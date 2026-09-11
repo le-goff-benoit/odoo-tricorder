@@ -1,32 +1,33 @@
-# Odoo Tricorder 0.1.0
+# Odoo Tricorder 0.2.0
 
-Première version du cockpit terminal des projets et agents Odoo, pour Ubuntu amd64.
+Le cockpit passe de la lecture des workflows à l’observation explicite des missions.
 
-- Projets, favoris, environnements et releases dans une interface française inspirée discrètement de LCARS.
-- Terminaux persistants : fermer puis rouvrir Tricorder retrouve les mêmes shells.
-- Suivi des tâches, preuves périmées, étapes et responsabilités des workflows.
-- Vue d’attention transversale, sources Community/Enterprise par série exacte,
-  comparaison des estimations avec les mesures existantes et lecture des documents.
-- Liens vers Tricorder et les agents Odoo intégrés dans l’application.
+- Navigation projet/release/tâche et critères d’acceptation plus visibles.
+- Sessions et rôles à portée explicite : release complète ou tâche.
+- Hooks Claude opt-in, JSONL natifs, statut Codex par identifiant via son service local.
+- Sous-agents observables, projet rouge « ! » et notification pour les attentes humaines.
+- Pictogrammes Claude/Codex dans les onglets.
+- Temps par tâche, activation guidée, distinction cumul/délai/attente et préparation
+  de consolidation Odoo Crew sans écraser les prévisions.
+- Volume des tests JUnit par rapport, avec liens vers les preuves.
+- Explorateur du projet et des fichiers reçus, recherche transversale.
+- Sources/profils/branches/commits/dépendances Enterprise-OCA ; stack et restauration déclarée.
+- Emplacements configurables : projets, sources et dossier de travail des nouveaux shells.
+- Graphe filtrable, reprise portable, palette, raccourcis et préférences persistantes.
 
-## Installation
-
-Télécharger `odoo-tricorder_0.1.0_amd64.deb`, puis :
+## Installation / mise à jour
 
 ```bash
-sudo apt install ./odoo-tricorder_0.1.0_amd64.deb
+sudo apt install ./odoo-tricorder_0.2.0_amd64.deb
 ```
 
-Le fichier `SHA256SUMS` permet de vérifier le téléchargement. Testé sur
-Pop!_OS 22.04 (base Ubuntu). Claude, Codex et [odoo-crew](https://github.com/le-goff-benoit/odoo-crew)
-s’installent séparément.
+L’observation s’active depuis **Agents → Associer une session**, pas automatiquement.
+Claude/Codex/Odoo Crew restent séparés. Les projets/sources sont en lecture seule
+hors commandes que vous exécutez.
 
-## Périmètre de cette version
+Un ancien service PTY 0.1 conserve ses programmes. Arrêter explicitement tous ses
+terminaux une fois pour activer les dossiers personnalisés : seul le service vide
+est actualisé. Aucun programme existant n’est interrompu automatiquement.
 
-Les états du workflow et les processus observés sont distincts. Les sous-agents
-natifs et leurs demandes d’autorisation ne sont pas encore reliés automatiquement.
-Les mesures proviennent d’effort.json ; une valeur absente reste inconnue.
-La sélection d’un environnement prépare le contexte et n’accorde aucune permission.
-Les sources sont inventoriées en lecture seule, sans téléchargement automatique.
-
-Les sessions survivent à la fermeture de la fenêtre, pas au redémarrage du poste.
+Consulter [les adaptateurs](https://github.com/le-goff-benoit/odoo-tricorder/blob/v0.2.0/docs/ADAPTERS.md) pour les formats et limites.
+Un rapport JUnit vert ne remplace pas la recette Odoo. Une donnée absente reste inconnue.

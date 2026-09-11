@@ -31,6 +31,9 @@ class Terminal:
         self.environment = request.get('environment') or None
         self.release = request.get('release') or None
         self.task = request.get('task') or None
+        self.working_directory = str(Path(request.get('workingDirectory') or self.project).resolve(strict=True))
+        if not Path(self.working_directory).is_dir():
+            raise ValueError('Dossier de travail absent')
         self.created = time.time()
         self.last_output = None
         self.buffer = bytearray()
@@ -42,9 +45,10 @@ class Terminal:
         self.pid, self.fd = pty.fork()
         if self.pid == 0:
             try:
-                os.chdir(self.project)
+                os.chdir(self.working_directory)
                 env = {**os.environ, 'TERM': 'xterm-256color', 'COLORTERM': 'truecolor',
                        'TRICORDER_SESSION_ID': self.id, 'TRICORDER_PROJECT': self.project,
+                       'TRICORDER_WORKING_DIRECTORY': self.working_directory,
                        'TRICORDER_ENVIRONMENT': self.environment or '',
                        'TRICORDER_RELEASE': self.release or '', 'TRICORDER_TASK': self.task or ''}
                 # Selection is metadata, never production confirmation or credentials.
@@ -132,6 +136,7 @@ class Terminal:
         elif program and 'codex' in program.lower():
             provider = 'codex'
         return {'id': self.id, 'project': self.project, 'environment': self.environment,
+                'workingDirectory': self.working_directory,
                 'release': self.release, 'task': self.task, 'createdAt': self.created,
                 'lastOutputAt': self.last_output, 'pid': self.pid, 'program': program,
                 'provider': provider, 'alive': not self.closed, 'exitCode': self.exit_code,
@@ -169,7 +174,7 @@ class Broker:
             self.emit({'event': 'sessions'})
             return terminal.metadata()
         if action == 'ping':
-            return {'protocol': 1, 'pid': os.getpid()}
+            return {'protocol': 1, 'pid': os.getpid(), 'capabilities': ['working-directory']}
         terminal = self.sessions.get(request.get('session'))
         if terminal is None:
             raise ValueError('Session inconnue')

@@ -1,33 +1,35 @@
-# Suite du cockpit
+# Roadmap — implémentation 0.2.0
 
-La 0.1.0 livre le terminal et la lecture du dispositif existant.
+La roadmap initiale est implémentée dans la version 0.2.0. Installer son paquet
+depuis les releases GitHub ; ces fonctions ne sont pas dans le paquet 0.1.0.
 
-## Observation native des agents
+| Volet | Réalisation | Preuves |
+|---|---|---|
+| Association native | Projet, release, tâche ou release complète, rôle, flow, terminal, session, bornes | Tests observation et bureau |
+| Adaptateurs | Hooks Claude par lancement, JSONL Claude/Codex, lecture du service Codex par identifiant | Tests observation/runtime |
+| États & hiérarchie | Dernier état, outil si fourni, attente, interruption/fin, parent confirmé, événements filtrés | Tests adaptateurs et alertes UI |
+| Temps | Lecture odoo_usage.py, attribution sans chevauchement, inconnu préservé, comparatif par tâche | Tests lecteur et bureau |
+| Consolidation | Préparation odoo_effort.py import-usage, pas d’écriture automatique | E2E vérifie qu’effort.json n’est pas créé |
+| Reprise | Fiche Markdown portable à copier/exporter, conversations distinctes | Parcours bureau |
+| Sources | Profils explicites, chemins communs/projet, branches/commits, dépendances transitives | Tests insights |
+| Stack | Inventaire fichiers/exécutables, dossier dédié, restauration déclarée | Tests insights |
+| Configuration | Palette de skills, fournisseur explicite, confirmations conservées | Parcours bureau |
+| Navigation | Portée permanente, critères visibles, raccourcis projets/tâches/terminaux | Parcours bureau |
+| Graphe | Dépendances du plan, filtres tâche/ressource, étapes atteintes/prêtes | Parcours bureau |
+| Fichiers | Explorateur, inbox, aperçus sûrs, recherche Markdown/TXT transversale | Tests limites/symlinks et bureau |
+| Préférences | Police, taille, contraste, largeurs, division/suivi, racine projets et dossier de travail | Tests PTY et bureau |
+| Volume de QA | JUnit par exécution/tâche, exécutés/réussis/échecs/erreurs/ignorés | Tests quality et bureau |
 
-- Relier explicitement projet, release, tâche, flow et identifiant de session natif.
-- Adaptateurs indépendants pour les hooks Claude et les événements Codex.
-- Statuts observés : activité, outil en cours, attente humaine, fin, interruption.
-- Hiérarchie des sous-agents et liens vers leurs événements disponibles.
-- Ne jamais assimiler le simple démarrage d’un processus à une activité IA.
+## Frontières volontaires
 
-## Mesure et reprise
-
-- Import des observations via odoo_usage.py, avec attribution explicite des périodes.
-- Séparer temps cumulé, délai écoulé et attente humaine mesurée.
-- Préserver les prévisions historiques et les mesures inconnues.
-- Fiche de reprise portable entre Claude et Codex ; leurs conversations restent distinctes.
-
-## Environnements et sources
-
-- Profils explicites par projet en complément de la déduction initiale.
-- Vérification des branches/commits des sources Community et Enterprise.
-- Analyse des dépendances de modules pour le besoin exact d’Enterprise/OCA.
-- Inventaire de stack locale et fraîcheur des restaurations, sans toucher aux bases.
-- Actions de configuration en s’appuyant sur les outils existants, avec leurs confirmations.
-
-## Ergonomie
-
-- Navigation clavier étendue entre projets, tâches et terminaux.
-- Aperçu du graphe de dépendances avec filtrage par tâche et ressources.
-- Recherche transversale dans les documents et palette de préparation des skills.
-- Préférences de police, contraste et disposition mémorisée des panneaux.
+- Association explicite : pas de capture globale des conversations.
+- Aucun état IA déduit d’un processus présent ou silencieux.
+- Format/version non reconnu : indisponibilité expliquée, jamais faux statut.
+- Les événements détaillés Claude nécessitent le lancement avec les hooks préparés.
+- Codex runtime nécessite un service déjà démarré et app-server proxy ; aucun thread
+  n’est repris. Sous-agents directs : 30 maximum, parent confirmé par le service.
+- Le statut runtime n’est pas une mesure. Les inconnues ne deviennent jamais zéro ;
+  ni double compte natif/consolidé, ni attente fabriquée à partir du délai total.
+- Pas de téléchargement Enterprise/OCA, restauration, RPC, déploiement ou écriture
+  de workflow automatisés. La fraîcheur de restauration reste déclarative.
+- Pas d’éditeur ou d’exécution depuis l’explorateur, ni indexation PDF.

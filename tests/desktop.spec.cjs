@@ -132,7 +132,8 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     expect((await page.evaluate(async () => (await window.tricorder.terminals.list())[0])).environment).toBe('staging');
     await page.screenshot({ path: 'test-results/terminal.png' });
     await page.locator('[data-view="documents"]').click();
-    await page.locator('[data-document=".odoo-agents/JOURNAL.md"]').click();
+    await page.locator('[data-files=".odoo-agents"]').first().click();
+    await page.locator('[data-preview=".odoo-agents/JOURNAL.md"]').click();
     await expect(page.locator('.document-text')).toContainText('Le suivi des missions');
     await page.locator('[data-action="modal-close"]').click();
     await page.locator('[data-action="about"]').click();
@@ -162,6 +163,149 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     expect(errors).toEqual([]);
   } finally {
     if (app) { await closeWindow(app).catch(() => { app.process().kill('SIGKILL'); }); }
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('roadmap: observations, human alert, measures, files, graph, preparation and preferences', async () => {
+  test.setTimeout(120000);
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-roadmap-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  write(path.join(project, 'inbox/ticket.eml'), 'Subject: Demande synthétique\n\nÀ examiner.');
+  write(path.join(project, 'changelog', releaseId, 'junit-targeted.xml'), '<testsuite tests="12" failures="0" errors="0" skipped="2"><properties><property name="odoo.task" value="T02"/></properties></testsuite>');
+  const native = path.join(temp, 'session.jsonl');
+  const date = seconds => new Date(Date.now() - 60000 + seconds * 1000).toISOString();
+  const rows = [
+    { type: 'session_meta', timestamp: date(0), payload: { id: 'synthetic-thread', timestamp: date(0) } },
+    { type: 'turn_context', timestamp: date(0), payload: { turn_id: 'turn1', model: 'synthetic-model' } },
+    { type: 'event_msg', timestamp: date(0), payload: { type: 'task_started', turn_id: 'turn1' } },
+    { type: 'token_usage_record', timestamp: date(10), payload: { thread_id: 'synthetic-thread', response_id: 'response1', thread_token_usage: { input_tokens: 100, cached_input_tokens: 0, cache_write_input_tokens: 0, output_tokens: 40, total_tokens: 140 } } },
+    { type: 'event_msg', timestamp: date(20), payload: { type: 'task_complete', turn_id: 'turn1', duration_ms: 20000 } },
+    { type: 'event_msg', timestamp: date(21), payload: { type: 'exec_approval_request', command: 'DO-NOT-EXPOSE-PRIVATE' } },
+  ];
+  write(native, rows.map(r => JSON.stringify(r)).join('\n') + '\n');
+  const env = { ...process.env, HOME: home, HISTFILE: path.join(temp, 'shell-history'),
+    TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+    TRICORDER_HOME: home, TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') };
+  const launchOptions = { args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env,
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}) };
+  let app;
+  const errors = [];
+  try {
+    app = await electron.launch(launchOptions);
+    const page = await app.firstWindow();
+    page.on('pageerror', error => errors.push(error.message));
+    await expect(page.locator('#project-title')).toHaveText('orbital-industries');
+    await app.evaluate(({ dialog, clipboard, Notification, BrowserWindow }, source) => {
+      dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [source] });
+      let value = ''; clipboard.readText = () => value; clipboard.writeText = text => { value = text; };
+      globalThis.tricorderNotifications = 0;
+      Notification.isSupported = () => true;
+      Notification.prototype.show = () => { globalThis.tricorderNotifications += 1; };
+      BrowserWindow.getAllWindows()[0].isFocused = () => false;
+    }, native);
+    await page.locator('[data-view="effort"]').click();
+    await expect(page.locator('#content')).toContainText('Pourquoi le réalisé peut-il être vide');
+    await page.locator('[data-view="agents"]').click();
+    await expect(page.locator('#content')).toContainText('Qui fait quoi');
+    await page.locator('[data-cockpit="associate"]').first().click();
+    await page.locator('#native-task').selectOption('T02');
+    await expect(page.locator('#native-flow')).toHaveValue('.odoo-agents/flows/maintenance.json');
+    await page.locator('[data-cockpit="bind"]').click();
+    await expect(page.locator('.native-binding')).toContainText('synthetic-thread');
+    await expect(page.locator('.project-item.needs-human .human-alert')).toHaveText('!');
+    expect(await app.evaluate(() => globalThis.tricorderNotifications)).toBeGreaterThan(0);
+    await expect(page.locator('.quality-panel')).toContainText('10');
+    await expect(page.locator('#content')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
+    await page.locator('[data-native-events]').click();
+    await expect(page.locator('#modal')).toContainText('exec_approval_request');
+    await expect(page.locator('#modal')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
+    await page.locator('[data-action="modal-close"]').click();
+    const observed = await page.evaluate(p => window.tricorder.cockpit.observations(p), project);
+    expect(observed[0].usage.active_seconds).toBe(20);
+    expect(observed[0].usage.tokens.total_tokens).toBe(140);
+    await page.locator('[data-view="effort"]').click();
+    await expect(page.locator('#content')).toContainText('Natif · non consolidé');
+    await page.locator('[data-usage]').click();
+    await expect(page.locator('#modal')).toContainText('import-usage');
+    await page.locator('[data-cockpit="copy-command"]').click();
+    expect(await page.evaluate(() => window.tricorder.clipboard.read())).toContain('--task');
+    expect(fs.existsSync(path.join(project, 'changelog', releaseId, 'effort.json'))).toBe(false);
+    await page.locator('[data-action="modal-close"]').click();
+    await page.screenshot({ path: 'test-results/roadmap-effort.png' });
+    await page.locator('[data-view="plan"]').click();
+    await expect(page.locator('.task-acceptance')).toHaveCount(3);
+    await page.locator('#task-select').selectOption('T02');
+    await expect(page.locator('#inspector')).toContainText('Critères d’acceptation');
+    await page.locator('[data-cockpit="graph"]').click();
+    await expect(page.locator('.graph-node')).toHaveCount(3);
+    await page.locator('#graph-task').selectOption('T03');
+    await expect(page.locator('.graph-node')).toHaveCount(3);
+    await page.locator('#graph-resource').selectOption('orbital_custom');
+    await page.screenshot({ path: 'test-results/roadmap-graph.png' });
+    await page.locator('[data-cockpit="handoff"]').click();
+    await expect(page.locator('#modal')).toContainText('Cette fiche transmet le contexte');
+    await page.locator('[data-cockpit="copy-handoff"]').click();
+    expect(await page.evaluate(() => window.tricorder.clipboard.read())).toContain('synthetic-thread');
+    await page.locator('[data-action="modal-close"]').click();
+    await page.locator('[data-view="environments"]').click();
+    await expect(page.locator('#content')).not.toContainText('Fichiers reçus');
+    await expect(page.locator('#content')).toContainText('Stack locale');
+    await page.locator('[data-view="documents"]').click();
+    await page.locator('[data-files="inbox"]').first().click();
+    await page.locator('[data-preview="inbox/ticket.eml"]').click();
+    await expect(page.locator('.document-text')).toContainText('Demande synthétique');
+    await page.locator('[data-action="modal-close"]').click();
+    await page.locator('.top-actions [data-cockpit="search"]').click();
+    await page.locator('#global-query').fill('facturation');
+    await page.locator('[data-cockpit="run-search"]').click();
+    await expect(page.locator('.search-result').first()).toBeVisible();
+    await page.locator('[data-action="modal-close"]').click();
+    await page.locator('[data-cockpit="palette"]').click();
+    await page.locator('#skill-provider').selectOption('codex');
+    await page.locator('#skill-filter').fill('odoo-env');
+    await page.locator('[data-skill="odoo-env"]').click();
+    await expect(page.locator('#modal')).toContainText('$odoo-env');
+    await page.locator('[data-action="modal-close"]').click();
+    await page.locator('[data-view="sources"]').click();
+    await page.locator('[data-cockpit="profile"]').click();
+    await page.locator('#profile-kind').selectOption('online');
+    await page.locator('[data-cockpit="save-profile"]').click();
+    await expect(page.locator('#content')).toContainText('Odoo Online');
+    await page.locator('[data-cockpit="preferences"]').click();
+    await page.locator('#pref-size').fill('16');
+    await page.locator('#pref-contrast').check();
+    await page.locator('[data-cockpit="save-preferences"]').click();
+    await expect(page.locator('html')).toHaveClass('high-contrast');
+    const persisted = JSON.parse(fs.readFileSync(path.join(temp, 'state/settings.json')));
+    expect(persisted.ui.fontSize).toBe(16);
+    expect(persisted.profiles[project].kind).toBe('online');
+    expect(persisted.bindings[0].nativeId).toBe('synthetic-thread');
+    const work = path.join(temp, 'worktree'); fs.mkdirSync(work);
+    await app.evaluate(({ dialog }, target) => { dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [target] }); }, work);
+    await page.locator('[data-cockpit="profile"]').click();
+    await page.locator('[data-cockpit="working-directory"]').click();
+    await expect(page.locator('#modal')).not.toBeVisible();
+    await page.locator('#task-select').selectOption('T02');
+    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await expect(page.locator('.terminal-host')).toHaveCount(1);
+    const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+    expect(terminal.workingDirectory).toBe(work);
+    expect(terminal.task).toBe('T02');
+    await expect(page.locator('#terminal-context')).toContainText('Tâche T02');
+    await expect(page.locator('.provider-icon[aria-label="Shell"]').first()).toBeVisible();
+    await page.locator('#task-select').selectOption('');
+    await expect(page.locator('#inspector')).toContainText('RELEASE COMPLÈTE');
+    expect((await page.evaluate(async () => (await window.tricorder.terminals.list())[0])).task).toBe('T02');
+    fs.appendFileSync(native, JSON.stringify({ type: 'event_msg', timestamp: new Date().toISOString(), payload: { type: 'task_started', turn_id: 'turn2' } }) + '\n');
+    await expect(page.locator('.human-alert')).toHaveCount(0, { timeout: 15000 });
+    await page.locator('[data-view="agents"]').click();
+    await page.screenshot({ path: 'test-results/roadmap-agents.png' });
+    expect(errors).toEqual([]);
+  } finally {
+    if (app) await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
     await cleanupBroker(path.join(temp, 'run/pty.sock'));
     fs.rmSync(temp, { recursive: true, force: true });
   }

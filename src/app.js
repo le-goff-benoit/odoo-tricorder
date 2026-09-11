@@ -3,6 +3,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { SearchAddon } from '@xterm/addon-search';
 import '@xterm/xterm/css/xterm.css';
 import './style.css';
+import { cockpit, providerIcon } from './cockpit.js';
 
 const api = window.tricorder;
 const $ = selector => document.querySelector(selector);
@@ -31,7 +32,7 @@ const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
 const labels = { validated: 'Validée', stale: 'À revalider', blocked: 'Bloquée', interrupted: 'Interrompue', awaiting_receipt: 'À réceptionner', pending: 'En attente', ready: 'Prête', running: 'En cours', unverified: 'Non vérifiée', deferred: 'Reportée', claimed: 'Revendiquée', done: 'Terminée', active: 'Actif', complete: 'Terminé', cancelled: 'Annulé', waiting_human: 'Attend une décision', deadlocked: 'Sans étape prête' };
 const badge = (state, text) => `<span class="badge ${esc(state)}">${esc(text || labels[state] || state)}</span>`;
 const when = value => value ? new Date(typeof value === 'number' ? value * 1000 : value).toLocaleString('fr-CH', { dateStyle: 'short', timeStyle: 'short' }) : 'Non observé';
-const minutes = value => value == null ? 'Non mesuré' : `${Math.round(value).toLocaleString('fr-CH')} min`;
+const minutes = value => value == null ? 'Non mesuré' : value < 1 ? `${Math.round(value * 60)} s` : `${Math.round(value).toLocaleString('fr-CH')} min`;
 const empty = (title, detail, action = '') => `<div class="empty">${icon('grid')}<h2>${esc(title)}</h2><p>${esc(detail)}</p>${action}</div>`;
 let projects = [], settings = {}, current = null, detail = null, view = 'terminal', selectedTask = null;
 let sessions = [], selectedSession = new Map(), terminals = new Map(), generation = 0, busy = false, pollBusy = false;
@@ -67,9 +68,10 @@ function sidebar() {
     <button class="project-item ${current === p.path && !overviewMode ? 'selected' : ''}" data-project="${esc(p.path)}"><span class="project-monogram">${esc(p.name.slice(0, 2).toUpperCase())}</span><span class="project-name">${esc(p.name)}<small>${esc(p.series ? 'Odoo ' + p.series : 'Série à préciser')}${p.running ? ' · ' + p.running + ' en cours' : ''}</small></span>${p.attention?.length ? `<span class="attention-dot">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot">★</span>' : ''}</button>`).join('') || '<p class="muted pad">Aucun projet trouvé. Ajoutez un dossier.</p>';
   $('#attention-count').textContent = attentionItems().length;
   $('.attention-link').classList.toggle('selected', overviewMode);
+  cockpitUI.alertSidebar();
 }
 function tabs() {
-  const views = [['terminal', 'Terminal', 'terminal'], ['plan', 'Plan de release', 'plan'], ['agents', 'Agents', 'agents'], ['environments', 'Environnements', 'server'], ['sources', 'Sources', 'sources'], ['effort', 'Temps & estimations', 'chart'], ['documents', 'Documents', 'file']];
+  const views = [['terminal', 'Terminal', 'terminal'], ['plan', 'Plan de release', 'plan'], ['agents', 'Agents', 'agents'], ['environments', 'Environnements', 'server'], ['sources', 'Sources', 'sources'], ['effort', 'Temps & estimations', 'chart'], ['documents', 'Fichiers', 'folder']];
   $('#tabs').innerHTML = views.map(([id, label, symbol]) => `<button data-view="${id}" class="${view === id && !overviewMode ? 'active' : ''}">${icon(symbol)}${label}</button>`).join('');
 }
 function header() {
@@ -87,6 +89,7 @@ function header() {
 function setView(next) { view = next; overviewMode = false; render(); }
 function render() {
   sidebar(); header(); tabs();
+  $('.project-header [data-action="new-terminal"]').disabled = busy || !detail;
   const terminalVisible = !overviewMode && view === 'terminal';
   $('#terminal-workspace').hidden = !terminalVisible;
   $('#content').hidden = terminalVisible;
@@ -98,6 +101,7 @@ function render() {
   else if (!detail) $('#content').innerHTML = empty('Aucun projet sélectionné', 'Choisissez un projet dans la colonne de gauche.');
   else ({ plan: renderPlan, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || renderPlan)();
   renderInspector();
+  cockpitUI.augment();
   $('#session-count').textContent = `${sessions.filter(s => s.alive).length} terminal(aux) actif(s)`;
 }
 async function chooseProject(project, release) {
@@ -111,14 +115,14 @@ async function chooseProject(project, release) {
     const result = await api.project(project, known.some(r => r.id === selected) ? selected : null);
     if (ticket !== generation) return;
     detail = result;
-    selectedTask = result.tasks.find(t => t.status === 'running' || t.status === 'stale')?.id || result.tasks[0]?.id;
+    selectedTask = null; // Release scope is explicit; never silently pick a task.
     settings = await api.settings({ context: { project, release: result.selectedRelease || '', environment: settings.contexts?.[project]?.environment || '' } });
   } catch (error) { if (ticket === generation) projectError = error.message; }
-  finally { if (ticket === generation) { busy = false; render(); } }
+  finally { if (ticket === generation) { busy = false; render(); cockpitUI.refreshNative(); } }
 }
 function renderAttention() {
   const items = attentionItems();
-  $('#content').innerHTML = `<div class="page"><div class="metrics"><div class="metric"><span>PROJETS SUIVIS</span><strong>${projects.length}</strong><small>Sur ce poste</small></div><div class="metric"><span>À EXAMINER</span><strong class="gold">${items.length}</strong><small>Preuves, blocages et réceptions</small></div><div class="metric"><span>TERMINAUX ACTIFS</span><strong>${sessions.filter(s => s.alive).length}</strong><small>Activité du processus observée</small></div></div><div class="section-title"><h2>Votre file d’attention</h2><span>Actualisée toutes les 30 secondes</span></div>${items.map(({ project, task }) => `<button class="attention-card" data-attention-project="${esc(project.path)}" data-task-id="${esc(task.id)}"><div>${badge(task.status)}<span class="muted">${esc(project.name)} / ${esc(task.id)}</span></div><h3>${esc(task.title)}</h3><p>${esc(task.reason)}</p>${icon('arrow')}</button>`).join('') || empty('Rien à signaler dans les plans lus', 'Les questions internes à Claude et Codex ne sont pas encore collectées automatiquement.')}<div class="note">Les états Odoo et les processus du terminal sont suivis séparément. Une étape revendiquée ne prouve pas l’activité de son agent.</div></div>`;
+  $('#content').innerHTML = `<div class="page"><div class="metrics"><div class="metric"><span>PROJETS SUIVIS</span><strong>${projects.length}</strong><small>Sur ce poste</small></div><div class="metric"><span>À EXAMINER</span><strong class="gold">${items.length}</strong><small>Preuves, blocages et réceptions</small></div><div class="metric"><span>TERMINAUX ACTIFS</span><strong>${sessions.filter(s => s.alive).length}</strong><small>Activité du processus observée</small></div></div><div class="section-title"><h2>Votre file d’attention</h2><span>Actualisée toutes les 30 secondes</span></div>${items.map(({ project, task }) => `<button class="attention-card" data-attention-project="${esc(project.path)}" data-task-id="${esc(task.id)}"><div>${badge(task.status)}<span class="muted">${esc(project.name)} / ${esc(task.id)}</span></div><h3>${esc(task.title)}</h3><p>${esc(task.reason)}</p>${icon('arrow')}</button>`).join('') || empty('Rien à signaler dans les plans lus', 'Les demandes humaines des sessions associées sont signalées dans la barre des projets.')}<div class="note">Les états Odoo et les processus du terminal sont suivis séparément. Une étape revendiquée ne prouve pas l’activité de son agent.</div></div>`;
 }
 function renderPlan() {
   const tasks = detail.tasks;
@@ -129,37 +133,35 @@ function renderInspector() {
   if ($('#inspector').hidden) return;
   const task = detail?.tasks.find(t => t.id === selectedTask);
   const flow = detail?.flows.find(f => f.path === task?.flow);
-  $('#inspector').innerHTML = `<div class="inspector-heading"><span class="eyebrow">SUIVI DE MISSION</span><span class="live-label">${icon('agents')} Workflow Odoo</span></div>${task ? `<div class="inspector-task"><span class="task-id">${esc(task.id)}</span><h3>${esc(task.title)}</h3>${badge(task.status)}</div>${flow ? `<div class="timeline">${flow.nodes.map(n => `<div class="timeline-node ${esc(n.status)}"><span class="timeline-point"></span><div><strong>${esc(n.description)}</strong><small>${esc(n.role || n.id)}</small>${n.owner ? `<p class="gold">${esc(n.owner)}</p><p>Activité non confirmée</p>` : ''}${n.status === 'ready' ? badge(n.executor === 'human' ? 'blocked' : 'ready', n.executor === 'human' ? 'Décision humaine attendue' : 'Prochaine étape') : ''}</div></div>`).join('')}</div>${flow.warning ? `<div class="note warning">${esc(flow.warning)}</div>` : ''}` : '<p class="muted pad">Aucun workflow associé à cette tâche.</p>'}<div class="inspector-bottom"><h4>Critères d’acceptation</h4><ul>${(task.acceptance || []).map(a => `<li>${esc(a)}</li>`).join('')}</ul><button class="secondary wide" data-action="task-terminal">${icon('terminal')} Terminal pour ${esc(task.id)}</button>${task.request ? `<button class="text-button" data-document="${esc(task.request)}">Voir la demande ${icon('external')}</button>` : ''}</div>` : `<div class="pad"><h3>Votre agent, votre terminal.</h3><p class="muted">Lancez <code>claude</code> ou <code>codex</code> dans un terminal. Le workflow Odoo apparaîtra ici lorsqu’une tâche sera associée à un plan.</p><div class="note">Les sous-agents natifs et leurs demandes d’autorisation ne sont pas encore reliés au cockpit.</div><button class="secondary wide" data-action="agents-link">Installer les agents ${icon('external')}</button></div>`}`;
+  $('#inspector').innerHTML = `<div class="inspector-heading"><span class="eyebrow">SUIVI DE MISSION</span><span class="live-label">${icon('agents')} Workflow Odoo</span></div>${task ? `<div class="inspector-task"><span class="task-id">${esc(task.id)}</span><h3>${esc(task.title)}</h3>${badge(task.status)}</div>${flow ? `<div class="timeline">${flow.nodes.map(n => `<div class="timeline-node ${esc(n.status)}"><span class="timeline-point"></span><div><strong>${esc(n.description)}</strong><small>${esc(n.role || n.id)}</small>${n.owner ? `<p class="gold">${esc(n.owner)}</p><p>Activité non confirmée</p>` : ''}${n.status === 'ready' ? badge(n.executor === 'human' ? 'blocked' : 'ready', n.executor === 'human' ? 'Décision humaine attendue' : 'Prochaine étape') : ''}</div></div>`).join('')}</div>${flow.warning ? `<div class="note warning">${esc(flow.warning)}</div>` : ''}` : '<p class="muted pad">Aucun workflow associé à cette tâche.</p>'}<div class="inspector-bottom"><h4>Critères d’acceptation</h4><ul>${(task.acceptance || []).map(a => `<li>${esc(a)}</li>`).join('')}</ul><button class="secondary wide" data-action="task-terminal">${icon('terminal')} Terminal pour ${esc(task.id)}</button>${task.request ? `<button class="text-button" data-document="${esc(task.request)}">Voir la demande ${icon('external')}</button>` : ''}</div>` : `<div class="pad"><h3>Votre agent, votre terminal.</h3><p class="muted">Lancez <code>claude</code> ou <code>codex</code> dans un terminal. Le workflow Odoo apparaîtra ici lorsqu’une tâche sera associée à un plan.</p><div class="note">Associez une session dans Agents pour observer ses événements natifs et demandes humaines.</div><button class="secondary wide" data-action="agents-link">Installer les agents ${icon('external')}</button></div>`}`;
 }
 function renderAgents() {
-  const own = sessions.filter(s => s.project === current);
-  const claims = detail.flows.flatMap(f => f.nodes.filter(n => n.status === 'claimed').map(n => ({ ...n, flow: f })));
-  $('#content').innerHTML = `<div class="page"><div class="section-title"><h2>Sessions & responsabilités</h2><span>Deux sources, deux niveaux de certitude</span></div><h4 class="eyebrow">PROCESSUS OBSERVÉS</h4><div class="card-grid">${own.map(s => `<button class="info-card session-card" data-session="${s.id}"><div class="card-title">${icon('terminal')}<h3>${esc(s.program || 'Shell')}</h3>${badge(s.alive ? 'validated' : 'done', s.alive ? 'Processus actif' : 'Terminé')}</div><p>${esc(s.environment || 'Non ciblé')} · ${esc(s.task || 'Sans tâche associée')}</p><small>Ouvert le ${when(s.createdAt)}<br>Dernière sortie : ${when(s.lastOutputAt)}</small></button>`).join('') || '<p class="muted">Aucun terminal pour ce projet.</p>'}</div><h4 class="eyebrow section-space">ÉTAPES REVENDIQUÉES</h4>${claims.map(n => `<div class="info-card"><div class="card-title"><h3>${esc(n.role)}</h3>${badge('claimed', 'Activité non confirmée')}</div><p>${esc(n.description)}</p><small>${esc(n.owner)} · depuis ${when(n.claimedAt)}</small><div class="note">Ressources réservées : ${esc(n.locks.map(l => l.resource || l.path || JSON.stringify(l)).join(', ') || 'Aucune indiquée')}</div></div>`).join('') || '<p class="muted">Aucune étape actuellement revendiquée dans les workflows de cette release.</p>'}<div class="section-title section-space"><h2>Historique des workflows</h2></div>${detail.flows.map(f => `<details class="flow-log"><summary><strong>${esc(f.id)}</strong>${badge(f.status)}<span>${when(f.updatedAt)}</span></summary>${f.events.map(e => `<div class="event-row"><time>${when(e.at)}</time><strong>${esc(e.node || e.action)}</strong><span>${esc(e.outcome || '')}</span><p>${esc(e.note || '')}</p></div>`).join('')}</details>`).join('')}<div class="note">« Processus actif » ne signifie pas que l’agent réfléchit : il peut attendre une saisie. Les noms et propriétaires des étapes viennent des workflows, pas d’une détection des sous-agents.</div></div>`;
+  // Rich view rendered by cockpitUI.augment().
+  $('#content').innerHTML = '<div class="page"></div>';
 }
 function renderEnvironments() {
   const chosen = settings.contexts?.[current]?.environment;
-  $('#content').innerHTML = `<div class="page"><div class="section-title"><h2>Environnements déclarés</h2><span>${detail.environments.length} disponible(s)</span></div><div class="card-grid">${detail.environments.map(e => `<article class="info-card ${e.kind === 'production' ? 'production-card' : ''}"><div class="card-title">${icon('server')}<h3>${esc(e.name)}</h3>${badge(e.kind === 'production' ? 'blocked' : 'series', e.kind)}</div><dl><dt>Plateforme</dt><dd>${esc(e.platform || 'Non précisée')}</dd><dt>Adresse</dt><dd>${esc(e.url || 'Non précisée')}</dd><dt>Base</dt><dd>${esc(e.db || 'Non précisée')}</dd><dt>Connexion</dt><dd>Non vérifiée · aucune requête distante</dd></dl><button class="${chosen === e.name ? 'secondary' : 'primary'}" data-environment="${esc(e.name)}">${chosen === e.name ? 'Contexte sélectionné' : 'Sélectionner ce contexte'}</button>${e.kind === 'production' ? '<p class="warning-text">Production : sélection sans autorisation d’écriture. Les commandes saisies dans le shell conservent leurs propres permissions.</p>' : ''}</article>`).join('')}</div>${!detail.environments.length ? empty('Aucun environnement déclaré', 'Utilisez /odoo-env dans votre agent. Les métadonnées seront lues depuis .odoo-agents/instances.json ; les secrets restent dans le trousseau.') : ''}<div class="section-title section-space"><h2>Fichiers reçus</h2><span>Inbox du projet</span></div><div class="file-list">${detail.inbox.map(f => `<div class="file-row">${icon('file')}<strong>${esc(f.name)}</strong><span>${(f.bytes / 1048576).toFixed(1)} Mo</span><small>${when(f.modified)}</small></div>`).join('') || '<p class="muted">Aucun fichier dans inbox/.</p>'}</div><div class="note">Un changement de sélection s’applique aux nouveaux terminaux. Les sessions existantes gardent leur contexte d’origine.</div></div>`;
+  $('#content').innerHTML = `<div class="page"><div class="section-title"><h2>Environnements déclarés</h2><span>${detail.environments.length} disponible(s)</span></div><div class="card-grid">${detail.environments.map(e => `<article class="info-card ${e.kind === 'production' ? 'production-card' : ''}"><div class="card-title">${icon('server')}<h3>${esc(e.name)}</h3>${badge(e.kind === 'production' ? 'blocked' : 'series', e.kind)}</div><dl><dt>Plateforme</dt><dd>${esc(e.platform || 'Non précisée')}</dd><dt>Adresse</dt><dd>${esc(e.url || 'Non précisée')}</dd><dt>Base</dt><dd>${esc(e.db || 'Non précisée')}</dd><dt>Connexion</dt><dd>Non vérifiée · aucune requête distante</dd></dl><button class="${chosen === e.name ? 'secondary' : 'primary'}" data-environment="${esc(e.name)}">${chosen === e.name ? 'Contexte sélectionné' : 'Sélectionner ce contexte'}</button>${e.kind === 'production' ? '<p class="warning-text">Production : sélection sans autorisation d’écriture. Les commandes saisies dans le shell conservent leurs propres permissions.</p>' : ''}</article>`).join('')}</div>${!detail.environments.length ? empty('Aucun environnement déclaré', 'Utilisez /odoo-env dans votre agent. Les métadonnées seront lues depuis .odoo-agents/instances.json ; les secrets restent dans le trousseau.') : ''}<div class="note">Un changement de sélection s’applique aux nouveaux terminaux. Les sessions existantes gardent leur contexte d’origine.</div></div>`;
 }
 function renderSources() {
   const sources = detail.sources;
-  $('#content').innerHTML = `<div class="page"><div class="section-title"><h2>Bibliothèque des sources Odoo</h2><button class="secondary" data-action="source-root">${icon('folder')} Choisir le dossier partagé</button></div><div class="note"><strong>${esc({ module: 'Projet avec modules', studio: 'Projet sans module / Studio', online: 'Odoo Online' }[sources.profile])}</strong> · profil déduit des modules et environnements déclarés.<br>${esc(sources.explanation)}</div><div class="source-root">${icon('folder')}<code>${esc(sources.root)}</code>${badge('series', sources.series || 'Série inconnue')}</div><div class="card-grid">${sources.libraries.map(l => `<article class="info-card"><div class="card-title">${icon('sources')}<h3>${l.kind}</h3>${badge(l.present ? 'validated' : 'pending', l.present ? 'Présent' : 'Absent')}</div><code class="path">${esc(l.path || 'Déclarer la série du projet')}</code><p>${l.kind === 'Enterprise' ? esc(sources.enterpriseRequirement) : l.required ? 'Nécessaire à la voie module locale' : 'Référence pour l’analyse du standard'}</p></article>`).join('')}</div><div class="section-title section-space"><h2>Modules du projet</h2><span>Code propre au projet</span></div><div class="module-chips">${sources.modules.map(m => `<code>${esc(m)}</code>`).join('') || '<span class="muted">Aucun module custom détecté.</span>'}</div><h4 class="eyebrow section-space">SÉRIES PRÉSENTES SUR CE POSTE</h4><div class="module-chips">${sources.available.map(s => badge('series', s)).join('') || '<p class="muted">Bibliothèque absente ou vide.</p>'}</div><div class="note">${esc(sources.policy)} La présence d’un dossier ne vérifie pas sa branche Git. La V1 ne télécharge ni ne met à jour les sources ; Enterprise nécessite vos accès Odoo.</div></div>`;
+  $('#content').innerHTML = `<div class="page"><div class="section-title"><h2>Bibliothèque des sources Odoo</h2><button class="secondary" data-action="source-root">${icon('folder')} Choisir le dossier partagé</button></div><div class="note"><strong>${esc({ module: 'Projet avec modules', studio: 'Projet sans module / Studio', online: 'Odoo Online' }[sources.profile])}</strong> · ${sources.inferred ? "profil déduit des métadonnées" : "profil explicitement choisi"}.<br>${esc(sources.explanation)}</div><div class="source-root">${icon('folder')}<code>${esc(sources.root)}</code>${badge('series', sources.series || 'Série inconnue')}</div><div class="card-grid">${sources.libraries.map(l => `<article class="info-card"><div class="card-title">${icon('sources')}<h3>${l.kind}</h3>${badge(l.present ? 'validated' : 'pending', l.present ? 'Présent' : 'Absent')}</div><code class="path">${esc(l.path || 'Déclarer la série du projet')}</code><p>${l.kind === 'Enterprise' ? esc(sources.enterpriseRequirement) : l.required ? 'Nécessaire à la voie module locale' : 'Référence pour l’analyse du standard'}</p></article>`).join('')}</div><div class="section-title section-space"><h2>Modules du projet</h2><span>Code propre au projet</span></div><div class="module-chips">${sources.modules.map(m => `<code>${esc(m)}</code>`).join('') || '<span class="muted">Aucun module custom détecté.</span>'}</div><h4 class="eyebrow section-space">SÉRIES PRÉSENTES SUR CE POSTE</h4><div class="module-chips">${sources.available.map(s => badge('series', s)).join('') || '<p class="muted">Bibliothèque absente ou vide.</p>'}</div><div class="note">${esc(sources.policy)} Branches et commits vérifiés ci-dessous. Aucun téléchargement ni mise à jour automatique ; Enterprise nécessite vos accès Odoo.</div></div>`;
 }
 function renderEffort() {
-  const effort = detail.effort;
-  if (!effort) { $('#content').innerHTML = empty('Pas encore d’estimation', 'Utilisez /odoo-estimate pour estimer et mesurer le travail de cette release.'); return; }
-  const totals = effort.totals || {};
-  $('#content').innerHTML = `<div class="page"><div class="section-title"><h2>Prévu & réalisé</h2><span>Minutes d’exécution des agents</span></div><div class="metrics"><div class="metric"><span>PRÉVISION INITIALE</span><strong>${totals.planned_initial_minutes == null ? '—' : Math.round(totals.planned_initial_minutes)}<em> min</em></strong><small>Révisée : ${minutes(totals.planned_revised_minutes)}</small></div><div class="metric"><span>TEMPS CUMULÉ MESURÉ</span><strong>${totals.actual_minutes == null ? '—' : Math.round(totals.actual_minutes)}<em> min</em></strong><small>${totals.actual_minutes == null ? 'Mesure incomplète ou absente' : 'Somme du temps des agents'}</small></div><div class="metric"><span>JETONS MESURÉS</span><strong>${totals.tokens == null ? '—' : totals.tokens.toLocaleString('fr-CH')}</strong><small>${totals.tokens == null ? 'Compteurs non disponibles' : 'Total enregistré'}</small></div></div><div class="table-scroll"><table><thead><tr><th>Tâche / rôle</th><th>Initial</th><th>Révisé</th><th>Réel</th><th>Écart</th></tr></thead><tbody>${(effort.rows || []).map(r => `<tr><td><strong>${esc(r.task)}</strong> <span class="muted">${esc(r.agent)}</span><small>${esc(r.title)}</small>${r.scope_changed ? '<small class="warning-text">Périmètre modifié : comparaison non homogène</small>' : ''}${r.retrospective ? '<small class="warning-text">Estimation rétrospective</small>' : ''}</td><td>${minutes(r.initial?.expected_minutes)}</td><td>${minutes(r.revised?.expected_minutes)}</td><td class="${r.actual_minutes == null ? 'muted' : ''}">${minutes(r.actual_minutes)}</td><td>${r.delta_minutes == null ? '—' : (r.delta_minutes > 0 ? '+' : '') + Math.round(r.delta_minutes) + ' min'}</td></tr>`).join('')}</tbody></table></div><div class="note">Temps calendaire couvert : ${minutes(totals.covered_interval_minutes)}. Sous-total connu des agents : ${minutes(totals.known_minutes)}. Une donnée absente reste inconnue ; elle ne devient pas zéro.</div>${(effort.warnings || []).map(w => `<div class="note warning">${esc(w)}</div>`).join('')}<p class="muted">Les mesures viennent d’effort.json. La durée d’ouverture d’un terminal n’est pas comptée comme du travail agent. La collecte et l’attribution automatiques des sessions feront l’objet d’une version suivante.</p></div>`;
+  // Rich view rendered by cockpitUI.augment().
+  $('#content').innerHTML = '<div class="page"></div>';
 }
 function renderDocuments() {
-  $('#content').innerHTML = `<div class="page"><div class="section-title"><h2>Documents & mémoire</h2><span>Release et contexte du projet</span></div><div class="file-list">${detail.documents.map(d => `<button class="file-row" data-document="${esc(d.path)}">${icon('file')}<strong>${esc(d.name)}</strong><span class="file-type">${esc(d.type)}</span>${icon('external')}</button>`).join('') || empty('Aucun document', 'Les demandes, preuves et journaux apparaîtront ici.')}</div></div>`;
+  // Rich view rendered by cockpitUI.augment().
+  $('#content').innerHTML = '<div class="page"></div>';
 }
 function renderTerminals() {
   const own = sessions.filter(s => s.project === current);
   let id = selectedSession.get(current);
   if (!own.some(s => s.id === id)) { id = own.at(-1)?.id; selectedSession.set(current, id); }
-  $('#terminal-tabs').innerHTML = own.map((s, i) => `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}"></span>${esc(s.provider || s.program || 'Terminal')} ${i + 1}${s.task ? ' · ' + esc(s.task) : ''}</button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
+  $('#terminal-tabs').innerHTML = own.map((s, i) => `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}"></span>${providerIcon(s.provider)}${esc(s.provider || s.program || 'Terminal')} ${i + 1}${s.task ? ' · ' + esc(s.task) : ''}</button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
   const selected = own.find(s => s.id === id);
-  $('#terminal-context').textContent = selected ? `${selected.environment || 'Non ciblé'} · ${selected.release || 'Sans release'} · ${selected.task || 'Sans tâche'} · ouvert ${when(selected.createdAt)}` : 'Shell local · lancez librement claude ou codex';
+  $('#terminal-context').textContent = selected ? `${selected.environment || 'Non ciblé'} · ${selected.release || 'Sans release'} · ${selected.task ? 'Tâche ' + selected.task : 'Release complète'} · ${selected.workingDirectory || selected.project} · ouvert ${when(selected.createdAt)}` : 'Shell local · lancez librement claude ou codex';
   const env = detail?.environments.find(e => e.name === selected?.environment);
   $('#terminal-context').classList.toggle('production', env?.kind === 'production');
   if (env?.kind === 'production') $('#terminal-context').textContent = 'PRODUCTION · contexte déclaré, aucune permission accordée · ' + $('#terminal-context').textContent;
@@ -181,10 +183,15 @@ async function mountTerminal(id) {
     theme: { background: '#101519', foreground: '#dce3e6', cursor: '#efb779', selectionBackground: '#354b56', black: '#1d252a', red: '#ec8d8d', green: '#82c7ae', yellow: '#e8bf82', blue: '#8eacd8', magenta: '#c4a5d5', cyan: '#80ccca', white: '#dee6e9' } });
   const fit = new FitAddon(), search = new SearchAddon(); term.loadAddon(fit); term.loadAddon(search);
   const state = { host, term, fit, search, attaching: true, queue: [] }; terminals.set(id, state);
+  cockpitUI.applyPreferences();
   term.open(host);
   term.onData(data => api.terminals.write({ session: id, data }).catch(e => toast(e.message)));
   term.onResize(({ cols, rows }) => api.terminals.resize({ session: id, cols, rows }).catch(() => {}));
   term.attachCustomKeyEventHandler(event => {
+    if ((event.ctrlKey && event.altKey && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'f', 'F'].includes(event.key)) ||
+        (event.ctrlKey && ['PageUp', 'PageDown'].includes(event.key)) ||
+        (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'p') ||
+        (event.altKey && !event.ctrlKey && /^[1-7]$/.test(event.key))) { event.preventDefault(); return false; }
     if (event.ctrlKey && event.shiftKey && ['T', 'F', 'C', 'V'].includes(event.key.toUpperCase())) {
       event.preventDefault();
       if (event.type === 'keydown' && event.key.toUpperCase() === 'C' && term.hasSelection()) api.clipboard.write(term.getSelection()).catch(e => toast(e.message));
@@ -212,7 +219,7 @@ api.terminals.onEvent(message => {
   } else if (message.event === 'sessions') refreshSessions().catch(() => {});
   else if (message.event === 'disconnected') toast('Service terminal déconnecté. Actualisez pour reconnecter les sessions.');
 });
-async function newTerminal(task = null) {
+async function newTerminal(task = selectedTask) {
   if (!current || !detail || busy) { toast('Sélectionnez un projet et attendez son chargement.'); return; }
   const session = await api.terminals.create({ project: current, release: detail.selectedRelease, task, environment: settings.contexts?.[current]?.environment || null });
   selectedSession.set(current, session.id); await refreshSessions(); setView('terminal');
@@ -265,8 +272,8 @@ document.addEventListener('click', async event => {
       case 'find': $('#terminal-search').hidden = false; $('#terminal-search input').focus(); break;
       case 'find-close': $('#terminal-search').hidden = true; fitVisible(); break;
       case 'find-next': terminals.get(selectedSession.get(current))?.search.findNext($('#terminal-search input').value); break;
-      case 'split': split = !split; renderTerminals(); break;
-      case 'inspector': inspectorHidden = !inspectorHidden; render(); break;
+      case 'split': split = !split; settings = await api.settings({ ui: { split } }); renderTerminals(); break;
+      case 'inspector': inspectorHidden = !inspectorHidden; settings = await api.settings({ ui: { inspectorHidden } }); render(); break;
     }
   } catch (error) { toast(error.message); }
 });
@@ -274,6 +281,7 @@ document.addEventListener('change', async event => {
   try {
     if (event.target.id === 'release-select') await chooseProject(current, event.target.value);
     if (event.target.id === 'environment-select') await setEnvironment(event.target.value);
+    if (event.target.id === 'task-select') { selectedTask = event.target.value || null; render(); }
   } catch (error) { toast(error.message); }
 });
 $('#project-search').addEventListener('input', event => { filter = event.target.value; sidebar(); });
@@ -286,9 +294,15 @@ document.addEventListener('keydown', event => {
 
 $('.terminal-footer').insertAdjacentHTML('beforeend', '<button data-action="inspector">Suivi de mission</button>');
 
+const cockpitUI = cockpit({ api, get: () => ({ projects, settings, current, detail, view, selectedTask, sessions, selectedSession, terminals, overviewMode }),
+  setSettings: value => { settings = value; }, setProjects: value => { projects = value; }, render, sidebar, chooseProject, setView,
+  selectTask: id => { selectedTask = id; }, selectSession: id => selectedSession.set(current, id),
+  modal, toast, esc, badge, when, minutes });
+
 async function start() {
   try {
     const initial = await api.bootstrap(); projects = initial.projects; settings = initial.settings; version = initial.version;
+    split = !!settings.ui?.split; inspectorHidden = !!settings.ui?.inspectorHidden;
     $('#version').textContent = 'v' + version;
     notificationKeys = new Set(attentionItems().map(i => `${i.project.path}:${i.task.id}:${i.task.status}`));
     await refreshSessions();

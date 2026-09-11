@@ -44,7 +44,7 @@ def trusted_module(name):
 
 def git(root, *args):
     try:
-        result = subprocess.run(['git', '--no-pager', '-C', str(root), *args],
+        result = subprocess.run(['git', '--no-pager', '-c', 'core.fsmonitor=false', '-c', 'core.hooksPath=/dev/null', '-C', str(root), *args],
                                 capture_output=True, text=True, timeout=5,
                                 env={**os.environ, 'GIT_OPTIONAL_LOCKS': '0'})
         return result.stdout.strip() if result.returncode == 0 else ''
@@ -226,8 +226,6 @@ def summary(root):
             warnings.append(str(exc))
     attention = [t for t in tasks if t['status'] in ('stale', 'blocked', 'interrupted', 'awaiting_receipt')]
     for relative, unassigned in related_flows(root, current['id'] if current else None):
-        if not unassigned:
-            continue
         try:
             flow = flow_details(root, relative)
             if flow['status'] in ('waiting_human', 'deadlocked', 'blocked'):
@@ -287,7 +285,7 @@ def source_details(root, series, instances, source_root=None):
             'policy': 'Sources partagées en lecture seule. Aucune substitution par une autre série.'}
 
 
-def project(root, release=None, source_root=None):
+def project(root, release=None, source_root=None, profile=None):
     root = Path(root).resolve()
     data = summary(root)
     chosen = release or (data['release']['id'] if data['release'] else None)
@@ -302,6 +300,12 @@ def project(root, release=None, source_root=None):
     except (OSError, ValueError, AttributeError) as exc:
         data['warnings'].append('Environnements : ' + str(exc))
     data['sources'] = source_details(root, data['series'], data['environments'], source_root)
+    from insights import enrich, stack
+    try:
+        data['sources'] = enrich(root, data['sources'], profile or {})
+        data['stack'] = stack(root, profile or {})
+    except (ValueError, OSError, TypeError, RecursionError):
+        data['warnings'].append('Inventaire des sources ou de la stack incomplet.')
     if chosen:
         try:
             data['tasks'], warnings = plan_tasks(root, chosen)
@@ -335,6 +339,8 @@ def project(root, release=None, source_root=None):
         data['inbox'] = [{'name': p.name, 'bytes': p.stat().st_size,
                           'modified': datetime.fromtimestamp(p.stat().st_mtime, timezone.utc).isoformat()}
                          for p in sorted(inbox.iterdir()) if p.is_file() and not p.is_symlink()][:80]
+    from quality import reports
+    data['quality'] = reports(root, chosen, [t['id'] for t in data['tasks']])
     return data
 
 
@@ -354,7 +360,19 @@ def dispatch(payload):
     if action == 'overview':
         return overview(payload['home'], payload.get('extras', []))
     if action == 'project':
-        return project(payload['project'], payload.get('release'), payload.get('sourceRoot'))
+        return project(payload['project'], payload.get('release'), payload.get('sourceRoot'), payload.get('profile'))
+    if action == 'search':
+        from insights import search
+        return search(payload['project'], payload['query'])
+    if action in ('files', 'file-preview'):
+        from insights import files, file_preview
+        return (files if action == 'files' else file_preview)(payload['project'], payload.get('path', ''))
+    if action == 'observation':
+        from observation import snapshot
+        return snapshot(payload['source'], payload['provider'], payload.get('since'), payload.get('until'), payload.get('expected'))
+    if action == 'codex-runtime':
+        from codex_runtime import snapshot
+        return snapshot(payload['nativeId'])
     if action == 'document':
         return document(payload['project'], payload['path'])
     raise ValueError('Action inconnue')

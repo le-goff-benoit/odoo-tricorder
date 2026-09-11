@@ -32,7 +32,7 @@ function saveSettings() {
   fs.renameSync(target + '.tmp', target);
 }
 async function catalog(payload) {
-  if (payload.action === 'project') payload.sourceRoot = settings.sourceRoot;
+  if (payload.action === 'project') { payload.sourceRoot = settings.sourceRoot; payload.profile = settings.profiles?.[payload.project]; }
   try {
     const { stdout } = await exec('python3', [path.join(backend, 'catalog.py'), JSON.stringify(payload)], { maxBuffer: 12 * 1024 * 1024, timeout: 60000 });
     const data = JSON.parse(stdout);
@@ -50,7 +50,7 @@ function checkedProject(value) {
 }
 async function overview() {
   if (scanning) return scanning;
-  scanning = catalog({ action: 'overview', home, extras: settings.extras }).then(result => {
+  scanning = catalog({ action: 'overview', home: settings.workspaceRoot || home, extras: settings.extras }).then(result => {
     projects = new Set(result.map(p => p.path));
     return result;
   }).finally(() => { scanning = null; });
@@ -121,7 +121,8 @@ function handle(name, callback) {
   });
 }
 function wireAPI() {
-  handle('bootstrap', async () => ({ projects: await overview(), settings, links: LINKS, version: app.getVersion(), home }));
+  require('./cockpit.cjs').wireCockpit({ handle, dialog, shell, window: () => window, settings, save: saveSettings, checkedProject, catalog, terminal, stateDir, backend, home });
+  handle('bootstrap', async () => ({ projects: await overview(), settings, links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home }));
   handle('overview', overview);
   handle('project', (project, release) => catalog({ action: 'project', project: checkedProject(project), release }));
   handle('document', async (project, relative) => {
@@ -141,6 +142,13 @@ function wireAPI() {
     if (result.canceled) return null;
     settings.sourceRoot = fs.realpathSync(result.filePaths[0]); saveSettings(); return settings.sourceRoot;
   });
+  handle('workspace-root', async () => {
+    const result = await dialog.showOpenDialog(window, { title: 'Dossier dans lequel découvrir les projets', properties: ['openDirectory'], defaultPath: settings.workspaceRoot || home });
+    if (result.canceled) return null;
+    settings.workspaceRoot = fs.realpathSync(result.filePaths[0]); saveSettings();
+    if (scanning) await scanning;
+    return { projects: await overview(), root: settings.workspaceRoot };
+  });
   handle('open-folder', project => shell.openPath(checkedProject(project)));
   handle('link', key => { if (!LINKS[key]) throw new Error('Lien inconnu'); return shell.openExternal(LINKS[key]); });
   handle('clipboard:read', () => clipboard.readText());
@@ -149,6 +157,14 @@ function wireAPI() {
     // Only UI preferences. No command, shell or URL can be configured by renderer.
     if (typeof patch.activeProject === 'string') settings.activeProject = checkedProject(patch.activeProject);
     if (Array.isArray(patch.favorites)) settings.favorites = patch.favorites.filter(p => projects.has(p));
+    if (patch.ui && typeof patch.ui === 'object') {
+      settings.ui ||= {};
+      for (const key of ['split', 'inspectorHidden', 'highContrast']) if (typeof patch.ui[key] === 'boolean') settings.ui[key] = patch.ui[key];
+      for (const [key, min, max] of [['fontSize', 11, 22], ['sidebarWidth', 210, 360], ['inspectorWidth', 250, 480]]) {
+        if (Number.isFinite(patch.ui[key])) settings.ui[key] = Math.max(min, Math.min(max, Math.round(patch.ui[key])));
+      }
+      if (['mono', 'liberation', 'system'].includes(patch.ui.font)) settings.ui.font = patch.ui.font;
+    }
     if (patch.context && projects.has(patch.context.project)) {
       const { project, environment, release } = patch.context;
       settings.contexts[project] = { environment: typeof environment === 'string' ? environment : '', release: typeof release === 'string' ? release : '' };
@@ -163,7 +179,18 @@ function wireAPI() {
     if (environment && !data.environments.some(e => e.name === environment)) throw new Error('Environnement inconnu');
     const task = request.task || null;
     if (task && !data.tasks.some(t => t.id === task)) throw new Error('Tâche inconnue');
-    return terminal({ action: 'create', project, environment, task, release: data.selectedRelease, cols: 100, rows: 30 });
+    const workingDirectory = settings.profiles?.[project]?.workingDirectory || project;
+    if (workingDirectory !== project) {
+      const service = await terminal({ action: 'ping' });
+      if (!service.capabilities?.includes('working-directory')) {
+        if ((await terminal({ action: 'list' })).length) throw new Error('Le service persistant est encore en version 0.1. Arrêtez explicitement tous ses terminaux avant de créer une session dans un dossier personnalisé. Vos programmes actuels sont conservés.');
+        // Upgrade only an empty broker. Never terminate an existing terminal.
+        if (!Number.isInteger(service.pid) || service.pid <= 1) throw new Error('Service terminal incompatible');
+        process.kill(service.pid, 'SIGTERM'); broker?.destroy(); broker = null;
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+    }
+    return terminal({ action: 'create', project, workingDirectory, environment, task, release: data.selectedRelease, cols: 100, rows: 30 });
   });
   for (const action of ['attach', 'resize', 'write']) {
     handle('terminal:' + action, request => {

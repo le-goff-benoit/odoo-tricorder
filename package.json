@@ -1,6 +1,6 @@
 {
   "name": "odoo-tricorder",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "desktopName": "odoo-tricorder.desktop",
   "description": "Le cockpit terminal des projets et agents Odoo",
   "author": { "name": "Benoît Le Goff", "email": "le-goff-benoit@users.noreply.github.com" },
