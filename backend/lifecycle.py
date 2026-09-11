@@ -83,4 +83,3 @@ def link_flows(tasks, flows, release):
             task['flow'] = present[0]['path'] if len(present) == 1 else None
         task['flowNote'] = ('Workflow de la tentative enregistré absent ; autres associations explicites affichées.'
                             if recorded and not any(f['path'] == recorded for f in present) else None)
-

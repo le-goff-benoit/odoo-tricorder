@@ -5,6 +5,7 @@
 - Entrées, sorties et cache affichés par tâche, compteurs partiels préservés pour Claude/Codex.
 - Une dernière ligne JSONL en cours d’écriture ne masque plus les mesures précédentes.
 - Aucun cumul du relevé natif avec sa copie enregistrée ; anciens bilans et projets conservés.
+- Bouton de changement de release du terminal accessible aussi dans une fenêtre étroite.
 - Nécessite Odoo Crew mis à jour pour les nouveaux compteurs et horloges. Les durées natives sans trace de veille ne sont pas retraitées.
 
 ## Contexte et ergonomie hérités de la 0.2.6

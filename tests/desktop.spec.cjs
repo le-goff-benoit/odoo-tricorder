@@ -209,6 +209,7 @@ test('release context: none, automatic new release, same terminal and persistenc
   const options = { args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env,
     ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}) };
   let app = await electron.launch(options);
+  await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1000, 700));
   const errors = [];
   try {
     let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
@@ -284,6 +285,7 @@ test('flow starts: delayed terminal cannot hijack navigation, ambiguous adoption
   const errors = [];
   try {
     const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1000, 700));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await page.locator('#release-select').selectOption('');
     await page.locator('#tabs [data-view="plan"]').click();

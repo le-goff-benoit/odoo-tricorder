@@ -59,7 +59,9 @@
 .markdown-preview pre { background: #10191e; padding: 14px; overflow-x: auto; border-radius: 6px; }
 .markdown-preview pre code { padding: 0; } .markdown-preview blockquote { border-left: 3px solid var(--mint); padding-left: 16px; }
 .markdown-preview input[type=checkbox] { width: auto; margin-right: .5em; } .markdown-source { margin-top: 24px; color: var(--muted); }
-.no-release { max-width: 760px; line-height: 1.7; } #terminal-context .secondary { margin-left: 12px; font-size: 12px; }
+.no-release { max-width: 760px; line-height: 1.7; }
+#terminal-context { white-space: normal; overflow-wrap: anywhere; }
+#terminal-context .secondary { margin-left: 12px; font-size: 12px; max-width: 100%; white-space: normal; }
 .agent-breakdown { margin-top: 14px; }
 .agent-breakdown > summary { color: var(--mint); cursor: pointer; padding: 4px 0; }
 .agent-time-table { margin-top: 10px; min-width: 370px; border: 1px solid var(--line); border-radius: 5px; background: #162026; }

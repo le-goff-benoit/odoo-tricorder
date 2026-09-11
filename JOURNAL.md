@@ -6,6 +6,7 @@
 - README et notes alignés sur le téléchargement Ubuntu 0.2.7.
 - CI liée au commit Crew livré avec les nouveaux lecteurs ; paquet local déjà vérifié.
 - Sources publiées séparément du Debian et de son SHA-256 ; aucune donnée client embarquée.
+- CI Ubuntu : bouton de contexte masqué par la ligne non sécable sur fenêtre étroite ; retour à la ligne corrigé et parcours vérifiés à 1000 × 700.
 
 ## 2026-09-11 — Veille et jetons 0.2.7
 

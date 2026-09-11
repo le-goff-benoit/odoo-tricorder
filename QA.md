@@ -2,6 +2,11 @@
 
 ## Veille et jetons 0.2.7 — 11 septembre 2026
 
+- Publication : première CI rouge sur deux clics de contexte à résolution réduite
+  (run 34634642848). Cause : texte et bouton dans une ligne non sécable, bouton
+  hors de la zone visible. Retour à la ligne corrigé ; les deux parcours passent
+  à 1000 × 700, sans clic forcé ni suppression d’assertion. Paquet reconstruit.
+
 - Odoo Crew : 271 tests verts, dont reproduction rouge puis correction des
   chronomètres et compteurs. Horloges simulées : veille, reprise, reboot,
   plusieurs suspensions, horloge civile indépendante, ancien timer sans borne.
