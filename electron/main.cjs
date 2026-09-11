@@ -203,7 +203,17 @@ else {
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', event => event.preventDefault());
     window.webContents.session.setPermissionRequestHandler((_wc, _permission, callback) => callback(false));
-    Menu.setApplicationMenu(Menu.buildFromTemplate([{ label: 'Tricorder', submenu: [{ role: 'reload' }, { role: 'toggleDevTools' }, { type: 'separator' }, { role: 'quit', label: 'Fermer Tricorder (conserver les sessions)' }] }, { role: 'editMenu' }, { role: 'viewMenu' }]));
+    // The terminal owns Ctrl+Shift+C/V. Native pasteAndMatchStyle would also
+    // consume Ctrl+Shift+V and paste a second time, outside xterm's handler.
+    Menu.setApplicationMenu(Menu.buildFromTemplate([
+      { label: 'Tricorder', submenu: [{ role: 'reload' }, { role: 'toggleDevTools' }, { type: 'separator' }, { role: 'quit', label: 'Fermer Tricorder (conserver les sessions)' }] },
+      { label: 'Édition', submenu: [
+        { role: 'undo' }, { role: 'redo' }, { type: 'separator' },
+        { role: 'cut', accelerator: '' }, { role: 'copy', accelerator: '' }, { role: 'paste', accelerator: '' },
+        { type: 'separator' }, { role: 'selectAll', accelerator: '' },
+      ] },
+      { role: 'viewMenu' },
+    ]));
     wireAPI();
     await window.loadURL('tricorder://app/');
   }).catch(error => { dialog.showErrorBox('Odoo Tricorder', error.message); app.quit(); });

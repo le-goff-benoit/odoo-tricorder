@@ -186,6 +186,7 @@ async function mountTerminal(id) {
   term.onResize(({ cols, rows }) => api.terminals.resize({ session: id, cols, rows }).catch(() => {}));
   term.attachCustomKeyEventHandler(event => {
     if (event.ctrlKey && event.shiftKey && ['T', 'F', 'C', 'V'].includes(event.key.toUpperCase())) {
+      event.preventDefault();
       if (event.type === 'keydown' && event.key.toUpperCase() === 'C' && term.hasSelection()) api.clipboard.write(term.getSelection()).catch(e => toast(e.message));
       if (event.type === 'keydown' && event.key.toUpperCase() === 'V') api.clipboard.read().then(text => term.paste(text)).catch(() => toast('Collage indisponible'));
       return false;

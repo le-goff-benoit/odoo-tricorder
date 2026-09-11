@@ -27,10 +27,17 @@ jobs:
         env:
           TRICORDER_AGENTS_DIR: ${{ github.workspace }}/.test-tools/odoo-crew
       - run: npm run dist
+      - name: Vérifier l’application empaquetée
+        run: xvfb-run -a npm run test:packaged
+        env:
+          TRICORDER_AGENTS_DIR: ${{ github.workspace }}/.test-tools/odoo-crew
+      - run: npm run checksum
       - uses: actions/upload-artifact@v4
         with:
           name: ubuntu-amd64
-          path: release/*.deb
+          path: |
+            release/*.deb
+            release/SHA256SUMS
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

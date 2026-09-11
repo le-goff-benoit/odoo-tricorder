@@ -74,13 +74,19 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-ui-'));
   const home = path.join(temp, 'home'); fs.mkdirSync(home);
   const { project } = fixture(home);
-  const env = { ...process.env, TRICORDER_HOME: home, TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') };
+  const env = { ...process.env, HOME: home, HISTFILE: path.join(temp, 'shell-history'),
+    TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+    TRICORDER_HOME: home, TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') };
   const launchOptions = { args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env,
     ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}) };
   let app;
   const errors = [];
   try {
     app = await electron.launch(launchOptions);
+    await app.evaluate(({ Menu }) => {
+      const collect = menu => menu.items.flatMap(item => [item.role, ...(item.submenu ? collect(item.submenu) : [])]);
+      if (collect(Menu.getApplicationMenu()).includes('pasteandmatchstyle')) throw new Error('Conflicting native paste accelerator');
+    });
     let page = await app.firstWindow();
     page.on('pageerror', error => errors.push(error.message));
     await expect(page.locator('#project-title')).toHaveText('orbital-industries');
@@ -112,9 +118,13 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
       clipboard.writeText = text => { value = text; };
     });
     await page.evaluate(() => window.tricorder.clipboard.write("printf 'PASTE-%s\\n' 'OK'"));
-    await page.keyboard.press('Control+Shift+V');
+    // Untrusted DOM event exercises our handler without allowing Chromium to
+    // read the operating-system clipboard as a native default action.
+    await page.locator('.xterm-helper-textarea').dispatchEvent('keydown', { key: 'V', code: 'KeyV', ctrlKey: true, shiftKey: true, bubbles: true, cancelable: true });
+    await expect(page.locator('.xterm-screen')).toContainText('PASTE-%s');
     await page.keyboard.press('Enter');
     await expect(page.locator('.xterm-screen')).toContainText('PASTE-OK');
+    expect((await page.locator('.xterm-screen').innerText()).match(/PASTE-OK/g)).toHaveLength(1);
     await page.locator('[data-action="inspector"]').click();
     await expect(page.locator('#inspector')).toBeHidden();
     await page.locator('[data-action="inspector"]').click();

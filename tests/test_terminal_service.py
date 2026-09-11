@@ -19,7 +19,8 @@ class TerminalTests(unittest.IsolatedAsyncioTestCase):
         self.project.mkdir()
         self.socket = self.root / 'runtime/pty.sock'
         self.process = await asyncio.create_subprocess_exec(sys.executable, str(BROKER), str(self.socket),
-            stdout=asyncio.subprocess.DEVNULL, stderr=asyncio.subprocess.PIPE, start_new_session=True)
+            stdout=asyncio.subprocess.DEVNULL, stderr=asyncio.subprocess.PIPE, start_new_session=True,
+            env={**os.environ, 'HOME': str(self.root), 'HISTFILE': str(self.root / 'shell-history')})
         for _ in range(100):
             if self.socket.exists():
                 break

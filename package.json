@@ -15,8 +15,8 @@
     "test:ui": "npm run build && playwright test",
     "test:packaged": "node scripts/test-packaged.mjs",
     "checksum": "node scripts/checksum.mjs",
-    "pack": "npm run build && electron-builder --linux dir",
-    "dist": "npm run build && electron-builder --linux deb"
+    "pack": "npm run build && electron-builder --linux dir --publish never",
+    "dist": "npm run build && electron-builder --linux deb --publish never"
   },
   "build": {
     "appId": "dev.odoo.tricorder",
