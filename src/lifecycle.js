@@ -10,11 +10,7 @@ export function plainLanguageUI({ s, hasNative, actual, partial }) {
   const page = $('#content .page');
   if (!page) return;
   const controls = [...page.querySelectorAll('[data-cockpit="associate"]')];
-  if (controls.length) {
-    controls[0].textContent = 'Réglages du suivi';
-    page.querySelector('.section-title')?.append(controls[0]);
-    controls.slice(1).forEach(button => button.remove());
-  }
+  controls.forEach(button => button.remove());
   for (const panel of [...page.querySelectorAll('.native-panel:not(.quality-panel)')]) {
     const title = panel.querySelector('h2')?.textContent || '';
     if (!/Observation native|Mesures natives attribuées/.test(title)) continue;
@@ -46,12 +42,6 @@ export function plainLanguageUI({ s, hasNative, actual, partial }) {
     for (const cell of page.querySelectorAll('tbody td:last-child')) {
       if (cell.textContent === 'effort.json') cell.textContent = 'Enregistré';
       if (cell.textContent === 'Natif · non consolidé') cell.textContent = 'Provisoire';
-    }
-    const timers = (s.detail.effort?.openTimers || []).filter(t => !s.selectedTask || t.task === s.selectedTask);
-    if (timers.length) {
-      const notice = document.createElement('div'); notice.className = 'note warning open-timers';
-      notice.textContent = `${timers.length} période(s) de mesure en cours : ${timers.map(t => t.task === 'PREPARATION' ? 'préparation du plan' : t.task).join(', ')}. Les durées disponibles s’affichent à titre provisoire, hors veille.`;
-      page.querySelector('.metrics').after(notice);
     }
   }
   for (const panel of page.querySelectorAll('.quality-panel')) {
@@ -125,7 +115,7 @@ export function lifecycleUI({ s, esc, badge, when }) {
   // Existing shells never change scope as a side effect of navigation.
   $('#terminal-mismatch')?.remove();
   const terminal = s.sessions.find(t => t.id === s.selectedSession.get(s.current));
-  if (s.view === 'terminal' && terminal && ((terminal.release || null) !== (s.detail.selectedRelease || null) || (terminal.task || null) !== (s.selectedTask || null))) {
+  if (s.view === 'terminal' && terminal && ((terminal.release || null) !== (s.detail.selectedRelease || null))) {
     $('#terminal-context').insertAdjacentHTML('afterend', `<div id="terminal-mismatch" class="note" role="status"><strong>Terminal partagé du projet.</strong> Vous consultez ${esc(s.detail.selectedRelease || 'le projet sans release')}${s.detail.selectedRelease ? ' / ' + esc(s.selectedTask || 'release complète') : ''}. Changer de vue ne change pas les instructions de votre agent.<button class="text-button" data-follow-session="${esc(terminal.id)}">Revoir le contexte du terminal</button></div>`);
   }
 }

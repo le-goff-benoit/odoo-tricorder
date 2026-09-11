@@ -113,7 +113,11 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     const taskIds = [...new Set([...detail.tasks.map(t => t.id), ...(report?.rows || []).map(r => r.task), ...(report?.missing_tasks || []), ...bindings.map(b => b.task).filter(Boolean)])];
     const allRows = taskIds.map(id => {
       const estimates = (report?.rows || []).filter(r => r.task === id), native = bindings.filter(b => b.task === id && b.provider !== 'codex-runtime');
-      return { id, phase: estimates[0]?.phase || (id === 'RELEASE' ? 'closure' : 'task'), title: detail.tasks.find(t => t.id === id)?.title || estimates[0]?.title || '', agents: agentMeasures(estimates, native), ...taskMeasures(estimates, native) };
+      const task = detail.tasks.find(t => t.id === id);
+      const nodes = detail.flows.filter(f => (!f.release || f.release === detail.selectedRelease) && (f.path === task?.flow || task?.flowPaths?.includes(f.path))).flatMap(f => f.nodes || []);
+      const agents = agentMeasures(estimates, native, nodes), measures = taskMeasures(estimates, native);
+      if (measures.actual != null && agents.some(a => a.actual == null && a.reasons.includes('Intervention enregistrée · durée non mesurée'))) { measures.partial = true; measures.delta = null; }
+      return { id, phase: estimates[0]?.phase || (id === 'RELEASE' ? 'closure' : 'task'), title: task?.title || estimates[0]?.title || '', agents, ...measures };
     });
     const releaseTotal = summarizeMeasures(allRows).actual;
     const rows = allRows.filter(r => !get().selectedTask || r.id === get().selectedTask);
@@ -181,7 +185,6 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     if (contextKey !== graphContext) { graphTask = ''; graphResource = ''; graphContext = contextKey; }
     const task = s.detail.tasks.find(t => t.id === s.selectedTask);
     $('#context-bar .context-hint')?.remove();
-    $('#context-bar').insertAdjacentHTML('beforeend', `<label>PORTÉE<select id="task-select" aria-label="Portée de travail"><option value="">Release complète</option>${s.detail.tasks.map(t => `<option value="${esc(t.id)}" ${s.selectedTask === t.id ? 'selected' : ''}>${esc(t.id)} · ${esc(t.title)}</option>`).join('')}</select></label><span class="context-hint">${task ? 'Nouvelle session → tâche ' + esc(task.id) : 'Nouvelle session → release complète'}</span>`);
     if (s.view === 'terminal') {
       if (!task && !$('#inspector').hidden) $('#inspector').innerHTML = `<div class="inspector-heading"><span class="eyebrow">RELEASE COMPLÈTE</span><h3>${esc(s.detail.selectedRelease || 'Aucune release')}</h3></div><div class="pad"><p>Les nouvelles sessions concernent la release entière. Choisissez une tâche dans « Portée » pour lui consacrer une session.</p><h3>Critères d’acceptation</h3>${s.detail.tasks.map(t => `<section class="scope-criteria"><button data-task="${esc(t.id)}"><strong>${esc(t.id)} · ${esc(t.title)}</strong></button><ul>${(t.acceptance || []).map(a => `<li>${esc(a)}</li>`).join('')}</ul></section>`).join('')}</div>`;
     }
@@ -199,6 +202,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       for (const [index, row] of [...document.querySelectorAll('#content tbody > tr')].entries()) {
         const data = effortRows[index];
         if (!data) continue;
+        if (s.detail.tasks.some(t => t.id === data.id)) row.firstElementChild.querySelector('strong').innerHTML = `<button class="text-button" data-task="${esc(data.id)}">${esc(data.id)}</button>`;
         if (data.phase === 'preparation') {
           row.firstElementChild.querySelector('strong').textContent = 'Préparation du plan';
           row.firstElementChild.querySelector('small').textContent = 'Cadrage commun · non réparti rétroactivement';
@@ -219,6 +223,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         const task = effortRows[index];
         block.querySelector('.agent-time-head')?.insertAdjacentHTML('beforeend', '<span role="columnheader">Part tâche</span>');
         for (const [i, row] of [...block.querySelectorAll('.agent-time-row:not(.agent-time-head)')].entries()) {
+          for (const owner of task.agents[i].owners) row.children[0].insertAdjacentHTML('beforeend', `<small>${esc(owner)}</small>`);
           for (const reason of task.agents[i].reasons) row.children[3].insertAdjacentHTML('beforeend', `<small class="measurement-reason">${esc(reason)}</small>`);
           row.insertAdjacentHTML('beforeend', `<span role="cell" class="agent-time-share">${percent(timeShare(task.agents[i].actual, task.actual))}</span>`);
         }
@@ -235,7 +240,6 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       }
       $('#content .page').insertAdjacentHTML('beforeend', tokenPanel());
       $('#content .table-scroll').insertAdjacentHTML('afterend', `<section class="agent-allocation"><h3>Répartition entre agents · ${s.selectedTask ? 'tâche ' + esc(s.selectedTask) : 'release'}</h3><p class="muted">Parts du temps connu${effortTotals.partial ? ' · relevé partiel' : ''}. Les périodes non mesurées ne valent pas zéro.</p>${allocation.map(a => `<div class="allocation-row" data-allocation-agent="${esc(a.agent)}"><span>${esc(a.label)}</span><span>${hours(a.actual)}${a.partial ? ' · partiel' : ''}</span><strong>${percent(a.share)}</strong></div>`).join('') || '<p class="muted">Aucune répartition disponible.</p>'}</section>`);
-      $('#content .section-title').insertAdjacentHTML('afterend', '<p class="effort-live-hint muted">Les temps disponibles s’affichent dès leur enregistrement, sans attendre la clôture. Actualisation automatique toutes les 30 s ; relevés natifs toutes les 5 s. Les périodes encore sans mesure restent à compléter.</p>');
       const figures = document.querySelectorAll('#content .metrics .metric strong');
       figures[0].textContent = hours(effortTotals.initial);
       figures[1].textContent = hours(effortTotals.actual);
@@ -254,18 +258,13 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     }
     if (['agents', 'plan'].includes(s.view) && s.detail.selectedRelease) ($('#content .page') || $('#content')).insertAdjacentHTML('beforeend', qualityPanel(s.detail.quality, s.selectedTask));
     lifecycleUI({ s, esc, badge, when });
-    $('#task-select').parentElement.firstChild.textContent = 'TÂCHE CONSULTÉE';
-    $('#task-select option[value=""]').textContent = s.detail.selectedRelease ? 'Toute la release' : 'Sans tâche';
-    $('#task-select').disabled = !s.detail.selectedRelease;
     if (s.view === 'terminal' && !s.detail.selectedRelease && !$('#inspector').hidden) {
       $('#inspector').innerHTML = '<div class="pad"><h3>Travail hors release</h3><p>Démarre ton travail dans ce terminal. À la création d’une release, son plan et ses critères seront accessibles ici.</p></div>';
     }
     $('#context-bar .context-hint')?.remove();
-    $('#release-select').parentElement.after($('#task-select').parentElement);
     $('#environment-select').parentElement.classList.add('environment-context');
     $('#environment-select').parentElement.firstChild.textContent = 'ENVIRONNEMENT';
     $('#environment-select').title = 'Repère pour les nouveaux terminaux ; ne change ni la connexion, ni les permissions, ni le terminal existant.';
-    $('#task-select').title = 'Tâche consultée dans le plan, les missions et les mesures. Votre terminal reste partagé pour tout le projet.';
     $('.project-header').classList.add('compact-project');
     $('#breadcrumb').textContent = '';
     if ($('#breadcrumb').previousElementSibling) $('#breadcrumb').previousElementSibling.textContent = '';
@@ -278,12 +277,11 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       if (r) { option.textContent = option.selected ? r.title : `${r.id.slice(0, 10)} · ${r.title} · ${r.status}`; option.title = `${r.id} · ${r.taskCount ?? '?'} tâches / points`; }
     }
     const selectedRelease = s.detail.releases.find(r => r.id === s.detail.selectedRelease);
+    if (selectedRelease) $('#release-select').insertAdjacentHTML('afterend', `<span class="release-summary">${badge(selectedRelease.status, selectedRelease.status === 'ouverte' ? 'Ouverte' : selectedRelease.status === 'close' ? 'Close' : selectedRelease.status)}<span>${esc(selectedRelease.id.slice(0, 10))}</span></span>`);
     const status = workStatus(s, observations);
     $('#release-select').parentElement.classList.add('release-context');
     $('#release-select').parentElement.firstChild.textContent = 'RELEASE CONSULTÉE';
-    $('#task-select').parentElement.classList.add('task-context');
     const completed = s.detail.tasks.filter(t => t.status === 'validated').length;
-    $('#context-bar').insertAdjacentHTML('beforeend', `<div class="work-context-status"><div class="release-summary">${selectedRelease ? `${badge(selectedRelease.status, selectedRelease.status === 'ouverte' ? 'Ouverte' : selectedRelease.status === 'close' ? 'Close' : selectedRelease.status)}<span>${esc(selectedRelease.id.slice(0, 10))}</span><span>${s.detail.tasks.length ? `${completed} / ${s.detail.tasks.length} tâches validées` : 'Aucune tâche déclarée'}</span>` : '<span>Projet sans release · cadrage ou travail libre</span>'}</div><div class="current-work ${esc(status.kind)}"><strong>${esc(status.label)}</strong><span>${esc(status.text)}</span></div></div>`);
     const resources = ['documents', 'environments', 'sources'].includes(s.view);
     $('#context-bar').hidden = resources || s.view === 'express';
     if (resources) $('#content').insertAdjacentHTML('afterbegin', `<nav class="project-resources" aria-label="Ressources du projet">${[['documents', 'Fichiers'], ['environments', 'Environnements'], ['sources', 'Sources']].map(([id, label]) => `<button class="${s.view === id ? 'active' : ''}" data-view="${id}">${label}</button>`).join('')}</nav>`);
@@ -318,8 +316,33 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function localDate(value) { const d = new Date(value); return new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); }
   function preferences() {
     const ui = get().settings.ui || {};
-    modal(`<h2>Confort de lecture</h2><div class="cockpit-form"><label>Police du terminal<select id="pref-font">${[['mono', 'DejaVu Sans Mono'], ['liberation', 'Liberation Mono'], ['system', 'Monospace système']].map(([v, l]) => `<option value="${v}" ${(ui.font || 'mono') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label>Taille du terminal<input type="number" min="11" max="22" id="pref-size" value="${ui.fontSize || 13}"></label><label>Largeur des projets<input type="number" min="210" max="360" id="pref-sidebar" value="${ui.sidebarWidth || 258}"></label><label>Largeur du suivi<input type="number" min="250" max="480" id="pref-inspector" value="${ui.inspectorWidth || 310}"></label><label><input type="checkbox" id="pref-contrast" ${ui.highContrast ? 'checked' : ''}> Contraste renforcé</label></div>${action('save-preferences', 'Enregistrer')}<h3>Navigation clavier</h3><p>Ctrl Alt ↑/↓ : projets · Ctrl Alt ←/→ : tâches · Ctrl PageUp/PageDown : terminaux · Alt 1…7 : vues · Ctrl Shift P : palette · Ctrl Alt F : documents.</p>`);
-    $('#modal-content > p:last-child').textContent = 'Ctrl Alt ↑/↓ : projets · Ctrl Alt ←/→ : tâches · Ctrl PageUp/PageDown : terminaux · Alt 1…6 : Terminal, Plan, Express, Agents, Temps, Projet · Ctrl Shift P : skills · Ctrl Alt F : fichiers.';
+    modal(`<div class="preferences"><h2>Préférences</h2>
+      <form id="preferences-form">
+        <fieldset><legend>Terminal</legend><div class="cockpit-form">
+          <label>Police<select id="pref-font">${[['mono', 'DejaVu Sans Mono'], ['liberation', 'Liberation Mono'], ['system', 'Monospace système']].map(([v, l]) => `<option value="${v}" ${(ui.font || 'mono') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+          <label>Taille du texte (px)<input type="number" min="11" max="22" step="1" id="pref-size" value="${ui.fontSize || 13}" required></label>
+        </div></fieldset>
+        <fieldset><legend>Affichage</legend><div class="cockpit-form">
+          <label>Largeur de la barre latérale (px)<input type="number" min="210" max="360" step="1" id="pref-sidebar" value="${ui.sidebarWidth || 258}" required></label>
+          <label class="checkbox-label"><input type="checkbox" id="pref-contrast" ${ui.highContrast ? 'checked' : ''}> Contraste renforcé</label>
+        </div></fieldset>
+        <div class="preferences-actions"><button type="button" class="secondary" data-action="cancel-preferences">Annuler</button><button type="submit" class="primary">Enregistrer</button></div>
+      </form>
+      <section><h3>Dossiers partagés</h3><div class="cockpit-actions">${action('workspace-root', 'Dossier des projets')}${action('shared-sources', 'Sources Odoo')}</div><p class="muted">Pour un projet particulier : Projet → Sources → Configurer le projet.</p></section>
+      <details class="keyboard-help"><summary>Raccourcis clavier</summary><dl>
+        <dt>Nouvel onglet terminal</dt><dd>Ctrl Shift T</dd><dt>Rechercher dans le terminal</dt><dd>Ctrl Shift F</dd>
+        <dt>Changer de projet</dt><dd>Ctrl Alt ↑ / ↓</dd><dt>Changer de terminal</dt><dd>Ctrl PageUp / PageDown</dd>
+        <dt>Terminal · Plan · Kanban · Express · Agents · Temps · Projet</dt><dd>Alt 1…7</dd>
+        <dt>Skills</dt><dd>Ctrl Shift P</dd><dt>Rechercher un fichier</dt><dd>Ctrl Alt F</dd>
+      </dl></details></div>`);
+    $('#preferences-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!event.target.reportValidity()) return;
+      try {
+        setSettings(await api.settings({ ui: { font: $('#pref-font').value, fontSize: Number($('#pref-size').value), sidebarWidth: Number($('#pref-sidebar').value), highContrast: $('#pref-contrast').checked } }));
+        $('#modal').close(); render();
+      } catch (error) { toast(error.message); }
+    });
   }
   async function palette(env = false) {
     const skills = await api.cockpit.palette();
@@ -350,7 +373,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     const el = event.target.closest('button'); if (!el) return;
     try {
       if (el.dataset.skill) return commandModal(await api.cockpit.prepareSkill(el.dataset.skill, $('#skill-provider').value));
-      if (el.dataset.missionTask) { selectTask(el.dataset.missionTask); setView('plan'); return; }
+      if (el.dataset.missionTask) { selectTask(el.dataset.missionTask); return; }
       if (el.hasAttribute('data-files')) return await loadFiles(el.dataset.files);
       if (el.dataset.preview) {
         const preview = await api.cockpit.preview(get().current, el.dataset.preview);
@@ -383,10 +406,9 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         case 'stack-root': if (await api.cockpit.profileFolder(get().current, 'stackRoot')) { await reloadProject(); $('#modal').close(); } break;
         case 'oca-root': if (await api.cockpit.profileFolder(get().current, 'ocaRoots')) { await reloadProject(); $('#modal').close(); } break;
         case 'reset-profile': await api.cockpit.resetProfile(get().current); await reloadProject(); $('#modal').close(); break;
-        case 'preferences': preferences(); $('#modal-content').insertAdjacentHTML('beforeend', `<h3>Emplacements partagés</h3><div class="cockpit-actions">${action('workspace-root', 'Dossier des projets')}${action('shared-sources', 'Bibliothèque des sources Odoo')}</div><p class="muted">Les chemins spécifiques à un projet se règlent dans Projet → Sources → Configurer le projet.</p>`); break;
+        case 'preferences': preferences(); break;
         case 'workspace-root': { const value = await api.workspaceRoot(); if (value) { setProjects(value.projects); setSettings((await api.bootstrap()).settings); $('#modal').close(); if (value.projects.length) await chooseProject(value.projects[0].path); else render(); } break; }
         case 'shared-sources': if (await api.sourceRoot()) { $('#modal').close(); if (get().current) await reloadProject(); } break;
-        case 'save-preferences': setSettings(await api.settings({ ui: { font: $('#pref-font').value, fontSize: Number($('#pref-size').value), sidebarWidth: Number($('#pref-sidebar').value), inspectorWidth: Number($('#pref-inspector').value), highContrast: $('#pref-contrast').checked } })); $('#modal').close(); render(); break;
         case 'palette': await palette(); break;
         case 'palette-env': await palette(true); break;
         case 'search': searchDialog(); break;
@@ -411,7 +433,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     }
   });
   document.addEventListener('keydown', event => {
-    if ($('#modal').open) { if (event.key === 'Enter' && event.target.id === 'global-query') runSearch().catch(e => toast(e.message)); return; }
+    if (document.querySelector('dialog[open]')) { if (event.key === 'Enter' && event.target.id === 'global-query') runSearch().catch(e => toast(e.message)); return; }
     const s = get();
     if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'p') { event.preventDefault(); palette().catch(e => toast(e.message)); }
     if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'f') { event.preventDefault(); searchDialog(); }
@@ -419,10 +441,6 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     if (event.ctrlKey && event.altKey && ['ArrowUp', 'ArrowDown'].includes(event.key)) {
       event.preventDefault(); const at = s.projects.findIndex(p => p.path === s.current), step = event.key === 'ArrowDown' ? 1 : -1;
       const p = s.projects[(at + step + s.projects.length) % s.projects.length]; if (p) chooseProject(p.path).catch(e => toast(e.message));
-    }
-    if (event.ctrlKey && event.altKey && ['ArrowLeft', 'ArrowRight'].includes(event.key) && s.detail?.tasks.length) {
-      event.preventDefault(); const tasks = s.detail.tasks, at = tasks.findIndex(t => t.id === s.selectedTask), step = event.key === 'ArrowRight' ? 1 : -1;
-      selectTask(tasks[at < 0 ? step > 0 ? 0 : tasks.length - 1 : (at + step + tasks.length) % tasks.length].id); setView('plan');
     }
     if (event.ctrlKey && ['PageUp', 'PageDown'].includes(event.key)) {
       event.preventDefault(); const own = s.sessions.filter(t => t.project === s.current), at = own.findIndex(t => t.id === s.selectedSession.get(s.current));
@@ -432,5 +450,5 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   });
   $('.top-actions').insertAdjacentHTML('afterbegin', '<button class="text-button" data-view="project">Projet</button><button class="text-button" data-cockpit="palette" title="Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
   setInterval(refreshNative, 5000);
-  return { augment, refreshNative, applyPreferences, alertSidebar, rememberBoard: board.remember };
+  return { augment, refreshNative, applyPreferences, alertSidebar, rememberBoard: board.remember, openTask: board.openTask };
 }

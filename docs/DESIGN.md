@@ -8,6 +8,13 @@
 - Alignement : `--page-gutter` commun aux pages, bandeau, onglets et ressources
   (24 px, puis 16 px sur fenêtre compacte).
 - Sections : 24 px ; cartes : 16 px internes ; éléments liés : 8 ou 12 px.
+- Kanban : colonnes sans fond/cadre ; cartes compactes (12 px internes), 8 px
+  entre cartes. Les détails ne réduisent jamais la largeur du tableau : modale
+  accessible avec Échap, retour au déclencheur et critères d’acceptation en premier.
+- Aucun sélecteur de tâche global ni panneau latéral de suivi. La sélection du
+  projet/release reste distincte de la consultation ponctuelle d’une fiche.
+- Préférences : champs groupés par usage, unités explicites, validation native,
+  Annuler/Enregistrer pour l’affichage ; dossiers et aide clavier séparés.
 - Panneaux : rayon 8 px ; contrôles : rayon 6 px, hauteur minimale 36 px.
 - Titres de section : 18 px ; cartes : 14 px ; contenu : 13 px ; détails : 12 px.
 - Réutiliser `.page`, `.section-title`, `.info-card`, `.primary`, `.secondary`,

@@ -143,6 +143,46 @@ dialog { padding: var(--space-6); border-radius: var(--radius-panel); }
 .board-filters { gap: var(--space-2); margin-bottom: var(--space-4); }
 .release-board-layout { gap: var(--space-4); }
 .kanban-column { padding: var(--space-3); border-radius: var(--radius-panel); }
+/* Browsing a task is a dialog, never a second workspace or a global filter. */
+.task-modal { width: min(760px, 92vw); max-height: 88vh; padding: var(--space-6); }
+.task-modal .board-detail { padding: 0; border: 0; background: none; overflow: visible; }
+.task-modal .board-detail .section-title { position: static; background: none; }
+.task-modal .board-criteria { border-top: 1px solid var(--line); }
+.task-modal h2 { padding-right: var(--space-4); }
+.kanban-board { gap: var(--space-4); padding-bottom: var(--space-2); }
+.kanban-column { border: 0; border-radius: 0; background: none; padding: 0 var(--space-1); }
+.kanban-column > h2 { padding: var(--space-2) 0; margin-bottom: var(--space-2); border-bottom: 1px solid var(--line); }
+.kanban-card { padding: var(--space-3); margin-bottom: var(--space-2); border: 1px solid transparent; background: var(--panel); border-radius: var(--radius-control); }
+.kanban-card-status { margin: 0 0 var(--space-2); }
+.kanban-card h3 { font-size: var(--font-body); line-height: 1.5; font-weight: 500; }
+.kanban-card p { margin: var(--space-2) 0; line-height: 1.5; }
+.kanban-card .board-owner { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.board-time, .kanban-card > small { font-variant-numeric: tabular-nums; }
+.release-kanban .kanban-toolbar label { display: flex; align-items: center; gap: var(--space-2); }
+.board-filters .secondary { background: transparent; border-color: transparent; }
+.board-filters [aria-pressed=true] { background: #302a23; color: var(--gold); }
+.kanban-nav.project-item { width: 100%; margin: 0; padding: var(--space-3) var(--space-4); border: 0; border-radius: 0; text-align: left; }
+.compact-project > div { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-4); }
+.compact-project h1 { margin: 0; line-height: 1.2; }
+.compact-project .project-meta { margin: 0; display: flex; align-items: center; gap: var(--space-3); }
+.compact-project .project-meta .icon-button { display: inline-flex; align-items: center; justify-content: center; margin: 0; }
+#context-bar { grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr); align-items: start; padding: var(--space-3) var(--space-4); border-left: 1px solid var(--line); gap: var(--space-4); }
+#context-bar .environment-context { grid-column: 2; grid-row: 1; padding-left: var(--space-4); }
+#context-bar select { margin-top: var(--space-1); }
+#context-bar .release-summary { display: flex; gap: var(--space-2); margin-top: var(--space-1); font-size: var(--font-small); }
+.preferences { display: grid; gap: var(--space-5); }
+.preferences h2, .preferences h3 { margin: 0; }
+.preferences fieldset { border: 0; border-bottom: 1px solid var(--line); padding: 0 0 var(--space-4); margin: 0 0 var(--space-4); min-width: 0; }
+.preferences legend { font-size: var(--font-card); color: var(--mint); padding: 0; }
+.preferences .cockpit-form { margin: var(--space-3) 0 0; }
+.preferences .checkbox-label { display: flex; flex-direction: row; align-items: center; align-self: end; min-height: var(--control-height); }
+.preferences input[type=checkbox] { width: 16px; height: 16px; margin: 0; align-self: center; }
+.preferences-actions { display: flex; justify-content: flex-end; gap: var(--space-2); }
+.keyboard-help { border-top: 1px solid var(--line); padding-top: var(--space-4); }
+.keyboard-help dl { display: grid; grid-template-columns: 1fr auto; gap: var(--space-3); margin-top: var(--space-3); font-size: var(--font-small); }
+.keyboard-help dd { margin: 0; color: var(--mint); }
+.terminal-tab-tools { display: flex; align-items: center; margin-left: auto; gap: var(--space-1); }
+.agent-time-table .agent-time-row { grid-template-columns: minmax(150px, 1.5fr) repeat(3, minmax(100px, 1fr)) minmax(70px, .7fr); padding: var(--space-2) var(--space-3); }
 @media (max-width: 1100px) {
   :root { --page-gutter: var(--space-4); --section-gap: var(--space-4); }
   .page { padding: var(--section-gap) var(--page-gutter); }

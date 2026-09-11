@@ -1,5 +1,23 @@
 # QA — Odoo Tricorder
 
+## Ergonomie et agents — 0.2.9
+
+- 63 tests Python + 37 tests JavaScript : 100 verts ; `git diff --check` vert.
+- 15 parcours Electron locaux verts, dont NECA en lecture seule (empreintes conservées).
+- Paquet final : 15 parcours verts en 48,3 s ; JS/CSS empaquetés identiques au build.
+- Navigation adaptée : pas de filtre global de tâche ; Kanban, plan, agents et
+  mesures indépendants du contexte du terminal. Fiche modale, Échap, focus, scroll,
+  changement de release, actualisation et tâches homonymes contrôlés.
+- Préférences : structure, saisies invalides, enregistrement et annulation testés.
+- Claude/Codex : faux exécutables de shell uniquement ; bon dossier, un terminal
+  par lancement, double clic protégé, aucun appel fournisseur ni consommation réelle.
+- Agents : noms canoniques et responsables explicites, interventions sans chrono
+  visibles sans durée fabriquée ; aucune estimation rétroactive ni fausse économie.
+- Captures inspectées : Kanban compact, fiche, préférences, plan desktop/compact.
+  Huit vues vérifiées à 1440/1000 px, sans débordement du document.
+- Aucun changement des fichiers clients, de Crew ou de l’application installée.
+- Debian amd64 : `64faaf7fdb53af6f0699f37d4ff800fd30d45cbcfca3c4fbcacf53d842faa27f`.
+
 ## Livraison 0.2.8
 
 - Crew publié : `72702f4a18185adb1fddbb505ed71a99d039a3a4`, profils actifs conformes.

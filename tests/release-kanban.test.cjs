@@ -1,6 +1,18 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const load = () => import('../src/release-kanban.mjs');
+test('a reached agent without a timer stays visible and prevents a false complete saving', async () => {
+  const { releaseCards } = await load();
+  const [card] = releaseCards({ selectedRelease: 'r', tasks: [{ id: 'T01', status: 'running', flow: 'f' }],
+    flows: [{ path: 'f', release: 'r', nodes: [
+      { role: 'odoo-analyst', executor: 'agent', status: 'done' },
+      { role: 'odoo-developer', executor: 'agent', status: 'claimed', owner: 'claude-dev-T01' },
+    ] }], effort: { rows: [{ task: 'T01', agent: 'odoo-developer', actual_minutes: 15, initial: { expected_minutes: 30 } }] } });
+  assert.equal(card.measures.actual, 15);
+  assert.equal(card.measures.partial, true);
+  assert.equal(card.measures.delta, null);
+  assert.equal(card.agents.find(a => a.agent === 'odoo-analyst').actual, null);
+});
 test('release board separates receipts, stale proofs, legacy declarations and deferrals', async () => {
   const { releaseColumn } = await load();
   assert.equal(releaseColumn({ progress: 'received', status: 'stale' }), 'done');

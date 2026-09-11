@@ -1,5 +1,17 @@
 # Journal
 
+## 2026-09-11 — Ergonomie simplifiée 0.2.9
+
+- Retrait du filtre global de tâche, du panneau de suivi et du pied du terminal.
+- Kanban compact, fiche modale accessible ; navigation sans réaffectation du shell.
+- Préférences structurées, contraste aligné, noms d’agents et responsables conservés.
+- Interventions du workflow visibles même sans relevé de temps ; aucune durée inventée.
+- Boutons Claude/Codex explicites dans un nouveau shell, commandes simulées en tests.
+- Lecture NECA : T01 possède un chrono développeur, pas de relevé analyste/orchestrateur.
+- Les données et agents du client ne sont pas modifiés. Publication/installation distinctes.
+- QA : 100 tests unitaires et 15 parcours sur le paquet verts, NECA en lecture seule.
+- Publication GitHub 0.2.9 demandée ; application installée laissée intacte.
+
 ## 2026-09-11 — Livraison de la 0.2.8
 
 - Demande explicite : publier Tricorder, mettre à jour le poste et pousser la logique Crew.

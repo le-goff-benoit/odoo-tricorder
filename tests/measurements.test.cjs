@@ -1,6 +1,26 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const load = () => import('../src/measurements.mjs');
+test('workflow participation exposes actual agent names, never invents elapsed time', async () => {
+  const { agentMeasures } = await load();
+  const rows = [{ agent: 'odoo-developer', actual_minutes: 15 }, { agent: 'orchestrateur', actual_minutes: null }];
+  const nodes = [
+    { role: 'orchestrator', executor: 'agent', status: 'done' },
+    { role: 'odoo-analyst', executor: 'agent', status: 'done' },
+    { role: 'odoo-developer', executor: 'agent', status: 'claimed', owner: 'claude-odoo-developer-T01' },
+    { role: 'odoo-tester', executor: 'agent', status: 'ready' },
+    { role: 'human', executor: 'human', status: 'done' },
+  ];
+  const result = agentMeasures(rows, [], nodes);
+  assert.deepEqual(result.map(a => a.label), ['odoo-developer', 'orchestrator', 'odoo-analyst']);
+  assert.deepEqual(result[0].owners, ['claude-odoo-developer-T01']);
+  assert.equal(result[0].actual, 15);
+  for (const row of result.slice(1)) {
+    assert.equal(row.actual, null); assert.equal(row.initial, null);
+    assert.deepEqual(row.owners, []);
+    assert.deepEqual(row.reasons, ['Intervention enregistrée · durée non mesurée']);
+  }
+});
 test('preparation and native task observations cannot count the same period twice', async () => {
   const { withoutPreparationOverlap } = await load();
   const reservation = [{ provider: 'codex', thread: 'session', since: '2026-09-11T10:00:00Z', until: '2026-09-11T10:10:00Z' }];
@@ -108,7 +128,7 @@ test('agent breakdown preserves partial roles and reconciles to the recorded tas
   ];
   const native = [{ role: 'orchestrateur', usage: { active_seconds: 600, complete: true } }];
   const agents = agentMeasures(rows, native);
-  assert.equal(agents.length, 3); assert.equal(agents[0].label, 'Développement');
+  assert.equal(agents.length, 3); assert.equal(agents[0].label, 'odoo-developer');
   assert.equal(agents[0].initial, 20); assert.equal(agents[0].revised, 25);
   assert.equal(agents[2].actual, null); // Not replaced by provisional native time.
   assert.equal(summarizeMeasures(agents).actual, taskMeasures(rows, native).actual);
@@ -122,7 +142,7 @@ test('native-only breakdown groups explicit roles without inventing child-agent 
     { usage: { active_seconds: 30, complete: false } },
   ]);
   assert.equal(agents.length, 2); assert.equal(agents[0].actual, 3);
-  assert.equal(agents[1].label, 'Non attribué'); assert.equal(agents[1].partial, true);
+  assert.equal(agents[1].label, 'Agent non identifié'); assert.equal(agents[1].partial, true);
   assert.equal(summarizeMeasures(agents).actual, 3.5);
 });
 

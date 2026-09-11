@@ -28,13 +28,18 @@ export function releaseCards(detail, bindings = []) {
     const active = agents.some(a => ['active', 'tool'].includes(a.state));
     const recorded = (detail.effort?.rows || []).filter(r => r.task === task.id);
     const measured = observed.filter(b => b.provider !== 'codex-runtime');
+    const breakdown = agentMeasures(recorded, measured, flows.flatMap(f => f.nodes || []));
+    const measures = taskMeasures(recorded, measured);
+    if (measures.actual != null && breakdown.some(a => a.actual == null && a.reasons.includes('Intervention enregistrée · durée non mesurée'))) {
+      measures.partial = true; measures.delta = null;
+    }
     return { ...task, column: releaseColumn(task, flow), flows, flow, waiting,
       blocked: ['blocked', 'interrupted', 'deadlocked'].includes(task.status) || ['blocked', 'deadlocked'].includes(flow?.status),
       owners: [...new Set(claimed.map(n => n.owner).filter(Boolean))],
       providers: [...new Set(observed.map(b => b.provider?.split('-')[0]).filter(p => ['codex', 'claude'].includes(p)))],
       stage: claimed.map(n => n.description || n.role).join(' · ') || (next.length ? 'Prochaine étape : ' + next.map(n => n.description || n.role).join(' · ') : ''),
       activity: waiting ? 'Votre décision est attendue' : active ? 'Activité observée' : 'Activité non confirmée',
-      measures: taskMeasures(recorded, measured), agents: agentMeasures(recorded, measured),
+      measures, agents: breakdown,
     };
   });
 }

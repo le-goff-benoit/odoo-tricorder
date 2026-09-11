@@ -2,6 +2,19 @@
 
 # Odoo Tricorder
 
+### Nouveautés 0.2.9
+
+- Navigation au niveau projet/release : une fiche de tâche ne filtre plus les autres vues.
+- Kanban allégé, sans cadre autour des colonnes ; détails en fenêtre modale,
+  critères en premier. Accessible aussi depuis le plan, les agents et les temps.
+- Préférences regroupées par Terminal, Affichage, Dossiers et Raccourcis.
+- Suppression du panneau latéral de suivi, du pied du terminal et des réglages
+  manuels de suivi. Express dispose de son propre pictogramme.
+- Boutons Claude/Codex sur le terminal vide : lancement explicite dans un nouveau
+  shell du projet, sans toucher aux terminaux existants. Les exécutables doivent être installés.
+- Noms des agents dans les mesures, identifiants de responsables quand disponibles.
+  Une intervention du workflow sans relevé est affichée sans inventer sa durée.
+
 ### Nouveautés 0.2.8
 
 - Onglet **Kanban** de la release : avancement, réceptions distinctes des preuves,
@@ -45,13 +58,13 @@ mesurés : sous-total **partiel**, rôles à compléter, périodes ouvertes et a
 en heures/minutes. Un suivi partiel n'est pas une économie sur la prévision complète.
 Les observations provisoires ne sont jamais additionnées au registre enregistré.
 
-La **0.2.8** cible Ubuntu 22.04/24.04 amd64.
+La **0.2.9** cible Ubuntu 22.04/24.04 amd64.
 Le paquet est construit et essayé sur Pop!_OS 22.04.
-Télécharger le fichier `.deb` depuis la [release 0.2.8](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.2.8),
+Télécharger le fichier `.deb` depuis la [release 0.2.9](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.2.9),
 puis exécuter cette commande depuis son dossier de téléchargement :
 
 ```bash
-sudo apt install ./odoo-tricorder_0.2.8_amd64.deb
+sudo apt install ./odoo-tricorder_0.2.9_amd64.deb
 ```
 
 Ouvrir Odoo Tricorder depuis les applications. Python 3 et les bibliothèques du
@@ -61,12 +74,12 @@ séparément. Le terminal fonctionne aussi sans eux.
 ## Un cockpit, pas un IDE
 
 - Projets, favoris, releases, environnements et vrais terminaux persistants.
-- Portée permanente **Projet → Release → Release complète ou tâche**.
-- Critères d’acceptation visibles sur les cartes du plan et dans le suivi.
+- Navigation **Projet → Release** ; consultation d’une tâche dans une fenêtre modale.
+- Critères d’acceptation visibles sur les cartes du plan et dans les fiches de tâche.
 - Missions des agents : rôle, portée, workflow, sessions et sous-agents observables.
 - Pictogrammes Claude/Codex dans les onglets ; **projet rouge et « ! »** lorsqu’une
   attente humaine est signalée, notification du bureau si la fenêtre n’a pas le focus.
-- Estimations et mesures par tâche, activation guidée, distinction cumul/délai/attente,
+- Estimations et mesures par tâche, noms des agents, distinction cumul/délai/attente,
   préparation de la consolidation des mesures dans Odoo Crew.
 - Volume de QA depuis les preuves JUnit : exécutés, réussis, échecs, erreurs, ignorés.
 - Explorateur en lecture seule : dossiers, code, inbox, mémoire, aperçus texte/image,
@@ -79,19 +92,18 @@ séparément. Le terminal fonctionne aussi sans eux.
 ## Prise en main
 
 1. Sélectionner un projet dans la liste de gauche (dossiers découverts automatiquement).
-2. Choisir la release et la **tâche consultée**. L’environnement est un repère séparé,
+2. Choisir la release (ou aucune). L’environnement est un contexte séparé,
    pas une connexion ou une autorisation.
 3. Ouvrir un terminal de projet et le conserver pour tout le travail. Naviguer entre
    releases et tâches ne change pas les instructions de l’agent ni le shell.
-4. Lancer `claude` ou `codex`, puis les skills habituels : `/odoo-plan` pour Claude,
+4. Cliquer sur **Claude** ou **Codex** dans le terminal vide, ou saisir la commande
+   dans un shell existant, puis les skills habituels : `/odoo-plan` pour Claude,
    `$odoo-plan` pour Codex. La palette prépare la bonne syntaxe, sans l’exécuter.
-5. Facultatif : **Agents → Réglages du suivi** relie la conversation aux
-   durées/jetons disponibles. Le suivi des tâches et workflows ne dépend pas de cette
-   association. Une conversation peut couvrir toute la release dans le même terminal ;
-   une attribution à une tâche exige des bornes adaptées, sans chevauchement.
-6. Pour observer Claude avec ses hooks, préparer son lancement dans ce dialogue,
-   puis copier la commande dans le shell. Pour Codex, un identifiant exact permet
-   aussi de lire le statut via son service local existant.
+5. Consulter le Kanban et les mesures produites par Odoo Crew. Les tâches restent
+   toutes visibles ; une fiche ne réaffecte ni le terminal ni les mesures.
+6. Les interventions sans durée restent signalées comme non mesurées. Le cockpit
+   ne transforme pas l’historique des étapes en chronomètre et ne lance pas de collecte
+   globale des conversations. Les associations natives existantes sont conservées.
 
 L’association est volontaire : aucune exploration globale des conversations
 personnelles, aucun prompt ou contenu d’outil affiché dans les événements.

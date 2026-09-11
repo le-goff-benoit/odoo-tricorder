@@ -14,11 +14,14 @@ suffit pas : vérifier aussi la sélection mémorisée et les processus conserv�
 | Une lecture du précédent projet arrive en retard | Ni écran courant ni sélection mémorisée écrasés | `flow starts`, réponse IPC retardée explicitement |
 | Lecture projet en erreur, puis réparation de la cause | Écran d’erreur sans blocs parasites ; actualisation récupérable, aucune exception JS | `Markdown preview` |
 | Observation native hors release ou dialogue annulé | Pas de retour implicite à une release ; annulation sans association enregistrée | `cockpit-context.test.cjs` |
-| Consultation d’une autre release ou tâche | Consultation distincte du terminal ; mémoire des tâches par release | `lifecycle` |
+| Consultation d’une autre release ou tâche | Fiche modale indépendante, aucun filtre global ni réaffectation du terminal | `lifecycle`, `simplified workspace` |
 | Contexte changé entre lecture et attribution | Refus de l’ancien contexte ; refus d’une release absente ou d’un terminal d’un autre projet | `release context` |
 | Markdown contenant du HTML hostile | Texte mis en forme, code passif, source consultable, aucune action injectée ni requête HTTP | `Markdown preview` |
 | Mesures partielles, filtre puis actualisation | Temps connu conservé, absence distincte de zéro, pas de faux écart | `effort`, `measurements.test.cjs` |
-| Nouveaux relevés pendant une release ouverte | Temps et parts tâches/agents à jour sans clôture ; part release inchangée par le filtre tâche | `effort: open release` |
+| Nouveaux relevés pendant une release ouverte | Temps et parts tâches/agents à jour sans clôture, toutes les tâches visibles | `effort: open release` |
+| Agent présent dans le workflow mais sans chronomètre | Nom conservé, intervention signalée, durée inconnue ; aucun gain inventé | `measurements`, `release-kanban`, `simplified workspace` |
+| Boutons Claude/Codex et double clic | Un seul nouveau terminal, bon projet, commande autorisée seulement, aucun terminal existant modifié | `simplified workspace`, fausses commandes locales |
+| Préférences invalides ou annulées | Validation des bornes, valeurs non enregistrées ; persistance après validation | `simplified workspace` |
 | Travail terminé mais mesure absente/interrompue | Motif du relevé incomplet affiché par rôle ; aucun statut de travail modifié | `test_effort_explains_unrecorded_running_interrupted_and_missing_duration`, parcours NECA |
 | Cadrage commencé sans release puis rattaché | Une seule mesure, aucune prévision inventée, disparition du total hors release après rattachement | `preparation`, `test_preparation_before_plan_moves_between_views_without_writes` |
 | Une observation native recouvre le cadrage | Période non additionnée ; seules les fenêtres explicitement disjointes peuvent compléter les tâches | `measurements.test.cjs` |

@@ -52,17 +52,23 @@ export function taskMeasures(estimates, native) {
     delta: comparable && actual != null && (revised ?? initial) != null ? actual - (revised ?? initial) : null };
 }
 
-export function agentMeasures(estimates, native) {
+export function agentMeasures(estimates, native, nodes = []) {
   // Use the same source for every role as for the task total: never fill missing
   // recorded roles with native time and accidentally double-count a conversation.
   const observations = taskMeasures(estimates, native).basis === 'effort.json' ? [] : native;
-  const roles = [...new Set([...estimates.map(r => r.agent || ''), ...observations.map(r => r.role || '')])];
-  const labels = { 'odoo-analyst': 'Analyse', 'odoo-developer': 'Développement', 'odoo-tester': 'QA / tests',
-    'odoo-studio': 'Studio', 'odoo-support': 'Support', orchestrateur: 'Coordination', orchestrator: 'Coordination' };
+  const roleKey = role => role === 'orchestrateur' ? 'orchestrator' : role;
+  const reached = nodes.filter(n => ['done', 'claimed'].includes(n.status) && n.executor !== 'human' && n.role && n.role !== 'human');
+  const roles = [...new Set([...estimates.map(r => r.agent || ''), ...observations.map(r => r.role || ''),
+    ...reached.filter(n => !estimates.some(r => roleKey(r.agent) === roleKey(n.role)) && !observations.some(r => roleKey(r.role) === roleKey(n.role))).map(n => n.role)])];
   const reasons = { unrecorded: 'Aucun relevé enregistré', running: 'Mesure en cours', interrupted: 'Mesure interrompue, durée inconnue', 'missing-duration': 'Durée indisponible' };
-  return roles.map(agent => ({ agent, label: labels[agent] || agent || 'Non attribué',
-    reasons: [...new Set(estimates.filter(r => (r.agent || '') === agent).map(r => reasons[r.timeState]).filter(Boolean))],
-    ...taskMeasures(estimates.filter(r => (r.agent || '') === agent), observations.filter(r => (r.role || '') === agent)) }));
+  return roles.map(agent => {
+    const work = reached.filter(n => roleKey(n.role) === roleKey(agent));
+    const measures = taskMeasures(estimates.filter(r => (r.agent || '') === agent), observations.filter(r => (r.role || '') === agent));
+    return { agent, label: roleKey(agent) || 'Agent non identifié',
+      owners: [...new Set(work.map(n => n.owner).filter(Boolean))],
+      reasons: work.length && measures.actual == null ? ['Intervention enregistrée · durée non mesurée'] : [...new Set(estimates.filter(r => (r.agent || '') === agent).map(r => reasons[r.timeState]).filter(Boolean))],
+      ...measures };
+  });
 }
 
 export function timeShare(value, total) {
