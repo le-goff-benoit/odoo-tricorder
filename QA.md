@@ -24,6 +24,9 @@
   la contre-épreuve en bureau virtuel reste portée par GitHub Actions.
 - Installation locale autorisée puis réalisée : dpkg 0.2.9, archive installée
   identique au paquet testé, fenêtre rouverte, même identifiant/PID de terminal actif.
+- Seconde CI : défilement vert ; course préexistante dans le test de démarrage
+  (redimensionnement avant création de fenêtre). Attente explicite de `firstWindow`
+  avant accès à la fenêtre/au menu, sans temporisation arbitraire ni code produit modifié.
 
 ## Livraison 0.2.8
 
