@@ -1,5 +1,13 @@
 # QA — Odoo Tricorder
 
+## Livraison 0.2.8
+
+- Crew publié : `72702f4a18185adb1fddbb505ed71a99d039a3a4`, profils actifs conformes.
+- 98 tests Tricorder rejoués avec ce Crew : verts. Changements de publication
+  limités à README, documentation et révision CI ; code empaqueté inchangé.
+- Le paquet conserve le SHA-256 `36a6265e123a03b43381c8d25364f97d676688b0af1ffe6efd6689e7ab8803d8`.
+- Consignes de suivi désormais livrées côté Crew ; aucun superviseur dans l'interface.
+
 ## Kanban de release et design commun — révision locale 0.2.8
 
 - Base : `290d93e` ; Crew lu à `dd530627e70524257661a69e1ef0179f303ece0d`, sans modification.

@@ -2,7 +2,7 @@
 
 # Odoo Tricorder
 
-### Ajouts locaux 0.2.8 (non publiés)
+### Nouveautés 0.2.8
 
 - Onglet **Kanban** de la release : avancement, réceptions distinctes des preuves,
   filtres prêtes / bloquées / accord attendu / responsable. Les états inconnus et
@@ -12,8 +12,8 @@
   reste une consultation ; elle n'interrompt ni ne réaffecte le terminal.
 - Socle de [design commun](docs/DESIGN.md) : espacements, alignements, cartes,
   boutons, tableaux et dialogues, contrôlés sur huit vues en desktop et compact.
-- [Analyse du suivi utile des agents](docs/AGENT_PROGRESS.md) : propositions à
-  expérimenter, distinctes du Kanban livré ; aucun superviseur automatique actif.
+- [Suivi utile des agents](docs/AGENT_PROGRESS.md) : consignes de points d'étape
+  dans Odoo Crew mis à jour ; aucun superviseur automatique dans Tricorder.
 
 Un terminal de bureau pour vos projets et agents Odoo, installable sur Ubuntu.
 Vos dossiers à gauche, un vrai shell au centre, des missions à la portée explicite.
@@ -24,7 +24,7 @@ Vos dossiers à gauche, un vrai shell au centre, des missions à la portée expl
 
 ## Installer
 
-**Version de travail 0.2.8** : cadrage `/odoo-plan` visible avant la release,
+**Version 0.2.8** : cadrage `/odoo-plan` visible avant la release,
 puis rattaché sans double comptage ; préparation/tâches/clôture, parts du temps
 et jetons par rôle. Nécessite Odoo Crew avec les commandes `prepare-*`.
 Le bandeau distingue release consultée, avancement et activité observée ;
@@ -33,8 +33,6 @@ Le **Kanban global**, dans la barre latérale, réunit les tâches de tous les p
 À faire, En cours, À valider, Bloqué / à vérifier, Terminé. Les releases closes
 sont masquées par défaut ; chaque carte ouvre la bonne release et la bonne tâche.
 Les statuts viennent des plans et des preuves, sans glisser-déposer de validation.
-Cette version locale n'est pas encore publiée ; le téléchargement ci-dessous
-reste celui de la 0.2.7.
 
 La **0.2.7** ajoute le suivi des chronomètres hors veille et les compteurs de jetons détaillés, en complément du travail sans release et des aperçus Markdown (voir [QA.md](QA.md)).
 La protection veille demande également les outils Odoo Crew mis à jour : elle
@@ -47,13 +45,13 @@ mesurés : sous-total **partiel**, rôles à compléter, périodes ouvertes et a
 en heures/minutes. Un suivi partiel n'est pas une économie sur la prévision complète.
 Les observations provisoires ne sont jamais additionnées au registre enregistré.
 
-La **0.2.7** cible Ubuntu 22.04/24.04 amd64.
+La **0.2.8** cible Ubuntu 22.04/24.04 amd64.
 Le paquet est construit et essayé sur Pop!_OS 22.04.
-Télécharger le fichier `.deb` depuis la [release 0.2.7](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.2.7),
+Télécharger le fichier `.deb` depuis la [release 0.2.8](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.2.8),
 puis exécuter cette commande depuis son dossier de téléchargement :
 
 ```bash
-sudo apt install ./odoo-tricorder_0.2.7_amd64.deb
+sudo apt install ./odoo-tricorder_0.2.8_amd64.deb
 ```
 
 Ouvrir Odoo Tricorder depuis les applications. Python 3 et les bibliothèques du

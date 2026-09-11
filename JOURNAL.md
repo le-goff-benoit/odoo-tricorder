@@ -1,5 +1,14 @@
 # Journal
 
+## 2026-09-11 — Livraison de la 0.2.8
+
+- Demande explicite : publier Tricorder, mettre à jour le poste et pousser la logique Crew.
+- Crew publié à `72702f4` : bilans utiles, passation bornée, pas de réception anticipée.
+- Profils locaux reconstruits ; CI Tricorder épinglée sur cette révision publique.
+- README et notes de version alignés sur le téléchargement 0.2.8.
+- Paquet testé : 98 tests, 14 parcours Electron dont NECA en lecture seule.
+- Mise à jour système distincte de la publication ; terminaux persistants à préserver.
+
 ## 2026-09-11 — Kanban de release et socle visuel partagé
 
 - Demande : implémenter le Kanban proposé et harmoniser l'ensemble des vues.

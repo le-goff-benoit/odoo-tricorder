@@ -20,8 +20,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: le-goff-benoit/odoo-crew
-          # Publish this Crew commit before pushing this Tricorder revision.
-          ref: dd530627e70524257661a69e1ef0179f303ece0d
+          # Published Crew revision: preparation metrics and progress instructions.
+          ref: 72702f4a18185adb1fddbb505ed71a99d039a3a4
           path: .test-tools/odoo-crew
       - run: npm ci
       - run: npm test

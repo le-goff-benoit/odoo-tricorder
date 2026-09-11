@@ -1,6 +1,8 @@
 # Piloter l'utilité d'une investigation
 
-Statut : **proposition**, pas une politique active, ni un superviseur installé.
+Statut : **consigne de pilotage adoptée dans Odoo Crew**, à la demande explicite
+du chef de projet. Voir les [essais et limites](https://github.com/le-goff-benoit/odoo-crew/tree/main/docs/quality-lab/progress-2026-09-11).
+L'affichage structuré de ces bilans reste une proposition, sans superviseur installé.
 L'onglet Kanban montre les états et preuves déjà exposés ; il n'évalue pas la
 nécessité du raisonnement d'un agent et ne lui envoie pas de messages.
 
@@ -28,8 +30,9 @@ Pas de changement automatique des modèles, budgets ou protections Odoo.
   attente, durée des tours, temps-agent cumulé et délai réel ne sont pas synonymes.
 - La réception vérifie la présence et la fraîcheur des preuves ; la pertinence
   métier de celles-ci nécessite encore une relecture.
-- Les profils prescrivent déjà une analyse proportionnée et l'annonce des étapes
-  longues. Il manque un point intermédiaire structuré liant découvertes et décision.
+- Les profils mis à jour prescrivent une analyse proportionnée et un point
+  intermédiaire liant découvertes et décision ; son observation automatique
+  et son affichage structuré ne sont pas implémentés dans le cockpit.
 
 ## Contrat court confié à l'agent
 
@@ -44,9 +47,9 @@ La reproduction navigateur existe ; ne pas rejouer tout l'inventaire. Détermine
 si le contrat est assez clair pour confier la correction au développeur, et
 transmettre le test de reproduction et la piste restante. »
 
-## Point intermédiaire proposé
+## Point intermédiaire dans les consignes ; affichage proposé
 
-À tester : premier bilan après environ 10 minutes actives, puis au franchissement
+Consigne adoptée : premier bilan après environ 10 minutes actives, puis au franchissement
 du budget ou après deux pistes sans nouvel acquis. C'est un seuil de revue,
 **pas une limite universelle**, une preuve d'échec ou une obligation d'obtenir
 un nouvel accord humain toutes les dix minutes.
@@ -83,7 +86,7 @@ extrapoler un benchmark Cursor ni une seule release à toutes les tâches Odoo.
 Notre banc Crew a d'ailleurs déjà observé un cas où déléguer augmentait durée
 et jetons : davantage d'agents n'est pas un objectif en soi.
 
-## Avant adoption
+## Avant un superviseur automatique ou une affirmation de gain
 
 Tester une investigation normale, une recherche justifiée mais longue, une
 boucle répétitive, une attente humaine, une suspension/reprise, un changement
