@@ -17,6 +17,13 @@
   Huit vues vérifiées à 1440/1000 px, sans débordement du document.
 - Aucun changement des fichiers clients, de Crew ou de l’application installée.
 - Debian amd64 : `64faaf7fdb53af6f0699f37d4ff800fd30d45cbcfca3c4fbcacf53d842faa27f`.
+- Première CI : un test exigeait un défilement supérieur à 100 px alors que la
+  fenêtre n’en permettait que 68. Le contrat compare désormais la position réellement
+  atteinte avant/après actualisation, avec défilement non nul ; code livré inchangé.
+- Test corrigé rejoué sur sources et paquet : vert. Xvfb absent du poste local,
+  la contre-épreuve en bureau virtuel reste portée par GitHub Actions.
+- Installation locale autorisée puis réalisée : dpkg 0.2.9, archive installée
+  identique au paquet testé, fenêtre rouverte, même identifiant/PID de terminal actif.
 
 ## Livraison 0.2.8
 

@@ -246,11 +246,12 @@ test('release Kanban: receipts, criteria, filters, live refresh and existing ter
     await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
     await page.locator('#board-owner').selectOption('');
     await page.locator('[data-release-task="T02"]').click();
-    await page.locator('#task-modal').evaluate(el => { el.scrollTop = 180; });
+    const scrollBeforeRefresh = await page.locator('#task-modal').evaluate(el => { el.scrollTop = 180; return el.scrollTop; });
+    expect(scrollBeforeRefresh).toBeGreaterThan(0);
     await page.locator('[data-action="refresh"]').evaluate(el => el.click());
     await expect(page.locator('#sync-status')).toContainText('À jour');
     await expect(page.locator('.board-detail')).toContainText('Planifier les interventions');
-    expect(await page.locator('#task-modal').evaluate(el => el.scrollTop)).toBeGreaterThan(100);
+    expect(await page.locator('#task-modal').evaluate(el => el.scrollTop)).toBe(scrollBeforeRefresh);
     await page.screenshot({ path: 'test-results/release-kanban.png' });
     await page.locator('.board-detail [data-session]').click();
     await expect(page.locator('#terminal-workspace')).toBeVisible();

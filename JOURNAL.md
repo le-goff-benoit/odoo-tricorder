@@ -10,7 +10,8 @@
 - Lecture NECA : T01 possède un chrono développeur, pas de relevé analyste/orchestrateur.
 - Les données et agents du client ne sont pas modifiés. Publication/installation distinctes.
 - QA : 100 tests unitaires et 15 parcours sur le paquet verts, NECA en lecture seule.
-- Publication GitHub 0.2.9 demandée ; application installée laissée intacte.
+- Publication GitHub 0.2.9 demandée ; installation locale ensuite autorisée et réalisée.
+- Terminal réel conservé : même identifiant/PID actif après installation et réouverture.
 
 ## 2026-09-11 — Livraison de la 0.2.8
 
