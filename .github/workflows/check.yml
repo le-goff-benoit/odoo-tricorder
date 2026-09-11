@@ -1,0 +1,38 @@
+name: Vérifier Tricorder
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Outillage Odoo de référence
+        uses: actions/checkout@v4
+        with:
+          repository: le-goff-benoit/odoo-crew
+          ref: 685a314f4f8227286a8a9d0fc46ec3435739d3a2
+          path: .test-tools/odoo-crew
+      - run: npm ci
+      - run: npm test
+      - name: Vérifier le bureau
+        run: xvfb-run -a npm run test:ui
+        env:
+          TRICORDER_AGENTS_DIR: ${{ github.workspace }}/.test-tools/odoo-crew
+      - run: npm run dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-amd64
+          path: release/*.deb
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: preuves-qa
+          path: test-results/
