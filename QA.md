@@ -2,6 +2,13 @@
 
 ## Veille et jetons 0.2.7 — 11 septembre 2026
 
+Publication finale : [CI Tricorder verte](https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/34635199296)
+sur le tag v0.2.7 ; [CI Crew verte](https://github.com/le-goff-benoit/odoo-crew/actions/runs/34634619505)
+sur v2026.09.11. Les deux releases sont publiques. Paquet corrigé installé
+localement (0.2.4 → 0.2.7) avec autorisation système, archive installée identique
+au paquet testé ; deux parcours sur l’exécutable installé passent en 10,9 s.
+La session utilisateur et son PID restent actifs, aucune fermeture forcée.
+
 - Publication : première CI rouge sur deux clics de contexte à résolution réduite
   (run 34634642848). Cause : texte et bouton dans une ligne non sécable, bouton
   hors de la zone visible. Retour à la ligne corrigé ; les deux parcours passent
@@ -23,7 +30,8 @@
 - Les dix mêmes parcours passent sur le paquet final (40,4 s), dont NECA.
 - Premier Debian 0.2.7 avant correction des fenêtres étroites : version, sources
   et catalogue vérifiés. SHA-256 antérieur : `ee2009873650c0bc82e954f818add0f084ec15c907fbe3a3b52db162c5ee752f`.
-- Paquet local prêt, non installé et non publié sur GitHub.
+- À la validation initiale, le paquet était local seulement ; publication et
+  installation finales consignées ci-dessus.
 - L’écran vérifie cache inconnu, sous-total partiel et « Veille exclue : 8 h ».
 - Génération Crew isolée puis active conforme : 30 profils et deux blocs.
 - Avertissement transitoire Codex pendant le build : le générateur écrit encore

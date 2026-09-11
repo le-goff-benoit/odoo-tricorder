@@ -7,6 +7,9 @@
 - CI liée au commit Crew livré avec les nouveaux lecteurs ; paquet local déjà vérifié.
 - Sources publiées séparément du Debian et de son SHA-256 ; aucune donnée client embarquée.
 - CI Ubuntu : bouton de contexte masqué par la ligne non sécable sur fenêtre étroite ; retour à la ligne corrigé et parcours vérifiés à 1000 × 700.
+- Releases publiques : Crew v2026.09.11 et Tricorder v0.2.7 ; contrôles GitHub verts sur les commits tagués.
+- Installation locale autorisée via dialogue système : 0.2.4 → 0.2.7, binaire vérifié et deux parcours de lancement verts.
+- Terminal existant conservé (même session et PID) ; fenêtre utilisateur non fermée automatiquement.
 
 ## 2026-09-11 — Veille et jetons 0.2.7
 
