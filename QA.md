@@ -6,6 +6,11 @@
   (run 34634642848). Cause : texte et bouton dans une ligne non sécable, bouton
   hors de la zone visible. Retour à la ligne corrigé ; les deux parcours passent
   à 1000 × 700, sans clic forcé ni suppression d’assertion. Paquet reconstruit.
+- Deuxième CI : parcours de contexte verts ; capture interrompue par le
+  rafraîchissement du DOM. La capture attend désormais la fin du rafraîchissement
+  et fait son défilement dans une seule opération synchrone ; assertions inchangées.
+- SHA-256 du paquet corrigé destiné à la publication :
+  `d7e46f98711132f7456221f60b16269f51165e41ef7e707357d1f4ea309b9b11`.
 
 - Odoo Crew : 271 tests verts, dont reproduction rouge puis correction des
   chronomètres et compteurs. Horloges simulées : veille, reprise, reboot,
@@ -16,8 +21,8 @@
 - Tricorder : 60 tests Python et 22 tests JavaScript verts ; dix parcours Electron
   sources, avec NECA en lecture seule, sans modification de ses données.
 - Les dix mêmes parcours passent sur le paquet final (40,4 s), dont NECA.
-- Debian 0.2.7 construit ; version, sources JavaScript/Electron et catalogue
-  embarqués vérifiés. SHA-256 : `ee2009873650c0bc82e954f818add0f084ec15c907fbe3a3b52db162c5ee752f`.
+- Premier Debian 0.2.7 avant correction des fenêtres étroites : version, sources
+  et catalogue vérifiés. SHA-256 antérieur : `ee2009873650c0bc82e954f818add0f084ec15c907fbe3a3b52db162c5ee752f`.
 - Paquet local prêt, non installé et non publié sur GitHub.
 - L’écran vérifie cache inconnu, sous-total partiel et « Veille exclue : 8 h ».
 - Génération Crew isolée puis active conforme : 30 profils et deux blocs.

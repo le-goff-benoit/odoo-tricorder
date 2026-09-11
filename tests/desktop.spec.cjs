@@ -128,14 +128,15 @@ test('effort: partial recorded time survives missing roles, task filtering and r
     await expect(page.locator('.open-timers')).toHaveCount(0);
     await page.locator('#task-select').selectOption('T01');
     await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#sync-status')).toContainText('À jour');
     await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('0 h 23 min');
     await expect(first.locator('.agent-breakdown')).toHaveAttribute('open', '');
     await expect(first.locator('[data-agent="odoo-developer"]')).toBeVisible();
-    await page.locator('.token-allocation').scrollIntoViewIfNeeded();
+    await page.locator('.token-allocation').evaluate(el => el.scrollIntoView({ block: 'center' }));
     await page.screenshot({ path: 'test-results/token-breakdown.png' });
-    await first.scrollIntoViewIfNeeded();
+    await first.evaluate(el => el.scrollIntoView({ block: 'center' }));
     await page.screenshot({ path: 'test-results/partial-effort.png' });
-    await first.locator('.agent-breakdown').scrollIntoViewIfNeeded();
+    await first.locator('.agent-breakdown').evaluate(el => el.scrollIntoView({ block: 'center' }));
     await page.screenshot({ path: 'test-results/agent-time-breakdown.png' });
     expect(fs.readFileSync(effortFile, 'utf8')).toBe(before);
   } finally {
