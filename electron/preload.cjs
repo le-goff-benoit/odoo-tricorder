@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('tricorder', Object.freeze({
     profile: call('profile'), profileFolder: call('profile-folder'), resetProfile: call('profile-reset'), search: call('search-documents'),
     palette: call('palette'), prepareSkill: call('prepare-skill'), prepareUsage: call('prepare-usage'), files: call('files'), preview: call('file-preview'),
     handoff: call('handoff'), exportHandoff: call('export-handoff') }),
-  terminals: Object.freeze({ list: call('terminal:list'), create: call('terminal:create'),
+  terminals: Object.freeze({ list: call('terminal:list'), create: call('terminal:create'), context: call('terminal:context'),
     attach: call('terminal:attach'), write: call('terminal:write'), resize: call('terminal:resize'), stop: call('terminal:stop'),
     onEvent(callback) { const listener = (_event, value) => callback(value); ipcRenderer.on('terminal:event', listener); return () => ipcRenderer.removeListener('terminal:event', listener); },
   }),

@@ -1,17 +1,23 @@
 {
   "name": "odoo-tricorder",
-  "version": "0.2.0",
+  "version": "0.2.7",
   "desktopName": "odoo-tricorder.desktop",
   "description": "Le cockpit terminal des projets et agents Odoo",
-  "author": { "name": "Benoît Le Goff", "email": "le-goff-benoit@users.noreply.github.com" },
+  "author": {
+    "name": "Benoît Le Goff",
+    "email": "le-goff-benoit@users.noreply.github.com"
+  },
   "homepage": "https://github.com/le-goff-benoit/odoo-tricorder",
-  "repository": { "type": "git", "url": "https://github.com/le-goff-benoit/odoo-tricorder.git" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/le-goff-benoit/odoo-tricorder.git"
+  },
   "license": "MIT",
   "main": "electron/main.cjs",
   "scripts": {
     "build": "node scripts/build.mjs",
     "start": "npm run build && electron .",
-    "test": "python3 -m unittest discover -s tests -v",
+    "test": "python3 -m unittest discover -s tests -v && node --test tests/*.test.cjs",
     "test:ui": "npm run build && playwright test",
     "test:packaged": "node scripts/test-packaged.mjs",
     "checksum": "node scripts/checksum.mjs",
@@ -73,7 +79,9 @@
   "dependencies": {
     "@xterm/addon-fit": "0.11.0",
     "@xterm/addon-search": "0.16.0",
-    "@xterm/xterm": "6.0.0"
+    "@xterm/xterm": "6.0.0",
+    "dompurify": "3.4.15",
+    "marked": "18.0.12"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

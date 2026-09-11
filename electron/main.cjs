@@ -6,6 +6,7 @@ const os = require('node:os');
 const socketNet = require('node:net');
 const { pathToFileURL } = require('node:url');
 const { promisify } = require('node:util');
+const { sessionContext, saveContext } = require('./terminal-context.cjs');
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'tricorder', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
 const LINKS = {
@@ -34,7 +35,10 @@ function saveSettings() {
 async function catalog(payload) {
   if (payload.action === 'project') { payload.sourceRoot = settings.sourceRoot; payload.profile = settings.profiles?.[payload.project]; }
   try {
-    const { stdout } = await exec('python3', [path.join(backend, 'catalog.py'), JSON.stringify(payload)], { maxBuffer: 12 * 1024 * 1024, timeout: 60000 });
+    const task = exec('python3', [path.join(backend, 'catalog.py'), '--stdin'], { maxBuffer: 12 * 1024 * 1024, timeout: 60000 });
+    task.child.stdin.on('error', () => {});
+    task.child.stdin.end(JSON.stringify(payload));
+    const { stdout } = await task;
     const data = JSON.parse(stdout);
     if (data.error) throw new Error(data.error);
     return data.result;
@@ -169,15 +173,38 @@ function wireAPI() {
       const { project, environment, release } = patch.context;
       settings.contexts[project] = { environment: typeof environment === 'string' ? environment : '', release: typeof release === 'string' ? release : '' };
     }
+    if (patch.selection && projects.has(patch.selection.project)) {
+      const { project, release, task } = patch.selection;
+      if (typeof release === 'string' && release.length < 240 && (task === null || typeof task === 'string' && /^[A-Za-z][A-Za-z0-9_-]{0,40}$/.test(task))) {
+        settings.taskSelections ||= {};
+        settings.taskSelections[JSON.stringify([project, release])] = task;
+      }
+    }
     saveSettings(); return settings;
   });
-  handle('terminal:list', () => terminal({ action: 'list' }));
+  handle('terminal:list', async () => (await terminal({ action: 'list' })).map(s => sessionContext(settings, s)));
+  handle('terminal:context', async request => {
+    const project = checkedProject(request.project);
+    const session = (await terminal({ action: 'list' })).find(s => s.id === request.session && s.project === project);
+    if (!session?.alive) throw new Error('Terminal actif introuvable dans ce projet');
+    const current = sessionContext(settings, session);
+    if ('expectedRelease' in request && current.release !== request.expectedRelease) throw new Error('Le contexte du terminal a changé');
+    const release = request.release || null, task = request.task || null;
+    if (release !== null && typeof release !== 'string') throw new Error('Release invalide');
+    const data = await catalog({ action: 'project', project, release: release || '' });
+    if (task && !data.tasks.some(t => t.id === task)) throw new Error('Tâche inconnue pour cette release');
+    if ('expectedRelease' in request && sessionContext(settings, session).release !== request.expectedRelease) throw new Error('Le contexte du terminal a changé');
+    if ('expectedProjectRelease' in request && settings.contexts[project]?.release !== request.expectedProjectRelease) throw new Error('La release consultée a changé');
+    const result = saveContext(settings, session, release, task);
+    saveSettings(); return result;
+  });
   handle('terminal:create', async request => {
     const project = checkedProject(request.project);
-    const data = await catalog({ action: 'project', project, release: request.release || null });
+    const data = await catalog({ action: 'project', project, release: request.release === null ? '' : request.release });
     const environment = request.environment || null;
     if (environment && !data.environments.some(e => e.name === environment)) throw new Error('Environnement inconnu');
     const task = request.task || null;
+    if (request.release === null && task) throw new Error('Une tâche exige une release');
     if (task && !data.tasks.some(t => t.id === task)) throw new Error('Tâche inconnue');
     const workingDirectory = settings.profiles?.[project]?.workingDirectory || project;
     if (workingDirectory !== project) {
@@ -190,7 +217,9 @@ function wireAPI() {
         await new Promise(resolve => setTimeout(resolve, 200));
       }
     }
-    return terminal({ action: 'create', project, workingDirectory, environment, task, release: data.selectedRelease, cols: 100, rows: 30 });
+    const session = await terminal({ action: 'create', project, workingDirectory, environment, task, release: data.selectedRelease, cols: 100, rows: 30 });
+    const result = saveContext(settings, session, data.selectedRelease, task, request.scopeMode === 'express' ? 'express' : 'auto');
+    saveSettings(); return result;
   });
   for (const action of ['attach', 'resize', 'write']) {
     handle('terminal:' + action, request => {

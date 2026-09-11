@@ -9,6 +9,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from urllib.parse import urlsplit, urlunsplit
+from lifecycle import release_state, legacy_tasks, receipt_context, link_flows
 
 LIMIT = 4 * 1024 * 1024
 EXCLUDED = {'odoo-sources', 'node_modules', 'snap', 'filestore', 'nobackup'}
@@ -79,12 +80,12 @@ def releases(root):
         if not folder.is_dir() or folder.is_symlink() or not (folder / 'README.md').is_file():
             continue
         try:
-            content = read_text(folder / 'README.md')
+            content = read_text(inside(root, folder / 'README.md'))
             title = re.search(r'^#\s+(.+)', content, re.M)
-            marker = re.search(r'<!--\s*release\s+([^>]+?)\s*-->', content, re.I)
-            status = (marker[1].strip().lower() if marker else 'inconnue')
+            status, status_reason = release_state(content)
             result.append({'id': folder.name, 'title': title[1] if title else folder.name,
-                           'status': status, 'hasPlan': (folder / 'plan.json').is_file(),
+                           'status': status, 'statusReason': status_reason,
+                           'hasPlan': (folder / 'plan.json').is_file(),
                            'hasEffort': (folder / 'effort.json').is_file()})
         except (OSError, ValueError):
             result.append({'id': folder.name, 'title': folder.name, 'status': 'illisible'})
@@ -94,8 +95,8 @@ def releases(root):
 def plan_tasks(root, release):
     folder = inside(root, root / 'changelog' / release)
     if not (folder / 'plan.json').is_file():
-        return [], []
-    plan = read_json(folder / 'plan.json')
+        return legacy_tasks(read_text(inside(root, folder / 'README.md')), release), []
+    plan = read_json(inside(root, folder / 'plan.json'))
     if plan.get('schema') != 1 or not isinstance(plan.get('tasks'), list):
         raise ValueError('Format du plan non pris en charge')
     warnings, statuses, availability = [], {}, {}
@@ -118,9 +119,15 @@ def plan_tasks(root, release):
             if ready:
                 state = 'ready'
         attempts = task.get('attempts', [])
+        receipt = receipt_context(root, task, read_json, inside, git)
+        if receipt and receipt['location'] == 'worktree' and state == 'stale':
+            reason = 'Réception enregistrée dans un worktree du même dépôt ; preuve non validée dans ce dossier. ' + reason
         result.append({k: task.get(k) for k in ('id', 'title', 'depends_on', 'acceptance', 'scopes', 'risk', 'route', 'request')} | {
             'status': state, 'reason': reason, 'flow': attempts[-1].get('flow') if attempts else None,
             'receiptAt': (task.get('receipt') or {}).get('at'),
+            'progress': 'deferred' if task.get('deferred') else 'received' if receipt else state,
+            'validation': state if receipt else 'not_recorded', 'source': 'plan',
+            'receiptContext': receipt,
         })
     return result, warnings
 
@@ -164,9 +171,13 @@ def flow_details(root, relative):
     claims = data.get('claims', {})
     ready = summary.get('ready', [])
     events = data.get('events', [])
-    result = {'id': path.stem, 'path': str(path.relative_to(root)), 'status': summary.get('status', data.get('status')),
+    result = {'id': path.stem, 'kind': data.get('kind'), 'path': str(path.relative_to(root)), 'status': summary.get('status', data.get('status')),
               'updatedAt': data.get('updated_at'), 'warning': warning, 'nodes': [],
               'events': events[-80:], 'ready': ready, 'edges': graph.get('edges', [])}
+    association = data.get('plan_task') or {}
+    release = association.get('release') or data.get('release')
+    result.update(release=Path(release).name if release else None, taskId=association.get('id'),
+                  scope='task' if association.get('id') else 'release' if release else 'project')
     # Only nodes actually reached by this run, plus its next steps.
     seen = list(dict.fromkeys([e['node'] for e in events if 'node' in e] + list(claims) + ready))
     for name in seen:
@@ -185,13 +196,48 @@ def flow_details(root, relative):
     return result
 
 
+def express_interventions(root):
+    """Read declared express runs, including completed runs without a release."""
+    result = []
+    for path in sorted((root / '.odoo-agents/flows').glob('*.json')):
+        try:
+            raw = read_json(inside(root, path))
+            if raw.get('kind') != 'express':
+                continue
+            flow = flow_details(root, str(path.relative_to(root)))
+            # An express run keeps its kind even after promotion to the full route.
+            flow['promoted'] = any(
+                (e.get('node'), e.get('outcome')) in
+                {('express_scope', 'full'), ('express_implementation', 'expanded')}
+                for e in raw.get('events', []))
+            qa = [e for e in raw.get('events', []) if e.get('node') == 'express_qa']
+            flow['expressQA'] = qa[-1].get('outcome') if qa else None
+            flow['expressEvidence'] = qa[-1].get('evidence', []) if qa else []
+            result.append(flow)
+        except (OSError, ValueError, TypeError, AttributeError):
+            continue
+    return sorted(result, key=lambda f: f.get('updatedAt') or '', reverse=True)
+
+
 def effort_details(folder):
     if not (folder / 'effort.json').is_file():
         return None
     try:
         data = read_json(folder / 'effort.json')
         # report_data computes the current report in memory; report() writes files.
-        return trusted_module('odoo_effort').report_data(folder, data)
+        reader = trusted_module('odoo_effort').report_data
+        # Older Crew installations still provide recorded values only.
+        import inspect
+        report = reader(folder, data, **({'live': True} if 'live' in inspect.signature(reader).parameters else {}))
+        for row in report.get('rows', []):
+            entries = [e for e in data.get('entries', []) if e.get('task') == row['task'] and e.get('agent') == row['agent']]
+            row['timeState'] = ('complete' if row.get('time_complete') else 'unrecorded' if not entries
+                                else 'running' if any(e.get('status') == 'running' for e in entries)
+                                else 'interrupted' if any(e.get('status') == 'interrupted' for e in entries)
+                                else 'missing-duration')
+        report['openTimers'] = [{'task': e['task'], 'agent': e['agent']} for e in data.get('entries', [])
+                                if e.get('status') == 'running']
+        return report
     except Exception as exc:
         return {'rows': [], 'warnings': [str(exc)], 'unverified': True}
 
@@ -218,24 +264,36 @@ def summary(root):
     root = Path(root).resolve()
     rels = releases(root)
     current = next((r for r in rels if r['status'] == 'ouverte'), rels[0] if rels else None)
-    tasks, warnings = [], []
-    if current:
+    tasks, warnings, attention, running = [], [], [], 0
+    for release in rels:
         try:
-            tasks, warnings = plan_tasks(root, current['id'])
+            release_tasks, issues = plan_tasks(root, release['id'])
+            warnings.extend(release['id'] + ' : ' + issue for issue in issues)
+            release['taskCount'] = len(release_tasks)
+            release['receivedCount'] = sum(t.get('progress') == 'received' for t in release_tasks)
+            release['validatedCount'] = sum(t['status'] == 'validated' for t in release_tasks)
+            running += sum(t['status'] == 'running' for t in release_tasks)
+            if current and release['id'] == current['id']:
+                tasks = release_tasks
+            attention.extend(t | {'release': release['id']} for t in release_tasks
+                             if t['status'] in ('stale', 'blocked', 'interrupted', 'awaiting_receipt')
+                             and not (release['status'] == 'close' and t['status'] == 'stale'))
         except Exception as exc:
-            warnings.append(str(exc))
-    attention = [t for t in tasks if t['status'] in ('stale', 'blocked', 'interrupted', 'awaiting_receipt')]
-    for relative, unassigned in related_flows(root, current['id'] if current else None):
+            warnings.append(release['id'] + ' : ' + str(exc))
+    flow_paths = dict.fromkeys(relative for release in (rels or [{'id': None}])
+                             for relative, _ in related_flows(root, release['id']))
+    for relative in flow_paths:
         try:
             flow = flow_details(root, relative)
             if flow['status'] in ('waiting_human', 'deadlocked', 'blocked'):
                 attention.append({'id': 'flow:' + flow['id'], 'title': 'Workflow du projet : ' + flow['id'],
+                                  'release': flow.get('release'),
                                   'status': flow['status'], 'reason': '; '.join(n['description'] for n in flow['nodes'] if n['status'] == 'ready') or 'Aucune étape prête'})
         except Exception as exc:
             warnings.append(Path(relative).name + ' : ' + str(exc))
     return {'path': str(root), 'name': root.name, 'series': project_series(root),
             'release': current, 'releases': rels, 'attention': attention,
-            'running': sum(t['status'] == 'running' for t in tasks), 'warnings': warnings}
+            'running': running, 'warnings': warnings}
 
 
 def overview(home, extras):
@@ -288,13 +346,13 @@ def source_details(root, series, instances, source_root=None):
 def project(root, release=None, source_root=None, profile=None):
     root = Path(root).resolve()
     data = summary(root)
-    chosen = release or (data['release']['id'] if data['release'] else None)
+    chosen = None if release == '' else release or (data['release']['id'] if data['release'] else None)
     if chosen and chosen not in {r['id'] for r in data['releases']}:
         raise ValueError('Release inconnue')
     data.update({'selectedRelease': chosen, 'branch': git(root, 'branch', '--show-current'),
                  'gitChanges': len(git(root, 'status', '--porcelain', '-uno').splitlines()),
                  'environments': [], 'tasks': [], 'flows': [], 'effort': None,
-                 'documents': [], 'inbox': []})
+                 'documents': [], 'inbox': [], 'express': express_interventions(root)})
     try:
         data['environments'] = environments(root)
     except (OSError, ValueError, AttributeError) as exc:
@@ -321,7 +379,10 @@ def project(root, release=None, source_root=None, profile=None):
             try:
                 data['flows'].append(flow_details(root, relative))
             except Exception as exc:
-                data['warnings'].append(Path(relative).name + ' : ' + str(exc))
+                data['flows'].append({'id': Path(relative).stem, 'path': relative, 'status': 'unavailable',
+                                      'missing': True, 'warning': 'Workflow local indisponible : ' + str(exc),
+                                      'nodes': [], 'events': [], 'ready': [], 'scope': 'task'})
+        link_flows(data['tasks'], data['flows'], chosen)
         data['documents'] = [{'name': p.name, 'path': str(p.relative_to(root)), 'type': p.suffix[1:]}
                              for p in sorted(folder.iterdir())
                              if p.is_file() and p.suffix.lower() in ('.md', '.pdf', '.txt')]
@@ -380,7 +441,10 @@ def dispatch(payload):
 
 if __name__ == '__main__':
     try:
-        print(json.dumps({'result': dispatch(json.loads(sys.argv[1]))}, ensure_ascii=False))
+        request = sys.stdin.read(1024 * 1024 + 1) if sys.argv[1] == '--stdin' else sys.argv[1]
+        if len(request) > 1024 * 1024:
+            raise ValueError('Requête trop volumineuse.')
+        print(json.dumps({'result': dispatch(json.loads(request))}, ensure_ascii=False))
     except Exception as error:
         print(json.dumps({'error': str(error)}, ensure_ascii=False))
         sys.exit(1)

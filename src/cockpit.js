@@ -1,4 +1,7 @@
 // Roadmap views use metadata APIs only; commands are prepared, never injected.
+import { lifecycleUI, missionCards, plainLanguageUI } from './lifecycle.js';
+import { knownSum, taskMeasures, summarizeMeasures, hours, agentMeasures, timeShare, agentAllocation, tokenMeasures } from './measurements.mjs';
+import { documentBody } from './markdown.js';
 export function providerIcon(provider) {
   const name = provider?.split('-')[0];
   const shape = name === 'claude' ? '<path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5M8 3l8 18M3 8l18 8"/>' : name === 'codex' ? '<path d="m8 5-6 7 6 7m8-14 6 7-6 7m-3-16-2 18"/>' : '<path d="m4 6 6 6-6 6m9 0h7"/>';
@@ -8,17 +11,34 @@ export function providerIcon(provider) {
 export function cockpit({ api, get, setSettings, setProjects, render, sidebar, chooseProject, setView, selectTask, selectSession, modal, toast, esc, badge, when, minutes }) {
   const $ = s => document.querySelector(s);
   let observations = [], observedProject = null, reading = false, graphTask = '', graphResource = '', graphOn = false, searchTicket = 0;
-  let prepared = '', handoff = '';
+  let prepared = '', handoff = '', graphContext = '', effortTotals = {};
+  let effortRows = [];
+  const expandedAgents = new Set();
+  const percent = value => value == null ? '—' : value.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' %';
+  document.addEventListener('toggle', event => {
+    const key = event.target.dataset?.agentDetail;
+    if (!key || !event.target.isConnected) return;
+    if (event.target.open) expandedAgents.add(key); else expandedAgents.delete(key);
+  }, true);
   let explorer = null, explorerProject = null, explorerPath = '', exploring = false, fileTicket = 0;
   const states = { unknown: 'Inconnu', idle: 'Au repos · attend une saisie', active: 'Activité observée', tool: 'Outil en cours', waiting_human: 'Décision humaine attendue', interrupted: 'Interrompu', complete: 'Terminé' };
-  const action = (name, title) => `<button class="secondary" data-cockpit="${name}">${title}</button>`;
+  const action = (name, title) => ['graph', 'handoff'].includes(name) ? '' : `<button class="secondary" data-cockpit="${name}">${title}</button>`;
   const selected = () => {
     const s = get(), task = s.detail?.tasks.find(t => t.id === s.selectedTask);
-    return { project: s.current, release: s.detail?.selectedRelease, task: task?.id, flow: task?.flow, terminal: s.selectedSession.get(s.current) };
+    const terminal = s.sessions.find(t => t.id === s.selectedSession.get(s.current) && t.project === s.current);
+    return { project: s.current, release: s.detail?.selectedRelease, task: task?.id, flow: task?.flow, terminal: terminal?.id };
   };
-  function currentObservations() {
+  function currentObservations(allTasks = false) {
     const s = get();
-    return observations.filter(b => b.project === s.current && (b.release === s.detail?.selectedRelease || !b.release));
+    return observations.filter(b => b.project === s.current && (b.release || null) === (s.detail?.selectedRelease || null) && (allTasks || !s.selectedTask || b.task === s.selectedTask));
+  }
+  function tokenPanel() {
+    const s = get(), saved = s.detail?.effort?.rows || [];
+    const native = currentObservations();
+    const ids = [...new Set([...saved.map(r => r.task), ...native.map(b => b.task)].filter(Boolean))]
+      .filter(id => !s.selectedTask || id === s.selectedTask);
+    const rows = ids.map(id => ({ id, ...tokenMeasures(saved.filter(r => r.task === id), native.filter(b => b.task === id)) }));
+    return `<section class="token-allocation"><h3>Consommation de jetons</h3><p class="muted">Entrées et sorties séparées. Le cache fait déjà partie des entrées : il ne s’ajoute pas au total. « Non mesuré » ne signifie pas zéro.</p><div class="table-scroll"><table><thead><tr><th>Tâche</th>${(rows[0]?.fields || []).map(f => `<th>${esc(f.label)}</th>`).join('')}<th>Relevé</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.id)}</td>${r.fields.map(f => `<td>${f.value == null ? 'Non mesuré' : f.value.toLocaleString('fr-CH') + (f.partial ? ' · partiel' : '')}</td>`).join('')}<td>${r.source}</td></tr>`).join('') || '<tr><td>Aucun compteur disponible.</td></tr>'}</tbody></table></div></section>`;
   }
   function applyPreferences() {
     const s = get(), ui = s.settings.ui || {};
@@ -68,28 +88,32 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function missionView() {
     const s = get(), rows = currentObservations();
     const waiting = rows.flatMap(b => b.agents || []).filter(a => a.state === 'waiting_human').length;
-    return `<div class="page"><div class="section-title"><h2>Qui fait quoi ?</h2>${badge(waiting ? 'waiting_human' : 'series', waiting ? `${waiting} décision(s) attendue(s)` : 'Suivi des missions')}</div><p class="muted">Les workflows indiquent la responsabilité ; les sessions associées indiquent le dernier état réellement observé.</p>${s.detail.flows.map(f => {
-      const task = s.detail.tasks.find(t => t.flow === f.path), linked = rows.filter(b => b.flow === f.path);
-      return `<article class="agent-mission ${f.status === 'waiting_human' || linked.some(b => b.agents?.some(a => a.state === 'waiting_human')) ? 'awaiting' : ''}"><div class="mission-state"><h3>${esc(task ? task.id + ' · ' + task.title : f.id)}</h3>${badge(f.status)}</div>${f.nodes.filter(n => ['claimed', 'ready'].includes(n.status)).map(n => `<p><strong>${esc(n.owner || n.role)}</strong> · ${esc(n.description)} ${badge(n.status, n.executor === 'human' ? 'Votre décision est attendue' : undefined)}</p><small>Ressources : ${esc((n.locks || []).map(l => l.resource || l.path || '').join(', ') || 'non réservées')}</small>`).join('') || '<p class="muted">Aucune étape active déclarée.</p>'}<div class="cockpit-actions">${linked.flatMap(b => (b.agents || []).map(a => `${providerIcon(b.provider)} ${badge(a.stale ? "unverified" : a.state, a.stale ? "Activité inconnue" : states[a.state])} <small>${esc(b.role || "orchestrator")}</small>`)).join("")}</div><p class="muted">${linked.length ? linked.length + ' session(s) associée(s), détail ci-dessous.' : 'Activité native inconnue : associez la session à ce workflow.'}</p><div class="cockpit-actions">${task ? `<button class="secondary" data-mission-task="${esc(task.id)}">Voir la tâche</button>` : ''}${linked.filter(b => b.terminal && s.sessions.some(t => t.id === b.terminal)).map(b => `<button class="secondary" data-session="${esc(b.terminal)}">Ouvrir ${esc(b.provider)}</button>`).join('')}${action('associate', 'Associer une session')}</div></article>`;
-    }).join('')}${nativePanel()}<details class="flow-log"><summary>Terminaux du projet (${s.sessions.filter(t => t.project === s.current).length}) — présence des processus uniquement</summary>${s.sessions.filter(t => t.project === s.current).map(t => `<button class="file-row" data-session="${t.id}">${providerIcon(t.provider)}<strong>${esc(t.program || 'Shell')}</strong><span>${esc(t.task || 'Sans tâche')} · ${t.alive ? 'processus actif' : 'arrêté'}</span></button>`).join('')}</details></div>`;
+    return `<div class="page"><div class="section-title"><h2>Qui fait quoi ?</h2>${badge(waiting ? 'waiting_human' : 'series', waiting ? `${waiting} décision(s) attendue(s)` : s.selectedTask ? 'Tâche ' + s.selectedTask : 'Release complète')}</div><p class="muted">Les workflows indiquent la responsabilité ; les sessions associées indiquent le dernier état observé.</p>${missionCards({ s, rows, esc, badge })}${nativePanel()}<details class="flow-log"><summary>Autres terminaux et missions du projet</summary>${s.sessions.filter(t => t.project === s.current).map(t => `<button class="file-row" data-session="${t.id}">${providerIcon(t.provider)}<strong>${esc(t.program || 'Shell')}</strong><span>${esc(t.release || 'Sans release')} / ${esc(t.task || 'Release complète')} · ${t.alive ? 'processus actif' : 'arrêté'}</span></button>`).join('')}</details></div>`;
   }
   function effortView() {
-    const { detail } = get(), report = detail.effort, bindings = currentObservations();
-    const knownSum = values => values.length && values.every(v => v != null) ? values.reduce((a, b) => a + b, 0) : null;
-    const taskIds = [...new Set([...detail.tasks.map(t => t.id), ...(report?.rows || []).map(r => r.task), ...bindings.map(b => b.task).filter(Boolean)])];
-    const rows = taskIds.map(id => {
+    const { detail } = get(), report = detail.effort, bindings = currentObservations(true);
+    const taskIds = [...new Set([...detail.tasks.map(t => t.id), ...(report?.rows || []).map(r => r.task), ...(report?.missing_tasks || []), ...bindings.map(b => b.task).filter(Boolean)])];
+    const allRows = taskIds.map(id => {
       const estimates = (report?.rows || []).filter(r => r.task === id), native = bindings.filter(b => b.task === id && b.provider !== 'codex-runtime');
-      const initial = knownSum(estimates.map(r => r.initial?.expected_minutes)), revised = knownSum(estimates.map(r => r.revised?.expected_minutes));
-      const recorded = knownSum(estimates.map(r => r.actual_minutes));
-      const observed = knownSum(native.map(b => b.usage?.active_seconds == null ? null : b.usage.active_seconds / 60));
-      const actual = recorded ?? observed;
-      return { id, title: detail.tasks.find(t => t.id === id)?.title || estimates[0]?.title || '', initial, revised, actual,
-        basis: recorded != null ? 'effort.json' : observed != null ? 'Natif · non consolidé' : 'Non mesuré',
-        partial: recorded == null && !native.every(b => b.usage?.complete),
-        delta: actual != null && (revised ?? initial) != null ? actual - (revised ?? initial) : null };
+      return { id, title: detail.tasks.find(t => t.id === id)?.title || estimates[0]?.title || '', agents: agentMeasures(estimates, native), ...taskMeasures(estimates, native) };
     });
-    const total = knownSum(rows.map(r => r.actual));
-    return `<div class="page"><div class="section-title"><h2>Prévu, réalisé, écart</h2>${action('associate', 'Activer le suivi d’une session')}</div><div class="metrics"><div class="metric"><span>PRÉVISION INITIALE</span><strong>${minutes(knownSum(rows.map(r => r.initial)))}</strong></div><div class="metric"><span>RÉALISÉ ATTRIBUÉ</span><strong>${minutes(total)}</strong><small>${total == null ? 'Au moins une tâche sans mesure' : 'Tours / périodes mesurés, pas du temps de calcul pur'}</small></div><div class="metric"><span>SESSIONS ASSOCIÉES</span><strong>${bindings.length}</strong><small>Collecte locale toutes les 5 secondes</small></div></div>${!bindings.length ? `<div class="effort-state"><h3>Pourquoi le réalisé peut-il être vide ?</h3><p>L’ouverture d’un terminal n’est pas du temps de travail. Associez la session native à sa tâche et à sa période pour importer les durées disponibles. Les estimations existantes restent conservées.</p>${action('associate', 'Associer ma session')}</div>` : ''}<div class="table-scroll"><table><thead><tr><th>Tâche</th><th>Initial</th><th>Révisé</th><th>Réalisé</th><th>Écart indicatif</th><th>Source</th></tr></thead><tbody>${rows.map(r => `<tr><td><strong>${esc(r.id)}</strong><small>${esc(r.title)}</small></td><td>${minutes(r.initial)}</td><td>${minutes(r.revised)}</td><td>${minutes(r.actual)}${r.partial ? '<small>Partiel</small>' : ''}</td><td>${r.delta == null ? '—' : (r.delta > 0 ? '+' : '') + Math.round(r.delta) + ' min'}</td><td>${esc(r.basis)}</td></tr>`).join('') || '<tr><td colspan="6">Aucun plan ni estimation. Préparez /odoo-plan puis /odoo-estimate dans votre agent.</td></tr>'}</tbody></table></div><p class="muted">Le réalisé enregistré fait foi lorsqu’il est complet ; les observations natives servent sinon de suivi provisoire. Ces deux sources ne sont jamais additionnées. Un écart partiel n’est pas un bilan de clôture.</p>${(report?.warnings || []).map(w => `<div class="note warning">${esc(w)}</div>`).join('')}${measures()}</div>`;
+    const releaseTotal = summarizeMeasures(allRows).actual;
+    const rows = allRows.filter(r => !get().selectedTask || r.id === get().selectedTask);
+    for (const row of rows) row.share = timeShare(row.actual, releaseTotal);
+    effortRows = rows;
+    const summary = summarizeMeasures(rows), total = summary.actual;
+    effortTotals = { initial: knownSum(rows.map(r => r.initial)), ...summary };
+    return `<div class="page"><div class="section-title"><h2>Prévu, réalisé, écart</h2>${action('associate', 'Activer le suivi d’une session')}</div><div class="metrics"><div class="metric"><span>PRÉVISION INITIALE</span><strong>${minutes(knownSum(rows.map(r => r.initial)))}</strong></div><div class="metric"><span>RÉALISÉ ATTRIBUÉ</span><strong>${minutes(total)}</strong><small>${total == null ? 'Au moins une tâche sans mesure' : 'Tours / périodes mesurés, pas du temps de calcul pur'}</small></div><div class="metric"><span>SESSIONS ASSOCIÉES</span><strong>${bindings.length}</strong><small>Collecte locale toutes les 5 secondes</small></div></div>${!bindings.length ? `<div class="effort-state"><h3>Pourquoi le réalisé peut-il être vide ?</h3><p>L’ouverture d’un terminal n’est pas du temps de travail. Associez la session native à sa tâche et à sa période pour importer les durées disponibles. Les estimations existantes restent conservées.</p>${action('associate', 'Associer ma session')}</div>` : ''}<div class="table-scroll"><table><thead><tr><th>Tâche</th><th>Initial</th><th>Révisé</th><th>Réalisé</th><th>Écart indicatif</th><th>Source</th></tr></thead><tbody>${rows.map(r => `<tr><td><strong>${esc(r.id)}</strong><small>${esc(r.title)}</small></td><td>${hours(r.initial)}</td><td>${hours(r.revised)}</td><td>${hours(r.actual)}${r.partial ? '<small>Partiel</small>' : ''}${r.missingRoles.length ? `<small>À compléter : ${esc(r.missingRoles.map(role => ({ 'odoo-developer': 'développement', 'odoo-tester': 'QA', orchestrateur: 'coordination' })[role] || role).join(', '))}</small>` : ''}</td><td>${r.delta == null ? '—' : (r.delta > 0 ? '+' : '') + Math.round(r.delta) + ' min'}</td><td>${esc(r.basis)}</td></tr>`).join('') || '<tr><td colspan="6">Aucun plan ni estimation. Préparez /odoo-plan puis /odoo-estimate dans votre agent.</td></tr>'}</tbody></table></div><p class="muted">Le réalisé enregistré fait foi lorsqu’il est complet ; les observations natives servent sinon de suivi provisoire. Ces deux sources ne sont jamais additionnées. Un écart partiel n’est pas un bilan de clôture.</p>${(report?.warnings || []).map(w => `<div class="note warning">${esc(w)}</div>`).join('')}${measures()}</div>`;
+  }
+  function expressView() {
+    const flows = get().detail.express || [];
+    const labels = { active: 'En cours', running: 'En cours', complete: 'Terminée', blocked: 'Bloquée', waiting_human: 'Votre décision est attendue', deadlocked: 'À débloquer' };
+    const stages = { briefing: 'Briefing', express_scope: 'Qualification', express_implementation: 'Correction', express_qa: 'Contrôles ciblés', express_record: 'Journal', express_delivery: 'Livraison', task_done: 'Terminée' };
+    return `<div class="page express-page"><div class="section-title"><h2>Interventions express</h2><button class="secondary" data-view="terminal">Revenir au terminal du projet</button></div><p class="muted">Correctifs suivis à l’échelle du projet, indépendamment de la release consultée.</p>${flows.map(f => {
+      const active = f.nodes.filter(n => ['claimed', 'ready'].includes(n.status));
+      const qa = { pass: 'Contrôles ciblés réussis (résultat enregistré)', retry: 'Contrôles à reprendre', blocked: 'Contrôles bloquants' }[f.expressQA] || 'Contrôles ciblés non renseignés';
+      return `<article class="info-card express-card"><div class="card-title"><h3>${esc(f.id.replaceAll('-', ' '))}</h3>${badge(f.status === 'complete' ? 'done' : f.status, labels[f.status] || 'État à vérifier')}</div>${f.promoted ? '<p class="note">Périmètre élargi : poursuite en développement complet.</p>' : ''}<p>${esc(f.release ? 'Changelog : ' + f.release : 'Hors release')} · ${when(f.updatedAt)}</p>${active.map(n => `<p><strong>${esc(stages[n.id] || n.description)}</strong> · ${esc(n.owner || (n.status === 'ready' ? 'Prochaine étape' : 'Responsable non renseigné'))}${n.owner ? ' <small>(responsabilité enregistrée, activité non confirmée)</small>' : ''}</p>`).join('')}<p>${qa}</p><details class="technical-details"><summary>Étapes et traces</summary>${f.nodes.map(n => `<p>${esc(stages[n.id] || n.description)} · ${esc(n.status === 'done' ? 'Parcourue' : n.status === 'claimed' ? 'Prise en charge' : 'À venir')}</p>`).join('')}<pre>${esc(JSON.stringify(f.expressEvidence, null, 2))}</pre>${f.warning ? `<p class="warning-text">${esc(f.warning)}</p>` : ''}</details></article>`;
+    }).join('') || '<div class="note">Aucune intervention express enregistrée dans ce dossier. Lancez /odoo-express dans le terminal du projet ; son suivi apparaîtra ici.</div>'}</div>`;
   }
   async function loadFiles(relative = '') {
     const project = get().current;
@@ -127,7 +151,16 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     applyPreferences();
     alertSidebar();
     const s = get();
-    if (!s.detail || s.overviewMode) return;
+    if (s.overviewMode) {
+      const entries = s.projects.flatMap(p => [...(p.attention || []), ...(p.warnings || []).map(() => ({}))]);
+      document.querySelectorAll('[data-attention-project]').forEach((el, i) => {
+        if (entries[i]?.release) { el.dataset.attentionRelease = entries[i].release; el.querySelector('.muted').textContent += ' / ' + entries[i].release; }
+      });
+      return;
+    }
+    if (!s.detail || s.projectError) return;
+    const contextKey = JSON.stringify([s.current, s.detail.selectedRelease]);
+    if (contextKey !== graphContext) { graphTask = ''; graphResource = ''; graphContext = contextKey; }
     const task = s.detail.tasks.find(t => t.id === s.selectedTask);
     $('#context-bar .context-hint')?.remove();
     $('#context-bar').insertAdjacentHTML('beforeend', `<label>PORTÉE<select id="task-select" aria-label="Portée de travail"><option value="">Release complète</option>${s.detail.tasks.map(t => `<option value="${esc(t.id)}" ${s.selectedTask === t.id ? 'selected' : ''}>${esc(t.id)} · ${esc(t.title)}</option>`).join('')}</select></label><span class="context-hint">${task ? 'Nouvelle session → tâche ' + esc(task.id) : 'Nouvelle session → release complète'}</span>`);
@@ -141,7 +174,38 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     }
     const page = $('#content .page') || $('#content');
     if (s.view === 'agents') $('#content').innerHTML = missionView();
-    if (s.view === 'effort') $('#content').innerHTML = effortView();
+    if (s.view === 'express') $('#content').innerHTML = expressView();
+    if (s.view === 'effort') {
+      $('#content').innerHTML = effortView();
+      for (const [index, row] of [...document.querySelectorAll('#content tbody > tr')].entries()) {
+        const data = effortRows[index];
+        if (!data) continue;
+        const suspended = (s.detail.effort?.rows || []).filter(r => r.task === data.id).reduce((sum, r) => sum + (r.suspended_seconds || 0), 0);
+        if (suspended > 0) row.children[3].insertAdjacentHTML('beforeend', `<small>Veille exclue : ${hours(suspended / 60)}</small>`);
+        for (const note of row.children[3].querySelectorAll('small')) {
+          if (note.textContent === 'Partiel') note.textContent = 'Relevé incomplet';
+          else if (note.textContent.startsWith('À compléter :')) note.textContent = note.textContent.replace('À compléter :', 'Temps incomplet :');
+        }
+        const key = JSON.stringify([s.current, s.detail.selectedRelease, data.id]);
+        row.firstElementChild.insertAdjacentHTML('beforeend', `<small class="task-time-share">${data.share == null ? 'Part non mesurée' : percent(data.share) + ' du temps connu de la release'}</small>`);
+        row.firstElementChild.insertAdjacentHTML('beforeend', `<details class="agent-breakdown" data-agent-detail="${esc(key)}" ${expandedAgents.has(key) ? 'open' : ''}><summary>Détail par agent${data.agents.length ? ' (' + data.agents.length + ')' : ''}</summary>${data.agents.length ? `<div class="agent-time-table" role="table" aria-label="Temps par agent pour ${esc(data.id)}"><div class="agent-time-row agent-time-head" role="row"><span role="columnheader">Agent / rôle</span><span role="columnheader">Initial</span><span role="columnheader">Révisé</span><span role="columnheader">Réalisé</span></div>${data.agents.map(a => `<div class="agent-time-row" role="row" data-agent="${esc(a.agent)}"><span role="cell" title="${esc(a.agent)}">${esc(a.label)}</span><span role="cell">${a.initial == null ? 'Non estimé' : hours(a.initial)}</span><span role="cell">${a.revised == null ? 'Non estimé' : hours(a.revised)}</span><span role="cell">${hours(a.actual)}${a.partial ? '<small>Partiel</small>' : ''}${a.basis === 'Natif · non consolidé' ? '<small>Provisoire</small>' : ''}</span></div>`).join('')}</div><small>Selon les rôles renseignés dans les relevés, sans répartir les temps manquants.</small>` : '<small>Aucune répartition par agent disponible pour cette tâche.</small>'}</details>`);
+      }
+      for (const [index, block] of [...document.querySelectorAll('.agent-breakdown')].entries()) {
+        const task = effortRows[index];
+        block.querySelector('.agent-time-head')?.insertAdjacentHTML('beforeend', '<span role="columnheader">Part tâche</span>');
+        for (const [i, row] of [...block.querySelectorAll('.agent-time-row:not(.agent-time-head)')].entries()) {
+          for (const reason of task.agents[i].reasons) row.children[3].insertAdjacentHTML('beforeend', `<small class="measurement-reason">${esc(reason)}</small>`);
+          row.insertAdjacentHTML('beforeend', `<span role="cell" class="agent-time-share">${percent(timeShare(task.agents[i].actual, task.actual))}</span>`);
+        }
+      }
+      const allocation = agentAllocation(effortRows);
+      $('#content .page').insertAdjacentHTML('beforeend', tokenPanel());
+      $('#content .table-scroll').insertAdjacentHTML('afterend', `<section class="agent-allocation"><h3>Répartition entre agents · ${s.selectedTask ? 'tâche ' + esc(s.selectedTask) : 'release'}</h3><p class="muted">Parts du temps connu${effortTotals.partial ? ' · relevé partiel' : ''}. Les périodes non mesurées ne valent pas zéro.</p>${allocation.map(a => `<div class="allocation-row" data-allocation-agent="${esc(a.agent)}"><span>${esc(a.label)}</span><span>${hours(a.actual)}${a.partial ? ' · partiel' : ''}</span><strong>${percent(a.share)}</strong></div>`).join('') || '<p class="muted">Aucune répartition disponible.</p>'}</section>`);
+      $('#content .section-title').insertAdjacentHTML('afterend', '<p class="effort-live-hint muted">Les temps disponibles s’affichent dès leur enregistrement, sans attendre la clôture. Actualisation automatique toutes les 30 s ; relevés natifs toutes les 5 s. Les périodes encore sans mesure restent à compléter.</p>');
+      const figures = document.querySelectorAll('#content .metrics .metric strong');
+      figures[0].textContent = hours(effortTotals.initial);
+      figures[1].textContent = hours(effortTotals.actual);
+    }
     if (s.view === 'sources') page.insertAdjacentHTML('beforeend', sourcesExtra());
     if (s.view === 'environments') {
       const title = [...page.querySelectorAll('.section-title')].find(el => el.textContent.includes('Fichiers reçus'));
@@ -149,12 +213,39 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       page.insertAdjacentHTML('beforeend', stackPanel());
     }
     if (s.view === 'documents') $('#content').innerHTML = filesView();
-    if (s.view === 'plan') page.insertAdjacentHTML('afterbegin', `<div class="cockpit-actions">${action('graph', graphOn ? 'Masquer le graphe' : 'Graphe des dépendances')}${action('handoff', 'Fiche de reprise')}</div>${graphOn ? graph() : ''}`);
     if (s.view === 'plan') for (const card of page.querySelectorAll('.task-card')) {
       const t = s.detail.tasks.find(t => t.id === card.dataset.task);
       card.querySelector('.task-description')?.insertAdjacentHTML('beforeend', `<div class="task-acceptance"><strong>Critères d’acceptation</strong><ul>${(t?.acceptance || []).map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`);
     }
-    if (['agents', 'plan'].includes(s.view)) ($('#content .page') || $('#content')).insertAdjacentHTML('beforeend', qualityPanel(s.detail.quality, s.selectedTask));
+    if (['agents', 'plan'].includes(s.view) && s.detail.selectedRelease) ($('#content .page') || $('#content')).insertAdjacentHTML('beforeend', qualityPanel(s.detail.quality, s.selectedTask));
+    lifecycleUI({ s, esc, badge, when });
+    $('#task-select').parentElement.firstChild.textContent = 'TÂCHE CONSULTÉE';
+    $('#task-select option[value=""]').textContent = s.detail.selectedRelease ? 'Toute la release' : 'Sans tâche';
+    $('#task-select').disabled = !s.detail.selectedRelease;
+    if (s.view === 'terminal' && !s.detail.selectedRelease && !$('#inspector').hidden) {
+      $('#inspector').innerHTML = '<div class="pad"><h3>Travail hors release</h3><p>Démarre ton travail dans ce terminal. À la création d’une release, son plan et ses critères seront accessibles ici.</p></div>';
+    }
+    $('#context-bar .context-hint')?.remove();
+    $('#release-select').parentElement.after($('#task-select').parentElement);
+    $('#environment-select').parentElement.classList.add('environment-context');
+    $('#environment-select').parentElement.firstChild.textContent = 'REPÈRE D’ENVIRONNEMENT';
+    $('#environment-select').title = 'Repère pour les nouveaux terminaux ; ne change ni la connexion, ni les permissions, ni le terminal existant.';
+    $('#task-select').title = 'Tâche consultée dans le plan, les missions et les mesures. Votre terminal reste partagé pour tout le projet.';
+    $('.project-header').classList.add('compact-project');
+    $('#breadcrumb').textContent = '';
+    if ($('#breadcrumb').previousElementSibling) $('#breadcrumb').previousElementSibling.textContent = '';
+    const pathLabel = $('#project-meta > span');
+    if (pathLabel) pathLabel.hidden = true;
+    $('.project-header [data-action="folder"]').title = s.current;
+    plainLanguageUI({ s, hasNative: currentObservations().length > 0, actual: effortTotals.actual, partial: effortTotals.partial });
+    for (const option of $('#release-select').options) {
+      const r = s.detail.releases.find(r => r.id === option.value);
+      if (r) { option.textContent = `${r.id.slice(0, 10)} · ${r.title} · ${r.status}`; option.title = `${r.id} · ${r.taskCount ?? '?'} tâches / points`; }
+    }
+    const resources = ['documents', 'environments', 'sources'].includes(s.view);
+    $('#context-bar').hidden = resources || s.view === 'express';
+    if (resources) $('#content').insertAdjacentHTML('afterbegin', `<nav class="project-resources" aria-label="Ressources du projet">${[['documents', 'Fichiers'], ['environments', 'Environnements'], ['sources', 'Sources']].map(([id, label]) => `<button class="${s.view === id ? 'active' : ''}" data-view="${id}">${label}</button>`).join('')}</nav>`);
+    $('[data-view="project"]').classList.toggle('active', resources);
   }
   function qualityPanel(quality, task) {
     const data = quality || { reports: [], warnings: [], documents: [] };
@@ -168,6 +259,9 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function associationForm() {
     const s = get(), c = selected();
     modal(`<h2>Associer une session native</h2><p>Choisissez l’attribution avant de sélectionner le fichier. Seuls états, identifiants, dates et compteurs sont lus ; les prompts et résultats restent hors du cockpit.</p><div class="cockpit-form"><label>Fournisseur<select id="native-provider"><option value="codex">Codex · historique JSONL</option><option value="claude">Claude · historique JSONL</option></select></label><label>Tâche<select id="native-task"><option value="">Non attribuée</option>${s.detail.tasks.map(t => `<option value="${esc(t.id)}" ${t.id === c.task ? 'selected' : ''}>${esc(t.id)} · ${esc(t.title)}</option>`).join('')}</select></label><label>Workflow<select id="native-flow"><option value="">Non attribué</option>${s.detail.flows.map(f => `<option value="${esc(f.path)}" ${f.path === c.flow ? 'selected' : ''}>${esc(f.id)}</option>`).join('')}</select></label><label>Terminal<select id="native-terminal"><option value="">Aucun</option>${s.sessions.filter(t => t.project === s.current).map(t => `<option value="${t.id}" ${t.id === c.terminal ? 'selected' : ''}>${esc(t.program || 'Shell')} · ${t.id.slice(0, 8)}</option>`).join('')}</select></label><label>Depuis (facultatif)<input type="datetime-local" id="native-since"></label><label>Jusqu’au (facultatif)<input type="datetime-local" id="native-until"></label></div><div class="cockpit-actions">${action('bind', 'Choisir le JSONL')}${action('claude-hooks', 'Préparer Claude avec hooks')}</div><p class="muted">Les hooks Claude observent aussi les permissions et sous-agents. Ils ne prennent aucune décision. Les fenêtres d’une même session ne peuvent pas se chevaucher.</p>`);
+    $('#modal h2').textContent = 'Mesures natives · réglage avancé';
+    $('#modal-content > p').textContent = 'Facultatif : relier une conversation Claude/Codex à ses mesures de temps et de jetons. Votre terminal reste le même pour tout le projet. Le suivi des releases, tâches et workflows fonctionne sans cette association. Pour une conversation qui couvre toute la release, laissez la portée release complète ; attribuez une tâche seulement pour une période délimitée.';
+    $('#native-task option[value=""]').textContent = 'Release complète · sans attribution à une tâche';
   }
   function formAssociation() {
     const c = selected();
@@ -183,6 +277,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function preferences() {
     const ui = get().settings.ui || {};
     modal(`<h2>Confort de lecture</h2><div class="cockpit-form"><label>Police du terminal<select id="pref-font">${[['mono', 'DejaVu Sans Mono'], ['liberation', 'Liberation Mono'], ['system', 'Monospace système']].map(([v, l]) => `<option value="${v}" ${(ui.font || 'mono') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label>Taille du terminal<input type="number" min="11" max="22" id="pref-size" value="${ui.fontSize || 13}"></label><label>Largeur des projets<input type="number" min="210" max="360" id="pref-sidebar" value="${ui.sidebarWidth || 258}"></label><label>Largeur du suivi<input type="number" min="250" max="480" id="pref-inspector" value="${ui.inspectorWidth || 310}"></label><label><input type="checkbox" id="pref-contrast" ${ui.highContrast ? 'checked' : ''}> Contraste renforcé</label></div>${action('save-preferences', 'Enregistrer')}<h3>Navigation clavier</h3><p>Ctrl Alt ↑/↓ : projets · Ctrl Alt ←/→ : tâches · Ctrl PageUp/PageDown : terminaux · Alt 1…7 : vues · Ctrl Shift P : palette · Ctrl Alt F : documents.</p>`);
+    $('#modal-content > p:last-child').textContent = 'Ctrl Alt ↑/↓ : projets · Ctrl Alt ←/→ : tâches · Ctrl PageUp/PageDown : terminaux · Alt 1…6 : Terminal, Plan, Express, Agents, Temps, Projet · Ctrl Shift P : skills · Ctrl Alt F : fichiers.';
   }
   async function palette(env = false) {
     const skills = await api.cockpit.palette();
@@ -217,7 +312,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       if (el.hasAttribute('data-files')) return await loadFiles(el.dataset.files);
       if (el.dataset.preview) {
         const preview = await api.cockpit.preview(get().current, el.dataset.preview);
-        if (preview.type !== 'pdf') modal(`<h2>${esc(preview.name)}</h2>${preview.type === 'image' ? `<img class="file-image" src="${esc(preview.url)}" alt="${esc(preview.name)}">` : `<pre class="document-text">${esc(preview.text)}</pre>`}`);
+        if (preview.type !== 'pdf') modal(`<h2>${esc(preview.name)}</h2>${preview.type === 'image' ? `<img class="file-image" src="${esc(preview.url)}" alt="${esc(preview.name)}">` : documentBody(preview, esc)}`);
         return;
       }
       if (el.dataset.usage) return commandModal(await api.cockpit.prepareUsage(el.dataset.usage));
@@ -246,7 +341,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         case 'stack-root': if (await api.cockpit.profileFolder(get().current, 'stackRoot')) { await reloadProject(); $('#modal').close(); } break;
         case 'oca-root': if (await api.cockpit.profileFolder(get().current, 'ocaRoots')) { await reloadProject(); $('#modal').close(); } break;
         case 'reset-profile': await api.cockpit.resetProfile(get().current); await reloadProject(); $('#modal').close(); break;
-        case 'preferences': preferences(); $('#modal-content').insertAdjacentHTML('beforeend', `<h3>Emplacements partagés</h3><div class="cockpit-actions">${action('workspace-root', 'Dossier des projets')}${action('shared-sources', 'Bibliothèque des sources Odoo')}</div><p class="muted">Les chemins spécifiques à un projet se règlent dans Sources → Configurer le projet.</p>`); break;
+        case 'preferences': preferences(); $('#modal-content').insertAdjacentHTML('beforeend', `<h3>Emplacements partagés</h3><div class="cockpit-actions">${action('workspace-root', 'Dossier des projets')}${action('shared-sources', 'Bibliothèque des sources Odoo')}</div><p class="muted">Les chemins spécifiques à un projet se règlent dans Projet → Sources → Configurer le projet.</p>`); break;
         case 'workspace-root': { const value = await api.workspaceRoot(); if (value) { setProjects(value.projects); setSettings((await api.bootstrap()).settings); $('#modal').close(); if (value.projects.length) await chooseProject(value.projects[0].path); else render(); } break; }
         case 'shared-sources': if (await api.sourceRoot()) { $('#modal').close(); if (get().current) await reloadProject(); } break;
         case 'save-preferences': setSettings(await api.settings({ ui: { font: $('#pref-font').value, fontSize: Number($('#pref-size').value), sidebarWidth: Number($('#pref-sidebar').value), inspectorWidth: Number($('#pref-inspector').value), highContrast: $('#pref-contrast').checked } })); $('#modal').close(); render(); break;
@@ -278,7 +373,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     const s = get();
     if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'p') { event.preventDefault(); palette().catch(e => toast(e.message)); }
     if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'f') { event.preventDefault(); searchDialog(); }
-    if (event.altKey && !event.ctrlKey && /^[1-7]$/.test(event.key)) { event.preventDefault(); setView(['terminal', 'plan', 'agents', 'environments', 'sources', 'effort', 'documents'][Number(event.key) - 1]); }
+    if (event.altKey && !event.ctrlKey && /^[1-6]$/.test(event.key)) { event.preventDefault(); setView(['terminal', 'plan', 'express', 'agents', 'effort', 'project'][Number(event.key) - 1]); }
     if (event.ctrlKey && event.altKey && ['ArrowUp', 'ArrowDown'].includes(event.key)) {
       event.preventDefault(); const at = s.projects.findIndex(p => p.path === s.current), step = event.key === 'ArrowDown' ? 1 : -1;
       const p = s.projects[(at + step + s.projects.length) % s.projects.length]; if (p) chooseProject(p.path).catch(e => toast(e.message));
@@ -293,7 +388,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       if (next) { selectSession(next.id); setView('terminal'); }
     }
   });
-  $('.top-actions').insertAdjacentHTML('afterbegin', '<button class="text-button" data-cockpit="search" title="Ctrl Alt F">Rechercher</button><button class="text-button" data-cockpit="palette" title="Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
+  $('.top-actions').insertAdjacentHTML('afterbegin', '<button class="text-button" data-view="project">Projet</button><button class="text-button" data-cockpit="palette" title="Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
   setInterval(refreshNative, 5000);
   return { augment, refreshNative, applyPreferences, alertSidebar };
 }

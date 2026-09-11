@@ -25,10 +25,18 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
   }
   async function context(request) {
     const project = checkedProject(request.project);
-    const data = await catalog({ action: 'project', project, release: request.release || null });
+    const data = await catalog({ action: 'project', project, release: request.release === null ? '' : request.release });
     if (request.task && !data.tasks.some(t => t.id === request.task)) throw new Error('Tâche inconnue');
     if (request.flow && !data.flows.some(f => f.path === request.flow)) throw new Error('Workflow inconnu');
-    if (request.terminal && !(await terminal({ action: 'list' })).some(s => s.id === request.terminal && s.project === project)) throw new Error('Terminal d’un autre projet');
+    if (request.flow) {
+      const flow = data.flows.find(f => f.path === request.flow);
+      if (flow.missing) throw new Error('Workflow local indisponible');
+      if (flow.taskId && flow.taskId !== request.task) throw new Error('Workflow d’une autre tâche');
+      if (request.task && !(data.tasks.find(t => t.id === request.task).flowPaths || []).includes(request.flow)) throw new Error('Workflow non associé à cette tâche');
+    }
+    if (request.terminal && !(await terminal({ action: 'list' })).some(s => s.id === request.terminal && s.project === project)) {
+      throw new Error('Terminal d’un autre projet');
+    }
     const since = date(request.since), until = date(request.until);
     const role = request.role || 'orchestrator';
     if (typeof role !== 'string' || !/^[a-z][a-z0-9-]{0,63}$/.test(role)) throw new Error('Rôle invalide');

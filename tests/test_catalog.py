@@ -33,6 +33,31 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(found[0]['series'], '18.0')
         self.assertEqual(found[0]['release']['status'], 'ouverte')
 
+    def test_removed_email_not_exposed_or_loaded(self):
+        original = catalog.trusted_module
+        def guarded(name):
+            self.assertNotEqual(name, 'odoo_delivery', 'Removed email storage must not be read')
+            return original(name)
+        with patch.object(catalog, 'trusted_module', side_effect=guarded):
+            data = catalog.project(self.project, self.release.name)
+        self.assertNotIn('delivery', data)
+        self.assertNotIn('deliveryConfig', data)
+
+    def test_removed_email_actions_are_unknown(self):
+        with patch.object(catalog, 'trusted_module') as load:
+            for action in ('delivery-configure', 'delivery-edit', 'delivery-connect-smtp'):
+                with self.subTest(action=action), self.assertRaisesRegex(ValueError, 'Action inconnue'):
+                    catalog.dispatch({'action': action})
+            load.assert_not_called()
+
+    def test_explicit_no_release_does_not_fall_back_to_existing(self):
+        data = catalog.project(self.project, '')
+        self.assertIsNone(data['selectedRelease'])
+        self.assertEqual(data['tasks'], [])
+        self.assertIsNone(data['effort'])
+        self.assertTrue(data['releases'])
+        self.assertEqual(catalog.project(self.project)['selectedRelease'], self.release.name)
+
     def test_secrets_never_returned_and_url_cleaned(self):
         self.write_json(self.project / '.odoo-agents/instances.json', {
             'production': {'kind': 'production', 'url': 'https://user:secret@example.test/odoo?token=secret#secret',
@@ -96,6 +121,20 @@ class CatalogTests(unittest.TestCase):
             result = catalog.effort_details(self.release)
         self.assertIsNone(result['totals']['actual_minutes'])
         self.assertEqual(before, set(self.release.iterdir()))
+
+    def test_effort_explains_unrecorded_running_interrupted_and_missing_duration(self):
+        from types import SimpleNamespace
+        states = ['complete', 'unrecorded', 'running', 'interrupted', 'missing-duration']
+        rows = [{'task': str(i), 'agent': 'qa', 'time_complete': state == 'complete'} for i, state in enumerate(states)]
+        entries = [{'task': str(i), 'agent': 'qa', 'status': state if state in ('running', 'interrupted') else 'complete'}
+                   for i, state in enumerate(states) if state != 'unrecorded']
+        self.write_json(self.release / 'effort.json', {'entries': entries})
+        before = (self.release / 'effort.json').read_bytes()
+        with patch.object(catalog, 'trusted_module', return_value=SimpleNamespace(report_data=lambda *_: {'rows': rows})):
+            result = catalog.effort_details(self.release)
+        self.assertEqual([r['timeState'] for r in result['rows']], states)
+        self.assertEqual(result['openTimers'], [{'task': '2', 'agent': 'qa'}])
+        self.assertEqual((self.release / 'effort.json').read_bytes(), before)
 
     def test_malformed_plan_and_instances_leave_project_accessible(self):
         (self.release / 'plan.json').write_text('{broken')

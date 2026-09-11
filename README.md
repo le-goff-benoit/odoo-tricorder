@@ -11,13 +11,24 @@ Vos dossiers à gauche, un vrai shell au centre, des missions à la portée expl
 
 ## Installer
 
-La **0.2.0** cible Ubuntu 22.04/24.04 amd64.
+La **0.2.7** ajoute le suivi des chronomètres hors veille et les compteurs de jetons détaillés, en complément du travail sans release et des aperçus Markdown (voir [QA.md](QA.md)).
+La protection veille demande également les outils Odoo Crew mis à jour : elle
+s’applique aux chronomètres démarrés avec cette version, même fenêtre fermée.
+Après redémarrage, une mesure sans borne fiable reste inconnue. Les durées
+natives anciennes ne sont pas corrigées sans preuve de suspension.
+
+Les durées déjà enregistrées restent visibles même si certains rôles ne sont pas
+mesurés : sous-total **partiel**, rôles à compléter, périodes ouvertes et affichage
+en heures/minutes. Un suivi partiel n'est pas une économie sur la prévision complète.
+Les observations provisoires ne sont jamais additionnées au registre enregistré.
+
+La **0.2.7** cible Ubuntu 22.04/24.04 amd64.
 Le paquet est construit et essayé sur Pop!_OS 22.04.
-Télécharger le fichier `.deb` depuis la [release 0.2.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.2.0),
+Télécharger le fichier `.deb` depuis la [release 0.2.7](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.2.7),
 puis exécuter cette commande depuis son dossier de téléchargement :
 
 ```bash
-sudo apt install ./odoo-tricorder_0.2.0_amd64.deb
+sudo apt install ./odoo-tricorder_0.2.7_amd64.deb
 ```
 
 Ouvrir Odoo Tricorder depuis les applications. Python 3 et les bibliothèques du
@@ -37,20 +48,24 @@ séparément. Le terminal fonctionne aussi sans eux.
 - Volume de QA depuis les preuves JUnit : exécutés, réussis, échecs, erreurs, ignorés.
 - Explorateur en lecture seule : dossiers, code, inbox, mémoire, aperçus texte/image,
   PDF via le bureau. Recherche transversale Markdown/TXT entre projets.
-- Graphe de dépendances filtrable, fiche de reprise, palette de préparation des skills.
+- Dépendances lisibles sur les tâches, palette de préparation des skills.
 - Sources Community/Enterprise/OCA : profils explicites, chemins, branches/commits,
   dépendances transitives ; stack locale et date de restauration déclarée.
 - Préférences de police, taille, contraste, largeurs et disposition mémorisées.
 
 ## Prise en main
 
-1. Sélectionner un projet ou ajouter son dossier avec **+**.
-2. Choisir une release, un environnement et la **Portée** : release complète ou tâche.
-3. Ouvrir un terminal. Son dossier et sa portée apparaissent au-dessus du shell.
+1. Sélectionner un projet dans la liste de gauche (dossiers découverts automatiquement).
+2. Choisir la release et la **tâche consultée**. L’environnement est un repère séparé,
+   pas une connexion ou une autorisation.
+3. Ouvrir un terminal de projet et le conserver pour tout le travail. Naviguer entre
+   releases et tâches ne change pas les instructions de l’agent ni le shell.
 4. Lancer `claude` ou `codex`, puis les skills habituels : `/odoo-plan` pour Claude,
    `$odoo-plan` pour Codex. La palette prépare la bonne syntaxe, sans l’exécuter.
-5. Dans **Agents → Associer une session**, choisir tâche, workflow, rôle, terminal
-   éventuel et période avant de sélectionner un historique JSONL.
+5. Facultatif : **Agents → Réglages du suivi** relie la conversation aux
+   durées/jetons disponibles. Le suivi des tâches et workflows ne dépend pas de cette
+   association. Une conversation peut couvrir toute la release dans le même terminal ;
+   une attribution à une tâche exige des bornes adaptées, sans chevauchement.
 6. Pour observer Claude avec ses hooks, préparer son lancement dans ce dialogue,
    puis copier la commande dans le shell. Pour Codex, un identifiant exact permet
    aussi de lire le statut via son service local existant.
@@ -60,16 +75,86 @@ personnelles, aucun prompt ou contenu d’outil affiché dans les événements.
 La lecture native s’actualise toutes les cinq secondes, application ouverte.
 Les formats et limites sont décrits dans [les adaptateurs](docs/ADAPTERS.md).
 
+### Ce que signifient les états
+
+Une release est ouverte avec le marqueur Odoo Crew `release ouverte` (ou ancien
+`lot ouvert`) ; le README sans ce marqueur est **clos**, conformément à
+`odoo-release.sh`. Ce statut ne prouve pas un déploiement en production.
+
+Les tâches de `plan.json` et les points numérotés des tableaux README sont visibles.
+Une tâche **réceptionnée** conserve cet avancement historique même si sa preuve est
+à revérifier ici. Les preuves produites dans un worktree sont identifiées sans être
+validées arbitrairement dans le dossier principal. Les workflows absents ou multiples
+restent explicites ; seules leurs associations déclarées servent aux liens de tâche.
+Une preuve périmée d’une release close reste dans son historique et ne crée pas
+une nouvelle urgence dans la file d’attention.
+
+La sélection est mémorisée par projet et release. Le bouton **Continuer dans le
+terminal du projet** réutilise le shell existant. Le contexte affiché au-dessus du
+shell est celui de son ouverture, pas une attribution automatique de tout le travail futur.
+Le graphe visuel et la fiche de reprise sont retirés de l’interface en 0.2.1.
+La colonne de gauche affiche uniquement la liste des projets, sans ajout, recherche
+ni page « À mon attention ». Les alertes restent attachées au projet concerné.
+Les blocs techniques vides sont masqués ; les détails de collecte et les identifiants
+internes sont repliés. L’écran courant privilégie tâches, critères, agents et temps.
+
 ## Navigation et emplacements
 
+Dans **Temps & estimations**, « Détail par agent » déplie pour chaque tâche les
+durées initiales, révisées et réalisées par rôle, en heures/minutes. Les rôles non
+mesurés restent explicites. Le détail reste ouvert pendant les actualisations.
+Les pourcentages indiquent la part de chaque tâche dans le temps connu de la
+release (même avec un filtre de tâche), et la part de chaque agent dans sa tâche.
+Une synthèse compare aussi les agents sur le périmètre affiché. Les temps inconnus
+ne valent pas zéro ; un total nul n’a pas de pourcentage. Les arrondis peuvent
+ne pas totaliser exactement 100 %. Les relevés s’affichent dès leur enregistrement,
+release ouverte comprise : aucune attente de clôture. « Relevé incomplet » signifie
+qu’il manque une durée, pas qu’il reste du travail ; le détail distingue absence
+de relevé, mesure en cours et mesure interrompue.
+La revue du décompte et les améliorations proposées sont dans [USAGE_REVIEW.md](USAGE_REVIEW.md).
+
+Le sélecteur propose toujours **Aucune release**, même si des releases existent.
+Ce choix est mémorisé par projet. Sans choix précédent, une release ouverte est
+proposée s’il en existe une ; une ancienne release close n’est plus imposée.
+
+Pour le projet consulté, en partant sans release, une **nouvelle release ouverte** détectée à l’actualisation
+(automatique toutes les 30 secondes, ou bouton Actualiser) devient la sélection
+du projet. Le terminal du projet sans release, ou rattaché à une ancienne release
+close, reçoit ce repère s’il est le seul candidat. Les terminaux Express, arrêtés
+ou rattachés à une autre release ouverte ne sont pas réaffectés. Plusieurs nouvelles
+releases ou plusieurs terminaux candidats : aucune attribution de terminal devinée.
+
+Dans un terminal existant, **Utiliser la release affichée dans ce terminal** ou
+**Mettre ce terminal hors release** permet de changer son repère sans l’arrêter.
+La consultation des tâches reste indépendante. Ces paramètres privés du cockpit
+survivent à sa fermeture : aucun plan, historique de mesures ou profil client n’est
+réécrit. Le processus, son répertoire, ses variables d’environnement initiales et
+les instructions de l’agent déjà lancé ne changent pas. Pas de commande injectée.
+
+Les aperçus **Markdown** du plan et de l’explorateur présentent titres, tableaux,
+listes, citations et blocs de code. Le source est disponible dans un volet replié.
+Le HTML actif et les images ne sont pas chargés ; les liens restent du texte,
+sans navigation. Les autres fichiers texte conservent leur affichage brut.
+
+Les onglets de pilotage regroupent **Terminal, Plan de release, Express, Agents et
+Temps & estimations**. Le bouton **Projet**, en haut, ouvre les ressources :
+**Fichiers, Environnements, Sources**. Revenir au plan conserve la tâche consultée.
+
+**Express** affiche les interventions déclarées comme telles dans les workflows du
+projet, y compris celles terminées sans release. La responsabilité, les étapes et le
+dernier résultat des contrôles ciblés sont présentés, sans inventer un volume de tests.
+Une bascule vers le développement complet est signalée. Le changelog peut rester lié,
+mais aucun plan ni nouvelle conversation par intervention n’est exigé. Seuls les
+workflows présents dans le dossier du projet sont lus, pas ceux de worktrees externes.
+
 **Préférences → Dossier des projets** choisit la racine de découverte (home par
-défaut). Le bouton **+** ajoute un projet situé ailleurs.
+défaut). Les projets sont découverts dans ce dossier.
 
 La bibliothèque partagée est `~/odoo-sources`, ou `ODOO_SOURCES_DIR` si défini :
 par exemple `18.0/`, `18.0-enterprise/`, `19.1/`, `19.1-enterprise/`.
 **Préférences → Bibliothèque des sources Odoo** permet de la déplacer.
 
-**Sources → Configurer le projet** permet de choisir son profil module/Studio/Online,
+**Projet → Sources → Configurer le projet** permet de choisir son profil module/Studio/Online,
 son dossier de travail, sa stack et des chemins Community/Enterprise/OCA spécifiques.
 La série vient de `.odoo-agents/config`, sinon du manifest. Aucune substitution
 de série, aucun téléchargement ou mise à jour des sources.
@@ -86,14 +171,13 @@ des services. La date de restauration est **déclarative**, sans accès à la ba
 
 | Raccourci | Action |
 |---|---|
-| Ctrl K | Rechercher un projet |
 | Ctrl Shift T | Nouveau terminal |
 | Ctrl Shift F | Rechercher dans le terminal |
 | Ctrl Shift C / V | Copier la sélection / coller |
 | Ctrl Alt ↑ / ↓ | Projet précédent / suivant |
 | Ctrl Alt ← / → | Tâche précédente / suivante |
 | Ctrl PageUp / PageDown | Terminal précédent / suivant |
-| Alt 1 à 7 | Changer de vue |
+| Alt 1 à 6 | Terminal, Plan, Express, Agents, Temps, Projet |
 | Ctrl Shift P | Palette de skills |
 | Ctrl Alt F | Recherche documentaire transversale |
 
@@ -108,6 +192,9 @@ entre elles. Le réalisé enregistré fait foi lorsqu’il est complet ; les obs
 servent sinon de suivi provisoire. La consolidation prépare
 `odoo_effort.py import-usage` : vérifier lot et rôle, puis exécuter soi-même.
 Les prévisions historiques restent inchangées.
+Les indicateurs **Prévision initiale** et **Réalisé attribué** sont en heures/minutes.
+Une estimation rétrospective, un périmètre modifié ou une mesure partielle ne produit
+pas de faux écart de clôture ; les réserves du lecteur Odoo Crew sont consultables.
 
 Une ouverture de terminal n’est pas du temps agent. Les durées de tours peuvent
 inclure outils et attentes ; ce n’est pas du calcul pur. Les inconnues restent
@@ -118,6 +205,8 @@ de QA. La propriété JUnit `odoo.task` (ou `tricorder.task`) indique une tâche
 Les relances restent distinctes, sans somme artificielle. Sans rapport exploitable,
 l’écran affiche « volume non renseigné » et propose `qa.md`/`recette.md` s’ils existent.
 Un rapport vert ne certifie pas à lui seul toute la recette Odoo.
+Les extraits chiffrés des comptes rendus sont également consultables, séparément et
+étiquetés **déclarations**, sans être additionnés ni convertis en compteurs vérifiés.
 
 ## Sécurité et persistance
 
@@ -176,6 +265,7 @@ Les parcours Electron peuvent tourner avec `xvfb-run -a` en CI ; Odoo Crew est r
 pour les scénarios de validation et de mesure. `npm start` lance le code source.
 
 Voir [ROADMAP.md](ROADMAP.md) pour le périmètre et [QA.md](QA.md) pour le bilan.
+La [matrice des parcours](tests/USER_FLOWS.md) couvre départs de flux, interruptions et reprises.
 
 ## Licence
 

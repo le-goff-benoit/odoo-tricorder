@@ -3,6 +3,13 @@
 La roadmap initiale est implémentée dans la version 0.2.0. Installer son paquet
 depuis les releases GitHub ; ces fonctions ne sont pas dans le paquet 0.1.0.
 
+En 0.2.1, le graphe visuel et la fiche de reprise sont retirés de l’interface à la
+demande de l’utilisateur. Le tableau ci-dessous conserve l’historique de la 0.2.0.
+
+La 0.2.1 ajoute le suivi Express hors plan et regroupe Sources, Environnements et
+Fichiers sous Projet. Le cycle de vie, la navigation, les critères et les durées
+sont fiabilisés ; la recette et ses limites sont consignées dans [QA.md](QA.md).
+
 | Volet | Réalisation | Preuves |
 |---|---|---|
 | Association native | Projet, release, tâche ou release complète, rôle, flow, terminal, session, bornes | Tests observation et bureau |

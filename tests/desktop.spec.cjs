@@ -70,6 +70,404 @@ async function closeWindow(app) {
   await Promise.race([exited, new Promise((_, reject) => setTimeout(() => reject(new Error('Window close did not exit app')), 8000))]);
 }
 
+async function projectView(page, view) {
+  await page.locator('[data-view="project"]').click();
+  await expect(page.locator('#tabs [data-view="sources"]')).toHaveCount(0);
+  await expect(page.locator('#tabs [data-view="environments"]')).toHaveCount(0);
+  await expect(page.locator('#tabs [data-view="documents"]')).toHaveCount(0);
+  await page.locator(`.project-resources [data-view="${view}"]`).click();
+  await expect(page.locator('#context-bar')).toBeHidden();
+}
+
+test('effort: partial recorded time survives missing roles, task filtering and refresh', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-partial-effort-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const effortFile = path.join(project, 'changelog', releaseId, 'effort.json');
+  const lines = ['odoo-developer', 'odoo-tester', 'orchestrateur'].map(agent => ({ task: 'T01', agent, expected_minutes: 20 }));
+  write(effortFile, { schema: 1, release: releaseId, tasks: { T01: 'Factures', T02: 'Maintenance', T03: 'Recette' },
+    estimates: [{ revision: 1, at: '2026-09-01T00:00:00Z', lines }], rate_cards: [], entries: [
+      { id: 'dev', task: 'T01', agent: 'odoo-developer', status: 'complete', seconds: 1080, suspended_seconds: 28800, tokens: { input_tokens: 100, output_tokens: 20, cached_input_tokens: 50 } },
+      { id: 'qa', task: 'T01', agent: 'odoo-tester', status: 'complete', seconds: 300, tokens: null },
+      { id: 'coordination', task: 'T01', agent: 'orchestrateur', status: 'running', seconds: null, tokens: null },
+    ] });
+  const before = fs.readFileSync(effortFile, 'utf8');
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  try {
+    const page = await app.firstWindow();
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await page.locator('[data-view="effort"]').click();
+    await expect(page.locator('.metric').nth(1)).toContainText('TEMPS ENREGISTRÉ · PARTIEL');
+    await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('0 h 23 min');
+    await expect(page.locator('.open-timers')).toContainText('1 période(s) de mesure à terminer');
+    const first = page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T01' });
+    await expect(first.locator('td').nth(3)).toContainText('Veille exclue : 8 h 00 min');
+    const tokens = page.locator('.token-allocation tbody tr').filter({ hasText: 'T01' });
+    await expect(tokens.locator('td').nth(1)).toHaveText('100 · partiel');
+    await expect(tokens.locator('td').nth(2)).toHaveText('20 · partiel');
+    await expect(tokens.locator('td').nth(4)).toHaveText('Non mesuré');
+    await expect(first.locator('td').nth(3)).toContainText('0 h 23 min');
+    await expect(first.locator('td').nth(3)).toContainText('Temps incomplet : coordination');
+    await expect(first.locator('td').nth(3)).toContainText('Relevé incomplet');
+    await expect(first.locator('td').nth(4)).toHaveText('—');
+    await expect(first.locator('td').last()).toHaveText('Enregistré');
+    await first.locator('.agent-breakdown summary').click();
+    await expect(first.locator('[data-agent="odoo-developer"]')).toContainText('0 h 18 min');
+    await expect(first.locator('[data-agent="odoo-tester"]')).toContainText('0 h 05 min');
+    await expect(first.locator('[data-agent="orchestrateur"]')).toContainText('Non mesuré');
+    await expect(first.locator('[data-agent="orchestrateur"]')).toContainText('Mesure en cours');
+    await expect(first.locator('[data-agent="odoo-developer"] .agent-time-share')).toHaveText('78,3 %');
+    await expect(first.locator('[data-agent="odoo-developer"] [role="cell"]').nth(1)).toHaveText('0 h 20 min');
+    await expect(page.locator('#content')).not.toContainText('Le temps passé reste à enregistrer');
+    await page.locator('#task-select').selectOption('T02');
+    await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('Non mesuré');
+    await expect(page.locator('.open-timers')).toHaveCount(0);
+    await page.locator('#task-select').selectOption('T01');
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('0 h 23 min');
+    await expect(first.locator('.agent-breakdown')).toHaveAttribute('open', '');
+    await expect(first.locator('[data-agent="odoo-developer"]')).toBeVisible();
+    await page.locator('.token-allocation').scrollIntoViewIfNeeded();
+    await page.screenshot({ path: 'test-results/token-breakdown.png' });
+    await first.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: 'test-results/partial-effort.png' });
+    await first.locator('.agent-breakdown').scrollIntoViewIfNeeded();
+    await page.screenshot({ path: 'test-results/agent-time-breakdown.png' });
+    expect(fs.readFileSync(effortFile, 'utf8')).toBe(before);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('effort: open release updates task and agent percentages before closure', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-live-effort-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const effortFile = path.join(project, 'changelog', releaseId, 'effort.json');
+  const ledger = { schema: 1, release: releaseId, tasks: { T01: 'Factures', T02: 'Maintenance', T03: 'Recette' },
+    estimates: [{ revision: 1, at: '2026-09-01T00:00:00Z', lines: [
+      { task: 'T01', agent: 'odoo-developer', expected_minutes: 30 },
+      { task: 'T02', agent: 'odoo-tester', expected_minutes: 30 },
+      { task: 'T03', agent: 'orchestrateur', expected_minutes: 10 },
+    ] }], rate_cards: [], entries: [
+      { id: 'dev', task: 'T01', agent: 'odoo-developer', status: 'complete', seconds: 1200, tokens: null },
+      { id: 'qa', task: 'T02', agent: 'odoo-tester', status: 'complete', seconds: 600, tokens: null },
+    ] };
+  write(effortFile, ledger);
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  const errors = [];
+  try {
+    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await page.locator('#tabs [data-view="effort"]').click();
+    const first = page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T01' });
+    await expect(first.locator('.task-time-share')).toContainText('66,7 %');
+    await expect(page.locator('[data-allocation-agent="odoo-developer"] strong')).toHaveText('66,7 %');
+    await expect(page.locator('[data-allocation-agent="odoo-tester"] strong')).toHaveText('33,3 %');
+    await expect(page.locator('[data-allocation-agent="orchestrateur"] strong')).toHaveText('—');
+    await expect(page.locator('.agent-allocation')).toContainText('relevé partiel');
+    await expect(page.locator('.effort-live-hint')).toContainText('sans attendre la clôture');
+    await page.locator('#task-select').selectOption('T01');
+    await expect(first.locator('.task-time-share')).toContainText('66,7 %');
+    await expect(page.locator('[data-allocation-agent="odoo-developer"] strong')).toHaveText('100 %');
+    // Agent writes another completed measurement while the release remains open.
+    ledger.entries[1].seconds = 2400; write(effortFile, ledger);
+    const expectedFile = fs.readFileSync(effortFile, 'utf8');
+    await page.locator('[data-action="refresh"]').click();
+    await expect(first.locator('.task-time-share')).toContainText('33,3 %');
+    await expect(page.locator('#release-select option:checked')).toContainText('ouverte');
+    await page.locator('#task-select').selectOption('');
+    await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('1 h 00 min');
+    await expect(page.locator('[data-allocation-agent="odoo-tester"] strong')).toHaveText('66,7 %');
+    await page.locator('.agent-allocation').scrollIntoViewIfNeeded();
+    await page.screenshot({ path: 'test-results/time-allocation.png' });
+    expect(fs.readFileSync(effortFile, 'utf8')).toBe(expectedFile);
+    expect(errors).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('release context: none, automatic new release, same terminal and persistence', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-context-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const env = { ...process.env, HOME: home, TRICORDER_HOME: home,
+    TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+    TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') };
+  const options = { args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env,
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}) };
+  let app = await electron.launch(options);
+  const errors = [];
+  try {
+    let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await page.locator('#release-select').selectOption('');
+    await page.locator('#tabs [data-view="plan"]').click();
+    await expect(page.locator('.no-release')).toContainText('Aucune release sélectionnée');
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#release-select')).toHaveValue('');
+    await page.locator('[data-action="new-terminal"]').first().click();
+    await expect.poll(async () => (await page.evaluate(() => window.tricorder.terminals.list())).length).toBe(1);
+    const original = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
+    expect(original.release).toBeNull();
+    expect(Number.isInteger(original.pid)).toBe(true);
+    const newId = '2026-09-12_01_nouvelle-release';
+    write(path.join(project, 'changelog', newId, 'README.md'), '<!-- release ouverte -->\n# Nouvelle release\n');
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#release-select')).toHaveValue(newId);
+    await expect.poll(async () => (await page.evaluate(() => window.tricorder.terminals.list()))[0].release).toBe(newId);
+    const updated = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
+    expect(updated.id).toBe(original.id); expect(updated.pid).toBe(original.pid); expect(updated.alive).toBe(true);
+    const stored = JSON.parse(fs.readFileSync(path.join(temp, 'state/settings.json'), 'utf8'));
+    expect(stored.contexts[project].release).toBe(newId);
+    const refused = await page.evaluate(async ({ project, session }) => {
+      try { await window.tricorder.terminals.context({ project, session, release: 'missing-release' }); return false; }
+      catch { return true; }
+    }, { project, session: original.id });
+    expect(refused).toBe(true);
+    const stale = await page.evaluate(async ({ project, session, release }) => {
+      try { await window.tricorder.terminals.context({ project, session, release, expectedRelease: null }); return false; }
+      catch { return true; }
+    }, { project, session: original.id, release: releaseId });
+    expect(stale).toBe(true);
+    const foreign = await page.evaluate(async ({ project, session }) => {
+      try { await window.tricorder.terminals.context({ project, session, release: null }); return false; }
+      catch { return true; }
+    }, { project: path.join(home, 'nova-services'), session: original.id });
+    expect(foreign).toBe(true);
+    await closeWindow(app); app = await electron.launch(options);
+    page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await expect(page.locator('#release-select')).toHaveValue(newId);
+    expect((await page.evaluate(() => window.tricorder.terminals.list()))[0].pid).toBe(original.pid);
+    await page.locator('#release-select').selectOption('');
+    await page.locator('[data-action="terminal-context"]').click();
+    await expect.poll(async () => (await page.evaluate(() => window.tricorder.terminals.list()))[0].release).toBeNull();
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#release-select')).toHaveValue('');
+    await expect(page.locator('#task-select')).toBeDisabled();
+    await expect(page.locator('#terminal-mismatch')).toHaveCount(0);
+    await closeWindow(app); app = await electron.launch(options);
+    page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await expect(page.locator('#release-select')).toHaveValue('');
+    await expect(page.locator('#task-select')).toBeDisabled();
+    await expect(page.locator('#inspector')).toContainText('Travail hors release');
+    expect((await page.evaluate(() => window.tricorder.terminals.list()))[0].pid).toBe(original.pid);
+    await page.screenshot({ path: 'test-results/no-release-terminal.png' });
+    expect(errors).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-flow-starts-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  const errors = [];
+  try {
+    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await page.locator('#release-select').selectOption('');
+    await page.locator('#tabs [data-view="plan"]').click();
+    // Deterministic pause, not a timing-dependent sleep: user leaves during creation.
+    await app.evaluate(({ ipcMain }) => {
+      const original = ipcMain._invokeHandlers.get('terminal:create');
+      ipcMain.removeHandler('terminal:create');
+      ipcMain.handle('terminal:create', async (...args) => {
+        await new Promise(resolve => { globalThis.finishTerminalCreation = resolve; });
+        return original(...args);
+      });
+      globalThis.originalTerminalCreate = original;
+    });
+    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await expect.poll(() => app.evaluate(() => typeof globalThis.finishTerminalCreation)).toBe('function');
+    await page.locator('[data-project]').filter({ hasText: 'nova-services' }).click();
+    await expect(page.locator('.no-release')).toBeVisible();
+    await app.evaluate(({ ipcMain }) => {
+      ipcMain.removeHandler('terminal:create'); ipcMain.handle('terminal:create', globalThis.originalTerminalCreate);
+      globalThis.finishTerminalCreation();
+    });
+    await expect(page.locator('#session-count')).toHaveText('1 terminal(aux) actif(s)');
+    await expect(page.locator('.no-release')).toBeVisible();
+    await expect(page.locator('#terminal-workspace')).toBeHidden();
+    const first = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
+    expect(first.project).toBe(project); expect(first.release).toBeNull();
+    await page.locator('[data-project]').filter({ hasText: 'orbital-industries' }).click();
+    await expect(page.locator('#release-select')).toHaveValue('');
+    // Two ordinary conversations and an Express conversation: never guess a creator.
+    await page.evaluate(async project => {
+      await window.tricorder.terminals.create({ project, release: null });
+      await window.tricorder.terminals.create({ project, release: null, scopeMode: 'express' });
+    }, project);
+    const newId = '2026-09-12_01_ambiguite';
+    write(path.join(project, 'changelog', newId, 'README.md'), '<!-- release ouverte -->\n# Nouvelle release\n');
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#release-select')).toHaveValue(newId);
+    const unchanged = await page.evaluate(() => window.tricorder.terminals.list());
+    expect(unchanged).toHaveLength(3);
+    expect(unchanged.every(s => s.release === null)).toBe(true);
+    await expect(page.locator('#toast')).toContainText('aucun terminal réaffecté automatiquement');
+    await page.locator('#tabs [data-view="terminal"]').click();
+    await page.locator('[data-action="terminal-context"]').click();
+    await expect.poll(async () => (await page.evaluate(() => window.tricorder.terminals.list())).filter(s => s.release === newId).length).toBe(1);
+    const assigned = await page.evaluate(() => window.tricorder.terminals.list());
+    expect(assigned.find(s => s.id === first.id).release).toBe(newId);
+    expect(assigned.find(s => s.id === first.id).pid).toBe(first.pid);
+    expect(assigned.find(s => s.scopeMode === 'express').release).toBeNull();
+    // A late response for the former project must not replace the current screen.
+    await page.locator('#tabs [data-view="plan"]').click();
+    await app.evaluate(({ ipcMain }, delayedProject) => {
+      const original = ipcMain._invokeHandlers.get('project');
+      ipcMain.removeHandler('project');
+      ipcMain.handle('project', async (...args) => {
+        if (args[1] === delayedProject) await new Promise(resolve => { globalThis.finishProjectRead = resolve; });
+        return original(...args);
+      });
+      globalThis.originalProjectRead = original;
+    }, project);
+    await page.locator('#release-select').selectOption(releaseId);
+    await expect.poll(() => app.evaluate(() => typeof globalThis.finishProjectRead)).toBe('function');
+    await page.locator('[data-project]').filter({ hasText: 'nova-services' }).click();
+    await expect(page.locator('.no-release')).toBeVisible();
+    await app.evaluate(({ ipcMain }) => {
+      ipcMain.removeHandler('project'); ipcMain.handle('project', globalThis.originalProjectRead);
+      globalThis.finishProjectRead();
+    });
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('.project-item.selected')).toContainText('nova-services');
+    await expect(page.locator('.no-release')).toBeVisible();
+    await expect(page.locator('#task-select')).toBeDisabled();
+    const stored = JSON.parse(fs.readFileSync(path.join(temp, 'state/settings.json'), 'utf8'));
+    expect(stored.contexts[project].release).toBe(newId);
+    expect(errors).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('Markdown preview: readable safe content and recovery from a project read error', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-markdown-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const source = '<!-- release ouverte -->\n# Guide lisible\n\n## Résultat\n\nDu **gras**, de l’*italique* et du `code`.\n\n- Premier point\n- Second point\n\n- [x] Accepté\n\n| Tâche | Résultat |\n| --- | --- |\n| T01 | Validé |\n\n> Une remarque utile.\n\n```js\nconst ok = true;\n```\n\n![tracking](https://invalid.example.test/pixel.png)\n<script>window.INJECTED = true</script>\n<button data-action="new-terminal">Non actif</button>\n<a href="javascript:alert(1)">Lien dangereux</a>\n';
+  write(path.join(project, 'changelog', releaseId, 'README.md'), source);
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  const errors = [], external = [];
+  try {
+    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    page.on('request', r => { if (/^https?:/.test(r.url())) external.push(r.url()); });
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await page.locator('#tabs [data-view="plan"]').click();
+    await page.locator('.release-links [data-document]').click();
+    await expect(page.locator('.markdown-preview h1')).toHaveText('Guide lisible');
+    await expect(page.locator('.markdown-preview strong')).toHaveText('gras');
+    await expect(page.locator('.markdown-preview table td')).toHaveCount(2);
+    await expect(page.locator('.markdown-preview input')).toBeChecked();
+    await expect(page.locator('.markdown-preview input')).toBeDisabled();
+    await expect(page.locator('.markdown-preview script, .markdown-preview img, .markdown-preview button, .markdown-preview [href], .markdown-preview [data-action]')).toHaveCount(0);
+    expect(await page.evaluate(() => window.INJECTED)).toBeUndefined();
+    await page.screenshot({ path: 'test-results/markdown-preview.png' });
+    await page.locator('.markdown-source summary').click();
+    await expect(page.locator('.markdown-source pre')).toHaveText(source);
+    await page.locator('[data-action="modal-close"]').click();
+    await projectView(page, 'documents');
+    await page.locator('[data-files="changelog"]').first().click();
+    await page.locator(`[data-files="changelog/${releaseId}"]`).click();
+    await page.locator(`[data-preview="changelog/${releaseId}/README.md"]`).click();
+    await expect(page.locator('.markdown-preview h1')).toHaveText('Guide lisible');
+    await page.locator('[data-action="modal-close"]').click();
+    await page.locator('#tabs [data-view="plan"]').click();
+    await app.evaluate(({ ipcMain }) => {
+      globalThis.savedProjectHandler = ipcMain._invokeHandlers.get('project');
+      ipcMain.removeHandler('project'); ipcMain.handle('project', () => { throw new Error('synthetic project read failure'); });
+    });
+    await page.locator('#release-select').selectOption('');
+    await expect(page.locator('#content')).toContainText('Lecture impossible');
+    await expect(page.locator('.quality-panel')).toHaveCount(0);
+    await app.evaluate(({ ipcMain }) => { ipcMain.removeHandler('project'); ipcMain.handle('project', globalThis.savedProjectHandler); });
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#content')).not.toContainText('Lecture impossible');
+    expect(errors).toEqual([]); expect(external).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('email removed: no UI or API, old private records preserved, project still usable', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-no-mail-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const privateState = path.join(temp, 'delivery');
+  const key = require('node:crypto').createHash('sha256').update(JSON.stringify(project)).digest('hex');
+  const config = path.join(privateState, key, 'config.json');
+  const draft = path.join(privateState, key, 'old-draft.json');
+  write(config, { enabled: true, transport: 'gmail-smtp', sender: 'synthetic@example.test' });
+  write(draft, { status: 'draft', body: 'Ancien brouillon à préserver' });
+  const before = [config, draft].map(file => fs.readFileSync(file, 'utf8'));
+  const env = { ...process.env, HOME: home, TRICORDER_HOME: home,
+    TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+    TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run'),
+    ODOO_DELIVERY_STATE_DIR: privateState };
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env,
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}) });
+  const errors = [];
+  try {
+    const page = await app.firstWindow(); page.on('pageerror', error => errors.push(error.message));
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await page.locator('#tabs [data-view="plan"]').click();
+    await expect(page.locator('.delivery-panel')).toHaveCount(0);
+    await expect(page.getByText('Email de clôture', { exact: true })).toHaveCount(0);
+    const snapshot = await page.evaluate(async p => ({
+      data: await window.tricorder.project(p),
+      api: Object.keys(window.tricorder.cockpit),
+    }), project);
+    expect(snapshot.data).not.toHaveProperty('delivery');
+    expect(snapshot.data).not.toHaveProperty('deliveryConfig');
+    for (const name of ['deliveryConfigure', 'deliveryEdit', 'deliveryAttachments', 'deliveryConnectSmtp', 'send'])
+      expect(snapshot.api).not.toContain(name);
+    await projectView(page, 'documents');
+    await expect(page.locator('[data-view="communication"]')).toHaveCount(0);
+    await expect(page.locator('#mail-sender')).toHaveCount(0);
+    await expect(page.locator('[data-cockpit="delivery-connect-smtp"]')).toHaveCount(0);
+    await expect(page.locator('.project-resources [data-view]')).toHaveCount(3);
+    await page.locator('[data-action="refresh"]').click();
+    await page.locator('#tabs [data-view="plan"]').click();
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await expect(page.locator('.delivery-panel')).toHaveCount(0);
+    await page.screenshot({ path: 'test-results/email-removed.png' });
+    expect([config, draft].map(file => fs.readFileSync(file, 'utf8'))).toEqual(before);
+    expect(errors).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
 test('desktop: projects, proof status, sources, real terminal and persistence', async () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-ui-'));
   const home = path.join(temp, 'home'); fs.mkdirSync(home);
@@ -98,9 +496,9 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     await expect(page.locator('#inspector')).toContainText('Codex · développeur');
     await expect(page.locator('#inspector')).toContainText('Activité non confirmée');
     await page.screenshot({ path: 'test-results/plan.png' });
-    await page.locator('[data-view="sources"]').click();
+    await projectView(page, 'sources');
     await expect(page.locator('#content')).toContainText('Aucune substitution par une autre série');
-    await page.locator('[data-view="environments"]').click();
+    await projectView(page, 'environments');
     await page.locator('[data-environment="staging"]').click();
     await page.locator('.project-header [data-action="new-terminal"]').click();
     await expect(page.locator('.terminal-host')).toHaveCount(1);
@@ -131,7 +529,7 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     await page.locator('#environment-select').selectOption('production');
     expect((await page.evaluate(async () => (await window.tricorder.terminals.list())[0])).environment).toBe('staging');
     await page.screenshot({ path: 'test-results/terminal.png' });
-    await page.locator('[data-view="documents"]').click();
+    await projectView(page, 'documents');
     await page.locator('[data-files=".odoo-agents"]').first().click();
     await page.locator('[data-preview=".odoo-agents/JOURNAL.md"]').click();
     await expect(page.locator('.document-text')).toContainText('Le suivi des missions');
@@ -163,6 +561,227 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     expect(errors).toEqual([]);
   } finally {
     if (app) { await closeWindow(app).catch(() => { app.process().kill('SIGKILL'); }); }
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-lifecycle-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const historical = '2026-09-10_01_historique';
+  const emptyRelease = '2026-09-09_01_sans-plan';
+  write(path.join(project, 'changelog', historical, 'README.md'), '# Historique\n| 1 | Livrer le premier point | fait |\n| 2 | Point bloqué | bloqué |');
+  write(path.join(project, 'changelog', emptyRelease, 'README.md'), '# Bilan de livraison\nVersion livrée : 1.0.');
+  write(path.join(project, '.odoo-agents/flows/express-caption.json'), {
+    kind: 'express', status: 'complete', graph_snapshot: { nodes: {
+      express_qa: { description: 'Contrôles ciblés' }, task_done: { description: 'Terminée' },
+    } }, events: [{ node: 'express_qa', outcome: 'pass', evidence: ['Contrôle ciblé synthétique'] },
+      { node: 'task_done', outcome: 'done' }], updated_at: '2026-09-11T09:00:00Z',
+  });
+  const env = { ...process.env, HOME: home, HISTFILE: path.join(temp, 'history'),
+    TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+    TRICORDER_HOME: home, TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') };
+  const launch = { args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env,
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}) };
+  let app;
+  const errors = [];
+  try {
+    app = await electron.launch(launch);
+    let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await expect(page.locator('.brand')).toHaveText('TRICORDER');
+    await expect(page.locator('.topbar')).not.toContainText('POSTE LOCAL');
+    await expect(page.locator('.statusbar')).not.toContainText('Local');
+    await page.locator('#tabs [data-view="express"]').click();
+    await expect(page.locator('.express-card')).toHaveCount(1);
+    await expect(page.locator('.express-card')).toContainText('Hors release');
+    await expect(page.locator('.express-card')).toContainText('Terminée');
+    await expect(page.locator('.express-card')).toContainText('Contrôles ciblés réussis');
+    await expect(page.locator('#context-bar')).toBeHidden();
+    await page.locator('[data-view="plan"]').click();
+    await expect(page.locator('#context-bar')).toBeVisible();
+    await page.locator('#task-select').selectOption('T02');
+    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await expect(page.locator('.terminal-host')).toHaveCount(1);
+    const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+    await page.locator('#release-select').selectOption(historical);
+    await expect(page.locator('#terminal-mismatch')).toBeVisible();
+    await expect(page.locator('#terminal-context')).toContainText(releaseId);
+    await expect(page.locator('#task-select option')).toHaveCount(3);
+    await page.locator('#task-select').selectOption('P1');
+    await page.locator('[data-view="plan"]').click();
+    await expect(page.locator('.release-state')).toContainText('Close');
+    await expect(page.locator('.task-card')).toHaveCount(2);
+    await expect(page.locator('.task-card[data-task="P1"]')).toContainText('Terminée');
+    await expect(page.locator('#inspector')).toContainText('Aucune réception vérifiable');
+    await page.locator('[data-action="task-terminal"]').click();
+    await expect(page.locator('#release-select')).toHaveValue(historical);
+    await expect(page.locator('#task-select')).toHaveValue('P1');
+    expect((await page.evaluate(() => window.tricorder.terminals.list())).length).toBe(1);
+    await expect(page.locator('#terminal-mismatch')).toContainText('Terminal partagé du projet');
+    await page.locator('[data-view="plan"]').click();
+    await page.locator('#release-select').selectOption(releaseId);
+    await expect(page.locator('#task-select')).toHaveValue('T02');
+    await page.locator('#release-select').selectOption(historical);
+    await expect(page.locator('#task-select')).toHaveValue('P1');
+    await page.locator('[data-view="terminal"]').click();
+    await page.locator('[data-follow-session]').click();
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await expect(page.locator('#task-select')).toHaveValue('T02');
+    await expect(page.locator('#terminal-mismatch')).toHaveCount(0);
+    // Invalid associations fail before opening a file picker or persisting metadata.
+    const rejection = await page.evaluate(async ({ project, releaseId, terminal }) => {
+      try { await window.tricorder.cockpit.bind({ project, release: releaseId, task: 'T03', flow: '.odoo-agents/flows/maintenance.json', terminal: terminal.id, provider: 'codex' }); }
+      catch (e) { return e.message; }
+    }, { project, releaseId, terminal });
+    expect(rejection).toContain('non associé à cette tâche');
+    // One conversation/terminal may span several tasks; its opening scope is not a lock.
+    const prepared = await page.evaluate(({ project, releaseId, terminal }) => window.tricorder.cockpit.prepareClaude({ project, release: releaseId, task: 'T03', terminal: terminal.id }), { project, releaseId, terminal });
+    expect(prepared.command).toContain('claude --settings');
+    const before = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+    expect(before.pid).toBe(terminal.pid); expect(before.task).toBe('T02');
+    await page.locator('#release-select').selectOption(emptyRelease);
+    await page.locator('[data-view="plan"]').click();
+    await expect(page.locator('#content')).toContainText('Aucune tâche structurée');
+    await page.locator('.release-links [data-document]').click();
+    await expect(page.locator('#modal')).toContainText('Bilan de livraison');
+    await page.locator('[data-action="modal-close"]').click();
+    await expect(page.locator('[data-action="attention"]')).toHaveCount(0);
+    await page.locator('#release-select').selectOption(historical);
+    await page.locator('#task-select').selectOption('P2');
+    await expect(page.locator('#release-select')).toHaveValue(historical);
+    await expect(page.locator('#task-select')).toHaveValue('P2');
+    await page.locator('[data-project]').filter({ hasText: 'nova-services' }).click();
+    await page.locator('[data-project]').filter({ hasText: 'orbital-industries' }).click();
+    await expect(page.locator('#task-select')).toHaveValue('P2');
+    await expect(page.locator('[data-action="add"]')).toHaveCount(0);
+    await expect(page.locator('#project-search')).toHaveCount(0);
+    await expect(page.locator('.project-item')).toHaveCount(3);
+    await expect(page.locator('#task-select')).toHaveValue('P2');
+    // Two navigation events in the same turn: only the latest response may win.
+    await page.evaluate(([first, last]) => {
+      const select = document.querySelector('#release-select');
+      select.value = first; select.dispatchEvent(new Event('change', { bubbles: true }));
+      select.value = last; select.dispatchEvent(new Event('change', { bubbles: true }));
+    }, [releaseId, historical]);
+    await expect(page.locator('#release-select')).toHaveValue(historical);
+    await expect(page.locator('#task-select')).toHaveValue('P2');
+    await page.screenshot({ path: 'test-results/lifecycle-plan.png' });
+    await closeWindow(app); app = null;
+    app = await electron.launch(launch); page = await app.firstWindow();
+    await expect(page.locator('#release-select')).toHaveValue(historical);
+    await expect(page.locator('#task-select')).toHaveValue('P2');
+    await expect(page.locator('#terminal-mismatch')).toBeVisible();
+    await projectView(page, 'documents');
+    await page.screenshot({ path: 'test-results/project-resources.png' });
+    await page.locator('#tabs [data-view="express"]').click();
+    await expect(page.locator('.express-card')).toHaveCount(1);
+    await page.screenshot({ path: 'test-results/express.png' });
+    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await expect(page.locator('.terminal-host')).toHaveCount(2);
+    const allTerminals = await page.evaluate(() => window.tricorder.terminals.list());
+    const expressTerminal = allTerminals.find(t => t.id !== terminal.id);
+    expect(expressTerminal.release).toBeNull();
+    expect(expressTerminal.task).toBeNull();
+    expect(errors).toEqual([]);
+  } finally {
+    if (app) await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('real project: read-only release/task/mission screens', async () => {
+  test.skip(!process.env.TRICORDER_REAL_PROJECT, 'Opt-in local uniquement ; aucune donnée client dans les fixtures CI');
+  test.setTimeout(120000);
+  const project = fs.realpathSync(process.env.TRICORDER_REAL_PROJECT);
+  const releaseId = process.env.TRICORDER_REAL_RELEASE;
+  if (!releaseId || !/^[\w-]+$/.test(releaseId)) throw new Error('Release réelle explicite requise');
+  const { createHash } = require('node:crypto');
+  const protectedFiles = [];
+  function collect(folder) {
+    for (const item of fs.readdirSync(folder, { withFileTypes: true })) {
+      if (item.isSymbolicLink()) continue;
+      const file = path.join(folder, item.name);
+      if (item.isDirectory()) collect(file);
+      else if (/\.(md|json)$/.test(item.name)) protectedFiles.push(file);
+    }
+  }
+  collect(path.join(project, 'changelog', releaseId));
+  const effortRelease = process.env.TRICORDER_REAL_EFFORT_RELEASE;
+  if (effortRelease) {
+    if (!/^[\w-]+$/.test(effortRelease)) throw new Error('Release de temps explicite requise');
+    collect(path.join(project, 'changelog', effortRelease));
+  }
+  const digest = () => protectedFiles.map(file => createHash('sha256').update(fs.readFileSync(file)).digest('hex'));
+  const before = digest();
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-real-readonly-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  write(path.join(temp, 'state/settings.json'), { extras: [project], activeProject: project, contexts: { [project]: { release: releaseId } } });
+  let app;
+  const errors = [];
+  try {
+    app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+      ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+      env: { ...process.env, HOME: home, HISTFILE: path.join(temp, 'history'),
+        TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+        TRICORDER_HOME: home, TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await page.locator('[data-view="plan"]').click();
+    await expect(page.locator('.release-state')).toContainText('Close');
+    await expect(page.locator('.task-card')).toHaveCount(5);
+    await page.locator('#task-select').selectOption('T01');
+    await expect(page.locator('#inspector')).toContainText('Réceptionnée');
+    await expect(page.locator('#inspector')).toContainText('worktree du même dépôt');
+    await expect(page.locator('#inspector')).toContainText('Critères d’acceptation');
+    await expect(page.locator('#inspector')).not.toContainText('SUIVI DE MISSION');
+    await expect(page.locator('#inspector')).not.toContainText('Workflow Odoo');
+    await page.screenshot({ path: 'test-results/real-neca-plan.png' });
+    await page.getByRole('button', { name: 'Voir les missions de cette tâche', exact: true }).click();
+    await expect(page.locator('.agent-mission')).toHaveCount(2);
+    await expect(page.locator('#content')).toContainText('Historique local absent');
+    await expect(page.locator('#content')).toContainText('Historique de mission');
+    await page.screenshot({ path: 'test-results/real-neca-agents.png' });
+    await page.locator('[data-view="effort"]').click();
+    await expect(page.locator('#content .table-scroll').first().locator('tbody tr')).toHaveCount(1);
+    await expect(page.locator('#content .metric strong').first()).toContainText(' h ');
+    const actualHeadline = await page.locator('#content .metric strong').nth(1).innerText();
+    expect(actualHeadline === 'Non mesuré' || actualHeadline.includes(' h ')).toBe(true);
+    await page.screenshot({ path: 'test-results/real-neca-effort.png' });
+    if (effortRelease) {
+      await page.locator('#release-select').selectOption(effortRelease);
+      await page.locator('#task-select').selectOption('');
+      await expect(page.locator('.metric').nth(1)).toContainText('PARTIEL');
+      await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('2 h 19 min');
+      await expect(page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T01' }).locator('td').nth(3)).toContainText('0 h 23 min');
+      await expect(page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T03' }).locator('td').nth(3)).toContainText('0 h 58 min');
+      const t02 = page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T02' });
+      await t02.locator('.agent-breakdown summary').click();
+      await expect(t02.locator('[data-agent="odoo-tester"]')).toContainText('Aucun relevé enregistré');
+      const ledger = JSON.parse(fs.readFileSync(path.join(project, 'changelog', effortRelease, 'effort.json'), 'utf8'));
+      const running = (ledger.entries || []).filter(entry => entry.status === 'running');
+      await expect(page.locator('.open-timers')).toHaveCount(running.length ? 1 : 0);
+      for (const entry of running) await expect(page.locator('.open-timers')).toContainText(entry.task);
+      await page.screenshot({ path: 'test-results/real-neca-partial-effort.png' });
+      await page.locator('#release-select').selectOption(releaseId);
+    }
+    await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1050, 700));
+    await page.locator('[data-view="plan"]').click();
+    await expect(page.locator('#task-select')).toHaveValue('T01');
+    await page.screenshot({ path: 'test-results/real-neca-compact.png' });
+    const other = await page.locator('#release-select option').first().getAttribute('value');
+    await page.locator('#release-select').selectOption(other);
+    await page.locator('[data-view="plan"]').click();
+    await page.locator('#release-select').selectOption(releaseId);
+    await expect(page.locator('#task-select')).toHaveValue('T01');
+    expect(await page.evaluate(() => window.tricorder.terminals.list())).toEqual([]);
+    expect(errors).toEqual([]);
+    expect(digest()).toEqual(before);
+  } finally {
+    if (app) await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
     await cleanupBroker(path.join(temp, 'run/pty.sock'));
     fs.rmSync(temp, { recursive: true, force: true });
   }
@@ -207,7 +826,9 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
       BrowserWindow.getAllWindows()[0].isFocused = () => false;
     }, native);
     await page.locator('[data-view="effort"]').click();
-    await expect(page.locator('#content')).toContainText('Pourquoi le réalisé peut-il être vide');
+    await expect(page.locator('#content')).toContainText('Le temps passé reste à enregistrer');
+    await expect(page.locator('#content')).not.toContainText('Mesures natives attribuées');
+    await expect(page.locator('#content')).not.toContainText('odoo_usage.py');
     await page.locator('[data-view="agents"]').click();
     await expect(page.locator('#content')).toContainText('Qui fait quoi');
     await page.locator('[data-cockpit="associate"]').first().click();
@@ -219,6 +840,7 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     expect(await app.evaluate(() => globalThis.tricorderNotifications)).toBeGreaterThan(0);
     await expect(page.locator('.quality-panel')).toContainText('10');
     await expect(page.locator('#content')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
+    await page.locator('.technical-details > summary').click();
     await page.locator('[data-native-events]').click();
     await expect(page.locator('#modal')).toContainText('exec_approval_request');
     await expect(page.locator('#modal')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
@@ -227,7 +849,8 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     expect(observed[0].usage.active_seconds).toBe(20);
     expect(observed[0].usage.tokens.total_tokens).toBe(140);
     await page.locator('[data-view="effort"]').click();
-    await expect(page.locator('#content')).toContainText('Natif · non consolidé');
+    await expect(page.locator('#content')).toContainText('Provisoire');
+    await page.locator('.technical-details > summary').click();
     await page.locator('[data-usage]').click();
     await expect(page.locator('#modal')).toContainText('import-usage');
     await page.locator('[data-cockpit="copy-command"]').click();
@@ -239,26 +862,18 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await expect(page.locator('.task-acceptance')).toHaveCount(3);
     await page.locator('#task-select').selectOption('T02');
     await expect(page.locator('#inspector')).toContainText('Critères d’acceptation');
-    await page.locator('[data-cockpit="graph"]').click();
-    await expect(page.locator('.graph-node')).toHaveCount(3);
-    await page.locator('#graph-task').selectOption('T03');
-    await expect(page.locator('.graph-node')).toHaveCount(3);
-    await page.locator('#graph-resource').selectOption('orbital_custom');
-    await page.screenshot({ path: 'test-results/roadmap-graph.png' });
-    await page.locator('[data-cockpit="handoff"]').click();
-    await expect(page.locator('#modal')).toContainText('Cette fiche transmet le contexte');
-    await page.locator('[data-cockpit="copy-handoff"]').click();
-    expect(await page.evaluate(() => window.tricorder.clipboard.read())).toContain('synthetic-thread');
-    await page.locator('[data-action="modal-close"]').click();
-    await page.locator('[data-view="environments"]').click();
+    await expect(page.locator('[data-cockpit="graph"]')).toHaveCount(0);
+    await expect(page.locator('[data-cockpit="handoff"]')).toHaveCount(0);
+    await projectView(page, 'environments');
     await expect(page.locator('#content')).not.toContainText('Fichiers reçus');
     await expect(page.locator('#content')).toContainText('Stack locale');
-    await page.locator('[data-view="documents"]').click();
+    await projectView(page, 'documents');
+    await expect(page.locator('[data-cockpit="handoff"]')).toHaveCount(0);
     await page.locator('[data-files="inbox"]').first().click();
     await page.locator('[data-preview="inbox/ticket.eml"]').click();
     await expect(page.locator('.document-text')).toContainText('Demande synthétique');
     await page.locator('[data-action="modal-close"]').click();
-    await page.locator('.top-actions [data-cockpit="search"]').click();
+    await page.locator('#content [data-cockpit="search"]').click();
     await page.locator('#global-query').fill('facturation');
     await page.locator('[data-cockpit="run-search"]').click();
     await expect(page.locator('.search-result').first()).toBeVisible();
@@ -269,7 +884,7 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await page.locator('[data-skill="odoo-env"]').click();
     await expect(page.locator('#modal')).toContainText('$odoo-env');
     await page.locator('[data-action="modal-close"]').click();
-    await page.locator('[data-view="sources"]').click();
+    await projectView(page, 'sources');
     await page.locator('[data-cockpit="profile"]').click();
     await page.locator('#profile-kind').selectOption('online');
     await page.locator('[data-cockpit="save-profile"]').click();
@@ -288,6 +903,7 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await page.locator('[data-cockpit="profile"]').click();
     await page.locator('[data-cockpit="working-directory"]').click();
     await expect(page.locator('#modal')).not.toBeVisible();
+    await page.locator('[data-view="plan"]').click();
     await page.locator('#task-select').selectOption('T02');
     await page.locator('.project-header [data-action="new-terminal"]').click();
     await expect(page.locator('.terminal-host')).toHaveCount(1);

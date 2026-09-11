@@ -76,6 +76,59 @@ class ObservationTests(unittest.TestCase):
         self.assertTrue(result['warnings'])
         self.assertEqual(result['agents'], [])
 
+    def test_usage_survives_partial_tail_then_recovers(self):
+        rows = [
+            {'type': 'session_meta', 'timestamp': '2026-09-11T10:00:00Z', 'payload': {'id': 'p'}},
+            {'type': 'turn_context', 'timestamp': '2026-09-11T10:00:01Z', 'payload': {'turn_id': 't', 'model': 'synthetic'}},
+            {'type': 'event_msg', 'timestamp': '2026-09-11T10:00:10Z', 'payload': {'type': 'task_complete', 'turn_id': 't', 'duration_ms': 9000}},
+        ]
+        self.write(rows)
+        self.assertEqual(observation.snapshot(self.source, 'codex')['usage']['active_seconds'], 9)
+        self.write(rows, '{"unfinished')
+        partial = observation.snapshot(self.source, 'codex')
+        self.assertEqual(partial['usage']['active_seconds'], 9)
+        self.assertFalse(partial['usage']['complete'])
+        self.assertTrue(partial['agents'])
+        self.write(rows)
+        self.assertEqual(observation.snapshot(self.source, 'codex')['usage']['active_seconds'], 9)
+
+    def test_missing_cache_preserves_other_valid_token_counters(self):
+        self.write([
+            {'type': 'session_meta', 'timestamp': '2026-09-11T10:00:00Z', 'payload': {'id': 'p'}},
+            {'type': 'token_usage_record', 'timestamp': '2026-09-11T10:00:10Z', 'payload': {
+                'response_id': 'r', 'thread_id': 'p', 'thread_token_usage': {
+                    'input_tokens': 100, 'cached_input_tokens': 50, 'output_tokens': 20, 'total_tokens': 120,
+                }}},
+        ])
+        data = observation.snapshot(self.source, 'codex')
+        self.assertEqual(data['usage']['tokens']['input_tokens'], 100)
+        self.assertEqual(data['usage']['tokens']['output_tokens'], 20)
+        self.assertIsNone(data['usage']['tokens']['cache_write_input_tokens'])
+        self.assertIn('some_usage_counters_missing', data['usage']['warnings'])
+
+    def test_review_overnight_gap_between_turns_is_not_agent_time(self):
+        rows = [{'type': 'session_meta', 'timestamp': '2026-09-11T20:00:00Z', 'payload': {'id': 'p'}}]
+        for day, hour, turn in [('11', '20', 'before'), ('12', '08', 'after')]:
+            rows.extend([
+                {'type': 'turn_context', 'timestamp': f'2026-09-{day}T{hour}:00:00Z', 'payload': {'turn_id': turn, 'model': 'synthetic'}},
+                {'type': 'event_msg', 'timestamp': f'2026-09-{day}T{hour}:00:10Z', 'payload': {'type': 'task_complete', 'turn_id': turn, 'duration_ms': 10000}},
+            ])
+        self.write(rows)
+        data = observation.snapshot(self.source, 'codex')['usage']
+        self.assertEqual(data['active_seconds'], 20)
+        self.assertEqual(data['elapsed_seconds'], 43210)
+
+    def test_review_suspension_inside_a_turn_cannot_be_inferred_from_duration(self):
+        # Without a separate suspend/resume observation, a native long duration
+        # is not proof of continuous activity and cannot be corrected by guessing.
+        self.write([
+            {'type': 'session_meta', 'timestamp': '2026-09-11T20:00:00Z', 'payload': {'id': 'p'}},
+            {'type': 'turn_context', 'timestamp': '2026-09-11T20:00:00Z', 'payload': {'turn_id': 't', 'model': 'synthetic'}},
+            {'type': 'event_msg', 'timestamp': '2026-09-12T08:00:10Z', 'payload': {'type': 'task_complete', 'turn_id': 't', 'duration_ms': 43210000}},
+        ])
+        data = observation.snapshot(self.source, 'codex')['usage']
+        self.assertEqual(data['active_seconds'], 43210)
+
     def test_fork_ignores_inherited_agent_events(self):
         self.write([
             {'type': 'session_meta', 'payload': {'id': 'child', 'source': {'subagent': {'thread_spawn': {'parent_thread_id': 'parent'}}}}},

@@ -1,6 +1,7 @@
 """JUnit evidence, per report/run. Never infer passed tests from workflow state."""
 from datetime import datetime, timezone
 from pathlib import Path
+import re
 import xml.etree.ElementTree as ET
 
 from catalog import inside, read_text
@@ -56,5 +57,18 @@ def reports(root, release, task_ids):
             warnings.append('Rapport non exploitable : ' + path.name)
     if len(paths) > 100:
         warnings.append('Inventaire limité à 100 rapports.')
-    docs = [str(p.relative_to(root)) for p in (folder / 'qa.md', folder / 'recette.md') if p.is_file() and not p.is_symlink()]
-    return {'reports': sorted(found, key=lambda r: r['modifiedAt'], reverse=True), 'warnings': warnings, 'documents': docs}
+    docs = [str(p.relative_to(root)) for p in (folder / 'qa.md', folder / 'recette.md', folder / 'README.md') if p.is_file() and not p.is_symlink()]
+    declarations = []
+    for relative in docs:
+        try:
+            for line, text in enumerate(read_text(inside(root, root / relative), 512000).splitlines(), 1):
+                if re.search(r'\b(?:tests?|méthodes|scénarios)\b', text, re.I) and re.search(r'\d', text):
+                    declarations.append({'path': relative, 'line': line, 'text': text[:700]})
+                    if len(declarations) >= 30:
+                        break
+        except (OSError, ValueError):
+            warnings.append('Déclarations de QA non lisibles : ' + relative)
+        if len(declarations) >= 30:
+            break
+    return {'reports': sorted(found, key=lambda r: r['modifiedAt'], reverse=True), 'warnings': warnings,
+            'documents': docs, 'declarations': declarations}
