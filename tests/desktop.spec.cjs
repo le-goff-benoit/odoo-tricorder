@@ -541,6 +541,9 @@ test('release context: none, automatic new release, same terminal and persistenc
     await page.locator('#tabs [data-view="plan"]').click();
     await expect(page.locator('.no-release')).toContainText('Aucune release sélectionnée');
     await page.locator('[data-action="refresh"]').evaluate(el => el.click());
+    // The selection was already empty: it cannot prove refresh has finished.
+    // Wait for the completed overview before creating a release and refreshing again.
+    await expect(page.locator('#sync-status')).toHaveText(/^À jour · /);
     await expect(page.locator('#release-select')).toHaveValue('');
     await expect(page.locator('.project-header [data-action="new-terminal"]')).toHaveCount(0);
     await page.keyboard.press('Control+Shift+T');

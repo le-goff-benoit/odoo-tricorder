@@ -15,7 +15,7 @@
   visibles sans durée fabriquée ; aucune estimation rétroactive ni fausse économie.
 - Captures inspectées : Kanban compact, fiche, préférences, plan desktop/compact.
   Huit vues vérifiées à 1440/1000 px, sans débordement du document.
-- Aucun changement des fichiers clients, de Crew ou de l’application installée.
+- Aucun changement des fichiers clients ou de Crew.
 - Debian amd64 : `64faaf7fdb53af6f0699f37d4ff800fd30d45cbcfca3c4fbcacf53d842faa27f`.
 - Première CI : un test exigeait un défilement supérieur à 100 px alors que la
   fenêtre n’en permettait que 68. Le contrat compare désormais la position réellement
@@ -27,6 +27,9 @@
 - Seconde CI : défilement vert ; course préexistante dans le test de démarrage
   (redimensionnement avant création de fenêtre). Attente explicite de `firstWindow`
   avant accès à la fenêtre/au menu, sans temporisation arbitraire ni code produit modifié.
+- Troisième CI : le parcours sans release lançait deux actualisations sans attendre
+  la première (la sélection vide était déjà vraie). Attente de l’état « À jour »
+  avant création du terminal/de la release ; adoption et conservation du PID toujours exigées.
 
 ## Livraison 0.2.8
 
