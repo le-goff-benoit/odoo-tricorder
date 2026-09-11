@@ -32,7 +32,7 @@ export function plainLanguageUI({ s, hasNative, actual, partial }) {
     const cards = page.querySelectorAll('.metric');
     cards[2].querySelector('span').textContent = 'TÂCHES SUIVIES';
     cards[2].querySelector('strong').textContent = s.selectedTask ? '1' : String(s.detail.tasks.length);
-    cards[2].querySelector('small').textContent = s.selectedTask ? 'Tâche consultée' : 'Dans cette release';
+    cards[2].querySelector('small').textContent = s.selectedTask ? 'Tâche consultée' : s.detail.selectedRelease ? 'Dans cette release' : 'Le cadrage précède les tâches';
     cards[1].querySelector('span').textContent = partial ? 'TEMPS ENREGISTRÉ · PARTIEL' : 'TEMPS ENREGISTRÉ';
     cards[1].querySelector('small').textContent = actual == null ? 'Aucune durée disponible' : partial ? 'Certaines périodes restent non mesurées' : 'Périodes enregistrées';
     const empty = page.querySelector('.effort-state');
@@ -50,7 +50,7 @@ export function plainLanguageUI({ s, hasNative, actual, partial }) {
     const timers = (s.detail.effort?.openTimers || []).filter(t => !s.selectedTask || t.task === s.selectedTask);
     if (timers.length) {
       const notice = document.createElement('div'); notice.className = 'note warning open-timers';
-      notice.textContent = `${timers.length} période(s) de mesure à terminer : ${timers.map(t => t.task).join(', ')}. Les durées en cours disponibles s’affichent à titre provisoire, hors veille. L’agent doit terminer les mesures ou déclarer les interruptions.`;
+      notice.textContent = `${timers.length} période(s) de mesure en cours : ${timers.map(t => t.task === 'PREPARATION' ? 'préparation du plan' : t.task).join(', ')}. Les durées disponibles s’affichent à titre provisoire, hors veille.`;
       page.querySelector('.metrics').after(notice);
     }
   }
@@ -128,7 +128,6 @@ export function lifecycleUI({ s, esc, badge, when }) {
   if (s.view === 'terminal' && terminal && ((terminal.release || null) !== (s.detail.selectedRelease || null) || (terminal.task || null) !== (s.selectedTask || null))) {
     $('#terminal-context').insertAdjacentHTML('afterend', `<div id="terminal-mismatch" class="note" role="status"><strong>Terminal partagé du projet.</strong> Vous consultez ${esc(s.detail.selectedRelease || 'le projet sans release')}${s.detail.selectedRelease ? ' / ' + esc(s.selectedTask || 'release complète') : ''}. Changer de vue ne change pas les instructions de votre agent.<button class="text-button" data-follow-session="${esc(terminal.id)}">Revoir le contexte du terminal</button></div>`);
   }
-  if (s.view === 'terminal' && terminal) $('#terminal-context').textContent = 'Contexte à l’ouverture · ' + $('#terminal-context').textContent;
 }
 
 export function missionCards({ s, rows, esc, badge }) {

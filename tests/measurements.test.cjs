@@ -1,6 +1,18 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const load = () => import('../src/measurements.mjs');
+test('preparation and native task observations cannot count the same period twice', async () => {
+  const { withoutPreparationOverlap } = await load();
+  const reservation = [{ provider: 'codex', thread: 'session', since: '2026-09-11T10:00:00Z', until: '2026-09-11T10:10:00Z' }];
+  const bindings = [
+    { nativeId: 'session', provider: 'codex', task: 'T01' },
+    { nativeId: 'session', provider: 'codex', task: 'T01', since: '2026-09-11T10:05:00Z', until: '2026-09-11T10:15:00Z' },
+    { nativeId: 'session', provider: 'codex', task: 'T02', since: '2026-09-11T10:10:00Z', until: '2026-09-11T10:20:00Z' },
+    { nativeId: 'child', provider: 'codex', task: 'T03' },
+  ];
+  assert.deepEqual(withoutPreparationOverlap(bindings, reservation).map(b => b.task), ['T02', 'T03']);
+  assert.equal(withoutPreparationOverlap(bindings).length, 4);
+});
 test('partial token fields survive and recorded/native counters are never added', async () => {
   const { tokenMeasures } = await load();
   const result = tokenMeasures([{ tokens: { input_tokens: 100, output_tokens: 20, cached_input_tokens: 50 } }],

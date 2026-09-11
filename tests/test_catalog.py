@@ -58,6 +58,52 @@ class CatalogTests(unittest.TestCase):
         self.assertTrue(data['releases'])
         self.assertEqual(catalog.project(self.project)['selectedRelease'], self.release.name)
 
+    def test_preparation_before_plan_moves_between_views_without_writes(self):
+        effort = catalog.trusted_module('odoo_effort')
+        usage = {'thread_id': 'synthetic', 'tokens': None, 'model': None,
+                 'warnings': [], 'source_sha256': 'synthetic', 'identities': []}
+        with patch.object(effort, 'normalized_usage', return_value=usage):
+            entry = effort.prepare_start(self.project, 'odoo-analyst', 'codex', 'synthetic')
+        ledger = effort.preparation_folder(self.project) / 'effort.json'
+        before = ledger.read_bytes()
+        data = catalog.project(self.project, '')
+        self.assertEqual(data['tasks'], [])
+        self.assertEqual(data['effort']['rows'][0]['phase'], 'preparation')
+        self.assertEqual(data['effort']['rows'][0]['timeState'], 'running')
+        self.assertEqual(data['effort']['openTimers'][0]['task'], 'PREPARATION')
+        self.assertEqual(before, ledger.read_bytes())
+        effort.prepare_attach(self.project, entry['id'], self.release)
+        before = ledger.read_bytes()
+        self.assertIsNone(catalog.project(self.project, '')['effort'])
+        data = catalog.project(self.project, self.release.name)
+        self.assertEqual(data['effort']['rows'][0]['entries'], [entry['id']])
+        self.assertEqual(data['effort']['openTimers'][0]['agent'], 'odoo-analyst')
+        self.assertFalse((self.release / 'effort.json').exists())
+        self.assertEqual(before, ledger.read_bytes())
+
+    def test_invalid_preparation_does_not_hide_project(self):
+        folder = self.project / '.odoo-agents/preparation'
+        folder.mkdir()
+        (folder / 'effort.json').write_text('{invalid')
+        for selected in ('', self.release.name):
+            data = catalog.project(self.project, selected)
+            self.assertTrue(data['effort']['unverified'])
+            self.assertTrue(data['releases'])
+
+    def test_board_reads_all_releases_and_keeps_unknown_ownership(self):
+        closed = self.project / 'changelog/old'
+        closed.mkdir()
+        (closed / 'README.md').write_text('# Ancienne release\n')
+        def tasks(root, release):
+            return [{'id': 'T01', 'title': release, 'status': 'unverified', 'acceptance': ['Critère'],
+                     'flow': '.odoo-agents/flows/missing.json', 'source': 'plan'}], []
+        with patch.object(catalog, 'plan_tasks', side_effect=tasks):
+            board = catalog.summary(self.project)['board']
+        self.assertEqual({t['release'] for t in board}, {self.release.name, 'old'})
+        self.assertTrue(all(t['owners'] == [] for t in board))
+        self.assertTrue(all(t['status'] == 'unverified' for t in board))
+        self.assertEqual(next(t for t in board if t['release'] == 'old')['releaseStatus'], 'close')
+
     def test_secrets_never_returned_and_url_cleaned(self):
         self.write_json(self.project / '.odoo-agents/instances.json', {
             'production': {'kind': 'production', 'url': 'https://user:secret@example.test/odoo?token=secret#secret',

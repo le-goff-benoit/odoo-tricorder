@@ -1,4 +1,12 @@
 export const knownSum = values => values.length && values.every(v => Number.isFinite(v) && v >= 0) ? values.reduce((a, b) => a + b, 0) : null;
+export function withoutPreparationOverlap(observations, reservations = []) {
+  return observations.filter(b => !reservations.some(r => {
+    if (r.provider !== b.provider?.split('-')[0] || r.thread !== b.nativeId) return false;
+    // Unbounded native histories cannot be safely added to a preparation timer.
+    const [since, until, start, end] = [b.since, b.until, r.since, r.until].map(value => value ? Date.parse(value) : NaN);
+    return ![since, until, start, end].every(Number.isFinite) || since >= until || start > end || Math.max(since, start) < Math.min(until, end);
+  }));
+}
 export const tokenFields = [
   ['input_tokens', 'Entrées (cache inclus)'], ['output_tokens', 'Sorties'],
   ['cached_input_tokens', 'Dont cache lu'], ['cache_write_input_tokens', 'Dont cache écrit'],

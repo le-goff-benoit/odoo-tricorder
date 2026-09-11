@@ -219,16 +219,27 @@ def express_interventions(root):
     return sorted(result, key=lambda f: f.get('updatedAt') or '', reverse=True)
 
 
-def effort_details(folder):
-    if not (folder / 'effort.json').is_file():
+def effort_details(folder, project_only=False):
+    root = folder if project_only else folder.parent.parent
+    if not (folder / 'effort.json').is_file() and not (root / '.odoo-agents/preparation/effort.json').is_file():
         return None
     try:
-        data = read_json(folder / 'effort.json')
+        module = trusted_module('odoo_effort')
+        if project_only:
+            return module.preparation_report(root, live=True) if hasattr(module, 'preparation_report') else None
+        if (folder / 'effort.json').is_file():
+            data = read_json(folder / 'effort.json')
+        elif hasattr(module, 'preparation_entries') and module.preparation_entries(root, folder.name):
+            data = module.empty_state(folder)
+        else:
+            return None
         # report_data computes the current report in memory; report() writes files.
-        reader = trusted_module('odoo_effort').report_data
+        reader = module.report_data
         # Older Crew installations still provide recorded values only.
         import inspect
         report = reader(folder, data, **({'live': True} if 'live' in inspect.signature(reader).parameters else {}))
+        if hasattr(module, 'measurement_state'):
+            data = module.measurement_state(folder, data)
         for row in report.get('rows', []):
             entries = [e for e in data.get('entries', []) if e.get('task') == row['task'] and e.get('agent') == row['agent']]
             row['timeState'] = ('complete' if row.get('time_complete') else 'unrecorded' if not entries
@@ -264,7 +275,7 @@ def summary(root):
     root = Path(root).resolve()
     rels = releases(root)
     current = next((r for r in rels if r['status'] == 'ouverte'), rels[0] if rels else None)
-    tasks, warnings, attention, running = [], [], [], 0
+    tasks, warnings, attention, board, running = [], [], [], [], 0
     for release in rels:
         try:
             release_tasks, issues = plan_tasks(root, release['id'])
@@ -275,6 +286,18 @@ def summary(root):
             running += sum(t['status'] == 'running' for t in release_tasks)
             if current and release['id'] == current['id']:
                 tasks = release_tasks
+            for task in release_tasks:
+                owners = []
+                if task.get('flow'):
+                    try:
+                        flow = flow_details(root, task['flow'])
+                        owners = list(dict.fromkeys(n['owner'] for n in flow['nodes']
+                                                    if n['status'] == 'claimed' and n.get('owner')))
+                    except Exception:
+                        pass  # Missing ownership is not an invented assignment.
+                board.append({k: task.get(k) for k in ('id', 'title', 'status', 'reason', 'source', 'acceptance')} |
+                             {'release': release['id'], 'releaseTitle': release['title'],
+                              'releaseStatus': release['status'], 'owners': owners})
             attention.extend(t | {'release': release['id']} for t in release_tasks
                              if t['status'] in ('stale', 'blocked', 'interrupted', 'awaiting_receipt')
                              and not (release['status'] == 'close' and t['status'] == 'stale'))
@@ -293,7 +316,7 @@ def summary(root):
             warnings.append(Path(relative).name + ' : ' + str(exc))
     return {'path': str(root), 'name': root.name, 'series': project_series(root),
             'release': current, 'releases': rels, 'attention': attention,
-            'running': running, 'warnings': warnings}
+            'running': running, 'warnings': warnings, 'board': board}
 
 
 def overview(home, extras):
@@ -387,6 +410,7 @@ def project(root, release=None, source_root=None, profile=None):
                              for p in sorted(folder.iterdir())
                              if p.is_file() and p.suffix.lower() in ('.md', '.pdf', '.txt')]
     if not chosen:
+        data['effort'] = effort_details(root, project_only=True)
         for relative, _ in related_flows(root, None):
             try:
                 data['flows'].append(flow_details(root, relative))

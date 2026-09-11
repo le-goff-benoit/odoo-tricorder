@@ -6,6 +6,7 @@ import './style.css';
 import { cockpit, providerIcon } from './cockpit.js';
 import { documentBody } from './markdown.js';
 import { newReleaseContext } from './release-context.mjs';
+import { boardCards, columns as kanbanColumns } from './kanban.mjs';
 
 const api = window.tricorder;
 const $ = selector => document.querySelector(selector);
@@ -40,11 +41,13 @@ let projects = [], settings = {}, current = null, detail = null, view = 'termina
 let sessions = [], selectedSession = new Map(), terminals = new Map(), generation = 0, busy = false, pollBusy = false;
 let projectError = null, overviewMode = false, filter = '', split = false, inspectorHidden = false, version = '';
 let notificationKeys = new Set();
+let kanbanClosed = false;
 
 $('#app').innerHTML = `
   <aside class="sidebar">
     <div class="brand"><div class="brand-mark">${icon('terminal')}</div><div>TRICORDER</div></div>
     <div class="project-heading"><span>PROJETS</span></div>
+    <button class="kanban-nav" data-view="kanban">${icon('grid')} Kanban global</button>
     <div id="project-list" class="project-list"></div>
     <div class="sidebar-bottom"><button class="install-agents" data-action="agents-link">${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="about-button" data-action="about">À propos de Tricorder <span id="version"></span></button></div>
   </aside>
@@ -62,6 +65,7 @@ function attentionItems() {
   return projects.flatMap(p => [...(p.attention || []).map(t => ({ project: p, task: t })), ...(p.warnings || []).map(reason => ({ project: p, task: { id: 'État', title: 'Lecture à vérifier', reason, status: 'unverified' } }))]);
 }
 function sidebar() {
+  $('.kanban-nav').classList.toggle('selected', overviewMode);
   const favorites = settings.favorites || [];
   const listed = [...projects].sort((a, b) => Number(favorites.includes(b.path)) - Number(favorites.includes(a.path)) || a.name.localeCompare(b.name));
   $('#project-list').innerHTML = listed.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())).map(p => `
@@ -74,17 +78,22 @@ function tabs() {
 }
 function header() {
   const project = detail || projects.find(p => p.path === current);
-  $('#breadcrumb').textContent = overviewMode ? 'À mon attention' : project?.name || 'Projets';
-  $('#project-title').textContent = overviewMode ? 'Ce qui vous attend.' : project?.name || 'Votre poste de commande.';
+  $('#breadcrumb').textContent = overviewMode ? '' : project?.name || 'Projets';
+  $('#project-title').textContent = overviewMode ? 'Kanban global' : project?.name || 'Votre poste de commande.';
   $('#project-eyebrow').textContent = overviewMode ? 'VUE TRANSVERSALE' : 'ESPACE DE TRAVAIL';
   $('#project-meta').innerHTML = overviewMode ? `${attentionItems().length} élément(s) à examiner · ${projects.length} projets suivis` : project ? `<span>${icon('folder')}${esc(project.path.replace(/^\/home\/[^/]+/, '~'))}</span>${project.series ? badge('series', 'Odoo ' + project.series) : ''}${detail?.branch ? `<span>${icon('branch')}${esc(detail.branch)}${detail.gitChanges ? ' · ' + detail.gitChanges + ' modif.' : ''}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="Favori">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier">${icon('external')}</button>` : 'Ajoutez un dossier pour retrouver vos projets, terminaux et agents.';
   $('#context-bar').hidden = overviewMode || !project;
+  if (overviewMode) $('#project-meta').textContent = `${projects.length} projets · tous les plans réunis`;
+  $('.project-header [data-action="new-terminal"]').hidden = overviewMode;
+  $('#tabs').hidden = overviewMode;
+  $('[data-view="project"]').hidden = overviewMode;
   if (project && !overviewMode) {
     const context = settings.contexts?.[current] || {};
     $('#context-bar').innerHTML = `<label>RELEASE<select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${(project.releases || []).map(r => `<option value="${esc(r.id)}" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${esc(r.id)} · ${esc(r.status)}</option>`).join('')}</select></label><label>ENVIRONNEMENT<select id="environment-select" aria-label="Environnement"><option value="">Non ciblé · shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select></label><span class="context-hint">Contexte des nouveaux terminaux</span>`;
   }
 }
 function setView(next) {
+  if (next === 'kanban') { overviewMode = true; render(); $('#content').scrollTop = 0; return; }
   if (next === 'project') next = 'documents';
   const changed = view !== next;
   view = next; overviewMode = false; render();
@@ -119,7 +128,7 @@ function render() {
   $('#terminal-workspace').hidden = !terminalVisible;
   $('#content').hidden = terminalVisible;
   $('#inspector').hidden = overviewMode || !['terminal', 'plan'].includes(view) || (view === 'terminal' && inspectorHidden);
-  if (overviewMode) renderAttention();
+  if (overviewMode) renderKanban();
   else if (terminalVisible) renderTerminals();
   else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
   else if (projectError) $('#content').innerHTML = empty('Lecture impossible', projectError);
@@ -148,9 +157,14 @@ async function chooseProject(project, release) {
   } catch (error) { if (ticket === generation) projectError = error.message; }
   finally { if (ticket === generation) { busy = false; render(); cockpitUI.refreshNative(); } }
 }
-function renderAttention() {
-  const items = attentionItems();
-  $('#content').innerHTML = `<div class="page"><div class="metrics"><div class="metric"><span>PROJETS SUIVIS</span><strong>${projects.length}</strong><small>Sur ce poste</small></div><div class="metric"><span>À EXAMINER</span><strong class="gold">${items.length}</strong><small>Preuves, blocages et réceptions</small></div><div class="metric"><span>TERMINAUX ACTIFS</span><strong>${sessions.filter(s => s.alive).length}</strong><small>Activité du processus observée</small></div></div><div class="section-title"><h2>Votre file d’attention</h2><span>Actualisée toutes les 30 secondes</span></div>${items.map(({ project, task }) => `<button class="attention-card" data-attention-project="${esc(project.path)}" data-task-id="${esc(task.id)}"><div>${badge(task.status)}<span class="muted">${esc(project.name)} / ${esc(task.id)}</span></div><h3>${esc(task.title)}</h3><p>${esc(task.reason)}</p>${icon('arrow')}</button>`).join('') || empty('Rien à signaler dans les plans lus', 'Les demandes humaines des sessions associées sont signalées dans la barre des projets.')}<div class="note">Les états Odoo et les processus du terminal sont suivis séparément. Une étape revendiquée ne prouve pas l’activité de son agent.</div></div>`;
+function renderKanban() {
+  const scrollLeft = $('.kanban-board')?.scrollLeft || 0;
+  const cards = boardCards(projects, kanbanClosed);
+  $('#content').innerHTML = `<div class="page kanban-page"><div class="kanban-toolbar"><p>${cards.length} tâches · ${kanbanClosed ? 'Toutes les releases' : 'Releases closes masquées'}</p><button class="secondary" data-action="kanban-closed" aria-pressed="${kanbanClosed}">${kanbanClosed ? 'Masquer' : 'Inclure'} les releases closes</button></div><div class="kanban-board">${kanbanColumns.map(([id, label]) => {
+    const tasks = cards.filter(t => t.column === id);
+    return `<section class="kanban-column" data-column="${id}" aria-label="${label}"><h2>${label}<span>${tasks.length}</span></h2>${tasks.map(t => `<button class="kanban-card" data-kanban-project="${esc(t.project)}" data-kanban-release="${esc(t.release)}" data-kanban-task="${esc(t.id)}"><span class="kanban-project">${esc(t.projectName)}</span><small class="kanban-release">${esc(t.releaseTitle)}${t.releaseStatus === 'close' ? ' · close' : ''}</small><div class="kanban-card-status"><span>${esc(t.id)}</span>${badge(t.status)}</div><h3>${esc(t.title)}</h3><p>${esc(t.owners?.length ? t.owners.join(' · ') : 'Responsable non renseigné')}</p>${t.acceptance?.length ? `<small>${t.acceptance.length} critères d’acceptation</small>` : ''}</button>`).join('') || '<p class="kanban-empty">Aucune tâche</p>'}</section>`;
+  }).join('')}</div>${projects.some(p => p.warnings?.length) ? '<p class="note">Certains projets ont des informations à vérifier. Les statuts inconnus restent dans « Bloqué / à vérifier » ; ouvrez le projet pour le détail.</p>' : ''}<p class="muted">Les colonnes suivent les plans et leurs preuves. Cliquez sur une carte pour retrouver sa tâche ; aucun statut n’est modifié depuis ce tableau.</p></div>`;
+  $('.kanban-board').scrollLeft = scrollLeft;
 }
 function renderPlan() {
   if (!detail.selectedRelease) {
@@ -194,13 +208,13 @@ function renderTerminals() {
   if (!own.some(s => s.id === id)) { id = own.at(-1)?.id; selectedSession.set(current, id); }
   $('#terminal-tabs').innerHTML = own.map((s, i) => `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}"></span>${providerIcon(s.provider)}${esc(s.provider || s.program || 'Terminal')} ${i + 1}${s.task ? ' · ' + esc(s.task) : ''}</button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
   const selected = own.find(s => s.id === id);
-  $('#terminal-context').textContent = selected ? `${selected.environment || 'Non ciblé'} · ${selected.release || 'Sans release'} · ${selected.task ? 'Tâche ' + selected.task : selected.release ? 'Release complète' : 'Travail hors release'} · ${selected.workingDirectory || selected.project} · ouvert ${when(selected.createdAt)}` : 'Shell local · lancez librement claude ou codex';
+  $('#terminal-context').replaceChildren();
   if (selected?.alive && detail && (selected.release !== detail.selectedRelease || selected.task !== selectedTask)) {
     $('#terminal-context').insertAdjacentHTML('beforeend', ` <button class="secondary" data-action="terminal-context">${detail.selectedRelease ? 'Utiliser la release affichée dans ce terminal' : 'Mettre ce terminal hors release'}</button>`);
   }
   const env = detail?.environments.find(e => e.name === selected?.environment);
   $('#terminal-context').classList.toggle('production', env?.kind === 'production');
-  if (env?.kind === 'production') $('#terminal-context').textContent = 'PRODUCTION · contexte déclaré, aucune permission accordée · ' + $('#terminal-context').textContent;
+  if (env?.kind === 'production') $('#terminal-context').prepend('PRODUCTION · aucune permission accordée ');
   $('#terminal-empty').hidden = own.length > 0;
   $('#terminal-hosts').hidden = own.length === 0;
   $('#terminal-empty').innerHTML = empty('Votre prochaine mission commence ici.', 'Un vrai shell dans le dossier du projet. Lancez Claude, Codex ou vos commandes habituelles.', `<button class="primary" data-action="new-terminal">${icon('terminal')} Ouvrir un terminal</button><div class="launch-hints"><code>claude</code><span>ou</span><code>codex</code></div>`);
@@ -273,7 +287,7 @@ async function refresh() {
     const previous = projects.find(p => p.path === project)?.releases;
     projects = await api.overview();
     await refreshSessions();
-    const next = !busy && detail && !projectError && project === current && ticket === generation
+    const next = !overviewMode && !busy && detail && !projectError && project === current && ticket === generation
       ? newReleaseContext(previous, projects.find(p => p.path === project)?.releases || [], detail?.selectedRelease, sessions, project) : null;
     if (next && view !== 'express') {
       if (next.session) await api.terminals.context({ project, session: next.session.id, release: next.release, task: null, expectedRelease: next.session.release, expectedProjectRelease: '' });
@@ -302,6 +316,11 @@ document.addEventListener('click', async event => {
   try {
     if (el.dataset.project) return await chooseProject(el.dataset.project);
     if (el.dataset.view) return setView(el.dataset.view);
+    if (el.dataset.kanbanProject) {
+      await chooseProject(el.dataset.kanbanProject, el.dataset.kanbanRelease);
+      selectTask(el.dataset.kanbanTask); setView('plan'); return;
+    }
+    if (el.dataset.action === 'kanban-closed') { kanbanClosed = !kanbanClosed; render(); return; }
     if (el.dataset.task) { selectTask(el.dataset.task); render(); return; }
     if (el.dataset.attentionProject) { await chooseProject(el.dataset.attentionProject, el.dataset.attentionRelease); selectTask(el.dataset.taskId); setView(el.dataset.taskId.startsWith('flow:') ? 'agents' : 'plan'); return; }
     if (el.dataset.session) {
@@ -372,7 +391,8 @@ async function start() {
     notificationKeys = new Set(attentionItems().map(i => `${i.project.path}:${i.task.id}:${i.task.status}`));
     await refreshSessions();
     const chosen = projects.find(p => p.path === settings.activeProject) || projects.find(p => p.attention?.length) || projects[0];
-    if (chosen) await chooseProject(chosen.path); else render();
+    // An early click on the global board must survive asynchronous bootstrap.
+    if (chosen && !overviewMode) await chooseProject(chosen.path); else render();
     $('#sync-status').textContent = 'À jour';
     setInterval(refresh, 30000);
     setInterval(() => refreshSessions().catch(() => {}), 5000);

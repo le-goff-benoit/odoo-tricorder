@@ -20,6 +20,12 @@ suffit pas : vérifier aussi la sélection mémorisée et les processus conserv�
 | Mesures partielles, filtre puis actualisation | Temps connu conservé, absence distincte de zéro, pas de faux écart | `effort`, `measurements.test.cjs` |
 | Nouveaux relevés pendant une release ouverte | Temps et parts tâches/agents à jour sans clôture ; part release inchangée par le filtre tâche | `effort: open release` |
 | Travail terminé mais mesure absente/interrompue | Motif du relevé incomplet affiché par rôle ; aucun statut de travail modifié | `test_effort_explains_unrecorded_running_interrupted_and_missing_duration`, parcours NECA |
+| Cadrage commencé sans release puis rattaché | Une seule mesure, aucune prévision inventée, disparition du total hors release après rattachement | `preparation`, `test_preparation_before_plan_moves_between_views_without_writes` |
+| Une observation native recouvre le cadrage | Période non additionnée ; seules les fenêtres explicitement disjointes peuvent compléter les tâches | `measurements.test.cjs` |
+| Terminal ouvert sans trace récente | Aucune activité d'agent inventée ; étape attribuée distincte d'une activité observée | `work-context.test.cjs` |
+| Même identifiant T01 dans plusieurs projets/releases | Le Kanban garde chaque carte distincte ; clic vers le projet/release/tâche exacts | `global Kanban`, `kanban.test.cjs` |
+| Clic sur le Kanban pendant le chargement initial | La réponse asynchrone ne remplace pas le choix global par un projet | `global Kanban`, scénario rejoué trois fois |
+| Afficher les releases closes puis actualiser | Filtre conservé et statuts historiques non convertis en validation | `global Kanban` |
 
 Les noms courts désignent les tests Electron de `desktop.spec.cjs`. Ils sont
 rejoués depuis les sources puis sur l’exécutable empaqueté. Les fixtures sont

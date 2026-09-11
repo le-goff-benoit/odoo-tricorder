@@ -1,5 +1,17 @@
 # Journal
 
+## 2026-09-11 — Cadrage mesuré et contexte de travail lisible
+
+- Préparation du plan visible hors release puis dans sa release, sans copie des mesures.
+- Temps par étape, parts du temps connu et jetons par rôle ; registres clients en lecture seule.
+- Les observations natives qui recouvrent une préparation ne s'ajoutent pas aux totaux.
+- Bandeau : titre de release, statut et avancement distincts de l'activité observée/étape attribuée.
+- Libellé « Environnement » ; suppression du récapitulatif terminal, avertissements de divergence/production conservés.
+- Kanban global multi-projets, filtre releases closes, responsables connus, navigation exacte vers la tâche ; aucune mutation des statuts.
+- Tests : parcours synthétique projet → release → hors release, anciennes navigations, contexte et métriques.
+- QA finale : 63 tests Python, 29 tests JS, 12 parcours sources puis paquet (NECA lecture seule), trois répétitions du Kanban précoce.
+- Version 0.2.8 locale ; publication et installation du paquet distinctes.
+
 ## 2026-09-11 — Publication demandée de la 0.2.7
 
 - Demande explicite : pousser Crew et Tricorder, publier les versions sur GitHub.

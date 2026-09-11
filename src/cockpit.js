@@ -1,6 +1,7 @@
 // Roadmap views use metadata APIs only; commands are prepared, never injected.
 import { lifecycleUI, missionCards, plainLanguageUI } from './lifecycle.js';
-import { knownSum, taskMeasures, summarizeMeasures, hours, agentMeasures, timeShare, agentAllocation, tokenMeasures } from './measurements.mjs';
+import { knownSum, taskMeasures, summarizeMeasures, hours, agentMeasures, timeShare, agentAllocation, tokenMeasures, withoutPreparationOverlap } from './measurements.mjs';
+import { workStatus } from './work-context.mjs';
 import { documentBody } from './markdown.js';
 export function providerIcon(provider) {
   const name = provider?.split('-')[0];
@@ -34,10 +35,19 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   }
   function tokenPanel() {
     const s = get(), saved = s.detail?.effort?.rows || [];
-    const native = currentObservations();
+    const native = withoutPreparationOverlap(currentObservations(), s.detail?.effort?.preparationSessions);
     const ids = [...new Set([...saved.map(r => r.task), ...native.map(b => b.task)].filter(Boolean))]
       .filter(id => !s.selectedTask || id === s.selectedTask);
-    const rows = ids.map(id => ({ id, ...tokenMeasures(saved.filter(r => r.task === id), native.filter(b => b.task === id)) }));
+    const rows = ids.flatMap(id => {
+      const recorded = saved.filter(r => r.task === id), observed = native.filter(b => b.task === id);
+      const main = { id: recorded[0]?.phase === 'preparation' ? 'Préparation du plan' : id === 'RELEASE' ? 'Clôture commune' : id, ...tokenMeasures(recorded, observed) };
+      // Choose one source for the whole task, then split it by declared role.
+      const agents = agentMeasures(recorded, observed).map(a => {
+        const metrics = tokenMeasures(recorded.filter(r => r.agent === a.agent), main.source === 'Enregistré' ? [] : observed.filter(b => (b.role || '') === a.agent));
+        return { id: '↳ ' + a.label, ...metrics, source: metrics.fields.some(f => f.value != null) ? main.source : 'Non mesuré' };
+      });
+      return [main, ...agents];
+    });
     return `<section class="token-allocation"><h3>Consommation de jetons</h3><p class="muted">Entrées et sorties séparées. Le cache fait déjà partie des entrées : il ne s’ajoute pas au total. « Non mesuré » ne signifie pas zéro.</p><div class="table-scroll"><table><thead><tr><th>Tâche</th>${(rows[0]?.fields || []).map(f => `<th>${esc(f.label)}</th>`).join('')}<th>Relevé</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.id)}</td>${r.fields.map(f => `<td>${f.value == null ? 'Non mesuré' : f.value.toLocaleString('fr-CH') + (f.partial ? ' · partiel' : '')}</td>`).join('')}<td>${r.source}</td></tr>`).join('') || '<tr><td>Aucun compteur disponible.</td></tr>'}</tbody></table></div></section>`;
   }
   function applyPreferences() {
@@ -62,7 +72,13 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       const waiting = values.flatMap(b => b.agents || []).filter(a => a.state === 'waiting_human' && !before.has(a.nativeId));
       if (waiting.length) api.notify({ title: 'Tricorder · décision attendue', body: `${waiting.length} agent(s) attendent une décision dans le terminal.` });
       sidebar(); alertSidebar();
-      if (['agents', 'effort'].includes(get().view) && !$('#modal').open) render();
+      if (get().detail && $('.current-work')) {
+        const status = workStatus(get(), observations);
+        $('.current-work').className = 'current-work ' + status.kind;
+        $('.current-work strong').textContent = status.label;
+        $('.current-work span').textContent = status.text;
+      }
+      if (!get().overviewMode && ['agents', 'effort'].includes(get().view) && !$('#modal').open) render();
     } catch (error) { toast(error.message); }
     finally { reading = false; }
   }
@@ -91,18 +107,18 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     return `<div class="page"><div class="section-title"><h2>Qui fait quoi ?</h2>${badge(waiting ? 'waiting_human' : 'series', waiting ? `${waiting} décision(s) attendue(s)` : s.selectedTask ? 'Tâche ' + s.selectedTask : 'Release complète')}</div><p class="muted">Les workflows indiquent la responsabilité ; les sessions associées indiquent le dernier état observé.</p>${missionCards({ s, rows, esc, badge })}${nativePanel()}<details class="flow-log"><summary>Autres terminaux et missions du projet</summary>${s.sessions.filter(t => t.project === s.current).map(t => `<button class="file-row" data-session="${t.id}">${providerIcon(t.provider)}<strong>${esc(t.program || 'Shell')}</strong><span>${esc(t.release || 'Sans release')} / ${esc(t.task || 'Release complète')} · ${t.alive ? 'processus actif' : 'arrêté'}</span></button>`).join('')}</details></div>`;
   }
   function effortView() {
-    const { detail } = get(), report = detail.effort, bindings = currentObservations(true);
+    const { detail } = get(), report = detail.effort, bindings = withoutPreparationOverlap(currentObservations(true), report?.preparationSessions);
     const taskIds = [...new Set([...detail.tasks.map(t => t.id), ...(report?.rows || []).map(r => r.task), ...(report?.missing_tasks || []), ...bindings.map(b => b.task).filter(Boolean)])];
     const allRows = taskIds.map(id => {
       const estimates = (report?.rows || []).filter(r => r.task === id), native = bindings.filter(b => b.task === id && b.provider !== 'codex-runtime');
-      return { id, title: detail.tasks.find(t => t.id === id)?.title || estimates[0]?.title || '', agents: agentMeasures(estimates, native), ...taskMeasures(estimates, native) };
+      return { id, phase: estimates[0]?.phase || (id === 'RELEASE' ? 'closure' : 'task'), title: detail.tasks.find(t => t.id === id)?.title || estimates[0]?.title || '', agents: agentMeasures(estimates, native), ...taskMeasures(estimates, native) };
     });
     const releaseTotal = summarizeMeasures(allRows).actual;
     const rows = allRows.filter(r => !get().selectedTask || r.id === get().selectedTask);
     for (const row of rows) row.share = timeShare(row.actual, releaseTotal);
     effortRows = rows;
     const summary = summarizeMeasures(rows), total = summary.actual;
-    effortTotals = { initial: knownSum(rows.map(r => r.initial)), ...summary };
+    effortTotals = { initial: knownSum(rows.filter(r => r.phase !== 'preparation').map(r => r.initial)), ...summary };
     return `<div class="page"><div class="section-title"><h2>Prévu, réalisé, écart</h2>${action('associate', 'Activer le suivi d’une session')}</div><div class="metrics"><div class="metric"><span>PRÉVISION INITIALE</span><strong>${minutes(knownSum(rows.map(r => r.initial)))}</strong></div><div class="metric"><span>RÉALISÉ ATTRIBUÉ</span><strong>${minutes(total)}</strong><small>${total == null ? 'Au moins une tâche sans mesure' : 'Tours / périodes mesurés, pas du temps de calcul pur'}</small></div><div class="metric"><span>SESSIONS ASSOCIÉES</span><strong>${bindings.length}</strong><small>Collecte locale toutes les 5 secondes</small></div></div>${!bindings.length ? `<div class="effort-state"><h3>Pourquoi le réalisé peut-il être vide ?</h3><p>L’ouverture d’un terminal n’est pas du temps de travail. Associez la session native à sa tâche et à sa période pour importer les durées disponibles. Les estimations existantes restent conservées.</p>${action('associate', 'Associer ma session')}</div>` : ''}<div class="table-scroll"><table><thead><tr><th>Tâche</th><th>Initial</th><th>Révisé</th><th>Réalisé</th><th>Écart indicatif</th><th>Source</th></tr></thead><tbody>${rows.map(r => `<tr><td><strong>${esc(r.id)}</strong><small>${esc(r.title)}</small></td><td>${hours(r.initial)}</td><td>${hours(r.revised)}</td><td>${hours(r.actual)}${r.partial ? '<small>Partiel</small>' : ''}${r.missingRoles.length ? `<small>À compléter : ${esc(r.missingRoles.map(role => ({ 'odoo-developer': 'développement', 'odoo-tester': 'QA', orchestrateur: 'coordination' })[role] || role).join(', '))}</small>` : ''}</td><td>${r.delta == null ? '—' : (r.delta > 0 ? '+' : '') + Math.round(r.delta) + ' min'}</td><td>${esc(r.basis)}</td></tr>`).join('') || '<tr><td colspan="6">Aucun plan ni estimation. Préparez /odoo-plan puis /odoo-estimate dans votre agent.</td></tr>'}</tbody></table></div><p class="muted">Le réalisé enregistré fait foi lorsqu’il est complet ; les observations natives servent sinon de suivi provisoire. Ces deux sources ne sont jamais additionnées. Un écart partiel n’est pas un bilan de clôture.</p>${(report?.warnings || []).map(w => `<div class="note warning">${esc(w)}</div>`).join('')}${measures()}</div>`;
   }
   function expressView() {
@@ -180,6 +196,12 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       for (const [index, row] of [...document.querySelectorAll('#content tbody > tr')].entries()) {
         const data = effortRows[index];
         if (!data) continue;
+        if (data.phase === 'preparation') {
+          row.firstElementChild.querySelector('strong').textContent = 'Préparation du plan';
+          row.firstElementChild.querySelector('small').textContent = 'Cadrage commun · non réparti rétroactivement';
+          row.children[1].textContent = 'Non estimé';
+          row.children[2].textContent = 'Non estimé';
+        } else if (data.phase === 'closure') row.firstElementChild.querySelector('strong').textContent = 'Clôture commune';
         const suspended = (s.detail.effort?.rows || []).filter(r => r.task === data.id).reduce((sum, r) => sum + (r.suspended_seconds || 0), 0);
         if (suspended > 0) row.children[3].insertAdjacentHTML('beforeend', `<small>Veille exclue : ${hours(suspended / 60)}</small>`);
         for (const note of row.children[3].querySelectorAll('small')) {
@@ -187,7 +209,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
           else if (note.textContent.startsWith('À compléter :')) note.textContent = note.textContent.replace('À compléter :', 'Temps incomplet :');
         }
         const key = JSON.stringify([s.current, s.detail.selectedRelease, data.id]);
-        row.firstElementChild.insertAdjacentHTML('beforeend', `<small class="task-time-share">${data.share == null ? 'Part non mesurée' : percent(data.share) + ' du temps connu de la release'}</small>`);
+        row.firstElementChild.insertAdjacentHTML('beforeend', `<small class="task-time-share">${data.share == null ? 'Part non mesurée' : percent(data.share) + (s.detail.selectedRelease ? ' du temps connu de la release' : ' du temps connu du projet')}</small>`);
         row.firstElementChild.insertAdjacentHTML('beforeend', `<details class="agent-breakdown" data-agent-detail="${esc(key)}" ${expandedAgents.has(key) ? 'open' : ''}><summary>Détail par agent${data.agents.length ? ' (' + data.agents.length + ')' : ''}</summary>${data.agents.length ? `<div class="agent-time-table" role="table" aria-label="Temps par agent pour ${esc(data.id)}"><div class="agent-time-row agent-time-head" role="row"><span role="columnheader">Agent / rôle</span><span role="columnheader">Initial</span><span role="columnheader">Révisé</span><span role="columnheader">Réalisé</span></div>${data.agents.map(a => `<div class="agent-time-row" role="row" data-agent="${esc(a.agent)}"><span role="cell" title="${esc(a.agent)}">${esc(a.label)}</span><span role="cell">${a.initial == null ? 'Non estimé' : hours(a.initial)}</span><span role="cell">${a.revised == null ? 'Non estimé' : hours(a.revised)}</span><span role="cell">${hours(a.actual)}${a.partial ? '<small>Partiel</small>' : ''}${a.basis === 'Natif · non consolidé' ? '<small>Provisoire</small>' : ''}</span></div>`).join('')}</div><small>Selon les rôles renseignés dans les relevés, sans répartir les temps manquants.</small>` : '<small>Aucune répartition par agent disponible pour cette tâche.</small>'}</details>`);
       }
       for (const [index, block] of [...document.querySelectorAll('.agent-breakdown')].entries()) {
@@ -199,12 +221,22 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         }
       }
       const allocation = agentAllocation(effortRows);
+      if (effortRows.some(r => r.phase === 'preparation')) {
+        $('#content .table-scroll th').textContent = 'Travail';
+        const phases = [['preparation', 'Préparation du plan'], ['task', 'Tâches'], ['closure', 'Clôture commune']];
+        $('#content .metrics').insertAdjacentHTML('afterend', `<section class="phase-breakdown"><h3>Temps par étape</h3>${phases.map(([phase, label]) => {
+          const rows = effortRows.filter(r => r.phase === phase);
+          const amount = summarizeMeasures(rows).actual;
+          return `<div class="allocation-row" data-phase="${phase}"><span>${label}</span><span>${rows.length ? hours(amount) : 'Aucun relevé'}</span><strong>${rows.length ? percent(timeShare(amount, effortTotals.actual)) : '—'}</strong></div>`;
+        }).join('')}<p class="muted">Le cadrage est mesuré dès la préparation du plan. Il reste commun : aucune répartition passée ni prévision après coup. La prévision ci-dessus concerne les tâches et la clôture estimées.</p></section>`);
+      }
       $('#content .page').insertAdjacentHTML('beforeend', tokenPanel());
       $('#content .table-scroll').insertAdjacentHTML('afterend', `<section class="agent-allocation"><h3>Répartition entre agents · ${s.selectedTask ? 'tâche ' + esc(s.selectedTask) : 'release'}</h3><p class="muted">Parts du temps connu${effortTotals.partial ? ' · relevé partiel' : ''}. Les périodes non mesurées ne valent pas zéro.</p>${allocation.map(a => `<div class="allocation-row" data-allocation-agent="${esc(a.agent)}"><span>${esc(a.label)}</span><span>${hours(a.actual)}${a.partial ? ' · partiel' : ''}</span><strong>${percent(a.share)}</strong></div>`).join('') || '<p class="muted">Aucune répartition disponible.</p>'}</section>`);
       $('#content .section-title').insertAdjacentHTML('afterend', '<p class="effort-live-hint muted">Les temps disponibles s’affichent dès leur enregistrement, sans attendre la clôture. Actualisation automatique toutes les 30 s ; relevés natifs toutes les 5 s. Les périodes encore sans mesure restent à compléter.</p>');
       const figures = document.querySelectorAll('#content .metrics .metric strong');
       figures[0].textContent = hours(effortTotals.initial);
       figures[1].textContent = hours(effortTotals.actual);
+      if (!s.detail.selectedRelease) $('#content .agent-allocation h3').textContent = 'Répartition entre agents · projet';
     }
     if (s.view === 'sources') page.insertAdjacentHTML('beforeend', sourcesExtra());
     if (s.view === 'environments') {
@@ -228,7 +260,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     $('#context-bar .context-hint')?.remove();
     $('#release-select').parentElement.after($('#task-select').parentElement);
     $('#environment-select').parentElement.classList.add('environment-context');
-    $('#environment-select').parentElement.firstChild.textContent = 'REPÈRE D’ENVIRONNEMENT';
+    $('#environment-select').parentElement.firstChild.textContent = 'ENVIRONNEMENT';
     $('#environment-select').title = 'Repère pour les nouveaux terminaux ; ne change ni la connexion, ni les permissions, ni le terminal existant.';
     $('#task-select').title = 'Tâche consultée dans le plan, les missions et les mesures. Votre terminal reste partagé pour tout le projet.';
     $('.project-header').classList.add('compact-project');
@@ -240,8 +272,15 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     plainLanguageUI({ s, hasNative: currentObservations().length > 0, actual: effortTotals.actual, partial: effortTotals.partial });
     for (const option of $('#release-select').options) {
       const r = s.detail.releases.find(r => r.id === option.value);
-      if (r) { option.textContent = `${r.id.slice(0, 10)} · ${r.title} · ${r.status}`; option.title = `${r.id} · ${r.taskCount ?? '?'} tâches / points`; }
+      if (r) { option.textContent = option.selected ? r.title : `${r.id.slice(0, 10)} · ${r.title} · ${r.status}`; option.title = `${r.id} · ${r.taskCount ?? '?'} tâches / points`; }
     }
+    const selectedRelease = s.detail.releases.find(r => r.id === s.detail.selectedRelease);
+    const status = workStatus(s, observations);
+    $('#release-select').parentElement.classList.add('release-context');
+    $('#release-select').parentElement.firstChild.textContent = 'RELEASE CONSULTÉE';
+    $('#task-select').parentElement.classList.add('task-context');
+    const completed = s.detail.tasks.filter(t => t.status === 'validated').length;
+    $('#context-bar').insertAdjacentHTML('beforeend', `<div class="work-context-status"><div class="release-summary">${selectedRelease ? `${badge(selectedRelease.status, selectedRelease.status === 'ouverte' ? 'Ouverte' : selectedRelease.status === 'close' ? 'Close' : selectedRelease.status)}<span>${esc(selectedRelease.id.slice(0, 10))}</span><span>${s.detail.tasks.length ? `${completed} / ${s.detail.tasks.length} tâches validées` : 'Aucune tâche déclarée'}</span>` : '<span>Projet sans release · cadrage ou travail libre</span>'}</div><div class="current-work ${esc(status.kind)}"><strong>${esc(status.label)}</strong><span>${esc(status.text)}</span></div></div>`);
     const resources = ['documents', 'environments', 'sources'].includes(s.view);
     $('#context-bar').hidden = resources || s.view === 'express';
     if (resources) $('#content').insertAdjacentHTML('afterbegin', `<nav class="project-resources" aria-label="Ressources du projet">${[['documents', 'Fichiers'], ['environments', 'Environnements'], ['sources', 'Sources']].map(([id, label]) => `<button class="${s.view === id ? 'active' : ''}" data-view="${id}">${label}</button>`).join('')}</nav>`);

@@ -11,6 +11,18 @@ Vos dossiers à gauche, un vrai shell au centre, des missions à la portée expl
 
 ## Installer
 
+**Version de travail 0.2.8** : cadrage `/odoo-plan` visible avant la release,
+puis rattaché sans double comptage ; préparation/tâches/clôture, parts du temps
+et jetons par rôle. Nécessite Odoo Crew avec les commandes `prepare-*`.
+Le bandeau distingue release consultée, avancement et activité observée ;
+« Environnement » est simplifié, le récapitulatif sous le terminal est retiré.
+Le **Kanban global**, dans la barre latérale, réunit les tâches de tous les projets :
+À faire, En cours, À valider, Bloqué / à vérifier, Terminé. Les releases closes
+sont masquées par défaut ; chaque carte ouvre la bonne release et la bonne tâche.
+Les statuts viennent des plans et des preuves, sans glisser-déposer de validation.
+Cette version locale n'est pas encore publiée ; le téléchargement ci-dessous
+reste celui de la 0.2.7.
+
 La **0.2.7** ajoute le suivi des chronomètres hors veille et les compteurs de jetons détaillés, en complément du travail sans release et des aperçus Markdown (voir [QA.md](QA.md)).
 La protection veille demande également les outils Odoo Crew mis à jour : elle
 s’applique aux chronomètres démarrés avec cette version, même fenêtre fermée.

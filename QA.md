@@ -1,5 +1,31 @@
 # QA — Odoo Tricorder
 
+## Version locale 0.2.8 — cadrage, contexte et Kanban
+
+- Crew de référence : `dd530627e70524257661a69e1ef0179f303ece0d` (commit local,
+  à publier **avant** Tricorder : la CI est épinglée sur cette révision).
+- Crew : 283 tests verts, dont 12 nouveaux cas avant plan ; génération isolée
+  puis active conforme (30 profils/commandes + 2 blocs), skills plan/estimation valides.
+- Tricorder : 63 tests Python et 29 tests JavaScript verts.
+- Douze parcours Electron verts depuis les sources, dont NECA en lecture seule.
+  Aucune écriture dans les releases clientes ; vérification des empreintes.
+- Les douze parcours passent aussi sur l'exécutable empaqueté final (39,2 s).
+  Paquet Debian 0.2.8 construit ; SHA-256 :
+  `021a6fbac94858ec1906a2a9a2e508c0ff94996d57a1df4f80a7b74978563c8a`.
+- Ajouts : préparation projet → release → retour hors release ; temps et jetons
+  par rôle sans double comptage ; Kanban multi-projets et accès à la tâche exacte.
+- Reprises : assertions adaptées au statut de release déplacé dans son badge ;
+  clic Kanban précoce protégé contre la sélection automatique du bootstrap,
+  avec trois répétitions vertes. Le défilement horizontal du Kanban est conservé.
+- Bandeau : libellé Environnement, distinction consultation/activité/attribution,
+  aucune activité déduite d'un simple processus vivant ; alerte de divergence et
+  de production conservées, ligne récapitulative terminal retirée.
+- Limites : métriques nouvelles à partir d'un skill à jour et d'une trace
+  identifiable ; les valeurs passées ne sont pas reconstruites. Le Kanban porte
+  les tâches déclarées, pas les conversations libres ni un état supposé du modèle.
+- Publication/installation : distinctes de cette validation locale ; la version
+  installée et publiée précédente reste la 0.2.7.
+
 ## Veille et jetons 0.2.7 — 11 septembre 2026
 
 Publication finale : [CI Tricorder verte](https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/34635199296)

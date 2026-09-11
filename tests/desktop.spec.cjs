@@ -79,6 +79,115 @@ async function projectView(page, view) {
   await expect(page.locator('#context-bar')).toBeHidden();
 }
 
+test('global Kanban: all projects, closed-release filter and exact task navigation', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-kanban-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const second = path.join(home, 'nova-services'), oldId = '2026-08-01_01_archive';
+  const originalPlan = JSON.parse(fs.readFileSync(path.join(project, 'changelog', releaseId, 'plan.json')));
+  const definition = { schema: 1, tasks: [{ ...originalPlan.tasks[2], id: 'T01', title: 'Contrôler les livraisons Nova',
+    request: `changelog/${releaseId}/demande.md`, scopes: [], depends_on: [] }] };
+  write(path.join(second, 'changelog', releaseId, 'README.md'), '<!-- release ouverte -->\n# Livraisons Nova\n');
+  write(path.join(second, 'changelog', releaseId, 'demande.md'), '# Demande Nova\n');
+  write(path.join(second, 'changelog', releaseId, 'plan.json'), definition);
+  write(path.join(project, 'changelog', oldId, 'README.md'), '# Archive Orbital\n');
+  write(path.join(project, 'changelog', oldId, 'plan.json'), { schema: 1, tasks: [originalPlan.tasks[2]] });
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  try {
+    const page = await app.firstWindow();
+    await page.locator('[data-view="kanban"]').click();
+    await expect(page.locator('#project-title')).toHaveText('Kanban global');
+    await expect(page.locator('#context-bar')).toBeHidden();
+    await expect(page.locator('.kanban-card')).toHaveCount(4);
+    await expect(page.locator('.kanban-board')).toContainText('orbital-industries');
+    await expect(page.locator('.kanban-board')).toContainText('nova-services');
+    await expect(page.locator('.kanban-board')).toContainText('Codex · développeur');
+    await expect(page.locator('.kanban-card[draggable="true"]')).toHaveCount(0);
+    await expect(page.locator('.kanban-board')).toBeInViewport();
+    await page.locator('[data-action="kanban-closed"]').click();
+    await expect(page.locator('.kanban-card')).toHaveCount(5);
+    await expect(page.locator('.kanban-board')).toContainText('Archive Orbital');
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#sync-status')).toContainText('À jour');
+    await expect(page.locator('.kanban-card')).toHaveCount(5);
+    await page.screenshot({ path: 'test-results/global-kanban.png' });
+    await page.locator('.kanban-card').filter({ hasText: 'Contrôler les livraisons Nova' }).click();
+    await expect(page.locator('#project-title')).toHaveText('nova-services');
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await expect(page.locator('#task-select')).toHaveValue('T01');
+    await expect(page.locator('.task-card.selected')).toContainText('Contrôler les livraisons Nova');
+    expect(JSON.parse(fs.readFileSync(path.join(second, 'changelog', releaseId, 'plan.json')))).toEqual(definition);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('preparation: project scope becomes release scope without a duplicate or a retroactive forecast', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-preparation-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const project = path.join(home, 'atelier-orbital');
+  write(path.join(project, '.odoo-agents/config'), 'series = 19.0\n');
+  const file = path.join(project, '.odoo-agents/preparation/effort.json');
+  const ledger = { schema: 1, release: 'preparation', tasks: { PREPARATION: 'Préparation du plan' },
+    estimates: [], rate_cards: [], entries: [{ id: 'prep', task: 'PREPARATION', phase: 'preparation',
+      release: null, agent: 'odoo-analyst', provider: 'codex', thread_id: 'prep-session', status: 'complete', seconds: 600,
+      tokens: { input_tokens: 120, output_tokens: 30, cached_input_tokens: 40, cache_write_input_tokens: 0, total_tokens: 150 } }] };
+  write(file, ledger);
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  try {
+    const page = await app.firstWindow();
+    await app.evaluate(({ BrowserWindow }) => { const win = BrowserWindow.getAllWindows()[0]; win.setMinimumSize(800, 600); win.setSize(1000, 800); });
+    await expect(page.locator('#release-select')).toHaveValue('');
+    await expect(page.locator('.current-work')).toContainText('Aucune activité confirmée');
+    await page.locator('[data-view="effort"]').click();
+    await expect(page.locator('.phase-breakdown [data-phase="preparation"]')).toContainText('0 h 10 min');
+    await expect(page.locator('.phase-breakdown [data-phase="preparation"]')).toContainText('100 %');
+    await expect(page.locator('.token-allocation tbody')).toContainText('Préparation du plan');
+    await expect(page.locator('.metric').nth(0).locator('strong')).toHaveText('Non mesuré');
+    const before = fs.readFileSync(file, 'utf8');
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#sync-status')).toContainText('À jour');
+    expect(fs.readFileSync(file, 'utf8')).toBe(before);
+
+    // Simulate the agent's explicit attachment, not a cockpit write.
+    const releaseId = '2026-09-11_01_organisation-des-interventions';
+    const release = path.join(project, 'changelog', releaseId);
+    write(path.join(release, 'README.md'), '<!-- release ouverte -->\n# Organisation des interventions\n');
+    ledger.entries[0].release = releaseId; write(file, ledger);
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator(`#release-select option[value="${releaseId}"]`)).toHaveCount(1);
+    await page.locator('#release-select').selectOption(releaseId);
+    await expect(page.locator('.phase-breakdown [data-phase="preparation"]')).toContainText('0 h 10 min');
+    await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('0 h 10 min');
+    await expect(page.locator('.release-summary')).toContainText('Ouverte');
+    await expect(page.locator('.release-summary')).toContainText('Aucune tâche déclarée');
+    const row = page.locator('#content .table-scroll').first().locator('tbody tr');
+    await row.locator('.agent-breakdown summary').click();
+    await expect(row.locator('[data-agent="odoo-analyst"]')).toContainText('0 h 10 min');
+    await expect(row.locator('[data-agent="odoo-analyst"]')).toContainText('100 %');
+    await page.screenshot({ path: 'test-results/preparation-release.png' });
+    expect(fs.existsSync(path.join(release, 'effort.json'))).toBe(false);
+    await page.locator('#release-select').selectOption('');
+    await expect(page.locator('.phase-breakdown')).toHaveCount(0);
+    await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('Non mesuré');
+    expect(fs.readFileSync(file, 'utf8')).toBe(JSON.stringify(ledger, null, 2));
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
 test('effort: partial recorded time survives missing roles, task filtering and refresh', async () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-partial-effort-'));
   const home = path.join(temp, 'home'); fs.mkdirSync(home);
@@ -103,7 +212,7 @@ test('effort: partial recorded time survives missing roles, task filtering and r
     await page.locator('[data-view="effort"]').click();
     await expect(page.locator('.metric').nth(1)).toContainText('TEMPS ENREGISTRÉ · PARTIEL');
     await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('0 h 23 min');
-    await expect(page.locator('.open-timers')).toContainText('1 période(s) de mesure à terminer');
+    await expect(page.locator('.open-timers')).toContainText('1 période(s) de mesure en cours');
     const first = page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T01' });
     await expect(first.locator('td').nth(3)).toContainText('Veille exclue : 8 h 00 min');
     const tokens = page.locator('.token-allocation tbody tr').filter({ hasText: 'T01' });
@@ -186,7 +295,7 @@ test('effort: open release updates task and agent percentages before closure', a
     const expectedFile = fs.readFileSync(effortFile, 'utf8');
     await page.locator('[data-action="refresh"]').click();
     await expect(first.locator('.task-time-share')).toContainText('33,3 %');
-    await expect(page.locator('#release-select option:checked')).toContainText('ouverte');
+    await expect(page.locator('.release-summary')).toContainText('Ouverte');
     await page.locator('#task-select').selectOption('');
     await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('1 h 00 min');
     await expect(page.locator('[data-allocation-agent="odoo-tester"] strong')).toHaveText('66,7 %');
@@ -611,7 +720,11 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
     await page.locator('#release-select').selectOption(historical);
     await expect(page.locator('#terminal-mismatch')).toBeVisible();
-    await expect(page.locator('#terminal-context')).toContainText(releaseId);
+    await expect(page.locator('#terminal-context')).not.toContainText('ouvert ');
+    await expect(page.locator('#terminal-context [data-action="terminal-context"]')).toBeVisible();
+    await expect(page.locator('.current-work')).toContainText('Terminal sur un autre contexte');
+    await expect(page.locator('#environment-select').locator('..')).toContainText('ENVIRONNEMENT');
+    await expect(page.locator('#environment-select').locator('..')).not.toContainText('REPÈRE');
     await expect(page.locator('#task-select option')).toHaveCount(3);
     await page.locator('#task-select').selectOption('P1');
     await page.locator('[data-view="plan"]').click();
@@ -913,7 +1026,7 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
     expect(terminal.workingDirectory).toBe(work);
     expect(terminal.task).toBe('T02');
-    await expect(page.locator('#terminal-context')).toContainText('Tâche T02');
+    await expect(page.locator('#terminal-context')).toBeHidden();
     await expect(page.locator('.provider-icon[aria-label="Shell"]').first()).toBeVisible();
     await page.locator('#task-select').selectOption('');
     await expect(page.locator('#inspector')).toContainText('RELEASE COMPLÈTE');
