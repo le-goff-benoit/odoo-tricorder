@@ -2,6 +2,19 @@
 
 # Odoo Tricorder
 
+### Ajouts locaux 0.2.8 (non publiés)
+
+- Onglet **Kanban** de la release : avancement, réceptions distinctes des preuves,
+  filtres prêtes / bloquées / accord attendu / responsable. Les états inconnus et
+  les tâches reportées restent séparés. Aucune modification du workflow par glisser-déposer.
+- Carte ouverte : critères, étape, responsables, temps par agent, rapports de tests
+  attribués, derniers changements et retour au terminal existant. La sélection
+  reste une consultation ; elle n'interrompt ni ne réaffecte le terminal.
+- Socle de [design commun](docs/DESIGN.md) : espacements, alignements, cartes,
+  boutons, tableaux et dialogues, contrôlés sur huit vues en desktop et compact.
+- [Analyse du suivi utile des agents](docs/AGENT_PROGRESS.md) : propositions à
+  expérimenter, distinctes du Kanban livré ; aucun superviseur automatique actif.
+
 Un terminal de bureau pour vos projets et agents Odoo, installable sur Ubuntu.
 Vos dossiers à gauche, un vrai shell au centre, des missions à la portée explicite.
 

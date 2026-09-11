@@ -1,5 +1,17 @@
 # Journal
 
+## 2026-09-11 — Kanban de release et socle visuel partagé
+
+- Demande : implémenter le Kanban proposé et harmoniser l'ensemble des vues.
+- Réceptions, validité des preuves, blocages et états inconnus restent distincts.
+- Détail en place : critères, étape, responsabilité, temps par rôle, tests et terminal existant.
+- Filtres et défilement conservés ; aucun statut ni terminal réaffecté par consultation.
+- Espacements migrés sur grille de 4 px ; composants communs dans `design-system.css`.
+- Contrats de styles calculés sur huit vues à 1440 et 1000 px ; CSS rendu lisible.
+- Tests unitaires, parcours Electron et contrôle NECA en lecture seule : détails dans QA.md.
+- Article Cursor et investigations longues : analyse dans `docs/AGENT_PROGRESS.md`, sans changement des profils.
+- Aucun arrêt de session client, aucune campagne LLM payante, aucune publication ni installation système.
+
 ## 2026-09-11 — Alléger le bandeau, cadrer le Kanban de release
 
 - Demande : retirer le bouton « Nouveau terminal » et proposer un Kanban par release.

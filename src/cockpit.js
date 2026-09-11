@@ -3,6 +3,7 @@ import { lifecycleUI, missionCards, plainLanguageUI } from './lifecycle.js';
 import { knownSum, taskMeasures, summarizeMeasures, hours, agentMeasures, timeShare, agentAllocation, tokenMeasures, withoutPreparationOverlap } from './measurements.mjs';
 import { workStatus } from './work-context.mjs';
 import { documentBody } from './markdown.js';
+import { releaseBoard } from './release-board.js';
 export function providerIcon(provider) {
   const name = provider?.split('-')[0];
   const shape = name === 'claude' ? '<path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5M8 3l8 18M3 8l18 8"/>' : name === 'codex' ? '<path d="m8 5-6 7 6 7m8-14 6 7-6 7m-3-16-2 18"/>' : '<path d="m4 6 6 6-6 6m9 0h7"/>';
@@ -14,6 +15,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   let observations = [], observedProject = null, reading = false, graphTask = '', graphResource = '', graphOn = false, searchTicket = 0;
   let prepared = '', handoff = '', graphContext = '', effortTotals = {};
   let effortRows = [];
+  const board = releaseBoard({ get, observations: () => currentObservations(true), render, selectTask, esc, badge, when, providerIcon });
   const expandedAgents = new Set();
   const percent = value => value == null ? '—' : value.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' %';
   document.addEventListener('toggle', event => {
@@ -78,7 +80,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         $('.current-work strong').textContent = status.label;
         $('.current-work span').textContent = status.text;
       }
-      if (!get().overviewMode && ['agents', 'effort'].includes(get().view) && !$('#modal').open) render();
+      if (!get().overviewMode && ['agents', 'effort', 'release-kanban'].includes(get().view) && !$('#modal').open && document.activeElement?.id !== 'board-owner') render();
     } catch (error) { toast(error.message); }
     finally { reading = false; }
   }
@@ -191,6 +193,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     const page = $('#content .page') || $('#content');
     if (s.view === 'agents') $('#content').innerHTML = missionView();
     if (s.view === 'express') $('#content').innerHTML = expressView();
+    if (s.view === 'release-kanban') board.draw();
     if (s.view === 'effort') {
       $('#content').innerHTML = effortView();
       for (const [index, row] of [...document.querySelectorAll('#content tbody > tr')].entries()) {
@@ -412,7 +415,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     const s = get();
     if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'p') { event.preventDefault(); palette().catch(e => toast(e.message)); }
     if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'f') { event.preventDefault(); searchDialog(); }
-    if (event.altKey && !event.ctrlKey && /^[1-6]$/.test(event.key)) { event.preventDefault(); setView(['terminal', 'plan', 'express', 'agents', 'effort', 'project'][Number(event.key) - 1]); }
+    if (event.altKey && !event.ctrlKey && /^[1-7]$/.test(event.key)) { event.preventDefault(); setView(['terminal', 'plan', 'release-kanban', 'express', 'agents', 'effort', 'project'][Number(event.key) - 1]); }
     if (event.ctrlKey && event.altKey && ['ArrowUp', 'ArrowDown'].includes(event.key)) {
       event.preventDefault(); const at = s.projects.findIndex(p => p.path === s.current), step = event.key === 'ArrowDown' ? 1 : -1;
       const p = s.projects[(at + step + s.projects.length) % s.projects.length]; if (p) chooseProject(p.path).catch(e => toast(e.message));
@@ -429,5 +432,5 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   });
   $('.top-actions').insertAdjacentHTML('afterbegin', '<button class="text-button" data-view="project">Projet</button><button class="text-button" data-cockpit="palette" title="Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
   setInterval(refreshNative, 5000);
-  return { augment, refreshNative, applyPreferences, alertSidebar };
+  return { augment, refreshNative, applyPreferences, alertSidebar, rememberBoard: board.remember };
 }

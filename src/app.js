@@ -3,6 +3,7 @@ import { FitAddon } from '@xterm/addon-fit';
 import { SearchAddon } from '@xterm/addon-search';
 import '@xterm/xterm/css/xterm.css';
 import './style.css';
+import './design-system.css';
 import { cockpit, providerIcon } from './cockpit.js';
 import { documentBody } from './markdown.js';
 import { newReleaseContext } from './release-context.mjs';
@@ -73,7 +74,7 @@ function sidebar() {
   cockpitUI.alertSidebar();
 }
 function tabs() {
-  const views = [['terminal', 'Terminal', 'terminal'], ['plan', 'Plan de release', 'plan'], ['express', 'Express', 'terminal'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
+  const views = [['terminal', 'Terminal', 'terminal'], ['plan', 'Plan de release', 'plan'], ['release-kanban', 'Kanban', 'grid'], ['express', 'Express', 'terminal'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
   $('#tabs').innerHTML = views.map(([id, label, symbol]) => `<button data-view="${id}" class="${view === id && !overviewMode ? 'active' : ''}">${icon(symbol)}${label}</button>`).join('');
 }
 function header() {
@@ -121,6 +122,7 @@ async function followSession(id) {
   selectedSession.set(current, id); setView('terminal');
 }
 function render() {
+  cockpitUI.rememberBoard();
   sidebar(); header(); tabs();
   const terminalVisible = !overviewMode && view === 'terminal';
   $('#terminal-workspace').hidden = !terminalVisible;
@@ -131,7 +133,7 @@ function render() {
   else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
   else if (projectError) $('#content').innerHTML = empty('Lecture impossible', projectError);
   else if (!detail) $('#content').innerHTML = empty('Aucun projet sélectionné', 'Choisissez un projet dans la colonne de gauche.');
-  else ({ plan: renderPlan, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || renderPlan)();
+  else ({ 'release-kanban': () => {}, plan: renderPlan, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || renderPlan)();
   renderInspector();
   cockpitUI.augment();
   $('#session-count').textContent = `${sessions.filter(s => s.alive).length} terminal(aux) actif(s)`;

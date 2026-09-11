@@ -1,5 +1,27 @@
 # QA — Odoo Tricorder
 
+## Kanban de release et design commun — révision locale 0.2.8
+
+- Base : `290d93e` ; Crew lu à `dd530627e70524257661a69e1ef0179f303ece0d`, sans modification.
+- 63 tests Python + 35 tests JavaScript verts (98), dont six nouveaux contrats.
+- Kanban : réception avec preuves périmées, étape bloquée, historique ambigu,
+  observations natives ciblées/périmées, mesures sans double compte, filtres.
+- Parcours : critères, répartition, JUnit, attente humaine native, absence de fuite
+  des arguments privés, rafraîchissement, même terminal/PID, changement de release.
+- Design : huit vues à 1440 et 1000 px, styles calculés des gouttières/cartes/boutons,
+  dialogues, absence de double marge des grilles et espacement des sections.
+- Source : 14 parcours verts, dont NECA en lecture seule et empreintes conservées ;
+  retouches finales du design et filtre d'attente rejoués avec succès séparément.
+- Le bureau peut ignorer le redimensionnement natif : le test fixe et vérifie
+  explicitement le viewport CSS. Le premier échec de largeur n'était pas une preuve responsive.
+- Captures inspectées : Plan, Kanban, Agents, Temps, Sources et Environnements,
+  dont les versions compactes ; pas de comparaison pixel à pixel exhaustive.
+- Profils agents, session réelle, statuts clients et application installée inchangés.
+- Les propositions de supervision dans `docs/AGENT_PROGRESS.md` ne sont pas implémentées.
+- Paquet final : 14 parcours Electron verts (55,7 s), y compris NECA en lecture
+  seule ; Debian construit, non publié et non installé. SHA-256 courant :
+  `36a6265e123a03b43381c8d25364f97d676688b0af1ffe6efd6689e7ab8803d8`.
+
 ## Retrait du bouton du bandeau — révision locale 0.2.8
 
 - Bouton retiré du DOM et références de rendu supprimées, sans changement du service terminal.

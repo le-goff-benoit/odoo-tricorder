@@ -128,6 +128,148 @@ test('global Kanban: all projects, closed-release filter and exact task navigati
   }
 });
 
+test('release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-release-board-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const planFile = path.join(project, 'changelog', releaseId, 'plan.json');
+  const planBefore = fs.readFileSync(planFile, 'utf8');
+  write(path.join(project, 'changelog', releaseId, 'junit-targeted.xml'), '<testsuite tests="12" failures="0" errors="0" skipped="2"><properties><property name="odoo.task" value="T02"/></properties></testsuite>');
+  write(path.join(project, 'changelog', releaseId, 'effort.json'), { schema: 1, release: releaseId,
+    tasks: { T02: 'Planifier les interventions récurrentes' }, estimates: [], rate_cards: [],
+    entries: [{ id: 'a', task: 'T02', agent: 'odoo-analyst', status: 'complete', seconds: 600 }] });
+  const oldId = '2026-09-10_01_archive';
+  write(path.join(project, 'changelog', oldId, 'README.md'), '# Ancienne release\n');
+  write(path.join(project, 'changelog', oldId, 'plan.json'), { schema: 1, tasks: [
+    { ...JSON.parse(planBefore).tasks[2], id: 'T02', title: 'Autre tâche homonyme', depends_on: [] } ] });
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  const errors = [];
+  try {
+    const page = await app.firstWindow(); page.on('pageerror', error => errors.push(error.message));
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await page.keyboard.press('Control+Shift+T');
+    await expect(page.locator('.terminal-tab')).toHaveCount(1);
+    const [terminal] = await page.evaluate(() => window.tricorder.terminals.list());
+    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(3);
+    await expect(page.locator('.release-kanban [data-column="done"]')).toContainText('T01');
+    await expect(page.locator('.board-count')).toContainText('1 tâches réceptionnées sur 3');
+    await expect(page.locator('.release-kanban [data-column="done"]')).toContainText('preuves à revérifier');
+    await page.locator('[data-release-task="T02"]').click();
+    await expect(page.locator('#task-select')).toHaveValue('T02');
+    await expect(page.locator('.board-detail')).toContainText('Développement du module');
+    await expect(page.locator('.board-detail')).toContainText('Codex · développeur');
+    await expect(page.locator('.board-criteria li')).toHaveCount(2);
+    await expect(page.locator('.board-detail')).toContainText('0 h 10 min');
+    await expect(page.locator('.board-detail')).toContainText('100 %');
+    await expect(page.locator('.board-detail')).toContainText('10 exécutés');
+    await expect(page.locator('.board-detail')).toContainText('Périmètre et critères vérifiés.');
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(3);
+    await page.locator('#board-owner').selectOption('Codex · développeur');
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
+    await page.locator('#board-owner').selectOption('');
+    await page.locator('.board-detail').evaluate(el => { el.scrollTop = 180; });
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#sync-status')).toContainText('À jour');
+    await expect(page.locator('.board-detail')).toContainText('Planifier les interventions');
+    expect(await page.locator('.board-detail').evaluate(el => el.scrollTop)).toBeGreaterThan(100);
+    await page.screenshot({ path: 'test-results/release-kanban.png' });
+    await page.locator('.board-detail [data-session]').click();
+    await expect(page.locator('#terminal-workspace')).toBeVisible();
+    const after = await page.evaluate(() => window.tricorder.terminals.list());
+    expect(after.length).toBe(1); expect(after[0].id).toBe(terminal.id); expect(after[0].pid).toBe(terminal.pid);
+    expect(after[0].task).toBeNull();
+    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await page.locator('#release-select').selectOption(oldId);
+    await expect(page.locator('.board-detail')).toHaveCount(0);
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
+    await expect(page.locator('.release-kanban')).toContainText('Autre tâche homonyme');
+    await page.locator('#release-select').selectOption(releaseId);
+    await expect(page.locator('.board-detail')).toContainText('Planifier les interventions');
+    // An agent updates the plan on disk: refresh must update cards without changing context.
+    const updated = JSON.parse(planBefore); updated.tasks[1].title = 'Interventions mises à jour'; write(planFile, updated);
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('.board-detail h2')).toHaveText('Interventions mises à jour');
+    await app.evaluate(({ BrowserWindow }) => { const win = BrowserWindow.getAllWindows()[0]; win.setMinimumSize(800, 600); win.setSize(1000, 800); });
+    await expect(page.locator('[data-board-close]')).toBeInViewport();
+    await page.screenshot({ path: 'test-results/release-kanban-compact.png' });
+    await page.locator('[data-board-close]').click();
+    await expect(page.locator('.board-detail')).toHaveCount(0);
+    await page.locator('#release-select').selectOption('');
+    await expect(page.locator('.no-release')).toContainText('Aucune release sélectionnée');
+    await expect(page.locator('.board-detail')).toHaveCount(0);
+    expect(JSON.parse(fs.readFileSync(planFile))).toEqual(updated);
+    expect(errors).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('design system: common gutters, cards and controls across every project view', async () => {
+  test.setTimeout(90000);
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-design-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  fixture(home);
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  const errors = [];
+  try {
+    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await expect(page.locator('#release-select')).not.toHaveValue('');
+    for (const [width, gutter] of [[1440, 24], [1000, 16]]) {
+      await app.evaluate(({ BrowserWindow }, width) => { const w = BrowserWindow.getAllWindows()[0]; w.setMinimumSize(800, 600); w.setSize(width, 900); }, width);
+      // A tiling desktop can refuse setSize. Exercise the CSS viewport explicitly.
+      await page.setViewportSize({ width, height: 900 });
+      await expect.poll(() => page.evaluate(() => window.innerWidth)).toBe(width);
+      for (const view of ['plan', 'release-kanban', 'express', 'agents', 'effort', 'documents', 'sources', 'environments']) {
+        if (['documents', 'sources', 'environments'].includes(view)) await projectView(page, view);
+        else await page.locator(`#tabs [data-view="${view}"]`).click();
+        await expect(page.locator('#content > .page')).toBeVisible();
+        const styles = await page.evaluate(() => {
+          const css = q => getComputedStyle(document.querySelector(q));
+          return { page: css('#content > .page').paddingLeft, right: css('#content > .page').paddingRight,
+            tabs: css('#tabs').paddingLeft, header: css('.project-header').paddingLeft,
+            max: css('#content > .page').maxWidth,
+            cards: [...document.querySelectorAll('#content .info-card, #content .agent-mission, #content .metric')].map(el => {
+              const s = getComputedStyle(el); return [s.paddingLeft, s.paddingTop, s.borderRadius];
+            }),
+            gridMargins: [...document.querySelectorAll('.card-grid > .info-card')].map(el => getComputedStyle(el).margin),
+            sectionGaps: [...document.querySelectorAll('.section-title.section-space')].map(el => getComputedStyle(el).marginTop),
+            buttons: [...document.querySelectorAll('#content .secondary')].filter(el => el.offsetWidth).map(el => {
+              const s = getComputedStyle(el); return [s.paddingLeft, s.paddingTop, s.minHeight];
+            }),
+            overflow: document.documentElement.scrollWidth > window.innerWidth,
+          };
+        });
+        for (const key of ['page', 'right', 'tabs', 'header']) expect(styles[key], `${width} ${view} ${key}`).toBe(`${gutter}px`);
+        expect(styles.max).toBe('none'); expect(styles.overflow, `${view} document overflow`).toBe(false);
+        for (const card of styles.cards) expect(card, view).toEqual(['16px', '16px', '8px']);
+        for (const margin of styles.gridMargins) expect(margin, 'Grid owns spacing, no double margin').toBe('0px');
+        for (const margin of styles.sectionGaps) expect(margin, 'Section rhythm').toBe(`${gutter}px`);
+        for (const button of styles.buttons) expect(button, view).toEqual(['12px', '8px', '36px']);
+        await page.screenshot({ path: `test-results/design-${view}-${width}.png` });
+      }
+      await page.locator('[data-cockpit="preferences"]').click();
+      await expect(page.locator('#modal')).toBeVisible();
+      expect(await page.locator('#modal').evaluate(el => getComputedStyle(el).padding)).toBe('24px');
+      await page.locator('[data-action="modal-close"]').click();
+    }
+    expect(errors).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
 test('preparation: project scope becomes release scope without a duplicate or a retroactive forecast', async () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-preparation-'));
   const home = path.join(temp, 'home'); fs.mkdirSync(home);
@@ -958,6 +1100,16 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await expect(page.locator('.native-binding')).toContainText('synthetic-thread');
     await expect(page.locator('.project-item.needs-human .human-alert')).toHaveText('!');
     expect(await app.evaluate(() => globalThis.tricorderNotifications)).toBeGreaterThan(0);
+    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await page.locator('[data-board-filter="waiting"]').click();
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
+    await expect(page.locator('.release-kanban .kanban-card')).toContainText('T02');
+    await expect(page.locator('.release-kanban .provider-icon[aria-label="Codex"]')).toHaveCount(1);
+    await page.locator('[data-release-task="T02"]').click();
+    await expect(page.locator('.board-detail')).toContainText('Votre décision est attendue');
+    await expect(page.locator('.board-detail')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
+    await page.locator('[data-board-close]').click();
+    await page.locator('[data-view="agents"]').click();
     await expect(page.locator('.quality-panel')).toContainText('10');
     await expect(page.locator('#content')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
     await page.locator('.technical-details > summary').click();
