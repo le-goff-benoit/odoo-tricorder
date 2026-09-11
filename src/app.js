@@ -53,7 +53,7 @@ $('#app').innerHTML = `
   </aside>
   <main class="workspace">
     <header class="topbar"><div class="breadcrumbs"><strong id="breadcrumb"></strong></div><div class="top-actions"><span id="sync-status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header>
-    <section class="project-header"><div><div class="eyebrow" id="project-eyebrow">ESPACE DE TRAVAIL</div><h1 id="project-title">Bienvenue à bord.</h1><div id="project-meta" class="project-meta"></div></div><button class="primary" data-action="new-terminal">${icon('plus')} Nouveau terminal</button></section>
+    <section class="project-header"><div><div class="eyebrow" id="project-eyebrow">ESPACE DE TRAVAIL</div><h1 id="project-title">Bienvenue à bord.</h1><div id="project-meta" class="project-meta"></div></div></section>
     <div id="context-bar" class="context-bar"></div>
     <nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
     <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button data-action="find-next">Suivant</button><button data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div><div class="terminal-footer"><span>Les sessions continuent quand vous fermez Tricorder.</span><button data-action="find">${icon('search')} Rechercher</button><button data-action="split">Diviser</button></div></div></section><aside id="inspector" class="inspector"></aside></div>
@@ -84,7 +84,6 @@ function header() {
   $('#project-meta').innerHTML = overviewMode ? `${attentionItems().length} élément(s) à examiner · ${projects.length} projets suivis` : project ? `<span>${icon('folder')}${esc(project.path.replace(/^\/home\/[^/]+/, '~'))}</span>${project.series ? badge('series', 'Odoo ' + project.series) : ''}${detail?.branch ? `<span>${icon('branch')}${esc(detail.branch)}${detail.gitChanges ? ' · ' + detail.gitChanges + ' modif.' : ''}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="Favori">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier">${icon('external')}</button>` : 'Ajoutez un dossier pour retrouver vos projets, terminaux et agents.';
   $('#context-bar').hidden = overviewMode || !project;
   if (overviewMode) $('#project-meta').textContent = `${projects.length} projets · tous les plans réunis`;
-  $('.project-header [data-action="new-terminal"]').hidden = overviewMode;
   $('#tabs').hidden = overviewMode;
   $('[data-view="project"]').hidden = overviewMode;
   if (project && !overviewMode) {
@@ -123,7 +122,6 @@ async function followSession(id) {
 }
 function render() {
   sidebar(); header(); tabs();
-  $('.project-header [data-action="new-terminal"]').disabled = busy || !detail;
   const terminalVisible = !overviewMode && view === 'terminal';
   $('#terminal-workspace').hidden = !terminalVisible;
   $('#content').hidden = terminalVisible;

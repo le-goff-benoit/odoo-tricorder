@@ -188,6 +188,10 @@ des services. La date de restauration est **déclarative**, sans accès à la ba
 | Ctrl Shift C / V | Copier la sélection / coller |
 | Ctrl Alt ↑ / ↓ | Projet précédent / suivant |
 | Ctrl Alt ← / → | Tâche précédente / suivante |
+
+Le bouton « Nouveau terminal » n'occupe plus le bandeau du projet. Utiliser le
+« + » des onglets du terminal ou `Ctrl Shift T` depuis une autre vue. Depuis
+Express, le raccourci conserve le démarrage hors release.
 | Ctrl PageUp / PageDown | Terminal précédent / suivant |
 | Alt 1 à 6 | Terminal, Plan, Express, Agents, Temps, Projet |
 | Ctrl Shift P | Palette de skills |

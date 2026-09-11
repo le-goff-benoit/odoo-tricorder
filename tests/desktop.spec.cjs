@@ -329,7 +329,8 @@ test('release context: none, automatic new release, same terminal and persistenc
     await expect(page.locator('.no-release')).toContainText('Aucune release sélectionnée');
     await page.locator('[data-action="refresh"]').click();
     await expect(page.locator('#release-select')).toHaveValue('');
-    await page.locator('[data-action="new-terminal"]').first().click();
+    await expect(page.locator('.project-header [data-action="new-terminal"]')).toHaveCount(0);
+    await page.keyboard.press('Control+Shift+T');
     await expect.poll(async () => (await page.evaluate(() => window.tricorder.terminals.list())).length).toBe(1);
     const original = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
     expect(original.release).toBeNull();
@@ -399,6 +400,7 @@ test('flow starts: delayed terminal cannot hijack navigation, ambiguous adoption
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await page.locator('#release-select').selectOption('');
     await page.locator('#tabs [data-view="plan"]').click();
+    await expect(page.locator('.no-release')).toBeVisible();
     // Deterministic pause, not a timing-dependent sleep: user leaves during creation.
     await app.evaluate(({ ipcMain }) => {
       const original = ipcMain._invokeHandlers.get('terminal:create');
@@ -409,7 +411,7 @@ test('flow starts: delayed terminal cannot hijack navigation, ambiguous adoption
       });
       globalThis.originalTerminalCreate = original;
     });
-    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await page.keyboard.press('Control+Shift+T');
     await expect.poll(() => app.evaluate(() => typeof globalThis.finishTerminalCreation)).toBe('function');
     await page.locator('[data-project]').filter({ hasText: 'nova-services' }).click();
     await expect(page.locator('.no-release')).toBeVisible();
@@ -612,7 +614,7 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     await expect(page.locator('#content')).toContainText('Aucune substitution par une autre série');
     await projectView(page, 'environments');
     await page.locator('[data-environment="staging"]').click();
-    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await page.keyboard.press('Control+Shift+T');
     await expect(page.locator('.terminal-host')).toHaveCount(1);
     const first = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
     expect(first.environment).toBe('staging');
@@ -715,7 +717,9 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await page.locator('[data-view="plan"]').click();
     await expect(page.locator('#context-bar')).toBeVisible();
     await page.locator('#task-select').selectOption('T02');
-    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await expect(page.locator('.project-header [data-action="new-terminal"]')).toHaveCount(0);
+    await page.locator('#tabs [data-view="terminal"]').click();
+    await page.locator('#terminal-tabs [data-action="new-terminal"]').click();
     await expect(page.locator('.terminal-host')).toHaveCount(1);
     const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
     await page.locator('#release-select').selectOption(historical);
@@ -795,7 +799,7 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await page.locator('#tabs [data-view="express"]').click();
     await expect(page.locator('.express-card')).toHaveCount(1);
     await page.screenshot({ path: 'test-results/express.png' });
-    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await page.keyboard.press('Control+Shift+T');
     await expect(page.locator('.terminal-host')).toHaveCount(2);
     const allTerminals = await page.evaluate(() => window.tricorder.terminals.list());
     const expressTerminal = allTerminals.find(t => t.id !== terminal.id);
@@ -1021,7 +1025,7 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await expect(page.locator('#modal')).not.toBeVisible();
     await page.locator('[data-view="plan"]').click();
     await page.locator('#task-select').selectOption('T02');
-    await page.locator('.project-header [data-action="new-terminal"]').click();
+    await page.keyboard.press('Control+Shift+T');
     await expect(page.locator('.terminal-host')).toHaveCount(1);
     const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
     expect(terminal.workingDirectory).toBe(work);

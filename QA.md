@@ -1,5 +1,18 @@
 # QA — Odoo Tricorder
 
+## Retrait du bouton du bandeau — révision locale 0.2.8
+
+- Bouton retiré du DOM et références de rendu supprimées, sans changement du service terminal.
+- Régressions : absence du bouton, création par « + » et Ctrl Shift T,
+  contexte de tâche/environnement conservé, Express hors release et création différée.
+- 63 tests Python et 29 tests JavaScript verts. Le test de création différée
+  attend le chargement du projet avant le raccourci (le garde-fou `busy` reste actif).
+- Suite du paquet : 11 parcours Electron verts (35,2 s), parcours NECA optionnel
+  non rejoué sur cette retouche ; uniquement des projets synthétiques.
+- Paquet Debian reconstruit, non publié et non installé. SHA-256 courant :
+  `11863d83c1cf860a3028b3bfee4b9e82b5aa1c7cf070adf9f021eb3a9e01602e`.
+- Le Kanban par release reste une proposition, distincte du Kanban global déjà disponible.
+
 ## Version locale 0.2.8 — cadrage, contexte et Kanban
 
 - Crew de référence : `dd530627e70524257661a69e1ef0179f303ece0d` (commit local,

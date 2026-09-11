@@ -1,5 +1,14 @@
 # Journal
 
+## 2026-09-11 — Alléger le bandeau, cadrer le Kanban de release
+
+- Demande : retirer le bouton « Nouveau terminal » et proposer un Kanban par release.
+- Bouton retiré du bandeau ; « + » et Ctrl Shift T conservés, y compris le contexte Express.
+- Tests de navigation adaptés aux accès conservés, sans neutraliser les contrôles de contexte/PID.
+- QA : 92 tests Python/JS, 11 parcours Electron sur paquet verts ; NECA non rejoué sur cette retouche.
+- Kanban par release : analyse et proposition seulement, aucun nouvel onglet implémenté à ce stade.
+- Pas de publication ni d'installation système dans cette intervention.
+
 ## 2026-09-11 — Cadrage mesuré et contexte de travail lisible
 
 - Préparation du plan visible hors release puis dans sa release, sans copie des mesures.
