@@ -1,5 +1,31 @@
 # QA — Odoo Tricorder
 
+## Livraison 0.3.0 — 15 septembre 2026
+
+- Installation système autorisée et réalisée : dpkg 0.3.0.
+- SHA-256 app.asar installé identique au paquet testé :
+  `9f91e50a0d4787e0bcd7240e1953a85e82239fe71c36e877332bb384ea46d1f5`.
+- Deux parcours sur le binaire installé réussis en 10,5 s, données synthétiques.
+- Publication coordonnée avec Crew 4c6738c ; README et captures revus.
+- Les limites de quotas/modèles et la conservation du parent ouvert restent documentées.
+
+## Intentions, orchestration et ergonomie — 0.3.0
+
+- 79 tests Python et 54 JavaScript réussis ; 16 parcours Electron réussis,
+  1 parcours client réel volontairement ignoré (projets synthétiques uniquement).
+- Ajout en direct : nouvelle release détectée, demande avant plan, navigation
+  des deux Kanbans vers Intentions, remplacement par tâche puis retrait vérifiés.
+- Neuf vues × trois tailles/zoom ; clavier, dialogues, source conservée,
+  activités simultanées et quotas sans valeur fictive. Captures dans
+  `docs/implementation-2026-09-15/`.
+- Crew : 305 tests dont 1 ignoré (parseur TOML absent de Python 3.10),
+  graphe valide, 35 fichiers générés/installés avec parité Codex/Claude.
+- Essais CLI natifs de planification/continuation consignés dans Crew ;
+  aucune recette Odoo client ni qualification de quota réel revendiquée.
+- Paquet Debian 0.3.0 construit ; 16 parcours Electron réussis, 1 ignoré sur
+  le binaire empaqueté ; checksum produit, aucune publication distante.
+- Rapport de réception et vérification du paquet : `docs/EXECUTION_2026-09-15.md`.
+
 ## Ergonomie et agents — 0.2.9
 
 - 63 tests Python + 37 tests JavaScript : 100 verts ; `git diff --check` vert.

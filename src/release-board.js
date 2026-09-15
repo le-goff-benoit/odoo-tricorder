@@ -1,4 +1,7 @@
-import { releaseCards, releaseColumns, filterCards } from './release-kanban.mjs';
+import { taskState } from './task-state.mjs';
+import { timerMarkup } from './activity.mjs';
+import { intentionItems, intentionTasks } from './plan-model.mjs';
+import { allReleaseCards as releaseCards, releaseColumns, filterCards } from './release-kanban.mjs';
 import { hours, timeShare } from './measurements.mjs';
 
 export function releaseBoard({ get, observations, render, esc, badge, when, providerIcon }) {
@@ -79,15 +82,17 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
     state().owner = event.target.value; render();
     document.querySelector('#board-owner')?.focus({ preventScroll: true });
   });
-  const proofLabel = t => t.status === 'validated' ? 'Preuves valides' : t.column === 'done' ? 'Réception conservée · preuves à revérifier' : t.status === 'done' ? 'Terminée selon le compte rendu · réception non vérifiée' : '';
+  const proofLabel = t => t.kind === 'orchestration' ? t.stage : taskState(t).proof;
   function card(t) {
+    if (t.kind === 'intention') return `<button class="kanban-card" data-kind="intention" data-view="intentions" data-intention="${esc(t.intentionId)}"><div class="kanban-card-status"><strong>${esc(t.intentionId)}</strong>${badge('pending', t.presentation.label)}</div><h3>${esc(t.title)}</h3><p>Demande · ${esc(t.reason)}</p><small>Consulter la demande · pas encore exécutable</small></button>`;
     return `<button class="kanban-card" data-release-task="${esc(t.id)}" aria-haspopup="dialog">
-      <div class="kanban-card-status"><strong>${esc(t.id)}</strong>${t.waiting ? badge('waiting_human', 'Accord attendu') : ''}${t.blocked ? badge('blocked', 'Bloquée') : ''}${t.status === 'ready' ? badge('ready') : ''}</div>
+      <div class="kanban-card-status"><strong>${esc(t.kind === 'orchestration' ? 'Principal' : t.id)}</strong>${t.waiting ? badge('waiting_human', 'Accord attendu') : ''}${t.blocked ? badge('blocked', 'Bloquée') : ''}${t.status === 'ready' ? badge('ready') : ''}</div>
       <h3>${esc(t.title)}</h3>
-      ${t.owners.length ? `<p class="board-owner" title="${esc(t.owners.join(' · '))}">${t.providers.map(providerIcon).join('')} ${esc(t.owners.join(' · '))}</p>` : ''}
+      ${t.owners.length ? `<p class="board-owner" title="${esc(t.owners.join(' · '))}">Responsable déclaré : ${esc(t.owners.join(' · '))}</p>` : ''}
       ${proofLabel(t) ? `<p class="board-proof">${esc(proofLabel(t))}</p>` : ''}
+      ${(t.activities || []).map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${providerIcon(a.provider)} Suivi ${esc(a.provider === 'codex' ? 'Codex' : a.provider === 'claude' ? 'Claude' : a.provider || '')} · ${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}
       <p class="board-time">${hours(t.measures.actual)}${t.measures.partial ? ' · partiel' : ''} / ${t.measures.revised == null && t.measures.initial == null ? 'Non estimé' : hours(t.measures.revised ?? t.measures.initial)}</p>
-      <small>${t.acceptance?.length || 0} critères d’acceptation</small></button>`;
+      <small>${t.kind === 'orchestration' ? esc(t.model || 'Modèle principal non renseigné') : (t.acceptance?.length || 0) + ' critères d’acceptation'}</small></button>`;
   }
   function drawer(t) {
     const s = get();
@@ -99,6 +104,8 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
       ${t.receiptContext?.origin ? `<p class="muted">Origine ${t.receiptContext.location === 'worktree' ? '(worktree du même dépôt)' : ''} : ${esc(t.receiptContext.origin)}</p>` : ''}
       <section class="board-criteria"><h3>Critères d’acceptation</h3><ul>${(t.acceptance || []).map(c => `<li>${esc(c)}</li>`).join('') || '<li>Aucun critère renseigné</li>'}</ul></section>
       ${t.reason && (t.blocked || t.column === 'unknown' || t.status === 'stale') ? `<details class="note" open><summary>${t.blocked ? 'Blocage' : 'État à vérifier'}</summary><p>${esc(t.reason)}</p></details>` : ''}
+      ${t.kind === 'orchestration' ? `<p>Modèle principal : ${esc(t.model || 'non renseigné')}</p><p>Tâches pilotées : ${esc(t.taskIds.join(', ') || 'non renseignées')}</p>` : `<h3>Intentions couvertes</h3>${intentionItems(s.detail).filter(i => intentionTasks(s.detail, i).some(task => task.id === t.id)).map(i => `<button class="secondary" data-board-close data-view="intentions" data-intention="${esc(i.id)}">${esc(i.id)} · ${esc(i.purpose || i.text)}</button>`).join('') || '<p>Aucun lien enregistré dans cette release.</p>'}`}
+      ${(t.activities || []).map(a => `<p class="task-activity">${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}
       <h3>Étape et responsabilité</h3><p>${esc(t.stage || 'Étape non renseignée')}</p><p>${esc(t.owners.join(' · ') || 'Responsable non renseigné')} · ${esc(t.activity)}</p>
       ${t.flowNote ? `<p>${esc(t.flowNote)}</p>` : ''}
       ${t.depends_on?.length ? `<p>Dépend de ${t.depends_on.map(id => `<button class="secondary" data-release-task="${esc(id)}">${esc(id)}</button>`).join(' ')}</p>` : ''}
@@ -120,10 +127,10 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
     const owners = [...new Set(cards.flatMap(t => t.owners))].sort();
     const shown = filterCards(cards, saved.filter, saved.owner);
     const section = (id, label) => `<section class="kanban-column" data-column="${id}" data-board-scroll="${id}" aria-label="${label}"><h2>${label}<span>${shown.filter(t => t.column === id).length}</span></h2>${shown.filter(t => t.column === id).map(card).join('') || '<p class="kanban-empty">Aucune tâche</p>'}</section>`;
-    const columns = [...releaseColumns, ...[['unknown', 'État à vérifier'], ['deferred', 'Reportées']].filter(([id]) => cards.some(t => t.column === id))];
+    const columns = [...releaseColumns, ...[['blocked', 'Bloquées'], ['unknown', 'État à vérifier'], ['deferred', 'Reportées']].filter(([id]) => cards.some(t => t.column === id))];
     document.querySelector('#content').innerHTML = `<div class="page kanban-page release-kanban" data-context="${esc(context())}">
-      <div class="kanban-toolbar"><span class="board-count">${cards.filter(t => t.column === 'done').length} tâches réceptionnées sur ${cards.length} · ${shown.length} affichées</span><label>Responsable <select id="board-owner"><option value="">Tous</option>${[...new Set([...owners, saved.owner].filter(Boolean))].map(o => `<option ${saved.owner === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></label></div>
-      <div class="board-filters">${[['all', 'Toutes'], ['ready', 'Prêtes'], ['blocked', 'Bloquées'], ['waiting', 'Accord attendu']].map(([id, label]) => `<button class="secondary" data-board-filter="${id}" aria-pressed="${saved.filter === id}">${label}</button>`).join('')}</div>
+      <div class="kanban-toolbar"><span class="board-count">${cards.filter(t => !['orchestration', 'intention'].includes(t.kind) && t.column === 'done').length} réceptionnée${cards.filter(t => !['orchestration', 'intention'].includes(t.kind) && t.column === 'done').length > 1 ? 's' : ''} · ${cards.filter(t => !['orchestration', 'intention'].includes(t.kind)).length} tâches + orchestration${cards.some(t => t.kind === 'intention') ? ' · ' + cards.filter(t => t.kind === 'intention').length + ' demande(s) à planifier' : ''} · ${shown.length} affichées</span><label>Responsable <select id="board-owner"><option value="">Tous</option>${[...new Set([...owners, saved.owner].filter(Boolean))].map(o => `<option ${saved.owner === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></label></div>
+      <div class="board-filters">${[['all', 'Toutes'], ['executing', 'En exécution'], ['ready', 'Prêtes'], ['blocked', 'Bloquées'], ['waiting', 'Accord attendu']].map(([id, label]) => `<button class="secondary" data-board-filter="${id}" aria-pressed="${saved.filter === id}">${label}</button>`).join('')}</div>
       ${!cards.length ? '<p class="note">Aucune tâche structurée dans cette release. Le cadrage commun reste visible dans Temps & estimations.</p>' : ''}
       <div class="release-board-layout"><div class="kanban-board" data-board-scroll="board" style="--board-columns:${columns.length}">${columns.map(([id, label]) => section(id, label)).join('')}</div></div></div>`;
     for (const el of root().querySelectorAll('[data-board-scroll]')) {

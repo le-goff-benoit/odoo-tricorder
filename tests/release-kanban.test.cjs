@@ -27,11 +27,11 @@ test('blocked tasks retain their reached stage, unknown stages are not guessed',
   const detail = { selectedRelease: 'r', tasks: [{ id: 'T01', status: 'blocked', flow: 'f', reason: 'Copie absente' }],
     flows: [{ path: 'f', nodes: [{ id: 'review', description: 'Analyse', status: 'claimed', owner: 'Claude analyste' }] }] };
   const [card] = releaseCards(detail);
-  assert.equal(card.column, 'working'); assert.equal(card.blocked, true);
+  assert.equal(card.column, 'blocked'); assert.equal(card.blocked, true);
   assert.deepEqual(card.owners, ['Claude analyste']);
   assert.equal(card.stage, 'Analyse');
   detail.flows = [];
-  assert.equal(releaseCards(detail)[0].column, 'unknown');
+  assert.equal(releaseCards(detail)[0].column, 'blocked');
 });
 test('native activity is task-scoped, stale observations do not become live, receipts win', async () => {
   const { releaseCards } = await load();

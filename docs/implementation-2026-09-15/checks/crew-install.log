@@ -1,0 +1,90 @@
+Validation du graphe Odoo…
+Graphe valide : 59 nœuds, 129 arêtes, 4 forks, 4 jointures, 6 cycles bornés.
+ODOO BENCH 20260915-205201-be111094 · executed · 1/1 exécutés
+  B06-codex        completed    fixture / high · 0 s · qualité non évaluée
+ODOO BENCH 20260915-205201-1a259335 · running · 0/1 exécutés
+  B06-codex        running      fixture / high · 0 s · qualité non évaluée
+ODOO BENCH 20260915-205201-1a259335 · executed · 1/1 exécutés
+  B06-codex        completed    fixture / high · 0.2 s · qualité non évaluée
+ODOO BENCH 20260915-205201-9c94265e · running · 0/1 exécutés
+  B06-codex        running      fixture / high · 0 s · qualité non évaluée
+ODOO BENCH 20260915-205201-9c94265e · executed_with_errors · 1/1 exécutés
+  B06-codex        error        fixture / high · 0.2 s · qualité non évaluée
+ODOO BENCH 20260915-205201-955e8c1b · running · 0/1 exécutés
+  B06-codex        running      fixture / high · 0 s · qualité non évaluée
+ODOO BENCH 20260915-205201-955e8c1b · executed_with_errors · 1/1 exécutés
+  B06-codex        error        fixture / high · 0.2 s · qualité non évaluée
+ODOO BENCH 20260915-205202-efa58220 · interrupted · 0/1 exécutés
+  B06-codex        pending      fixture / high · 0 s · qualité non évaluée
+⚠️  ÉCRITURE EN PRODUCTION confirmée : x.synthetic.write
+  + x.synthetic studio_customization.one
+1 / 0 / 0 à créer / à modifier / inchangés sur synthetic
+  + x.synthetic studio_customization.one
+1 / 0 / 0 créés / modifiés / inchangés sur synthetic
+0 / 0 / 1 créés / modifiés / inchangés sur synthetic
+  + x.synthetic studio_customization.one
+0 / 0 / 1 créés / modifiés / inchangés sur synthetic
+{"trial": "trial", "error": "build failed"}
+mémoire modifiée depuis préparation : .odoo-agents/JOURNAL.md
+----------------------------------------------------------------------
+Ran 305 tests in 6.707s
+
+OK (skipped=1)
+ODOO FLOW · module_high_gate
+────────────────────────────────────────────────────────────────────────
+État       PRÊT
+Flux       development
+Projet     /tmp/tmp7y9gnkuz
+Progression 1 étape(s) franchie(s)
+Nœuds agent 0 revendiqué(s) · 0 prêt(s)
+Contrat QA 2 critères liés · couverture exigée pour pass
+Dernière   ✓ module_high_gate → blocked
+
+POSITION DANS LE GRAPHE
+  PROCHAINE ÉTAPE
+  ○ journal_task_blocked
+    ORCHESTRATEUR
+    Consigner l'échec de QA et les anomalies restantes avant l'arrêt.
+    Sorties: done · Preuve: entrée JOURNAL.md avec contrôles rouges
+Bases mémoire inchangées et dossier frais ; conserver le verrou mémoire pendant la copie des drafts.
+Dossier de réception : bundle.json · dabd98adde96
+Réception indépendante positive requise avant pass ; publier ensuite les drafts exacts.
+Mémoire published : .odoo-agents/PROJECT.md
+Mémoire published : .odoo-agents/JOURNAL.md
+Publication vérifiée ; journal_task reste revendiqué et doit être complété.
+{"probe": "real_process_overlap_synthetic_only", "parallel_seconds": 0.357, "sequential_seconds": 0.695, "events": [{"label": "qa-parallel", "start": 1789498326.4199915, "end": 1789498326.7569087, "passed": true}, {"label": "dev-parallel", "start": 1789498326.430869, "end": 1789498326.7525985, "passed": true}], "integration": "passed"}
+Génération des profils d'agents Odoo…
+  ✓ /home/blegoff/.claude/agents/odoo-analyst.md
+  ✓ /home/blegoff/.codex/skills/odoo-analyst/SKILL.md
+  ✓ /home/blegoff/.claude/agents/odoo-developer.md
+  ✓ /home/blegoff/.codex/skills/odoo-developer/SKILL.md
+  ✓ /home/blegoff/.claude/agents/odoo-studio.md
+  ✓ /home/blegoff/.codex/skills/odoo-studio/SKILL.md
+  ✓ /home/blegoff/.claude/agents/odoo-support.md
+  ✓ /home/blegoff/.codex/skills/odoo-support/SKILL.md
+  ✓ /home/blegoff/.claude/agents/odoo-tester.md
+  ✓ /home/blegoff/.codex/skills/odoo-tester/SKILL.md
+  ✓ /home/blegoff/.claude/CLAUDE.md
+  ✓ /home/blegoff/.codex/AGENTS.md
+  ✓ /home/blegoff/.claude/commands/odoo-new.md
+  ✓ /home/blegoff/.codex/skills/odoo-new/SKILL.md
+  ✓ /home/blegoff/.claude/commands/odoo-express.md
+  ✓ /home/blegoff/.codex/skills/odoo-express/SKILL.md
+  ✓ /home/blegoff/.claude/commands/odoo-close.md
+  ✓ /home/blegoff/.codex/skills/odoo-close/SKILL.md
+  ✓ /home/blegoff/.claude/commands/odoo-env.md
+  ✓ /home/blegoff/.codex/skills/odoo-env/SKILL.md
+  ✓ /home/blegoff/.claude/commands/odoo-feedback.md
+  ✓ /home/blegoff/.codex/skills/odoo-feedback/SKILL.md
+  ✓ /home/blegoff/.claude/skills/camptocamp-docs/SKILL.md
+  ✓ /home/blegoff/.codex/skills/camptocamp-docs/SKILL.md
+  ✓ /home/blegoff/.claude/commands/odoo-plan.md
+  ✓ /home/blegoff/.codex/skills/odoo-plan/SKILL.md
+  ✓ /home/blegoff/.claude/commands/odoo-start.md
+  ✓ /home/blegoff/.codex/skills/odoo-start/SKILL.md
+  ✓ /home/blegoff/.claude/commands/odoo-improve.md
+  ✓ /home/blegoff/.codex/skills/odoo-improve/SKILL.md
+  ✓ /home/blegoff/.claude/commands/odoo-estimate.md
+  ✓ /home/blegoff/.codex/skills/odoo-estimate/SKILL.md
+Génération conforme : 35 fichiers + 2 blocs d’aiguillage et pointeur personnel.
+Terminé. Sources partagées : /home/blegoff/.odoo19-agents/roles/, /home/blegoff/.odoo19-agents/roles/routing.md

@@ -16,6 +16,7 @@ test('unknown, stale and declared legacy statuses never become verified done', a
   assert.equal(columnFor('validated'), 'done');
   assert.equal(columnFor('awaiting_receipt'), 'review');
   assert.equal(columnFor('pending'), 'todo');
-  for (const value of ['unknown', 'unverified', 'stale', 'blocked', 'done', undefined]) assert.equal(columnFor(value), 'blocked');
+  for (const value of ['unknown', 'unverified', 'stale', 'done', undefined]) assert.equal(columnFor(value), 'unknown');
+  assert.equal(columnFor('blocked'), 'blocked');
   assert.deepEqual(boardCards([{ path: '/missing', warnings: ['Unavailable'] }]), []);
 });

@@ -97,7 +97,7 @@ def plan_tasks(root, release):
     if not (folder / 'plan.json').is_file():
         return legacy_tasks(read_text(inside(root, folder / 'README.md')), release), []
     plan = read_json(inside(root, folder / 'plan.json'))
-    if plan.get('schema') != 1 or not isinstance(plan.get('tasks'), list):
+    if plan.get('schema') not in (1, 2) or not isinstance(plan.get('tasks'), list):
         raise ValueError('Format du plan non pris en charge')
     warnings, statuses, availability = [], {}, {}
     try:
@@ -122,7 +122,8 @@ def plan_tasks(root, release):
         receipt = receipt_context(root, task, read_json, inside, git)
         if receipt and receipt['location'] == 'worktree' and state == 'stale':
             reason = 'Réception enregistrée dans un worktree du même dépôt ; preuve non validée dans ce dossier. ' + reason
-        result.append({k: task.get(k) for k in ('id', 'title', 'depends_on', 'acceptance', 'scopes', 'risk', 'route', 'request')} | {
+        result.append({k: task.get(k) for k in ('id', 'title', 'depends_on', 'acceptance', 'scopes', 'risk', 'route', 'request',
+                                              'intentions', 'contract', 'resources', 'execution', 'inputs', 'outputs')} | {
             'status': state, 'reason': reason, 'flow': attempts[-1].get('flow') if attempts else None,
             'receiptAt': (task.get('receipt') or {}).get('at'),
             'progress': 'deferred' if task.get('deferred') else 'received' if receipt else state,
@@ -130,6 +131,61 @@ def plan_tasks(root, release):
             'receiptContext': receipt,
         })
     return result, warnings
+
+
+def intentions_details(root, release):
+    """Read a declared register without inferring satisfaction from task links."""
+    relative = f'changelog/{release}/intentions.json'
+    result = {'schema': 1, 'revision': None, 'items': [], 'warnings': [], 'path': relative}
+    try:
+        path = inside(root, root / relative)
+        if not path.is_file():
+            return result | {'available': False}
+        data = read_json(path)
+        if data.get('schema') != 1 or not isinstance(data.get('items'), list):
+            raise ValueError('Format du registre non pris en charge')
+        used = set()
+        for entry in data['items']:
+            if not isinstance(entry, dict) or not isinstance(entry.get('id'), str) or entry['id'] in used:
+                raise ValueError('Identifiant d’intention absent ou dupliqué')
+            used.add(entry['id'])
+            if entry.get('status') not in {'clarify', 'ready', 'planned', 'satisfied', 'deferred'}:
+                raise ValueError('État d’intention inconnu : ' + entry['id'])
+        return result | {k: data.get(k) for k in ('schema', 'revision', 'items', 'history')} | {'available': True}
+    except (OSError, ValueError, TypeError, AttributeError) as exc:
+        return result | {'available': False, 'warnings': ['Intentions : ' + str(exc)]}
+
+
+def orchestration_details(root, release=None, *, any_release=False):
+    """Metadata only. An open terminal is never evidence of an active run."""
+    try:
+        path = inside(root, root / '.odoo-agents/orchestration.json')
+        if not path.is_file():
+            path = inside(root, root / 'changelog' / release / 'orchestration.json') if release else path
+            if not path.is_file():
+                return None
+        data = read_json(path)
+        if data.get('schema') != 1 or not data.get('id'):
+            raise ValueError('Format du suivi d’orchestration non pris en charge')
+        assigned = Path(data['release']).name if data.get('release') else None
+        if not any_release and assigned != release:
+            archived = inside(root, root / 'changelog' / release / 'orchestration.json') if release else None
+            if not archived or not archived.is_file():
+                return None
+            data = read_json(archived)
+            assigned = Path(data['release']).name if data.get('release') else None
+            if data.get('schema') != 1 or not data.get('id') or assigned != release:
+                raise ValueError('Suivi d’orchestration rattaché à une autre release')
+        allowed = ('id', 'provider', 'model', 'owner', 'phase', 'status', 'revision', 'reason', 'next_action')
+        return {key: data.get(key) for key in allowed} | {
+            'release': assigned, 'state': data.get('status'), 'taskIds': data.get('authorized_tasks', []),
+            'startedAt': data.get('started_at'), 'updatedAt': data.get('updated_at'),
+            'phaseStartedAt': data.get('phase_started_at'),
+            'endedAt': data.get('ended_at'), 'waitingReason': data.get('reason'),
+            'source': '.odoo-agents/orchestration.json',
+        }
+    except (OSError, ValueError, TypeError, AttributeError) as exc:
+        return {'state': 'unknown', 'status': 'unknown', 'warning': str(exc)}
 
 
 def environments(root):
@@ -277,6 +333,8 @@ def summary(root):
     current = next((r for r in rels if r['status'] == 'ouverte'), rels[0] if rels else None)
     tasks, warnings, attention, board, running = [], [], [], [], 0
     for release in rels:
+        release['orchestration'] = orchestration_details(root, release['id'])
+        release['intentions'] = intentions_details(root, release['id'])
         try:
             release_tasks, issues = plan_tasks(root, release['id'])
             warnings.extend(release['id'] + ' : ' + issue for issue in issues)
@@ -295,7 +353,7 @@ def summary(root):
                                                     if n['status'] == 'claimed' and n.get('owner')))
                     except Exception:
                         pass  # Missing ownership is not an invented assignment.
-                board.append({k: task.get(k) for k in ('id', 'title', 'status', 'reason', 'source', 'acceptance')} |
+                board.append({k: task.get(k) for k in ('id', 'title', 'status', 'progress', 'validation', 'reason', 'source', 'acceptance', 'flow', 'intentions')} |
                              {'release': release['id'], 'releaseTitle': release['title'],
                               'releaseStatus': release['status'], 'owners': owners})
             attention.extend(t | {'release': release['id']} for t in release_tasks
@@ -316,7 +374,8 @@ def summary(root):
             warnings.append(Path(relative).name + ' : ' + str(exc))
     return {'path': str(root), 'name': root.name, 'series': project_series(root),
             'release': current, 'releases': rels, 'attention': attention,
-            'running': running, 'warnings': warnings, 'board': board}
+            'running': running, 'warnings': warnings, 'board': board,
+            'orchestration': orchestration_details(root, any_release=True)}
 
 
 def overview(home, extras):
@@ -376,6 +435,8 @@ def project(root, release=None, source_root=None, profile=None):
                  'gitChanges': len(git(root, 'status', '--porcelain', '-uno').splitlines()),
                  'environments': [], 'tasks': [], 'flows': [], 'effort': None,
                  'documents': [], 'inbox': [], 'express': express_interventions(root)})
+    data['orchestration'] = orchestration_details(root, chosen)
+    data['intentions'] = intentions_details(root, chosen) if chosen else {'items': [], 'warnings': [], 'available': False}
     try:
         data['environments'] = environments(root)
     except (OSError, ValueError, AttributeError) as exc:
@@ -458,6 +519,9 @@ def dispatch(payload):
     if action == 'codex-runtime':
         from codex_runtime import snapshot
         return snapshot(payload['nativeId'])
+    if action == 'quotas':
+        from quotas import snapshot
+        return snapshot(payload.get('sources', []))
     if action == 'document':
         return document(payload['project'], payload['path'])
     raise ValueError('Action inconnue')

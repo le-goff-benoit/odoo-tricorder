@@ -1,0 +1,150 @@
+
+> odoo-tricorder@0.3.0 test
+> python3 -m unittest discover -s tests -v && node --test tests/*.test.cjs
+
+test_codex_native_hook_model_and_parent_are_metadata_only_and_duplicates_are_ignored (test_activity_hooks.ActivityHookTests) ... ok
+test_interrupt_closes_activity_and_waiting_does_not_run_timer (test_activity_hooks.ActivityHookTests) ... ok
+test_silent_long_running_tool_stays_active_with_stale_evidence (test_activity_hooks.ActivityHookTests) ... ok
+test_authoritative_stale_status_is_preserved (test_catalog.CatalogTests) ... ok
+test_board_reads_all_releases_and_keeps_unknown_ownership (test_catalog.CatalogTests) ... ok
+test_discovery_series_and_release (test_catalog.CatalogTests) ... ok
+test_document_boundary_including_symlinks (test_catalog.CatalogTests) ... ok
+test_effort_computed_without_writing_report (test_catalog.CatalogTests) ... ok
+test_effort_explains_unrecorded_running_interrupted_and_missing_duration (test_catalog.CatalogTests) ... ok
+test_explicit_no_release_does_not_fall_back_to_existing (test_catalog.CatalogTests) ... ok
+test_invalid_preparation_does_not_hide_project (test_catalog.CatalogTests) ... ok
+test_malformed_plan_and_instances_leave_project_accessible (test_catalog.CatalogTests) ... ok
+test_missing_exact_sources_never_uses_other_series (test_catalog.CatalogTests) ... ok
+test_online_sources_are_reference_not_module_requirement (test_catalog.CatalogTests) ... ok
+test_plan_without_tooling_does_not_invent_validation (test_catalog.CatalogTests) ... ok
+test_preparation_before_plan_moves_between_views_without_writes (test_catalog.CatalogTests) ... ok
+test_removed_email_actions_are_unknown (test_catalog.CatalogTests) ... ok
+test_removed_email_not_exposed_or_loaded (test_catalog.CatalogTests) ... ok
+test_secrets_never_returned_and_url_cleaned (test_catalog.CatalogTests) ... ok
+test_unassigned_active_flow_visible_without_inventing_release (test_catalog.CatalogTests) ... ok
+test_reader_only_allows_read_methods_and_filters_notifications (test_codex_runtime.CodexRuntimeTests) ... ok
+test_status_flags_not_process_liveness (test_codex_runtime.CodexRuntimeTests) ... ok
+test_explicit_online_profile_does_not_require_module_runtime (test_insights.InsightsTests) ... ok
+test_explorer_masks_private_files_and_refuses_arbitrary_reads (test_insights.InsightsTests) ... ok
+test_manifest_is_not_executed_and_cycles_terminate (test_insights.InsightsTests) ... ok
+test_revision_exact_series_and_pinned_commit (test_insights.InsightsTests) ... ok
+test_search_is_cross_release_bounded_and_does_not_escape (test_insights.InsightsTests) ... ok
+test_stack_restoration_unknown_is_not_zero (test_insights.InsightsTests) ... ok
+test_transitive_enterprise_oca_and_missing_dependencies (test_insights.InsightsTests) ... ok
+test_global_summary_exposes_new_intention_before_any_plan (test_intentions.IntentionsTests) ... ok
+test_invalid_or_missing_is_not_empty_success (test_intentions.IntentionsTests) ... ok
+test_orchestration_attachment_preserves_identity_without_cross_release_leak (test_intentions.IntentionsTests) ... ok
+test_register_is_read_only_and_never_infers_satisfaction (test_intentions.IntentionsTests) ... ok
+test_ambiguous_attempts_not_silently_selected (test_lifecycle.LifecycleTests) ... ok
+test_attention_includes_noncurrent_release_and_legacy_counts (test_lifecycle.LifecycleTests) ... ok
+test_closed_historical_proof_does_not_create_new_urgency (test_lifecycle.LifecycleTests) ... ok
+test_crew_closure_removes_marker_and_supports_legacy_lot (test_lifecycle.LifecycleTests) ... ok
+test_documented_test_volume_is_not_a_verified_counter (test_lifecycle.LifecycleTests) ... ok
+test_express_ignores_external_symlinks_and_filename_guesses (test_lifecycle.LifecycleTests) ... ok
+test_express_qa_retry_does_not_keep_old_green_result (test_lifecycle.LifecycleTests) ... ok
+test_express_without_release_includes_completed_and_promoted_runs (test_lifecycle.LifecycleTests) ... ok
+test_legacy_points_are_declared_not_proof_validated (test_lifecycle.LifecycleTests) ... ok
+test_links_use_explicit_association_not_task_name_or_other_release (test_lifecycle.LifecycleTests) ... ok
+test_no_plan_reads_readme_and_broken_plan_not_hidden_by_fallback (test_lifecycle.LifecycleTests) ... ok
+test_receipt_and_current_validation_are_separate (test_lifecycle.LifecycleTests) ... ok
+test_worktree_provenance_does_not_change_verdict (test_lifecycle.LifecycleTests) ... ok
+test_app_server_event_export (test_observation.ObservationTests) ... ok
+test_bad_dates_regressive_events_and_ambiguous_hooks_rejected (test_observation.ObservationTests) ... ok
+test_claude_hook_only_records_allowlist_and_children (test_observation.ObservationTests) ... ok
+test_codex_states_do_not_leak_text_arguments_or_output (test_observation.ObservationTests) ... ok
+test_fork_ignores_inherited_agent_events (test_observation.ObservationTests) ... ok
+test_hook_never_follows_output_symlink (test_observation.ObservationTests) ... ok
+test_missing_cache_preserves_other_valid_token_counters (test_observation.ObservationTests) ... ok
+test_parallel_tool_result_does_not_resolve_another_permission (test_observation.ObservationTests) ... ok
+test_partial_last_line_does_not_break_live_observation (test_observation.ObservationTests) ... ok
+test_review_overnight_gap_between_turns_is_not_agent_time (test_observation.ObservationTests) ... ok
+test_review_suspension_inside_a_turn_cannot_be_inferred_from_duration (test_observation.ObservationTests) ... ok
+test_subagent_tool_hook_never_changes_parent_state (test_observation.ObservationTests) ... ok
+test_unknown_format_and_identity_replacement_fail_closed (test_observation.ObservationTests) ... ok
+test_usage_reader_called_with_explicit_bounds_and_not_written (test_observation.ObservationTests) ... ok
+test_usage_survives_partial_tail_then_recovers (test_observation.ObservationTests) ... ok
+test_wait_intervals_and_open_window_are_distinct (test_observation.ObservationTests) ... ok
+test_counts_are_per_report_not_sum_of_parent_and_children (test_quality.QualityTests) ... ok
+test_entities_and_invalid_counters_are_refused (test_quality.QualityTests) ... ok
+test_no_report_is_unknown_not_zero (test_quality.QualityTests) ... ok
+test_reruns_stay_separate_and_unknown_task_not_inferred (test_quality.QualityTests) ... ok
+test_absent_null_false_invalid_are_never_zero (test_quotas.QuotaTests) ... ok
+test_cache_without_timestamp_never_becomes_fresh (test_quotas.QuotaTests) ... ok
+test_codex_multiple_buckets_keep_native_duration_and_ignore_legacy_duplicate (test_quotas.QuotaTests) ... ok
+test_collector_replaces_symlink_without_touching_destination (test_quotas.QuotaTests) ... ok
+test_collector_strips_everything_except_quota_metadata_and_latest_session_wins (test_quotas.QuotaTests) ... ok
+test_old_or_future_clock_observation_is_stale (test_quotas.QuotaTests) ... ok
+test_reset_requires_new_observation_not_fabricated_zero (test_quotas.QuotaTests) ... ok
+test_statusline_preserves_exact_original_stdin_and_stdout (test_quotas.QuotaTests) ... ok
+test_unsupported_newer_session_clears_previous_values (test_quotas.QuotaTests) ... ok
+test_closed_session_is_not_active_and_stop_is_explicit (test_terminal_service.TerminalTests) ... ok
+test_invalid_resize_rejected (test_terminal_service.TerminalTests) ... ok
+test_real_shell_resize_unicode_and_context (test_terminal_service.TerminalTests) ... ok
+test_reconnect_preserves_pid_and_output (test_terminal_service.TerminalTests) ... ok
+
+----------------------------------------------------------------------
+Ran 79 tests in 1.859s
+
+OK
+✔ release changes, atomic replacements and deletions change revision without following links (57.428361ms)
+✔ native observation respects explicit no-release and cancelled connection writes nothing (3.282894ms)
+✔ owned CSS uses shared spacing tokens, with relative Markdown spacing allowed (21.126172ms)
+✔ new requests project into both boards without becoming executable tasks (10.912601ms)
+✔ planning or splitting a request replaces its projection and removal restores it (3.132623ms)
+✔ clarification stays explicit, satisfied/deferred stay in registry, links are release scoped (8.815367ms)
+✔ global board keeps project/release identity and hides closed releases only by default (7.742211ms)
+✔ unknown, stale and declared legacy statuses never become verified done (0.82231ms)
+✔ workflow participation exposes actual agent names, never invents elapsed time (18.255269ms)
+✔ preparation and native task observations cannot count the same period twice (2.332176ms)
+✔ partial token fields survive and recorded/native counters are never added (1.048577ms)
+✔ headline durations use hours, preserving unknown and sub-minute values (0.384394ms)
+✔ empty, partial and invalid measures never become zero (0.390667ms)
+✔ recorded and native time are never added (0.423148ms)
+✔ changed scopes and retrospective estimates do not produce a variance (0.570217ms)
+✔ partial native time is provisional, not a closure variance (0.346383ms)
+✔ complete comparable period uses revised estimate (0.824857ms)
+✔ a missing role does not hide recorded work or produce a saving (0.731236ms)
+✔ an unfinished second passage preserves the known subtotal, without adding native work (0.372136ms)
+✔ missing measurements are not zero but an explicitly measured zero is retained (0.264631ms)
+✔ release subtotal includes measured tasks while signalling unknown tasks (0.404211ms)
+✔ native subtotal survives an unknown observation but remains provisional (1.144035ms)
+✔ agent breakdown preserves partial roles and reconciles to the recorded task subtotal (0.302724ms)
+✔ native-only breakdown groups explicit roles without inventing child-agent time (0.325335ms)
+✔ agent breakdown distinguishes unknown, measured zero and a task without any records (0.278274ms)
+✔ time shares use known durations only, never unknowns or a zero denominator (0.220263ms)
+✔ agent allocation aggregates across tasks and retains unknown roles (0.412952ms)
+✔ both boards keep a historical receipt when its current controls are stale (9.259872ms)
+✔ graph exposes ancestors, downstream work, cycles, absent dependencies and 50 tasks (2.565459ms)
+✔ three simultaneous activities and their waiting states use the same filter (6.778049ms)
+✔ timers need trustworthy starts and freeze at observed ends, not at selected cards (3.30963ms)
+✔ resource conflicts include declared databases and ports without adding result edges (9.484438ms)
+✔ orchestration trace is explicit, stale after missing follow-up and never inferred from an analyst (0.46036ms)
+✔ provider marks use OpenAI and Anthropic identity, without the former substitute symbols (0.789237ms)
+✔ both provider launch buttons prepare isolated hooks and a separate Crew Stop guard (4.351749ms)
+✔ Claude wrapper preserves statusLine command and padding while retaining no other settings (1.284007ms)
+✔ Codex shell arguments preserve literal paths and one configuration per event (40.076021ms)
+✔ quota scans are global and deduplicate overlapping refreshes (2.205355ms)
+✔ quotas distinguish unknown, zero and a reset without a fresh response (43.678751ms)
+✔ quota thresholds do not switch models and provider labels are escaped (2.461092ms)
+✔ new unique open release adopts one unscoped or closed-release terminal (16.586197ms)
+✔ no first-scan adoption, reopening, closed addition, or multiple new releases (0.4215ms)
+✔ express, other projects, live releases and ambiguity never guess a terminal (0.374252ms)
+✔ context survives settings serialization, never mutates broker metadata or process (0.984176ms)
+✔ a reached agent without a timer stays visible and prevents a false complete saving (21.818531ms)
+✔ release board separates receipts, stale proofs, legacy declarations and deferrals (0.38215ms)
+✔ blocked tasks retain their reached stage, unknown stages are not guessed (0.924568ms)
+✔ native activity is task-scoped, stale observations do not become live, receipts win (0.724302ms)
+✔ time uses one source and keeps missing values unknown; filters never change cards (0.36717ms)
+✔ ambiguous histories and other-release flows cannot invent the current responsible agent (0.239748ms)
+✔ an open terminal alone never claims an agent is working (0.564767ms)
+✔ consulting another release does not relabel the terminal activity (0.106781ms)
+✔ stale traces are not live work and claims remain only assignments (0.134708ms)
+✔ waiting, project preparation and unknown task scope stay explicit (0.172977ms)
+ℹ tests 54
+ℹ suites 0
+ℹ pass 54
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 177.266791

@@ -1,15 +1,10 @@
+import { intentionCards } from './plan-model.mjs';
+import { taskState } from './task-state.mjs';
+import { activities, orchestrationCard } from './activity.mjs';
 import { taskMeasures, agentMeasures, withoutPreparationOverlap } from './measurements.mjs';
 
 export const releaseColumns = [['todo', 'À faire'], ['working', 'En cours'], ['review', 'À réceptionner'], ['done', 'Réceptionnées']];
-export function releaseColumn(task, flow) {
-  if (task.progress === 'received' || task.status === 'validated') return 'done';
-  if (task.status === 'deferred' || task.progress === 'deferred') return 'deferred';
-  if (task.status === 'awaiting_receipt') return 'review';
-  if (['running', 'claimed', 'active'].includes(task.status)) return 'working';
-  if (['pending', 'ready'].includes(task.status)) return 'todo';
-  if (['blocked', 'waiting_human', 'interrupted'].includes(task.status) && flow?.nodes?.length) return 'working';
-  return 'unknown';
-}
+export function releaseColumn(task, flow) { return taskState(task, flow).column; }
 
 // Bindings supplied by the controller are already restricted to this project.
 export function releaseCards(detail, bindings = []) {
@@ -33,7 +28,7 @@ export function releaseCards(detail, bindings = []) {
     if (measures.actual != null && breakdown.some(a => a.actual == null && a.reasons.includes('Intervention enregistrée · durée non mesurée'))) {
       measures.partial = true; measures.delta = null;
     }
-    return { ...task, column: releaseColumn(task, flow), flows, flow, waiting,
+    return { ...task, presentation: taskState(task, flow), activities: activities(detail, native).filter(a => a.task === task.id), column: releaseColumn(task, flow), flows, flow, waiting,
       blocked: ['blocked', 'interrupted', 'deadlocked'].includes(task.status) || ['blocked', 'deadlocked'].includes(flow?.status),
       owners: [...new Set(claimed.map(n => n.owner).filter(Boolean))],
       providers: [...new Set(observed.map(b => b.provider?.split('-')[0]).filter(p => ['codex', 'claude'].includes(p)))],
@@ -45,5 +40,7 @@ export function releaseCards(detail, bindings = []) {
 }
 export function filterCards(cards, filter, owner) {
   return cards.filter(t => (!owner || t.owners.includes(owner)) &&
-    (filter === 'all' || filter === 'ready' && t.status === 'ready' || filter === 'blocked' && t.blocked || filter === 'waiting' && t.waiting));
+    (filter === 'all' || filter === 'executing' && t.activities?.some(a => a.executing) || filter === 'ready' && t.status === 'ready' || filter === 'blocked' && t.blocked || filter === 'waiting' && t.waiting));
 }
+
+export function allReleaseCards(detail, bindings = []) { return [orchestrationCard(detail, bindings), ...intentionCards(detail), ...releaseCards(detail, bindings)]; }

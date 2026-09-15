@@ -7,6 +7,7 @@ const socketNet = require('node:net');
 const { pathToFileURL } = require('node:url');
 const { promisify } = require('node:util');
 const { sessionContext, saveContext } = require('./terminal-context.cjs');
+const { catalogRevision } = require('./catalog-revision.cjs');
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'tricorder', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
 const LINKS = {
@@ -128,6 +129,7 @@ function wireAPI() {
   require('./cockpit.cjs').wireCockpit({ handle, dialog, shell, window: () => window, settings, save: saveSettings, checkedProject, catalog, terminal, stateDir, backend, home });
   handle('bootstrap', async () => ({ projects: await overview(), settings, links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home }));
   handle('overview', overview);
+  handle('catalog-revision', () => catalogRevision(projects));
   handle('project', (project, release) => catalog({ action: 'project', project: checkedProject(project), release }));
   handle('document', async (project, relative) => {
     const doc = await catalog({ action: 'document', project: checkedProject(project), path: relative });

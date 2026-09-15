@@ -1,0 +1,19 @@
+
+> odoo-tricorder@0.3.0 dist
+> npm run build && electron-builder --linux deb --publish never
+
+
+> odoo-tricorder@0.3.0 build
+> node scripts/build.mjs
+
+  • electron-builder  version=26.15.3 os=6.9.3-76060903-generic
+  • loaded configuration  file=package.json ("build" field)
+  • executing @electron/rebuild  electronVersion=44.3.0 arch=x64 buildFromSource=false workspaceRoot=/home/blegoff/odoo-tricorder projectDir=./ appDir=./
+  • installing native dependencies  arch=x64
+  • completed installing native dependencies
+  • packaging       platform=linux arch=x64 electron=44.3.0 appOutDir=release/linux-unpacked
+  • downloaded      label=electron progress=100%
+  • downloaded electron zip extracted successfully  output=/home/blegoff/odoo-tricorder/release/linux-unpacked
+  • searching for node modules  pm=npm searchDir=/home/blegoff/odoo-tricorder
+  • building        target=deb arch=x64 file=release/odoo-tricorder_0.3.0_amd64.deb
+  • adding autoupdate files for: deb  resourceDir=release/linux-unpacked/resources

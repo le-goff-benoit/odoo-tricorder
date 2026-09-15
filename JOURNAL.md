@@ -1,5 +1,40 @@
 # Journal
 
+## 2026-09-15 — Installation et publication 0.3.0
+
+- Demande : mettre à jour l’application, publier GitHub et revoir le README avec parcours et captures.
+- Paquet 0.3.0 installé via dpkg ; archive installée identique au paquet testé.
+- Deux parcours sur l’exécutable installé réussis : interface/lancements et demandes en direct.
+- README réorganisé, trois exemples de flux et captures de projets synthétiques.
+- Audit client détaillé conservé localement, hors de la publication publique.
+- CI liée à Crew 4c6738c ; détails de livraison dans docs/releases/0.3.0.md.
+
+## 2026-09-15 — Intentions → Plan et cockpit 0.3.0
+
+- Autorisation Benoît : réaliser les dix lots, puis passe globale UX/UI ; logos OpenAI/Anthropic.
+- Intentions versionnées, graphe, réception/preuves/activité séparées et orchestration visible.
+- Plusieurs activités/timers, lancements Codex/Claude instrumentés, quotas sans valeur inventée.
+- Crew : contrats/tests en amont, preuves immuables, QA isolée, modèles par rôle et garde de continuation.
+- Quotas natifs indisponibles sur ce poste ; candidats légers expérimentaux, principal conservé.
+- Ajout final : demandes visibles avant plan, rapprochement sans doublon et détection toutes les 2 secondes.
+- UX : vues compactes, clavier/contrastes, vocabulaire et distinction Non estimé/Non mesuré.
+- Vérifications : suites synthétiques et paquet local ; détails dans docs/EXECUTION_2026-09-15.md.
+- Profils Crew installés avec parité ; clients en lecture seule, aucune publication distante.
+
+## 2026-09-15 — Orchestration et activité visibles dans le plan UI
+
+- Ajout Benoît : tâche d'orchestration dans la liste/Kanban et indicateur ou timer des exécutions en cours.
+- Audit complété : cartes issues des tâches, résumé d'activité priorisant une seule observation, durées agrégées.
+- Plan : intentions I10/I11 et lot L10 ; carte de coordination, activités simultanées, filtre En exécution et timers d'étape.
+- Critères : attentes distinctes, durée sourcée, reprise/fraîcheur, absence de double compte et cohérence entre vues.
+- Périmètre conservé : documentation du plan uniquement ; aucune fonctionnalité implémentée.
+
+## 2026-09-15 — Audit et plan d’évolution
+
+- Analyse préalable de la planification, des preuves, du parallélisme et de l’interface.
+- Plan de dix lots autorisé, puis réalisé ; bilan public dans docs/EXECUTION_2026-09-15.md.
+- Audit client détaillé conservé localement, hors de la publication de l’application.
+
 ## 2026-09-11 — Ergonomie simplifiée 0.2.9
 
 - Retrait du filtre global de tâche, du panneau de suivi et du pied du terminal.

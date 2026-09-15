@@ -1,14 +1,13 @@
+import { planViews } from './plan-view.js';
+import { activities, timerMarkup, tickTimers } from './activity.mjs';
+import { quotaPanel, quotaPresentation } from './quotas.mjs';
 // Roadmap views use metadata APIs only; commands are prepared, never injected.
 import { lifecycleUI, missionCards, plainLanguageUI } from './lifecycle.js';
 import { knownSum, taskMeasures, summarizeMeasures, hours, agentMeasures, timeShare, agentAllocation, tokenMeasures, withoutPreparationOverlap } from './measurements.mjs';
-import { workStatus } from './work-context.mjs';
 import { documentBody } from './markdown.js';
 import { releaseBoard } from './release-board.js';
-export function providerIcon(provider) {
-  const name = provider?.split('-')[0];
-  const shape = name === 'claude' ? '<path d="M12 2v20M2 12h20M5 5l14 14M5 19 19 5M8 3l8 18M3 8l18 8"/>' : name === 'codex' ? '<path d="m8 5-6 7 6 7m8-14 6 7-6 7m-3-16-2 18"/>' : '<path d="m4 6 6 6-6 6m9 0h7"/>';
-  return `<svg class="provider-icon ${name === 'claude' ? 'claude' : name === 'codex' ? 'codex' : 'shell'}" role="img" aria-label="${name === 'claude' ? 'Claude' : name === 'codex' ? 'Codex' : 'Shell'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${shape}</svg>`;
-}
+import { providerIcon } from './provider-brand.mjs';
+export { providerIcon } from './provider-brand.mjs';
 
 export function cockpit({ api, get, setSettings, setProjects, render, sidebar, chooseProject, setView, selectTask, selectSession, modal, toast, esc, badge, when, minutes }) {
   const $ = s => document.querySelector(s);
@@ -16,7 +15,10 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   let prepared = '', handoff = '', graphContext = '', effortTotals = {};
   let effortRows = [];
   const board = releaseBoard({ get, observations: () => currentObservations(true), render, selectTask, esc, badge, when, providerIcon });
+  const planUI = planViews({ get, observations: () => currentObservations(true), esc, badge, render });
   const expandedAgents = new Set();
+  let quotaSnapshots = [], quotaReading = false, observationSignature = '', activitySignature = '';
+
   const percent = value => value == null ? '—' : value.toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' %';
   document.addEventListener('toggle', event => {
     const key = event.target.dataset?.agentDetail;
@@ -25,7 +27,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   }, true);
   let explorer = null, explorerProject = null, explorerPath = '', exploring = false, fileTicket = 0;
   const states = { unknown: 'Inconnu', idle: 'Au repos · attend une saisie', active: 'Activité observée', tool: 'Outil en cours', waiting_human: 'Décision humaine attendue', interrupted: 'Interrompu', complete: 'Terminé' };
-  const action = (name, title) => ['graph', 'handoff'].includes(name) ? '' : `<button class="secondary" data-cockpit="${name}">${title}</button>`;
+  const action = (name, title) => name === 'handoff' ? '' : `<button class="secondary" data-cockpit="${name}">${title}</button>`;
   const selected = () => {
     const s = get(), task = s.detail?.tasks.find(t => t.id === s.selectedTask);
     const terminal = s.sessions.find(t => t.id === s.selectedSession.get(s.current) && t.project === s.current);
@@ -70,17 +72,16 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     try {
       const values = await api.cockpit.observations(null);
       const before = new Set(observations.flatMap(b => (b.agents || []).filter(a => a.state === 'waiting_human').map(a => a.nativeId)));
+      const nextSignature = JSON.stringify(values.map(b => ({ ...b, observedAt: undefined })));
+      let changed = nextSignature !== observationSignature; observationSignature = nextSignature;
       observations = values; observedProject = project;
+      const nextActivitySignature = JSON.stringify([...activeRows(), ...get().projects.flatMap(p => (p.releases || []).flatMap(r => activities({ selectedRelease: r.id, orchestration: r.orchestration }, observations.filter(b => b.project === p.path))))].map(a => [a.id, a.executing, a.waiting, a.stale]));
+      changed ||= activitySignature !== nextActivitySignature; activitySignature = nextActivitySignature;
       const waiting = values.flatMap(b => b.agents || []).filter(a => a.state === 'waiting_human' && !before.has(a.nativeId));
       if (waiting.length) api.notify({ title: 'Tricorder · décision attendue', body: `${waiting.length} agent(s) attendent une décision dans le terminal.` });
-      sidebar(); alertSidebar();
-      if (get().detail && $('.current-work')) {
-        const status = workStatus(get(), observations);
-        $('.current-work').className = 'current-work ' + status.kind;
-        $('.current-work strong').textContent = status.label;
-        $('.current-work span').textContent = status.text;
-      }
-      if (!get().overviewMode && ['agents', 'effort', 'release-kanban'].includes(get().view) && !$('#modal').open && document.activeElement?.id !== 'board-owner') render();
+      sidebar(); alertSidebar(); drawActivity();
+      if (changed && get().overviewMode) render();
+      if (changed && !get().overviewMode && ['agents', 'effort', 'release-kanban', 'plan'].includes(get().view) && !$('#modal').open && document.activeElement?.id !== 'board-owner') render();
     } catch (error) { toast(error.message); }
     finally { reading = false; }
   }
@@ -97,7 +98,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   }
   function nativePanel() {
     const rows = currentObservations();
-    return `<section class="native-panel"><div class="section-title"><h2>Observation native</h2><div class="cockpit-actions">${action('associate', 'Associer une session')}${action('handoff', 'Fiche de reprise')}</div></div><p class="muted">Dernier événement connu, pas une mesure de « réflexion ». Après 90 s sans événement, l’activité actuelle reste inconnue.</p>${rows.map(b => `<article class="info-card native-binding"><div class="card-title">${providerIcon(b.provider)}<h3>${esc(b.provider)} · ${esc(b.nativeId || 'À démarrer')}</h3></div><p>${badge('series', b.role || 'orchestrator')} ${esc(b.task ? 'Tâche ' + b.task : b.release ? 'Release complète' : 'Projet sans release')} · ${esc(b.flow || 'Sans workflow')} · ${esc(b.terminal ? 'terminal ' + b.terminal.slice(0, 8) : 'sans terminal')}</p><small>${b.since ? when(b.since) : 'Début de session'} → ${b.until ? when(b.until) : 'Dernier événement'}</small>${(b.agents || []).map(a => `<div class="native-agent ${a.parentId ? 'child-agent' : ''}"><code>${esc(a.nativeId)}</code>${a.parentId ? `<small>↳ parent : ${esc(a.parentId)}</small>` : ''}${badge(a.stale ? 'unverified' : a.state, a.stale ? 'Actuellement inconnu' : states[a.state])}<small>Dernier état : ${esc(states[a.state])}${a.tool ? ' · ' + esc(a.tool) : ''} · ${when(a.lastAt)}</small><button class="text-button" data-native-events="${esc(b.id)}" data-native-agent="${esc(a.nativeId)}">Voir les événements (${a.events.length})</button></div>`).join('')}${(b.warnings || []).map(w => `<div class="note warning">${esc(w)}</div>`).join('')}<div class="cockpit-actions"><button class="text-button" data-forget-native="${esc(b.id)}">Retirer l’association</button></div></article>`).join('') || '<div class="note">Associez un historique JSONL Codex/Claude, ou préparez un lancement Claude avec hooks. Aucun historique personnel n’est parcouru automatiquement.</div>'}</section>`;
+    return `<section class="native-panel"><div class="section-title"><h2>Observation native</h2><div class="cockpit-actions">${action('associate', 'Associer une session')}${action('handoff', 'Fiche de reprise')}</div></div><p class="muted">État issu des événements du fournisseur. Une commande longue peut rester active sans nouvelle sortie ; une rupture du suivi est signalée.</p>${rows.map(b => `<article class="info-card native-binding"><div class="card-title">${providerIcon(b.provider)}<h3>${esc(b.provider)} · ${esc(b.nativeId || 'À démarrer')}</h3></div><p>${badge('series', b.role || 'orchestrator')} ${esc(b.task ? 'Tâche ' + b.task : b.release ? 'Release complète' : 'Projet sans release')} · ${esc(b.flow || 'Sans workflow')} · ${esc(b.terminal ? 'terminal ' + b.terminal.slice(0, 8) : 'sans terminal')}</p><small>${b.since ? when(b.since) : 'Début de session'} → ${b.until ? when(b.until) : 'Dernier événement'}</small>${(b.agents || []).map(a => `<div class="native-agent ${a.parentId ? 'child-agent' : ''}"><code>${esc(a.nativeId)}</code>${a.parentId ? `<small>↳ parent : ${esc(a.parentId)}</small>` : ''}${badge(a.stale ? 'unverified' : a.state, a.stale ? 'Actuellement inconnu' : states[a.state])}<small>Dernier état : ${esc(states[a.state])}${a.tool ? ' · ' + esc(a.tool) : ''} · ${when(a.lastAt)}</small><button class="text-button" data-native-events="${esc(b.id)}" data-native-agent="${esc(a.nativeId)}">Voir les événements (${a.events.length})</button></div>`).join('')}${(b.warnings || []).map(w => `<div class="note warning">${esc(w)}</div>`).join('')}<div class="cockpit-actions"><button class="text-button" data-forget-native="${esc(b.id)}">Retirer l’association</button></div></article>`).join('') || '<div class="note">Associez un historique JSONL Codex/Claude, ou préparez un lancement Claude avec hooks. Aucun historique personnel n’est parcouru automatiquement.</div>'}</section>`;
   }
   function measures() {
     const rows = currentObservations().filter(b => b.provider !== 'codex-runtime');
@@ -106,7 +107,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function missionView() {
     const s = get(), rows = currentObservations();
     const waiting = rows.flatMap(b => b.agents || []).filter(a => a.state === 'waiting_human').length;
-    return `<div class="page"><div class="section-title"><h2>Qui fait quoi ?</h2>${badge(waiting ? 'waiting_human' : 'series', waiting ? `${waiting} décision(s) attendue(s)` : s.selectedTask ? 'Tâche ' + s.selectedTask : 'Release complète')}</div><p class="muted">Les workflows indiquent la responsabilité ; les sessions associées indiquent le dernier état observé.</p>${missionCards({ s, rows, esc, badge })}${nativePanel()}<details class="flow-log"><summary>Autres terminaux et missions du projet</summary>${s.sessions.filter(t => t.project === s.current).map(t => `<button class="file-row" data-session="${t.id}">${providerIcon(t.provider)}<strong>${esc(t.program || 'Shell')}</strong><span>${esc(t.release || 'Sans release')} / ${esc(t.task || 'Release complète')} · ${t.alive ? 'processus actif' : 'arrêté'}</span></button>`).join('')}</details></div>`;
+    return `<div class="page"><div class="section-title"><h2>Activité des agents</h2>${badge(waiting ? 'waiting_human' : 'series', waiting ? `${waiting} décision(s) attendue(s)` : s.selectedTask ? 'Tâche ' + s.selectedTask : 'Toutes les tâches')}</div><p class="muted">Les workflows indiquent la responsabilité ; les sessions associées indiquent le dernier état observé.</p>${activityPanel()}<details class="mission-history"><summary>Responsabilités et historique des missions</summary>${missionCards({ s, rows, esc, badge })}</details>${nativePanel()}<details class="flow-log"><summary>Autres terminaux et missions du projet</summary>${s.sessions.filter(t => t.project === s.current).map(t => `<button class="file-row" data-session="${t.id}">${providerIcon(t.provider)}<strong>${esc(t.program || 'Shell')}</strong><span>${esc(t.release || 'Sans release')} / ${esc(t.task || 'Release complète')} · ${t.alive ? 'processus actif' : 'arrêté'}</span></button>`).join('')}</details></div>`;
   }
   function effortView() {
     const { detail } = get(), report = detail.effort, bindings = withoutPreparationOverlap(currentObservations(true), report?.preparationSessions);
@@ -124,8 +125,9 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     for (const row of rows) row.share = timeShare(row.actual, releaseTotal);
     effortRows = rows;
     const summary = summarizeMeasures(rows), total = summary.actual;
+    const initial = knownSum(rows.filter(r => r.phase !== 'preparation').map(r => r.initial));
     effortTotals = { initial: knownSum(rows.filter(r => r.phase !== 'preparation').map(r => r.initial)), ...summary };
-    return `<div class="page"><div class="section-title"><h2>Prévu, réalisé, écart</h2>${action('associate', 'Activer le suivi d’une session')}</div><div class="metrics"><div class="metric"><span>PRÉVISION INITIALE</span><strong>${minutes(knownSum(rows.map(r => r.initial)))}</strong></div><div class="metric"><span>RÉALISÉ ATTRIBUÉ</span><strong>${minutes(total)}</strong><small>${total == null ? 'Au moins une tâche sans mesure' : 'Tours / périodes mesurés, pas du temps de calcul pur'}</small></div><div class="metric"><span>SESSIONS ASSOCIÉES</span><strong>${bindings.length}</strong><small>Collecte locale toutes les 5 secondes</small></div></div>${!bindings.length ? `<div class="effort-state"><h3>Pourquoi le réalisé peut-il être vide ?</h3><p>L’ouverture d’un terminal n’est pas du temps de travail. Associez la session native à sa tâche et à sa période pour importer les durées disponibles. Les estimations existantes restent conservées.</p>${action('associate', 'Associer ma session')}</div>` : ''}<div class="table-scroll"><table><thead><tr><th>Tâche</th><th>Initial</th><th>Révisé</th><th>Réalisé</th><th>Écart indicatif</th><th>Source</th></tr></thead><tbody>${rows.map(r => `<tr><td><strong>${esc(r.id)}</strong><small>${esc(r.title)}</small></td><td>${hours(r.initial)}</td><td>${hours(r.revised)}</td><td>${hours(r.actual)}${r.partial ? '<small>Partiel</small>' : ''}${r.missingRoles.length ? `<small>À compléter : ${esc(r.missingRoles.map(role => ({ 'odoo-developer': 'développement', 'odoo-tester': 'QA', orchestrateur: 'coordination' })[role] || role).join(', '))}</small>` : ''}</td><td>${r.delta == null ? '—' : (r.delta > 0 ? '+' : '') + Math.round(r.delta) + ' min'}</td><td>${esc(r.basis)}</td></tr>`).join('') || '<tr><td colspan="6">Aucun plan ni estimation. Préparez /odoo-plan puis /odoo-estimate dans votre agent.</td></tr>'}</tbody></table></div><p class="muted">Le réalisé enregistré fait foi lorsqu’il est complet ; les observations natives servent sinon de suivi provisoire. Ces deux sources ne sont jamais additionnées. Un écart partiel n’est pas un bilan de clôture.</p>${(report?.warnings || []).map(w => `<div class="note warning">${esc(w)}</div>`).join('')}${measures()}</div>`;
+    return `<div class="page"><div class="section-title"><h2>Prévu, réalisé, écart</h2>${action('associate', 'Activer le suivi d’une session')}</div><div class="metrics"><div class="metric" data-metric="initial"><span>PRÉVISION INITIALE</span><strong class="${initial == null ? 'metric-empty' : ''}">${initial == null ? 'Non estimé' : hours(initial)}</strong></div><div class="metric" data-metric="actual"><span>RÉALISÉ ATTRIBUÉ</span><strong class="${total == null ? 'metric-empty' : ''}">${hours(total)}</strong><small>${total == null ? 'Au moins une tâche sans mesure' : 'Tours / périodes mesurés, pas du temps de calcul pur'}</small></div><div class="metric" data-metric="tasks"><span>SESSIONS ASSOCIÉES</span><strong>${bindings.length}</strong><small>Collecte locale toutes les 5 secondes</small></div></div>${!bindings.length ? `<div class="effort-state"><h3>Pourquoi le réalisé peut-il être vide ?</h3><p>L’ouverture d’un terminal n’est pas du temps de travail. Associez la session native à sa tâche et à sa période pour importer les durées disponibles. Les estimations existantes restent conservées.</p>${action('associate', 'Associer ma session')}</div>` : ''}<div class="table-scroll"><table><thead><tr><th>Tâche</th><th>Initial</th><th>Révisé</th><th>Réalisé</th><th>Écart indicatif</th><th>Source</th></tr></thead><tbody>${rows.map(r => `<tr><td><strong>${esc(r.id)}</strong><small>${esc(r.title)}</small></td><td>${hours(r.initial)}</td><td>${hours(r.revised)}</td><td>${hours(r.actual)}${r.partial ? '<small>Partiel</small>' : ''}${r.missingRoles.length ? `<small>À compléter : ${esc(r.missingRoles.map(role => ({ 'odoo-developer': 'développement', 'odoo-tester': 'QA', orchestrateur: 'coordination' })[role] || role).join(', '))}</small>` : ''}</td><td>${r.delta == null ? '—' : (r.delta > 0 ? '+' : '') + Math.round(r.delta) + ' min'}</td><td>${esc(r.basis)}</td></tr>`).join('') || '<tr><td colspan="6">Aucun plan ni estimation. Préparez /odoo-plan puis /odoo-estimate dans votre agent.</td></tr>'}</tbody></table></div><p class="muted">Le réalisé enregistré fait foi lorsqu’il est complet ; les observations natives servent sinon de suivi provisoire. Ces deux sources ne sont jamais additionnées. Un écart partiel n’est pas un bilan de clôture.</p>${(report?.warnings || []).map(w => `<div class="note warning">${esc(w)}</div>`).join('')}${measures()}</div>`;
   }
   function expressView() {
     const flows = get().detail.express || [];
@@ -169,9 +171,41 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     if (!stack) return '';
     return `<section class="native-panel"><div class="section-title"><h2>Stack locale & fraîcheur</h2><div class="cockpit-actions">${action('profile', 'Configurer le projet')}${action('palette-env', 'Configurer un environnement')}</div></div><code class="path">${esc(stack.root)}</code><div class="module-chips">${stack.files.map(f => badge(f.present ? 'validated' : 'pending', `${f.name} · ${f.present ? 'présent' : 'absent'}`)).join('')}${stack.tools.map(t => badge(t.installed ? 'series' : 'pending', `${t.name} · ${t.installed ? 'installé' : 'non trouvé'}`)).join('')}</div><p>Dernière restauration déclarée : ${when(stack.restoredAt)}${stack.ageDays != null ? ' · ' + Math.floor(stack.ageDays) + ' jour(s)' : ''}</p><small>${esc(stack.basis)} ${esc(stack.services)}. Présence des fichiers ≠ stack opérationnelle.</small></section>`;
   }
+  function activeRows() { return get().detail ? activities(get().detail, currentObservations(true)) : []; }
+  function activityPanel() {
+    const rows = activeRows().filter(a => a.executing || a.waiting || a.stale);
+    return `<section class="live-activities"><h3>Activité actuelle</h3>${rows.map(a => `<article class="activity-row ${a.executing ? 'executing' : ''}"><strong>${esc(a.task || 'Orchestration')} · ${esc(a.label)}</strong><span>${esc([a.provider, a.role, a.model, a.stage].filter(Boolean).join(' · '))}</span>${timerMarkup(a, esc)}${a.task ? `<button class="text-button" data-task="${esc(a.task)}">Voir la tâche</button>` : ''}</article>`).join('') || '<p>Aucune activité confirmée. Les responsabilités enregistrées restent disponibles ci-dessous.</p>'}</section>`;
+  }
+  function drawActivity() {
+    const strip = $('#activity-strip'); if (!strip) return;
+    strip.hidden = !get().detail || get().overviewMode;
+    const rows = activeRows(), running = rows.filter(a => a.executing), waiting = rows.filter(a => a.waiting);
+    const html = `<button class="text-button" data-cockpit="activity">En cours : ${running.length} activité${running.length > 1 ? 's' : ''} · ${waiting.length} en attente</button><span>${esc([...running, ...waiting].map(a => [a.task || 'Orchestration', a.label].join(' · ')).join(' / ') || 'Aucune activité confirmée')}</span>`;
+    if (strip.innerHTML !== html) strip.innerHTML = html;
+  }
+  function drawQuotas() {
+    let root = $('#provider-quotas');
+    if (!root) { root = document.createElement('div'); root.id = 'provider-quotas'; root.className = 'provider-quotas'; $('.topbar').prepend(root); }
+    root.innerHTML = ['codex', 'claude'].map(provider => {
+      const snapshot = quotaSnapshots.find(q => q.provider === provider);
+      const q = quotaPresentation(snapshot || { provider });
+      const windows = q.windows;
+      const text = windows.map(w => `${w.label || (w.windowMinutes === 300 ? '5 h' : w.windowMinutes === 10080 ? '7 j' : w.windowMinutes + ' min')} ${w.text}`).join(' · ');
+      return `<button class="quota-chip" data-severity="${windows.some(w => w.severity === 'danger') ? 'danger' : windows.some(w => w.severity === 'warning') ? 'warning' : 'normal'}" data-cockpit="quotas" title="${provider === 'codex' ? 'OpenAI · Codex' : 'Anthropic · Claude'} · ${esc(text || 'Quotas indisponibles')}" aria-label="Limites ${provider}, ${esc(text || 'indisponibles')}">${providerIcon(provider)} <span>${esc(text || '—')}</span></button>`;
+    }).join('');
+  }
+  async function refreshQuotas() {
+    if (quotaReading || !api.cockpit.quotas) return;
+    quotaReading = true;
+    try { quotaSnapshots = await api.cockpit.quotas(); drawQuotas(); }
+    catch { quotaSnapshots = []; drawQuotas(); }
+    finally { quotaReading = false; }
+  }
   function augment() {
     applyPreferences();
     alertSidebar();
+    drawActivity();
+    drawQuotas();
     const s = get();
     if (s.overviewMode) {
       const entries = s.projects.flatMap(p => [...(p.attention || []), ...(p.warnings || []).map(() => ({}))]);
@@ -195,6 +229,8 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     }
     const page = $('#content .page') || $('#content');
     if (s.view === 'agents') $('#content').innerHTML = missionView();
+    if (s.view === 'plan') $('#content').innerHTML = planUI.plan();
+    if (s.view === 'intentions') $('#content').innerHTML = planUI.intentions();
     if (s.view === 'express') $('#content').innerHTML = expressView();
     if (s.view === 'release-kanban') board.draw();
     if (s.view === 'effort') {
@@ -240,9 +276,6 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       }
       $('#content .page').insertAdjacentHTML('beforeend', tokenPanel());
       $('#content .table-scroll').insertAdjacentHTML('afterend', `<section class="agent-allocation"><h3>Répartition entre agents · ${s.selectedTask ? 'tâche ' + esc(s.selectedTask) : 'release'}</h3><p class="muted">Parts du temps connu${effortTotals.partial ? ' · relevé partiel' : ''}. Les périodes non mesurées ne valent pas zéro.</p>${allocation.map(a => `<div class="allocation-row" data-allocation-agent="${esc(a.agent)}"><span>${esc(a.label)}</span><span>${hours(a.actual)}${a.partial ? ' · partiel' : ''}</span><strong>${percent(a.share)}</strong></div>`).join('') || '<p class="muted">Aucune répartition disponible.</p>'}</section>`);
-      const figures = document.querySelectorAll('#content .metrics .metric strong');
-      figures[0].textContent = hours(effortTotals.initial);
-      figures[1].textContent = hours(effortTotals.actual);
       if (!s.detail.selectedRelease) $('#content .agent-allocation h3').textContent = 'Répartition entre agents · projet';
     }
     if (s.view === 'sources') page.insertAdjacentHTML('beforeend', sourcesExtra());
@@ -252,10 +285,6 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       page.insertAdjacentHTML('beforeend', stackPanel());
     }
     if (s.view === 'documents') $('#content').innerHTML = filesView();
-    if (s.view === 'plan') for (const card of page.querySelectorAll('.task-card')) {
-      const t = s.detail.tasks.find(t => t.id === card.dataset.task);
-      card.querySelector('.task-description')?.insertAdjacentHTML('beforeend', `<div class="task-acceptance"><strong>Critères d’acceptation</strong><ul>${(t?.acceptance || []).map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`);
-    }
     if (['agents', 'plan'].includes(s.view) && s.detail.selectedRelease) ($('#content .page') || $('#content')).insertAdjacentHTML('beforeend', qualityPanel(s.detail.quality, s.selectedTask));
     lifecycleUI({ s, esc, badge, when });
     if (s.view === 'terminal' && !s.detail.selectedRelease && !$('#inspector').hidden) {
@@ -278,7 +307,6 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     }
     const selectedRelease = s.detail.releases.find(r => r.id === s.detail.selectedRelease);
     if (selectedRelease) $('#release-select').insertAdjacentHTML('afterend', `<span class="release-summary">${badge(selectedRelease.status, selectedRelease.status === 'ouverte' ? 'Ouverte' : selectedRelease.status === 'close' ? 'Close' : selectedRelease.status)}<span>${esc(selectedRelease.id.slice(0, 10))}</span></span>`);
-    const status = workStatus(s, observations);
     $('#release-select').parentElement.classList.add('release-context');
     $('#release-select').parentElement.firstChild.textContent = 'RELEASE CONSULTÉE';
     const completed = s.detail.tasks.filter(t => t.status === 'validated').length;
@@ -397,6 +425,8 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         case 'bind': if (await api.cockpit.bind(formAssociation())) { $('#modal').close(); await refreshNative(); render(); } break;
         case 'claude-hooks': commandModal(await api.cockpit.prepareClaude(formAssociation())); await refreshNative(); break;
         case 'copy-command': await api.clipboard.write(prepared); toast('Commande copiée, non exécutée.'); break;
+        case 'quotas': modal('<h2>Limites des comptes</h2>' + quotaPanel(quotaSnapshots, esc)); $('#modal .quota-panel').open = true; break;
+        case 'activity': setView('agents'); break;
         case 'graph': graphOn = !graphOn; render(); break;
         case 'profile': profileForm(); $('#modal-content').insertAdjacentHTML('beforeend', `<h3>Emplacements propres à ce projet</h3><div class="cockpit-actions">${action('working-directory', 'Dossier de travail')}${action('community-root', 'Sources Community')}${action('enterprise-root', 'Sources Enterprise')}</div><p class="muted">Dossier des nouveaux terminaux : ${esc(get().settings.profiles?.[get().current]?.workingDirectory || get().current)}. Les terminaux existants gardent leur dossier.</p>`); break;
         case 'working-directory': if (await api.cockpit.profileFolder(get().current, 'workingDirectory')) { await reloadProject(); $('#modal').close(); } break;
@@ -450,5 +480,8 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   });
   $('.top-actions').insertAdjacentHTML('afterbegin', '<button class="text-button" data-view="project">Projet</button><button class="text-button" data-cockpit="palette" title="Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
   setInterval(refreshNative, 5000);
-  return { augment, refreshNative, applyPreferences, alertSidebar, rememberBoard: board.remember, openTask: board.openTask };
+  setInterval(() => tickTimers(), 1000);
+  setInterval(refreshQuotas, 30000);
+  refreshQuotas();
+  return { allObservations: () => observations, augment, refreshNative, applyPreferences, alertSidebar, rememberBoard: board.remember, openTask: board.openTask };
 }

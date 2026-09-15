@@ -1,0 +1,78 @@
+{
+  "scope": "50 t\u00e2ches synth\u00e9tiques, six nouveaux processus lecteur par variante, m\u00eame Crew actuel, cache disque chaud ; pas mesure compl\u00e8te client",
+  "baseline": "9792781",
+  "results": [
+    {
+      "variant": "before",
+      "samples": [
+        {
+          "wall_ms": 59.06,
+          "cpu_ms": 58.61,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 73.53,
+          "cpu_ms": 72.99,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 64.5,
+          "cpu_ms": 64.02,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 57.83,
+          "cpu_ms": 57.3,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 70.12,
+          "cpu_ms": 69.63,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 59.29,
+          "cpu_ms": 58.85,
+          "disk_input_blocks": 0
+        }
+      ],
+      "median_warm_wall_ms": 64.5
+    },
+    {
+      "variant": "after",
+      "samples": [
+        {
+          "wall_ms": 58.36,
+          "cpu_ms": 57.88,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 60.24,
+          "cpu_ms": 59.7,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 56.77,
+          "cpu_ms": 56.31,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 63.44,
+          "cpu_ms": 62.94,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 89.4,
+          "cpu_ms": 88.75,
+          "disk_input_blocks": 0
+        },
+        {
+          "wall_ms": 80.8,
+          "cpu_ms": 79.75,
+          "disk_input_blocks": 0
+        }
+      ],
+      "median_warm_wall_ms": 63.44
+    }
+  ]
+}

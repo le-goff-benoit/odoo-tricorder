@@ -114,7 +114,7 @@ test('simplified workspace: task dialogs, agent identity, preferences and launch
     await page.keyboard.press('Escape');
     await expect(page.locator('#task-modal')).not.toBeVisible();
     await expect(page.locator('[data-release-task="T02"]')).toBeFocused();
-    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(3);
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(4);
     await page.screenshot({ path: 'test-results/kanban-simplified.png' });
     await page.locator('#tabs [data-view="effort"]').click();
     await expect(page.locator('[data-cockpit="associate"], .open-timers, .effort-live-hint')).toHaveCount(0);
@@ -176,18 +176,18 @@ test('global Kanban: all projects, closed-release filter and exact task navigati
     await page.locator('[data-view="kanban"]').click();
     await expect(page.locator('#project-title')).toHaveText('Kanban global');
     await expect(page.locator('#context-bar')).toBeHidden();
-    await expect(page.locator('.kanban-card')).toHaveCount(4);
+    await expect(page.locator('.kanban-card')).toHaveCount(6);
     await expect(page.locator('.kanban-board')).toContainText('orbital-industries');
     await expect(page.locator('.kanban-board')).toContainText('nova-services');
     await expect(page.locator('.kanban-board')).toContainText('Codex · développeur');
     await expect(page.locator('.kanban-card[draggable="true"]')).toHaveCount(0);
     await expect(page.locator('.kanban-board')).toBeInViewport();
     await page.locator('[data-action="kanban-closed"]').click();
-    await expect(page.locator('.kanban-card')).toHaveCount(5);
+    await expect(page.locator('.kanban-card')).toHaveCount(8);
     await expect(page.locator('.kanban-board')).toContainText('Archive Orbital');
     await page.locator('[data-action="refresh"]').evaluate(el => el.click());
     await expect(page.locator('#sync-status')).toContainText('À jour');
-    await expect(page.locator('.kanban-card')).toHaveCount(5);
+    await expect(page.locator('.kanban-card')).toHaveCount(8);
     await page.screenshot({ path: 'test-results/global-kanban.png' });
     await page.locator('.kanban-card').filter({ hasText: 'Contrôler les livraisons Nova' }).click();
     await expect(page.locator('#project-title')).toHaveText('nova-services');
@@ -228,10 +228,10 @@ test('release Kanban: receipts, criteria, filters, live refresh and existing ter
     await expect(page.locator('.terminal-tab')).toHaveCount(1);
     const [terminal] = await page.evaluate(() => window.tricorder.terminals.list());
     await page.locator('#tabs [data-view="release-kanban"]').click();
-    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(3);
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(4);
     await expect(page.locator('.release-kanban [data-column="done"]')).toContainText('T01');
-    await expect(page.locator('.board-count')).toContainText('1 tâches réceptionnées sur 3');
-    await expect(page.locator('.release-kanban [data-column="done"]')).toContainText('preuves à revérifier');
+    await expect(page.locator('.board-count')).toContainText('1 réceptionnée · 3 tâches');
+    await expect(page.locator('.release-kanban [data-column="done"]')).toContainText('Contrôle à actualiser');
     await page.locator('[data-release-task="T02"]').click();
     await expect(page.locator('.board-detail')).toContainText('Développement du module');
     await expect(page.locator('.board-detail')).toContainText('Codex · développeur');
@@ -240,7 +240,7 @@ test('release Kanban: receipts, criteria, filters, live refresh and existing ter
     await expect(page.locator('.board-detail')).toContainText('100 %');
     await expect(page.locator('.board-detail')).toContainText('10 exécutés');
     await expect(page.locator('.board-detail')).toContainText('Périmètre et critères vérifiés.');
-    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(3);
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(4);
     await page.locator('[data-board-close]').click();
     await page.locator('#board-owner').selectOption('Codex · développeur');
     await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
@@ -261,7 +261,7 @@ test('release Kanban: receipts, criteria, filters, live refresh and existing ter
     await page.locator('#tabs [data-view="release-kanban"]').click();
     await page.locator('#release-select').selectOption(oldId);
     await expect(page.locator('.board-detail')).toHaveCount(0);
-    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
+    await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(2);
     await expect(page.locator('.release-kanban')).toContainText('Autre tâche homonyme');
     await page.locator('#release-select').selectOption(releaseId);
     await expect(page.locator('#task-modal')).not.toBeVisible();
@@ -302,12 +302,13 @@ test('design system: common gutters, cards and controls across every project vie
   try {
     const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).not.toHaveValue('');
-    for (const [width, gutter] of [[1440, 24], [1000, 16]]) {
+    for (const [width, height, zoom, gutter] of [[1440, 900, 1, 24], [1000, 900, 1, 16], [1000, 700, 1.25, 16]]) {
       await app.evaluate(({ BrowserWindow }, width) => { const w = BrowserWindow.getAllWindows()[0]; w.setMinimumSize(800, 600); w.setSize(width, 900); }, width);
       // A tiling desktop can refuse setSize. Exercise the CSS viewport explicitly.
-      await page.setViewportSize({ width, height: 900 });
-      await expect.poll(() => page.evaluate(() => window.innerWidth)).toBe(width);
-      for (const view of ['plan', 'release-kanban', 'express', 'agents', 'effort', 'documents', 'sources', 'environments']) {
+      await app.evaluate(({ BrowserWindow }, zoom) => BrowserWindow.getAllWindows()[0].webContents.setZoomFactor(zoom), zoom);
+      await page.setViewportSize({ width, height });
+      await expect.poll(() => page.evaluate(() => window.innerWidth)).toBe(Math.floor(width / zoom));
+      for (const view of ['intentions', 'plan', 'release-kanban', 'express', 'agents', 'effort', 'documents', 'sources', 'environments']) {
         if (['documents', 'sources', 'environments'].includes(view)) await projectView(page, view);
         else await page.locator(`#tabs [data-view="${view}"]`).click();
         await expect(page.locator('#content > .page')).toBeVisible();
@@ -333,7 +334,7 @@ test('design system: common gutters, cards and controls across every project vie
         for (const margin of styles.gridMargins) expect(margin, 'Grid owns spacing, no double margin').toBe('0px');
         for (const margin of styles.sectionGaps) expect(margin, 'Section rhythm').toBe(`${gutter}px`);
         for (const button of styles.buttons) expect(button, view).toEqual(['12px', '8px', '36px']);
-        await page.screenshot({ path: `test-results/design-${view}-${width}.png` });
+        await page.screenshot({ path: `test-results/design-${view}-${width}-${height}-zoom${zoom}.png` });
       }
       await page.locator('[data-cockpit="preferences"]').click();
       await expect(page.locator('#modal')).toBeVisible();
@@ -371,7 +372,7 @@ test('preparation: project scope becomes release scope without a duplicate or a 
     await expect(page.locator('.phase-breakdown [data-phase="preparation"]')).toContainText('0 h 10 min');
     await expect(page.locator('.phase-breakdown [data-phase="preparation"]')).toContainText('100 %');
     await expect(page.locator('.token-allocation tbody')).toContainText('Préparation du plan');
-    await expect(page.locator('.metric').nth(0).locator('strong')).toHaveText('Non mesuré');
+    await expect(page.locator('[data-metric=initial] strong')).toHaveText('Non estimé');
     const before = fs.readFileSync(file, 'utf8');
     await page.locator('[data-action="refresh"]').evaluate(el => el.click());
     await expect(page.locator('#sync-status')).toContainText('À jour');
@@ -818,8 +819,8 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     await expect(page.locator('#project-title')).toHaveText('orbital-industries');
     await expect(page.locator('#release-select')).toHaveValue('2026-09-11_01_facturation-et-maintenance');
     await page.locator('[data-view="plan"]').click();
-    await expect(page.locator('.task-card')).toHaveCount(3);
-    await expect(page.locator('[data-task="T01"]')).toContainText('À revalider');
+    await expect(page.locator('.task-card')).toHaveCount(4);
+    await expect(page.locator('[data-task="T01"]')).toContainText('Contrôle à actualiser');
     await page.locator('[data-task="T02"]').click();
     await expect(page.locator('#task-modal')).toBeVisible();
     await page.locator('[data-board-close]').click();
@@ -939,8 +940,8 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await expect(page.locator('#environment-select').locator('..')).not.toContainText('REPÈRE');
     await page.locator('[data-view="plan"]').click();
     await expect(page.locator('.release-state')).toContainText('Close');
-    await expect(page.locator('.task-card')).toHaveCount(2);
-    await expect(page.locator('.task-card[data-task="P1"]')).toContainText('Terminée');
+    await expect(page.locator('.task-card')).toHaveCount(3);
+    await expect(page.locator('.task-card[data-task="P1"]')).toContainText('réception non vérifiée');
     await page.locator('#tabs [data-view="terminal"]').click();
     await expect(page.locator('#release-select')).toHaveValue(historical);
     expect((await page.evaluate(() => window.tricorder.terminals.list())).length).toBe(1);
@@ -1139,7 +1140,7 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await expect(page.locator('#content')).not.toContainText('Mesures natives attribuées');
     await expect(page.locator('#content')).not.toContainText('odoo_usage.py');
     await page.locator('[data-view="agents"]').click();
-    await expect(page.locator('#content')).toContainText('Qui fait quoi');
+    await expect(page.locator('#content')).toContainText('Activité des agents');
     await expect(page.locator('[data-cockpit="associate"]')).toHaveCount(0);
     await page.evaluate(({ project, releaseId }) => window.tricorder.cockpit.bind({ project, release: releaseId, task: 'T02', flow: '.odoo-agents/flows/maintenance.json', provider: 'codex' }), { project, releaseId });
     await page.locator('[data-action="refresh"]').click();
@@ -1150,7 +1151,8 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await page.locator('[data-board-filter="waiting"]').click();
     await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
     await expect(page.locator('.release-kanban .kanban-card')).toContainText('T02');
-    await expect(page.locator('.release-kanban .provider-icon[aria-label="Codex"]')).toHaveCount(1);
+    await expect(page.locator('.release-kanban .provider-icon[aria-label="OpenAI"]')).toHaveCount(1);
+    await expect(page.locator('.release-kanban .board-owner')).toContainText('Responsable déclaré');
     await page.locator('[data-release-task="T02"]').click();
     await expect(page.locator('.board-detail')).toContainText('Votre décision est attendue');
     await expect(page.locator('.board-detail')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
@@ -1177,7 +1179,8 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await page.locator('[data-action="modal-close"]').click();
     await page.screenshot({ path: 'test-results/roadmap-effort.png' });
     await page.locator('[data-view="plan"]').click();
-    await expect(page.locator('.task-acceptance')).toHaveCount(3);
+    await expect(page.locator('.task-acceptance')).toHaveCount(0);
+    await expect(page.locator('[data-plan-mode="graph"]')).toBeVisible();
     await expect(page.locator('[data-cockpit="graph"]')).toHaveCount(0);
     await expect(page.locator('[data-cockpit="handoff"]')).toHaveCount(0);
     await projectView(page, 'environments');
@@ -1237,5 +1240,159 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     if (app) await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
     await cleanupBroker(path.join(temp, 'run/pty.sock'));
     fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('intentions, dependency graph and concurrent activities remain usable at compact size and zoom', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-intentions-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  write(path.join(project, 'changelog', releaseId, 'intentions.json'), { schema: 1, revision: 1, items: [
+    { id: 'I01', text: 'Conserver la demande originale et ses décisions.', purpose: 'Rendre les factures fiables', status: 'planned',
+      source: { path: `changelog/${releaseId}/demande.md`, original: 'Source figée initiale' }, tasks: ['T01', 'T03'], constraints: ['Copie locale'], questions: [], decisions: [{ at: '2026-09-15', text: 'Contrôler la somme des parties.' }] },
+  ] });
+  const now = new Date().toISOString();
+  write(path.join(project, '.odoo-agents/orchestration.json'), { schema: 1, id: 'main-stable', project, release: releaseId,
+    status: 'active', phase: 'Examine le résultat de T01', owner: 'Codex principal', provider: 'codex', model: 'principal',
+    started_at: now, phase_started_at: now, updated_at: now, authorized_tasks: ['T01', 'T02', 'T03'] });
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  const errors = [];
+  try {
+    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await app.evaluate(({ ipcMain }, { project, releaseId, now }) => {
+      ipcMain.removeHandler('observations');
+      ipcMain.handle('observations', () => ['T02', 'T03'].map((task, i) => ({ id: task, project, release: releaseId, task, provider: 'claude', role: i ? 'odoo-tester' : 'odoo-developer',
+        agents: [{ nativeId: task, state: i ? 'tool' : 'active', stale: false, startedAt: now, stageStartedAt: now, lastAt: now, events: [] }] })));
+    }, { project, releaseId, now });
+    await expect(page.locator('#activity-strip')).toContainText('3 activités', { timeout: 12000 });
+    const nav = await page.locator('#tabs [data-view]').evaluateAll(nodes => nodes.map(n => n.dataset.view));
+    expect(nav.indexOf('intentions')).toBeLessThan(nav.indexOf('plan'));
+    await page.locator('#tabs [data-view="intentions"]').click();
+    await page.locator('[data-intention="I01"]').click();
+    await expect(page.locator('.intention-detail')).toContainText('Conserver la demande originale');
+    await expect(page.locator('.intention-detail')).toContainText('Contrôler la somme des parties');
+    await page.locator('.intention-source summary').click();
+    await expect(page.locator('.intention-source pre')).toContainText('Source figée initiale');
+    await page.screenshot({ path: 'test-results/intentions-1440.png' });
+    await page.locator('.intention-detail [data-task="T01"]').click();
+    await expect(page.locator('#task-modal')).toContainText('Intentions couvertes');
+    await expect(page.locator('#task-modal [data-intention="I01"]')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await page.locator('#tabs [data-view="plan"]').click();
+    await expect(page.locator('[data-task="main-stable"]')).toContainText('Orchestration');
+    await page.locator('[data-plan-filter="executing"]').click();
+    await expect(page.locator('.task-card')).toHaveCount(3);
+    await page.locator('[data-plan-filter="all"]').click();
+    await page.locator('[data-plan-mode="graph"]').click();
+    await page.locator('[data-graph-select="T03"]').focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.graph-selection')).toContainText('En amont : T01, T02');
+    await expect(page.locator('[data-graph-select="T03"]')).toBeFocused();
+    expect(await page.locator('.dependency-canvas > svg').evaluate(el => el.getBoundingClientRect().width)).toBeGreaterThan(500);
+    await expect(page.locator('.dependency-edge')).toHaveCount(2);
+    const stable = await page.locator('.dependency-canvas').evaluate(el => { window.graphNodeBeforeRefresh = el; return true; });
+    expect(stable).toBe(true);
+    await page.locator('[data-action="refresh"]').evaluate(el => el.click());
+    await expect(page.locator('#sync-status')).toContainText('À jour');
+    expect(await page.locator('.dependency-canvas').evaluate(el => el === window.graphNodeBeforeRefresh)).toBe(true);
+    await page.screenshot({ path: 'test-results/dependencies-1440.png' });
+    await app.evaluate(({ BrowserWindow }) => { const win = BrowserWindow.getAllWindows()[0]; win.setSize(1000, 700); win.webContents.setZoomFactor(1.25); });
+    await page.setViewportSize({ width: 1000, height: 700 });
+    await expect(page.locator('#tabs [data-view="intentions"]')).toBeInViewport();
+    await page.locator('[data-plan-mode="list"]').click();
+    await expect(page.locator('[data-plan-mode="list"]')).toBeFocused();
+    const timerBefore = await page.locator('[data-plan-task="T02"] .activity-timer').textContent();
+    await expect(page.locator('[data-plan-task="T02"] .activity-timer')).not.toHaveText(timerBefore, { timeout: 3000 });
+    await page.locator('#tabs [data-view="agents"]').click();
+    await expect(page.locator('.activity-row')).toHaveCount(3);
+    await expect(page.locator('.mission-history')).not.toHaveAttribute('open');
+    await page.locator('#provider-quotas button').first().click();
+    await expect(page.locator('#modal')).toContainText('Limites des comptes');
+    await expect(page.locator('#modal .quota-content section')).toHaveCount(2);
+    await page.screenshot({ path: 'test-results/quotas-1000-zoom125.png' });
+    await page.keyboard.press('Escape');
+    const metrics = await page.evaluate(() => {
+      const rgb = value => value.match(/[\d.]+/g).slice(0, 3).map(Number);
+      const luminance = value => rgb(value).map(v => { v /= 255; return v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+      const ratios = [...document.querySelectorAll('.activity-row strong, .activity-row > span, #content h2')].map(el => {
+        let parent = el, background;
+        while (parent) { background = getComputedStyle(parent).backgroundColor; if (background !== 'rgba(0, 0, 0, 0)' && background !== 'transparent') break; parent = parent.parentElement; }
+        const fg = luminance(getComputedStyle(el).color), bg = luminance(background || 'rgb(0, 0, 0)');
+        return (Math.max(fg, bg) + .05) / (Math.min(fg, bg) + .05);
+      });
+      return { width: innerWidth, height: innerHeight, scrollWidth: document.documentElement.scrollWidth, ratios };
+    });
+    expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.width);
+    expect(Math.min(...metrics.ratios)).toBeGreaterThanOrEqual(4.5);
+    fs.writeFileSync('test-results/ui-measurements.json', JSON.stringify(metrics, null, 2));
+    await page.screenshot({ path: 'test-results/activities-1000-zoom125.png' });
+    await app.evaluate(({ BrowserWindow }) => { const win = BrowserWindow.getAllWindows()[0]; win.setSize(1000, 900); win.webContents.setZoomFactor(1); });
+    await page.setViewportSize({ width: 1000, height: 900 });
+    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await page.screenshot({ path: 'test-results/orchestration-1000.png' });
+    await page.locator('[data-view="kanban"]').click();
+    await page.locator('[data-action="kanban-executing"]').click();
+    await expect(page.locator('.kanban-card')).toHaveCount(3);
+    expect(errors).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('live requests appear before planning and reconcile with tasks without manual refresh', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-live-requests-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  try {
+    const page = await app.firstWindow();
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    const newRelease = '2026-09-15_01_demandes-en-direct';
+    const folder = path.join(project, 'changelog', newRelease);
+    write(path.join(folder, 'README.md'), '<!-- release ouverte -->\n# Demandes en direct');
+    const register = { schema: 1, revision: 1, items: [{ id: 'I01', text: 'Conserver exactement ma demande initiale', purpose: 'Demande reçue en direct', status: 'clarify', tasks: [] }] };
+    write(path.join(folder, 'intentions.json'), register);
+    await expect(page.locator(`#release-select option[value="${newRelease}"]`)).toHaveCount(1, { timeout: 10000 });
+    await page.locator('#release-select').selectOption(newRelease);
+    await page.locator('#tabs [data-view="plan"]').click();
+    await expect(page.locator('[data-plan-task="intention:I01"]')).toContainText('À préciser');
+    await expect(page.locator('[data-plan-task="intention:I01"] [data-task]')).toHaveCount(0);
+    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await expect(page.locator('.release-kanban [data-intention="I01"]')).toBeVisible();
+    await page.locator('[data-view="kanban"]').click();
+    await page.locator('[data-kanban-intention="I01"]').click();
+    await expect(page.locator('.intention-detail')).toContainText('Conserver exactement ma demande initiale');
+    await page.locator('#tabs [data-view="plan"]').click();
+    const source = `changelog/${newRelease}/demande.md`; write(path.join(project, source), '# Demande conservée');
+    write(path.join(folder, 'plan.json'), { schema: 1, tasks: [{ id: 'T01', title: 'Résultat retenu après revue', request: source,
+      acceptance: ['Résultat vérifié'], risk: 'normal', route: 'module', scopes: ['orbital_custom'], depends_on: [], intentions: ['I01'] }] });
+    register.items[0].status = 'planned'; register.items[0].tasks = ['T01']; register.revision++;
+    write(path.join(folder, 'intentions.json'), register);
+    await expect(page.locator('[data-plan-task="T01"]')).toContainText('Résultat retenu', { timeout: 10000 });
+    await expect(page.locator('[data-plan-task="intention:I01"]')).toHaveCount(0);
+    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await expect(page.locator('.release-kanban [data-release-task="T01"]')).toBeVisible();
+    await expect(page.locator('.release-kanban [data-intention="I01"]')).toHaveCount(0);
+    // Removing the planned task must expose the unmet request again, not lose it.
+    write(path.join(folder, 'plan.json'), { schema: 1, tasks: [] });
+    await expect(page.locator('.release-kanban [data-intention="I01"]')).toBeVisible({ timeout: 10000 });
+    await page.screenshot({ path: 'test-results/live-requests.png' });
+    await page.locator('#tabs [data-view="intentions"]').click();
+    await page.locator('.intention-card[data-intention="I01"]').click();
+    await expect(page.locator('.intention-detail')).toContainText('Conserver exactement ma demande initiale');
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });
   }
 });

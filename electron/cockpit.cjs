@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
 const quote = value => "'" + String(value).replace(/'/g, "'\\''") + "'";
-const HOOKS = ['SessionStart', 'SessionEnd', 'UserPromptSubmit', 'PreToolUse', 'PostToolUse', 'PostToolUseFailure', 'PermissionRequest', 'Notification', 'Elicitation', 'ElicitationResult', 'Stop', 'StopFailure', 'SubagentStart', 'SubagentStop'];
+const { prepareLaunch } = require('./provider-launch.cjs');
 const SKILLS = {
   'odoo-plan': 'Préparer une release et ses critères', 'odoo-start': 'Exécuter ou reprendre le plan',
   'odoo-new': 'Traiter une demande de développement', 'odoo-support': 'Diagnostiquer un ticket',
@@ -13,7 +13,7 @@ const SKILLS = {
 
 function wireCockpit({ handle, dialog, shell, window, settings, save, checkedProject, catalog, terminal, stateDir, backend, home }) {
   settings.bindings ||= []; settings.profiles ||= {}; settings.ui ||= {};
-  let observing;
+  let observing, readingQuotas, quotaCache, quotaReadAt = 0;
   async function observeAll() {
     const bindings = settings.bindings.filter(b => { try { checkedProject(b.project); return true; } catch { return false; } });
     const result = new Array(bindings.length);
@@ -64,7 +64,7 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
       if (settings.bindings.some(b => b.id !== binding.id && overlap(b, binding))) throw new Error('Période déjà associée ; mesures exclues pour éviter un double compte');
       return { ...binding, ...data };
     } catch (error) {
-      return { ...binding, agents: [], usage: null, warnings: [binding.pending && !binding.nativeId ? 'En attente du premier événement Claude.' : error.message] };
+      return { ...binding, agents: [], usage: null, warnings: [binding.pending && !binding.nativeId ? `En attente du premier événement ${binding.provider.startsWith('codex') ? 'Codex' : 'Claude'}.` : error.message] };
     }
   }
   handle('observations', async project => {
@@ -72,6 +72,16 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
     // Avoid overlapping periodic scans, including large native histories.
     if (!observing) observing = observeAll().finally(() => { observing = null; });
     return (await observing).filter(b => !project || b.project === project);
+  });
+  handle('quotas', async () => {
+    // Account quotas are global, never summed across projects or sessions.
+    if (quotaCache && Date.now() - quotaReadAt < 30000) return quotaCache;
+    const folder = stateDir && path.join(stateDir, 'observations');
+    const sources = [...new Set(settings.bindings.map(b => b.quotaSource).filter(source => typeof source === 'string' && folder &&
+      path.dirname(source) === folder && /^[\w-]+\.quota\.json$/.test(path.basename(source))))];
+    if (!readingQuotas) readingQuotas = catalog({ action: 'quotas', sources })
+      .then(value => { quotaCache = value; quotaReadAt = Date.now(); return value; }).finally(() => { readingQuotas = null; });
+    return readingQuotas;
   });
   handle('bind-native', async request => {
     const association = await context(request);
@@ -95,18 +105,19 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
     if (settings.bindings.some(b => b.provider === 'codex-runtime' && b.nativeId === binding.nativeId)) throw new Error('Cette session est déjà observée par le service local');
     settings.bindings.push(binding); save(); return binding;
   });
-  handle('prepare-claude', async request => {
+  async function prepareAgent(request) {
     const association = await context(request);
+    if (!['claude', 'codex'].includes(request.provider)) throw new Error('Fournisseur inconnu');
     const id = randomUUID();
-    const folder = path.join(stateDir, 'observations'); fs.mkdirSync(folder, { recursive: true, mode: 0o700 });
-    const source = path.join(folder, id + '.jsonl');
-    const command = ['python3', path.join(backend, 'agent_hook.py'), source].map(quote).join(' ');
-    const config = { hooks: Object.fromEntries(HOOKS.map(name => [name, [{ hooks: [{ type: 'command', command, timeout: 5 }] }]])) };
-    const configPath = path.join(folder, id + '.settings.json');
-    fs.writeFileSync(configPath, JSON.stringify(config), { mode: 0o600, flag: 'wx' });
-    settings.bindings.push({ ...association, id, provider: 'claude-hooks', source, nativeId: null, pending: true }); save();
-    return { command: 'claude --settings ' + quote(configPath), note: 'Hooks de cette invocation uniquement ; configuration globale inchangée. Validez les hooks dans Claude. Aucune autorisation automatisée.' };
-  });
+    const prepared = prepareLaunch({ provider: request.provider, id, folder: path.join(stateDir, 'observations'), backend, home,
+      project: association.project, crew: process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents') });
+    settings.bindings.push({ ...association, id, provider: request.provider + '-hooks', source: prepared.source,
+      quotaSource: prepared.quotaSource, nativeId: null, pending: true }); save();
+    quotaCache = null;
+    return { command: prepared.command, note: prepared.note, bindingId: id };
+  }
+  handle('prepare-agent', prepareAgent);
+  handle('prepare-claude', request => prepareAgent({ ...request, provider: 'claude' }));
   handle('forget-native', async id => {
     const binding = settings.bindings.find(b => b.id === id);
     if (!binding) throw new Error('Association inconnue');

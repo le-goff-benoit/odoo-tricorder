@@ -1,0 +1,20 @@
+{
+  "provider": "claude",
+  "mode": "interactive PTY",
+  "model_requested": "opus",
+  "effort_requested": "low",
+  "tools": [],
+  "prompt": "Réponds uniquement OK, sans outils.",
+  "timeout_seconds": 90,
+  "exit_code": 124,
+  "cleanup": "Le CLI ne termine pas sur TERM ; processus enfant arrêté explicitement après expiration.",
+  "native_response_observed": false,
+  "hook_journal_exists": false,
+  "quota_snapshot_exists": false,
+  "eligibility": "unknown",
+  "status": "unavailable",
+  "conclusion": "CLI interactif bloqué avant premier événement ; ne prouve ni absence de droit abonnement ni quota zéro.",
+  "auth_files_read": false,
+  "provider_configuration_changed": false,
+  "at": "2026-09-15T18:28:03.570996+00:00"
+}

@@ -68,7 +68,7 @@ def claude_hook(row, at=None):
     states = {'SessionStart': 'idle', 'UserPromptSubmit': 'active', 'PreToolUse': 'tool',
               'PostToolUse': 'active', 'PostToolUseFailure': 'active', 'PermissionRequest': 'waiting_human',
               'Elicitation': 'waiting_human', 'ElicitationResult': 'active',
-              'Stop': 'idle', 'StopFailure': 'interrupted', 'SessionEnd': 'complete',
+              'Stop': 'idle', 'StopFailure': 'interrupted', 'Interrupt': 'interrupted', 'SessionEnd': 'complete',
               'SubagentStart': 'active', 'SubagentStop': 'complete'}
     state = states.get(kind)
     if kind == 'Notification' and row.get('notification_type') == 'permission_prompt':
@@ -168,12 +168,13 @@ def snapshot(source, provider, since=None, until=None, expected=None):
     if lower is not None and upper is not None and upper <= lower:
         raise ValueError('La fin doit suivre le début de la période')
     usage_source = source
-    if provider == 'claude-hooks':
+    if provider in ('claude-hooks', 'codex-hooks'):
         ids = {r.get('rootId') for r in rows if r.get('rootId')}
         if len(ids) > 1:
             raise ValueError('Plusieurs sessions dans le journal de hooks')
         native = next(iter(ids), None)
-        events = [event(r.get('at'), r['state'], r.get('nativeId'), r.get('tool'), r.get('parentId'), r.get('kind'), i, r.get('requestId'))
+        events = [{**event(r.get('at'), r['state'], r.get('nativeId'), r.get('tool'), r.get('parentId'), r.get('kind'), i, r.get('requestId')),
+                   'eventId': identifier(r.get('eventId')), 'model': identifier(r.get('model')), 'role': identifier(r.get('role'))}
                   for i, r in enumerate(rows, 1) if r.get('state') in ('idle', 'active', 'tool', 'waiting_human', 'complete', 'interrupted')]
         usage_source = next((r['usageSource'] for r in reversed(rows) if r.get('usageSource')), None)
     elif provider == 'codex':
@@ -192,13 +193,18 @@ def snapshot(source, provider, since=None, until=None, expected=None):
               and (upper is None or e['at'] and instant(e['at']) <= upper)]
     agents = {}
     waits, exact_waits = [], []
+    seen = set()
     for e in events:
+        if e.get('eventId'):
+            if e['eventId'] in seen:
+                continue
+            seen.add(e['eventId'])
         agent = agents.setdefault(e['nativeId'], {'nativeId': e['nativeId'], 'parentId': e['parentId'], 'events': [], 'waitStart': None, 'waitRequest': None, 'waitAmbiguous': False})
         at = instant(e['at'])
         if at is not None and agent.get('lastAt') is not None and at < agent['lastAt']:
             raise ValueError('Horodatages régressifs : mesures refusées')
         state = e['state']
-        boundary = e['kind'] in ('Stop', 'StopFailure', 'SessionEnd', 'SubagentStop', 'task_complete', 'task_started', 'turn_aborted', 'turn/completed', 'turn/started', 'thread/closed', 'UserPromptSubmit')
+        boundary = e['kind'] in ('Stop', 'StopFailure', 'Interrupt', 'SessionEnd', 'SubagentStop', 'task_complete', 'task_started', 'turn_aborted', 'turn/completed', 'turn/started', 'thread/closed', 'UserPromptSubmit')
         resolution = e['kind'] in ('ElicitationResult', 'serverRequest/resolved')
         matching_tool = (e['kind'] in ('PostToolUse', 'PostToolUseFailure', 'function_call_output', 'custom_tool_call_output')
                          and e['requestId'] and e['requestId'] == agent['waitRequest'])
@@ -216,6 +222,17 @@ def snapshot(source, provider, since=None, until=None, expected=None):
             agent['waitRequest'] = e['requestId']
         elif e['state'] == 'waiting_human' and e['requestId'] != agent['waitRequest']:
             agent['waitAmbiguous'] = True
+        if e['kind'] in ('UserPromptSubmit', 'SubagentStart', 'task_started', 'turn/started'):
+            agent['startedAt'], agent['endedAt'] = e['at'], None
+        if state in ('idle', 'complete', 'interrupted', 'waiting_human') and agent.get('startedAt') and not agent.get('endedAt'):
+            agent['endedAt'] = e['at']
+        if agent.get('state') == 'waiting_human' and state in ('active', 'tool'):
+            agent['startedAt'], agent['endedAt'] = e['at'], None
+        if agent.get('state') != state or agent.get('tool') != e['tool']:
+            agent['stageStartedAt'] = e['at'] if at is not None else None
+        for key in ('model', 'role'):
+            if e.get(key):
+                agent[key] = e[key]
         agent.update({'state': state, 'tool': e['tool'], 'lastAt': at})
         agent['events'].append(e)
     for agent in agents.values():

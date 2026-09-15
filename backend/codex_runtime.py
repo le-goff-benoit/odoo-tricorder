@@ -1,6 +1,6 @@
 """Opt-in read-only client of an existing Codex daemon, via its stdio proxy.
 
-Only initialize, thread/read and parent-filtered thread/list are permitted.
+Only initialize, thread/read, parent-filtered thread/list and account quotas are permitted.
 No daemon start, resume, turn/start or approval response is ever sent.
 """
 import json
@@ -21,7 +21,7 @@ class Reader:
         self.selector.register(process.stdout, selectors.EVENT_READ)
 
     def request(self, method, params):
-        if method not in ('initialize', 'thread/read', 'thread/list'):
+        if method not in ('initialize', 'thread/read', 'thread/list', 'account/rateLimits/read'):
             raise ValueError('Méthode Codex refusée')
         self.sequence += 1
         message = {'id': self.sequence, 'method': method, 'params': params}
@@ -100,6 +100,25 @@ def snapshot(native):
         return {'nativeId': native, 'agents': agents, 'usage': None, 'usageSource': None,
                 'waitingSeconds': None, 'waitingIntervals': [], 'observedAt': iso(time.time()),
                 'warnings': warnings + ['Statut du service local. Pour les durées et jetons, associer aussi un historique JSONL ; cette lecture de statut n’est jamais comptée comme une mesure.']}
+    finally:
+        reader.close()
+        proc.terminate()
+        try:
+            proc.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            proc.kill(); proc.wait()
+        proc.stdin.close(); proc.stdout.close()
+
+
+def rate_limits():
+    """Read the current service account; no login, credentials or model request."""
+    proc = subprocess.Popen(['codex', 'app-server', 'proxy'], stdin=subprocess.PIPE,
+                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    reader = Reader(proc)
+    try:
+        reader.request('initialize', {'clientInfo': {'name': 'odoo_tricorder', 'version': '0.3.0'}})
+        proc.stdin.write(b'{"method":"initialized"}\n'); proc.stdin.flush()
+        return reader.request('account/rateLimits/read', {})
     finally:
         reader.close()
         proc.terminate()

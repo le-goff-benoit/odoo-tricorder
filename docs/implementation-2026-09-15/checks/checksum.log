@@ -1,0 +1,5 @@
+
+> odoo-tricorder@0.3.0 checksum
+> node scripts/checksum.mjs
+
+1d85efad6f2daa6d74dd439c151138cddccb7ea1674dc131ead0f85e26d671f7  odoo-tricorder_0.3.0_amd64.deb

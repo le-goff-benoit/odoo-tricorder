@@ -1,3 +1,4 @@
+import { timerMarkup } from './activity.mjs';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { SearchAddon } from '@xterm/addon-search';
@@ -34,7 +35,7 @@ const paths = {
   branch: '<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 7v10m12-10a10 10 0 0 1-12 9"/>',
 };
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.grid}</svg>`;
-const labels = { validated: 'Validée', stale: 'À revalider', blocked: 'Bloquée', interrupted: 'Interrompue', awaiting_receipt: 'À réceptionner', pending: 'En attente', ready: 'Prête', running: 'En cours', unverified: 'Non vérifiée', deferred: 'Reportée', claimed: 'Revendiquée', done: 'Terminée', active: 'Actif', complete: 'Terminé', cancelled: 'Annulé', waiting_human: 'Attend une décision', deadlocked: 'Sans étape prête' };
+const labels = { validated: 'Validée', stale: 'Contrôle à actualiser', blocked: 'Bloquée', interrupted: 'Interrompue', awaiting_receipt: 'À réceptionner', pending: 'En attente', ready: 'Prête', running: 'En cours', unverified: 'Non vérifiée', deferred: 'Reportée', claimed: 'Prise en charge', done: 'Terminée', active: 'Actif', complete: 'Terminé', cancelled: 'Annulé', waiting_human: 'Attend une décision', deadlocked: 'Sans étape prête' };
 const badge = (state, text) => `<span class="badge ${esc(state)}">${esc(text || labels[state] || state)}</span>`;
 const when = value => value ? new Date(typeof value === 'number' ? value * 1000 : value).toLocaleString('fr-CH', { dateStyle: 'short', timeStyle: 'short' }) : 'Non observé';
 const minutes = value => value == null ? 'Non mesuré' : value < 1 ? `${Math.round(value * 60)} s` : `${Math.round(value).toLocaleString('fr-CH')} min`;
@@ -43,7 +44,7 @@ let projects = [], settings = {}, current = null, detail = null, view = 'termina
 let sessions = [], selectedSession = new Map(), terminals = new Map(), generation = 0, busy = false, pollBusy = false;
 let projectError = null, overviewMode = false, filter = '', split = false, inspectorHidden = false, version = '';
 let notificationKeys = new Set();
-let kanbanClosed = false;
+let kanbanClosed = false, kanbanExecuting = false;
 let launchingTerminal = false;
 
 $('#app').innerHTML = `
@@ -58,7 +59,7 @@ $('#app').innerHTML = `
     <header class="topbar"><div class="breadcrumbs"><strong id="breadcrumb"></strong></div><div class="top-actions"><span id="sync-status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header>
     <section class="project-header"><div><div class="eyebrow" id="project-eyebrow">ESPACE DE TRAVAIL</div><h1 id="project-title">Bienvenue à bord.</h1><div id="project-meta" class="project-meta"></div></div></section>
     <div id="context-bar" class="context-bar"></div>
-    <nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
+    <div id="activity-strip" class="activity-strip" hidden></div><nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
     <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button data-action="find-next">Suivant</button><button data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div><div class="terminal-footer"><span>Les sessions continuent quand vous fermez Tricorder.</span><button data-action="find">${icon('search')} Rechercher</button><button data-action="split">Diviser</button></div></div></section><aside id="inspector" class="inspector"></aside></div>
   </main><div id="toast" role="status" hidden></div><dialog id="modal"><div id="modal-content"></div></dialog>`;
 
@@ -75,7 +76,7 @@ function sidebar() {
   cockpitUI.alertSidebar();
 }
 function tabs() {
-  const views = [['terminal', 'Terminal', 'terminal'], ['plan', 'Plan de release', 'plan'], ['release-kanban', 'Kanban', 'grid'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
+  const views = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['release-kanban', 'Kanban', 'grid'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
   $('#tabs').innerHTML = views.map(([id, label, symbol]) => `<button data-view="${id}" class="${view === id && !overviewMode ? 'active' : ''}">${icon(symbol)}${label}</button>`).join('');
 }
 function header() {
@@ -90,7 +91,7 @@ function header() {
   $('[data-view="project"]').hidden = overviewMode;
   if (project && !overviewMode) {
     const context = settings.contexts?.[current] || {};
-    $('#context-bar').innerHTML = `<label>RELEASE<select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${(project.releases || []).map(r => `<option value="${esc(r.id)}" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${esc(r.id)} · ${esc(r.status)}</option>`).join('')}</select></label><label>ENVIRONNEMENT<select id="environment-select" aria-label="Environnement"><option value="">Non ciblé · shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select></label><span class="context-hint">Contexte des nouveaux terminaux</span>`;
+    $('#context-bar').innerHTML = `<label><span class="context-label">RELEASE</span><select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${(project.releases || []).map(r => `<option value="${esc(r.id)}" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${esc(r.id)} · ${esc(r.status)}</option>`).join('')}</select></label><label><span class="context-label">ENVIRONNEMENT</span><select id="environment-select" aria-label="Environnement"><option value="">Non ciblé · shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select></label><span class="context-hint">Contexte des nouveaux terminaux</span>`;
   }
 }
 function setView(next) {
@@ -116,6 +117,10 @@ async function followSession(id) {
   selectedSession.set(current, id); setView('terminal');
 }
 function render() {
+  const active = document.activeElement;
+  const focusKey = ['data-task', 'data-plan-mode', 'data-plan-filter', 'data-graph-select', 'data-intention', 'data-view', 'data-cockpit'].find(k => active?.hasAttribute(k));
+  const focusValue = focusKey ? active.getAttribute(focusKey) : null;
+  const scroll = [$('#content').scrollTop, $('#content .graph-scroll')?.scrollLeft || 0, $('#content .graph-scroll')?.scrollTop || 0];
   cockpitUI.rememberBoard();
   sidebar(); header(); tabs();
   const terminalVisible = !overviewMode && view === 'terminal';
@@ -127,8 +132,11 @@ function render() {
   else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
   else if (projectError) $('#content').innerHTML = empty('Lecture impossible', projectError);
   else if (!detail) $('#content').innerHTML = empty('Aucun projet sélectionné', 'Choisissez un projet dans la colonne de gauche.');
-  else ({ 'release-kanban': () => {}, plan: renderPlan, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || renderPlan)();
+  else ({ 'release-kanban': () => {}, intentions: () => {}, plan: () => {}, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
   cockpitUI.augment();
+  $('#content').scrollTop = scroll[0];
+  const graph = $('#content .graph-scroll'); if (graph) { graph.scrollLeft = scroll[1]; graph.scrollTop = scroll[2]; }
+  if (focusKey && !active.isConnected && !document.querySelector('dialog[open]')) document.querySelector(`[${focusKey}="${CSS.escape(focusValue)}"]`)?.focus({ preventScroll: true });
 }
 async function chooseProject(project, release) {
   current = project; overviewMode = false; detail = null; selectedTask = null; projectError = null; busy = true;
@@ -149,21 +157,13 @@ async function chooseProject(project, release) {
 }
 function renderKanban() {
   const scrollLeft = $('.kanban-board')?.scrollLeft || 0;
-  const cards = boardCards(projects, kanbanClosed);
-  $('#content').innerHTML = `<div class="page kanban-page"><div class="kanban-toolbar"><p>${cards.length} tâches · ${kanbanClosed ? 'Toutes les releases' : 'Releases closes masquées'}</p><button class="secondary" data-action="kanban-closed" aria-pressed="${kanbanClosed}">${kanbanClosed ? 'Masquer' : 'Inclure'} les releases closes</button></div><div class="kanban-board">${kanbanColumns.map(([id, label]) => {
+  const allCards = boardCards(projects, kanbanClosed, cockpitUI.allObservations());
+  const cards = kanbanExecuting ? allCards.filter(t => t.activities?.some(a => a.executing)) : allCards;
+  $('#content').innerHTML = `<div class="page kanban-page"><div class="kanban-toolbar"><p>${cards.filter(t => !['orchestration', 'intention'].includes(t.kind)).length} tâches${cards.some(t => t.kind === 'intention') ? ' · ' + cards.filter(t => t.kind === 'intention').length + ' demande(s) à planifier' : ''} + ${cards.filter(t => t.kind === 'orchestration').length} orchestration(s) · ${kanbanClosed ? 'Toutes les releases' : 'Releases closes masquées'}</p><button class="secondary" data-action="kanban-executing" aria-pressed="${kanbanExecuting}">En exécution</button><button class="secondary" data-action="kanban-closed" aria-pressed="${kanbanClosed}">${kanbanClosed ? 'Masquer' : 'Inclure'} les releases closes</button></div><div class="kanban-board" style="--board-columns:${kanbanColumns.length}">${kanbanColumns.map(([id, label]) => {
     const tasks = cards.filter(t => t.column === id);
-    return `<section class="kanban-column" data-column="${id}" aria-label="${label}"><h2>${label}<span>${tasks.length}</span></h2>${tasks.map(t => `<button class="kanban-card" data-kanban-project="${esc(t.project)}" data-kanban-release="${esc(t.release)}" data-kanban-task="${esc(t.id)}"><span class="kanban-project">${esc(t.projectName)}</span><small class="kanban-release">${esc(t.releaseTitle)}${t.releaseStatus === 'close' ? ' · close' : ''}</small><div class="kanban-card-status"><span>${esc(t.id)}</span>${badge(t.status)}</div><h3>${esc(t.title)}</h3><p>${esc(t.owners?.length ? t.owners.join(' · ') : 'Responsable non renseigné')}</p>${t.acceptance?.length ? `<small>${t.acceptance.length} critères d’acceptation</small>` : ''}</button>`).join('') || '<p class="kanban-empty">Aucune tâche</p>'}</section>`;
-  }).join('')}</div>${projects.some(p => p.warnings?.length) ? '<p class="note">Certains projets ont des informations à vérifier. Les statuts inconnus restent dans « Bloqué / à vérifier » ; ouvrez le projet pour le détail.</p>' : ''}<p class="muted">Les colonnes suivent les plans et leurs preuves. Cliquez sur une carte pour retrouver sa tâche ; aucun statut n’est modifié depuis ce tableau.</p></div>`;
+    return `<section class="kanban-column" data-column="${id}" aria-label="${label}"><h2>${label}<span>${tasks.length}</span></h2>${tasks.map(t => `<button class="kanban-card" data-kanban-project="${esc(t.project)}" data-kanban-release="${esc(t.release)}" ${t.kind === 'intention' ? `data-kanban-intention="${esc(t.intentionId)}"` : `data-kanban-task="${esc(t.id)}"`}><span class="kanban-project">${esc(t.projectName)}</span><small class="kanban-release">${esc(t.releaseTitle)}${t.releaseStatus === 'close' ? ' · close' : ''}</small><div class="kanban-card-status"><span>${esc(t.intentionId || t.id)}</span>${badge(t.status, t.presentation?.label)}</div><h3>${esc(t.title)}</h3>${t.kind === 'orchestration' ? `<p>${esc(t.stage)} · ${esc(t.model || 'Modèle principal non renseigné')}</p>` : ''}<p>${esc(t.kind === 'intention' ? 'Revue de l’orchestrateur attendue' : t.owners?.length ? t.owners.join(' · ') : 'Responsable non renseigné')}</p>${(t.activities || []).map(a => `<p class="task-activity">${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}${t.presentation?.proof ? `<p class="board-proof">${esc(t.presentation.proof)}</p>` : ''}${t.acceptance?.length ? `<small>${t.acceptance.length} critères d’acceptation</small>` : ''}</button>`).join('') || '<p class="kanban-empty">Aucune tâche</p>'}</section>`;
+  }).join('')}</div>${projects.some(p => p.warnings?.length) ? '<p class="note">Certains projets ont des informations à vérifier. Les statuts inconnus restent dans « État à vérifier » ; ouvrez le projet pour le détail.</p>' : ''}<p class="muted">Les colonnes suivent les plans et leurs preuves. Cliquez sur une carte pour retrouver sa tâche ; aucun statut n’est modifié depuis ce tableau.</p></div>`;
   $('.kanban-board').scrollLeft = scrollLeft;
-}
-function renderPlan() {
-  if (!detail.selectedRelease) {
-    $('#content').innerHTML = '<div class="page no-release"><h2>Aucune release sélectionnée</h2><p>Tu peux commencer dans le terminal du projet. Une nouvelle release ouverte sera repérée à l’actualisation, sans redémarrer le terminal.</p><button class="secondary" data-view="terminal">Revenir au terminal</button></div>';
-    return;
-  }
-  const tasks = detail.tasks;
-  const completed = tasks.filter(t => t.status === 'validated').length;
-  $('#content').innerHTML = `<div class="page"><div class="section-title"><div class="section-heading"><span class="eyebrow">RELEASE</span><h2>${esc(detail.releases.find(r => r.id === detail.selectedRelease)?.title || 'Plan de release')}</h2></div>${badge('series', `${completed} / ${tasks.length} validées`)}</div><div class="progress-track"><div style="width:${tasks.length ? completed / tasks.length * 100 : 0}%"></div></div>${detail.warnings.map(w => `<div class="note warning">${esc(w)}</div>`).join('')}<div class="task-list">${tasks.map(t => `<button class="task-card ${selectedTask === t.id ? 'selected' : ''}" data-task="${esc(t.id)}"><div class="task-marker ${esc(t.status)}">${t.status === 'validated' ? '✓' : t.status === 'stale' ? '!' : '·'}</div><div class="task-description"><div class="task-topline"><span class="task-id">${esc(t.id)}</span>${badge(t.status)}${t.risk === 'high' ? '<span class="risk">Sensible</span>' : ''}</div><h3>${esc(t.title)}</h3><p>${esc(t.reason || 'En attente de démarrage')}</p><div class="dependencies">${(t.depends_on || []).length ? 'Dépend de ' + t.depends_on.map(d => `<span>${esc(d)}</span>`).join(' ') : 'Sans dépendance'} · ${esc((t.scopes || []).join(', '))}</div></div>${icon('arrow')}</button>`).join('') || empty('Aucun plan dans cette release', 'Utilisez /odoo-plan dans votre agent pour préparer les tâches.')}</div></div>`;
 }
 function renderAgents() {
   // Rich view rendered by cockpitUI.augment().
@@ -244,7 +244,7 @@ async function mountTerminal(id) {
 }
 function fitVisible() { if (view !== 'terminal' || overviewMode) return; for (const t of terminals.values()) if (!t.host.hidden && t.host.clientWidth > 0 && t.host.clientHeight > 0) { try { t.fit.fit(); } catch {} } }
 new ResizeObserver(fitVisible).observe($('#terminal-hosts'));
-async function refreshSessions() { sessions = await api.terminals.list(); if (view === 'terminal' && !overviewMode) renderTerminals(); }
+async function refreshSessions() { const next = await api.terminals.list(); const changed = JSON.stringify(next) !== JSON.stringify(sessions); sessions = next; if (changed && view === 'terminal' && !overviewMode) renderTerminals(); }
 api.terminals.onEvent(message => {
   if (message.event === 'data') {
     const t = terminals.get(message.session);
@@ -261,7 +261,10 @@ async function newTerminal(task = null, provider = null) {
   try {
   const project = current, ticket = generation, startingView = view;
   const session = await api.terminals.create({ project, release: view === 'express' ? null : detail.selectedRelease, scopeMode: view === 'express' ? 'express' : 'auto', task: view === 'express' ? null : task, environment: settings.contexts?.[project]?.environment || null });
-  if (provider) await api.terminals.write({ session: session.id, data: provider + '\r' });
+  if (provider) {
+    const launch = await api.cockpit.prepareAgent({ project, release: session.release || null, task, terminal: session.id, provider, role: 'orchestrator' });
+    await api.terminals.write({ session: session.id, data: launch.command + '\r' });
+  }
   selectedSession.set(project, session.id); await refreshSessions();
   if (current === project && ticket === generation && view === startingView) setView('terminal');
   } finally { launchingTerminal = false; }
@@ -273,6 +276,7 @@ async function refresh() {
   if (pollBusy) return;
   pollBusy = true; $('#sync-status').textContent = 'Actualisation…';
   const project = current, ticket = generation;
+  const before = JSON.stringify([projects, detail, sessions, projectError]);
   try {
     const previous = projects.find(p => p.path === project)?.releases;
     projects = await api.overview();
@@ -296,7 +300,8 @@ async function refresh() {
     await refreshSessions();
     const items = attentionItems(), keys = new Set(items.map(i => `${i.project.path}:${i.task.id}:${i.task.status}`));
     if ([...keys].some(k => !notificationKeys.has(k))) api.notify({ title: 'Tricorder · à votre attention', body: `${items.length} élément(s) à examiner dans vos projets.` });
-    notificationKeys = keys; render();
+    notificationKeys = keys;
+    if (before !== JSON.stringify([projects, detail, sessions, projectError])) render();
     $('#sync-status').textContent = 'À jour · ' + new Date().toLocaleTimeString('fr-CH', { hour: '2-digit', minute: '2-digit' });
   } catch (error) { $('#sync-status').textContent = 'Actualisation incomplète'; toast(error.message); }
   finally { pollBusy = false; }
@@ -309,8 +314,13 @@ document.addEventListener('click', async event => {
     if (el.dataset.view) return setView(el.dataset.view);
     if (el.dataset.kanbanProject) {
       await chooseProject(el.dataset.kanbanProject, el.dataset.kanbanRelease);
-      setView('release-kanban'); selectTask(el.dataset.kanbanTask); return;
+      if (el.dataset.kanbanIntention) {
+        setView('intentions');
+        [...document.querySelectorAll('.intention-card')].find(node => node.dataset.intention === el.dataset.kanbanIntention)?.click();
+      } else { setView('release-kanban'); selectTask(el.dataset.kanbanTask); }
+      return;
     }
+    if (el.dataset.action === 'kanban-executing') { kanbanExecuting = !kanbanExecuting; render(); return; }
     if (el.dataset.action === 'kanban-closed') { kanbanClosed = !kanbanClosed; render(); return; }
     if (el.dataset.task) { selectTask(el.dataset.task); return; }
     if (el.dataset.attentionProject) { await chooseProject(el.dataset.attentionProject, el.dataset.attentionRelease); selectTask(el.dataset.taskId); setView(el.dataset.taskId.startsWith('flow:') ? 'agents' : 'plan'); return; }
@@ -378,6 +388,7 @@ const cockpitUI = cockpit({ api, get: () => ({ projects, settings, current, deta
 async function start() {
   try {
     const initial = await api.bootstrap(); projects = initial.projects; settings = initial.settings; version = initial.version;
+    let revision = await api.revision(), checkingRevision = false;
     split = !!settings.ui?.split; inspectorHidden = !!settings.ui?.inspectorHidden;
     $('#version').textContent = 'v' + version;
     notificationKeys = new Set(attentionItems().map(i => `${i.project.path}:${i.task.id}:${i.task.status}`));
@@ -387,6 +398,15 @@ async function start() {
     if (chosen && !overviewMode) await chooseProject(chosen.path); else render();
     $('#sync-status').textContent = 'À jour';
     setInterval(refresh, 30000);
+    setInterval(async () => {
+      if (checkingRevision || pollBusy || busy) return;
+      checkingRevision = true;
+      try {
+        const next = await api.revision();
+        if (next !== revision) { await refresh(); revision = next; }
+      } catch { /* The regular refresh reports catalog errors and recovers. */ }
+      finally { checkingRevision = false; }
+    }, 2000);
     setInterval(() => refreshSessions().catch(() => {}), 5000);
   } catch (error) { toast(error.message); $('#sync-status').textContent = 'Chargement impossible'; render(); }
 }

@@ -1,5 +1,6 @@
-"""Opt-in Claude hook. No output/decisions: never approves or blocks an agent."""
+"""Invocation-scoped native hook. Metadata only; never blocks or approves."""
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -14,6 +15,11 @@ def record(target, row):
     if not value or not value['nativeId'] or not identifier(row.get('session_id')):
         return
     value['rootId'] = row['session_id']
+    value['model'] = identifier(row.get('model'))
+    value['role'] = identifier(row.get('agent_type'))
+    correlation = row.get('tool_use_id') or row.get('turn_id')
+    if identifier(correlation):
+        value['eventId'] = hashlib.sha256(json.dumps([value['rootId'], value['nativeId'], value['kind'], correlation]).encode()).hexdigest()
     # Only the main transcript is used for usage; child work is not silently added.
     source = row.get('transcript_path')
     if not row.get('agent_id') and isinstance(source, str) and Path(source).is_absolute() and Path(source).suffix == '.jsonl':
@@ -21,6 +27,7 @@ def record(target, row):
     fd = os.open(target, os.O_WRONLY | os.O_APPEND | os.O_CREAT | os.O_NOFOLLOW, 0o600)
     with os.fdopen(fd, 'a') as stream:
         fcntl.flock(stream, fcntl.LOCK_EX)
+        os.fchmod(stream.fileno(), 0o600)
         if os.fstat(stream.fileno()).st_size >= 64 * 1024 * 1024:
             return
         value['at'] = iso(time.time())

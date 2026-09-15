@@ -25,12 +25,12 @@ export function plainLanguageUI({ s, hasNative, actual, partial }) {
     panel.querySelector('h2').textContent = s.view === 'effort' ? 'Relevés de temps' : 'Conversations suivies';
   }
   if (s.view === 'effort') {
-    const cards = page.querySelectorAll('.metric');
-    cards[2].querySelector('span').textContent = 'TÂCHES SUIVIES';
-    cards[2].querySelector('strong').textContent = s.selectedTask ? '1' : String(s.detail.tasks.length);
-    cards[2].querySelector('small').textContent = s.selectedTask ? 'Tâche consultée' : s.detail.selectedRelease ? 'Dans cette release' : 'Le cadrage précède les tâches';
-    cards[1].querySelector('span').textContent = partial ? 'TEMPS ENREGISTRÉ · PARTIEL' : 'TEMPS ENREGISTRÉ';
-    cards[1].querySelector('small').textContent = actual == null ? 'Aucune durée disponible' : partial ? 'Certaines périodes restent non mesurées' : 'Périodes enregistrées';
+    const cards = { tasks: page.querySelector('[data-metric=tasks]'), actual: page.querySelector('[data-metric=actual]') };
+    cards.tasks.querySelector('span').textContent = 'TÂCHES SUIVIES';
+    cards.tasks.querySelector('strong').textContent = s.selectedTask ? '1' : String(s.detail.tasks.length);
+    cards.tasks.querySelector('small').textContent = s.selectedTask ? 'Tâche consultée' : s.detail.selectedRelease ? 'Dans cette release' : 'Le cadrage précède les tâches';
+    cards.actual.querySelector('span').textContent = partial ? 'TEMPS ENREGISTRÉ · PARTIEL' : 'TEMPS ENREGISTRÉ';
+    cards.actual.querySelector('small').textContent = actual == null ? 'Aucune durée disponible' : partial ? 'Certaines périodes restent non mesurées' : 'Périodes enregistrées';
     const empty = page.querySelector('.effort-state');
     if (empty) {
       if (actual != null && !partial) empty.remove();
@@ -76,35 +76,6 @@ export function lifecycleUI({ s, esc, badge, when }) {
   const progress = t => t.progress === 'received' ? badge('received', 'Réceptionnée') : badge(t.progress || t.status);
   const validation = t => t.validation === 'not_recorded' ? 'Aucune réception vérifiable enregistrée' : t.validation === 'validated' ? 'Preuves valides dans ce dossier' : 'Preuves à revérifier dans ce dossier';
   const provenance = t => `<details class="task-proof"><summary>${validation(t)}</summary><p>${esc(t.reason)}</p>${t.receiptContext?.origin ? `<small>Origine ${t.receiptContext.location === 'worktree' ? '(worktree du même dépôt)' : ''} : <code>${esc(t.receiptContext.origin)}</code></small>` : ''}${t.receiptAt ? `<small>Réception : ${when(t.receiptAt)}</small>` : ''}${t.flowNote ? `<p>${esc(t.flowNote)}</p>` : ''}</details>`;
-  if (s.view === 'plan') {
-    const page = $('#content .page');
-    if (release) {
-      page.querySelector('.section-heading')?.insertAdjacentHTML('beforeend', `<p class="release-state" title="${esc(release.statusReason)}">${badge(release.status, release.status === 'close' ? 'Close' : release.status === 'ouverte' ? 'Ouverte' : release.status)}</p>`);
-      const received = s.detail.tasks.filter(t => t.progress === 'received').length;
-      page.querySelector('.section-title > .badge')?.replaceWith(Object.assign(document.createElement('span'), {
-        className: 'release-counts', textContent: release.hasPlan ? `${s.detail.tasks.length} tâches · ${received} réceptionnées` : `${s.detail.tasks.length} points suivis`,
-      }));
-      const completed = s.detail.tasks.filter(t => ['received', 'done', 'validated'].includes(t.progress || t.status)).length;
-      page.querySelector('.progress-track')?.setAttribute('title', 'Avancement enregistré (réceptions du plan ou points déclarés réalisés), distinct de la validation actuelle des preuves');
-      if (page.querySelector('.progress-track > div')) page.querySelector('.progress-track > div').style.width = `${s.detail.tasks.length ? completed / s.detail.tasks.length * 100 : 0}%`;
-      page.querySelector('.task-list').insertAdjacentHTML('beforebegin', `<div class="release-links"><button class="secondary" data-document="changelog/${esc(release.id)}/README.md">Lire le bilan de release</button></div>`);
-      const empty = page.querySelector('.task-list .empty');
-      if (empty) empty.innerHTML = '<h3>Aucune tâche structurée dans cette release</h3><p>Le bilan reste accessible ci-dessus. L’absence de plan ne signifie pas qu’aucun travail n’a été réalisé.</p>';
-    }
-    for (const card of page.querySelectorAll('.task-card')) {
-      const t = s.detail.tasks.find(t => t.id === card.dataset.task);
-      if (t.progress === 'received') {
-        card.querySelector('.task-topline').insertAdjacentHTML('afterbegin', progress(t));
-        card.querySelector('.task-description > p').textContent = 'Travail terminé et réceptionné.';
-      } else if (t.source === 'plan') {
-        const descriptions = { running: 'Travail en cours.', ready: 'Prête à démarrer.', pending: 'En attente de démarrage ou des tâches précédentes.', awaiting_receipt: 'Travail terminé, réception à confirmer.', interrupted: 'Suivi interrompu, à vérifier.', unverified: 'Suivi incomplet, voir le détail.' };
-        if (descriptions[t.status]) card.querySelector('.task-description > p').textContent = descriptions[t.status];
-      }
-      const dependencies = card.querySelector('.dependencies');
-      if (dependencies) dependencies.textContent = t.depends_on?.length ? 'Après ' + t.depends_on.join(', ') : '';
-      if (!t.acceptance?.length) card.querySelector('.task-acceptance ul').innerHTML = '<li>Critères non renseignés.</li>';
-    }
-  }
   if (task && !$('#inspector').hidden) {
     $('#inspector .inspector-task')?.insertAdjacentHTML('beforeend', `${task.progress === 'received' ? progress(task) : ''}${provenance(task)}`);
     $('#inspector .inspector-bottom')?.insertAdjacentHTML('beforeend', `<button class="secondary wide" data-view="agents">Voir les missions de cette tâche</button>`);

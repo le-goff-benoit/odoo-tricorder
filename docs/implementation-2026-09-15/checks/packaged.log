@@ -1,0 +1,29 @@
+
+> odoo-tricorder@0.3.0 test:packaged
+> node scripts/test-packaged.mjs
+
+
+Running 17 tests using 1 worker
+
+(node:659990) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/desktop.spec.cjs:82:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (5.8s)
+  ✓   2 tests/desktop.spec.cjs:156:1 › global Kanban: all projects, closed-release filter and exact task navigation (2.4s)
+  ✓   3 tests/desktop.spec.cjs:204:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (4.5s)
+  ✓   4 tests/desktop.spec.cjs:291:1 › design system: common gutters, cards and controls across every project view (7.5s)
+  ✓   5 tests/desktop.spec.cjs:351:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (3.1s)
+  ✓   6 tests/desktop.spec.cjs:409:1 › effort: partial recorded time survives missing roles, task filtering and refresh (3.2s)
+  ✓   7 tests/desktop.spec.cjs:474:1 › effort: open release updates task and agent percentages before closure (2.5s)
+  ✓   8 tests/desktop.spec.cjs:526:1 › release context: none, automatic new release, same terminal and persistence (6.0s)
+  ✓   9 tests/desktop.spec.cjs:601:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (3.5s)
+  ✓  10 tests/desktop.spec.cjs:695:1 › Markdown preview: readable safe content and recovery from a project read error (3.5s)
+  ✓  11 tests/desktop.spec.cjs:748:1 › email removed: no UI or API, old private records preserved, project still usable (2.6s)
+  ✓  12 tests/desktop.spec.cjs:799:1 › desktop: projects, proof status, sources, real terminal and persistence (5.4s)
+  ✓  13 tests/desktop.spec.cjs:895:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (6.8s)
+  -  14 tests/desktop.spec.cjs:1012:1 › real project: read-only release/task/mission screens
+  ✓  15 tests/desktop.spec.cjs:1100:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (12.0s)
+  ✓  16 tests/desktop.spec.cjs:1246:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (8.9s)
+  ✓  17 tests/desktop.spec.cjs:1349:1 › live requests appear before planning and reconcile with tasks without manual refresh (8.2s)
+
+  1 skipped
+  16 passed (1.4m)
