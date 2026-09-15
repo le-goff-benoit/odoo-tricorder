@@ -8,6 +8,7 @@
 - README réorganisé, trois exemples de flux et captures de projets synthétiques.
 - Audit client détaillé conservé localement, hors de la publication publique.
 - CI liée à Crew 4c6738c ; détails de livraison dans docs/releases/0.3.0.md.
+- Premier passage CI : nettoyage trop tôt après arrêt du shell ; attente de sortie ajoutée au test.
 
 ## 2026-09-15 — Intentions → Plan et cockpit 0.3.0
 

@@ -7,6 +7,8 @@
   `9f91e50a0d4787e0bcd7240e1953a85e82239fe71c36e877332bb384ea46d1f5`.
 - Deux parcours sur le binaire installé réussis en 10,5 s, données synthétiques.
 - Publication coordonnée avec Crew 4c6738c ; README et captures revus.
+- Premier passage GitHub : ENOTEMPTY au nettoyage après succès du parcours terminal.
+  Le helper attend maintenant la fin des shells synthétiques avant de supprimer leur dossier.
 - Les limites de quotas/modèles et la conservation du parent ouvert restent documentées.
 
 ## Intentions, orchestration et ergonomie — 0.3.0
