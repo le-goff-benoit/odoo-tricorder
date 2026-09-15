@@ -8,6 +8,7 @@
 - Les sources périmées restent à relire ; réception locale et déploiement restent séparés.
 - Lancement d'agent rendu disponible après chargement du contexte projet.
 - Contrôles synthétiques et capture README ; banc natif Crew avec échec/réserves conservés.
+- Installation 0.3.1 vérifiée : archive identique au paquet testé et parcours sur exécutable installé réussi.
 - Détails : docs/releases/0.3.1.md et bilan Crew knowledge-2026-09-15.
 
 ## 2026-09-15 — Installation et publication 0.3.0
