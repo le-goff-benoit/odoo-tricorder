@@ -8,7 +8,7 @@ Retrouvez vos demandes, le plan de release, les agents en activité et leurs
 résultats autour d’un terminal persistant. **Odoo Crew orchestre le travail ;
 Tricorder en montre l’avancement.**
 
-[Installer la version 0.3.1](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.1) ·
+[Installer la version 0.3.2](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.2) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Exemples de parcours](docs/WORKFLOWS.md) ·
 [Signaler un problème](https://github.com/le-goff-benoit/odoo-tricorder/issues)
@@ -56,6 +56,17 @@ Les agents lisent les acquis avant leur tâche et publient leurs découvertes au
 fil du travail. La clôture consolide cette mémoire déjà utilisée. Une décision
 peut rendre périmées les seules tâches explicitement affectées ; les propositions
 restent visibles sans devenir des règles confirmées. [Parcours détaillé](docs/WORKFLOWS.md).
+
+## Lire les preuves de qualité
+
+Les rapports JUnit sont comptés séparément. Un rapport qui mélange des résultats
+détaillés et des compteurs incompatibles est signalé comme non exploitable : il
+ne peut plus apparaître vert en masquant un échec. Un rapport vert ne suffit pas
+à déclarer une tâche reçue.
+
+Le [banc Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/quality-lab/README.md)
+sépare calibration des tests, exécution native des agents et réception du travail.
+Les comparaisons de vitesse restent liées à la qualité réellement vérifiée.
 
 ## Installer
 

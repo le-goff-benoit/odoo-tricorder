@@ -1,5 +1,16 @@
 # Journal
 
+## 2026-09-16 — Fiabilité des preuves 0.3.2
+
+- Banc agents : inspection des faux succès et de la mesure jusqu’à réception.
+- Défaut reproduit : un JUnit mixte cachait un échec agrégé derrière un cas détaillé vert.
+- Compteurs confrontés à chaque suite ; rapports contradictoires refusés.
+- Suites imbriquées cohérentes conservées, sans double comptage.
+- Tests synthétiques : mélange, erreur omise, contradictions, imbrication et tests ignorés.
+- README actualisé ; campagnes natives Crew distinctes des calibrations sans modèle.
+- Vérifié : 87 tests Python, 56 Node, 16 parcours UI et 16 empaquetés ; paquet Debian construit.
+- Installation 0.3.2 contrôlée : archive et backend identiques, parcours sur exécutable installé vert.
+
 ## 2026-09-15 — Mémoire partagée 0.3.1
 
 - Demande : mémoire nourrie et utilisée pendant toute la release, sources et documents intégrés.

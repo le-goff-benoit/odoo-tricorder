@@ -21,7 +21,7 @@ jobs:
         with:
           repository: le-goff-benoit/odoo-crew
           # Crew: shared release memory, document/source catalogues and receipt validation.
-          ref: 284379f4c1d120e2462625ee3878ba5fbb0da5f8
+          ref: f11913d1bf9896e32286b0e24bed041984bc8b60
           path: .test-tools/odoo-crew
       - run: npm ci
       - run: npm test

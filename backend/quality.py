@@ -7,6 +7,47 @@ import xml.etree.ElementTree as ET
 from catalog import inside, read_text
 
 
+COUNTERS = ('tests', 'failures', 'errors', 'skipped')
+
+
+def declared_counts(suite):
+    try:
+        counts = {key: int(suite.get(key)) for key in COUNTERS if suite.get(key) is not None}
+    except ValueError:
+        raise ValueError('Compteurs de tests invalides') from None
+    if any(value < 0 for value in counts.values()):
+        raise ValueError('Compteurs de tests incohérents')
+    return counts
+
+
+def verify_counts(suite, observed):
+    if any(value != observed[COUNTERS.index(key)] for key, value in declared_counts(suite).items()):
+        raise ValueError('Compteurs de tests incohérents avec les cas ou les sous-suites')
+
+
+def case_counts(cases):
+    outcomes = [tuple(c.find(key) is not None for key in ('failure', 'error', 'skipped')) for c in cases]
+    if any(sum(row) > 1 for row in outcomes):
+        raise ValueError('Résultats de test contradictoires')
+    return (len(cases), *(sum(row[index] for row in outcomes) for index in range(3)))
+
+
+def summary_counts(suite):
+    children = [child for child in suite if child.tag in ('testsuite', 'testsuites')]
+    if children:
+        rows = [summary_counts(child) for child in children]
+        counts = tuple(sum(row[index] for row in rows) for index in range(4))
+    else:
+        declared = declared_counts(suite)
+        if 'tests' not in declared:
+            raise ValueError('Compteurs de tests absents')
+        counts = tuple(declared.get(key, 0) for key in COUNTERS)
+        if counts[0] < sum(counts[1:]):
+            raise ValueError('Compteurs de tests incohérents')
+    verify_counts(suite, counts)
+    return counts
+
+
 def junit(root, path, task_ids):
     path = inside(root, path)
     raw = read_text(path, 2 * 1024 * 1024)
@@ -17,20 +58,15 @@ def junit(root, path, task_ids):
         raise ValueError('Ce fichier n’est pas un rapport JUnit')
     cases = list(tree.iter('testcase'))
     if cases:
-        failed = sum(c.find('failure') is not None for c in cases)
-        errors = sum(c.find('error') is not None for c in cases)
-        skipped = sum(c.find('skipped') is not None for c in cases)
-        total = len(cases)
-        passed = sum(all(c.find(k) is None for k in ('failure', 'error', 'skipped')) for c in cases)
+        total, failed, errors, skipped = case_counts(cases)
+        # A summary-only sibling must not disappear behind a detailed green case.
+        # Check each container independently; parent counters are never added.
+        for suite in tree.iter():
+            if suite.tag in ('testsuite', 'testsuites'):
+                verify_counts(suite, case_counts(list(suite.iter('testcase'))))
     else:
-        # Aggregated counters: use root totals if present, otherwise leaf suites only.
-        suites = [tree] if tree.get('tests') is not None else [s for s in tree.iter('testsuite') if s.find('testsuite') is None]
-        if not suites or any(s.get('tests') is None for s in suites):
-            raise ValueError('Compteurs de tests absents')
-        total, failed, errors, skipped = [sum(int(s.get(k, '0')) for s in suites) for k in ('tests', 'failures', 'errors', 'skipped')]
-        passed = total - failed - errors - skipped
-        if min(total, failed, errors, skipped, passed) < 0:
-            raise ValueError('Compteurs de tests incohérents')
+        total, failed, errors, skipped = summary_counts(tree)
+    passed = total - failed - errors - skipped
     tasks = {p.get('value') for p in tree.iter('property') if p.get('name') in ('odoo.task', 'tricorder.task')}
     task = next(iter(tasks)) if len(tasks) == 1 and tasks <= set(task_ids) else None
     return {'path': str(path.relative_to(root)), 'name': path.name, 'task': task,
