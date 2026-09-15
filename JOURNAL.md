@@ -1,5 +1,15 @@
 # Journal
 
+## 2026-09-15 — Mémoire partagée 0.3.1
+
+- Demande : mémoire nourrie et utilisée pendant toute la release, sources et documents intégrés.
+- Vue Mémoire en lecture seule via le validateur Crew, contributions actualisées automatiquement.
+- Passations, décisions/questions, pièces avec repères et index de code distingués.
+- Les sources périmées restent à relire ; réception locale et déploiement restent séparés.
+- Lancement d'agent rendu disponible après chargement du contexte projet.
+- Contrôles synthétiques et capture README ; banc natif Crew avec échec/réserves conservés.
+- Détails : docs/releases/0.3.1.md et bilan Crew knowledge-2026-09-15.
+
 ## 2026-09-15 — Installation et publication 0.3.0
 
 - Demande : mettre à jour l’application, publier GitHub et revoir le README avec parcours et captures.

@@ -487,6 +487,8 @@ def project(root, release=None, source_root=None, profile=None):
                          for p in sorted(inbox.iterdir()) if p.is_file() and not p.is_symlink()][:80]
     from quality import reports
     data['quality'] = reports(root, chosen, [t['id'] for t in data['tasks']])
+    from knowledge import snapshot as knowledge_snapshot
+    data['knowledge'] = knowledge_snapshot(root, chosen)
     return data
 
 

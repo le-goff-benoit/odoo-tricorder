@@ -24,6 +24,9 @@ function fixture(home) {
   });
   write(path.join(release, 'README.md'), '<!-- release ouverte -->\n# Facturation & maintenance récurrente\n\nUne release synthétique pour les tests du cockpit.');
   write(path.join(release, 'demande.md'), '# Demande\n\nFiabiliser la facturation et les interventions récurrentes.');
+  const source = { path: `changelog/${releaseId}/demande.md`, sha256: require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(release, 'demande.md'))).digest('hex') };
+  write(path.join(release, 'knowledge/K01.json'), { schema: 1, id: 'K01', kind: 'question', state: 'proposed',
+    statement: 'Préciser l’exception pour la société B.', author: 'Codex · analyste', scope: [], sources: [source] });
   const task = (id, title, extra = {}) => ({ id, title, request: `changelog/${releaseId}/demande.md`,
     acceptance: ['Les scénarios ciblés sont vérifiés sur copie locale.', 'Les résultats sont associés à une preuve.'],
     risk: 'normal', route: 'module', scopes: ['orbital_custom'], depends_on: [], ...extra });
@@ -109,6 +112,16 @@ test('simplified workspace: task dialogs, agent identity, preferences and launch
     await page.setViewportSize({ width: 1280, height: 900 });
     await expect(page.locator('#task-select, .terminal-footer, .statusbar')).toHaveCount(0);
     await expect(page.locator('#inspector')).toBeHidden();
+    await page.locator('#tabs [data-view="knowledge"]').click();
+    await expect(page.locator('.knowledge-page')).toContainText('Préciser l’exception pour la société B.');
+    await expect(page.locator('.knowledge-page')).toContainText('À confirmer');
+    await page.screenshot({ path: 'test-results/memoire-release.png' });
+    const memoryPath = path.join(project, 'changelog', releaseId, 'knowledge/K01.json');
+    const nextMemory = JSON.parse(fs.readFileSync(memoryPath));
+    nextMemory.id = 'K02'; nextMemory.statement = 'Découverte partagée pendant la tâche.';
+    write(path.join(project, 'changelog', releaseId, 'knowledge/K02.json'), nextMemory);
+    await expect(page.locator('.knowledge-page')).toContainText('Découverte partagée pendant la tâche.', { timeout: 15000 });
+    await page.locator('#tabs [data-view="terminal"]').click();
     expect(await page.locator('#tabs [data-view="terminal"] svg').innerHTML()).not.toBe(await page.locator('#tabs [data-view="express"] svg').innerHTML());
     await page.locator('[data-launch-agent="claude"]').evaluate(button => { button.click(); button.click(); });
     await expect(page.locator('.xterm-screen')).toContainText('FAKE-CLAUDE:' + project);
@@ -320,7 +333,7 @@ test('design system: common gutters, cards and controls across every project vie
       await app.evaluate(({ BrowserWindow }, zoom) => BrowserWindow.getAllWindows()[0].webContents.setZoomFactor(zoom), zoom);
       await page.setViewportSize({ width, height });
       await expect.poll(() => page.evaluate(() => window.innerWidth)).toBe(Math.floor(width / zoom));
-      for (const view of ['intentions', 'plan', 'release-kanban', 'express', 'agents', 'effort', 'documents', 'sources', 'environments']) {
+      for (const view of ['intentions', 'plan', 'release-kanban', 'knowledge', 'express', 'agents', 'effort', 'documents', 'sources', 'environments']) {
         if (['documents', 'sources', 'environments'].includes(view)) await projectView(page, view);
         else await page.locator(`#tabs [data-view="${view}"]`).click();
         await expect(page.locator('#content > .page')).toBeVisible();

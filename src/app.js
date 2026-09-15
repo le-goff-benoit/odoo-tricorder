@@ -76,7 +76,7 @@ function sidebar() {
   cockpitUI.alertSidebar();
 }
 function tabs() {
-  const views = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['release-kanban', 'Kanban', 'grid'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
+  const views = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['release-kanban', 'Kanban', 'grid'], ['knowledge', 'Mémoire', 'file'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
   $('#tabs').innerHTML = views.map(([id, label, symbol]) => `<button data-view="${id}" class="${view === id && !overviewMode ? 'active' : ''}">${icon(symbol)}${label}</button>`).join('');
 }
 function header() {
@@ -132,7 +132,7 @@ function render() {
   else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
   else if (projectError) $('#content').innerHTML = empty('Lecture impossible', projectError);
   else if (!detail) $('#content').innerHTML = empty('Aucun projet sélectionné', 'Choisissez un projet dans la colonne de gauche.');
-  else ({ 'release-kanban': () => {}, intentions: () => {}, plan: () => {}, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
+  else ({ 'release-kanban': () => {}, intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
   cockpitUI.augment();
   $('#content').scrollTop = scroll[0];
   const graph = $('#content .graph-scroll'); if (graph) { graph.scrollLeft = scroll[1]; graph.scrollTop = scroll[2]; }
@@ -201,7 +201,9 @@ function renderTerminals() {
   if (env?.kind === 'production') $('#terminal-context').prepend('PRODUCTION · aucune permission accordée ');
   $('#terminal-empty').hidden = own.length > 0;
   $('#terminal-hosts').hidden = own.length === 0;
-  $('#terminal-empty').innerHTML = empty('Votre prochaine mission commence ici.', 'Un vrai shell dans le dossier du projet. Lancez Claude, Codex ou vos commandes habituelles.', `<button class="primary" data-action="new-terminal">${icon('terminal')} Ouvrir un terminal</button><div class="launch-hints"><button class="secondary" data-launch-agent="claude">${providerIcon('claude')} Claude</button><button class="secondary" data-launch-agent="codex">${providerIcon('codex')} Codex</button></div>`);
+  $('#terminal-empty').innerHTML = busy || !detail
+    ? empty('Chargement du projet…', 'Les commandes seront disponibles dès que son contexte sera prêt.')
+    : empty('Votre prochaine mission commence ici.', 'Un vrai shell dans le dossier du projet. Lancez Claude, Codex ou vos commandes habituelles.', `<button class="primary" data-action="new-terminal">${icon('terminal')} Ouvrir un terminal</button><div class="launch-hints"><button class="secondary" data-launch-agent="claude">${providerIcon('claude')} Claude</button><button class="secondary" data-launch-agent="codex">${providerIcon('codex')} Codex</button></div>`);
   const visible = new Set(id ? [id] : []);
   if (split && own.length > 1) visible.add(own.find(s => s.id !== id).id);
   for (const [session, t] of terminals) t.host.hidden = !visible.has(session);
@@ -411,3 +413,5 @@ async function start() {
   } catch (error) { toast(error.message); $('#sync-status').textContent = 'Chargement impossible'; render(); }
 }
 start();
+import { knowledgeView } from './knowledge-view.js';
+import './knowledge.css';

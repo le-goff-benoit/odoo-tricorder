@@ -125,3 +125,19 @@ approprié ; l’investigation ne suffit pas à déclarer le problème résolu.
 Dans les deux cas, les détails de tâche et les documents de projet donnent accès
 aux résultats enregistrés. Une activité silencieuse ou une durée absente reste
 signalée comme telle : le cockpit n’en déduit ni réussite ni arrêt.
+## Une mémoire nourrie pendant la release
+
+1. Dans **Intentions**, l'orchestrateur conserve les demandes et leurs pièces.
+2. Il prépare le **Plan** avec critères et dépendances, puis active la mémoire
+   partagée Crew. Chaque agent reçoit les acquis avant sa tâche.
+3. Pendant le travail, une découverte ou une question publiée apparaît dans
+   **Mémoire**. Après réception, le fragment de la tâche devient disponible aux
+   suivantes. Les vues se rafraîchissent automatiquement.
+4. Une décision nouvelle indique les tâches affectées. Leurs anciennes réceptions
+   deviennent périmées ; les acquis indépendants restent valides.
+5. La clôture consolide les règles et les questions restantes. Le déploiement
+   exige ses propres observations : une tâche reçue localement ne le prouve pas.
+
+Tricorder consulte ces fichiers ; l'orchestrateur Crew publie et arbitre.
+Les anciennes releases ne sont pas converties automatiquement en décisions.
+[Commandes Crew et formats](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/KNOWLEDGE.md).

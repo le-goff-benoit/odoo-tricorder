@@ -1,0 +1,11 @@
+.knowledge-summary { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0; }
+.knowledge-summary span { display: flex; gap: 8px; align-items: baseline; }
+.knowledge-summary strong { font-size: 22px; }
+.knowledge-list { display: grid; gap: 12px; margin-bottom: 28px; }
+.knowledge-list .card-title { flex-wrap: wrap; }
+.knowledge-state { color: var(--text-muted, #b4bcc8); font-size: 12px; }
+.knowledge-text { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; line-height: 1.6; }
+.knowledge-page summary { cursor: pointer; line-height: 1.6; }
+.knowledge-page summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.knowledge-alert { border: 1px solid #a57630; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+.knowledge-page .path { overflow-wrap: anywhere; white-space: normal; display: block; margin-top: 6px; }

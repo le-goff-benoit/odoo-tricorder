@@ -20,8 +20,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: le-goff-benoit/odoo-crew
-          # Crew v2026.09.15: intentions, contracts and orchestration.
-          ref: 4c6738c60c959fd1ceac7d24d6949d96909b6ab2
+          # Crew: shared release memory, document/source catalogues and receipt validation.
+          ref: d6b71aecbb82c2ba664b448dd896db3ca4f7a1b1
           path: .test-tools/odoo-crew
       - run: npm ci
       - run: npm test

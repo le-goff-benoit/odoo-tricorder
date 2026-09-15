@@ -8,8 +8,8 @@ Retrouvez vos demandes, le plan de release, les agents en activité et leurs
 résultats autour d’un terminal persistant. **Odoo Crew orchestre le travail ;
 Tricorder en montre l’avancement.**
 
-[Installer la version 0.3.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.0) ·
-[Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/v2026.09.15/docs/INSTALL.md) ·
+[Installer la version 0.3.1](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.1) ·
+[Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Exemples de parcours](docs/WORKFLOWS.md) ·
 [Signaler un problème](https://github.com/le-goff-benoit/odoo-tricorder/issues)
 
@@ -21,6 +21,9 @@ Tricorder en montre l’avancement.**
 - **Plan** présente les tâches, leurs critères et leurs dépendances, en liste ou en graphe.
 - Les **Kanbans** de release et global montrent aussi les demandes **À planifier**,
   avant leur découpage en tâches, et le travail d’orchestration.
+- **Mémoire** montre les découvertes partagées pendant la release, les passations
+  des tâches reçues, décisions, questions et pièces sourcées. Les contributions
+  apparaissent automatiquement ; une source périmée est signalée.
 - **Agents** montre toutes les activités observées : développement, QA, orchestration
   ou attente. Le filtre **En exécution** permet de les retrouver dans les tableaux.
 - **Temps & estimations** distingue prévisions, durées enregistrées et mesures manquantes.
@@ -45,24 +48,33 @@ Quand l’orchestrateur la relie aux tâches retenues, celles-ci remplacent sa c
 provisoire. L’intention et sa source restent consultables. Cette carte n’autorise
 aucune exécution à elle seule.
 
+### Partager les acquis pendant la release
+
+![Mémoire partagée de la release](docs/screenshots/memory.png)
+
+Les agents lisent les acquis avant leur tâche et publient leurs découvertes au
+fil du travail. La clôture consolide cette mémoire déjà utilisée. Une décision
+peut rendre périmées les seules tâches explicitement affectées ; les propositions
+restent visibles sans devenir des règles confirmées. [Parcours détaillé](docs/WORKFLOWS.md).
+
 ## Installer
 
-Le paquet **0.3.0** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
+Le paquet **0.3.1** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
 parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
-1. Télécharger `odoo-tricorder_0.3.0_amd64.deb` dans la
-   [release 0.3.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.0).
+1. Télécharger `odoo-tricorder_0.3.1_amd64.deb` dans la
+   [release 0.3.1](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.1).
 2. Depuis le dossier contenant le téléchargement :
 
    ```bash
-   sudo apt install ./odoo-tricorder_0.3.0_amd64.deb
+   sudo apt install ./odoo-tricorder_0.3.1_amd64.deb
    ```
 
 3. Ouvrir **Odoo Tricorder** dans le menu des applications.
 
 Python 3 et les bibliothèques du bureau sont des dépendances du paquet.
 Pour le suivi Odoo complet, installer séparément
-[Odoo Crew v2026.09.15](https://github.com/le-goff-benoit/odoo-crew/releases/tag/v2026.09.15)
+[Odoo Crew, version actuelle](https://github.com/le-goff-benoit/odoo-crew)
 et **Claude Code, Codex, ou les deux**, avec leurs accès habituels.
 Odoo Crew doit être généré avec `build.sh`, normalement dans `~/.odoo19-agents`.
 Le terminal reste utilisable sans fournisseur IA.
@@ -118,7 +130,7 @@ Le bouton Actualiser reste disponible.
 
 - Les indicateurs de compte prévoient les fenêtres **5 h / hebdomadaire** et leurs
   remises à zéro. **Les quotas natifs réels n’ont pas pu être qualifiés lors de la
-  livraison 0.3.0** : les adaptateurs sont expérimentaux et affichent indisponible
+  livraison 0.3.1** : les adaptateurs sont expérimentaux et affichent indisponible
   sans donnée fiable. Aucun appel modèle ne sert à les rafraîchir.
 - L’orchestrateur conserve le **modèle principal**. Les modèles plus légers par rôle
   restent expérimentaux dans Crew ; aucun basculement automatique ne dépend du quota.
