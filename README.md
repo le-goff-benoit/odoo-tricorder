@@ -1,82 +1,77 @@
-![Odoo Tricorder, le cockpit de vos projets et agents](assets/readme-banner.png)
+![Odoo Tricorder — le plan d’une release, ses agents et leurs minuteurs](assets/readme-banner.png)
 
 # Odoo Tricorder
 
-**Un cockpit de bureau pour suivre vos projets Odoo avec Claude Code et Codex.**
+**Le cockpit de bureau de vos projets Odoo menés avec Claude Code et Codex.**
 
-Retrouvez vos demandes, le plan de release, les agents en activité et leurs
-résultats autour d’un terminal persistant. **Odoo Crew orchestre le travail ;
-Tricorder en montre l’avancement.**
+Un terminal persistant par projet, et autour de lui tout ce qu’il faut pour
+garder la main sur l’exécution : les demandes d’origine, le plan de la release,
+les agents en activité, leurs preuves et leur temps. **Odoo Crew orchestre le
+travail ; Tricorder le rend lisible.** Rien n’est modifié depuis le cockpit.
 
 [Installer la version 0.3.5](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.5) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
-[Exemples de parcours](docs/WORKFLOWS.md) ·
+[Parcours d’exemple](docs/WORKFLOWS.md) ·
+[Direction visuelle](docs/design/DIRECTION.md) ·
 [Signaler un problème](https://github.com/le-goff-benoit/odoo-tricorder/issues)
 
-## De la demande au résultat
+## Ce que vous voyez
 
-**Intentions → Plan → Exécution → Recette**
+Une release se lit de gauche à droite dans la barre d’onglets, dans l’ordre du
+travail : **Intentions → Plan → Mémoire → Express → Agents → Temps**, le tout
+adossé au **Terminal**. Chaque onglet porte son numéro : `Alt 1` à `Alt 8`.
 
-- **Intentions** conserve les demandes originales, décisions et questions ouvertes.
-- **Plan** présente les tâches, leurs critères et leurs dépendances, en **liste**,
-  en **Kanban** ou en **graphe**, avec les mêmes filtres et le même responsable.
-- Le Plan et le **Kanban global** montrent aussi les demandes **À planifier**,
-  avant leur découpage en tâches, et le travail d’orchestration.
-- **Mémoire** montre les découvertes partagées pendant la release, les passations
-  des tâches reçues, décisions, questions et pièces sourcées. Les contributions
-  apparaissent automatiquement ; une source périmée est signalée.
-- **Agents** montre toutes les activités observées : développement, QA, orchestration
-  ou attente. Le filtre **En exécution** permet de les retrouver dans les tableaux.
-- **Temps & estimations** distingue prévisions, durées enregistrées et mesures manquantes.
-  Les fiches de tâche regroupent critères, responsabilités et preuves de contrôle.
+### Le plan, en liste, en Kanban ou en graphe
 
-Les captures présentent des projets synthétiques.
+![Plan de release en liste : orchestration, demande à planifier, tâches et minuteurs](docs/screenshots/plan.png)
 
-### Comprendre l’ordre du travail
+Chaque ligne dit trois choses : identifiant, titre et état ; le responsable ou
+l’étape en cours ; l’activité réellement observée avec son minuteur. Le capuchon
+coloré à gauche et le **rail d’étapes** (parcourue, en cours, à venir) donnent
+l’avancement d’un regard. Les filtres (**En exécution**, **Prêtes**, **Bloquées**,
+**Accord attendu**) et le choix du responsable valent pour les trois modes.
 
-![Plan de release avec dépendances de résultat et tâche sélectionnée](docs/screenshots/dependencies.png)
+![Graphe des dépendances avec la tâche T03 sélectionnée](docs/screenshots/dependencies.png)
 
-Le graphe montre les tâches en amont et en aval. Les ressources communes sont
-signalées séparément ; la mention **Peut démarrer** vient des règles Crew.
-La liste offre les mêmes accès aux tâches au clavier.
+Le mode **Dépendances** montre l’amont et l’aval d’une tâche. Les ressources
+communes sont signalées séparément ; « peut démarrer » vient des règles Crew.
 
-### Voir les nouvelles demandes sans attendre le plan
+### Les demandes, avant même leur découpage
 
-![Une nouvelle demande apparaît à planifier dans le suivi de release](docs/screenshots/live-requests.png)
+![Kanban de release avec une demande à planifier et l’orchestration en cours](docs/screenshots/live-requests.png)
 
-Dès que Crew enregistre une demande, elle apparaît **À planifier** ou **À préciser**.
-Quand l’orchestrateur la relie aux tâches retenues, celles-ci remplacent sa carte
-provisoire. L’intention et sa source restent consultables. Cette carte n’autorise
-aucune exécution à elle seule.
+Dès que Crew enregistre une demande, elle apparaît **À planifier** ou
+**À préciser** dans le Plan et dans le **Kanban global**. Quand l’orchestrateur
+la relie aux tâches retenues, celles-ci remplacent sa carte provisoire ;
+l’intention et sa source restent consultables dans **Intentions**.
 
-### Partager les acquis pendant la release
+### La mémoire partagée de la release
 
-![Mémoire partagée de la release](docs/screenshots/memory.png)
+![Mémoire partagée : point à relire, contributions et sources](docs/screenshots/memory.png)
 
-Les agents lisent les acquis avant leur tâche et publient leurs découvertes au
-fil du travail. La clôture consolide cette mémoire déjà utilisée. Une décision
-peut rendre périmées les seules tâches explicitement affectées ; les propositions
-restent visibles sans devenir des règles confirmées. [Parcours détaillé](docs/WORKFLOWS.md).
+Les agents publient leurs découvertes, décisions et passations au fil du
+travail ; une source périmée ou une contribution à relire est signalée en tête.
 
-## Lire les preuves de qualité
+### Les agents et leur temps
 
-Les rapports JUnit sont comptés séparément. Un rapport qui mélange des résultats
-détaillés et des compteurs incompatibles est signalé comme non exploitable : il
-ne peut plus apparaître vert en masquant un échec. Un rapport vert ne suffit pas
-à déclarer une tâche reçue.
+![Activité des agents : développement, QA et orchestration observés simultanément](docs/screenshots/activities.png)
 
-Le [banc Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/quality-lab/README.md)
-sépare calibration des tests, exécution native des agents et réception du travail.
-Les comparaisons de vitesse restent liées à la qualité réellement vérifiée.
+**Agents** ne montre que ce qui est observé : un terminal ouvert n’est pas une
+activité. La bande **En cours** sous l’en-tête et le compteur de l’onglet
+n’apparaissent que lorsqu’une activité est confirmée ou qu’une décision est
+attendue. **Temps** distingue prévisions, durées enregistrées et mesures
+manquantes ; « Non mesuré » ne vaut jamais zéro.
+
+![Temps : prévision, temps enregistré, tâches suivies et détail par agent](docs/screenshots/effort.png)
 
 ## Installer
 
-Le paquet **0.3.5** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
-parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
+Le paquet **0.3.5** cible Linux Ubuntu / Pop!_OS **amd64**. La construction et
+les parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
 1. Télécharger `odoo-tricorder_0.3.5_amd64.deb` dans la
    [release 0.3.5](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.5).
-2. Depuis le dossier contenant le téléchargement :
+2. Depuis le dossier du téléchargement :
 
    ```bash
    sudo apt install ./odoo-tricorder_0.3.5_amd64.deb
@@ -84,25 +79,27 @@ parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
 3. Ouvrir **Odoo Tricorder** dans le menu des applications.
 
-Python 3 et les bibliothèques du bureau sont des dépendances du paquet.
-Pour le suivi Odoo complet, installer séparément
-[Odoo Crew, version actuelle](https://github.com/le-goff-benoit/odoo-crew)
-et **Claude Code, Codex, ou les deux**, avec leurs accès habituels.
-Odoo Crew doit être généré avec `build.sh`, normalement dans `~/.odoo19-agents`.
-Le terminal reste utilisable sans fournisseur IA.
+Python 3 et les bibliothèques du bureau sont des dépendances du paquet. Pour le
+suivi Odoo complet, installer séparément
+[Odoo Crew](https://github.com/le-goff-benoit/odoo-crew) (généré avec `build.sh`,
+normalement dans `~/.odoo19-agents`) et **Claude Code, Codex, ou les deux**. Le
+terminal reste utilisable sans fournisseur IA ; un raccourci vers l’installation
+de Crew n’est proposé dans la barre latérale que si le dispositif manque.
 
 ## Commencer
 
-1. Dans **Préférences → Dossiers partagés → Dossier des projets**, choisir la racine
-   de vos projets si elle diffère de votre dossier personnel.
-2. Choisir un projet à gauche, puis une release ou **Aucune release**.
-3. Dans **Terminal**, cliquer sur **Claude** ou **Codex** pour ouvrir un lancement
-   avec suivi. Les boutons portent les logos Anthropic et OpenAI. Vous pouvez
-   aussi ouvrir un shell avec `Ctrl Shift T`.
-4. Dans l’agent lancé, demander le plan puis son exécution avec les skills Crew.
-   Le bouton **Skills** prépare la syntaxe à copier ; il n’exécute pas le skill.
-5. Suivre les résultats dans **Plan** (liste, Kanban ou dépendances) et **Agents**. Cliquer une tâche
-   ouvre ses détails, sans réaffecter le terminal.
+1. **Préférences → Dossiers partagés → Dossier des projets** : la racine de vos
+   projets si elle diffère de votre dossier personnel.
+2. Choisir un projet dans la barre latérale, puis une release dans la pastille de
+   l’en-tête (le point vert signale une release ouverte). La seconde pastille est
+   l’environnement des nouveaux terminaux : un repère, jamais une connexion ni
+   une permission.
+3. Dans **Terminal**, cliquer sur **Claude** ou **Codex** pour ouvrir un
+   lancement avec suivi ; `Ctrl Shift T` ouvre un shell simple.
+4. Dans l’agent, demander le plan puis son exécution avec les skills Crew. Le
+   bouton **Skills** prépare la syntaxe à copier ; il n’exécute rien.
+5. Suivre dans **Plan** et **Agents**. Cliquer une tâche ouvre sa fiche
+   (critères, preuves, temps) sans réaffecter le terminal.
 
 Les skills se saisissent **dans la conversation de l’agent**, pas dans le shell :
 
@@ -114,11 +111,9 @@ Les skills se saisissent **dans la conversation de l’agent**, pas dans le shel
 | Réaliser un correctif local express | `/odoo-express` | `$odoo-express` |
 | Diagnostiquer un ticket | `/odoo-support` | `$odoo-support` |
 
-Voir [trois parcours avec demandes prêtes à adapter](docs/WORKFLOWS.md).
+Trois parcours prêts à adapter : [docs/WORKFLOWS.md](docs/WORKFLOWS.md).
 
-## Lire les états et les mesures
-
-![Développement, QA et orchestration observés simultanément](docs/screenshots/activities.png)
+## Lire les états
 
 | Indication | Ce qu’elle signifie |
 |---|---|
@@ -129,66 +124,55 @@ Voir [trois parcours avec demandes prêtes à adapter](docs/WORKFLOWS.md).
 | **En exécution** | Activité confirmée par une observation récente. Un terminal ouvert ne suffit pas. |
 | **Durée inconnue / Suivi à vérifier** | Il manque une borne fiable ou une observation récente. Cela ne prouve pas l’arrêt du processus. |
 
-Le timer indique le **temps écoulé de l’étape observée**, pas un pourcentage de
-progression. Les temps communs d’orchestration ne sont pas ajoutés une seconde fois
-aux tâches. Un relevé partiel ne produit pas de faux gain par rapport à une prévision complète.
+Le minuteur indique le **temps écoulé de l’étape observée**, pas un pourcentage.
+Les rapports JUnit sont comptés par exécution ; un rapport qui mélange des
+résultats détaillés et des compteurs incompatibles est signalé comme non
+exploitable et ne peut pas apparaître vert. Un rapport vert ne suffit pas à
+déclarer une tâche reçue.
 
-Les modifications des demandes et plans sont détectées toutes les **2 secondes**,
-puis les données sont relues. Le suivi fournisseur est interrogé toutes les
-**5 secondes** ; une actualisation générale intervient toutes les **30 secondes**.
-Le bouton Actualiser reste disponible.
+Les demandes et plans sont relus dès qu’un fichier change (contrôle toutes les
+**2 secondes**) ; le suivi fournisseur est interrogé toutes les **5 secondes** ;
+une actualisation générale intervient toutes les **30 secondes**.
 
-### Quotas et automatisation : disponibilité actuelle
+### Quotas : disponibilité actuelle
 
-- Les indicateurs de compte prévoient les fenêtres **5 h / hebdomadaire** et leurs
-  remises à zéro. **Les quotas natifs réels n’ont pas pu être qualifiés lors de la
-  livraison 0.3.1** : les adaptateurs sont expérimentaux. Tant qu’aucune donnée
-  fiable n’existe, la barre supérieure n’affiche qu’un lien **Quotas** vers le
-  détail ; les pastilles par fournisseur apparaissent dès qu’une fenêtre est lue.
-  Aucun appel modèle ne sert à les rafraîchir.
-- L’orchestrateur conserve le **modèle principal**. Les modèles plus légers par rôle
-  restent expérimentaux dans Crew ; aucun basculement automatique ne dépend du quota.
-- Les hooks transmettent les événements et peuvent rappeler au principal la suite
-  autorisée. **Ils ne réveillent pas un agent principal dont la session est fermée**
-  et ne valent pas réception d’une tâche. Le retour natif dépend du fournisseur et
-  de son transport ; les permissions et interruptions restent respectées.
+Les adaptateurs de quotas **5 h / hebdomadaire** sont expérimentaux et n’ont pas
+pu être qualifiés sur compte réel. Tant qu’aucune donnée fiable n’existe, la
+barre supérieure n’affiche qu’un lien **Quotas** ; les pastilles par fournisseur
+apparaissent dès qu’une fenêtre est lue. Aucun appel modèle ne sert à les
+rafraîchir et aucun basculement de modèle n’en dépend.
 
-## Navigation et raccourcis
-
-L’onglet **Projet** donne accès aux **Fichiers**, **Environnements** et **Sources**.
-Les préférences règlent notamment le terminal et le contraste.
-L’environnement choisi est un repère ; il ne crée pas de connexion Odoo ni de
-permission d’écriture.
+## Raccourcis
 
 | Raccourci | Action |
 |---|---|
+| `Alt 1` à `Alt 8` | Terminal, Intentions, Plan, Mémoire, Express, Agents, Temps, Projet |
 | `Ctrl Shift T` | Nouveau terminal |
 | `Ctrl Shift F` | Rechercher dans le terminal |
 | `Ctrl Shift C` / `Ctrl Shift V` | Copier la sélection du terminal / coller |
 | `Ctrl Alt ↑` / `Ctrl Alt ↓` | Projet précédent / suivant |
 | `Ctrl PageUp` / `Ctrl PageDown` | Terminal précédent / suivant |
-| `Alt 1` à `Alt 8` | Onglets dans l’ordre affiché : Terminal, Intentions, Plan, Mémoire, Express, Agents, Temps, Projet |
 | `Ctrl Shift P` | Palette de skills |
 | `Ctrl Alt F` | Recherche dans les documents des projets |
 
-La barre supérieure réunit le nom du projet, sa série, la release consultée
-(pastille avec l’état de la release) et l’environnement des nouveaux terminaux.
-La bande **En cours** n’apparaît que lorsqu’une activité est confirmée ou qu’une
-décision est attendue ; l’onglet **Agents** porte alors le compte. Le raccourci
-vers l’installation d’Odoo Crew n’est affiché que si le dispositif est absent du poste.
+L’onglet **Projet** regroupe les ressources en lecture seule : **Fichiers**,
+**Environnements** et **Sources**. Les préférences règlent le terminal, la
+largeur de la barre latérale et le contraste.
 
-## Données locales et persistance
+## Données locales
 
-Tricorder lit les projets, plans, preuves et workflows sans les modifier.
-Les agents et commandes lancés dans le shell conservent leurs propres permissions.
+Tricorder lit les projets, plans, preuves et workflows sans les modifier. Les
+agents et commandes lancés dans le shell conservent leurs propres permissions.
 Fermer la fenêtre laisse les terminaux en marche ; ils ne survivent pas au
-redémarrage du poste. Changer de vue ne change ni leur dossier ni leurs instructions.
+redémarrage du poste. Changer de vue ne change ni leur dossier ni leurs
+instructions.
 
-L’application utilise Electron, xterm.js et un service Python sur socket Unix privée.
-Elle n’expose aucun service TCP, n’envoie aucune télémétrie et ne lit ni le trousseau
-ni les clés des fournisseurs. Les lancements suivis conservent des métadonnées
-locales d’événements ; ils ne parcourent pas globalement vos conversations.
-Les préférences sont dans `~/.config/odoo-tricorder/settings.json` par défaut.
+L’application utilise Electron, xterm.js et un service Python sur socket Unix
+privée. Elle n’expose aucun service TCP, n’envoie aucune télémétrie, ne charge
+rien depuis le réseau (polices comprises) et ne lit ni le trousseau ni les clés
+des fournisseurs. Les lancements suivis conservent des métadonnées locales
+d’événements ; ils ne parcourent pas vos conversations. Les préférences sont dans
+`~/.config/odoo-tricorder/settings.json`.
 
 ## Développer et vérifier
 
@@ -196,22 +180,25 @@ Node.js 22+, Python 3.10+ et Odoo Crew pour les tests d’intégration :
 
 ```bash
 npm ci
-npm test
-npm run test:ui
-npm run dist
+npm test            # 87 tests Python, 56 tests Node
+npm run test:ui     # 17 parcours Electron sur projets synthétiques
+npm run dist        # paquet Debian dans release/
 npm run test:packaged
 npm run checksum
 ```
 
-`npm start` lance l’application depuis les sources. Les tests utilisent des projets
-temporaires synthétiques ; les parcours Electron nécessitent une session graphique
-ou `xvfb-run -a`. Les tests ordinaires ne lancent aucune campagne de modèles réelle.
+`npm start` lance l’application depuis les sources. Les parcours Electron
+nécessitent une session graphique ou `xvfb-run -a`. Aucun test ne lance de
+campagne de modèles réelle. Le socle visuel est documenté dans
+[docs/DESIGN.md](docs/DESIGN.md) ; les maquettes des directions explorées sont
+dans [docs/design/variants](docs/design/variants).
 
 ## Licence et marques
 
 Code sous [licence MIT](LICENSE). Les polices Antonio et IBM Plex sont embarquées
-sous [SIL Open Font License](assets/fonts/README.md). L’identité visuelle, hommage
-discret aux interfaces LCARS de *Star Trek : The Next Generation*, est décrite dans
-[docs/design/DIRECTION.md](docs/design/DIRECTION.md). Les logos OpenAI et Anthropic sont des marques
-de leurs titulaires ; leurs [sources officielles sont documentées](assets/providers/README.md).
-Projet indépendant, sans affiliation à Odoo, OpenAI, Anthropic ou Star Trek.
+sous [SIL Open Font License](assets/fonts/README.md). Les logos OpenAI et Anthropic
+sont des marques de leurs titulaires ; leurs
+[sources officielles sont documentées](assets/providers/README.md). L’identité
+visuelle est un hommage discret aux interfaces LCARS de *Star Trek : The Next
+Generation*. Projet indépendant, sans affiliation à Odoo, OpenAI, Anthropic ou
+Paramount.
