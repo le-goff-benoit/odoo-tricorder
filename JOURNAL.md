@@ -1,5 +1,15 @@
 # Journal
 
+## 2026-09-16 — Hiérarchie visuelle 0.3.4
+
+- Remarques de Benoît : pertinence et hiérarchie des informations, barre supérieure lourde, monogrammes inutiles, sélection de projet datée, espacement général.
+- Barre supérieure en une ligne : pastilles méta, sélecteurs release/environnement en pastilles (état de release en point de couleur), actions à droite ; Projet devient un onglet.
+- Barre latérale sans monogramme : nom, série à droite, point vert d’activité, pastille de compte ; sélection par fond discret.
+- Système de composants : segments, puces, boutons fantômes, badges pilules, tableaux encadrés ; jetons de texte à trois niveaux ; rythme vertical resserré.
+- Cartes de tâches réduites à identifiant/titre/état + méta + activité ; prose d’introduction retirée des vues ; panneau qualité seulement dans le Plan.
+- `design-system.css` réécrit comme système complet ; `style.css` réduit aux géométries spécialisées.
+- Vérifié : 87 tests Python, 56 Node, 16 parcours Electron depuis les sources et dans le paquet ; captures régénérées ; publication v0.3.4 et installation locale.
+
 ## 2026-09-16 — Cockpit plus clair 0.3.3
 
 - Demande de Benoît : relire design et ergonomie, retirer le redondant, moderniser ; puis appliquer les recommandations, publier et mettre à jour le poste.

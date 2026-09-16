@@ -8,7 +8,7 @@ Retrouvez vos demandes, le plan de release, les agents en activité et leurs
 résultats autour d’un terminal persistant. **Odoo Crew orchestre le travail ;
 Tricorder en montre l’avancement.**
 
-[Installer la version 0.3.3](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.3) ·
+[Installer la version 0.3.4](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.4) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Exemples de parcours](docs/WORKFLOWS.md) ·
 [Signaler un problème](https://github.com/le-goff-benoit/odoo-tricorder/issues)
@@ -71,15 +71,15 @@ Les comparaisons de vitesse restent liées à la qualité réellement vérifiée
 
 ## Installer
 
-Le paquet **0.3.3** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
+Le paquet **0.3.4** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
 parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
-1. Télécharger `odoo-tricorder_0.3.3_amd64.deb` dans la
-   [release 0.3.3](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.3).
+1. Télécharger `odoo-tricorder_0.3.4_amd64.deb` dans la
+   [release 0.3.4](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.4).
 2. Depuis le dossier contenant le téléchargement :
 
    ```bash
-   sudo apt install ./odoo-tricorder_0.3.3_amd64.deb
+   sudo apt install ./odoo-tricorder_0.3.4_amd64.deb
    ```
 
 3. Ouvrir **Odoo Tricorder** dans le menu des applications.
@@ -155,8 +155,8 @@ Le bouton Actualiser reste disponible.
 
 ## Navigation et raccourcis
 
-**Projet**, en haut de la fenêtre, donne accès aux **Fichiers**, **Environnements**
-et **Sources**. Les préférences règlent notamment le terminal et le contraste.
+L’onglet **Projet** donne accès aux **Fichiers**, **Environnements** et **Sources**.
+Les préférences règlent notamment le terminal et le contraste.
 L’environnement choisi est un repère ; il ne crée pas de connexion Odoo ni de
 permission d’écriture.
 
@@ -167,16 +167,15 @@ permission d’écriture.
 | `Ctrl Shift C` / `Ctrl Shift V` | Copier la sélection du terminal / coller |
 | `Ctrl Alt ↑` / `Ctrl Alt ↓` | Projet précédent / suivant |
 | `Ctrl PageUp` / `Ctrl PageDown` | Terminal précédent / suivant |
-| `Alt 1` à `Alt 7` | Onglets dans l’ordre affiché : Terminal, Intentions, Plan, Mémoire, Express, Agents, Temps |
-| `Alt 8` | Ressources du projet (Fichiers, Environnements, Sources) |
+| `Alt 1` à `Alt 8` | Onglets dans l’ordre affiché : Terminal, Intentions, Plan, Mémoire, Express, Agents, Temps, Projet |
 | `Ctrl Shift P` | Palette de skills |
 | `Ctrl Alt F` | Recherche dans les documents des projets |
 
-Le bandeau du projet réunit le nom, la série, la release consultée et
-l’environnement sur une seule ligne. La bande **En cours** n’apparaît que
-lorsqu’une activité est confirmée ou qu’une décision est attendue ; l’onglet
-**Agents** porte alors le compte. Le raccourci vers l’installation d’Odoo Crew
-n’est affiché que si le dispositif est absent du poste.
+La barre supérieure réunit le nom du projet, sa série, la release consultée
+(pastille avec l’état de la release) et l’environnement des nouveaux terminaux.
+La bande **En cours** n’apparaît que lorsqu’une activité est confirmée ou qu’une
+décision est attendue ; l’onglet **Agents** porte alors le compte. Le raccourci
+vers l’installation d’Odoo Crew n’est affiché que si le dispositif est absent du poste.
 
 ## Données locales et persistance
 

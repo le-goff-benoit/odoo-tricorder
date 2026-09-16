@@ -75,15 +75,15 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
   });
   const proofLabel = t => t.kind === 'orchestration' ? t.stage : taskState(t).proof;
   function card(t) {
-    if (t.kind === 'intention') return `<button class="kanban-card" data-kind="intention" data-view="intentions" data-intention="${esc(t.intentionId)}"><div class="kanban-card-status"><strong>${esc(t.intentionId)}</strong>${badge('pending', t.presentation.label)}</div><h3>${esc(t.title)}</h3><p>Demande · ${esc(t.reason)}</p><small>Consulter la demande · pas encore exécutable</small></button>`;
+    if (t.kind === 'intention') return `<button class="kanban-card" data-kind="intention" data-view="intentions" data-intention="${esc(t.intentionId)}"><div class="kanban-card-status"><strong>${esc(t.intentionId)}</strong>${badge('pending', t.presentation.label)}</div><h3>${esc(t.title)}</h3><p class="card-meta">${esc(t.reason)}</p></button>`;
     return `<button class="kanban-card" data-release-task="${esc(t.id)}" aria-haspopup="dialog">
       <div class="kanban-card-status"><strong>${esc(t.kind === 'orchestration' ? 'Principal' : t.id)}</strong>${t.waiting ? badge('waiting_human', 'Accord attendu') : ''}${t.blocked ? badge('blocked', 'Bloquée') : ''}${t.status === 'ready' ? badge('ready') : ''}</div>
       <h3>${esc(t.title)}</h3>
-      ${t.owners.length ? `<p class="board-owner" title="${esc(t.owners.join(' · '))}">Responsable déclaré : ${esc(t.owners.join(' · '))}</p>` : ''}
+      ${t.owners.length ? `<p class="card-meta board-owner" title="Responsable déclaré : ${esc(t.owners.join(' · '))}"><span class="sr-only">Responsable déclaré : </span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>${esc(t.owners.join(' · '))}</p>` : ''}
+      ${t.kind === 'orchestration' && t.model ? `<p class="card-meta">Modèle : ${esc(t.model)}</p>` : ''}
       ${proofLabel(t) ? `<p class="board-proof">${esc(proofLabel(t))}</p>` : ''}
-      ${(t.activities || []).map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${providerIcon(a.provider)} Suivi ${esc(a.provider === 'codex' ? 'Codex' : a.provider === 'claude' ? 'Claude' : a.provider || '')} · ${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}
-      ${t.measures.actual == null && t.measures.revised == null && t.measures.initial == null ? '' : `<p class="board-time" title="Temps connu / prévu">${hours(t.measures.actual)}${t.measures.partial ? ' · partiel' : ''} / ${t.measures.revised == null && t.measures.initial == null ? 'Non estimé' : hours(t.measures.revised ?? t.measures.initial)}</p>`}
-      <small>${t.kind === 'orchestration' ? 'Modèle : ' + esc(t.model || 'non renseigné') : (t.acceptance?.length || 0) + ' critères d’acceptation'}</small></button>`;
+      ${(t.activities || []).map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${providerIcon(a.provider)}${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}
+      ${t.measures.actual == null && t.measures.revised == null && t.measures.initial == null ? '' : `<p class="board-time" title="Temps connu / prévu">${hours(t.measures.actual)}${t.measures.partial ? ' · partiel' : ''} / ${t.measures.revised == null && t.measures.initial == null ? 'Non estimé' : hours(t.measures.revised ?? t.measures.initial)}</p>`}</button>`;
   }
   function drawer(t) {
     const s = get();

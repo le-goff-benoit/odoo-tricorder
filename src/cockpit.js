@@ -112,7 +112,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function missionView() {
     const s = get(), rows = currentObservations();
     const waiting = rows.flatMap(b => b.agents || []).filter(a => a.state === 'waiting_human').length;
-    return `<div class="page"><div class="section-title"><h2>Activité des agents</h2>${badge(waiting ? 'waiting_human' : 'series', waiting ? `${waiting} décision(s) attendue(s)` : s.selectedTask ? 'Tâche ' + s.selectedTask : 'Toutes les tâches')}</div><p class="muted">Les workflows indiquent la responsabilité ; les sessions associées indiquent le dernier état observé.</p>${activityPanel()}<details class="mission-history"><summary>Responsabilités et historique des missions</summary>${missionCards({ s, rows, esc, badge })}</details>${nativePanel()}<details class="project-terminals"><summary>Autres terminaux et missions du projet</summary>${s.sessions.filter(t => t.project === s.current).map(t => `<button class="file-row" data-session="${t.id}">${providerIcon(t.provider)}<strong>${esc(t.program || 'Shell')}</strong><span>${esc(t.release || 'Sans release')} / ${esc(t.task || 'Release complète')} · ${t.alive ? 'processus actif' : 'arrêté'}</span></button>`).join('')}</details></div>`;
+    return `<div class="page"><div class="section-title"><h2>Activité des agents</h2>${waiting ? badge('waiting_human', `${waiting} décision(s) attendue(s)`) : ''}</div>${activityPanel()}<details class="mission-history"><summary>Responsabilités et historique des missions</summary>${missionCards({ s, rows, esc, badge })}</details>${nativePanel()}<details class="project-terminals"><summary>Autres terminaux et missions du projet</summary>${s.sessions.filter(t => t.project === s.current).map(t => `<button class="file-row" data-session="${t.id}">${providerIcon(t.provider)}<strong>${esc(t.program || 'Shell')}</strong><span>${esc(t.release || 'Sans release')} / ${esc(t.task || 'Release complète')} · ${t.alive ? 'processus actif' : 'arrêté'}</span></button>`).join('')}</details></div>`;
   }
   const roleLabels = { 'odoo-developer': 'développement', 'odoo-tester': 'QA', orchestrateur: 'coordination' };
   const sourceLabel = basis => ({ 'effort.json': 'Enregistré', 'Natif · non consolidé': 'Provisoire' })[basis] || basis;
@@ -156,7 +156,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     const flows = get().detail.express || [];
     const labels = { active: 'En cours', running: 'En cours', complete: 'Terminée', blocked: 'Bloquée', waiting_human: 'Votre décision est attendue', deadlocked: 'À débloquer' };
     const stages = { briefing: 'Briefing', express_scope: 'Qualification', express_implementation: 'Correction', express_qa: 'Contrôles ciblés', express_record: 'Journal', express_delivery: 'Livraison', task_done: 'Terminée' };
-    return `<div class="page express-page"><div class="section-title"><h2>Interventions express</h2><span>${flows.length} intervention${flows.length > 1 ? 's' : ''}</span></div><p class="muted">Correctifs suivis à l’échelle du projet, indépendamment de la release consultée.</p>${flows.map(f => {
+    return `<div class="page express-page"><div class="section-title"><h2>Interventions express</h2><span>${flows.length} intervention${flows.length > 1 ? 's' : ''}</span></div>${flows.map(f => {
       const active = f.nodes.filter(n => ['claimed', 'ready'].includes(n.status));
       const qa = { pass: 'Contrôles ciblés réussis (résultat enregistré)', retry: 'Contrôles à reprendre', blocked: 'Contrôles bloquants' }[f.expressQA] || 'Contrôles ciblés non renseignés';
       return `<article class="info-card express-card"><div class="card-title"><h3>${esc(f.id.replaceAll('-', ' '))}</h3>${badge(f.status === 'complete' ? 'done' : f.status, labels[f.status] || 'État à vérifier')}</div>${f.promoted ? '<p class="note">Périmètre élargi : poursuite en développement complet.</p>' : ''}<p>${esc(f.release ? 'Changelog : ' + f.release : 'Hors release')} · ${when(f.updatedAt)}</p>${active.map(n => `<p><strong>${esc(stages[n.id] || n.description)}</strong> · ${esc(n.owner || (n.status === 'ready' ? 'Prochaine étape' : 'Responsable non renseigné'))}${n.owner ? ' <small>(responsabilité enregistrée, activité non confirmée)</small>' : ''}</p>`).join('')}<p>${qa}</p><details class="technical-details"><summary>Étapes et traces</summary>${f.nodes.map(n => `<p>${esc(stages[n.id] || n.description)} · ${esc(n.status === 'done' ? 'Parcourue' : n.status === 'claimed' ? 'Prise en charge' : 'À venir')}</p>`).join('')}<pre>${esc(JSON.stringify(f.expressEvidence, null, 2))}</pre>${f.warning ? `<p class="warning-text">${esc(f.warning)}</p>` : ''}</details></article>`;
@@ -177,7 +177,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     const s = get(), data = explorerProject === s.current ? explorer : null;
     if (!data && !exploring) loadFiles();
     const parts = (data?.path === '.' ? '' : data?.path || '').split('/').filter(Boolean);
-    return `<div class="page"><div class="section-title"><h2>Fichiers du projet</h2><div class="cockpit-actions">${action('search', 'Recherche transversale')}${action('refresh-files', 'Actualiser')}</div></div><p class="muted">Explorateur en lecture seule. Les secrets, dossiers techniques et liens symboliques sont masqués. Aucun fichier n’est exécuté.</p><div class="cockpit-actions"><button class="secondary" data-files="">Racine</button><button class="secondary" data-files="changelog">Releases</button><button class="secondary" data-files=".odoo-agents">Mémoire du projet</button><button class="secondary" data-files="inbox">Fichiers reçus</button></div><div class="explorer-path">${esc(s.current)}${parts.map((p, i) => ` / <button data-files="${esc(parts.slice(0, i + 1).join('/'))}">${esc(p)}</button>`).join('')}</div><div class="file-explorer">${parts.length ? `<button class="explorer-row" data-files="${esc(parts.slice(0, -1).join('/'))}">↰ Dossier parent</button>` : ''}${(data?.entries || []).map(f => `<button class="explorer-row" ${f.directory ? 'data-files' : 'data-preview'}="${esc(f.path)}" ${f.readable ? '' : 'disabled'}><span>${f.directory ? '▸' : '·'}</span><strong>${esc(f.name)}</strong><small>${f.directory ? 'Dossier' : (f.bytes / 1024).toFixed(1) + ' Ko'} · ${when(f.modified)}${!f.readable ? ' · aperçu indisponible' : ''}</small></button>`).join('') || '<p class="pad muted">Dossier vide ou en cours de lecture.</p>'}</div>${data?.truncated ? '<p class="warning-text">Affichage limité aux 500 premières entrées.</p>' : ''}</div>`;
+    return `<div class="page"><div class="section-title"><h2>Fichiers du projet</h2><div class="cockpit-actions">${action('search', 'Recherche transversale')}${action('refresh-files', 'Actualiser')}</div></div><div class="chips"><button class="chip" data-files="">Racine</button><button class="chip" data-files="changelog">Releases</button><button class="chip" data-files=".odoo-agents">Mémoire du projet</button><button class="chip" data-files="inbox">Fichiers reçus</button></div><div class="explorer-path">${esc(s.current)}${parts.map((p, i) => ` / <button data-files="${esc(parts.slice(0, i + 1).join('/'))}">${esc(p)}</button>`).join('')}</div><div class="file-explorer">${parts.length ? `<button class="explorer-row" data-files="${esc(parts.slice(0, -1).join('/'))}">↰ Dossier parent</button>` : ''}${(data?.entries || []).map(f => `<button class="explorer-row" ${f.directory ? 'data-files' : 'data-preview'}="${esc(f.path)}" ${f.readable ? '' : 'disabled'}><span>${f.directory ? '▸' : '·'}</span><strong>${esc(f.name)}</strong><small>${f.directory ? 'Dossier' : (f.bytes / 1024).toFixed(1) + ' Ko'} · ${when(f.modified)}${!f.readable ? ' · aperçu indisponible' : ''}</small></button>`).join('') || '<p class="pad muted">Dossier vide ou en cours de lecture.</p>'}</div>${data?.truncated ? '<p class="warning-text">Affichage limité aux 500 premières entrées.</p>' : ''}</div>`;
   }
   function sourcesExtra() {
     const sources = get().detail.sources, dep = sources.dependencies;
@@ -191,14 +191,14 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function activeRows() { return get().detail ? activities(get().detail, currentObservations(true)) : []; }
   function activityPanel() {
     const rows = activeRows().filter(a => a.executing || a.waiting || a.stale);
-    return `<section class="live-activities"><h3>Activité actuelle</h3>${rows.map(a => `<article class="activity-row ${a.executing ? 'executing' : ''}"><strong>${esc(a.task || 'Orchestration')} · ${esc(a.label)}</strong><span>${esc([a.provider, a.role, a.model, a.stage].filter(Boolean).join(' · '))}</span>${timerMarkup(a, esc)}${a.task ? `<button class="text-button" data-task="${esc(a.task)}">Voir la tâche</button>` : ''}</article>`).join('') || '<p>Aucune activité confirmée. Les responsabilités enregistrées restent disponibles ci-dessous.</p>'}</section>`;
+    return `<section class="live-activities">${rows.map(a => `<article class="activity-row ${a.executing ? 'executing' : ''}"><strong>${esc(a.task || 'Orchestration')} · ${esc(a.label)}</strong><span>${esc([a.provider, a.role, a.model, a.stage].filter(Boolean).join(' · '))}</span>${timerMarkup(a, esc)}${a.task ? `<button class="text-button" data-task="${esc(a.task)}">Voir la tâche</button>` : ''}</article>`).join('') || '<p class="muted">Aucune activité confirmée pour le moment.</p>'}</section>`;
   }
   function drawActivity() {
     const strip = $('#activity-strip'); if (!strip) return;
     const rows = get().detail && !get().overviewMode ? activeRows() : [];
     const running = rows.filter(a => a.executing), waiting = rows.filter(a => a.waiting);
     strip.hidden = !running.length && !waiting.length;
-    const html = `<button class="text-button" data-cockpit="activity">En cours : ${running.length} activité${running.length > 1 ? 's' : ''} · ${waiting.length} en attente</button><span>${esc([...running, ...waiting].map(a => [a.task || 'Orchestration', a.label].join(' · ')).join(' / '))}</span>`;
+    const html = `<button class="text-button" data-cockpit="activity">En cours : ${running.length} activité${running.length > 1 ? 's' : ''}${waiting.length ? ` · ${waiting.length} en attente` : ''}</button><span>${esc([...running, ...waiting].map(a => [a.task || 'Orchestration', a.label].join(' · ')).join(' / '))}</span>`;
     if (strip.innerHTML !== html) strip.innerHTML = html;
     const tab = $('#tabs [data-view="agents"]');
     if (tab) {
@@ -240,12 +240,11 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     if (s.view === 'sources') page.insertAdjacentHTML('beforeend', sourcesExtra());
     if (s.view === 'environments') page.insertAdjacentHTML('beforeend', stackPanel());
     if (s.view === 'documents') $('#content').innerHTML = filesView();
-    if (['agents', 'plan'].includes(s.view) && s.detail.selectedRelease) ($('#content .page') || $('#content')).insertAdjacentHTML('beforeend', qualityPanel(s.detail.quality, s.selectedTask));
+    if (s.view === 'plan' && s.detail.selectedRelease) ($('#content .page') || $('#content')).insertAdjacentHTML('beforeend', qualityPanel(s.detail.quality, s.selectedTask));
     lifecycleUI({ s, esc, when });
     const resources = ['documents', 'environments', 'sources'].includes(s.view);
     $('#context-bar').hidden = resources || s.view === 'express';
     if (resources) $('#content').insertAdjacentHTML('afterbegin', `<nav class="project-resources" aria-label="Ressources du projet">${[['documents', 'Fichiers'], ['environments', 'Environnements'], ['sources', 'Sources']].map(([id, label]) => `<button class="${s.view === id ? 'active' : ''}" data-view="${id}">${label}</button>`).join('')}</nav>`);
-    $('[data-view="project"]').classList.toggle('active', resources);
   }
   function qualityPanel(quality, task) {
     const data = quality || { reports: [], warnings: [], documents: [] };
@@ -279,7 +278,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       <details class="keyboard-help"><summary>Raccourcis clavier</summary><dl>
         <dt>Nouvel onglet terminal</dt><dd>Ctrl Shift T</dd><dt>Rechercher dans le terminal</dt><dd>Ctrl Shift F</dd>
         <dt>Changer de projet</dt><dd>Ctrl Alt ↑ / ↓</dd><dt>Changer de terminal</dt><dd>Ctrl PageUp / PageDown</dd>
-        <dt>Onglets, dans l’ordre affiché (Projet en dernier)</dt><dd>Alt 1…8</dd>
+        <dt>Onglets, dans l’ordre affiché</dt><dd>Alt 1…8</dd>
         <dt>Skills</dt><dd>Ctrl Shift P</dd><dt>Rechercher un fichier</dt><dd>Ctrl Alt F</dd>
       </dl></details></div>`);
     $('#preferences-form').addEventListener('submit', async event => {
@@ -381,7 +380,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       if (next) { selectSession(next.id); setView('terminal'); }
     }
   });
-  $('.top-actions').insertAdjacentHTML('afterbegin', '<button class="text-button" data-view="project">Projet</button><button class="text-button" data-cockpit="palette" title="Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
+  $('.top-actions').insertAdjacentHTML('afterbegin', '<button class="text-button" data-cockpit="palette" title="Palette de skills · Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
   setInterval(refreshNative, 5000);
   setInterval(() => tickTimers(), 1000);
   setInterval(refreshQuotas, 30000);

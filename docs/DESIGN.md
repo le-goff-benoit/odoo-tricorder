@@ -1,8 +1,9 @@
 # Socle visuel Tricorder
 
-`src/design-system.css` est le contrat commun, chargé après les styles de vues.
-`src/style.css` conserve les géométries spécialisées (terminal, sidebar, Kanban,
-étapes et responsive), pas une deuxième charte par onglet.
+`src/design-system.css` est le système visuel complet : jetons (couleurs, texte,
+espacements), mise en page, composants réutilisables et responsive, chargé après
+`src/style.css` qui ne conserve que les géométries spécialisées (terminal,
+Markdown, dialogues, explorateur, mesures).
 
 - Espacements : grille de 4 px, variables `--space-1` à `--space-11`.
 - Alignement : `--page-gutter` commun aux pages, bandeau, onglets et ressources
@@ -13,14 +14,26 @@
   accessible avec Échap, retour au déclencheur et critères d’acceptation en premier.
 - Aucun sélecteur de tâche global ni panneau latéral de suivi. La sélection du
   projet/release reste distincte de la consultation ponctuelle d’une fiche.
-- En-tête en une bande : identité du projet à gauche, release et environnement à
-  droite (`#context-bar`), onglets dessous. `header()` émet le balisage final ;
-  aucune vue ne retouche l’en-tête après rendu. La bande d’activité et le compte
-  sur l’onglet Agents n’existent que lorsqu’une activité est confirmée.
+- En-tête en une ligne (`.topbar.project-header`) : nom du projet et pastilles
+  méta, sélecteurs release/environnement en pastilles (`.pill-select`, libellés
+  masqués pour les lecteurs d’écran), actions globales à droite ; onglets dessous.
+  `header()` émet le balisage final ; aucune vue ne retouche l’en-tête après rendu.
+  La bande d’activité et le compte sur l’onglet Agents n’existent que lorsqu’une
+  activité est confirmée.
+- Barre latérale sans monogramme : une ligne par projet (nom, série à droite,
+  point vert si activité, pastille de compte si attention) ; la sélection est un
+  fond discret, pas une bordure.
+- Hiérarchie de texte à trois niveaux (`--text`, `--text-2`, `--text-3`) ;
+  commandes : segments (`.segmented`/`.segment`) pour les modes, puces (`.chip`)
+  pour les filtres, boutons fantômes (`.secondary`) pour les actions, or (`.primary`)
+  pour l’action principale ; badges en pilules 11 px.
+- Une carte dit trois choses : identifiant + titre + état, une ligne de méta
+  (responsable, étape ou preuve), l’activité observée. Les compteurs de critères,
+  chemins de fichiers et phrases d’explication n’y figurent pas.
 - Taille minimale du texte : 11 px (badges, libellés en capitales), 12 px pour
   tout contenu secondaire. Les onglets et le corps restent à 13 px.
 - Un onglet ne propose pas de bouton « revenir à » un autre onglet : la navigation
-  passe par la barre d’onglets et les raccourcis Alt 1…8.
+  passe par la barre d’onglets et les raccourcis Alt 1…8 (Projet est un onglet).
 - Le Plan a trois modes (liste, Kanban, dépendances) qui partagent filtres et
   responsable ; il n’existe pas de second onglet Kanban par release.
 - Les vues sont émises en une passe : aucun `textContent` réécrit ni nœud déplacé

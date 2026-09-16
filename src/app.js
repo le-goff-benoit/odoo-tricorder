@@ -32,8 +32,11 @@ const paths = {
   refresh: '<path d="M20 7a9 9 0 1 0 1 9M20 2v6h-6"/>',
   folder: '<path d="M3 6h7l2 3h9v12H3z"/>',
   bell: '<path d="M6 8a6 6 0 0 1 12 0v8l2 2H4l2-2zm4 14h4"/>',
+  chevron: '<path d="m6 9 6 6 6-6"/>',
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   star: '<path d="m12 3 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>',
+  person: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+  tag: '<path d="M3 12V4h8l9 9-8 8z"/><circle cx="7" cy="8" r="1"/>',
   branch: '<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 7v10m12-10a10 10 0 0 1-12 9"/>',
 };
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.grid}</svg>`;
@@ -42,9 +45,10 @@ const badge = (state, text) => `<span class="badge ${esc(state)}">${esc(text || 
 const when = value => value ? new Date(typeof value === 'number' ? value * 1000 : value).toLocaleString('fr-CH', { dateStyle: 'short', timeStyle: 'short' }) : 'Non observé';
 const minutes = value => value == null ? 'Non mesuré' : value < 1 ? `${Math.round(value * 60)} s` : `${Math.round(value).toLocaleString('fr-CH')} min`;
 const empty = (title, detail, action = '') => `<div class="empty">${icon('grid')}<h2>${esc(title)}</h2><p>${esc(detail)}</p>${action}</div>`;
-// Visible tab order. Alt+1…Alt+7 follow this list; Alt+8 opens the project resources.
-const VIEWS = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['knowledge', 'Mémoire', 'file'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
-const SHORTCUT_VIEWS = [...VIEWS.map(([id]) => id), 'project'];
+// Visible tab order; Alt+1…Alt+8 follow it. « Projet » groups the read-only resources.
+const VIEWS = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['knowledge', 'Mémoire', 'file'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps', 'chart'], ['project', 'Projet', 'folder']];
+const RESOURCE_VIEWS = ['documents', 'environments', 'sources'];
+const SHORTCUT_VIEWS = VIEWS.map(([id]) => id);
 let projects = [], settings = {}, current = null, detail = null, view = 'terminal', selectedTask = null;
 let sessions = [], selectedSession = new Map(), terminals = new Map(), generation = 0, busy = false, pollBusy = false;
 let projectError = null, overviewMode = false, split = false, version = '', crewInstalled = true;
@@ -55,14 +59,13 @@ let launchingTerminal = false;
 $('#app').innerHTML = `
   <aside class="sidebar">
     <div class="brand"><div class="brand-mark">${icon('terminal')}</div><div>TRICORDER</div></div>
-    <div class="project-heading"><span>PROJETS</span></div>
-    <button class="kanban-nav project-item" data-view="kanban"><span class="project-monogram">${icon('grid')}</span><span class="project-name">Kanban global<small>Tous les projets</small></span></button>
+    <nav class="side-nav" aria-label="Vues transversales"><button class="side-item kanban-nav" data-view="kanban">${icon('grid')}<span>Kanban global</span></button></nav>
+    <div class="side-heading">Projets</div>
     <div id="project-list" class="project-list"></div>
     <div class="sidebar-bottom"><button class="install-agents" data-action="agents-link" hidden>${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="about-button" data-action="about">À propos de Tricorder <span id="version"></span></button></div>
   </aside>
   <main class="workspace">
-    <header class="topbar"><div class="top-actions"><span id="sync-status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header>
-    <section class="project-header compact-project"><div class="project-identity"><h1 id="project-title"></h1><div id="project-meta" class="project-meta"></div></div><div id="context-bar" class="context-bar"></div></section>
+    <header class="topbar project-header"><div class="project-identity"><h1 id="project-title"></h1><div id="project-meta" class="project-meta"></div></div><div id="context-bar" class="context-bar"></div><div class="top-actions"><span id="sync-status" class="sync-status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header>
     <div id="activity-strip" class="activity-strip" hidden></div><nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
     <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button data-action="find-next">Suivant</button><button data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
   </main><div id="toast" role="status" hidden></div><dialog id="modal"><div id="modal-content"></div></dialog>`;
@@ -76,28 +79,29 @@ function sidebar() {
   const favorites = settings.favorites || [];
   const listed = [...projects].sort((a, b) => Number(favorites.includes(b.path)) - Number(favorites.includes(a.path)) || a.name.localeCompare(b.name));
   $('#project-list').innerHTML = listed.map(p => `
-    <button class="project-item ${current === p.path && !overviewMode ? 'selected' : ''}" data-project="${esc(p.path)}"><span class="project-monogram">${esc(p.name.slice(0, 2).toUpperCase())}</span><span class="project-name">${esc(p.name)}<small>${esc(p.series ? 'Odoo ' + p.series : 'Série à préciser')}${p.running ? ' · ' + p.running + ' en cours' : ''}</small></span>${p.attention?.length ? `<span class="attention-dot">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot">★</span>' : ''}</button>`).join('') || '<p class="muted pad">Aucun projet trouvé. Choisissez le dossier des projets dans Préférences.</p>';
+    <button class="project-item side-item ${current === p.path && !overviewMode ? 'selected' : ''}" data-project="${esc(p.path)}" aria-current="${current === p.path && !overviewMode ? 'page' : 'false'}" title="${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name">${esc(p.name)}</span><span class="project-sub">${esc(p.series || '—')}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || '<p class="muted pad">Aucun projet trouvé. Choisissez le dossier des projets dans Préférences.</p>';
   $('.install-agents').hidden = crewInstalled;
   cockpitUI.alertSidebar();
 }
 function tabs() {
-  $('#tabs').innerHTML = VIEWS.map(([id, label, symbol]) => `<button data-view="${id}" class="${view === id && !overviewMode ? 'active' : ''}">${icon(symbol)}${label}</button>`).join('');
+  const active = id => !overviewMode && (view === id || (id === 'project' && RESOURCE_VIEWS.includes(view)));
+  $('#tabs').innerHTML = VIEWS.map(([id, label, symbol]) => `<button data-view="${id}" class="${active(id) ? 'active' : ''}" aria-current="${active(id) ? 'page' : 'false'}">${icon(symbol)}${label}</button>`).join('');
 }
 const releaseLabel = r => ({ ouverte: 'Ouverte', close: 'Close' }[r.status] || r.status);
 function header() {
   const project = detail || projects.find(p => p.path === current);
   $('#project-title').textContent = overviewMode ? 'Kanban global' : project?.name || 'Aucun projet';
-  $('#project-meta').innerHTML = overviewMode ? `${projects.length} projets · tous les plans réunis`
-    : project ? `${project.series ? badge('series', 'Odoo ' + project.series) : ''}${detail?.branch ? `<span title="Branche Git">${icon('branch')}${esc(detail.branch)}${detail.gitChanges ? ' · ' + detail.gitChanges + ' modif.' : ''}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="${settings.favorites?.includes(current) ? 'Retirer des favoris' : 'Mettre en favori'}" aria-pressed="${!!settings.favorites?.includes(current)}">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier ${esc(project.path)}">${icon('external')}</button>`
-    : 'Choisissez le dossier des projets dans Préférences pour retrouver vos projets, terminaux et agents.';
+  $('#project-meta').innerHTML = overviewMode ? `<span class="muted">${projects.length} projets</span>`
+    : project ? `${project.series ? `<span class="meta-pill" title="Série Odoo">${esc(project.series)}</span>` : ''}${detail?.branch ? `<span class="meta-pill" title="Branche Git">${icon('branch')}${esc(detail.branch)}${detail.gitChanges ? ` <em>${detail.gitChanges}</em>` : ''}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="${settings.favorites?.includes(current) ? 'Retirer des favoris' : 'Mettre en favori'}" aria-pressed="${!!settings.favorites?.includes(current)}">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier ${esc(project.path)}">${icon('external')}</button>`
+    : '<span class="muted">Choisissez le dossier des projets dans Préférences.</span>';
   $('#context-bar').hidden = overviewMode || !project;
   $('#tabs').hidden = overviewMode;
-  $('[data-view="project"]').hidden = overviewMode;
   if (project && !overviewMode) {
     const context = settings.contexts?.[current] || {};
     const releases = detail?.releases || project.releases || [];
     const selected = releases.find(r => r.id === detail?.selectedRelease);
-    $('#context-bar').innerHTML = `<label class="release-context"><span class="context-label">RELEASE</span><select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${releases.map(r => `<option value="${esc(r.id)}" title="${esc(r.id)} · ${r.taskCount ?? '?'} tâches / points" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${r.id === detail?.selectedRelease ? esc(r.title || r.id) : `${esc(r.id.slice(0, 10))} · ${esc(r.title || r.id)} · ${esc(releaseLabel(r))}`}</option>`).join('')}</select>${selected ? `<span class="release-summary">${badge(selected.status, releaseLabel(selected))}<span>${esc(selected.id.slice(0, 10))}</span></span>` : ''}</label><label class="environment-context"><span class="context-label">ENVIRONNEMENT</span><select id="environment-select" aria-label="Environnement" title="Repère pour les nouveaux terminaux ; ne change ni la connexion, ni les permissions, ni le terminal existant."><option value="">Non ciblé · shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select></label>`;
+    const environment = detail?.environments?.find(e => e.name === context.environment);
+    $('#context-bar').innerHTML = `<label class="pill-select release-context ${selected ? selected.status : 'none'}"><span class="sr-only context-label">RELEASE</span>${selected ? `<span class="release-summary" title="Release ${releaseLabel(selected).toLowerCase()} · ${esc(selected.id)}"><i class="status-dot ${esc(selected.status)}"></i><span class="sr-only">${releaseLabel(selected)}</span></span>` : icon('tag')}<select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${releases.map(r => `<option value="${esc(r.id)}" title="${esc(r.id)} · ${r.taskCount ?? '?'} tâches / points" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${r.id === detail?.selectedRelease ? esc(r.title || r.id) : `${esc(r.id.slice(0, 10))} · ${esc(r.title || r.id)} · ${esc(releaseLabel(r))}`}</option>`).join('')}</select>${icon('chevron')}</label><label class="pill-select environment-context ${environment?.kind === 'production' ? 'production' : ''}"><span class="sr-only context-label">ENVIRONNEMENT</span>${icon('server')}<select id="environment-select" aria-label="Environnement" title="Repère pour les nouveaux terminaux ; ne change ni la connexion, ni les permissions, ni le terminal existant."><option value="">Shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select>${icon('chevron')}</label>`;
   }
 }
 function setView(next) {
@@ -164,10 +168,10 @@ function renderKanban() {
   const scrollLeft = $('.kanban-board')?.scrollLeft || 0;
   const allCards = boardCards(projects, kanbanClosed, cockpitUI.allObservations());
   const cards = kanbanExecuting ? allCards.filter(t => t.activities?.some(a => a.executing)) : allCards;
-  $('#content').innerHTML = `<div class="page kanban-page"><div class="kanban-toolbar"><p>${cards.filter(t => !['orchestration', 'intention'].includes(t.kind)).length} tâches${cards.some(t => t.kind === 'intention') ? ' · ' + cards.filter(t => t.kind === 'intention').length + ' demande(s) à planifier' : ''} + ${cards.filter(t => t.kind === 'orchestration').length} orchestration(s) · ${kanbanClosed ? 'Toutes les releases' : 'Releases closes masquées'}</p><button class="secondary" data-action="kanban-executing" aria-pressed="${kanbanExecuting}">En exécution</button><button class="secondary" data-action="kanban-closed" aria-pressed="${kanbanClosed}">${kanbanClosed ? 'Masquer' : 'Inclure'} les releases closes</button></div>${(() => { const shownColumns = kanbanColumns.filter(([id]) => !['blocked', 'unknown', 'deferred'].includes(id) || cards.some(t => t.column === id)); return `<div class="kanban-board" style="--board-columns:${shownColumns.length}">${shownColumns.map(([id, label]) => {
+  $('#content').innerHTML = `<div class="page kanban-page"><div class="kanban-toolbar"><div class="chips" role="group" aria-label="Filtrer le tableau"><button class="chip" data-action="kanban-executing" aria-pressed="${kanbanExecuting}">En exécution</button><button class="chip" data-action="kanban-closed" aria-pressed="${kanbanClosed}">Releases closes</button></div><span class="release-counts">${cards.filter(t => !['orchestration', 'intention'].includes(t.kind)).length} tâches${cards.some(t => t.kind === 'intention') ? ' · ' + cards.filter(t => t.kind === 'intention').length + ' demande(s) à planifier' : ''} · ${cards.filter(t => t.kind === 'orchestration').length} orchestration(s)</span></div>${(() => { const shownColumns = kanbanColumns.filter(([id]) => !['blocked', 'unknown', 'deferred'].includes(id) || cards.some(t => t.column === id)); return `<div class="kanban-board" style="--board-columns:${shownColumns.length}">${shownColumns.map(([id, label]) => {
     const tasks = cards.filter(t => t.column === id);
-    return `<section class="kanban-column" data-column="${id}" aria-label="${label}"><h2>${label}<span>${tasks.length}</span></h2>${tasks.map(t => `<button class="kanban-card" data-kanban-project="${esc(t.project)}" data-kanban-release="${esc(t.release)}" ${t.kind === 'intention' ? `data-kanban-intention="${esc(t.intentionId)}"` : `data-kanban-task="${esc(t.id)}"`}><span class="kanban-project">${esc(t.projectName)}</span><small class="kanban-release">${esc(t.releaseTitle)}${t.releaseStatus === 'close' ? ' · close' : ''}</small><div class="kanban-card-status"><span>${esc(t.intentionId || t.id)}</span>${badge(t.status, t.presentation?.label)}</div><h3>${esc(t.title)}</h3>${t.kind === 'orchestration' ? `<p>${esc(t.stage)} · ${esc(t.model || 'Modèle principal non renseigné')}</p>` : ''}<p>${esc(t.kind === 'intention' ? 'Revue de l’orchestrateur attendue' : t.owners?.length ? t.owners.join(' · ') : 'Responsable non renseigné')}</p>${(t.activities || []).map(a => `<p class="task-activity">${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}${t.presentation?.proof ? `<p class="board-proof">${esc(t.presentation.proof)}</p>` : ''}${t.acceptance?.length ? `<small>${t.acceptance.length} critères d’acceptation</small>` : ''}</button>`).join('') || '<p class="kanban-empty">Aucune tâche</p>'}</section>`;
-  }).join('')}</div>`; })()}${projects.some(p => p.warnings?.length) ? '<p class="note">Certains projets ont des informations à vérifier. Les statuts inconnus restent dans « État à vérifier » ; ouvrez le projet pour le détail.</p>' : ''}<p class="muted">Les colonnes suivent les plans et leurs preuves. Cliquez sur une carte pour retrouver sa tâche ; aucun statut n’est modifié depuis ce tableau.</p></div>`;
+    return `<section class="kanban-column" data-column="${id}" aria-label="${label}"><h2>${label}<span>${tasks.length}</span></h2>${tasks.map(t => `<button class="kanban-card" data-kanban-project="${esc(t.project)}" data-kanban-release="${esc(t.release)}" ${t.kind === 'intention' ? `data-kanban-intention="${esc(t.intentionId)}"` : `data-kanban-task="${esc(t.id)}"`}><span class="kanban-project">${esc(t.projectName)}<small class="kanban-release"> · ${esc(t.releaseTitle)}${t.releaseStatus === 'close' ? ' · close' : ''}</small></span><div class="kanban-card-status"><strong>${esc(t.intentionId || t.id)}</strong>${badge(t.status, t.presentation?.label)}</div><h3>${esc(t.title)}</h3>${t.kind === 'orchestration' ? `<p class="card-meta">${esc(t.stage)}</p>` : ''}${t.kind === 'intention' ? '<p class="card-meta">Revue de l’orchestrateur attendue</p>' : t.owners?.length ? `<p class="card-meta board-owner">${icon('person')}${esc(t.owners.join(' · '))}</p>` : ''}${(t.activities || []).map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${providerIcon(a.provider)}${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}${t.presentation?.proof ? `<p class="board-proof">${esc(t.presentation.proof)}</p>` : ''}</button>`).join('') || '<p class="kanban-empty">Aucune tâche</p>'}</section>`;
+  }).join('')}</div>`; })()}${projects.some(p => p.warnings?.length) ? '<p class="note">Certains projets ont des informations à vérifier. Les statuts inconnus restent dans « État à vérifier » ; ouvrez le projet pour le détail.</p>' : ''}</div>`;
   $('.kanban-board').scrollLeft = scrollLeft;
 }
 function renderAgents() {

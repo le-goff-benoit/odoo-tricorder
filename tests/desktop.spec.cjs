@@ -275,6 +275,8 @@ test('release Kanban: receipts, criteria, filters, live refresh and existing ter
     await page.locator('#board-owner').selectOption('Codex · développeur');
     await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
     await page.locator('#board-owner').selectOption('');
+    // A short window forces the dialog to scroll so the position survives a refresh.
+    await page.setViewportSize({ width: 1280, height: 560 });
     await page.locator('[data-release-task="T02"]').click();
     const scrollBeforeRefresh = await page.locator('#task-modal').evaluate(el => { el.scrollTop = 180; return el.scrollTop; });
     expect(scrollBeforeRefresh).toBeGreaterThan(0);
@@ -1189,8 +1191,9 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await expect(page.locator('.board-detail')).toContainText('Votre décision est attendue');
     await expect(page.locator('.board-detail')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
     await page.locator('[data-board-close]').click();
-    await page.locator('[data-view="agents"]').click();
+    await page.locator('[data-view="plan"]').click();
     await expect(page.locator('.quality-panel')).toContainText('10');
+    await page.locator('[data-view="agents"]').click();
     await expect(page.locator('#content')).not.toContainText('DO-NOT-EXPOSE-PRIVATE');
     await page.locator('.technical-details > summary').click();
     await page.locator('[data-native-events]').click();

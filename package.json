@@ -1,6 +1,6 @@
 {
   "name": "odoo-tricorder",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "desktopName": "odoo-tricorder.desktop",
   "description": "Le cockpit terminal des projets et agents Odoo",
   "author": {
