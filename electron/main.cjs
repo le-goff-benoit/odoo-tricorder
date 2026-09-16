@@ -127,7 +127,8 @@ function handle(name, callback) {
 }
 function wireAPI() {
   require('./cockpit.cjs').wireCockpit({ handle, dialog, shell, window: () => window, settings, save: saveSettings, checkedProject, catalog, terminal, stateDir, backend, home });
-  handle('bootstrap', async () => ({ projects: await overview(), settings, links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home }));
+  handle('bootstrap', async () => ({ projects: await overview(), settings, links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home,
+    crewInstalled: fs.existsSync(path.join(process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents'), 'scripts', 'odoo_plan.py')) }));
   handle('overview', overview);
   handle('catalog-revision', () => catalogRevision(projects));
   handle('project', (project, release) => catalog({ action: 'project', project: checkedProject(project), release }));
@@ -135,13 +136,6 @@ function wireAPI() {
     const doc = await catalog({ action: 'document', project: checkedProject(project), path: relative });
     if (doc.type === 'pdf') { const error = await shell.openPath(doc.path); if (error) throw new Error(error); }
     return doc;
-  });
-  handle('add-project', async () => {
-    const result = await dialog.showOpenDialog(window, { title: 'Ajouter un projet', properties: ['openDirectory'], defaultPath: home });
-    if (result.canceled) return null;
-    const root = fs.realpathSync(result.filePaths[0]);
-    if (!settings.extras.includes(root)) settings.extras.push(root);
-    saveSettings(); return overview();
   });
   handle('source-root', async () => {
     const result = await dialog.showOpenDialog(window, { title: 'Bibliothèque partagée des sources Odoo', properties: ['openDirectory'], defaultPath: settings.sourceRoot || path.join(home, 'odoo-sources') });
@@ -165,8 +159,8 @@ function wireAPI() {
     if (Array.isArray(patch.favorites)) settings.favorites = patch.favorites.filter(p => projects.has(p));
     if (patch.ui && typeof patch.ui === 'object') {
       settings.ui ||= {};
-      for (const key of ['split', 'inspectorHidden', 'highContrast']) if (typeof patch.ui[key] === 'boolean') settings.ui[key] = patch.ui[key];
-      for (const [key, min, max] of [['fontSize', 11, 22], ['sidebarWidth', 210, 360], ['inspectorWidth', 250, 480]]) {
+      for (const key of ['split', 'highContrast']) if (typeof patch.ui[key] === 'boolean') settings.ui[key] = patch.ui[key];
+      for (const [key, min, max] of [['fontSize', 11, 22], ['sidebarWidth', 210, 360]]) {
         if (Number.isFinite(patch.ui[key])) settings.ui[key] = Math.max(min, Math.min(max, Math.round(patch.ui[key])));
       }
       if (['mono', 'liberation', 'system'].includes(patch.ui.font)) settings.ui.font = patch.ui.font;
@@ -174,13 +168,6 @@ function wireAPI() {
     if (patch.context && projects.has(patch.context.project)) {
       const { project, environment, release } = patch.context;
       settings.contexts[project] = { environment: typeof environment === 'string' ? environment : '', release: typeof release === 'string' ? release : '' };
-    }
-    if (patch.selection && projects.has(patch.selection.project)) {
-      const { project, release, task } = patch.selection;
-      if (typeof release === 'string' && release.length < 240 && (task === null || typeof task === 'string' && /^[A-Za-z][A-Za-z0-9_-]{0,40}$/.test(task))) {
-        settings.taskSelections ||= {};
-        settings.taskSelections[JSON.stringify([project, release])] = task;
-      }
     }
     saveSettings(); return settings;
   });

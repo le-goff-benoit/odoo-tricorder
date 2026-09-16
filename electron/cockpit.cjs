@@ -181,28 +181,6 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
     if (binding.until) args.push('--until', binding.until);
     return { command: args.map(quote).join(' '), note: 'Cette commande écrit les mesures dans effort.json via Odoo Crew. Vérifiez le lot et le rôle avant exécution ; Tricorder ne l’exécute pas.' };
   });
-  handle('handoff', async request => {
-    const association = await context(request);
-    const data = await catalog({ action: 'project', project: association.project, release: association.release });
-    const tasks = data.tasks.filter(t => !association.task || t.id === association.task);
-    const lines = ['# Reprise de mission — Odoo Tricorder', '', `Projet : ${data.path}`, `Série : ${data.series || 'inconnue'}`,
-      `Release : ${data.selectedRelease || 'aucune'}`, '', 'Lire AGENTS.md et lancer le briefing Odoo avant toute intervention.',
-      'Cette fiche transmet le contexte, pas une conversation native ni une autorisation de production.', ''];
-    for (const t of tasks) lines.push(`## ${t.id} — ${t.title}`, `État : ${t.status} — ${t.reason || ''}`,
-      `Dépendances : ${(t.depends_on || []).join(', ') || 'aucune'}`, `Workflow : ${t.flow || 'non associé'}`,
-      `Demande : ${t.request || 'non indiquée'}`, ...(t.acceptance || []).map(a => '- ' + a), '');
-    lines.push('## Sessions explicitement associées');
-    for (const b of settings.bindings.filter(b => b.project === data.path && b.release === data.selectedRelease && (!association.task || b.task === association.task)))
-      lines.push(`- ${b.provider} / ${b.nativeId || 'en attente'} / tâche ${b.task || 'non attribuée'} / flow ${b.flow || 'non attribué'}`);
-    lines.push('', '## Documents à relire', ...data.documents.map(d => '- ' + d.path));
-    return lines.join('\n');
-  });
-  handle('export-handoff', async text => {
-    if (typeof text !== 'string' || text.length > 1024 * 1024) throw new Error('Fiche invalide');
-    const choice = await dialog.showSaveDialog(window(), { title: 'Exporter la fiche de reprise', defaultPath: path.join(home, 'tricorder-reprise.md'), filters: [{ name: 'Markdown', extensions: ['md'] }] });
-    if (choice.canceled) return null;
-    fs.writeFileSync(choice.filePath, text, { mode: 0o600 }); return choice.filePath;
-  });
 }
 
 module.exports = { wireCockpit };

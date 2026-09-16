@@ -1,5 +1,18 @@
 # Journal
 
+## 2026-09-16 — Cockpit plus clair 0.3.3
+
+- Demande de Benoît : relire design et ergonomie, retirer le redondant, moderniser ; puis appliquer les recommandations, publier et mettre à jour le poste.
+- En-tête ramené de cinq bandes à trois : identité du projet, release et environnement sur une ligne, onglets dessous ; `header()` émet le balisage final.
+- Plan à trois modes (Liste, Kanban, Dépendances) avec filtres et responsable communs ; l’onglet Kanban de release disparaît, le Kanban global reste ; mode mémorisé par projet, filtres par release.
+- Bande « En cours » et compte sur l’onglet Agents seulement avec une activité confirmée ; pastilles de quotas seulement avec des données ; boutons « Revenir au terminal » / « Voir le plan » retirés ; colonnes vides du Kanban global masquées ; carte Crew seulement si absent.
+- Temps & estimations : avertissements regroupés dans un dépliant « Comment lire ces mesures », panneaux vides masqués, « Part non mesurée » supprimée ; vue émise en une passe, plus de réécriture du DOM après rendu (également en-tête, panneaux natifs, cartes de mission, qualité).
+- Raccourcis Alt 1…8 alignés sur l’ordre affiché ; aide, README, WORKFLOWS et DESIGN mis à jour ; plancher typographique 11/12 px.
+- Code mort retiré : inspecteur latéral, fiche de reprise, ancien graphe, association manuelle, `add-project`, `selection`, `plainLanguageUI` ; ~800 lignes de CSS orphelin ou en double.
+- Captures README/WORKFLOWS régénérées sur le projet synthétique Orbital.
+- Vérifié : 87 tests Python, 56 Node, 16 parcours Electron depuis les sources et dans le paquet (1 opt-in NECA ignoré) ; paquet 0.3.3 construit, empreinte publiée.
+- Publication GitHub v0.3.3 ; installation locale laissée à Benoît (sudo).
+
 ## 2026-09-16 — Fiabilité des preuves 0.3.2
 
 - Banc agents : inspection des faux succès et de la mesure jusqu’à réception.

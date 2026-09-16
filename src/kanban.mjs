@@ -2,7 +2,7 @@ import { intentionCards } from './plan-model.mjs';
 import { orchestrationCard, activities } from './activity.mjs';
 import { taskState } from './task-state.mjs';
 export const columns = [
-  ['todo', 'À faire'], ['working', 'En cours'], ['review', 'À valider'],
+  ['todo', 'À faire'], ['working', 'En cours'], ['review', 'À réceptionner'],
   ['blocked', 'Bloquées'], ['unknown', 'État à vérifier'], ['deferred', 'Reportées'], ['done', 'Réceptionnées'],
 ];
 export function columnFor(value) { return taskState(typeof value === 'string' ? { status: value } : value || {}).column; }

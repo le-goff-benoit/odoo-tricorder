@@ -34,12 +34,8 @@
   padding-left: var(--page-gutter);
   padding-right: var(--page-gutter);
 }
-.project-header, .compact-project {
-  padding: var(--space-4) var(--page-gutter);
-}
-#context-bar {
-  margin: 0 var(--page-gutter) var(--space-4);
-  padding: var(--space-4) var(--card-padding) 0;
+.project-header {
+  padding: var(--space-3) var(--page-gutter);
 }
 .section-title, .kanban-toolbar {
   gap: var(--space-4);
@@ -140,7 +136,7 @@ dialog { padding: var(--space-6); border-radius: var(--radius-panel); }
   background: var(--surface-card);
 }
 .board-detail h3 { margin: var(--space-5) 0 var(--space-3); }
-.board-filters { gap: var(--space-2); margin-bottom: var(--space-4); }
+.board-filters { gap: var(--space-2); }
 .release-board-layout { gap: var(--space-4); }
 .kanban-column { padding: var(--space-3); border-radius: var(--radius-panel); }
 /* Browsing a task is a dialog, never a second workspace or a global filter. */
@@ -162,14 +158,6 @@ dialog { padding: var(--space-6); border-radius: var(--radius-panel); }
 .board-filters .secondary { background: transparent; border-color: transparent; }
 .board-filters [aria-pressed=true] { background: #302a23; color: var(--gold); }
 .kanban-nav.project-item { width: 100%; margin: 0; padding: var(--space-3) var(--space-4); border: 0; border-radius: 0; text-align: left; }
-.compact-project > div { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-4); }
-.compact-project h1 { margin: 0; line-height: 1.2; }
-.compact-project .project-meta { margin: 0; display: flex; align-items: center; gap: var(--space-3); }
-.compact-project .project-meta .icon-button { display: inline-flex; align-items: center; justify-content: center; margin: 0; }
-#context-bar { grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr); align-items: start; padding: var(--space-3) var(--space-4); border-left: 1px solid var(--line); gap: var(--space-4); }
-#context-bar .environment-context { grid-column: 2; grid-row: 1; padding-left: var(--space-4); }
-#context-bar select { margin-top: var(--space-1); }
-#context-bar .release-summary { display: flex; gap: var(--space-2); margin-top: var(--space-1); font-size: var(--font-small); }
 .preferences { display: grid; gap: var(--space-5); }
 .preferences h2, .preferences h3 { margin: 0; }
 .preferences fieldset { border: 0; border-bottom: 1px solid var(--line); padding: 0 0 var(--space-4); margin: 0 0 var(--space-4); min-width: 0; }
@@ -186,7 +174,7 @@ dialog { padding: var(--space-6); border-radius: var(--radius-panel); }
 @media (max-width: 1100px) {
   :root { --page-gutter: var(--space-4); --section-gap: var(--space-4); }
   .page { padding: var(--section-gap) var(--page-gutter); }
-  .project-header, .compact-project { padding: var(--space-3) var(--page-gutter); }
+  .project-header { padding: var(--space-3) var(--page-gutter); }
 }
 
 /* Intention → plan and activity share the same surfaces and state vocabulary. */
@@ -195,13 +183,17 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
   outline: 2px solid #efb779;
   outline-offset: 3px;
 }
-.tabs { overflow-x: auto; flex-shrink: 0; }
-.tabs button { flex-shrink: 0; }
 .activity-strip { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--page-gutter); border-bottom: 1px solid #35434b; font-size: var(--font-small); }
 .activity-strip[hidden] { display: none; }
 .activity-strip > span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #a8b6bd; }
 .activity-strip > button { flex-shrink: 0; }
-.plan-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+.plan-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); margin-bottom: var(--space-4); }
+.plan-toolbar .release-links { margin-left: auto; }
+.plan-page > .section-title, .plan-page > .plan-toolbar, .plan-page > .note { flex-shrink: 0; }
+.board-owner-filter { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-small); color: var(--muted); }
+.reading-notes { margin-top: var(--section-gap); }
+.reading-notes summary { cursor: pointer; }
+.reading-notes ul { margin: var(--space-3) 0 0; padding-left: var(--space-5); line-height: 1.7; }
 .plan-toolbar [role="group"] { display: flex; gap: var(--space-2); }
 [aria-pressed="true"] { border-color: #efb779; background: #353229; }
 .plan-task-row { background: var(--surface-card); border: 1px solid #35434b; border-radius: var(--radius-panel); }
@@ -214,8 +206,8 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .activity-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); padding: var(--space-3); border-bottom: 1px solid #35434b; }
 .activity-row > span:not(.activity-timer) { flex: 1; color: #a8b6bd; }
 .live-activities { margin-bottom: var(--section-gap); }
-.mission-history { margin: var(--space-4) 0; }
-.mission-history > summary { cursor: pointer; padding: var(--space-3) 0; }
+.mission-history, .project-terminals { margin: var(--space-4) 0; }
+.mission-history > summary, .project-terminals > summary { cursor: pointer; padding: var(--space-3) 0; }
 .intention-layout { display: grid; grid-template-columns: minmax(210px, 1fr) minmax(280px, 1.5fr); gap: var(--space-5); }
 .intention-card { display: flex; flex-direction: column; width: 100%; align-items: start; text-align: left; gap: var(--space-2); margin: var(--space-3) 0; padding: var(--space-4); background: var(--surface-card); border: 1px solid #35434b; border-radius: var(--radius-panel); }
 .intention-card strong, .intention-detail { overflow-wrap: anywhere; }
@@ -233,18 +225,13 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 .graph-node.unrelated { border-style: dashed; }
 .graph-node.selected { border: 2px solid #efb779; }
 .graph-node small { color: #a8b6bd; }
-.provider-quotas { display: flex; flex-wrap: wrap; gap: var(--space-2); min-width: 0; }
-.quota-chip { display: flex; align-items: center; gap: var(--space-1); border: 1px solid #46545c; border-radius: var(--radius-control); padding: var(--space-1) var(--space-2); font-size: var(--font-small); background: #192329; }
-.quota-chip svg { width: 14px; height: 14px; }
-.topbar { gap: var(--space-2); flex-wrap: wrap; height: auto; min-height: 48px; padding-top: var(--space-2); padding-bottom: var(--space-2); }
-.topbar .breadcrumbs:empty { display: none; }
-.release-kanban .kanban-board { min-height: 240px; }
+.release-kanban .kanban-board { min-height: 320px; }
+.release-kanban .kanban-column { overflow: visible; }
+.release-kanban .release-board-layout { margin-bottom: var(--section-gap); }
 .page small, .board-proof, .board-owner, .board-time, .kanban-release { font-size: var(--font-small); }
 @media (max-width: 1100px) {
   .intention-layout { grid-template-columns: 1fr; }
   .intention-detail { border-left: 0; border-top: 1px solid #35434b; }
-  .topbar .top-actions { margin-left: auto; }
-  .project-header h1 { font-size: 22px; }
   .activity-strip > span { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -266,23 +253,48 @@ button:focus-visible, select:focus-visible, input:focus-visible, summary:focus-v
 @media (max-width: 900px) {
   .sidebar { width: 210px; }
   .brand { padding-left: var(--space-4); padding-right: var(--space-4); }
-  .project-header, .compact-project { padding-top: var(--space-2); padding-bottom: var(--space-2); }
-  #context-bar { margin-bottom: var(--space-2); }
 }
-.plan-toolbar { align-items: center; }
-.plan-toolbar .release-links { margin: 0; }
 #modal .quota-panel > summary { display: none; }
 
 /* Short windows keep the chosen context visible without consuming the work area. */
 .metric strong.metric-empty { font-size: 20px; line-height: 1.35; }
+
+/* ---- Header: project identity and release/environment context share one band. ---- */
+.topbar { display: flex; align-items: center; min-height: 44px; padding-top: var(--space-1); padding-bottom: var(--space-1); border-bottom: 1px solid var(--line); background: #131a1e; flex-shrink: 0; }
+.top-actions { display: flex; flex: 1; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-3); font-size: var(--font-small); color: #8fa2ab; }
+.top-actions .text-button { padding: var(--space-1) var(--space-2); }
+.provider-quotas { display: flex; flex-wrap: wrap; gap: var(--space-2); min-width: 0; }
+.provider-quotas .text-button { color: var(--muted); }
+.quota-chip { display: flex; align-items: center; gap: var(--space-1); border: 1px solid #46545c; border-radius: var(--radius-control); padding: var(--space-1) var(--space-2); font-size: var(--font-small); background: #192329; }
+.quota-chip svg { width: 14px; height: 14px; }
+.project-header { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-6); border-bottom: 1px solid var(--line); }
+.project-identity { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-3); min-width: 0; }
+.project-identity h1 { font-size: 22px; font-weight: 550; letter-spacing: -.4px; line-height: 1.3; margin: 0; overflow-wrap: anywhere; }
+.project-meta { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); font-size: var(--font-small); color: #8e9ea7; }
+.project-meta > span { display: inline-flex; align-items: center; gap: var(--space-1); }
+.project-meta svg { width: 14px; height: 14px; }
+.project-meta .icon-button { padding: var(--space-1); }
+#context-bar { display: flex; flex: 1 1 520px; justify-content: flex-end; flex-wrap: wrap; gap: var(--space-2) var(--space-5); min-width: 0; margin: 0; padding: 0; }
+#context-bar label { display: flex; align-items: center; gap: var(--space-2); min-width: 0; font-size: var(--font-small); color: var(--muted); }
+#context-bar .context-label { letter-spacing: .8px; font-size: 11px; font-weight: 600; color: #8b9ca4; white-space: nowrap; }
+#context-bar .release-context { flex: 1 1 420px; }
+#context-bar .environment-context { flex: 0 1 250px; }
+#context-bar select { flex: 1; min-width: 0; max-width: none; height: var(--control-height); padding: 0 var(--space-6) 0 var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--panel); color: var(--text, #d9e3e7); font-size: var(--font-body); text-overflow: ellipsis; }
+#context-bar .release-context select { font-weight: 550; }
+#context-bar .release-summary { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--font-small); color: var(--muted); white-space: nowrap; }
+.tabs { display: flex; gap: var(--space-2); flex-shrink: 0; height: 40px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.tabs button { display: flex; align-items: center; gap: var(--space-2); padding: 0 var(--space-2); white-space: nowrap; border-bottom: 2px solid transparent; font-size: var(--font-body); color: #92a2aa; flex-shrink: 0; }
+.tabs svg { width: 14px; height: 14px; }
+.tabs button.active { border-color: var(--gold); color: var(--gold); }
+.tab-count { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 var(--space-1); border-radius: 9px; background: #233831; color: #9bd2b8; font-size: 11px; font-weight: 600; }
+.tab-count.waiting { background: #423627; color: #edc08b; }
+@media (max-width: 1100px) {
+  #context-bar { flex-basis: 100%; justify-content: flex-start; }
+  .project-identity h1 { font-size: 20px; }
+  .tabs svg { display: none; }
+}
 @media (max-height: 740px) {
-  .topbar { min-height: 40px; padding-top: calc(var(--space-1) / 2); padding-bottom: calc(var(--space-1) / 2); }
-  .project-header, .compact-project { padding-top: var(--space-1); padding-bottom: var(--space-1); }
-  #context-bar { padding-top: var(--space-2); padding-bottom: var(--space-2); margin-bottom: var(--space-1); }
-  #context-bar label { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: calc(var(--space-1) / 2) var(--space-2); align-items: center; }
-  #context-bar .context-label { grid-row: 1; grid-column: 1; }
-  #context-bar select { grid-row: 2; grid-column: 1 / -1; margin-top: 0; }
-  #context-bar .release-summary { grid-row: 1; grid-column: 2; margin-top: 0; }
-  .activity-strip { padding-top: calc(var(--space-1) / 2); padding-bottom: calc(var(--space-1) / 2); }
+  .topbar { min-height: 38px; }
+  .project-header { padding-top: var(--space-2); padding-bottom: var(--space-2); }
   .tabs { height: 36px; }
 }

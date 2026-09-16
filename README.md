@@ -8,7 +8,7 @@ Retrouvez vos demandes, le plan de release, les agents en activité et leurs
 résultats autour d’un terminal persistant. **Odoo Crew orchestre le travail ;
 Tricorder en montre l’avancement.**
 
-[Installer la version 0.3.2](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.2) ·
+[Installer la version 0.3.3](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.3) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Exemples de parcours](docs/WORKFLOWS.md) ·
 [Signaler un problème](https://github.com/le-goff-benoit/odoo-tricorder/issues)
@@ -18,8 +18,9 @@ Tricorder en montre l’avancement.**
 **Intentions → Plan → Exécution → Recette**
 
 - **Intentions** conserve les demandes originales, décisions et questions ouvertes.
-- **Plan** présente les tâches, leurs critères et leurs dépendances, en liste ou en graphe.
-- Les **Kanbans** de release et global montrent aussi les demandes **À planifier**,
+- **Plan** présente les tâches, leurs critères et leurs dépendances, en **liste**,
+  en **Kanban** ou en **graphe**, avec les mêmes filtres et le même responsable.
+- Le Plan et le **Kanban global** montrent aussi les demandes **À planifier**,
   avant leur découpage en tâches, et le travail d’orchestration.
 - **Mémoire** montre les découvertes partagées pendant la release, les passations
   des tâches reçues, décisions, questions et pièces sourcées. Les contributions
@@ -70,15 +71,15 @@ Les comparaisons de vitesse restent liées à la qualité réellement vérifiée
 
 ## Installer
 
-Le paquet **0.3.1** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
+Le paquet **0.3.3** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
 parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
-1. Télécharger `odoo-tricorder_0.3.1_amd64.deb` dans la
-   [release 0.3.1](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.1).
+1. Télécharger `odoo-tricorder_0.3.3_amd64.deb` dans la
+   [release 0.3.3](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.3).
 2. Depuis le dossier contenant le téléchargement :
 
    ```bash
-   sudo apt install ./odoo-tricorder_0.3.1_amd64.deb
+   sudo apt install ./odoo-tricorder_0.3.3_amd64.deb
    ```
 
 3. Ouvrir **Odoo Tricorder** dans le menu des applications.
@@ -100,7 +101,7 @@ Le terminal reste utilisable sans fournisseur IA.
    aussi ouvrir un shell avec `Ctrl Shift T`.
 4. Dans l’agent lancé, demander le plan puis son exécution avec les skills Crew.
    Le bouton **Skills** prépare la syntaxe à copier ; il n’exécute pas le skill.
-5. Suivre les résultats dans **Plan**, **Kanban** et **Agents**. Cliquer une tâche
+5. Suivre les résultats dans **Plan** (liste, Kanban ou dépendances) et **Agents**. Cliquer une tâche
    ouvre ses détails, sans réaffecter le terminal.
 
 Les skills se saisissent **dans la conversation de l’agent**, pas dans le shell :
@@ -141,8 +142,10 @@ Le bouton Actualiser reste disponible.
 
 - Les indicateurs de compte prévoient les fenêtres **5 h / hebdomadaire** et leurs
   remises à zéro. **Les quotas natifs réels n’ont pas pu être qualifiés lors de la
-  livraison 0.3.1** : les adaptateurs sont expérimentaux et affichent indisponible
-  sans donnée fiable. Aucun appel modèle ne sert à les rafraîchir.
+  livraison 0.3.1** : les adaptateurs sont expérimentaux. Tant qu’aucune donnée
+  fiable n’existe, la barre supérieure n’affiche qu’un lien **Quotas** vers le
+  détail ; les pastilles par fournisseur apparaissent dès qu’une fenêtre est lue.
+  Aucun appel modèle ne sert à les rafraîchir.
 - L’orchestrateur conserve le **modèle principal**. Les modèles plus légers par rôle
   restent expérimentaux dans Crew ; aucun basculement automatique ne dépend du quota.
 - Les hooks transmettent les événements et peuvent rappeler au principal la suite
@@ -164,12 +167,16 @@ permission d’écriture.
 | `Ctrl Shift C` / `Ctrl Shift V` | Copier la sélection du terminal / coller |
 | `Ctrl Alt ↑` / `Ctrl Alt ↓` | Projet précédent / suivant |
 | `Ctrl PageUp` / `Ctrl PageDown` | Terminal précédent / suivant |
-| `Alt 1` à `Alt 7` | Terminal, Plan, Kanban, Express, Agents, Temps, Projet |
+| `Alt 1` à `Alt 7` | Onglets dans l’ordre affiché : Terminal, Intentions, Plan, Mémoire, Express, Agents, Temps |
+| `Alt 8` | Ressources du projet (Fichiers, Environnements, Sources) |
 | `Ctrl Shift P` | Palette de skills |
 | `Ctrl Alt F` | Recherche dans les documents des projets |
 
-L’onglet **Intentions** se trouve avant **Plan** ; les raccourcis `Alt 1…7`
-conservent leur ordre historique.
+Le bandeau du projet réunit le nom, la série, la release consultée et
+l’environnement sur une seule ligne. La bande **En cours** n’apparaît que
+lorsqu’une activité est confirmée ou qu’une décision est attendue ; l’onglet
+**Agents** porte alors le compte. Le raccourci vers l’installation d’Odoo Crew
+n’est affiché que si le dispositif est absent du poste.
 
 ## Données locales et persistance
 

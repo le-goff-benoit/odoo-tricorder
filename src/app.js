@@ -9,6 +9,8 @@ import { cockpit, providerIcon } from './cockpit.js';
 import { documentBody } from './markdown.js';
 import { newReleaseContext } from './release-context.mjs';
 import { boardCards, columns as kanbanColumns } from './kanban.mjs';
+import { knowledgeView } from './knowledge-view.js';
+import './knowledge.css';
 
 const api = window.tricorder;
 const $ = selector => document.querySelector(selector);
@@ -40,9 +42,12 @@ const badge = (state, text) => `<span class="badge ${esc(state)}">${esc(text || 
 const when = value => value ? new Date(typeof value === 'number' ? value * 1000 : value).toLocaleString('fr-CH', { dateStyle: 'short', timeStyle: 'short' }) : 'Non observé';
 const minutes = value => value == null ? 'Non mesuré' : value < 1 ? `${Math.round(value * 60)} s` : `${Math.round(value).toLocaleString('fr-CH')} min`;
 const empty = (title, detail, action = '') => `<div class="empty">${icon('grid')}<h2>${esc(title)}</h2><p>${esc(detail)}</p>${action}</div>`;
+// Visible tab order. Alt+1…Alt+7 follow this list; Alt+8 opens the project resources.
+const VIEWS = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['knowledge', 'Mémoire', 'file'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
+const SHORTCUT_VIEWS = [...VIEWS.map(([id]) => id), 'project'];
 let projects = [], settings = {}, current = null, detail = null, view = 'terminal', selectedTask = null;
 let sessions = [], selectedSession = new Map(), terminals = new Map(), generation = 0, busy = false, pollBusy = false;
-let projectError = null, overviewMode = false, filter = '', split = false, inspectorHidden = false, version = '';
+let projectError = null, overviewMode = false, split = false, version = '', crewInstalled = true;
 let notificationKeys = new Set();
 let kanbanClosed = false, kanbanExecuting = false;
 let launchingTerminal = false;
@@ -53,14 +58,13 @@ $('#app').innerHTML = `
     <div class="project-heading"><span>PROJETS</span></div>
     <button class="kanban-nav project-item" data-view="kanban"><span class="project-monogram">${icon('grid')}</span><span class="project-name">Kanban global<small>Tous les projets</small></span></button>
     <div id="project-list" class="project-list"></div>
-    <div class="sidebar-bottom"><button class="install-agents" data-action="agents-link">${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="about-button" data-action="about">À propos de Tricorder <span id="version"></span></button></div>
+    <div class="sidebar-bottom"><button class="install-agents" data-action="agents-link" hidden>${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="about-button" data-action="about">À propos de Tricorder <span id="version"></span></button></div>
   </aside>
   <main class="workspace">
-    <header class="topbar"><div class="breadcrumbs"><strong id="breadcrumb"></strong></div><div class="top-actions"><span id="sync-status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header>
-    <section class="project-header"><div><div class="eyebrow" id="project-eyebrow">ESPACE DE TRAVAIL</div><h1 id="project-title">Bienvenue à bord.</h1><div id="project-meta" class="project-meta"></div></div></section>
-    <div id="context-bar" class="context-bar"></div>
+    <header class="topbar"><div class="top-actions"><span id="sync-status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header>
+    <section class="project-header compact-project"><div class="project-identity"><h1 id="project-title"></h1><div id="project-meta" class="project-meta"></div></div><div id="context-bar" class="context-bar"></div></section>
     <div id="activity-strip" class="activity-strip" hidden></div><nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
-    <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button data-action="find-next">Suivant</button><button data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div><div class="terminal-footer"><span>Les sessions continuent quand vous fermez Tricorder.</span><button data-action="find">${icon('search')} Rechercher</button><button data-action="split">Diviser</button></div></div></section><aside id="inspector" class="inspector"></aside></div>
+    <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button data-action="find-next">Suivant</button><button data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
   </main><div id="toast" role="status" hidden></div><dialog id="modal"><div id="modal-content"></div></dialog>`;
 
 function toast(message) { const el = $('#toast'); el.textContent = message; el.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.hidden = true; }, 6500); }
@@ -71,27 +75,29 @@ function sidebar() {
   $('.kanban-nav').classList.toggle('selected', overviewMode);
   const favorites = settings.favorites || [];
   const listed = [...projects].sort((a, b) => Number(favorites.includes(b.path)) - Number(favorites.includes(a.path)) || a.name.localeCompare(b.name));
-  $('#project-list').innerHTML = listed.filter(p => p.name.toLowerCase().includes(filter.toLowerCase())).map(p => `
-    <button class="project-item ${current === p.path && !overviewMode ? 'selected' : ''}" data-project="${esc(p.path)}"><span class="project-monogram">${esc(p.name.slice(0, 2).toUpperCase())}</span><span class="project-name">${esc(p.name)}<small>${esc(p.series ? 'Odoo ' + p.series : 'Série à préciser')}${p.running ? ' · ' + p.running + ' en cours' : ''}</small></span>${p.attention?.length ? `<span class="attention-dot">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot">★</span>' : ''}</button>`).join('') || '<p class="muted pad">Aucun projet trouvé. Ajoutez un dossier.</p>';
+  $('#project-list').innerHTML = listed.map(p => `
+    <button class="project-item ${current === p.path && !overviewMode ? 'selected' : ''}" data-project="${esc(p.path)}"><span class="project-monogram">${esc(p.name.slice(0, 2).toUpperCase())}</span><span class="project-name">${esc(p.name)}<small>${esc(p.series ? 'Odoo ' + p.series : 'Série à préciser')}${p.running ? ' · ' + p.running + ' en cours' : ''}</small></span>${p.attention?.length ? `<span class="attention-dot">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot">★</span>' : ''}</button>`).join('') || '<p class="muted pad">Aucun projet trouvé. Choisissez le dossier des projets dans Préférences.</p>';
+  $('.install-agents').hidden = crewInstalled;
   cockpitUI.alertSidebar();
 }
 function tabs() {
-  const views = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['release-kanban', 'Kanban', 'grid'], ['knowledge', 'Mémoire', 'file'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps & estimations', 'chart']];
-  $('#tabs').innerHTML = views.map(([id, label, symbol]) => `<button data-view="${id}" class="${view === id && !overviewMode ? 'active' : ''}">${icon(symbol)}${label}</button>`).join('');
+  $('#tabs').innerHTML = VIEWS.map(([id, label, symbol]) => `<button data-view="${id}" class="${view === id && !overviewMode ? 'active' : ''}">${icon(symbol)}${label}</button>`).join('');
 }
+const releaseLabel = r => ({ ouverte: 'Ouverte', close: 'Close' }[r.status] || r.status);
 function header() {
   const project = detail || projects.find(p => p.path === current);
-  $('#breadcrumb').textContent = overviewMode ? '' : project?.name || 'Projets';
-  $('#project-title').textContent = overviewMode ? 'Kanban global' : project?.name || 'Votre poste de commande.';
-  $('#project-eyebrow').textContent = overviewMode ? 'VUE TRANSVERSALE' : 'ESPACE DE TRAVAIL';
-  $('#project-meta').innerHTML = overviewMode ? `${attentionItems().length} élément(s) à examiner · ${projects.length} projets suivis` : project ? `<span>${icon('folder')}${esc(project.path.replace(/^\/home\/[^/]+/, '~'))}</span>${project.series ? badge('series', 'Odoo ' + project.series) : ''}${detail?.branch ? `<span>${icon('branch')}${esc(detail.branch)}${detail.gitChanges ? ' · ' + detail.gitChanges + ' modif.' : ''}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="Favori">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier">${icon('external')}</button>` : 'Ajoutez un dossier pour retrouver vos projets, terminaux et agents.';
+  $('#project-title').textContent = overviewMode ? 'Kanban global' : project?.name || 'Aucun projet';
+  $('#project-meta').innerHTML = overviewMode ? `${projects.length} projets · tous les plans réunis`
+    : project ? `${project.series ? badge('series', 'Odoo ' + project.series) : ''}${detail?.branch ? `<span title="Branche Git">${icon('branch')}${esc(detail.branch)}${detail.gitChanges ? ' · ' + detail.gitChanges + ' modif.' : ''}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="${settings.favorites?.includes(current) ? 'Retirer des favoris' : 'Mettre en favori'}" aria-pressed="${!!settings.favorites?.includes(current)}">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier ${esc(project.path)}">${icon('external')}</button>`
+    : 'Choisissez le dossier des projets dans Préférences pour retrouver vos projets, terminaux et agents.';
   $('#context-bar').hidden = overviewMode || !project;
-  if (overviewMode) $('#project-meta').textContent = `${projects.length} projets · tous les plans réunis`;
   $('#tabs').hidden = overviewMode;
   $('[data-view="project"]').hidden = overviewMode;
   if (project && !overviewMode) {
     const context = settings.contexts?.[current] || {};
-    $('#context-bar').innerHTML = `<label><span class="context-label">RELEASE</span><select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${(project.releases || []).map(r => `<option value="${esc(r.id)}" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${esc(r.id)} · ${esc(r.status)}</option>`).join('')}</select></label><label><span class="context-label">ENVIRONNEMENT</span><select id="environment-select" aria-label="Environnement"><option value="">Non ciblé · shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select></label><span class="context-hint">Contexte des nouveaux terminaux</span>`;
+    const releases = detail?.releases || project.releases || [];
+    const selected = releases.find(r => r.id === detail?.selectedRelease);
+    $('#context-bar').innerHTML = `<label class="release-context"><span class="context-label">RELEASE</span><select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${releases.map(r => `<option value="${esc(r.id)}" title="${esc(r.id)} · ${r.taskCount ?? '?'} tâches / points" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${r.id === detail?.selectedRelease ? esc(r.title || r.id) : `${esc(r.id.slice(0, 10))} · ${esc(r.title || r.id)} · ${esc(releaseLabel(r))}`}</option>`).join('')}</select>${selected ? `<span class="release-summary">${badge(selected.status, releaseLabel(selected))}<span>${esc(selected.id.slice(0, 10))}</span></span>` : ''}</label><label class="environment-context"><span class="context-label">ENVIRONNEMENT</span><select id="environment-select" aria-label="Environnement" title="Repère pour les nouveaux terminaux ; ne change ni la connexion, ni les permissions, ni le terminal existant."><option value="">Non ciblé · shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select></label>`;
   }
 }
 function setView(next) {
@@ -99,7 +105,7 @@ function setView(next) {
   if (next === 'project') next = 'documents';
   const changed = view !== next;
   view = next; overviewMode = false; render();
-  if (changed) { $('#content').scrollTop = 0; $('#inspector').scrollTop = 0; }
+  if (changed) $('#content').scrollTop = 0;
 }
 function selectTask(id) {
   cockpitUI.openTask(id);
@@ -126,13 +132,12 @@ function render() {
   const terminalVisible = !overviewMode && view === 'terminal';
   $('#terminal-workspace').hidden = !terminalVisible;
   $('#content').hidden = terminalVisible;
-  $('#inspector').hidden = true;
   if (overviewMode) renderKanban();
   else if (terminalVisible) renderTerminals();
   else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
   else if (projectError) $('#content').innerHTML = empty('Lecture impossible', projectError);
   else if (!detail) $('#content').innerHTML = empty('Aucun projet sélectionné', 'Choisissez un projet dans la colonne de gauche.');
-  else ({ 'release-kanban': () => {}, intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
+  else ({ intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
   cockpitUI.augment();
   $('#content').scrollTop = scroll[0];
   const graph = $('#content .graph-scroll'); if (graph) { graph.scrollLeft = scroll[1]; graph.scrollTop = scroll[2]; }
@@ -151,7 +156,7 @@ async function chooseProject(project, release) {
     if (ticket !== generation) return;
     detail = result;
     const updated = await api.settings({ context: { project, release: result.selectedRelease || '', environment: settings.contexts?.[project]?.environment || '' } });
-    if (ticket === generation) settings = { ...updated, taskSelections: settings.taskSelections };
+    if (ticket === generation) settings = updated;
   } catch (error) { if (ticket === generation) projectError = error.message; }
   finally { if (ticket === generation) { busy = false; render(); cockpitUI.refreshNative(); } }
 }
@@ -159,10 +164,10 @@ function renderKanban() {
   const scrollLeft = $('.kanban-board')?.scrollLeft || 0;
   const allCards = boardCards(projects, kanbanClosed, cockpitUI.allObservations());
   const cards = kanbanExecuting ? allCards.filter(t => t.activities?.some(a => a.executing)) : allCards;
-  $('#content').innerHTML = `<div class="page kanban-page"><div class="kanban-toolbar"><p>${cards.filter(t => !['orchestration', 'intention'].includes(t.kind)).length} tâches${cards.some(t => t.kind === 'intention') ? ' · ' + cards.filter(t => t.kind === 'intention').length + ' demande(s) à planifier' : ''} + ${cards.filter(t => t.kind === 'orchestration').length} orchestration(s) · ${kanbanClosed ? 'Toutes les releases' : 'Releases closes masquées'}</p><button class="secondary" data-action="kanban-executing" aria-pressed="${kanbanExecuting}">En exécution</button><button class="secondary" data-action="kanban-closed" aria-pressed="${kanbanClosed}">${kanbanClosed ? 'Masquer' : 'Inclure'} les releases closes</button></div><div class="kanban-board" style="--board-columns:${kanbanColumns.length}">${kanbanColumns.map(([id, label]) => {
+  $('#content').innerHTML = `<div class="page kanban-page"><div class="kanban-toolbar"><p>${cards.filter(t => !['orchestration', 'intention'].includes(t.kind)).length} tâches${cards.some(t => t.kind === 'intention') ? ' · ' + cards.filter(t => t.kind === 'intention').length + ' demande(s) à planifier' : ''} + ${cards.filter(t => t.kind === 'orchestration').length} orchestration(s) · ${kanbanClosed ? 'Toutes les releases' : 'Releases closes masquées'}</p><button class="secondary" data-action="kanban-executing" aria-pressed="${kanbanExecuting}">En exécution</button><button class="secondary" data-action="kanban-closed" aria-pressed="${kanbanClosed}">${kanbanClosed ? 'Masquer' : 'Inclure'} les releases closes</button></div>${(() => { const shownColumns = kanbanColumns.filter(([id]) => !['blocked', 'unknown', 'deferred'].includes(id) || cards.some(t => t.column === id)); return `<div class="kanban-board" style="--board-columns:${shownColumns.length}">${shownColumns.map(([id, label]) => {
     const tasks = cards.filter(t => t.column === id);
     return `<section class="kanban-column" data-column="${id}" aria-label="${label}"><h2>${label}<span>${tasks.length}</span></h2>${tasks.map(t => `<button class="kanban-card" data-kanban-project="${esc(t.project)}" data-kanban-release="${esc(t.release)}" ${t.kind === 'intention' ? `data-kanban-intention="${esc(t.intentionId)}"` : `data-kanban-task="${esc(t.id)}"`}><span class="kanban-project">${esc(t.projectName)}</span><small class="kanban-release">${esc(t.releaseTitle)}${t.releaseStatus === 'close' ? ' · close' : ''}</small><div class="kanban-card-status"><span>${esc(t.intentionId || t.id)}</span>${badge(t.status, t.presentation?.label)}</div><h3>${esc(t.title)}</h3>${t.kind === 'orchestration' ? `<p>${esc(t.stage)} · ${esc(t.model || 'Modèle principal non renseigné')}</p>` : ''}<p>${esc(t.kind === 'intention' ? 'Revue de l’orchestrateur attendue' : t.owners?.length ? t.owners.join(' · ') : 'Responsable non renseigné')}</p>${(t.activities || []).map(a => `<p class="task-activity">${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}${t.presentation?.proof ? `<p class="board-proof">${esc(t.presentation.proof)}</p>` : ''}${t.acceptance?.length ? `<small>${t.acceptance.length} critères d’acceptation</small>` : ''}</button>`).join('') || '<p class="kanban-empty">Aucune tâche</p>'}</section>`;
-  }).join('')}</div>${projects.some(p => p.warnings?.length) ? '<p class="note">Certains projets ont des informations à vérifier. Les statuts inconnus restent dans « État à vérifier » ; ouvrez le projet pour le détail.</p>' : ''}<p class="muted">Les colonnes suivent les plans et leurs preuves. Cliquez sur une carte pour retrouver sa tâche ; aucun statut n’est modifié depuis ce tableau.</p></div>`;
+  }).join('')}</div>`; })()}${projects.some(p => p.warnings?.length) ? '<p class="note">Certains projets ont des informations à vérifier. Les statuts inconnus restent dans « État à vérifier » ; ouvrez le projet pour le détail.</p>' : ''}<p class="muted">Les colonnes suivent les plans et leurs preuves. Cliquez sur une carte pour retrouver sa tâche ; aucun statut n’est modifié depuis ce tableau.</p></div>`;
   $('.kanban-board').scrollLeft = scrollLeft;
 }
 function renderAgents() {
@@ -203,7 +208,7 @@ function renderTerminals() {
   $('#terminal-hosts').hidden = own.length === 0;
   $('#terminal-empty').innerHTML = busy || !detail
     ? empty('Chargement du projet…', 'Les commandes seront disponibles dès que son contexte sera prêt.')
-    : empty('Votre prochaine mission commence ici.', 'Un vrai shell dans le dossier du projet. Lancez Claude, Codex ou vos commandes habituelles.', `<button class="primary" data-action="new-terminal">${icon('terminal')} Ouvrir un terminal</button><div class="launch-hints"><button class="secondary" data-launch-agent="claude">${providerIcon('claude')} Claude</button><button class="secondary" data-launch-agent="codex">${providerIcon('codex')} Codex</button></div>`);
+    : empty('Aucun terminal ouvert', 'Un shell dans le dossier du projet. Lancez Claude ou Codex avec suivi, ou vos commandes habituelles.', `<button class="primary" data-action="new-terminal">${icon('terminal')} Ouvrir un terminal</button><div class="launch-hints"><button class="secondary" data-launch-agent="claude">${providerIcon('claude')} Claude</button><button class="secondary" data-launch-agent="codex">${providerIcon('codex')} Codex</button></div>`);
   const visible = new Set(id ? [id] : []);
   if (split && own.length > 1) visible.add(own.find(s => s.id !== id).id);
   for (const [session, t] of terminals) t.host.hidden = !visible.has(session);
@@ -227,7 +232,7 @@ async function mountTerminal(id) {
     if ((event.ctrlKey && event.altKey && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'f', 'F'].includes(event.key)) ||
         (event.ctrlKey && ['PageUp', 'PageDown'].includes(event.key)) ||
         (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'p') ||
-        (event.altKey && !event.ctrlKey && /^[1-7]$/.test(event.key))) { event.preventDefault(); return false; }
+        (event.altKey && !event.ctrlKey && /^[1-8]$/.test(event.key))) { event.preventDefault(); return false; }
     if (event.ctrlKey && event.shiftKey && ['T', 'F', 'C', 'V'].includes(event.key.toUpperCase())) {
       event.preventDefault();
       if (event.type === 'keydown' && event.key.toUpperCase() === 'C' && term.hasSelection()) api.clipboard.write(term.getSelection()).catch(e => toast(e.message));
@@ -319,7 +324,7 @@ document.addEventListener('click', async event => {
       if (el.dataset.kanbanIntention) {
         setView('intentions');
         [...document.querySelectorAll('.intention-card')].find(node => node.dataset.intention === el.dataset.kanbanIntention)?.click();
-      } else { setView('release-kanban'); selectTask(el.dataset.kanbanTask); }
+      } else { cockpitUI.showBoard(); setView('plan'); selectTask(el.dataset.kanbanTask); }
       return;
     }
     if (el.dataset.action === 'kanban-executing') { kanbanExecuting = !kanbanExecuting; render(); return; }
@@ -363,7 +368,6 @@ document.addEventListener('click', async event => {
       case 'find-close': $('#terminal-search').hidden = true; fitVisible(); break;
       case 'find-next': terminals.get(selectedSession.get(current))?.search.findNext($('#terminal-search input').value); break;
       case 'split': split = !split; settings = await api.settings({ ui: { split } }); renderTerminals(); break;
-      case 'inspector': inspectorHidden = !inspectorHidden; settings = await api.settings({ ui: { inspectorHidden } }); render(); break;
     }
   } catch (error) { toast(error.message); }
 });
@@ -375,12 +379,14 @@ document.addEventListener('change', async event => {
 });
 $('#terminal-search input').addEventListener('keydown', event => { if (event.key === 'Enter') terminals.get(selectedSession.get(current))?.search.findNext(event.target.value); });
 document.addEventListener('keydown', event => {
+  if (document.querySelector('dialog[open]')) return;
   if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 't') { event.preventDefault(); newTerminal().catch(e => toast(e.message)); }
   if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'f') { event.preventDefault(); $('#terminal-search').hidden = false; $('#terminal-search input').focus(); }
+  if (event.altKey && !event.ctrlKey && /^[1-8]$/.test(event.key)) {
+    const target = SHORTCUT_VIEWS[Number(event.key) - 1];
+    if (target && current) { event.preventDefault(); setView(target); }
+  }
 });
-
-// Terminal tools live beside the tabs; no permanent explanatory footer.
-$('.terminal-footer').remove();
 
 const cockpitUI = cockpit({ api, get: () => ({ projects, settings, current, detail, view, selectedTask, sessions, selectedSession, terminals, overviewMode, projectError }),
   setSettings: value => { settings = value; }, setProjects: value => { projects = value; }, render, sidebar, chooseProject, setView,
@@ -389,9 +395,9 @@ const cockpitUI = cockpit({ api, get: () => ({ projects, settings, current, deta
 
 async function start() {
   try {
-    const initial = await api.bootstrap(); projects = initial.projects; settings = initial.settings; version = initial.version;
+    const initial = await api.bootstrap(); projects = initial.projects; settings = initial.settings; version = initial.version; crewInstalled = initial.crewInstalled !== false;
     let revision = await api.revision(), checkingRevision = false;
-    split = !!settings.ui?.split; inspectorHidden = !!settings.ui?.inspectorHidden;
+    split = !!settings.ui?.split;
     $('#version').textContent = 'v' + version;
     notificationKeys = new Set(attentionItems().map(i => `${i.project.path}:${i.task.id}:${i.task.status}`));
     await refreshSessions();
@@ -413,5 +419,3 @@ async function start() {
   } catch (error) { toast(error.message); $('#sync-status').textContent = 'Chargement impossible'; render(); }
 }
 start();
-import { knowledgeView } from './knowledge-view.js';
-import './knowledge.css';

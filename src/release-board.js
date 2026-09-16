@@ -1,7 +1,7 @@
 import { taskState } from './task-state.mjs';
 import { timerMarkup } from './activity.mjs';
 import { intentionItems, intentionTasks } from './plan-model.mjs';
-import { allReleaseCards as releaseCards, releaseColumns, filterCards } from './release-kanban.mjs';
+import { allReleaseCards as releaseCards, releaseColumns } from './release-kanban.mjs';
 import { hours, timeShare } from './measurements.mjs';
 
 export function releaseBoard({ get, observations, render, esc, badge, when, providerIcon }) {
@@ -37,10 +37,10 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
   const context = () => JSON.stringify([get().current, get().detail?.selectedRelease]);
   function state() {
     const key = context();
-    if (!memory.has(key)) memory.set(key, { filter: 'all', owner: '', scroll: {} });
+    if (!memory.has(key)) memory.set(key, { scroll: {} });
     return memory.get(key);
   }
-  const root = () => document.querySelector('.release-kanban');
+  const root = () => document.querySelector('.plan-page[data-context]');
   // Capture before the central renderer changes any DOM. Context-scoped values
   // survive refresh, but cannot leak into another project's identically named T01.
   function remember() {
@@ -60,27 +60,18 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
       }
     }
     const page = root();
-    if (!page) return;
-    const saved = memory.get(page.dataset.context);
-    if (!saved) return;
+    if (!page || page.dataset.context !== context() || !page.querySelector('[data-board-scroll]')) return;
+    const saved = state();
     saved.scroll = Object.fromEntries([...page.querySelectorAll('[data-board-scroll]')].map(el => [el.dataset.boardScroll, [el.scrollLeft, el.scrollTop]]));
     const active = document.activeElement;
-    saved.focus = page.contains(active) ? ['data-release-task', 'data-board-close', 'data-board-filter'].find(key => active.hasAttribute(key)) : null;
+    saved.focus = page.contains(active) && active.hasAttribute('data-release-task') ? 'data-release-task' : null;
     saved.focusValue = saved.focus ? active.getAttribute(saved.focus) : null;
   }
   document.addEventListener('click', event => {
-    const button = event.target.closest('[data-release-task], [data-board-close], [data-board-filter]');
+    const button = event.target.closest('[data-release-task], [data-board-close]');
     if (!button) return;
-    if (button.hasAttribute('data-board-close')) { closeTask(); return; }
-    if (button.hasAttribute('data-release-task')) { openTask(button.dataset.releaseTask); return; }
-    if (get().overviewMode || get().view !== 'release-kanban') return;
-    if (button.hasAttribute('data-board-filter')) state().filter = button.dataset.boardFilter;
-    render();
-  });
-  document.addEventListener('change', event => {
-    if (event.target.id !== 'board-owner') return;
-    state().owner = event.target.value; render();
-    document.querySelector('#board-owner')?.focus({ preventScroll: true });
+    if (button.hasAttribute('data-board-close')) closeTask();
+    else openTask(button.dataset.releaseTask);
   });
   const proofLabel = t => t.kind === 'orchestration' ? t.stage : taskState(t).proof;
   function card(t) {
@@ -91,8 +82,8 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
       ${t.owners.length ? `<p class="board-owner" title="${esc(t.owners.join(' · '))}">Responsable déclaré : ${esc(t.owners.join(' · '))}</p>` : ''}
       ${proofLabel(t) ? `<p class="board-proof">${esc(proofLabel(t))}</p>` : ''}
       ${(t.activities || []).map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${providerIcon(a.provider)} Suivi ${esc(a.provider === 'codex' ? 'Codex' : a.provider === 'claude' ? 'Claude' : a.provider || '')} · ${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}
-      <p class="board-time">${hours(t.measures.actual)}${t.measures.partial ? ' · partiel' : ''} / ${t.measures.revised == null && t.measures.initial == null ? 'Non estimé' : hours(t.measures.revised ?? t.measures.initial)}</p>
-      <small>${t.kind === 'orchestration' ? esc(t.model || 'Modèle principal non renseigné') : (t.acceptance?.length || 0) + ' critères d’acceptation'}</small></button>`;
+      ${t.measures.actual == null && t.measures.revised == null && t.measures.initial == null ? '' : `<p class="board-time" title="Temps connu / prévu">${hours(t.measures.actual)}${t.measures.partial ? ' · partiel' : ''} / ${t.measures.revised == null && t.measures.initial == null ? 'Non estimé' : hours(t.measures.revised ?? t.measures.initial)}</p>`}
+      <small>${t.kind === 'orchestration' ? 'Modèle : ' + esc(t.model || 'non renseigné') : (t.acceptance?.length || 0) + ' critères d’acceptation'}</small></button>`;
   }
   function drawer(t) {
     const s = get();
@@ -117,26 +108,17 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
       <h3>Derniers changements enregistrés</h3>${events.map(e => `<p><small>${when(e.at)} · ${esc(e.flow)}</small><br>${esc(e.note || e.outcome || e.node)}</p>`).join('') || '<p>Aucun changement enregistré.</p>'}
       <h3>Terminal existant</h3>${terminals.map(x => `<button class="secondary" data-session="${esc(x.id)}">${providerIcon(x.provider)} ${esc(x.program || 'Terminal')} · ${esc(x.task || 'release complète')}</button>`).join('') || '<p>Aucun terminal ouvert dans ce contexte.</p>'}</section>`;
   }
-  function draw() {
-    const s = get(), saved = state();
-    if (!s.detail.selectedRelease) {
-      document.querySelector('#content').innerHTML = '<div class="page no-release"><h2>Aucune release sélectionnée</h2><p>Choisissez une release pour suivre ses tâches. Le cadrage peut commencer dans le terminal sans release.</p><button class="secondary" data-view="terminal">Revenir au terminal</button></div>';
-      return;
-    }
-    const cards = releaseCards(s.detail, observations());
-    const owners = [...new Set(cards.flatMap(t => t.owners))].sort();
-    const shown = filterCards(cards, saved.filter, saved.owner);
+  // Columns only: the Plan page owns the title, filters and owner selector.
+  function markup(cards, shown) {
     const section = (id, label) => `<section class="kanban-column" data-column="${id}" data-board-scroll="${id}" aria-label="${label}"><h2>${label}<span>${shown.filter(t => t.column === id).length}</span></h2>${shown.filter(t => t.column === id).map(card).join('') || '<p class="kanban-empty">Aucune tâche</p>'}</section>`;
     const columns = [...releaseColumns, ...[['blocked', 'Bloquées'], ['unknown', 'État à vérifier'], ['deferred', 'Reportées']].filter(([id]) => cards.some(t => t.column === id))];
-    document.querySelector('#content').innerHTML = `<div class="page kanban-page release-kanban" data-context="${esc(context())}">
-      <div class="kanban-toolbar"><span class="board-count">${cards.filter(t => !['orchestration', 'intention'].includes(t.kind) && t.column === 'done').length} réceptionnée${cards.filter(t => !['orchestration', 'intention'].includes(t.kind) && t.column === 'done').length > 1 ? 's' : ''} · ${cards.filter(t => !['orchestration', 'intention'].includes(t.kind)).length} tâches + orchestration${cards.some(t => t.kind === 'intention') ? ' · ' + cards.filter(t => t.kind === 'intention').length + ' demande(s) à planifier' : ''} · ${shown.length} affichées</span><label>Responsable <select id="board-owner"><option value="">Tous</option>${[...new Set([...owners, saved.owner].filter(Boolean))].map(o => `<option ${saved.owner === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></label></div>
-      <div class="board-filters">${[['all', 'Toutes'], ['executing', 'En exécution'], ['ready', 'Prêtes'], ['blocked', 'Bloquées'], ['waiting', 'Accord attendu']].map(([id, label]) => `<button class="secondary" data-board-filter="${id}" aria-pressed="${saved.filter === id}">${label}</button>`).join('')}</div>
-      ${!cards.length ? '<p class="note">Aucune tâche structurée dans cette release. Le cadrage commun reste visible dans Temps & estimations.</p>' : ''}
-      <div class="release-board-layout"><div class="kanban-board" data-board-scroll="board" style="--board-columns:${columns.length}">${columns.map(([id, label]) => section(id, label)).join('')}</div></div></div>`;
-    for (const el of root().querySelectorAll('[data-board-scroll]')) {
-      const [left, top] = saved.scroll[el.dataset.boardScroll] || [0, 0]; el.scrollLeft = left; el.scrollTop = top;
-    }
-    if (saved.focus) root().querySelector(`[${saved.focus}="${CSS.escape(saved.focusValue)}"]`)?.focus({ preventScroll: true });
+    return `<div class="release-board-layout"><div class="kanban-board" data-board-scroll="board" style="--board-columns:${columns.length}">${columns.map(([id, label]) => section(id, label)).join('')}</div></div>`;
   }
-  return { draw, remember, openTask };
+  function restore() {
+    const page = root(); if (!page) return;
+    const saved = state();
+    for (const el of page.querySelectorAll('[data-board-scroll]')) { const [left, top] = saved.scroll[el.dataset.boardScroll] || [0, 0]; el.scrollLeft = left; el.scrollTop = top; }
+    if (saved.focus) page.querySelector(`[${saved.focus}="${CSS.escape(saved.focusValue)}"]`)?.focus({ preventScroll: true });
+  }
+  return { markup, restore, remember, openTask };
 }

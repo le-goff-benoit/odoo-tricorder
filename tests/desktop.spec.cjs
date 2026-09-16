@@ -94,6 +94,11 @@ async function projectView(page, view) {
   await expect(page.locator('#context-bar')).toBeHidden();
 }
 
+async function kanbanMode(page) {
+  await page.locator('#tabs [data-view="plan"]').click();
+  await page.locator('[data-plan-mode="kanban"]').click();
+}
+
 test('simplified workspace: task dialogs, agent identity, preferences and launch buttons', async () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-simple-'));
   const home = path.join(temp, 'home'); fs.mkdirSync(home);
@@ -128,7 +133,7 @@ test('simplified workspace: task dialogs, agent identity, preferences and launch
     const [before] = await page.evaluate(() => window.tricorder.terminals.list());
     expect((await page.evaluate(() => window.tricorder.terminals.list())).length).toBe(1);
     expect(before.task).toBeNull();
-    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await kanbanMode(page);
     await page.locator('[data-release-task="T02"]').click();
     await expect(page.locator('#task-modal')).toBeVisible();
     await expect(page.locator('#task-modal')).toHaveAttribute('aria-labelledby', 'task-modal-title');
@@ -252,7 +257,7 @@ test('release Kanban: receipts, criteria, filters, live refresh and existing ter
     await page.keyboard.press('Control+Shift+T');
     await expect(page.locator('.terminal-tab')).toHaveCount(1);
     const [terminal] = await page.evaluate(() => window.tricorder.terminals.list());
-    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await kanbanMode(page);
     await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(4);
     await expect(page.locator('.release-kanban [data-column="done"]')).toContainText('T01');
     await expect(page.locator('.board-count')).toContainText('1 réceptionnée · 3 tâches');
@@ -283,7 +288,7 @@ test('release Kanban: receipts, criteria, filters, live refresh and existing ter
     const after = await page.evaluate(() => window.tricorder.terminals.list());
     expect(after.length).toBe(1); expect(after[0].id).toBe(terminal.id); expect(after[0].pid).toBe(terminal.pid);
     expect(after[0].task).toBeNull();
-    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await kanbanMode(page);
     await page.locator('#release-select').selectOption(oldId);
     await expect(page.locator('.board-detail')).toHaveCount(0);
     await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(2);
@@ -335,6 +340,8 @@ test('design system: common gutters, cards and controls across every project vie
       await expect.poll(() => page.evaluate(() => window.innerWidth)).toBe(Math.floor(width / zoom));
       for (const view of ['intentions', 'plan', 'release-kanban', 'knowledge', 'express', 'agents', 'effort', 'documents', 'sources', 'environments']) {
         if (['documents', 'sources', 'environments'].includes(view)) await projectView(page, view);
+        else if (view === 'release-kanban') await kanbanMode(page);
+        else if (view === 'plan') { await page.locator('#tabs [data-view="plan"]').click(); await page.locator('[data-plan-mode="list"]').click(); }
         else await page.locator(`#tabs [data-view="${view}"]`).click();
         await expect(page.locator('#content > .page')).toBeVisible();
         const styles = await page.evaluate(() => {
@@ -1080,7 +1087,7 @@ test('real project: read-only release/task/mission screens', async () => {
     await expect(page.locator('#task-modal')).toContainText('Réception');
     await page.screenshot({ path: 'test-results/real-neca-task-modal.png' });
     await page.locator('[data-board-close]').click();
-    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await kanbanMode(page);
     await expect(page.locator('.kanban-card')).toHaveCount(5);
     await page.screenshot({ path: 'test-results/real-neca-kanban.png' });
     await page.locator('#tabs [data-view="agents"]').click();
@@ -1172,8 +1179,8 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await expect(page.locator('.native-binding')).toContainText('synthetic-thread');
     await expect(page.locator('.project-item.needs-human .human-alert')).toHaveText('!');
     expect(await app.evaluate(() => globalThis.tricorderNotifications)).toBeGreaterThan(0);
-    await page.locator('#tabs [data-view="release-kanban"]').click();
-    await page.locator('[data-board-filter="waiting"]').click();
+    await kanbanMode(page);
+    await page.locator('[data-plan-filter="waiting"]').click();
     await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(1);
     await expect(page.locator('.release-kanban .kanban-card')).toContainText('T02');
     await expect(page.locator('.release-kanban .provider-icon[aria-label="OpenAI"]')).toHaveCount(1);
@@ -1310,6 +1317,7 @@ test('intentions, dependency graph and concurrent activities remain usable at co
     await expect(page.locator('#task-modal [data-intention="I01"]')).toBeVisible();
     await page.keyboard.press('Escape');
     await page.locator('#tabs [data-view="plan"]').click();
+    await page.locator('[data-plan-mode="list"]').click();
     await expect(page.locator('[data-task="main-stable"]')).toContainText('Orchestration');
     await page.locator('[data-plan-filter="executing"]').click();
     await expect(page.locator('.task-card')).toHaveCount(3);
@@ -1359,7 +1367,7 @@ test('intentions, dependency graph and concurrent activities remain usable at co
     await page.screenshot({ path: 'test-results/activities-1000-zoom125.png' });
     await app.evaluate(({ BrowserWindow }) => { const win = BrowserWindow.getAllWindows()[0]; win.setSize(1000, 900); win.webContents.setZoomFactor(1); });
     await page.setViewportSize({ width: 1000, height: 900 });
-    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await kanbanMode(page);
     await page.screenshot({ path: 'test-results/orchestration-1000.png' });
     await page.locator('[data-view="kanban"]').click();
     await page.locator('[data-action="kanban-executing"]').click();
@@ -1391,14 +1399,16 @@ test('live requests appear before planning and reconcile with tasks without manu
     await expect(page.locator(`#release-select option[value="${newRelease}"]`)).toHaveCount(1, { timeout: 10000 });
     await page.locator('#release-select').selectOption(newRelease);
     await page.locator('#tabs [data-view="plan"]').click();
+    await page.locator('[data-plan-mode="list"]').click();
     await expect(page.locator('[data-plan-task="intention:I01"]')).toContainText('À préciser');
     await expect(page.locator('[data-plan-task="intention:I01"] [data-task]')).toHaveCount(0);
-    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await kanbanMode(page);
     await expect(page.locator('.release-kanban [data-intention="I01"]')).toBeVisible();
     await page.locator('[data-view="kanban"]').click();
     await page.locator('[data-kanban-intention="I01"]').click();
     await expect(page.locator('.intention-detail')).toContainText('Conserver exactement ma demande initiale');
     await page.locator('#tabs [data-view="plan"]').click();
+    await page.locator('[data-plan-mode="list"]').click();
     const source = `changelog/${newRelease}/demande.md`; write(path.join(project, source), '# Demande conservée');
     write(path.join(folder, 'plan.json'), { schema: 1, tasks: [{ id: 'T01', title: 'Résultat retenu après revue', request: source,
       acceptance: ['Résultat vérifié'], risk: 'normal', route: 'module', scopes: ['orbital_custom'], depends_on: [], intentions: ['I01'] }] });
@@ -1406,7 +1416,7 @@ test('live requests appear before planning and reconcile with tasks without manu
     write(path.join(folder, 'intentions.json'), register);
     await expect(page.locator('[data-plan-task="T01"]')).toContainText('Résultat retenu', { timeout: 10000 });
     await expect(page.locator('[data-plan-task="intention:I01"]')).toHaveCount(0);
-    await page.locator('#tabs [data-view="release-kanban"]').click();
+    await kanbanMode(page);
     await expect(page.locator('.release-kanban [data-release-task="T01"]')).toBeVisible();
     await expect(page.locator('.release-kanban [data-intention="I01"]')).toHaveCount(0);
     // Removing the planned task must expose the unmet request again, not lose it.

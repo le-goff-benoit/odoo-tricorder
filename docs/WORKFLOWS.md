@@ -29,8 +29,8 @@ les tâches et les relie à ces intentions.
 
 ![Intention, demande originale et décisions conservées](screenshots/intentions.png)
 
-Dans **Plan**, consultez les critères d’une tâche et utilisez **Dépendances** pour
-comprendre l’ordre retenu. Le graphe distingue les résultats requis des ressources
+Dans **Plan**, consultez les critères d’une tâche ; le mode **Kanban** suit
+l’avancement par colonne et **Dépendances** montre l’ordre retenu. Le graphe distingue les résultats requis des ressources
 communes. L’orchestrateur fixe les commandes de contrôle et les responsabilités.
 
 Puis demandez explicitement l’exécution du périmètre voulu :
@@ -67,7 +67,7 @@ Conserve les tâches déjà reçues et explique les contrôles réellement impac
 ```
 
 Dès que Crew écrit cette intention, Tricorder détecte la modification et affiche
-une carte **À planifier** ou **À préciser** dans le Plan et les deux Kanbans.
+une carte **À planifier** ou **À préciser** dans le Plan et le Kanban global.
 Les modifications sont vérifiées toutes les deux secondes, puis le projet est relu.
 Le cockpit affiche ce qui a été enregistré ; il ne lit pas les messages de la
 conversation pour inventer une demande.

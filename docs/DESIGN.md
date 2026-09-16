@@ -13,6 +13,18 @@
   accessible avec Échap, retour au déclencheur et critères d’acceptation en premier.
 - Aucun sélecteur de tâche global ni panneau latéral de suivi. La sélection du
   projet/release reste distincte de la consultation ponctuelle d’une fiche.
+- En-tête en une bande : identité du projet à gauche, release et environnement à
+  droite (`#context-bar`), onglets dessous. `header()` émet le balisage final ;
+  aucune vue ne retouche l’en-tête après rendu. La bande d’activité et le compte
+  sur l’onglet Agents n’existent que lorsqu’une activité est confirmée.
+- Taille minimale du texte : 11 px (badges, libellés en capitales), 12 px pour
+  tout contenu secondaire. Les onglets et le corps restent à 13 px.
+- Un onglet ne propose pas de bouton « revenir à » un autre onglet : la navigation
+  passe par la barre d’onglets et les raccourcis Alt 1…8.
+- Le Plan a trois modes (liste, Kanban, dépendances) qui partagent filtres et
+  responsable ; il n’existe pas de second onglet Kanban par release.
+- Les vues sont émises en une passe : aucun `textContent` réécrit ni nœud déplacé
+  après `innerHTML`. L’état d’ouverture des `<details>` est mémorisé par clé.
 - Préférences : champs groupés par usage, unités explicites, validation native,
   Annuler/Enregistrer pour l’affichage ; dossiers et aide clavier séparés.
 - Panneaux : rayon 8 px ; contrôles : rayon 6 px, hauteur minimale 36 px.
