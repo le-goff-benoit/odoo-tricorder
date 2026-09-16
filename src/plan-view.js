@@ -1,5 +1,5 @@
 import { allReleaseCards, filterCards } from './release-kanban.mjs';
-import { taskState } from './task-state.mjs';
+import { taskState, stageRail } from './task-state.mjs';
 import { dependencyGraph, intentionItems, intentionTasks } from './plan-model.mjs';
 import { timerMarkup } from './activity.mjs';
 
@@ -25,13 +25,14 @@ export function planViews({ get, observations, esc, badge, render, board }) {
     if (el.dataset.planFilter) state().filter = el.dataset.planFilter;
     render();
   });
-  const activity = t => t.activities?.map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}"><span aria-hidden="true">${a.executing ? '●' : '○'}</span> ${esc(a.provider || '')} · ${esc(a.label)}${a.stage ? ' · ' + esc(a.stage) : ''} · ${timerMarkup(a, esc)}</p>`).join('') || '';
+  const activity = t => t.activities?.map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${esc(a.provider || '')} · ${esc(a.label)}${a.stage ? ' · ' + esc(a.stage) : ''}${timerMarkup(a, esc)}</p>`).join('') || '';
   function taskCard(t) {
-    if (t.kind === 'intention') return `<article class="plan-task-row intention" data-plan-task="${esc(t.id)}" data-kind="intention"><button class="task-card" data-view="intentions" data-intention="${esc(t.intentionId)}"><div class="task-head"><span class="task-id">${esc(t.intentionId)}</span><h3>${esc(t.title)}</h3>${badge('pending', t.presentation.label)}</div><p class="card-meta">${esc(t.reason)}</p></button></article>`;
+    if (t.kind === 'intention') return `<article class="plan-task-row intention" data-plan-task="${esc(t.id)}" data-kind="intention" data-tone="intention"><button class="task-card" data-view="intentions" data-intention="${esc(t.intentionId)}"><div class="task-head"><span class="task-id">${esc(t.intentionId)}</span><h3>${esc(t.title)}</h3>${badge('pending', t.presentation.label)}</div><p class="card-meta">${esc(t.reason)}</p></button></article>`;
     const p = t.presentation || taskState(t);
     const plainReason = t.reason && !/[\/]|^dépendances/i.test(t.reason) ? t.reason : '';
     const meta = t.kind === 'orchestration' ? [t.owners.join(' · '), t.stage, t.model ? 'modèle ' + t.model : ''] : [p.proof, t.owners?.length ? t.owners.join(' · ') : '', t.stage, !p.proof && !t.owners?.length && !t.stage ? plainReason : ''];
-    return `<article class="plan-task-row ${t.kind || ''} ${p.received ? 'received' : ''}" data-plan-task="${esc(t.id)}"><button class="task-card" data-task="${esc(t.id)}" aria-haspopup="dialog"><div class="task-head"><span class="task-id">${esc(t.kind === 'orchestration' ? 'Principal' : t.id)}</span><h3>${esc(t.title)}</h3>${t.risk === 'high' ? '<span class="risk">Sensible</span>' : ''}${badge(p.received ? 'received' : t.status, t.kind === 'orchestration' ? 'Orchestration' : p.label)}</div>${meta.filter(Boolean).length ? `<p class="card-meta">${esc(meta.filter(Boolean).join(' · '))}</p>` : ''}${t.depends_on?.length ? `<p class="dependencies">Après ${esc(t.depends_on.join(', '))}</p>` : ''}</button>${activity(t)}</article>`;
+    const tone = t.kind === 'orchestration' ? 'orchestration' : p.received ? 'received' : t.waiting ? 'waiting' : t.blocked ? 'blocked' : ['running', 'claimed', 'active'].includes(t.status) ? 'claimed' : 'pending';
+    return `<article class="plan-task-row ${t.kind || ''} ${p.received ? 'received' : ''}" data-plan-task="${esc(t.id)}" data-tone="${tone}"><button class="task-card" data-task="${esc(t.id)}" aria-haspopup="dialog"><div class="task-head"><span class="task-id">${esc(t.kind === 'orchestration' ? 'Principal' : t.id)}</span><h3>${esc(t.title)}</h3>${t.kind === 'orchestration' ? '' : stageRail(t.flow, esc)}${t.risk === 'high' ? '<span class="risk">Sensible</span>' : ''}${badge(p.received ? 'received' : t.status, t.kind === 'orchestration' ? 'Orchestration' : p.label)}</div>${meta.filter(Boolean).length ? `<p class="card-meta">${esc(meta.filter(Boolean).join(' · '))}</p>` : ''}${t.depends_on?.length ? `<p class="dependencies">Après ${esc(t.depends_on.join(', '))}</p>` : ''}</button>${activity(t)}</article>`;
   }
   function graph(tasks) {
     const g = dependencyGraph(tasks, state().task), selected = tasks.find(t => t.id === state().task);

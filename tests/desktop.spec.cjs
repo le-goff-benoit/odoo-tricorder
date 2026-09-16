@@ -127,7 +127,9 @@ test('simplified workspace: task dialogs, agent identity, preferences and launch
     write(path.join(project, 'changelog', releaseId, 'knowledge/K02.json'), nextMemory);
     await expect(page.locator('.knowledge-page')).toContainText('Découverte partagée pendant la tâche.', { timeout: 15000 });
     await page.locator('#tabs [data-view="terminal"]').click();
-    expect(await page.locator('#tabs [data-view="terminal"] svg').innerHTML()).not.toBe(await page.locator('#tabs [data-view="express"] svg').innerHTML());
+    // Tabs carry their Alt shortcut number instead of a decorative icon.
+    await expect(page.locator('#tabs [data-view="terminal"] .tab-key')).toHaveText('1');
+    await expect(page.locator('#tabs [data-view="express"] .tab-key')).toHaveText('5');
     await page.locator('[data-launch-agent="claude"]').evaluate(button => { button.click(); button.click(); });
     await expect(page.locator('.xterm-screen')).toContainText('FAKE-CLAUDE:' + project);
     const [before] = await page.evaluate(() => window.tricorder.terminals.list());
@@ -951,7 +953,7 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     app = await electron.launch(launch);
     let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
-    await expect(page.locator('.brand')).toHaveText('TRICORDER');
+    await expect(page.locator('.brand-name')).toHaveText('Tricorder');
     await expect(page.locator('.topbar')).not.toContainText('POSTE LOCAL');
     await page.locator('#tabs [data-view="express"]').click();
     await expect(page.locator('.express-card')).toHaveCount(1);

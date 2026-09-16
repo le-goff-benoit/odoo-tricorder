@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Variante B — Passerelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c1118;--s1:#111823;--s2:#16202c;--line:#1f2b39;--line2:#2b3a4b;--text:#dfe7ee;--t2:#9fb0bf;--t3:#66798a;
+--teal:#5fd3c8;--teal-soft:rgba(95,211,200,.14);--amber:#f2b34c;--amber-soft:rgba(242,179,76,.14);--violet:#a89bf0;--violet-soft:rgba(168,155,240,.16);--red:#f07d7d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 "Space Grotesk",sans-serif;height:900px;display:flex;overflow:hidden}
+.mono{font-family:"JetBrains Mono",monospace}
+.side{width:248px;background:var(--s1);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 10px 10px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 10px 16px}
+.mark{width:26px;height:26px;border:2px solid var(--teal);border-right-width:7px;border-radius:7px 3px 3px 3px;display:grid;place-items:center;color:var(--teal)}
+.brand b{font-weight:600;letter-spacing:.18em;font-size:14px}
+.brand small{display:block;font:10px "JetBrains Mono",monospace;color:var(--t3);letter-spacing:.14em;margin-top:2px}
+.head{padding:16px 12px 6px;font:500 10px "JetBrains Mono",monospace;letter-spacing:.2em;color:var(--t3)}
+.item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:4px;color:var(--t2)}
+.item .n{flex:1}.item .v{font:11px "JetBrains Mono",monospace;color:var(--t3)}
+.item.sel{background:var(--s2);color:var(--text);box-shadow:inset 2px 0 0 var(--teal)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
+.pill{min-width:18px;height:18px;padding:0 5px;border-radius:3px;background:var(--amber-soft);color:var(--amber);font:600 11px "JetBrains Mono",monospace;display:inline-grid;place-items:center}
+.foot{margin-top:auto;padding:10px 10px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;font:10px "JetBrains Mono",monospace;color:var(--t3);letter-spacing:.08em}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;background:
+ radial-gradient(circle at 1px 1px, rgba(255,255,255,.035) 1px, transparent 1px) 0 0/22px 22px}
+.top{display:flex;align-items:center;gap:14px;height:54px;padding:0 24px;border-bottom:1px solid var(--line);background:var(--bg)}
+.top h1{font-size:17px;font-weight:600;margin:0;letter-spacing:-.01em}
+.chip{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:3px;background:var(--s2);color:var(--t2);font:11px "JetBrains Mono",monospace;border:1px solid var(--line2)}
+.ps{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 10px;border:1px solid var(--line2);border-radius:4px;background:var(--s1)}
+.ps b{font-weight:500}.ps .st{display:inline-flex;gap:2px}.ps .st i{width:4px;height:10px;background:var(--teal);opacity:.35;border-radius:1px}.ps .st i.f{opacity:1}
+.ps svg{width:13px;height:13px;color:var(--t3)}
+.acts{margin-left:auto;display:flex;align-items:center;gap:14px;color:var(--t2);font-size:12px}
+.tele{font:11px "JetBrains Mono",monospace;color:var(--t3);letter-spacing:.06em}
+.tele b{color:var(--teal);font-weight:500}
+.strip{display:flex;gap:12px;align-items:center;padding:5px 24px;background:var(--teal-soft);border-bottom:1px solid var(--line);font-size:12px;color:var(--t2)}
+.strip b{color:var(--teal);font-weight:500}
+.tabs{display:flex;gap:2px;height:40px;padding:0 16px;border-bottom:1px solid var(--line);background:rgba(12,17,24,.7)}
+.tabs a{display:flex;align-items:center;gap:7px;padding:0 9px;color:var(--t2);font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a i{font:10.5px "JetBrains Mono",monospace;color:var(--t3);font-style:normal}
+.tabs a.on{color:var(--text);border-color:var(--teal)}.tabs a.on i{color:var(--teal)}
+.tabs .c{min-width:18px;height:18px;border-radius:3px;background:var(--teal-soft);color:var(--teal);font:600 11px "JetBrains Mono",monospace;display:inline-grid;place-items:center}
+.page{padding:20px 24px;overflow:auto}
+.sec{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sec h2{margin:0;font-size:17px;font-weight:600}
+.sec .cnt{margin-left:auto;font:11px "JetBrains Mono",monospace;color:var(--t3);letter-spacing:.04em}
+.bar{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:4px;overflow:hidden}
+.seg a{height:28px;padding:0 12px;display:grid;place-items:center;color:var(--t2);font-size:12px;border-right:1px solid var(--line2)}.seg a:last-child{border:0}
+.seg a.on{background:var(--teal-soft);color:var(--teal)}
+.chips{display:flex;gap:4px}.chips a{height:28px;padding:0 10px;border:1px solid var(--line);border-radius:4px;display:grid;place-items:center;color:var(--t2);font-size:12px}
+.chips a.on{border-color:var(--teal);color:var(--teal)}
+.link{margin-left:auto;color:var(--teal);font-size:12px}
+.list{display:flex;flex-direction:column;gap:6px}
+.row{background:var(--s1);border:1px solid var(--line);border-radius:4px;padding:10px 14px 10px 12px;position:relative}
+.row:before{content:"";position:absolute;left:-1px;top:8px;bottom:8px;width:2px;background:var(--t3);opacity:.4}
+.row.orch:before{background:var(--violet);opacity:1}.row.ok:before{background:var(--teal);opacity:1}.row.warm:before{background:var(--amber);opacity:1}.row.intent:before{opacity:0}
+.row .h{display:flex;align-items:center;gap:10px}
+.row .id{font:11.5px "JetBrains Mono",monospace;color:var(--t3);min-width:64px}
+.row h3{margin:0;font-size:13.5px;font-weight:500;flex:1}
+.rail{display:flex;gap:3px;margin-right:6px}.rail i{width:16px;height:4px;border-radius:1px;background:var(--line2)}.rail i.d{background:var(--teal)}.rail i.c{background:var(--amber)}
+.badge{height:20px;padding:0 8px;border-radius:3px;display:inline-grid;place-items:center;font:500 11px "JetBrains Mono",monospace;letter-spacing:.02em;background:var(--s2);color:var(--t2);border:1px solid var(--line2)}
+.badge.ok{background:var(--teal-soft);color:var(--teal);border-color:transparent}.badge.warm{background:var(--amber-soft);color:var(--amber);border-color:transparent}.badge.orch{background:var(--violet-soft);color:var(--violet);border-color:transparent}
+.risk{font:500 11px "JetBrains Mono",monospace;color:var(--red)}
+.row .m{color:var(--t2);font-size:12px;margin:3px 0 0 74px}
+.row .act{display:flex;align-items:center;gap:8px;margin:8px 0 0 74px;padding-top:8px;border-top:1px dashed var(--line);font-size:12px;color:var(--teal)}
+.row .act .t{font:12px "JetBrains Mono",monospace;color:var(--text);margin-left:auto}
+.row .act .lt{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.35}}
+</style></head><body>
+<aside class="side">
+  <div class="brand"><div class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 7 5 5-5 5m8 0h6"/></svg></div><div><b>TRICORDER</b><small>OPS · 0.3.4</small></div></div>
+  <div class="item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="n">Kanban global</span></div>
+  <div class="head">PROJETS</div>
+  <div class="item"><span class="n">equinox-studio</span><span class="v">19.1</span></div>
+  <div class="item"><span class="n">nova-services</span><span class="v">18.0</span></div>
+  <div class="item sel"><span class="dot"></span><span class="n">orbital-industries</span><span class="v">19.0</span><span class="pill">1</span></div>
+  <div class="foot"><span>À PROPOS</span><span>v0.3.4</span></div>
+</aside>
+<main class="main">
+  <header class="top">
+    <h1>orbital-industries</h1><span class="chip">19.0</span>
+    <span class="ps"><span class="st"><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i></span><b>Facturation &amp; maintenance récurrente</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m6 9 6 6 6-6"/></svg></span>
+    <span class="ps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/></svg>Shell local<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m6 9 6 6 6-6"/></svg></span>
+    <div class="acts"><span>Quotas</span><span>Skills</span><span>Préférences</span><span class="tele">SYNC <b>21:07</b></span></div>
+  </header>
+  <div class="strip"><b>3 activités en cours</b><span>T02 · Travail en cours / T03 · Commande en cours / Orchestration · Orchestration en cours</span></div>
+  <nav class="tabs"><a><i>01</i>Terminal</a><a><i>02</i>Intentions</a><a class="on"><i>03</i>Plan</a><a><i>04</i>Mémoire</a><a><i>05</i>Express</a><a><i>06</i>Agents <span class="c">3</span></a><a><i>07</i>Temps</a><a><i>08</i>Projet</a></nav>
+  <section class="page">
+    <div class="sec"><h2>Plan de release</h2><span class="badge ok">OUVERTE</span><span class="cnt">1/3 RÉCEPTIONNÉE · 1 À PLANIFIER</span></div>
+    <div class="bar"><div class="seg"><a class="on">Liste</a><a>Kanban</a><a>Dépendances</a></div><div class="chips"><a class="on">Toutes</a><a>En exécution</a><a>Prêtes</a><a>Bloquées</a><a>Accord attendu</a></div><span class="link">Lire le bilan de release</span></div>
+    <div class="list" id="list"></div>
+  </section>
+</main>
+<script src="_data.js"></script>
+<script>
+const claude='<svg width="14" height="11" viewBox="0 0 35 24" fill="currentColor"><path d="M24.5 0h-5.2l9.5 24h5.2z"/><path d="M9.5 0 0 24h5.3l1.9-5h9.9l2 5h5.3L14.9 0zm-.5 14.5 3.2-8.4 3.3 8.4z"/></svg>';
+const rails={T01:'ddd',T02:'dc-',T03:'---'};
+document.getElementById('list').innerHTML = TRICORDER_MOCK.rows.map(r => `<div class="row ${r.kind==='orch'?'orch':r.badge[1]==='ok'?'ok':r.badge[1]==='warm'?'warm':r.kind==='intent'?'intent':''}"><div class="h"><span class="id">${r.id}</span><h3>${r.title}</h3>${rails[r.id]?`<span class="rail">${[...rails[r.id]].map(c=>`<i class="${c==='d'?'d':c==='c'?'c':''}"></i>`).join('')}</span>`:''}${r.risk?'<span class="risk">SENSIBLE</span>':''}<span class="badge ${r.badge[1]}">${r.badge[0]}</span></div><div class="m">${r.meta}</div>${r.activity?`<div class="act"><span class="lt"></span>${r.activity[0]==='claude'?claude:'◎'} ${r.activity[1]}<span class="t">${r.activity[2]}</span></div>`:''}</div>`).join('');
+</script>
+</body></html>

@@ -14,3 +14,11 @@ export function taskState(task, flow) {
   const proof = received ? validation === 'validated' ? 'Preuves valides' : 'Contrôle à actualiser' : task.status === 'done' ? 'Réalisation déclarée · réception non vérifiée' : '';
   return { received, validation, column, label, proof, reason: task.reason || '' };
 }
+
+// Workflow steps as a compact rail: one segment per node, in graph order.
+export function stageRail(flow, esc = v => String(v ?? '')) {
+  const nodes = (flow?.nodes || []).slice(0, 8);
+  if (!nodes.length) return '';
+  const label = nodes.map(n => `${n.description || n.role || n.id} : ${{ done: 'parcourue', claimed: 'en cours', ready: 'prête', blocked: 'bloquée' }[n.status] || 'à venir'}`).join(' · ');
+  return `<span class="stage-rail" title="${esc(label)}" aria-label="${esc(label)}">${nodes.map(n => `<i class="${esc(n.status || 'pending')}"></i>`).join('')}</span>`;
+}

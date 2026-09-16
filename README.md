@@ -8,7 +8,7 @@ Retrouvez vos demandes, le plan de release, les agents en activité et leurs
 résultats autour d’un terminal persistant. **Odoo Crew orchestre le travail ;
 Tricorder en montre l’avancement.**
 
-[Installer la version 0.3.4](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.4) ·
+[Installer la version 0.3.5](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.5) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Exemples de parcours](docs/WORKFLOWS.md) ·
 [Signaler un problème](https://github.com/le-goff-benoit/odoo-tricorder/issues)
@@ -71,15 +71,15 @@ Les comparaisons de vitesse restent liées à la qualité réellement vérifiée
 
 ## Installer
 
-Le paquet **0.3.4** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
+Le paquet **0.3.5** cible Linux Ubuntu/Pop!_OS **amd64**. La construction et les
 parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
-1. Télécharger `odoo-tricorder_0.3.4_amd64.deb` dans la
-   [release 0.3.4](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.4).
+1. Télécharger `odoo-tricorder_0.3.5_amd64.deb` dans la
+   [release 0.3.5](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.5).
 2. Depuis le dossier contenant le téléchargement :
 
    ```bash
-   sudo apt install ./odoo-tricorder_0.3.4_amd64.deb
+   sudo apt install ./odoo-tricorder_0.3.5_amd64.deb
    ```
 
 3. Ouvrir **Odoo Tricorder** dans le menu des applications.
@@ -209,6 +209,9 @@ ou `xvfb-run -a`. Les tests ordinaires ne lancent aucune campagne de modèles r�
 
 ## Licence et marques
 
-Code sous [licence MIT](LICENSE). Les logos OpenAI et Anthropic sont des marques
+Code sous [licence MIT](LICENSE). Les polices Antonio et IBM Plex sont embarquées
+sous [SIL Open Font License](assets/fonts/README.md). L’identité visuelle, hommage
+discret aux interfaces LCARS de *Star Trek : The Next Generation*, est décrite dans
+[docs/design/DIRECTION.md](docs/design/DIRECTION.md). Les logos OpenAI et Anthropic sont des marques
 de leurs titulaires ; leurs [sources officielles sont documentées](assets/providers/README.md).
 Projet indépendant, sans affiliation à Odoo, OpenAI, Anthropic ou Star Trek.

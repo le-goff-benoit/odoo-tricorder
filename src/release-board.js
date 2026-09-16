@@ -1,4 +1,4 @@
-import { taskState } from './task-state.mjs';
+import { taskState, stageRail } from './task-state.mjs';
 import { timerMarkup } from './activity.mjs';
 import { intentionItems, intentionTasks } from './plan-model.mjs';
 import { allReleaseCards as releaseCards, releaseColumns } from './release-kanban.mjs';
@@ -77,12 +77,12 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
   function card(t) {
     if (t.kind === 'intention') return `<button class="kanban-card" data-kind="intention" data-view="intentions" data-intention="${esc(t.intentionId)}"><div class="kanban-card-status"><strong>${esc(t.intentionId)}</strong>${badge('pending', t.presentation.label)}</div><h3>${esc(t.title)}</h3><p class="card-meta">${esc(t.reason)}</p></button>`;
     return `<button class="kanban-card" data-release-task="${esc(t.id)}" aria-haspopup="dialog">
-      <div class="kanban-card-status"><strong>${esc(t.kind === 'orchestration' ? 'Principal' : t.id)}</strong>${t.waiting ? badge('waiting_human', 'Accord attendu') : ''}${t.blocked ? badge('blocked', 'Bloquée') : ''}${t.status === 'ready' ? badge('ready') : ''}</div>
+      <div class="kanban-card-status"><strong>${esc(t.kind === 'orchestration' ? 'Principal' : t.id)}</strong>${t.kind === 'orchestration' ? '' : stageRail(t.flow, esc)}${t.waiting ? badge('waiting_human', 'Accord attendu') : ''}${t.blocked ? badge('blocked', 'Bloquée') : ''}${t.status === 'ready' ? badge('ready') : ''}</div>
       <h3>${esc(t.title)}</h3>
       ${t.owners.length ? `<p class="card-meta board-owner" title="Responsable déclaré : ${esc(t.owners.join(' · '))}"><span class="sr-only">Responsable déclaré : </span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>${esc(t.owners.join(' · '))}</p>` : ''}
       ${t.kind === 'orchestration' && t.model ? `<p class="card-meta">Modèle : ${esc(t.model)}</p>` : ''}
       ${proofLabel(t) ? `<p class="board-proof">${esc(proofLabel(t))}</p>` : ''}
-      ${(t.activities || []).map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${providerIcon(a.provider)}${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}
+      ${(t.activities || []).map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${providerIcon(a.provider)}${esc(a.label)}${timerMarkup(a, esc)}</p>`).join('')}
       ${t.measures.actual == null && t.measures.revised == null && t.measures.initial == null ? '' : `<p class="board-time" title="Temps connu / prévu">${hours(t.measures.actual)}${t.measures.partial ? ' · partiel' : ''} / ${t.measures.revised == null && t.measures.initial == null ? 'Non estimé' : hours(t.measures.revised ?? t.measures.initial)}</p>`}</button>`;
   }
   function drawer(t) {
@@ -96,7 +96,7 @@ export function releaseBoard({ get, observations, render, esc, badge, when, prov
       <section class="board-criteria"><h3>Critères d’acceptation</h3><ul>${(t.acceptance || []).map(c => `<li>${esc(c)}</li>`).join('') || '<li>Aucun critère renseigné</li>'}</ul></section>
       ${t.reason && (t.blocked || t.column === 'unknown' || t.status === 'stale') ? `<details class="note" open><summary>${t.blocked ? 'Blocage' : 'État à vérifier'}</summary><p>${esc(t.reason)}</p></details>` : ''}
       ${t.kind === 'orchestration' ? `<p>Modèle principal : ${esc(t.model || 'non renseigné')}</p><p>Tâches pilotées : ${esc(t.taskIds.join(', ') || 'non renseignées')}</p>` : `<h3>Intentions couvertes</h3>${intentionItems(s.detail).filter(i => intentionTasks(s.detail, i).some(task => task.id === t.id)).map(i => `<button class="secondary" data-board-close data-view="intentions" data-intention="${esc(i.id)}">${esc(i.id)} · ${esc(i.purpose || i.text)}</button>`).join('') || '<p>Aucun lien enregistré dans cette release.</p>'}`}
-      ${(t.activities || []).map(a => `<p class="task-activity">${esc(a.label)} · ${timerMarkup(a, esc)}</p>`).join('')}
+      ${(t.activities || []).map(a => `<p class="task-activity ${a.executing ? 'executing' : ''}">${esc(a.label)}${timerMarkup(a, esc)}</p>`).join('')}
       <h3>Étape et responsabilité</h3><p>${esc(t.stage || 'Étape non renseignée')}</p><p>${esc(t.owners.join(' · ') || 'Responsable non renseigné')} · ${esc(t.activity)}</p>
       ${t.flowNote ? `<p>${esc(t.flowNote)}</p>` : ''}
       ${t.depends_on?.length ? `<p>Dépend de ${t.depends_on.map(id => `<button class="secondary" data-release-task="${esc(id)}">${esc(id)}</button>`).join(' ')}</p>` : ''}

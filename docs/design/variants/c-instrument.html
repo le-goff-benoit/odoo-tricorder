@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Variante C — Instrument</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#161615;--s1:#1d1c1a;--s2:#242220;--line:#2c2a27;--text:#efe9e1;--t2:#b3aca2;--t3:#7f7a72;
+--copper:#d98e5a;--copper-soft:rgba(217,142,90,.15);--sage:#a3b18a;--sage-soft:rgba(163,177,138,.15);--lilac:#b7a7d6;--lilac-soft:rgba(183,167,214,.16);--red:#d98177}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 "Instrument Sans",sans-serif;height:900px;display:flex;overflow:hidden}
+.serif{font-family:"Instrument Serif",serif;font-style:italic;font-weight:400}
+.mono{font-family:"DM Mono",monospace}
+.side{width:248px;background:var(--s1);display:flex;flex-direction:column;padding:16px 12px 12px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 18px}
+.mark{width:26px;height:26px;border:2px solid var(--copper);border-right-width:7px;border-radius:10px 4px 4px 4px;display:grid;place-items:center;color:var(--copper)}
+.brand b{font:400 20px "Instrument Serif",serif;letter-spacing:.01em}
+.head{padding:14px 8px 6px;font:500 11px "DM Mono",monospace;letter-spacing:.14em;color:var(--t3)}
+.item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;color:var(--t2)}
+.item .n{flex:1}.item .v{font:11px "DM Mono",monospace;color:var(--t3)}
+.item.sel{background:var(--s2);color:var(--text)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 3px var(--sage-soft)}
+.pill{min-width:18px;height:18px;padding:0 6px;border-radius:9px;background:var(--copper-soft);color:var(--copper);font:500 11px "DM Mono",monospace;display:inline-grid;place-items:center}
+.foot{margin-top:auto;padding:12px 8px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:11px;color:var(--t3)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:14px;height:56px;padding:0 26px;border-bottom:1px solid var(--line)}
+.top h1{font:400 24px "Instrument Serif",serif;margin:0;letter-spacing:.01em}
+.chip{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:11px;background:var(--s2);color:var(--t2);font:11px "DM Mono",monospace}
+.ps{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 10px 0 12px;border-radius:16px;background:var(--s2)}
+.ps b{font-weight:500}.ps .st{width:8px;height:8px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 3px var(--sage-soft)}
+.ps svg{width:13px;height:13px;color:var(--t3)}
+.acts{margin-left:auto;display:flex;align-items:center;gap:14px;color:var(--t2);font-size:12px}
+.acts .mono{color:var(--t3);font-size:11px}
+.strip{display:flex;gap:12px;align-items:center;padding:6px 26px;border-bottom:1px solid var(--line);font-size:12px;color:var(--t2)}
+.strip b{color:var(--sage);font-weight:500}
+.strip .sweep{height:2px;flex:0 0 60px;border-radius:1px;background:linear-gradient(90deg,transparent,var(--sage));animation:s 2.4s infinite linear;margin-left:auto}
+@keyframes s{from{transform:translateX(-40px);opacity:0}30%{opacity:1}to{transform:translateX(40px);opacity:0}}
+.tabs{display:flex;gap:6px;height:42px;padding:0 20px;border-bottom:1px solid var(--line)}
+.tabs a{display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--t2);font-size:13px;position:relative}
+.tabs a.on{color:var(--text)}.tabs a.on:after{content:"";position:absolute;left:8px;right:8px;bottom:-1px;height:2px;border-radius:1px;background:var(--copper)}
+.tabs .c{min-width:18px;height:18px;border-radius:9px;background:var(--sage-soft);color:var(--sage);font:500 11px "DM Mono",monospace;display:inline-grid;place-items:center}
+.page{padding:22px 26px;overflow:auto}
+.sec{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+.sec h2{margin:0;font:400 26px "Instrument Serif",serif}
+.sec .cnt{margin-left:auto;font-size:12px;color:var(--t3)}
+.bar{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.seg{display:inline-flex;background:var(--s2);border-radius:10px;padding:3px;gap:2px}
+.seg a{height:28px;padding:0 12px;display:grid;place-items:center;border-radius:8px;color:var(--t2);font-size:12.5px;font-weight:500}
+.seg a.on{background:#33302c;color:var(--text)}
+.chips{display:flex;gap:4px}.chips a{height:28px;padding:0 12px;border-radius:14px;display:grid;place-items:center;color:var(--t2);font-size:12px;background:transparent;border:1px solid var(--line)}
+.chips a.on{background:var(--copper-soft);border-color:transparent;color:var(--copper)}
+.link{margin-left:auto;color:var(--sage);font-size:12px}
+.list{display:flex;flex-direction:column;gap:8px}
+.row{background:var(--s1);border-radius:12px;padding:12px 16px}
+.row .h{display:flex;align-items:center;gap:10px}
+.row .id{font:11.5px "DM Mono",monospace;color:var(--t3);min-width:64px}
+.row h3{margin:0;font-size:14px;font-weight:500;flex:1}
+.badge{height:20px;padding:0 9px;border-radius:10px;display:inline-grid;place-items:center;font-size:11px;font-weight:500;background:var(--s2);color:var(--t2)}
+.badge.ok{background:var(--sage-soft);color:var(--sage)}.badge.warm{background:var(--copper-soft);color:var(--copper)}.badge.orch{background:var(--lilac-soft);color:var(--lilac)}
+.risk{font-size:11px;font-weight:500;color:var(--red)}
+.row .m{color:var(--t2);font-size:12px;margin:3px 0 0 74px}
+.row .act{display:flex;align-items:center;gap:8px;margin:10px 0 0 74px;font-size:12px;color:var(--sage)}
+.row .act .t{font:12px "DM Mono",monospace;color:var(--text);margin-left:auto}
+.row .act .lt{width:6px;height:6px;border-radius:50%;background:var(--sage);animation:p 1.6s infinite}
+.row.orch{box-shadow:inset 3px 0 0 var(--lilac)}.row.intent{background:transparent;border:1px dashed var(--line)}
+@keyframes p{50%{opacity:.35}}
+</style></head><body>
+<aside class="side">
+  <div class="brand"><div class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 7 5 5-5 5m8 0h6"/></svg></div><b>Tricorder</b></div>
+  <div class="item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="n">Kanban global</span></div>
+  <div class="head">PROJETS</div>
+  <div class="item"><span class="n">equinox-studio</span><span class="v">19.1</span></div>
+  <div class="item"><span class="n">nova-services</span><span class="v">18.0</span></div>
+  <div class="item sel"><span class="dot"></span><span class="n">orbital-industries</span><span class="v">19.0</span><span class="pill">1</span></div>
+  <div class="foot"><span>À propos de Tricorder</span><span>v0.3.4</span></div>
+</aside>
+<main class="main">
+  <header class="top">
+    <h1>orbital-industries</h1><span class="chip">19.0</span>
+    <span class="ps"><span class="st"></span><b>Facturation &amp; maintenance récurrente</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m6 9 6 6 6-6"/></svg></span>
+    <span class="ps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/></svg>Shell local<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m6 9 6 6 6-6"/></svg></span>
+    <div class="acts"><span>Quotas</span><span>Skills</span><span>Préférences</span><span class="mono">à jour · 21:07</span></div>
+  </header>
+  <div class="strip"><b>En cours : 3 activités</b><span>T02 · Travail en cours / T03 · Commande en cours / Orchestration · Orchestration en cours</span><span class="sweep"></span></div>
+  <nav class="tabs"><a>Terminal</a><a>Intentions</a><a class="on">Plan</a><a>Mémoire</a><a>Express</a><a>Agents <span class="c">3</span></a><a>Temps</a><a>Projet</a></nav>
+  <section class="page">
+    <div class="sec"><h2>Plan de release</h2><span class="badge ok">Ouverte</span><span class="cnt">1 réceptionnée · 3 tâches + orchestration · 1 demande à planifier</span></div>
+    <div class="bar"><div class="seg"><a class="on">Liste</a><a>Kanban</a><a>Dépendances</a></div><div class="chips"><a class="on">Toutes</a><a>En exécution</a><a>Prêtes</a><a>Bloquées</a><a>Accord attendu</a></div><span class="link">Lire le bilan de release</span></div>
+    <div class="list" id="list"></div>
+  </section>
+</main>
+<script src="_data.js"></script>
+<script>
+const claude='<svg width="14" height="11" viewBox="0 0 35 24" fill="currentColor"><path d="M24.5 0h-5.2l9.5 24h5.2z"/><path d="M9.5 0 0 24h5.3l1.9-5h9.9l2 5h5.3L14.9 0zm-.5 14.5 3.2-8.4 3.3 8.4z"/></svg>';
+document.getElementById('list').innerHTML = TRICORDER_MOCK.rows.map(r => `<div class="row ${r.kind==='orch'?'orch':r.kind==='intent'?'intent':''}"><div class="h"><span class="id">${r.id}</span><h3>${r.title}</h3>${r.risk?'<span class="risk">Sensible</span>':''}<span class="badge ${r.badge[1]}">${r.badge[0]}</span></div><div class="m">${r.meta}</div>${r.activity?`<div class="act"><span class="lt"></span>${r.activity[0]==='claude'?claude:'◎'} ${r.activity[1]}<span class="t">${r.activity[2]}</span></div>`:''}</div>`).join('');
+</script>
+</body></html>

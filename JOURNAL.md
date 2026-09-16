@@ -1,5 +1,13 @@
 # Journal
 
+## 2026-09-16 — Identité LCARS discret 0.3.5
+
+- Demande de Benoît : donner une âme au cockpit (hommage TNG), rester sobre, inspirer et donner le sentiment de contrôle ; effacer le côté « généré » ; explorer plusieurs variantes puis choisir.
+- Trois maquettes rendues sur le même écran (LCARS discret, passerelle, instrument) dans `docs/design/variants/` ; décision et règles dans `docs/design/DIRECTION.md`.
+- Retenu : LCARS discret + préfixes numériques d’onglets et rail d’étapes empruntés à la passerelle.
+- Polices Antonio / IBM Plex Sans / IBM Plex Mono embarquées (OFL, sous-ensembles latin) ; palette chaude sémantique ; rail latéral, coude, capuchons.
+- Vérifié : 87 tests Python, 56 Node, 16 parcours Electron depuis les sources et dans le paquet ; captures régénérées ; publication v0.3.5 et installation locale.
+
 ## 2026-09-16 — Hiérarchie visuelle 0.3.4
 
 - Remarques de Benoît : pertinence et hiérarchie des informations, barre supérieure lourde, monogrammes inutiles, sélection de projet datée, espacement général.

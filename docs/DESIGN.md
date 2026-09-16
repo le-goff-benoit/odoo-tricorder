@@ -1,5 +1,8 @@
 # Socle visuel Tricorder
 
+La direction artistique (hommage LCARS discret, polices Antonio / IBM Plex,
+couleurs sémantiques) est décrite et justifiée dans [design/DIRECTION.md](design/DIRECTION.md).
+
 `src/design-system.css` est le système visuel complet : jetons (couleurs, texte,
 espacements), mise en page, composants réutilisables et responsive, chargé après
 `src/style.css` qui ne conserve que les géométries spécialisées (terminal,
