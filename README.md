@@ -9,7 +9,7 @@ garder la main sur l’exécution : les demandes d’origine, le plan de la rele
 les agents en activité, leurs preuves et leur temps. **Odoo Crew orchestre le
 travail ; Tricorder le rend lisible.** Rien n’est modifié depuis le cockpit.
 
-[Installer la version 0.3.5](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.5) ·
+[Installer la version 0.3.6](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.6) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Parcours d’exemple](docs/WORKFLOWS.md) ·
 [Socle visuel](docs/DESIGN.md) ·
@@ -72,15 +72,15 @@ manquantes ; « Non mesuré » ne vaut jamais zéro.
 
 ## Installer
 
-Le paquet **0.3.5** cible Linux Ubuntu / Pop!_OS **amd64**. La construction et
+Le paquet **0.3.6** cible Linux Ubuntu / Pop!_OS **amd64**. La construction et
 les parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
-1. Télécharger `odoo-tricorder_0.3.5_amd64.deb` dans la
-   [release 0.3.5](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.5).
+1. Télécharger `odoo-tricorder_0.3.6_amd64.deb` dans la
+   [release 0.3.6](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.6).
 2. Depuis le dossier du téléchargement :
 
    ```bash
-   sudo apt install ./odoo-tricorder_0.3.5_amd64.deb
+   sudo apt install ./odoo-tricorder_0.3.6_amd64.deb
    ```
 
 3. Ouvrir **Odoo Tricorder** dans le menu des applications.
