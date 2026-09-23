@@ -33,6 +33,36 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual(found[0]['series'], '18.0')
         self.assertEqual(found[0]['release']['status'], 'ouverte')
 
+    def test_unreadable_folder_does_not_hide_other_projects(self):
+        locked = self.home / 'volume-docker'
+        (locked / 'data').mkdir(parents=True)
+        locked.chmod(0)
+        try:
+            found = catalog.overview(self.home, [str(locked / 'data')])
+        finally:
+            locked.chmod(0o700)
+        self.assertEqual([p['name'] for p in found], ['client avec espaces'])
+
+    def test_undecodable_file_name_keeps_project_readable_and_round_trips(self):
+        import os, subprocess
+        name = os.fsdecode(b'r\xe9union.md')
+        (self.release / name).write_text('Compte rendu')
+        backend = Path(catalog.__file__).parent / 'catalog.py'
+        def call(payload):
+            out = subprocess.run([sys.executable, str(backend), '--stdin'], input=json.dumps(payload),
+                                 capture_output=True, text=True, check=True).stdout
+            return json.loads(out)['result']
+        result = call({'action': 'project', 'project': str(self.project), 'release': '2026-09-11_test'})
+        self.assertEqual(result['name'], 'client avec espaces')
+        document = call({'action': 'document', 'project': str(self.project), 'path': f'changelog/2026-09-11_test/{name}'})
+        self.assertEqual(document['text'], 'Compte rendu')
+
+    def test_uppercase_pdf_is_never_read_as_text(self):
+        (self.release / 'Guide.PDF').write_bytes(b'%PDF-1.4 binary')
+        document = catalog.document(self.project, 'changelog/2026-09-11_test/Guide.PDF')
+        self.assertEqual(document['type'], 'pdf')
+        self.assertIsNone(document['text'])
+
     def test_removed_email_not_exposed_or_loaded(self):
         original = catalog.trusted_module
         def guarded(name):

@@ -171,7 +171,13 @@ function wireAPI() {
     }
     saveSettings(); return settings;
   });
-  handle('terminal:list', async () => (await terminal({ action: 'list' })).map(s => sessionContext(settings, s)));
+  handle('terminal:list', async () => {
+    const sessions = await terminal({ action: 'list' });
+    // Contexts of sessions that no longer exist would otherwise accumulate forever.
+    const stale = Object.keys(settings.terminalContexts || {}).filter(id => !sessions.some(s => s.id === id));
+    if (stale.length) { for (const id of stale) delete settings.terminalContexts[id]; saveSettings(); }
+    return sessions.map(s => sessionContext(settings, s));
+  });
   handle('terminal:context', async request => {
     const project = checkedProject(request.project);
     const session = (await terminal({ action: 'list' })).find(s => s.id === request.session && s.project === project);

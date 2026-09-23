@@ -382,12 +382,21 @@ def overview(home, extras):
     home = Path(home)
     candidates = set()
     for child in home.iterdir():
-        if child.name.startswith('.') or child.name in EXCLUDED or child.is_symlink() or not child.is_dir():
+        # One unreadable folder (Docker volume, other owner) must not hide the others.
+        try:
+            if child.name.startswith('.') or child.name in EXCLUDED or child.is_symlink() or not child.is_dir():
+                continue
+            if ((child / '.odoo-agents').is_dir() or (child / '__manifest__.py').is_file()
+                    or next(child.glob('*/__manifest__.py'), None)):
+                candidates.add(child.resolve())
+        except OSError:
             continue
-        if ((child / '.odoo-agents').is_dir() or (child / '__manifest__.py').is_file()
-                or next(child.glob('*/__manifest__.py'), None)):
-            candidates.add(child.resolve())
-    candidates.update(Path(p).resolve() for p in extras if Path(p).is_dir())
+    for extra in extras:
+        try:
+            if Path(extra).is_dir():
+                candidates.add(Path(extra).resolve())
+        except OSError:
+            continue
     result = []
     for root in sorted(candidates, key=lambda p: p.name.lower()):
         try:
@@ -499,8 +508,9 @@ def document(root, relative):
         root / '.odoo-agents/PROJECT.md', root / '.odoo-agents/JOURNAL.md')
     if not allowed or path.suffix.lower() not in ('.md', '.txt', '.pdf'):
         raise ValueError('Document non accessible depuis le cockpit')
-    return {'path': str(path), 'name': path.name, 'type': path.suffix[1:],
-            'text': read_text(path, 512000) if path.suffix != '.pdf' else None}
+    kind = path.suffix[1:].lower()
+    return {'path': str(path), 'name': path.name, 'type': kind,
+            'text': read_text(path, 512000) if kind != 'pdf' else None}
 
 
 def dispatch(payload):
@@ -534,7 +544,9 @@ if __name__ == '__main__':
         request = sys.stdin.read(1024 * 1024 + 1) if sys.argv[1] == '--stdin' else sys.argv[1]
         if len(request) > 1024 * 1024:
             raise ValueError('Requête trop volumineuse.')
-        print(json.dumps({'result': dispatch(json.loads(request))}, ensure_ascii=False))
+        # ASCII escapes keep undecodable file names (surrogates) printable; the
+        # renderer sends them back escaped, so they still resolve to the same file.
+        print(json.dumps({'result': dispatch(json.loads(request))}))
     except Exception as error:
-        print(json.dumps({'error': str(error)}, ensure_ascii=False))
+        print(json.dumps({'error': str(error)}))
         sys.exit(1)

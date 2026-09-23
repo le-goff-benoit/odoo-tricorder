@@ -1,5 +1,51 @@
 # QA — Odoo Tricorder
 
+## Revue fonctionnelle et design épuré 0.3.6 — 23 septembre 2026
+
+- `npm test` : 92 Python et 57 JavaScript réussis.
+- Nouveaux tests de régression, chacun rouge sur le code précédent :
+  saisie bloquée qui gelait les autres terminaux, shell arrêté resté zombie,
+  dossier illisible dans le dossier des projets, nom de fichier non UTF-8
+  (lecture et aller-retour du chemin), `.PDF` en majuscules.
+- `npm run test:ui` puis `npm run test:packaged` : 17 parcours réussis chacun,
+  1 parcours client réel facultatif ignoré. Contrats du socle conservés
+  (gouttières 24/16 px, cartes 16 px / 8 px, boutons 36 px, polices réellement chargées).
+- `npm run dist` : paquet Debian 0.3.6 construit ; `npm run test:packaged` : 17 parcours
+  réussis, 1 facultatif ignoré.
+- Installation autorisée par Benoît : dpkg 0.3.6 `install ok installed` ; `app.asar`
+  installé identique au paquet testé :
+  `bbd96cbc085c313e0d685c7f7f7757c43f4e1970fd7bc995c9a902a4bf4d181c`
+  (paquet `12210d6330a93fa7804f8db481833531e0a021f4e3a8ce6f96457c307e216bac`).
+  Parcours `simplified workspace` et `UI review` réussis sur l’exécutable installé.
+- Revue visuelle de toutes les vues à 1440 × 900 et 1000 × 700 sur le projet
+  synthétique Orbital, aucune erreur de console.
+- Limites : ré-attachement après déconnexion et cache des observations vérifiés
+  par relecture et parcours existants, sans test Electron dédié.
+
+## Installation locale de la passe UI/UX — 16 septembre 2026
+
+- Installation autorisée par Benoît et effectuée : paquet local 0.3.5, état dpkg `install ok installed`.
+- `app.asar` installé identique à celui du paquet validé :
+  `261562ad3f342fe32b064bcfc28d8085eb253e9c00f16564c734a3e97ac5cadb`.
+- Deux parcours Electron sur l’exécutable installé réussis en 15,5 s :
+  `simplified workspace` et `UI review`, données synthétiques isolées.
+- Sessions réelles laissées ouvertes ; le nouveau rendu est chargé à la prochaine ouverture.
+
+## Passe UI/UX locale — 16 septembre 2026 (après 0.3.5)
+
+- `npm test` : 87 Python et 57 JavaScript réussis.
+- `npm run test:ui` puis `npm run test:packaged` : 17 parcours réussis chacun,
+  1 parcours client réel facultatif ignoré.
+- `npm run dist` : paquet Debian de validation construit, sans installation ni publication.
+- Après la dernière retouche de fermeture, parcours `UI review` rejoué avec succès
+  sur sources puis sur l’exécutable final reconstruit.
+- Régression couverte : chargement réel des trois familles de polices embarquées ;
+  huit URLs vérifiées sur disque, caractères français inclus dans le test Electron.
+- Vues principales à trois formats ; sous-vues et dialogues à 1440 × 900 et
+  1000 × 700 / 125 %, fermeture visible, titres accessibles, retours clavier,
+  textes longs et absence de débordement hors des zones dédiées.
+- Revue et captures : [UI_REVIEW_2026-09-16.md](docs/UI_REVIEW_2026-09-16.md).
+
 ## Livraison 0.3.0 — 15 septembre 2026
 
 - Installation système autorisée et réalisée : dpkg 0.3.0.

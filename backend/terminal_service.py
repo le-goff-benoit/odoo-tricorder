@@ -19,6 +19,7 @@ import time
 import uuid
 
 MAX_BUFFER = 2 * 1024 * 1024
+MAX_PENDING_INPUT = 1024 * 1024
 
 
 class Terminal:
@@ -39,6 +40,10 @@ class Terminal:
         self.buffer = bytearray()
         self.exit_code = None
         self.closed = False
+        # Input waiting for the PTY. Writes never block the broker: a program that
+        # stops reading its input must not freeze the other terminals.
+        self.pending = bytearray()
+        self.writing = False
         shell = os.environ.get('SHELL', '/bin/bash')
         if not os.path.isfile(shell) or not os.access(shell, os.X_OK):
             shell = '/bin/bash'
@@ -90,7 +95,12 @@ class Terminal:
         if self.closed:
             return
         self.closed = True
-        asyncio.get_running_loop().remove_reader(self.fd)
+        loop = asyncio.get_running_loop()
+        loop.remove_reader(self.fd)
+        if self.writing:
+            loop.remove_writer(self.fd)
+            self.writing = False
+        self.pending.clear()
         os.close(self.fd)
         self.broker.emit({'event': 'sessions'})
 
@@ -113,14 +123,28 @@ class Terminal:
         if self.closed:
             raise ValueError('Session terminée')
         data = value.encode('utf-8')
-        if len(data) > 1024 * 1024:
+        if len(data) > MAX_PENDING_INPUT:
             raise ValueError('Collage trop volumineux')
-        while data:
+        if len(self.pending) + len(data) > MAX_PENDING_INPUT:
+            raise ValueError('Le programme de ce terminal ne lit plus sa saisie : texte refusé')
+        self.pending.extend(data)
+        self.flush()
+
+    def flush(self):
+        while self.pending and not self.closed:
             try:
-                written = os.write(self.fd, data)
-                data = data[written:]
+                written = os.write(self.fd, self.pending)
+                del self.pending[:written]
             except BlockingIOError:
-                await asyncio.sleep(.01)
+                if not self.writing:
+                    asyncio.get_running_loop().add_writer(self.fd, self.flush)
+                    self.writing = True
+                return
+            except OSError:
+                self.pending.clear()
+        if self.writing:
+            asyncio.get_running_loop().remove_writer(self.fd)
+            self.writing = False
 
     def metadata(self):
         foreground, program = None, None
@@ -146,6 +170,8 @@ class Terminal:
 class Broker:
     def __init__(self):
         self.sessions = {}
+        # Stopped shells leave the session list at once but must still be reaped.
+        self.stopped = set()
         self.clients = set()
         self.subscriptions = {}
         self.last_client = time.time()
@@ -188,6 +214,8 @@ class Broker:
         elif action == 'stop':
             terminal.stop()
             self.sessions.pop(terminal.id, None)
+            if terminal.exit_code is None:
+                self.stopped.add(terminal.pid)
             self.emit({'event': 'sessions'})
         else:
             raise ValueError('Action inconnue')
@@ -235,6 +263,12 @@ class Broker:
                         self.emit({'event': 'sessions'})
                 except ChildProcessError:
                     pass
+            for pid in tuple(self.stopped):
+                try:
+                    if os.waitpid(pid, os.WNOHANG)[0]:
+                        self.stopped.discard(pid)
+                except ChildProcessError:
+                    self.stopped.discard(pid)
             if not self.clients and not any(not s.closed for s in self.sessions.values()) and time.time() - self.last_client > 600:
                 os._exit(0)
 

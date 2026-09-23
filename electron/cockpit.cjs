@@ -55,11 +55,29 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
     return a.provider.split('-')[0] === b.provider.split('-')[0] && a.nativeId === b.nativeId && a.nativeId &&
       (a.until || '9999') > (b.since || '') && (b.until || '9999') > (a.since || '');
   }
+  // A native history is re-read only when it changed, or every 30 s for the
+  // usage transcript it points to: the 5 s poll no longer re-parses unchanged files.
+  const observed = new Map();
+  function sourceSignature(binding) {
+    try { const st = fs.statSync(binding.source); return [binding.since, binding.until, binding.nativeId, st.mtimeMs, st.size].join('|'); }
+    catch { return null; }
+  }
+  function withFreshStaleness(data) {
+    const now = Date.now() / 1000;
+    return { ...data, agents: (data.agents || []).map(a => typeof a.lastAt === 'number' ? { ...a, stale: now - a.lastAt > 90 } : a) };
+  }
+  async function readObservation(binding) {
+    if (binding.provider === 'codex-runtime') return catalog({ action: 'codex-runtime', nativeId: binding.nativeId });
+    const signature = sourceSignature(binding), hit = observed.get(binding.id);
+    if (signature && hit?.signature === signature && Date.now() - hit.at < 30000) return withFreshStaleness(hit.data);
+    const data = await catalog({ action: 'observation', source: binding.source, provider: binding.provider,
+      since: binding.since, until: binding.until, expected: binding.nativeId });
+    if (signature) observed.set(binding.id, { signature, at: Date.now(), data });
+    return data;
+  }
   async function observe(binding) {
     try {
-      const data = await catalog(binding.provider === 'codex-runtime' ? { action: 'codex-runtime', nativeId: binding.nativeId } :
-        { action: 'observation', source: binding.source, provider: binding.provider,
-          since: binding.since, until: binding.until, expected: binding.nativeId });
+      const data = await readObservation(binding);
       if (!binding.nativeId) { binding.nativeId = data.nativeId; save(); }
       if (settings.bindings.some(b => b.id !== binding.id && overlap(b, binding))) throw new Error('Période déjà associée ; mesures exclues pour éviter un double compte');
       return { ...binding, ...data };

@@ -127,9 +127,9 @@ test('simplified workspace: task dialogs, agent identity, preferences and launch
     write(path.join(project, 'changelog', releaseId, 'knowledge/K02.json'), nextMemory);
     await expect(page.locator('.knowledge-page')).toContainText('Découverte partagée pendant la tâche.', { timeout: 15000 });
     await page.locator('#tabs [data-view="terminal"]').click();
-    // Tabs carry their Alt shortcut number instead of a decorative icon.
-    await expect(page.locator('#tabs [data-view="terminal"] .tab-key')).toHaveText('1');
-    await expect(page.locator('#tabs [data-view="express"] .tab-key')).toHaveText('5');
+    // Tabs are plain labels; their Alt shortcut is announced, not drawn.
+    await expect(page.locator('#tabs [data-view="terminal"]')).toHaveAttribute('aria-keyshortcuts', 'Alt+1');
+    await expect(page.locator('#tabs [data-view="express"]')).toHaveAttribute('aria-keyshortcuts', 'Alt+5');
     await page.locator('[data-launch-agent="claude"]').evaluate(button => { button.click(); button.click(); });
     await expect(page.locator('.xterm-screen')).toContainText('FAKE-CLAUDE:' + project);
     const [before] = await page.evaluate(() => window.tricorder.terminals.list());
@@ -464,7 +464,7 @@ test('effort: partial recorded time survives missing roles, task filtering and r
     const page = await app.firstWindow();
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await page.locator('[data-view="effort"]').click();
-    await expect(page.locator('.metric').nth(1)).toContainText('TEMPS ENREGISTRÉ · PARTIEL');
+    await expect(page.locator('.metric').nth(1)).toContainText('Temps enregistré · partiel');
     await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('0 h 23 min');
     await expect(page.locator('.open-timers')).toHaveCount(0);
     const first = page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T01' });
@@ -954,7 +954,7 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await expect(page.locator('.brand-name')).toHaveText('Tricorder');
-    await expect(page.locator('.topbar')).not.toContainText('POSTE LOCAL');
+    await expect(page.locator('.topbar')).not.toContainText(/poste local/i);
     await page.locator('#tabs [data-view="express"]').click();
     await expect(page.locator('.express-card')).toHaveCount(1);
     await expect(page.locator('.express-card')).toContainText('Hors release');
@@ -972,8 +972,8 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await expect(page.locator('#terminal-mismatch')).toBeVisible();
     await expect(page.locator('#terminal-context')).not.toContainText('ouvert ');
     await expect(page.locator('#terminal-context [data-action="terminal-context"]')).toBeVisible();
-    await expect(page.locator('#environment-select').locator('..')).toContainText('ENVIRONNEMENT');
-    await expect(page.locator('#environment-select').locator('..')).not.toContainText('REPÈRE');
+    await expect(page.locator('#environment-select').locator('..')).toContainText('Environnement');
+    await expect(page.locator('#environment-select').locator('..')).not.toContainText(/repère/i);
     await page.locator('[data-view="plan"]').click();
     await expect(page.locator('.release-state')).toContainText('Close');
     await expect(page.locator('.task-card')).toHaveCount(3);
@@ -1105,7 +1105,7 @@ test('real project: read-only release/task/mission screens', async () => {
     await page.screenshot({ path: 'test-results/real-neca-effort.png' });
     if (effortRelease) {
       await page.locator('#release-select').selectOption(effortRelease);
-      await expect(page.locator('.metric').nth(1)).toContainText('PARTIEL');
+      await expect(page.locator('.metric').nth(1)).toContainText('partiel');
       await expect(page.locator('.metric').nth(1).locator('strong')).toHaveText('2 h 19 min');
       await expect(page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T01' }).locator('td').nth(3)).toContainText('0 h 23 min');
       await expect(page.locator('#content .table-scroll').first().locator('tbody tr').filter({ hasText: 'T03' }).locator('td').nth(3)).toContainText('0 h 58 min');
@@ -1431,6 +1431,148 @@ test('live requests appear before planning and reconcile with tasks without manu
     await page.locator('#tabs [data-view="intentions"]').click();
     await page.locator('.intention-card[data-intention="I01"]').click();
     await expect(page.locator('.intention-detail')).toContainText('Conserver exactement ma demande initiale');
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test('UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom', async () => {
+  test.setTimeout(120000);
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-ui-review-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  write(path.join(project, 'changelog', releaseId, 'README.md'), '<!-- release ouverte -->\n# Guide de lecture\n\n## Résultat attendu\n\nUn document conserve une typographie de lecture.\n\n| Repère | Explication |\n| --- | --- |\n| T01 | Une phrase longue qui doit rester lisible dans le tableau sans forcer le défilement de toute la fenêtre. |\n\n```\n' + 'trace-'.repeat(80) + '\n```');
+  write(path.join(project, 'changelog', releaseId, 'intentions.json'), { schema: 1, revision: 1, items: [
+    { id: 'I01', purpose: 'Rendre les factures fiables', text: 'Conserver la demande originale et ses décisions.', status: 'planned',
+      tasks: ['T01'], constraints: ['Copie locale'], source: { path: `changelog/${releaseId}/demande.md`, original: 'Demande originale conservée.' } },
+  ] });
+  write(path.join(project, '.odoo-agents/flows/express-caption.json'), { kind: 'express', status: 'complete',
+    graph_snapshot: { nodes: { express_qa: { description: 'Contrôles ciblés' }, task_done: { description: 'Terminée' } } },
+    events: [{ node: 'express_qa', outcome: 'pass', evidence: ['preuve/'.repeat(60)] }, { node: 'task_done', outcome: 'done' }],
+    updated_at: '2026-09-11T09:00:00Z' });
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
+  try {
+    const page = await app.firstWindow();
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    const fonts = await page.evaluate(async () => {
+      const results = [];
+      for (const family of ['IBM Plex Sans', 'IBM Plex Mono']) {
+        const faces = await document.fonts.load(`400 16px "${family}"`, 'Été français Œuvre');
+        results.push({ family, loaded: faces.length > 0 && faces.every(face => face.status === 'loaded') });
+      }
+      return results;
+    });
+    expect(fonts.every(font => font.loaded), JSON.stringify(fonts)).toBe(true);
+    const check = async (name, width) => {
+      const metrics = await page.evaluate(() => {
+        const dialog = [...document.querySelectorAll('dialog[open]')].at(-1);
+        const root = dialog || document.querySelector('#content:not([hidden])') || document.querySelector('#terminal-workspace');
+        return { overflow: root.scrollWidth > root.clientWidth + 1,
+          documentOverflow: document.documentElement.scrollWidth > innerWidth,
+          dialogName: dialog ? document.getElementById(dialog.getAttribute('aria-labelledby'))?.textContent : true };
+      });
+      expect(metrics.overflow, name + ' horizontal overflow').toBe(false);
+      expect(metrics.documentOverflow, name + ' window overflow').toBe(false);
+      expect(metrics.dialogName, name + ' accessible dialog title').toBeTruthy();
+      if (await page.locator('#modal[open] .modal-close').isVisible()) {
+        await expect(page.locator('#modal .modal-close')).toBeInViewport();
+        const close = await page.locator('#modal .modal-close').boundingBox(), dialog = await page.locator('#modal').boundingBox();
+        expect(close.x, 'Close stays on the right while scrolling').toBeGreaterThan(dialog.x + dialog.width / 2);
+      }
+      await page.screenshot({ path: `test-results/review-${name}-${width}.png` });
+    };
+    for (const [width, height, zoom] of [[1440, 900, 1], [1000, 700, 1.25]]) {
+      await app.evaluate(({ BrowserWindow }, zoom) => BrowserWindow.getAllWindows()[0].webContents.setZoomFactor(zoom), zoom);
+      await page.setViewportSize({ width, height });
+      await page.locator('#tabs [data-view="terminal"]').click();
+      if (width === 1440) {
+        await check('terminal-empty', width);
+        await page.locator('#terminal-empty [data-action="new-terminal"]').click();
+        await expect(page.locator('.xterm-screen')).toBeVisible();
+      }
+      await page.locator('[data-action="find"]').click();
+      await expect(page.locator('#terminal-search input')).toBeFocused();
+      await check('terminal-search', width);
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#terminal-search')).toBeHidden();
+      await expect(page.locator('.xterm-helper-textarea')).toBeFocused();
+      await page.locator('#tabs [data-view="intentions"]').click();
+      await page.locator('[data-intention="I01"]').click();
+      await page.locator('.intention-source summary').click();
+      await page.locator('.intention-history summary').click();
+      await check('intention-detail', width);
+      await page.locator('#tabs [data-view="plan"]').click();
+      await page.locator('[data-plan-mode="list"]').click();
+      await page.locator('[data-task="T02"]').click();
+      await check('task-detail', width);
+      await page.locator('#task-modal [data-document]').click();
+      await expect(page.locator('#modal')).toBeVisible();
+      await check('nested-document', width);
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#task-modal')).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(page.locator('[data-task="T02"]')).toBeFocused();
+      await page.locator('.release-links [data-document]').click();
+      await expect(page.locator('.markdown-preview h2')).toHaveText('Résultat attendu');
+      const documentStyles = await page.locator('.markdown-preview').evaluate(el => ({
+        font: getComputedStyle(el.querySelector('h2')).fontFamily,
+        uppercase: getComputedStyle(el.querySelector('h2')).textTransform,
+        whitespace: getComputedStyle(el.querySelector('td:last-child')).whiteSpace,
+      }));
+      expect(documentStyles.font).toContain('IBM Plex Sans');
+      expect(documentStyles.uppercase).toBe('none'); expect(documentStyles.whitespace).toBe('normal');
+      await check('markdown', width);
+      await page.locator('.markdown-source summary').click();
+      await check('markdown-source', width);
+      await page.keyboard.press('Escape');
+      await page.locator('#tabs [data-view="express"]').click();
+      await page.locator('.express-card summary').click();
+      await check('express-details', width);
+      await page.locator('#tabs [data-view="agents"]').click();
+      await page.locator('.mission-history > summary').click();
+      await page.locator('.agent-mission summary').click();
+      await check('mission-history', width);
+      await page.locator('#tabs [data-view="effort"]').click();
+      const breakdown = page.locator('tr').filter({ has: page.locator('[data-task="T02"]') }).locator('.agent-breakdown');
+      if (!(await breakdown.evaluate(el => el.open))) await breakdown.locator('summary').click();
+      await expect(breakdown.locator('.agent-time-table')).toBeVisible();
+      await breakdown.locator('.agent-time-table').scrollIntoViewIfNeeded();
+      await check('agent-time', width);
+      await projectView(page, 'environments');
+      await page.locator('[data-cockpit="profile"]').first().click();
+      await check('project-profile', width);
+      await page.keyboard.press('Escape');
+      await projectView(page, 'documents');
+      await page.locator('.chips [data-files="changelog"]').click();
+      await expect(page.locator('.chips [data-files="changelog"]')).toHaveAttribute('aria-pressed', 'true');
+      await check('file-folder', width);
+      await page.locator('[data-cockpit="search"]').click();
+      await page.locator('#global-query').fill('facturation');
+      await page.keyboard.press('Enter');
+      await expect(page.locator('#global-results')).toContainText('orbital-industries');
+      await check('search-results', width);
+      await page.keyboard.press('Escape');
+      for (const [action, name] of [['palette', 'skills'], ['quotas', 'quotas'], ['preferences', 'preferences']]) {
+        await page.locator(`[data-cockpit="${action}"]`).first().click();
+        await expect(page.locator('#modal')).toBeVisible();
+        if (action === 'preferences') await page.locator('.keyboard-help summary').click();
+        await check(name, width);
+        if (action === 'palette') {
+          await page.locator('#skill-filter').fill('odoo-plan');
+          await page.locator('[data-skill="odoo-plan"]').click();
+          await check('prepared-command', width);
+        }
+        await page.keyboard.press('Escape');
+      }
+      await page.locator('[data-action="about"]').click();
+      await check('about', width);
+      await page.keyboard.press('Escape');
+    }
   } finally {
     await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
     await cleanupBroker(path.join(temp, 'run/pty.sock')); fs.rmSync(temp, { recursive: true, force: true });

@@ -104,6 +104,35 @@ class TerminalTests(unittest.IsolatedAsyncioTestCase):
         self.ids.remove(identifier)
         self.assertEqual(await self.call('list'), [])
 
+    async def test_stalled_input_never_blocks_other_terminals(self):
+        stalled = await self.create()
+        # Raw mode, input never read: the PTY input queue fills up quickly.
+        await self.call('write', session=stalled, data='exec python3 -c "import tty,time;tty.setraw(0);print(\'raw-ready\', flush=True);time.sleep(30)"\n')
+        await self.output(stalled, 'raw-ready')
+        await asyncio.wait_for(self.call('write', session=stalled, data='x' * 200_000), 2)
+        with self.assertRaises(ValueError):
+            for _ in range(10):
+                await asyncio.wait_for(self.call('write', session=stalled, data='y' * 200_000), 2)
+        other = await asyncio.wait_for(self.create(), 2)
+        await self.call('write', session=other, data="printf 'still-%s\\n' 'responsive'\n")
+        await self.output(other, 'still-responsive')
+        self.assertEqual(len(await asyncio.wait_for(self.call('list'), 2)), 2)
+
+    async def test_stopped_shell_is_reaped(self):
+        identifier = await self.create()
+        pid = (await self.call('list'))[0]['pid']
+        await self.call('stop', session=identifier)
+        self.ids.remove(identifier)
+        state = None
+        for _ in range(60):
+            try:
+                state = Path(f'/proc/{pid}/stat').read_text().rsplit(') ', 1)[1].split()[0]
+            except FileNotFoundError:
+                state = None
+                break
+            await asyncio.sleep(.05)
+        self.assertIsNone(state, 'A stopped shell must not remain as a zombie')
+
     async def test_invalid_resize_rejected(self):
         identifier = await self.create()
         with self.assertRaises(ValueError):

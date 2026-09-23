@@ -15,3 +15,11 @@ test('owned CSS uses shared spacing tokens, with relative Markdown spacing allow
   const app = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
   assert.ok(app.indexOf("import './design-system.css'") > app.indexOf("import './style.css'"));
 });
+
+test('bundled font URLs resolve beside their stylesheet, including after packaging', () => {
+  const directory = path.join(__dirname, '../assets/fonts');
+  const css = fs.readFileSync(path.join(directory, 'fonts.css'), 'utf8');
+  const urls = [...css.matchAll(/url\('([^']+)'\)/g)].map(match => match[1]);
+  assert.equal(urls.length, 6);
+  for (const url of urls) assert.ok(fs.existsSync(path.resolve(directory, url)), `Missing bundled font: ${url}`);
+});

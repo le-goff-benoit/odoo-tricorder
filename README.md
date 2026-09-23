@@ -12,22 +12,28 @@ travail ; Tricorder le rend lisible.** Rien n’est modifié depuis le cockpit.
 [Installer la version 0.3.5](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.5) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Parcours d’exemple](docs/WORKFLOWS.md) ·
-[Direction visuelle](docs/design/DIRECTION.md) ·
+[Socle visuel](docs/DESIGN.md) ·
 [Signaler un problème](https://github.com/le-goff-benoit/odoo-tricorder/issues)
 
 ## Ce que vous voyez
 
 Une release se lit de gauche à droite dans la barre d’onglets, dans l’ordre du
 travail : **Intentions → Plan → Mémoire → Express → Agents → Temps**, le tout
-adossé au **Terminal**. Chaque onglet porte son numéro : `Alt 1` à `Alt 8`.
+adossé au **Terminal**. Les onglets s’atteignent avec `Alt 1` à `Alt 8`.
+
+L’interface est sobre : surfaces graphite, une seule police en casse naturelle,
+un seul accent pour la sélection et l’action principale ; la couleur est réservée
+à l’état (reçu, à relire, bloqué, orchestration). Les documents gardent une
+typographie de lecture et les formulaires s’adaptent à la fenêtre. Voir le
+[socle visuel](docs/DESIGN.md).
 
 ### Le plan, en liste, en Kanban ou en graphe
 
 ![Plan de release en liste : orchestration, demande à planifier, tâches et minuteurs](docs/screenshots/plan.png)
 
 Chaque ligne dit trois choses : identifiant, titre et état ; le responsable ou
-l’étape en cours ; l’activité réellement observée avec son minuteur. Le capuchon
-coloré à gauche et le **rail d’étapes** (parcourue, en cours, à venir) donnent
+l’étape en cours ; l’activité réellement observée avec son minuteur. Le point
+d’état à gauche et le **rail d’étapes** (parcourue, en cours, à venir) donnent
 l’avancement d’un regard. Les filtres (**En exécution**, **Prêtes**, **Bloquées**,
 **Accord attendu**) et le choix du responsable valent pour les trois modes.
 
@@ -195,10 +201,8 @@ dans [docs/design/variants](docs/design/variants).
 
 ## Licence et marques
 
-Code sous [licence MIT](LICENSE). Les polices Antonio et IBM Plex sont embarquées
+Code sous [licence MIT](LICENSE). Les polices IBM Plex Sans et Mono sont embarquées
 sous [SIL Open Font License](assets/fonts/README.md). Les logos OpenAI et Anthropic
 sont des marques de leurs titulaires ; leurs
-[sources officielles sont documentées](assets/providers/README.md). L’identité
-visuelle est un hommage discret aux interfaces LCARS de *Star Trek : The Next
-Generation*. Projet indépendant, sans affiliation à Odoo, OpenAI, Anthropic ou
-Paramount.
+[sources officielles sont documentées](assets/providers/README.md). Projet
+indépendant, sans affiliation à Odoo, OpenAI ou Anthropic.

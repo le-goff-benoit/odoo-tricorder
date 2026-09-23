@@ -1,5 +1,38 @@
 # Journal
 
+## 2026-09-23 — Revue fonctionnelle et design épuré 0.3.6
+
+- Demande de Benoît : revoir le fonctionnement, corriger ce qui pose problème, rendre le design plus moderne, simple et épuré.
+- Terminaux : un programme qui ne lit plus sa saisie ne gèle plus tout le service (file d’écriture par terminal, refus au-delà de 1 Mio) ; shells arrêtés récupérés (plus de zombies) ; ré-attachement automatique après déconnexion ; xterm des sessions disparues libérés ; contextes de terminaux morts purgés.
+- Catalogue : un dossier illisible ne vide plus la liste des projets ; un nom de fichier non UTF-8 ne rend plus le projet illisible ; `.PDF` en majuscules n’est plus lu comme du texte.
+- Interface : release disparue (checkout, renommage) → repli unique au lieu d’une erreur toutes les 30 s ; sélection de projet qui ne reste plus bloquée ; registre d’intentions invalide signalé comme tel.
+- Observations natives relues seulement si le fichier change (ou toutes les 30 s), au lieu d’un processus Python par association toutes les 5 s.
+- Design : abandon de l’hommage LCARS ; IBM Plex Sans seule en casse naturelle, surfaces graphite, un accent unique, couleur réservée à l’état ; points d’état, badges sobres, onglets soulignés, Kanban en colonnes, terminal au même fond. Antonio retirée ; `style.css` dédupliqué.
+- Non traités, à arbitrer : lecture complète des `settings.json` Claude pour la `statusLine` ; arrêt d’un terminal limité à SIGHUP (comme un terminal classique).
+- QA : 92 tests Python (+5 régressions, contre-épreuve rouge sur l’ancien code), 57 JavaScript ; 17 parcours Electron sur sources et paquet.
+- Livraison locale demandée : version 0.3.6, bannière et dix captures du README régénérées sur le projet synthétique Orbital, paquet installé (dpkg `install ok installed`, archive identique au paquet testé, 2 parcours verts sur l’exécutable installé). Aucune publication GitHub.
+
+## 2026-09-16 — Installation locale de la passe UI/UX
+
+- Mise à jour du poste explicitement demandée après validation de la passe globale.
+- Paquet local `release/odoo-tricorder_0.3.5_amd64.deb` installé via authentification système ; version conservée à 0.3.5.
+- État dpkg : `install ok installed` ; archive `app.asar` installée identique au binaire empaqueté validé.
+- SHA-256 : `261562ad3f342fe32b064bcfc28d8085eb253e9c00f16564c734a3e97ac5cadb`.
+- Deux parcours sur `/opt/Odoo Tricorder/odoo-tricorder` réussis en 15,5 s : espace de travail et revue UI étendue.
+- Vérifications avec projets synthétiques ; aucune fermeture de session réelle ni publication distante.
+
+## 2026-09-16 — Passe globale UI/UX après 0.3.5
+
+- Demande : cohérence du langage visuel et des interactions sur tous les blocs, vues et sous-vues.
+- Défaut transversal corrigé : les huit URLs de polices pointaient dans un sous-dossier inexistant ; Antonio et IBM Plex se chargent désormais réellement.
+- Ancienne surcharge Mémoire supprimée ; palette, contrastes, badges, cartes, formulaires, lecteurs, dialogues et terminal harmonisés.
+- Réception/orchestration/attente alignées entre les vues ; sélection de contexte distincte de l’action principale.
+- Formulaires adaptés à leur largeur, textes longs repliables ; Markdown en typographie de lecture.
+- Dialogues nommés et fermeture visible au défilement ; recherche terminal ajustée, Échap rend le focus au terminal.
+- Revue détaillée et huit captures dans `docs/UI_REVIEW_2026-09-16.md` et `docs/ui-review-2026-09-16/`.
+- QA : 87 tests Python, 57 JavaScript ; 17 parcours Electron sur sources et paquet, 1 parcours réel facultatif ignoré ; `npm run dist` réussi.
+- Modifications et paquet locaux ; aucune publication, installation système ni modification des projets clients.
+
 ## 2026-09-16 — Identité LCARS discret 0.3.5
 
 - Demande de Benoît : donner une âme au cockpit (hommage TNG), rester sobre, inspirer et donner le sentiment de contrôle ; effacer le côté « généré » ; explorer plusieurs variantes puis choisir.

@@ -1,5 +1,10 @@
 # Direction visuelle — 16 septembre 2026
 
+> **Remplacée le 23 septembre 2026.** À la demande de Benoît (« plus moderne,
+> simple et épuré »), l’hommage LCARS est abandonné au profit d’une direction
+> sobre décrite dans [../DESIGN.md](../DESIGN.md). Ce document reste comme trace
+> de l’exploration et de la décision précédente.
+
 Demande de Benoît : garder la sobriété et l’ergonomie, mais donner une âme au
 cockpit (hommage à *Star Trek : The Next Generation*), le rendre inspirant et
 donner un sentiment de contrôle sur l’exécution ; effacer le côté « généré ».
