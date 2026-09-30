@@ -21,7 +21,7 @@ jobs:
         with:
           repository: le-goff-benoit/odoo-crew
           # Crew: durable decisions, automatic feedback and delta reception.
-          ref: e78e0e51b277fdc4cd9b88bf311f318ba70d0e5a
+          ref: d4c5d6dabc1e29769b84f7f334466881de76d71b
           path: .test-tools/odoo-crew
       - run: npm ci
       - run: npm test
