@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
 const quote = value => "'" + String(value).replace(/'/g, "'\\''") + "'";
+const { workPrompt } = require('./work-request.cjs');
 const { prepareLaunch } = require('./provider-launch.cjs');
 const SKILLS = {
   'odoo-plan': 'Préparer une release et ses critères', 'odoo-start': 'Exécuter ou reprendre le plan',
@@ -34,8 +35,11 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
       if (flow.taskId && flow.taskId !== request.task) throw new Error('Workflow d’une autre tâche');
       if (request.task && !(data.tasks.find(t => t.id === request.task).flowPaths || []).includes(request.flow)) throw new Error('Workflow non associé à cette tâche');
     }
-    if (request.terminal && !(await terminal({ action: 'list' })).some(s => s.id === request.terminal && s.project === project)) {
-      throw new Error('Terminal d’un autre projet');
+    let selectedTerminal;
+    if (request.terminal) {
+      selectedTerminal = (await terminal({ action: 'list' })).find(s => s.id === request.terminal && s.project === project);
+      if (!selectedTerminal) throw new Error('Terminal d’un autre projet');
+      if (request.work && ((selectedTerminal.release || null) !== (data.selectedRelease || null) || (selectedTerminal.task || null) !== (request.task || null))) throw new Error('Le terminal ne correspond plus à cette release ou tâche');
     }
     const since = date(request.since), until = date(request.until);
     const role = request.role || 'orchestrator';
@@ -126,9 +130,10 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
   async function prepareAgent(request) {
     const association = await context(request);
     if (!['claude', 'codex'].includes(request.provider)) throw new Error('Fournisseur inconnu');
+    const prompt = request.work === undefined ? undefined : workPrompt(request.work, association);
     const id = randomUUID();
     const prepared = prepareLaunch({ provider: request.provider, id, folder: path.join(stateDir, 'observations'), backend, home,
-      project: association.project, crew: process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents') });
+      project: association.project, prompt, crew: process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents') });
     settings.bindings.push({ ...association, id, provider: request.provider + '-hooks', source: prepared.source,
       quotaSource: prepared.quotaSource, nativeId: null, pending: true }); save();
     quotaCache = null;

@@ -9,6 +9,7 @@ import { cockpit, providerIcon } from './cockpit.js';
 import { documentBody } from './markdown.js';
 import { newReleaseContext } from './release-context.mjs';
 import { boardCards, columns as kanbanColumns } from './kanban.mjs';
+import { workView } from './work-view.js';
 import { knowledgeView } from './knowledge-view.js';
 
 const api = window.tricorder;
@@ -46,9 +47,12 @@ const minutes = value => value == null ? 'Non mesuré' : value < 1 ? `${Math.rou
 const empty = (title, detail, action = '') => `<div class="empty">${icon('terminal')}<h2>${esc(title)}</h2><p>${esc(detail)}</p>${action}</div>`;
 // Visible tab order; Alt+1…Alt+8 follow it. « Projet » groups the read-only resources.
 const VIEWS = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['knowledge', 'Mémoire', 'file'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps', 'chart'], ['project', 'Projet', 'folder']];
+const PRIMARY_VIEWS = [['work', 'Travail', 'plan'], VIEWS[0], VIEWS[3]];
+const SECONDARY_VIEWS = VIEWS.filter(([id]) => !['terminal', 'knowledge'].includes(id));
+let detailsOpen = false;
 const RESOURCE_VIEWS = ['documents', 'environments', 'sources'];
-const SHORTCUT_VIEWS = VIEWS.map(([id]) => id);
-let projects = [], settings = {}, current = null, detail = null, view = 'terminal', selectedTask = null;
+const SHORTCUT_VIEWS = [...VIEWS.map(([id]) => id), 'work'];
+let projects = [], settings = {}, current = null, detail = null, view = 'work', selectedTask = null;
 let sessions = [], selectedSession = new Map(), terminals = new Map(), generation = 0, busy = false, pollBusy = false;
 let projectError = null, overviewMode = false, split = false, version = '', crewInstalled = true;
 let notificationKeys = new Set();
@@ -84,7 +88,8 @@ function sidebar() {
 }
 function tabs() {
   const active = id => !overviewMode && (view === id || (id === 'project' && RESOURCE_VIEWS.includes(view)));
-  $('#tabs').innerHTML = VIEWS.map(([id, label], index) => `<button data-view="${id}" class="${active(id) ? 'active' : ''}" aria-current="${active(id) ? 'page' : 'false'}" title="${label} · Alt ${index + 1}" aria-keyshortcuts="Alt+${index + 1}">${label}</button>`).join('');
+  const tab = ([id, label]) => `<button data-view="${id}" class="${active(id) ? 'active' : ''}" aria-current="${active(id) ? 'page' : 'false'}" title="${label} · Alt ${SHORTCUT_VIEWS.indexOf(id) + 1}" aria-keyshortcuts="Alt+${SHORTCUT_VIEWS.indexOf(id) + 1}">${label}</button>`;
+  $('#tabs').innerHTML = PRIMARY_VIEWS.map(tab).join('') + `<button data-action="work-details" aria-expanded="${detailsOpen}">Détails ${icon('chevron')}</button><span class="detail-tabs" ${detailsOpen ? '' : 'hidden'}>${SECONDARY_VIEWS.map(tab).join('')}</span>`;
 }
 const releaseLabel = r => ({ ouverte: 'Ouverte', close: 'Close' }[r.status] || r.status);
 function header() {
@@ -105,6 +110,7 @@ function header() {
 }
 function setView(next) {
   if (next === 'kanban') { overviewMode = true; render(); $('#content').scrollTop = 0; return; }
+  if (SECONDARY_VIEWS.some(([id]) => id === next) || RESOURCE_VIEWS.includes(next)) detailsOpen = true;
   if (next === 'project') next = 'documents';
   const changed = view !== next;
   view = next; overviewMode = false; render();
@@ -140,7 +146,7 @@ function render() {
   else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
   else if (projectError) $('#content').innerHTML = empty('Lecture impossible', projectError);
   else if (!detail) $('#content').innerHTML = empty('Aucun projet sélectionné', 'Choisissez un projet dans la colonne de gauche.');
-  else ({ intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
+  else ({ work: () => { $('#content').innerHTML = workView(detail, esc, badge); }, intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
   cockpitUI.augment();
   $('#content').scrollTop = scroll[0];
   const graph = $('#content .graph-scroll'); if (graph) { graph.scrollLeft = scroll[1]; graph.scrollTop = scroll[2]; }
@@ -235,7 +241,7 @@ async function mountTerminal(id) {
     if ((event.ctrlKey && event.altKey && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'f', 'F'].includes(event.key)) ||
         (event.ctrlKey && ['PageUp', 'PageDown'].includes(event.key)) ||
         (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'p') ||
-        (event.altKey && !event.ctrlKey && /^[1-8]$/.test(event.key))) { event.preventDefault(); return false; }
+        (event.altKey && !event.ctrlKey && /^[1-9]$/.test(event.key))) { event.preventDefault(); return false; }
     if (event.ctrlKey && event.shiftKey && ['T', 'F', 'C', 'V'].includes(event.key.toUpperCase())) {
       event.preventDefault();
       if (event.type === 'keydown' && event.key.toUpperCase() === 'C' && term.hasSelection()) api.clipboard.write(term.getSelection()).catch(e => toast(e.message));
@@ -301,7 +307,7 @@ api.terminals.onEvent(message => {
     setTimeout(() => refreshSessions().catch(() => {}), 500);
   }
 });
-async function newTerminal(task = null, provider = null) {
+async function newTerminal(task = null, provider = null, work = undefined) {
   if (!current || !detail || busy) { toast('Sélectionnez un projet et attendez son chargement.'); return; }
   if (launchingTerminal) return;
   if (provider && !['claude', 'codex'].includes(provider)) return;
@@ -310,12 +316,37 @@ async function newTerminal(task = null, provider = null) {
   const project = current, ticket = generation, startingView = view;
   const session = await api.terminals.create({ project, release: view === 'express' ? null : detail.selectedRelease, scopeMode: view === 'express' ? 'express' : 'auto', task: view === 'express' ? null : task, environment: settings.contexts?.[project]?.environment || null });
   if (provider) {
-    const launch = await api.cockpit.prepareAgent({ project, release: session.release || null, task, terminal: session.id, provider, role: 'orchestrator' });
+    const launch = await api.cockpit.prepareAgent({ project, release: session.release || null, task, terminal: session.id, provider, role: 'orchestrator', work });
     await api.terminals.write({ session: session.id, data: launch.command + '\r' });
   }
   selectedSession.set(project, session.id); await refreshSessions();
   if (current === project && ticket === generation && view === startingView) setView('terminal');
   } finally { launchingTerminal = false; }
+}
+function requestWork(action = 'develop', task = null, text = '') {
+  if (!detail || busy) return;
+  const context = { project: current, release: detail.selectedRelease, task, generation };
+  modal(`<span class="eyebrow">${esc(detail.name)}${context.release ? ' · ' + esc(context.release) : ''}</span><h2>${task ? 'Reprendre ' + esc(task) : 'Confier une demande'}</h2>
+    <form id="work-form" class="cockpit-form"><label>Action<select name="action">${[['develop', 'Développer / configurer'], ['diagnose', 'Diagnostiquer un problème'], ['plan', 'Préparer une release'], ...(task ? [['resume', 'Reprendre cette tâche']] : []), ...(context.release ? [['close', 'Clôturer cette release']] : []), ['feedback', 'Retenir un retour']].map(([id, title]) => `<option value="${id}" ${id === action ? 'selected' : ''}>${title}</option>`).join('')}</select></label>
+    <label>Votre demande<textarea name="text" rows="6" maxlength="12000" placeholder="Résultat attendu, contraintes et précisions utiles…">${esc(text)}</textarea></label>
+    <label>Agent<select name="provider"><option value="codex">Codex</option><option value="claude">Claude</option></select></label>
+    <p class="muted">La demande sera transmise dans un nouveau terminal associé à ce contexte. L’agent reprendra les preuves et décisions du projet.</p>
+    <button class="primary" type="submit">Lancer le travail</button><p id="work-error" role="alert"></p></form>`);
+  const form = $('#work-form');
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (context.project !== current || context.release !== detail?.selectedRelease || context.generation !== generation) {
+      $('#work-error').textContent = 'Le contexte a changé. Rouvrez la demande dans le projet choisi.'; return;
+    }
+    const data = new FormData(form);
+    const work = { action: data.get('action'), text: data.get('text') };
+    if (!work.text.trim() && !['resume', 'close'].includes(work.action)) { $('#work-error').textContent = 'Décrivez la demande.'; return; }
+    const submit = form.querySelector('[type=submit]'); submit.disabled = true;
+    try { await newTerminal(task, data.get('provider'), work); $('#modal').close(); }
+    catch (error) { $('#work-error').textContent = error.message; }
+    finally { submit.disabled = false; }
+  });
+  form.querySelector('textarea').focus();
 }
 function modal(content) {
   const dialog = $('#modal');
@@ -372,6 +403,15 @@ async function refresh() {
 document.addEventListener('click', async event => {
   const el = event.target.closest('button, [data-view]'); if (!el) return;
   try {
+    if (el.dataset.action === 'work-details') { detailsOpen = !detailsOpen; tabs(); return; }
+    if (el.dataset.action === 'work-request') { requestWork(); return; }
+    if (el.dataset.action === 'work-close') { requestWork('close'); return; }
+    if (el.dataset.workResume) {
+      const existing = sessions.find(s => s.alive && s.project === current && s.release === detail?.selectedRelease && s.task === el.dataset.workResume);
+      if (existing) return await followSession(existing.id);
+      requestWork('resume', el.dataset.workResume); return;
+    }
+    if (el.dataset.workQuestion) { requestWork('feedback', null, 'Concernant la question ' + el.dataset.workQuestion + ' : '); return; }
     if (el.dataset.project) return await chooseProject(el.dataset.project);
     if (el.dataset.launchAgent) return await newTerminal(null, el.dataset.launchAgent);
     if (el.dataset.view) return setView(el.dataset.view);
@@ -439,7 +479,7 @@ document.addEventListener('keydown', event => {
   if (document.querySelector('dialog[open]')) return;
   if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 't') { event.preventDefault(); newTerminal().catch(e => toast(e.message)); }
   if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'f') { event.preventDefault(); openTerminalSearch(); }
-  if (event.altKey && !event.ctrlKey && /^[1-8]$/.test(event.key)) {
+  if (event.altKey && !event.ctrlKey && /^[1-9]$/.test(event.key)) {
     const target = SHORTCUT_VIEWS[Number(event.key) - 1];
     if (target && current) { event.preventDefault(); setView(target); }
   }

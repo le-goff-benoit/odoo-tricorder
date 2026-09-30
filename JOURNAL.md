@@ -315,3 +315,12 @@
 - Reprises : conflit de collage natif supprimé, tests isolés du home/presse-papiers, publication CI explicite.
 - Limites : observation native des sous-agents et import automatique du temps reportés à la suite.
 - Livraison : paquet Debian amd64 et notes de version 0.1.0.
+
+## 2026-09-30 — Travail et mémoire du projet (0.4.0)
+
+- Accueil Travail : demandes contextualisées, reprise de tâche, préparation de clôture.
+- Trois entrées principales ; instruments détaillés repliés, raccourcis conservés.
+- Transmission du texte original comme argument CLI littéral, sans modification des sessions existantes.
+- Mémoire : observations feedback sourcées collectées par Crew, qualification distincte des décisions.
+- Tests synthétiques : chaînes shell malveillantes, contexte de tâche, parcours Electron et paquet final.
+- Limite : aucun gain de durée mesuré sur projets clients ; la présence d’une clôture ne prouve pas un déploiement.

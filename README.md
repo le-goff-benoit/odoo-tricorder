@@ -9,7 +9,7 @@ garder la main sur l’exécution : les demandes d’origine, le plan de la rele
 les agents en activité, leurs preuves et leur temps. **Odoo Crew orchestre le
 travail ; Tricorder le rend lisible.** Rien n’est modifié depuis le cockpit.
 
-[Installer la version 0.3.6](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.6) ·
+[Installer la version 0.4.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.4.0) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Parcours d’exemple](docs/WORKFLOWS.md) ·
 [Socle visuel](docs/DESIGN.md) ·
@@ -17,9 +17,10 @@ travail ; Tricorder le rend lisible.** Rien n’est modifié depuis le cockpit.
 
 ## Ce que vous voyez
 
-Une release se lit de gauche à droite dans la barre d’onglets, dans l’ordre du
-travail : **Intentions → Plan → Mémoire → Express → Agents → Temps**, le tout
-adossé au **Terminal**. Les onglets s’atteignent avec `Alt 1` à `Alt 8`.
+L’accueil **Travail** présente les demandes, points à examiner et actions à poursuivre.
+**Terminal** et **Mémoire** restent directement accessibles. **Détails** donne accès
+aux intentions, plan, express, agents, temps et ressources. Les raccourcis historiques
+`Alt 1` à `Alt 8` sont conservés ; `Alt 9` ouvre Travail.
 
 L’interface est sobre : surfaces graphite, une seule police en casse naturelle,
 un seul accent pour la sélection et l’action principale ; la couleur est réservée
@@ -72,15 +73,15 @@ manquantes ; « Non mesuré » ne vaut jamais zéro.
 
 ## Installer
 
-Le paquet **0.3.6** cible Linux Ubuntu / Pop!_OS **amd64**. La construction et
+Le paquet **0.4.0** cible Linux Ubuntu / Pop!_OS **amd64**. La construction et
 les parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
-1. Télécharger `odoo-tricorder_0.3.6_amd64.deb` dans la
-   [release 0.3.6](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.3.6).
+1. Télécharger `odoo-tricorder_0.4.0_amd64.deb` dans la
+   [release 0.4.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.4.0).
 2. Depuis le dossier du téléchargement :
 
    ```bash
-   sudo apt install ./odoo-tricorder_0.3.6_amd64.deb
+   sudo apt install ./odoo-tricorder_0.4.0_amd64.deb
    ```
 
 3. Ouvrir **Odoo Tricorder** dans le menu des applications.
@@ -100,12 +101,13 @@ de Crew n’est proposé dans la barre latérale que si le dispositif manque.
    l’en-tête (le point vert signale une release ouverte). La seconde pastille est
    l’environnement des nouveaux terminaux : un repère, jamais une connexion ni
    une permission.
-3. Dans **Terminal**, cliquer sur **Claude** ou **Codex** pour ouvrir un
-   lancement avec suivi ; `Ctrl Shift T` ouvre un shell simple.
-4. Dans l’agent, demander le plan puis son exécution avec les skills Crew. Le
-   bouton **Skills** prépare la syntaxe à copier ; il n’exécute rien.
-5. Suivre dans **Plan** et **Agents**. Cliquer une tâche ouvre sa fiche
-   (critères, preuves, temps) sans réaffecter le terminal.
+3. Dans **Travail**, cliquer **Nouvelle demande**, choisir l’action et l’agent,
+   puis décrire le résultat attendu. **Lancer le travail** ouvre un terminal contextualisé.
+4. **Reprendre** retrouve le terminal de la tâche s’il existe ou prépare une nouvelle
+   session. Le texte original, la release et la tâche sont transmis à l’agent.
+5. Les critères et preuves sont accessibles depuis la tâche ; **Mémoire** présente
+   les décisions et retours collectés. Le terminal et le sélecteur **Skills** restent
+   disponibles pour les usages avancés ; `Ctrl Shift T` ouvre un shell simple.
 
 Les skills se saisissent **dans la conversation de l’agent**, pas dans le shell :
 
@@ -206,3 +208,22 @@ sous [SIL Open Font License](assets/fonts/README.md). Les logos OpenAI et Anthro
 sont des marques de leurs titulaires ; leurs
 [sources officielles sont documentées](assets/providers/README.md). Projet
 indépendant, sans affiliation à Odoo, OpenAI ou Anthropic.
+
+## 0.4 — Partir du travail
+
+![Accueil Travail sur projet synthétique](docs/screenshots/travail.png)
+
+L’accueil **Travail** présente la release, les tâches reçues, les points à examiner
+et les actions à poursuivre. **Nouvelle demande** transmet votre texte original,
+le projet et la release au CLI Codex ou Claude ; **Reprendre** ajoute la tâche.
+Une fenêtre récapitule l’action avant lancement dans un nouveau terminal. La
+navigation ne change pas le contexte d’une session déjà ouverte.
+
+**Terminal** et **Mémoire** restent immédiatement accessibles ; **Détails** donne
+accès aux intentions, plan, express, agents, temps et ressources du projet. Les
+raccourcis Alt+1 à Alt+8 sont conservés ; Alt+9 ouvre Travail.
+
+Avec Crew actuel, Mémoire affiche aussi les retours collectés à la réception et
+à la clôture : faits et sources, à qualifier, sans adoption automatique de règles.
+Tricorder ne modifie pas les flows du projet : les agents et les commandes Crew
+conservent la responsabilité des opérations et leurs contrôles.

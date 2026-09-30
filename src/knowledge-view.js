@@ -9,11 +9,13 @@ export function knowledgeView(data, esc) {
   const refs = rows => (rows || []).map(r => `<code class="path">${esc(r.path)}</code>`).join('');
   const decisions = memory.decisions || [], rows = memory.contributions || [], documents = memory.documents || [], receipts = memory.receipts || [];
   const current = rows.filter(r => r.current);
-  const alerts = [...(memory.warnings || []), ...rows.filter(r => r.warning).map(r => `${r.id} : ${r.warning}`),
+  const feedback = memory.feedback || {};
+  const feedbackHTML = `<h3>Retours à qualifier</h3><p class="muted">Observations collectées automatiquement ; leur adoption passe par une relecture et un essai.</p><div class="knowledge-list">${(feedback.events || []).map(e => `<details class="info-card"><summary>${esc(e.kind)} · ${esc(e.triage?.status || 'candidate')} · ${esc(e.text)}</summary><p>${esc(e.source)}${e.release ? ' · ' + esc(e.release) : ''}</p><pre class="knowledge-text">${esc(typeof e.excerpt === 'string' ? e.excerpt : JSON.stringify(e.excerpt, null, 2))}</pre></details>`).join('') || '<p class="muted">Aucun retour collecté.</p>'}</div>`;
+  const alerts = [...(feedback.warnings || []),...(memory.warnings || []), ...rows.filter(r => r.warning).map(r => `${r.id} : ${r.warning}`),
     ...documents.filter(r => r.warning).map(r => `${r.id} : ${r.warning}`)];
   const cards = items => items.join('') || '<p class="muted">Aucun élément enregistré.</p>';
   const openQuestions = (memory.questions || []).filter(q => q.status === 'open');
-  const untouched = !current.length && !decisions.length && !documents.length && !receipts.length && !openQuestions.length;
+  const untouched = !current.length && !decisions.length && !documents.length && !receipts.length && !openQuestions.length && !(feedback.events || []).length;
   if (untouched) return `<div class="page knowledge-page"><div class="section-title"><div><h2>Mémoire partagée</h2><p class="muted">${esc(memory.release ? `Release ${memory.release}` : 'Toutes les releases du projet')}</p></div></div>
     ${alerts.length ? `<section class="knowledge-alert" role="status"><h3>À relire avant de poursuivre</h3><ul>${alerts.map(a => `<li>${esc(a)}</li>`).join('')}</ul></section>` : ''}
     <p class="note">La mémoire structurée n’est pas encore alimentée. Les agents y publieront découvertes, décisions et passations au fil du travail ; les documents PROJECT et JOURNAL restent disponibles dans Projet → Fichiers.</p>
@@ -22,6 +24,7 @@ export function knowledgeView(data, esc) {
   return `<div class="page knowledge-page"><div class="section-title"><div><h2>Mémoire partagée</h2><p class="muted">${esc(memory.release ? `Release ${memory.release}` : 'Toutes les releases du projet')} · alimentée pendant le travail</p></div></div>
     ${alerts.length ? `<section class="knowledge-alert" role="status"><h3>À relire avant de poursuivre</h3><ul>${alerts.map(a => `<li>${esc(a)}</li>`).join('')}</ul></section>` : ''}
     <div class="knowledge-summary"><span><strong>${decisions.filter(d => d.status === 'confirmed').length}</strong> décisions confirmées</span><span><strong>${current.length}</strong> contributions courantes</span><span><strong>${receipts.filter(r => r.state === 'validated').length}</strong> passations validées</span><span><strong>${documents.length}</strong> pièces cataloguées</span></div>
+    ${feedbackHTML}
     <h3>Au fil de la release</h3><div class="knowledge-list">${cards(current.map(r => `<article class="info-card"><div class="card-title"><h4>${esc(r.id)} · ${esc(label(r.kind))}</h4><span class="knowledge-state">${esc(label(r.state))} · ${esc(label(r.freshness))}</span></div><p>${esc(r.statement)}</p><p class="muted">${esc(r.release)}${r.task ? ` · ${esc(r.task)}` : ''}${r.author ? ` · ${esc(r.author)}` : ''}</p>${refs(r.sources)}${r.scope?.length ? `<p>Périmètre : ${esc(r.scope.join(', '))}</p>` : ''}</article>`))}</div>
     <h3>Acquis des tâches</h3><div class="knowledge-list">${cards(receipts.map(r => `<details class="info-card"><summary>${esc(r.task)} · ${esc(label(r.state))} · ${esc(r.release)}</summary><pre class="knowledge-text">${esc(r.text || r.warning)}</pre>${refs([r.source])}</details>`))}</div>
     ${openQuestions.length ? `<h3>Questions ouvertes du projet</h3><div class="knowledge-list">${openQuestions.map(q => `<article class="info-card"><h4>${esc(q.id)}</h4><p>${esc(q.question)}</p>${refs([q.source])}</article>`).join('')}</div>` : ''}

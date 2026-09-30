@@ -524,3 +524,17 @@ input[type=checkbox] { accent-color: var(--accent); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Work is the entry point; detailed instruments remain one click away. */
+.tabs .detail-tabs { display: flex; gap: var(--space-1); }
+.tabs .detail-tabs[hidden] { display: none; }
+.work-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-3) 0; }
+.work-task { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
+.work-task h3 { margin: 0; }
+.work-task .work-actions { flex-shrink: 0; }
+#work-form { display: grid; gap: var(--space-3); }
+#work-form textarea { resize: vertical; width: 100%; }
+#work-error { color: var(--danger); }
+@media (max-width: 900px) { .work-task { display: block; } }
+.work-page > .section-title > div { display: block; min-width: 0; }
+.work-page > .section-title h2 { margin: var(--space-2) 0; }

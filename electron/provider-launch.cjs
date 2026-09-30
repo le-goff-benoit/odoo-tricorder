@@ -32,8 +32,9 @@ function existingStatusLine(home, project) {
   return statusLine;
 }
 
-function prepareLaunch({ provider, id, folder, backend, home, project, crew }) {
+function prepareLaunch({ provider, id, folder, backend, home, project, crew, prompt }) {
   if (!['claude', 'codex'].includes(provider)) throw new Error('Fournisseur inconnu');
+  if (prompt !== undefined && (typeof prompt !== 'string' || prompt.length > 16000 || /[\x00-\x08\x0b-\x1f\x7f]/.test(prompt))) throw new Error('Message initial invalide');
   fs.mkdirSync(folder, { recursive: true, mode: 0o700 });
   const source = path.join(folder, id + '.jsonl');
   const quotaSource = provider === 'claude' ? path.join(folder, id + '.quota.json') : null;
@@ -43,18 +44,25 @@ function prepareLaunch({ provider, id, folder, backend, home, project, crew }) {
   if (fs.existsSync(guard)) {
     hooks.Stop[0].hooks.push({ type: 'command', command: ['python3', guard, 'hook', '--project', project, '--events', source].map(quote).join(' '), timeout: 5 });
   }
-  let command;
+  let command, argv;
   if (provider === 'claude') {
     const previous = existingStatusLine(home, project);
     const statusLine = { ...previous, type: 'command', command: ['python3', path.join(backend, 'statusline.py'), quotaSource, previous.command || ''].map(quote).join(' ') };
     const configPath = path.join(folder, id + '.settings.json');
     fs.writeFileSync(configPath, JSON.stringify({ hooks, statusLine }), { mode: 0o600, flag: 'wx' });
+    argv = ['claude', '--settings', configPath];
     command = 'claude --settings ' + quote(configPath);
   } else {
     // Inline TOML passed as a session configuration layer. Codex merges hooks
     // from its other layers; no global/project hooks.json is edited.
     const toml = value => Array.isArray(value) ? '[' + value.map(toml).join(',') + ']' : value && typeof value === 'object' ? '{' + Object.entries(value).map(([k, v]) => `${k}=${toml(v)}`).join(',') + '}' : JSON.stringify(value);
-    command = 'codex ' + Object.entries(hooks).map(([name, value]) => '-c ' + quote(`hooks.${name}=${toml(value)}`)).join(' ');
+    argv = ['codex', ...Object.entries(hooks).flatMap(([name, value]) => ['-c', `hooks.${name}=${toml(value)}`])];
+    command = 'codex ' + argv.slice(1).map(quote).join(' ');
+  }
+  if (prompt) {
+    const launchPath = path.join(folder, id + '.launch.json');
+    fs.writeFileSync(launchPath, JSON.stringify({ argv: [...argv, '--', prompt] }), { mode: 0o600, flag: 'wx' });
+    command = ['python3', path.join(backend, 'agent_launch.py'), launchPath].map(quote).join(' ');
   }
   return { command, source, quotaSource, note: 'Suivi de cette invocation ; configuration existante conservée. Les politiques et la validation native des hooks restent applicables.', hooks };
 }

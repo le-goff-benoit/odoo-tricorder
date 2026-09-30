@@ -77,3 +77,38 @@ test('quota scans are global and deduplicate overlapping refreshes', async () =>
   await handlers.quotas();
   assert.equal(reads, 1);
 });
+
+test('contextual requests remain one literal CLI argument for both providers', () => {
+  const { workPrompt } = require('../electron/work-request.cjs');
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-request-'));
+  try {
+    const text = 'Vérifier "les avoirs"\t\n$(touch /tmp/tricorder-injection) `id` ; \'x\'';
+    const prompt = workPrompt({ action: 'develop', text }, { project: root, release: 'release', task: null });
+    assert.ok(prompt.endsWith(text));
+    assert.ok(prompt.startsWith('/odoo-new'));
+    const bin = path.join(root, 'bin'); fs.mkdirSync(bin);
+    for (const provider of ['codex', 'claude']) {
+      fs.writeFileSync(path.join(bin, provider), '#!/usr/bin/env python3\nimport sys,json\nprint(json.dumps(sys.argv[1:]))\n', { mode: 0o755 });
+      const launch = prepareLaunch({ provider, id: provider, folder: path.join(root, 'out'), backend: path.resolve(__dirname, '../backend'), home: root, project: root, crew: root, prompt });
+      assert.ok(!launch.command.includes(text));
+      assert.equal(fs.statSync(path.join(root, 'out', provider + '.launch.json')).mode & 0o777, 0o600);
+      const args = JSON.parse(execFileSync('bash', ['-c', launch.command], { encoding: 'utf8', env: { ...process.env, PATH: bin + ':' + process.env.PATH } }));
+      assert.equal(args.at(-2), '--'); assert.equal(args.at(-1), prompt);
+    }
+    assert.throws(() => workPrompt({ action: 'resume', text: '' }, { project: root }), /release/);
+    assert.throws(() => workPrompt({ action: 'develop', text: '\x1b[2J' }, {}), /invalide/);
+    assert.throws(() => workPrompt({ action: 'develop', text: ' ' }, {}), /Décrivez/);
+    assert.throws(() => workPrompt({ action: 'shell', text: 'anything' }, {}), /inconnue/);
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
+
+test('work launch refuses a terminal from another release or task before writing settings', async () => {
+  const handlers = {}, settings = {};
+  wireCockpit({ handle: (name, callback) => { handlers[name] = callback; }, settings, save() {}, checkedProject: p => p,
+    catalog: async () => ({ selectedRelease: 'current', tasks: [{ id: 'T1' }], flows: [] }),
+    terminal: async () => [{ id: 't', project: '/synthetic', release: 'old', task: 'T1' }],
+    stateDir: '/unused', backend: '/unused', home: '/unused' });
+  await assert.rejects(handlers['prepare-agent']({ provider: 'codex', project: '/synthetic', release: 'current', task: 'T1', terminal: 't',
+    work: { action: 'resume', text: '' } }), /correspond plus/);
+  assert.equal(settings.bindings.length, 0);
+});
