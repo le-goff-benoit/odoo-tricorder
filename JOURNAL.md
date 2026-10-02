@@ -1,5 +1,13 @@
 # Journal
 
+## 2026-10-02 — Fausses alertes de la barre des projets
+
+- Demande : comprendre les pastilles de cadoetik, neca-sa, rubixcomm_odoo et vertical_construction, puis corriger les fausses alertes.
+- Catalogue : un essai de workflow remplacé par un essai suivant (ou remis à zéro dans le plan) n’est plus compté « à examiner » ; la tâche du plan porte l’état courant. Effet réel : neca-sa 1 → 0, vertical_construction 5 → 0.
+- Observation : une demande d’autorisation de hook sans identifiant (Codex, Claude) se rattache à l’unique appel ouvert du même outil ; sa fin lève l’attente. Les appels parallèles du même outil restent ambigus. Effet réel : « ! » de rubixcomm (sous-agent Codex du 17/09) levé.
+- Non changé, volontairement : une attente humaine sans nouvel événement n’est pas masquée après 90 s (une vraie invite ne produit aucun événement). Les tâches « code changé depuis le contrôle » restent signalées (cadoetik, neca-sa-gestion_projet).
+- QA : 95 tests Python (+3, contre-épreuve rouge sur l’ancien code), 59 JavaScript, 18 parcours Electron sur sources. Paquet non reconstruit ni installé.
+
 ## 2026-09-23 — Revue fonctionnelle et design épuré 0.3.6
 
 - Demande de Benoît : revoir le fonctionnement, corriger ce qui pose problème, rendre le design plus moderne, simple et épuré.

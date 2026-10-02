@@ -199,12 +199,23 @@ def snapshot(source, provider, since=None, until=None, expected=None):
             if e['eventId'] in seen:
                 continue
             seen.add(e['eventId'])
-        agent = agents.setdefault(e['nativeId'], {'nativeId': e['nativeId'], 'parentId': e['parentId'], 'events': [], 'waitStart': None, 'waitRequest': None, 'waitAmbiguous': False})
+        agent = agents.setdefault(e['nativeId'], {'nativeId': e['nativeId'], 'parentId': e['parentId'], 'events': [], 'waitStart': None, 'waitRequest': None, 'waitAmbiguous': False, 'openTools': {}})
         at = instant(e['at'])
         if at is not None and agent.get('lastAt') is not None and at < agent['lastAt']:
             raise ValueError('Horodatages régressifs : mesures refusées')
         state = e['state']
         boundary = e['kind'] in ('Stop', 'StopFailure', 'Interrupt', 'SessionEnd', 'SubagentStop', 'task_complete', 'task_started', 'turn_aborted', 'turn/completed', 'turn/started', 'thread/closed', 'UserPromptSubmit')
+        request = e['requestId']
+        if e['state'] == 'waiting_human' and not request and e['tool']:
+            # Hook permission prompts carry no id: bind them to the single open call of that tool.
+            calls = [r for r, tool in agent['openTools'].items() if tool == e['tool']]
+            request = calls[0] if len(calls) == 1 else None
+        if boundary:
+            agent['openTools'].clear()
+        elif e['state'] == 'tool' and request:
+            agent['openTools'][request] = e['tool']
+        elif e['state'] != 'waiting_human':
+            agent['openTools'].pop(request, None)
         resolution = e['kind'] in ('ElicitationResult', 'serverRequest/resolved')
         matching_tool = (e['kind'] in ('PostToolUse', 'PostToolUseFailure', 'function_call_output', 'custom_tool_call_output')
                          and e['requestId'] and e['requestId'] == agent['waitRequest'])
@@ -219,9 +230,9 @@ def snapshot(source, provider, since=None, until=None, expected=None):
             agent['waitRequest'], agent['waitAmbiguous'] = None, False
         if e['state'] == 'waiting_human' and agent['waitStart'] is None:
             agent['waitStart'] = at
-            agent['waitRequest'] = e['requestId']
-        elif e['state'] == 'waiting_human' and e['requestId'] != agent['waitRequest']:
-            agent['waitAmbiguous'] = True
+            agent['waitRequest'] = request
+        elif e['state'] == 'waiting_human' and request != agent['waitRequest'] and (request or e['tool']):
+            agent['waitAmbiguous'] = True  # A bare notification announces the same prompt.
         if e['kind'] in ('UserPromptSubmit', 'SubagentStart', 'task_started', 'turn/started'):
             agent['startedAt'], agent['endedAt'] = e['at'], None
         if state in ('idle', 'complete', 'interrupted', 'waiting_human') and agent.get('startedAt') and not agent.get('endedAt'):
@@ -239,7 +250,7 @@ def snapshot(source, provider, since=None, until=None, expected=None):
         agent['events'] = agent['events'][-100:]
         agent['stale'] = agent['lastAt'] is None or time.time() - agent['lastAt'] > 90
         agent['waitingOpen'] = agent.pop('waitStart') is not None
-        agent.pop('waitRequest'); agent.pop('waitAmbiguous')
+        agent.pop('waitRequest'); agent.pop('waitAmbiguous'); agent.pop('openTools')
     usage = None
     if usage_source:
         try:

@@ -197,6 +197,27 @@ class ObservationTests(unittest.TestCase):
         self.assertEqual(result['agents'][0]['state'], 'waiting_human')
         self.assertIsNone(result['waitingSeconds'])
 
+    def hook_rows(self, steps):
+        return [{'rootId': 'p', 'nativeId': 'p', 'at': f'2026-09-17T03:41:{second:02d}Z', 'kind': kind, 'tool': tool, 'requestId': request,
+                 'state': {'PreToolUse': 'tool', 'PostToolUse': 'active'}.get(kind, 'waiting_human')}
+                for second, kind, tool, request in steps]
+
+    def test_hook_permission_without_id_is_resolved_by_its_tool_call(self):
+        # Codex and Claude hooks send PermissionRequest without the tool call id.
+        for notification in ([], [(3, 'Notification', None, None)]):
+            self.write(self.hook_rows([(0, 'PreToolUse', 'Bash', 'exec-a'), (1, 'PermissionRequest', 'Bash', None), *notification,
+                                       (9, 'PostToolUse', 'Bash', 'exec-a'), (12, 'PreToolUse', 'wait_agent', 'call-b')]))
+            agent = observation.snapshot(self.source, 'codex-hooks')['agents'][0]
+            self.assertEqual(agent['state'], 'tool')
+            self.assertFalse(agent['waitingOpen'])
+
+    def test_hook_permission_without_id_stays_open_between_parallel_calls(self):
+        self.write(self.hook_rows([(0, 'PreToolUse', 'Bash', 'exec-a'), (0, 'PreToolUse', 'Bash', 'exec-b'),
+                                   (1, 'PermissionRequest', 'Bash', None), (9, 'PostToolUse', 'Bash', 'exec-a')]))
+        agent = observation.snapshot(self.source, 'codex-hooks')['agents'][0]
+        self.assertEqual(agent['state'], 'waiting_human')
+        self.assertTrue(agent['waitingOpen'])
+
 
 if __name__ == '__main__':
     unittest.main()

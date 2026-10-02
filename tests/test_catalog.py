@@ -230,6 +230,31 @@ class CatalogTests(unittest.TestCase):
         self.write_json(folder / 'old.json', {'status': 'complete', 'kind': 'close'})
         self.assertEqual(list(catalog.related_flows(self.project, self.release.name)), [('.odoo-agents/flows/closure.json', True)])
 
+    def test_superseded_blocked_attempt_is_not_attention(self):
+        folder = self.project / '.odoo-agents/flows'
+        folder.mkdir()
+        task = {'release': str(self.release), 'id': 'T01'}
+        self.write_json(folder / 'plan-t01-old.json', {'status': 'blocked', 'plan_task': task})
+        self.write_json(folder / 'plan-t01-new.json', {'status': 'complete', 'plan_task': task})
+        self.write_json(folder / 'plan-t02-old.json', {'status': 'blocked', 'plan_task': task | {'id': 'T02'}})
+        def tasks(root, release):
+            return [{'id': 'T01', 'title': 'Reprise réussie', 'status': 'validated', 'source': 'plan',
+                     'flow': '.odoo-agents/flows/plan-t01-new.json'},
+                    {'id': 'T02', 'title': 'Essai remis à zéro', 'status': 'pending', 'source': 'plan', 'flow': None}], []
+        with patch.object(catalog, 'plan_tasks', side_effect=tasks), \
+                patch.object(catalog, 'trusted_module', side_effect=ValueError('Outillage absent')):
+            data = catalog.summary(self.project)
+        self.assertEqual(data['attention'], [])
+        self.assertEqual(data['release']['id'], self.release.name)
+        def blocked(root, release):
+            return [{'id': 'T01', 'title': 'Essai courant', 'status': 'running', 'source': 'plan',
+                     'flow': '.odoo-agents/flows/plan-t01-old.json'},
+                    {'id': 'T02', 'title': 'Essai remis à zéro', 'status': 'pending', 'source': 'plan', 'flow': None}], []
+        with patch.object(catalog, 'plan_tasks', side_effect=blocked), \
+                patch.object(catalog, 'trusted_module', side_effect=ValueError('Outillage absent')):
+            attention = catalog.summary(self.project)['attention']
+        self.assertEqual([a['id'] for a in attention], ['flow:plan-t01-old'])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -332,6 +332,7 @@ def summary(root):
     rels = releases(root)
     current = next((r for r in rels if r['status'] == 'ouverte'), rels[0] if rels else None)
     tasks, warnings, attention, board, running = [], [], [], [], 0
+    current_attempts = {}
     for release in rels:
         release['orchestration'] = orchestration_details(root, release['id'])
         release['intentions'] = intentions_details(root, release['id'])
@@ -345,6 +346,8 @@ def summary(root):
             if current and release['id'] == current['id']:
                 tasks = release_tasks
             for task in release_tasks:
+                if task.get('source') == 'plan':
+                    current_attempts[(release['id'], task['id'])] = task.get('flow')
                 owners = []
                 if task.get('flow'):
                     try:
@@ -366,6 +369,9 @@ def summary(root):
     for relative in flow_paths:
         try:
             flow = flow_details(root, relative)
+            attempt = current_attempts.get((flow['release'], flow['taskId']), relative)
+            if not attempt or (root / attempt).resolve() != (root / relative).resolve():
+                continue  # Superseded attempt: the plan task carries the current state.
             if flow['status'] in ('waiting_human', 'deadlocked', 'blocked'):
                 attention.append({'id': 'flow:' + flow['id'], 'title': 'Workflow du projet : ' + flow['id'],
                                   'release': flow.get('release'),
