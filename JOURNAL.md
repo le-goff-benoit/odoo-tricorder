@@ -1,5 +1,15 @@
 # Journal
 
+## 2026-10-05 — Ouverture de la release NECA (0.4.1)
+
+- Signalement : dernière release de neca-sa-gestion_projet_011026 inaccessible dans le Tricorder installé.
+- Cause reproduite : lecture en 61,28 s, au-delà du délai Electron de 60 s ; 41 contributions d’implémentation répètent la validation intégrale du plan.
+- Correctif : verdict canonique partagé dans une lecture de Mémoire, cache détruit à chaque actualisation ; aucun contrôle ni statut forcé.
+- Lecture corrigée : 8,82 s, 11 tâches et 135 contributions ; contre-épreuve synthétique rouge (41 validations au lieu d’une).
+- QA : 97 tests Python, 59 JavaScript, 18 parcours Electron sur sources et paquet ; parcours NECA supplémentaire réussi sur les deux, empreintes de la release conservées.
+- Debian 0.4.1 installé après authentification système ; empreintes conformes au paquet, parcours NECA réussi sur l’application installée (20,5 s). Détails dans QA.md.
+- Aucun projet client ni outillage Crew modifié ; publication des sources demandée après confirmation du correctif par Benoît.
+
 ## 2026-10-02 — Fausses alertes de la barre des projets
 
 - Demande : comprendre les pastilles de cadoetik, neca-sa, rubixcomm_odoo et vertical_construction, puis corriger les fausses alertes.

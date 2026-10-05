@@ -58,6 +58,9 @@ l’intention et sa source restent consultables dans **Intentions**.
 
 Les agents publient leurs découvertes, décisions et passations au fil du
 travail ; une source périmée ou une contribution à relire est signalée en tête.
+Pendant une lecture, les contributions d’implémentation réutilisent la même
+validation du plan. Chaque actualisation vérifie à nouveau les preuves ; les
+releases riches en contributions restent accessibles sans répéter ces contrôles.
 
 ### Les agents et leur temps
 

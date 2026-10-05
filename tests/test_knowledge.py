@@ -4,12 +4,61 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 import knowledge
 
 
 class KnowledgeReaderTests(unittest.TestCase):
+    def test_plan_validation_shared_within_read_and_fresh_on_next_read(self):
+        from catalog import trusted_module
+        planner = trusted_module('odoo_plan')
+        original = planner.statuses
+        calls = []
+        source = {'state': 'validated'}
+
+        def validate(plan, project):
+            calls.append((plan['revision'], str(project)))
+            return {'T01': (source['state'], 'canonical verdict')}
+
+        with patch.object(planner, 'statuses', side_effect=validate) as validator:
+            with knowledge.validation_session():
+                plan = {'revision': 1}
+                first = planner.statuses(plan, '/tmp/project')
+                first['T01'] = ('fabricated', '')
+                self.assertEqual(planner.statuses(plan, '/tmp/project')['T01'][0], 'validated')
+                planner.statuses({'revision': 2}, '/tmp/project')
+                planner.statuses(plan, '/tmp/other-project')
+                self.assertEqual(len(calls), 3)
+            self.assertIs(planner.statuses, validator)
+            source['state'] = 'stale'
+            with knowledge.validation_session():
+                self.assertEqual(planner.statuses(plan, '/tmp/project')['T01'][0], 'stale')
+            self.assertEqual(len(calls), 4)
+        self.assertIs(planner.statuses, original)
+
+    def test_snapshot_reuses_verdicts_and_restores_validator_on_failure(self):
+        from catalog import trusted_module
+        planner = trusted_module('odoo_plan')
+
+        def snapshot(*args):
+            for _ in range(41):
+                planner.statuses({'tasks': []}, '/tmp/project')
+            raise ValueError('synthetic failure after contributions')
+
+        engine = SimpleNamespace(snapshot=snapshot)
+        original_load = trusted_module
+        def load(name):
+            return engine if name == 'odoo_knowledge' else original_load(name)
+        with patch('catalog.trusted_module', side_effect=load), \
+                patch.object(planner, 'statuses', return_value={}) as validator:
+            result = knowledge.snapshot('/tmp/project', 'R1')
+            self.assertFalse(result['available'])
+            self.assertIn('synthetic failure', result['warnings'][0])
+            self.assertEqual(validator.call_count, 1)
+            self.assertIs(planner.statuses, validator)
+
     def test_missing_canonical_validator_is_explicit_not_green(self):
         with patch('catalog.trusted_module', side_effect=ValueError('absent')):
             value = knowledge.snapshot('/tmp')

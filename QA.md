@@ -1,5 +1,38 @@
 # QA — Odoo Tricorder
 
+## Ouverture de la release NECA 0.4.1 — 5 octobre 2026
+
+- Projet lu : `neca-sa-gestion_projet_011026`, release
+  `2026-10-04_02_pilotage-financier-et-hierarchie-cfc`.
+- Reproduction sur le lecteur installé : 61,28 s, au-delà du délai de 60 s
+  dans Electron ; lecteur source précédent : 63,96 s. Le plan de 11 tâches
+  était revalidé pour chacune des 41 contributions d’implémentation acceptées.
+- Lecteur corrigé : 8,82 s, 11 tâches, 135 contributions et aucune alerte
+  de lecture. Le verdict provient toujours du validateur Crew.
+- Régressions : 41 demandes de validation dans une même vue → un appel
+  canonique ; résultat isolé des mutations du consommateur ; plans et projets
+  distincts séparés ; cache détruit entre lectures ; restauration après erreur.
+  Contre-épreuve sans cache : échec attendu `41 != 1`.
+- `npm test` : 97 tests Python et 59 JavaScript réussis. Premier essai dans
+  le bac à sable bloqué par les sockets Unix ; reprise hors bac à sable verte.
+- `npm run test:ui` : 18 parcours synthétiques réussis, 1 client facultatif
+  ignoré ; `npm run test:packaged` : 18 réussis, 2 clients facultatifs ignorés.
+- Parcours NECA opt-in : ouverture de la release et de Mémoire, lecture des
+  tâches et contributions, empreintes SHA-256 de tous les fichiers de la
+  release identiques avant/après. Sources : 19,5 s ; paquet : 22,0 s, nettoyage
+  du service isolé compris. Première version du test : ouverture réussie,
+  fermeture/teardown en erreur ; nettoyage explicite du broker ajouté.
+- `npm run dist` et `git diff --check` réussis.
+- Paquet Debian : `ba9ea57b6f4230933086ad66a03dddc387e0397a0fc77ca56c66f282a8e99956`.
+- `app.asar` empaqueté : `d5fbb0e51b2f492268b42ae4da36b35ca20ff0266801aaacbf797e00ae87f9ee`.
+- Installation locale autorisée et effectuée par le dialogue système : dpkg
+  `0.4.1 install ok installed`. `app.asar` et lecteur Python installés identiques
+  au paquet validé. Parcours NECA sur `/opt/Odoo Tricorder/odoo-tricorder` réussi
+  en 20,5 s, empreintes de la release conservées et service de test nettoyé.
+- Aucun accès à une instance Odoo, aucune écriture dans le projet client.
+  La lecture partage un verdict seulement pendant
+  la construction de la vue ; l’actualisation suivante recontrôle les preuves.
+
 ## Revue fonctionnelle et design épuré 0.3.6 — 23 septembre 2026
 
 - `npm test` : 92 Python et 57 JavaScript réussis.
