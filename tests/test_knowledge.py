@@ -22,7 +22,7 @@ class KnowledgeReaderTests(unittest.TestCase):
             calls.append((plan['revision'], str(project)))
             return {'T01': (source['state'], 'canonical verdict')}
 
-        with patch.object(planner, 'statuses', side_effect=validate) as validator:
+        with patch.object(planner, '_statuses', side_effect=validate) as validator:
             with knowledge.validation_session():
                 plan = {'revision': 1}
                 first = planner.statuses(plan, '/tmp/project')
@@ -31,7 +31,7 @@ class KnowledgeReaderTests(unittest.TestCase):
                 planner.statuses({'revision': 2}, '/tmp/project')
                 planner.statuses(plan, '/tmp/other-project')
                 self.assertEqual(len(calls), 3)
-            self.assertIs(planner.statuses, validator)
+            self.assertIs(planner._statuses, validator)
             source['state'] = 'stale'
             with knowledge.validation_session():
                 self.assertEqual(planner.statuses(plan, '/tmp/project')['T01'][0], 'stale')
@@ -52,12 +52,12 @@ class KnowledgeReaderTests(unittest.TestCase):
         def load(name):
             return engine if name == 'odoo_knowledge' else original_load(name)
         with patch('catalog.trusted_module', side_effect=load), \
-                patch.object(planner, 'statuses', return_value={}) as validator:
+                patch.object(planner, '_statuses', return_value={}) as validator:
             result = knowledge.snapshot('/tmp/project', 'R1')
             self.assertFalse(result['available'])
             self.assertIn('synthetic failure', result['warnings'][0])
             self.assertEqual(validator.call_count, 1)
-            self.assertIs(planner.statuses, validator)
+            self.assertIs(planner._statuses, validator)
 
     def test_missing_canonical_validator_is_explicit_not_green(self):
         with patch('catalog.trusted_module', side_effect=ValueError('absent')):

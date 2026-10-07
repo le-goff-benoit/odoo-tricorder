@@ -47,7 +47,8 @@ export function taskMeasures(estimates, native) {
   const partial = actual != null && (recorded != null ? !complete : estimates.length > 0 || !native.every(b => b.usage?.complete && valid(b.usage?.active_seconds)));
   const comparable = recorded != null && complete && !estimates.some(r => r.scope_changed || r.retrospective);
   const missingRoles = estimates.filter(r => r.time_complete === false || !valid(r.actual_minutes)).map(r => r.agent).filter(Boolean);
-  return { initial, revised, actual, partial, missingRoles,
+  const tokenValues = estimates.length ? estimates.map(r => r.tokens?.total_tokens ?? (r.known_tokens > 0 ? r.known_tokens : null)) : native.map(r => r.usage?.tokens?.total_tokens);
+  return { initial, revised, actual, partial, missingRoles, tokens: subtotal(tokenValues), tokenPartial: estimates.length ? estimates.some(r => r.token_complete === false || r.tokens?.total_tokens == null) : native.some(r => !r.usage?.complete || !r.usage?.tokens_complete),
     basis: recorded != null ? 'effort.json' : observed != null ? 'Natif · non consolidé' : 'Non mesuré',
     delta: comparable && actual != null && (revised ?? initial) != null ? actual - (revised ?? initial) : null };
 }

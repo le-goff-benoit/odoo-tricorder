@@ -1,3 +1,21 @@
+# Recette 0.5.0 — 7 octobre 2026
+
+- Crew de référence : `1f6bbf2`, API publique de lecture et mémoire projet.
+- 97 tests Python, 62 tests JavaScript réussis avec cette version de Crew.
+- 18 parcours Electron réussis sur le paquet Debian 0.5.0 ; deux parcours réels
+  optionnels non lancés. Les fixtures restent synthétiques, aucun projet client modifié.
+- Vérification des sept onglets, Kanban, fiches, questions et réponses,
+  demande originale, tests attribués, temps et jetons partiels, préparation,
+  actualisation, lisibilité à 1440 px et à 1000 px avec zoom 125 %.
+- Terminaux : processus et contexte conservés entre vues, reprise, presse-papiers,
+  navigation rapide et alertes sans divulgation d’arguments privés.
+- Package construit avec `npm run dist`, parcours `npm run test:packaged` réussis.
+- Empreinte du Debian dans `release/SHA256SUMS`.
+- Déployée exige une preuve Crew observée sur la cible ; GitHub seul reste
+  une publication. Les absences historiques ne sont ni réécrites ni estimées rétroactivement.
+
+---
+
 # QA — Odoo Tricorder
 
 ## Ouverture de la release NECA 0.4.1 — 5 octobre 2026

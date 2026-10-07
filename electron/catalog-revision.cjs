@@ -40,15 +40,16 @@ async function catalogRevision(projects) {
       if (!entry.isDirectory() || entry.isSymbolicLink()) continue;
       const folder = path.join(changelog, entry.name);
       if (!(await stat(folder))?.isDirectory()) continue;
-      for (const name of ['README.md', 'intentions.json', 'plan.json', 'effort.json', 'orchestration.json', 'consolidation.md']) await stat(path.join(folder, name));
+      for (const name of ['README.md', 'intentions.json', 'plan.json', 'effort.json', 'orchestration.json', 'consolidation.md', 'delivery-status.json']) await stat(path.join(folder, name));
       await references(project, path.join(folder, 'plan.json'));
       for (const entry of await directory(path.join(folder, 'knowledge'))) if (entry.isFile() && entry.name.endsWith('.json')) await references(project, path.join(folder, 'knowledge', entry.name));
     }
     const agents = path.join(project, '.odoo-agents');
     if (!(await stat(agents))?.isDirectory()) continue;
-    for (const name of ['PROJECT.md', 'JOURNAL.md', 'DECISIONS.json', 'DOCUMENTS.json', 'SOURCE_INDEX.json']) await stat(path.join(agents, name));
-    for (const name of ['DECISIONS.json', 'DOCUMENTS.json']) await references(project, path.join(agents, name));
+    for (const name of ['PROJECT.md', 'JOURNAL.md', 'DECISIONS.json', 'LEARNINGS.json', 'DOCUMENTS.json', 'SOURCE_INDEX.json']) await stat(path.join(agents, name));
+    for (const name of ['DECISIONS.json', 'LEARNINGS.json', 'DOCUMENTS.json']) await references(project, path.join(agents, name));
     await stat(path.join(agents, 'orchestration.json'));
+    for (const entry of await directory(path.join(agents, 'express'))) if (entry.isDirectory() && !entry.isSymbolicLink()) await stat(path.join(agents,'express',entry.name,'effort.json'));
     const flows = path.join(agents, 'flows');
     for (const entry of await directory(flows)) if (entry.isFile() && entry.name.endsWith('.json')) await stat(path.join(flows, entry.name));
   }

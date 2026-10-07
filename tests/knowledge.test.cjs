@@ -28,8 +28,8 @@ test('project memory remains inert text in the UI', async () => {
   const source = fs.readFileSync(path.join(__dirname, '../src/knowledge-view.js'), 'utf8');
   const { knowledgeView } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
   const esc = text => String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
-  const html = knowledgeView({ contributions: [{ id: 'K1', current: true, state: 'proposed',
+  const html = knowledgeView({ contributions: [{ id: 'K1', current: true, kind:'discovery', state: 'accepted', freshness:'verified',
     statement: '<img src=x onerror=alert(1)>', sources: [{ path: '<script>evil</script>' }] }] }, esc);
-  assert.ok(html.includes('&lt;img')); assert.ok(html.includes('À confirmer'));
+  assert.ok(html.includes('&lt;img')); assert.ok(html.includes('Apprentissage'));
   assert.ok(!html.includes('<img src=x')); assert.ok(!html.includes('<script>'));
 });

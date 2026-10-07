@@ -1,3 +1,5 @@
+import { releaseCards, effortCards } from './release-kanban.mjs';
+import { timeTable } from './pilotage.mjs';
 import { planViews } from './plan-view.js';
 import { activities, timerMarkup, tickTimers } from './activity.mjs';
 import { quotaPanel, quotaPresentation } from './quotas.mjs';
@@ -89,9 +91,9 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       changed ||= activitySignature !== nextActivitySignature; activitySignature = nextActivitySignature;
       const waiting = values.flatMap(b => b.agents || []).filter(a => a.state === 'waiting_human' && !before.has(a.nativeId));
       if (waiting.length) api.notify({ title: 'Tricorder · décision attendue', body: `${waiting.length} agent(s) attendent une décision dans le terminal.` });
-      sidebar(); alertSidebar(); drawActivity();
+      sidebar(); alertSidebar();
       if (changed && get().overviewMode) render();
-      if (changed && !get().overviewMode && ['agents', 'effort', 'plan'].includes(get().view) && !$('#modal').open && document.activeElement?.id !== 'board-owner') render();
+      if (changed && !get().overviewMode && ['work', 'agents', 'effort', 'plan'].includes(get().view) && !$('#modal').open && document.activeElement?.id !== 'board-owner') render();
     } catch (error) { toast(error.message); }
     finally { reading = false; }
   }
@@ -124,50 +126,14 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   const roleLabels = { 'odoo-developer': 'développement', 'odoo-tester': 'QA', orchestrateur: 'coordination' };
   const sourceLabel = basis => ({ 'effort.json': 'Enregistré', 'Natif · non consolidé': 'Provisoire' })[basis] || basis;
   function effortView() {
-    const s = get(), { detail } = s, report = detail.effort, bindings = withoutPreparationOverlap(currentObservations(true), report?.preparationSessions);
-    const taskIds = [...new Set([...detail.tasks.map(t => t.id), ...(report?.rows || []).map(r => r.task), ...(report?.missing_tasks || []), ...bindings.map(b => b.task).filter(Boolean)])];
-    const allRows = taskIds.map(id => {
-      const estimates = (report?.rows || []).filter(r => r.task === id), native = bindings.filter(b => b.task === id && b.provider !== 'codex-runtime');
-      const task = detail.tasks.find(t => t.id === id);
-      const nodes = detail.flows.filter(f => (!f.release || f.release === detail.selectedRelease) && (f.path === task?.flow || task?.flowPaths?.includes(f.path))).flatMap(f => f.nodes || []);
-      const agents = agentMeasures(estimates, native, nodes), measures = taskMeasures(estimates, native);
-      if (measures.actual != null && agents.some(a => a.actual == null && a.reasons.includes('Intervention enregistrée · durée non mesurée'))) { measures.partial = true; measures.delta = null; }
-      return { id, phase: estimates[0]?.phase || (id === 'RELEASE' ? 'closure' : 'task'), title: task?.title || estimates[0]?.title || '', agents, ...measures };
-    });
-    const releaseTotal = summarizeMeasures(allRows).actual;
-    const rows = allRows.filter(r => !s.selectedTask || r.id === s.selectedTask);
-    for (const row of rows) row.share = timeShare(row.actual, releaseTotal);
-    const summary = summarizeMeasures(rows), total = summary.actual, partial = summary.partial;
-    const initial = knownSum(rows.filter(r => r.phase !== 'preparation').map(r => r.initial));
-    const scope = s.selectedTask ? 'tâche ' + esc(s.selectedTask) : detail.selectedRelease ? 'release' : 'projet';
-    const metrics = `<div class="metrics"><div class="metric" data-metric="initial"><span>Prévision initiale</span><strong class="${initial == null ? 'metric-empty' : ''}">${initial == null ? 'Non estimé' : hours(initial)}</strong></div><div class="metric" data-metric="actual"><span>${partial ? 'Temps enregistré · partiel' : 'Temps enregistré'}</span><strong class="${total == null ? 'metric-empty' : ''}">${hours(total)}</strong><small>${total == null ? 'Aucune durée disponible' : partial ? 'Certaines périodes restent non mesurées' : 'Périodes enregistrées'}</small></div><div class="metric" data-metric="tasks"><span>Tâches suivies</span><strong>${s.selectedTask ? 1 : detail.tasks.length}</strong><small>${s.selectedTask ? 'Tâche consultée' : detail.selectedRelease ? 'Dans cette release' : 'Le cadrage précède les tâches'}</small></div></div>`;
-    const state = bindings.length || (total != null && !partial) ? '' : total == null
-      ? '<div class="effort-state"><h3>Le temps passé reste à enregistrer</h3><p>Les estimations sont conservées. Les durées viennent des lancements suivis (boutons Claude et Codex) et des relevés Odoo Crew ; aucun temps n’est inventé lorsqu’un relevé manque.</p></div>'
-      : '<div class="effort-state"><h3>Une partie du temps est enregistrée</h3><p>Les durées connues sont affichées. Les périodes manquantes ne valent pas zéro ; aucun écart avec la prévision complète n’est calculé.</p></div>';
-    const hasPreparation = rows.some(r => r.phase === 'preparation');
-    const phases = hasPreparation ? `<section class="phase-breakdown"><h3>Temps par étape</h3>${[['preparation', 'Préparation du plan'], ['task', 'Tâches'], ['closure', 'Clôture commune']].map(([phase, label]) => { const group = rows.filter(r => r.phase === phase); const amount = summarizeMeasures(group).actual; return `<div class="allocation-row" data-phase="${phase}"><span>${label}</span><span>${group.length ? hours(amount) : 'Aucun relevé'}</span><strong>${group.length ? percent(timeShare(amount, total)) : '—'}</strong></div>`; }).join('')}</section>` : '';
-    const breakdown = r => r.agents.length ? `<div class="agent-time-table" role="table" aria-label="Temps par agent pour ${esc(r.id)}"><div class="agent-time-row agent-time-head" role="row"><span role="columnheader">Agent / rôle</span><span role="columnheader">Initial</span><span role="columnheader">Révisé</span><span role="columnheader">Réalisé</span><span role="columnheader">Part tâche</span></div>${r.agents.map(a => `<div class="agent-time-row" role="row" data-agent="${esc(a.agent)}"><span role="cell" title="${esc(a.agent)}">${esc(a.label)}${a.owners.map(o => `<small>${esc(o)}</small>`).join('')}</span><span role="cell">${a.initial == null ? 'Non estimé' : hours(a.initial)}</span><span role="cell">${a.revised == null ? 'Non estimé' : hours(a.revised)}</span><span role="cell">${hours(a.actual)}${a.partial ? '<small>Partiel</small>' : ''}${a.basis === 'Natif · non consolidé' ? '<small>Provisoire</small>' : ''}${a.reasons.map(reason => `<small class="measurement-reason">${esc(reason)}</small>`).join('')}</span><span role="cell" class="agent-time-share">${percent(timeShare(a.actual, r.actual))}</span></div>`).join('')}</div>` : '<small>Aucune répartition par agent disponible pour cette tâche.</small>';
-    const line = r => {
-      const isTask = detail.tasks.some(t => t.id === r.id), key = JSON.stringify([s.current, detail.selectedRelease, r.id]);
-      const name = r.phase === 'preparation' ? 'Préparation du plan' : r.phase === 'closure' ? 'Clôture commune' : isTask ? `<button class="text-button" data-task="${esc(r.id)}">${esc(r.id)}</button>` : esc(r.id);
-      const suspended = (report?.rows || []).filter(x => x.task === r.id).reduce((sum, x) => sum + (x.suspended_seconds || 0), 0);
-      return `<tr><td><strong>${name}</strong><small>${esc(r.phase === 'preparation' ? 'Cadrage commun · non réparti rétroactivement' : r.title)}</small>${r.share == null ? '' : `<small class="task-time-share">${percent(r.share)}${detail.selectedRelease ? ' du temps connu de la release' : ' du temps connu du projet'}</small>`}<details class="agent-breakdown" data-agent-detail="${esc(key)}" ${expandedAgents.has(key) ? 'open' : ''}><summary>Détail par agent${r.agents.length ? ' (' + r.agents.length + ')' : ''}</summary>${breakdown(r)}</details></td><td>${r.phase === 'preparation' ? 'Non estimé' : hours(r.initial)}</td><td>${r.phase === 'preparation' ? 'Non estimé' : hours(r.revised)}</td><td>${hours(r.actual)}${r.partial ? '<small>Relevé incomplet</small>' : ''}${r.missingRoles.length ? `<small>Temps incomplet : ${esc(r.missingRoles.map(role => roleLabels[role] || role).join(', '))}</small>` : ''}${suspended > 0 ? `<small>Veille exclue : ${hours(suspended / 60)}</small>` : ''}</td><td>${r.delta == null ? '—' : (r.delta > 0 ? '+' : '') + Math.round(r.delta) + ' min'}</td><td>${esc(sourceLabel(r.basis))}</td></tr>`;
-    };
-    const allocation = agentAllocation(rows);
-    const allocationMarkup = allocation.length ? `<section class="agent-allocation"><h3>Répartition entre agents · ${scope}</h3><p class="muted">Parts du temps connu${partial ? ' · relevé partiel' : ''}.</p>${allocation.map(a => `<div class="allocation-row" data-allocation-agent="${esc(a.agent)}"><span>${esc(a.label)}</span><span>${hours(a.actual)}${a.partial ? ' · partiel' : ''}</span><strong>${percent(a.share)}</strong></div>`).join('')}</section>` : '';
-    const warnings = [...new Set([...(report?.warnings || []), ...(report?.rows || []).filter(r => !s.selectedTask || r.task === s.selectedTask).flatMap(r => r.warnings || [])])];
-    const reading = `<details class="note reading-notes"><summary>Comment lire ces mesures${warnings.length ? ` · ${warnings.length} limite${warnings.length > 1 ? 's' : ''} signalée${warnings.length > 1 ? 's' : ''}` : ''}</summary><ul><li>Le temps enregistré par Odoo Crew fait foi lorsqu’il est complet ; les relevés provisoires des conversations suivies ne s’y additionnent jamais.</li><li>Les durées sont des tours et périodes mesurés, pas du temps de calcul ; « Non mesuré » ne vaut pas zéro et un écart partiel n’est pas un bilan.</li><li>Le cadrage du plan reste un temps commun, jamais réparti après coup sur les tâches.</li><li>Pour les jetons, le cache fait déjà partie des entrées.</li>${warnings.map(w => `<li class="warning-text">${esc(w)}</li>`).join('')}</ul></details>`;
-    return `<div class="page"><div class="section-title"><h2>Prévu, réalisé, écart</h2></div>${metrics}${phases}${state}<div class="table-scroll"><table><thead><tr><th>${hasPreparation ? 'Travail' : 'Tâche'}</th><th>Initial</th><th>Révisé</th><th>Réalisé</th><th>Écart indicatif</th><th>Source</th></tr></thead><tbody>${rows.map(line).join('') || '<tr><td colspan="6">Aucun plan ni estimation. Préparez /odoo-plan puis /odoo-estimate dans votre agent.</td></tr>'}</tbody></table></div>${allocationMarkup}${tokenPanel()}${measures()}${reading}</div>`;
+    const s = get(), d = s.detail;
+    const cards = effortCards(d, currentObservations(true));
+    return `<div class="page"><h2>Temps prévu et réalisé</h2>${timeTable(cards, esc, true, true, expandedAgents, get().current + '/' + d.selectedRelease)}<p class="muted">Temps d’exécution des agents. Les périodes à compléter ne sont pas comptées comme zéro.</p><button class="secondary" data-cockpit="export-estimate">Copier l’estimation</button></div>`;
   }
   function expressView() {
     const flows = get().detail.express || [];
-    const labels = { active: 'En cours', running: 'En cours', complete: 'Terminée', blocked: 'Bloquée', waiting_human: 'Votre décision est attendue', deadlocked: 'À débloquer' };
-    const stages = { briefing: 'Briefing', express_scope: 'Qualification', express_implementation: 'Correction', express_qa: 'Contrôles ciblés', express_record: 'Journal', express_delivery: 'Livraison', task_done: 'Terminée' };
-    return `<div class="page express-page"><div class="section-title"><h2>Interventions express</h2><span>${flows.length} intervention${flows.length > 1 ? 's' : ''}</span></div>${flows.map(f => {
-      const active = f.nodes.filter(n => ['claimed', 'ready'].includes(n.status));
-      const qa = { pass: 'Contrôles ciblés réussis (résultat enregistré)', retry: 'Contrôles à reprendre', blocked: 'Contrôles bloquants' }[f.expressQA] || 'Contrôles ciblés non renseignés';
-      return `<article class="info-card express-card"><div class="card-title"><h3>${esc(f.id.replaceAll('-', ' '))}</h3>${badge(f.status === 'complete' ? 'done' : f.status, labels[f.status] || 'État à vérifier')}</div>${f.promoted ? '<p class="note">Périmètre élargi : poursuite en développement complet.</p>' : ''}<p>${esc(f.release ? 'Changelog : ' + f.release : 'Hors release')} · ${when(f.updatedAt)}</p>${active.map(n => `<p><strong>${esc(stages[n.id] || n.description)}</strong> · ${esc(n.owner || (n.status === 'ready' ? 'Prochaine étape' : 'Responsable non renseigné'))}${n.owner ? ' <small>(responsabilité enregistrée, activité non confirmée)</small>' : ''}</p>`).join('')}<p>${qa}</p><details class="technical-details"><summary>Étapes et traces</summary>${f.nodes.map(n => `<p>${esc(stages[n.id] || n.description)} · ${esc(n.status === 'done' ? 'Parcourue' : n.status === 'claimed' ? 'Prise en charge' : 'À venir')}</p>`).join('')}<pre class="document-text">${esc(JSON.stringify(f.expressEvidence, null, 2))}</pre>${f.warning ? `<p class="warning-text">${esc(f.warning)}</p>` : ''}</details></article>`;
-    }).join('') || '<div class="note">Aucune intervention express enregistrée dans ce dossier. Lancez /odoo-express dans le terminal du projet ; son suivi apparaîtra ici.</div>'}</div>`;
+    const labels = {complete:'Terminée', active:'En cours', running:'En cours', blocked:'À corriger', waiting_human:'Décision attendue'};
+    return `<div class="page express-page"><h2>Petites corrections</h2>${flows.map(f => `<article class="info-card express-card"><h3>${esc(f.title || 'Correction à décrire')}</h3>${badge(f.status, labels[f.status] || 'En cours')}<p>${esc(f.result || 'Résultat en cours de préparation.')}</p><p>${f.expressQA === 'pass' ? 'Tests réussis' : f.expressQA === 'retry' ? 'Tests à corriger' : 'Pas encore testé'}</p>${timeTable([{id:'',title:f.title || 'Correction',measures:taskMeasures(f.effort?.rows || [], [])}],esc)}</article>`).join('') || '<p>Aucune petite correction enregistrée.</p>'}</div>`;
   }
   async function loadFiles(relative = '') {
     const project = get().current;
@@ -235,8 +201,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function augment() {
     applyPreferences();
     alertSidebar();
-    drawActivity();
-    drawQuotas();
+    $('#activity-strip').hidden = true;
     const s = get();
     if (s.overviewMode || !s.detail || s.projectError) return;
     const page = $('#content .page') || $('#content');
@@ -248,7 +213,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     if (s.view === 'sources') page.insertAdjacentHTML('beforeend', sourcesExtra());
     if (s.view === 'environments') page.insertAdjacentHTML('beforeend', stackPanel());
     if (s.view === 'documents') $('#content').innerHTML = filesView();
-    if (s.view === 'plan' && s.detail.selectedRelease) ($('#content .page') || $('#content')).insertAdjacentHTML('beforeend', qualityPanel(s.detail.quality, s.selectedTask));
+
     lifecycleUI({ s, esc, when });
     const resources = ['documents', 'environments', 'sources'].includes(s.view);
     $('#context-bar').hidden = resources || s.view === 'express';
@@ -282,7 +247,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         </div></fieldset>
         <div class="preferences-actions"><button type="button" class="secondary" data-action="cancel-preferences">Annuler</button><button type="submit" class="primary">Enregistrer</button></div>
       </form>
-      <section><h3>Dossiers partagés</h3><div class="cockpit-actions">${action('workspace-root', 'Dossier des projets')}${action('shared-sources', 'Sources Odoo')}</div><p class="muted">Pour un projet particulier : Projet → Sources → Configurer le projet.</p></section>
+      <section><h3>Dossiers partagés</h3><div class="cockpit-actions">${action('workspace-root', 'Dossier des projets')}${action('shared-sources', 'Sources Odoo')}</div><p class="muted">Pour un projet particulier : Statut → Outils du projet → Sources → Configurer le projet.</p></section>
       <details class="keyboard-help"><summary>Raccourcis clavier</summary><dl>
         <dt>Nouvel onglet terminal</dt><dd>Ctrl Shift T</dd><dt>Rechercher dans le terminal</dt><dd>Ctrl Shift F</dd>
         <dt>Changer de projet</dt><dd>Ctrl Alt ↑ / ↓</dd><dt>Changer de terminal</dt><dd>Ctrl PageUp / PageDown</dd>
@@ -349,6 +314,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         case 'copy-command': await api.clipboard.write(prepared); toast('Commande copiée, non exécutée.'); break;
         case 'quotas': modal('<h2>Limites des comptes</h2>' + quotaPanel(quotaSnapshots, esc)); $('#modal .quota-panel').open = true; break;
         case 'activity': setView('agents'); break;
+        case 'export-estimate': { const d = get().detail; const rows = effortCards(d, currentObservations(true)); await api.clipboard.write('Estimation du travail des agents — ' + (d.name || '') + '\n' + rows.map(t => t.id + ' — ' + t.title + ' : ' + hours(t.measures.revised ?? t.measures.initial) + ((t.acceptance || []).length ? '\n  Périmètre : ' + t.acceptance.join(' ; ') : '') + ((d.effort?.rows || []).filter(r => r.task === t.id).flatMap(r => (r.revised || r.initial)?.assumptions || []).length ? '\n  Hypothèses : ' + [...new Set(d.effort.rows.filter(r => r.task === t.id).flatMap(r => (r.revised || r.initial)?.assumptions || []))].join(' ; ') : '')).join('\n') + '\nPérimètre : ' + (d.selectedRelease || 'préparation') + '\nCharge humaine et tarif client à définir séparément.'); toast('Estimation copiée.'); break; }
         case 'profile': profileForm(); $('#modal-content').insertAdjacentHTML('beforeend', `<h3>Emplacements propres à ce projet</h3><div class="cockpit-actions">${action('working-directory', 'Dossier de travail')}${action('community-root', 'Sources Community')}${action('enterprise-root', 'Sources Enterprise')}</div><p class="muted">Dossier des nouveaux terminaux : ${esc(get().settings.profiles?.[get().current]?.workingDirectory || get().current)}. Les terminaux existants gardent leur dossier.</p>`); break;
         case 'working-directory': if (await api.cockpit.profileFolder(get().current, 'workingDirectory')) { await reloadProject(); $('#modal').close(); } break;
         case 'community-root': if (await api.cockpit.profileFolder(get().current, 'communityRoot')) { await reloadProject(); $('#modal').close(); } break;

@@ -45,13 +45,13 @@ const badge = (state, text) => `<span class="badge ${esc(state)}">${esc(text || 
 const when = value => value ? new Date(typeof value === 'number' ? value * 1000 : value).toLocaleString('fr-CH', { dateStyle: 'short', timeStyle: 'short' }) : 'Non observé';
 const minutes = value => value == null ? 'Non mesuré' : value < 1 ? `${Math.round(value * 60)} s` : `${Math.round(value).toLocaleString('fr-CH')} min`;
 const empty = (title, detail, action = '') => `<div class="empty">${icon('terminal')}<h2>${esc(title)}</h2><p>${esc(detail)}</p>${action}</div>`;
-// Visible tab order; Alt+1…Alt+8 follow it. « Projet » groups the read-only resources.
+// Visible pilotage tabs. Diagnostic resources stay under the project tools menu.
 const VIEWS = [['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['knowledge', 'Mémoire', 'file'], ['express', 'Express', 'express'], ['agents', 'Agents', 'agents'], ['effort', 'Temps', 'chart'], ['project', 'Projet', 'folder']];
-const PRIMARY_VIEWS = [['work', 'Travail', 'plan'], VIEWS[0], VIEWS[3]];
-const SECONDARY_VIEWS = VIEWS.filter(([id]) => !['terminal', 'knowledge'].includes(id));
+const PRIMARY_VIEWS = [['work', 'Statut', 'plan'], ['terminal', 'Terminal', 'terminal'], ['intentions', 'Intentions', 'file'], ['plan', 'Plan', 'plan'], ['knowledge', 'Mémoire', 'file'], ['express', 'Express', 'express'], ['effort', 'Temps', 'chart']];
+const SECONDARY_VIEWS = [];
 let detailsOpen = false;
 const RESOURCE_VIEWS = ['documents', 'environments', 'sources'];
-const SHORTCUT_VIEWS = [...VIEWS.map(([id]) => id), 'work'];
+const SHORTCUT_VIEWS = PRIMARY_VIEWS.map(([id]) => id);
 let projects = [], settings = {}, current = null, detail = null, view = 'work', selectedTask = null;
 let sessions = [], selectedSession = new Map(), terminals = new Map(), generation = 0, busy = false, pollBusy = false;
 let projectError = null, overviewMode = false, split = false, version = '', crewInstalled = true;
@@ -89,7 +89,7 @@ function sidebar() {
 function tabs() {
   const active = id => !overviewMode && (view === id || (id === 'project' && RESOURCE_VIEWS.includes(view)));
   const tab = ([id, label]) => `<button data-view="${id}" class="${active(id) ? 'active' : ''}" aria-current="${active(id) ? 'page' : 'false'}" title="${label} · Alt ${SHORTCUT_VIEWS.indexOf(id) + 1}" aria-keyshortcuts="Alt+${SHORTCUT_VIEWS.indexOf(id) + 1}">${label}</button>`;
-  $('#tabs').innerHTML = PRIMARY_VIEWS.map(tab).join('') + `<button data-action="work-details" aria-expanded="${detailsOpen}">Détails ${icon('chevron')}</button><span class="detail-tabs" ${detailsOpen ? '' : 'hidden'}>${SECONDARY_VIEWS.map(tab).join('')}</span>`;
+  $('#tabs').innerHTML = PRIMARY_VIEWS.map(tab).join('');
 }
 const releaseLabel = r => ({ ouverte: 'Ouverte', close: 'Close' }[r.status] || r.status);
 function header() {
@@ -146,7 +146,7 @@ function render() {
   else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
   else if (projectError) $('#content').innerHTML = empty('Lecture impossible', projectError);
   else if (!detail) $('#content').innerHTML = empty('Aucun projet sélectionné', 'Choisissez un projet dans la colonne de gauche.');
-  else ({ work: () => { $('#content').innerHTML = workView(detail, esc, badge); }, intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
+  else ({ work: () => { $('#content').innerHTML = workView(detail, esc, badge, cockpitUI.allObservations().filter(b => b.project === current)); }, intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
   cockpitUI.augment();
   $('#content').scrollTop = scroll[0];
   const graph = $('#content .graph-scroll'); if (graph) { graph.scrollLeft = scroll[1]; graph.scrollTop = scroll[2]; }
@@ -327,7 +327,7 @@ function requestWork(action = 'develop', task = null, text = '') {
   if (!detail || busy) return;
   const context = { project: current, release: detail.selectedRelease, task, generation };
   modal(`<span class="eyebrow">${esc(detail.name)}${context.release ? ' · ' + esc(context.release) : ''}</span><h2>${task ? 'Reprendre ' + esc(task) : 'Confier une demande'}</h2>
-    <form id="work-form" class="cockpit-form"><label>Action<select name="action">${[['develop', 'Développer / configurer'], ['diagnose', 'Diagnostiquer un problème'], ['plan', 'Préparer une release'], ...(task ? [['resume', 'Reprendre cette tâche']] : []), ...(context.release ? [['close', 'Clôturer cette release']] : []), ['feedback', 'Retenir un retour']].map(([id, title]) => `<option value="${id}" ${id === action ? 'selected' : ''}>${title}</option>`).join('')}</select></label>
+    <form id="work-form" class="cockpit-form"><label>Action<select name="action">${[['develop', 'Développer / configurer'], ['diagnose', 'Diagnostiquer un problème'], ['plan', 'Préparer une release'], ...(task ? [['resume', 'Reprendre cette tâche']] : []), ...(context.release ? [['close', 'Clôturer cette release']] : []), ['answer', 'Répondre à une question'], ['feedback', 'Retenir un retour']].map(([id, title]) => `<option value="${id}" ${id === action ? 'selected' : ''}>${title}</option>`).join('')}</select></label>
     <label>Votre demande<textarea name="text" rows="6" maxlength="12000" placeholder="Résultat attendu, contraintes et précisions utiles…">${esc(text)}</textarea></label>
     <label>Agent<select name="provider"><option value="codex">Codex</option><option value="claude">Claude</option></select></label>
     <p class="muted">La demande sera transmise dans un nouveau terminal associé à ce contexte. L’agent reprendra les preuves et décisions du projet.</p>
@@ -411,7 +411,7 @@ document.addEventListener('click', async event => {
       if (existing) return await followSession(existing.id);
       requestWork('resume', el.dataset.workResume); return;
     }
-    if (el.dataset.workQuestion) { requestWork('feedback', null, 'Concernant la question ' + el.dataset.workQuestion + ' : '); return; }
+    if (el.dataset.workQuestion) { requestWork('answer', null, 'Concernant la question ' + el.dataset.workQuestion + ' — ' + (el.dataset.questionText || '') + '\nMa réponse : '); return; }
     if (el.dataset.project) return await chooseProject(el.dataset.project);
     if (el.dataset.launchAgent) return await newTerminal(null, el.dataset.launchAgent);
     if (el.dataset.view) return setView(el.dataset.view);

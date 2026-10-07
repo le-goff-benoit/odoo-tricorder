@@ -15,7 +15,7 @@ test('a reached agent without a timer stays visible and prevents a false complet
 });
 test('release board separates receipts, stale proofs, legacy declarations and deferrals', async () => {
   const { releaseColumn } = await load();
-  assert.equal(releaseColumn({ progress: 'received', status: 'stale' }), 'done');
+  assert.equal(releaseColumn({ progress: 'received', status: 'stale' }), 'review');
   assert.equal(releaseColumn({ status: 'awaiting_receipt' }), 'review');
   assert.equal(releaseColumn({ status: 'running' }), 'working');
   assert.equal(releaseColumn({ status: 'ready' }), 'todo');
@@ -45,7 +45,7 @@ test('native activity is task-scoped, stale observations do not become live, rec
   assert.equal(releaseCards(detail, native)[0].activity, 'Activité non confirmée');
   native.push({ release: 'r', task: 'T01', provider: 'claude', agents: [{ state: 'waiting_human', stale: false }] });
   assert.equal(releaseCards(detail, native)[0].waiting, true);
-  assert.equal(releaseCards(detail, native)[1].column, 'done');
+  assert.equal(releaseCards(detail, native)[1].column, 'review');
 });
 test('time uses one source and keeps missing values unknown; filters never change cards', async () => {
   const { releaseCards, filterCards } = await load();

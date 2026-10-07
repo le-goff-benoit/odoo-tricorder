@@ -110,6 +110,10 @@ def plan_tasks(root, release):
                 availability[task['id']] = module.available(plan, root, task['id'])
     except Exception as exc:
         warnings.append(str(exc))
+    delivery = {'tasks': []}
+    if (folder / 'delivery-status.json').is_file():
+        try: delivery = trusted_module('odoo_pilotage').delivery_snapshot(root, release)
+        except Exception as exc: warnings.append('Livraison à vérifier : ' + str(exc))
     result = []
     for task in plan['tasks']:
         identifier = task['id']
@@ -128,7 +132,11 @@ def plan_tasks(root, release):
             'receiptAt': (task.get('receipt') or {}).get('at'),
             'progress': 'deferred' if task.get('deferred') else 'received' if receipt else state,
             'validation': state if receipt else 'not_recorded', 'source': 'plan',
-            'receiptContext': receipt,
+            'receiptContext': receipt, 'delivery': delivery if identifier in delivery.get('tasks', []) else None,
+            'prescribedChecks': [{'id': c['id'], 'title': c.get('description') or c.get('title') or c['id'],
+                                  'status': 'pass' if state == 'validated' and c['id'] in (task.get('receipt') or {}).get('checks', {}) else 'stale' if c['id'] in (task.get('receipt') or {}).get('checks', {}) else 'pending',
+                                  'path': ((task.get('receipt') or {}).get('checks', {}).get(c['id']) or {}).get('path')}
+                                 for c in task.get('checks', [])] or ([{'id':'task-tests','title':'Tests de la tâche','status':'pass' if state == 'validated' else 'stale','path':task['receipt']['proof']['path']}] if (task.get('receipt') or {}).get('proof', {}).get('path') else []),
         })
     return result, warnings
 
@@ -269,6 +277,13 @@ def express_interventions(root):
             qa = [e for e in raw.get('events', []) if e.get('node') == 'express_qa']
             flow['expressQA'] = qa[-1].get('outcome') if qa else None
             flow['expressEvidence'] = qa[-1].get('evidence', []) if qa else []
+            notes = {e.get('node'): e.get('note') for e in raw.get('events', []) if e.get('note')}
+            flow['title'] = raw.get('title') or notes.get('express_scope')
+            flow['result'] = notes.get('express_implementation') or notes.get('express_record')
+            effort_path = root / '.odoo-agents/express' / path.stem
+            flow['effort'] = effort_details(effort_path) if (effort_path / 'effort.json').is_file() else None
+            if (flow.get('effort') or {}).get('rows'):
+                flow['title'] = flow['effort']['rows'][0].get('title') or flow['title']
             result.append(flow)
         except (OSError, ValueError, TypeError, AttributeError):
             continue
@@ -276,7 +291,7 @@ def express_interventions(root):
 
 
 def effort_details(folder, project_only=False):
-    root = folder if project_only else folder.parent.parent
+    root = folder if project_only else folder.parents[2] if folder.parent.name == 'express' and folder.parent.parent.name == '.odoo-agents' else folder.parent.parent
     if not (folder / 'effort.json').is_file() and not (root / '.odoo-agents/preparation/effort.json').is_file():
         return None
     try:
@@ -356,7 +371,7 @@ def summary(root):
                                                     if n['status'] == 'claimed' and n.get('owner')))
                     except Exception:
                         pass  # Missing ownership is not an invented assignment.
-                board.append({k: task.get(k) for k in ('id', 'title', 'status', 'progress', 'validation', 'reason', 'source', 'acceptance', 'flow', 'intentions')} |
+                board.append({k: task.get(k) for k in ('id', 'title', 'status', 'progress', 'validation', 'reason', 'source', 'acceptance', 'flow', 'intentions', 'delivery')} |
                              {'release': release['id'], 'releaseTitle': release['title'],
                               'releaseStatus': release['status'], 'owners': owners})
             attention.extend(t | {'release': release['id']} for t in release_tasks
@@ -441,6 +456,12 @@ def source_details(root, series, instances, source_root=None):
 
 
 def project(root, release=None, source_root=None, profile=None):
+    from knowledge import validation_session
+    with validation_session():
+        return _project(root, release, source_root, profile)
+
+
+def _project(root, release=None, source_root=None, profile=None):
     root = Path(root).resolve()
     data = summary(root)
     chosen = None if release == '' else release or (data['release']['id'] if data['release'] else None)
@@ -469,6 +490,15 @@ def project(root, release=None, source_root=None, profile=None):
             data['warnings'].extend(warnings)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             data['warnings'].append('Plan : ' + str(exc))
+        try:
+            delivery = trusted_module('odoo_pilotage').delivery_snapshot(root, chosen)
+            data['deployment'] = delivery
+            for task in data['tasks']:
+                if task['id'] in delivery.get('tasks', []): task['delivery'] = delivery
+        except (ImportError, FileNotFoundError):
+            pass
+        except Exception as exc:
+            data['warnings'].append('Livraison à vérifier : ' + str(exc))
         folder = root / 'changelog' / chosen
         data['effort'] = effort_details(folder)
         flow_paths = list(dict.fromkeys(t['flow'] for t in data['tasks'] if t.get('flow')))

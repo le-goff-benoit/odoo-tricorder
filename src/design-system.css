@@ -538,3 +538,14 @@ input[type=checkbox] { accent-color: var(--accent); }
 @media (max-width: 900px) { .work-task { display: block; } }
 .work-page > .section-title > div { display: block; min-width: 0; }
 .work-page > .section-title h2 { margin: var(--space-2) 0; }
+
+/* Pilotage: all four summary values belong to one visual group. */
+.work-page .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.work-page h3 { margin-top: var(--space-4); margin-bottom: var(--space-2); }
+.pilotage-times { width: 100%; }
+.pilotage-times td, .pilotage-times th { vertical-align: top; }
+.pilotage-times details { margin: 0; }
+.pilotage-times .total-row { font-weight: 600; }
+@media (max-width: 1100px) {
+  .work-page .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

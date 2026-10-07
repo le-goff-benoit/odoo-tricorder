@@ -7,32 +7,15 @@ import json
 
 @contextmanager
 def validation_session():
-    """Share canonical plan verdicts within one read, never across refreshes.
-
-    Crew validates the whole plan for each accepted implementation contribution.
-    The reader runs in a dedicated, single-threaded Python process; temporarily
-    memoizing that read avoids repeating the same evidence checks dozens of times.
-    """
+    """Use Crew's public per-read cache; older releases remain readable."""
     from catalog import trusted_module
     try:
-        module = trusted_module('odoo_plan')
-    except Exception:
+        module = trusted_module('odoo_pilotage')
+    except (ImportError, FileNotFoundError, ValueError):
         yield
         return
-    original = module.statuses
-    cache = {}
-
-    def statuses(plan, project):
-        key = (str(Path(project).resolve()), json.dumps(plan, sort_keys=True))
-        if key not in cache:
-            cache[key] = original(plan, project)
-        return deepcopy(cache[key])
-
-    module.statuses = statuses
-    try:
+    with module.read_session():
         yield
-    finally:
-        module.statuses = original
 
 
 def snapshot(root, release=None):

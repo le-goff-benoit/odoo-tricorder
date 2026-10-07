@@ -1,5 +1,14 @@
 # Journal
 
+## 2026-10-07 — Pilotage lisible (0.5.0)
+
+- Statut, Kanban par défaut, intentions enrichies et apprentissages de release.
+- Critères, tests attribués et temps par agent réunis dans la tâche ; prévu/réalisé/jetons partagent les mêmes calculs.
+- Publication et déploiement observé distincts ; preuves périmées et mesures incomplètes restent explicites.
+- API Crew de lecture partagée, sans substitution de fonctions ; titres et temps Express pris dans le registre métier.
+- Interface technique allégée ; terminaux et accès aux ressources préservés.
+- Recette et limites : QA.md.
+
 ## 2026-10-05 — Ouverture de la release NECA (0.4.1)
 
 - Signalement : dernière release de neca-sa-gestion_projet_011026 inaccessible dans le Tricorder installé.

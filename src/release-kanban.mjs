@@ -3,7 +3,7 @@ import { taskState } from './task-state.mjs';
 import { activities, orchestrationCard } from './activity.mjs';
 import { taskMeasures, agentMeasures, withoutPreparationOverlap } from './measurements.mjs';
 
-export const releaseColumns = [['todo', 'À faire'], ['working', 'En cours'], ['review', 'À réceptionner'], ['done', 'Réceptionnées']];
+export const releaseColumns = [['todo', 'À faire'], ['working', 'En cours'], ['review', 'Tests en cours'], ['done', 'À déployer'], ['deployed', 'Déployées']];
 export function releaseColumn(task, flow) { return taskState(task, flow).column; }
 
 // Bindings supplied by the controller are already restricted to this project.
@@ -43,4 +43,15 @@ export function filterCards(cards, filter, owner) {
     (filter === 'all' || filter === 'executing' && t.activities?.some(a => a.executing) || filter === 'ready' && t.status === 'ready' || filter === 'blocked' && t.blocked || filter === 'waiting' && t.waiting));
 }
 
-export function allReleaseCards(detail, bindings = []) { return [orchestrationCard(detail, bindings), ...intentionCards(detail), ...releaseCards(detail, bindings)]; }
+export function allReleaseCards(detail, bindings = []) { return [...intentionCards(detail), ...releaseCards(detail, bindings)]; }
+
+export function effortCards(detail, bindings = []) {
+  const cards = releaseCards(detail,bindings);
+  for (const id of new Set((detail.effort?.rows || []).map(r => r.task))) {
+    if (cards.some(t => t.id === id)) continue;
+    const rows = detail.effort.rows.filter(r => r.task === id);
+    cards.push({id,title:rows[0]?.title || (id === 'RELEASE' ? 'Livraison et travaux communs' : 'Préparation'),
+      measures:taskMeasures(rows,[]),agents:agentMeasures(rows,[])});
+  }
+  return cards;
+}

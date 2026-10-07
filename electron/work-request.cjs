@@ -5,13 +5,14 @@ const ACTIONS = Object.freeze({
   plan: ['/odoo-plan', 'Préparer le plan et les critères de la release.'],
   resume: ['/odoo-start', 'Reprendre le travail autorisé de cette tâche avec ses preuves actuelles.'],
   close: ['/odoo-close', 'Recetter et clôturer la release sélectionnée.'],
+  answer: ['/odoo-plan', 'Enregistrer cette réponse métier avec la question correspondante dans les intentions de la release, conserver le texte original et les décisions, actualiser la proposition et les questions ouvertes. Reprendre seulement le périmètre déjà autorisé.'],
   feedback: ['/odoo-feedback', 'Enregistrer et qualifier ce retour.'],
 });
 function workPrompt(request, context) {
   if (!request || typeof request !== 'object' || !Object.hasOwn(ACTIONS, request.action)) throw new Error('Action de travail inconnue');
   if (typeof request.text !== 'string' || request.text.length > 12000 || /[\x00-\x08\x0b-\x1f\x7f]/.test(request.text)) throw new Error('Demande invalide (12 000 caractères maximum, sans caractères de contrôle)');
   if (!request.text.trim() && !['resume', 'close'].includes(request.action)) throw new Error('Décrivez la demande');
-  if (['resume', 'close'].includes(request.action) && !context.release) throw new Error('Sélectionnez une release');
+  if (['resume', 'close', 'answer'].includes(request.action) && !context.release) throw new Error('Sélectionnez une release');
   if (request.action === 'resume' && !context.task) throw new Error('Sélectionnez une tâche');
   const [skill, objective] = ACTIONS[request.action];
   return `${skill}\n${objective}\nContexte sélectionné dans Tricorder : ${JSON.stringify({ project: context.project, release: context.release, task: context.task })}\nCommence par python3 ~/.odoo19-agents/scripts/odoo_work.py prepare sur ce projet et cette release, puis applique le skill. Reprends les décisions et preuves existantes. Termine le périmètre demandé ; signale la question précise si une décision manque. Un environnement sélectionné ne donne aucune permission d’écriture en production.\nDemande originale de l’utilisateur :\n${request.text}`;

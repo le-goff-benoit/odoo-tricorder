@@ -9,7 +9,7 @@ garder la main sur l’exécution : les demandes d’origine, le plan de la rele
 les agents en activité, leurs preuves et leur temps. **Odoo Crew orchestre le
 travail ; Tricorder le rend lisible.** Rien n’est modifié depuis le cockpit.
 
-[Installer la version 0.4.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.4.0) ·
+[Installer la version 0.5.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.5.0) ·
 [Installer Odoo Crew](https://github.com/le-goff-benoit/odoo-crew/blob/main/docs/INSTALL.md) ·
 [Parcours d’exemple](docs/WORKFLOWS.md) ·
 [Socle visuel](docs/DESIGN.md) ·
@@ -17,74 +17,49 @@ travail ; Tricorder le rend lisible.** Rien n’est modifié depuis le cockpit.
 
 ## Ce que vous voyez
 
-L’accueil **Travail** présente les demandes, points à examiner et actions à poursuivre.
-**Terminal** et **Mémoire** restent directement accessibles. **Détails** donne accès
-aux intentions, plan, express, agents, temps et ressources. Les raccourcis historiques
-`Alt 1` à `Alt 8` sont conservés ; `Alt 9` ouvre Travail.
+**Statut** ouvre un cockpit de la release : temps prévu et réalisé, tâches en cours,
+questions à trancher, travaux à déployer et déploiements vérifiés. Les sept onglets
+sont Statut, Terminal, Intentions, Plan, Mémoire, Express et Temps.
 
-L’interface est sobre : surfaces graphite, une seule police en casse naturelle,
-un seul accent pour la sélection et l’action principale ; la couleur est réservée
-à l’état (reçu, à relire, bloqué, orchestration). Les documents gardent une
-typographie de lecture et les formulaires s’adaptent à la fenêtre. Voir le
-[socle visuel](docs/DESIGN.md).
+![Statut d’une release synthétique](docs/screenshots/statut.png)
 
-### Le plan, en liste, en Kanban ou en graphe
+**Plan** ouvre le Kanban : À faire → En cours → Tests en cours → À déployer →
+Déployées. Un contrôle périmé reste indiqué « Tests à reprendre ». Une publication
+GitHub seule ne vaut pas déploiement ; la cible doit être observée par Crew.
+Les modes Liste et Dépendances restent disponibles.
 
-![Plan de release en liste : orchestration, demande à planifier, tâches et minuteurs](docs/screenshots/plan.png)
+Une fiche de tâche rassemble critères d’acceptation, temps par agent et tests
+réellement enregistrés. Les identifiants de sessions et journaux techniques
+n’encombrent plus cette fiche.
 
-Chaque ligne dit trois choses : identifiant, titre et état ; le responsable ou
-l’étape en cours ; l’activité réellement observée avec son minuteur. Le point
-d’état à gauche et le **rail d’étapes** (parcourue, en cours, à venir) donnent
-l’avancement d’un regard. Les filtres (**En exécution**, **Prêtes**, **Bloquées**,
-**Accord attendu**) et le choix du responsable valent pour les trois modes.
+**Intentions** conserve la demande originale, la proposition de travail, les
+contraintes, décisions et questions avec leurs réponses. **Mémoire** expose les
+apprentissages utiles, leur conséquence et leur intégration au projet.
+Les acquis périmés ne sont pas présentés comme immédiatement réutilisables.
 
-![Graphe des dépendances avec la tâche T03 sélectionnée](docs/screenshots/dependencies.png)
+**Temps** regroupe Prévu / Réalisé / Jetons par tâche, avec détail par agent.
+Les travaux communs et la préparation figurent dans les totaux. Une mesure
+incomplète conserve son sous-total connu ; elle ne devient jamais zéro.
+La synthèse d’estimation copie périmètre et hypothèses, sans convertir les minutes
+d’agent en charge humaine ou en prix commercial.
 
-Le mode **Dépendances** montre l’amont et l’aval d’une tâche. Les ressources
-communes sont signalées séparément ; « peut démarrer » vient des règles Crew.
+![Temps et jetons sur les mêmes lignes](docs/screenshots/temps.png)
 
-### Les demandes, avant même leur découpage
-
-![Kanban de release avec une demande à planifier et l’orchestration en cours](docs/screenshots/live-requests.png)
-
-Dès que Crew enregistre une demande, elle apparaît **À planifier** ou
-**À préciser** dans le Plan et dans le **Kanban global**. Quand l’orchestrateur
-la relie aux tâches retenues, celles-ci remplacent sa carte provisoire ;
-l’intention et sa source restent consultables dans **Intentions**.
-
-### La mémoire partagée de la release
-
-![Mémoire partagée : point à relire, contributions et sources](docs/screenshots/memory.png)
-
-Les agents publient leurs découvertes, décisions et passations au fil du
-travail ; une source périmée ou une contribution à relire est signalée en tête.
-Pendant une lecture, les contributions d’implémentation réutilisent la même
-validation du plan. Chaque actualisation vérifie à nouveau les preuves ; les
-releases riches en contributions restent accessibles sans répéter ces contrôles.
-
-### Les agents et leur temps
-
-![Activité des agents : développement, QA et orchestration observés simultanément](docs/screenshots/activities.png)
-
-**Agents** ne montre que ce qui est observé : un terminal ouvert n’est pas une
-activité. La bande **En cours** sous l’en-tête et le compteur de l’onglet
-n’apparaissent que lorsqu’une activité est confirmée ou qu’une décision est
-attendue. **Temps** distingue prévisions, durées enregistrées et mesures
-manquantes ; « Non mesuré » ne vaut jamais zéro.
-
-![Temps : prévision, temps enregistré, tâches suivies et détail par agent](docs/screenshots/effort.png)
+**Express** décrit chaque petite correction par son résultat métier, ses tests
+et son temps. **Terminal** conserve les sessions et leur contexte habituel.
+Les ressources techniques restent dans **Statut → Outils du projet**.
 
 ## Installer
 
-Le paquet **0.4.0** cible Linux Ubuntu / Pop!_OS **amd64**. La construction et
+Le paquet **0.5.0** cible Linux Ubuntu / Pop!_OS **amd64**. La construction et
 les parcours de bureau sont vérifiés sur Pop!_OS 22.04 LTS.
 
-1. Télécharger `odoo-tricorder_0.4.0_amd64.deb` dans la
-   [release 0.4.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.4.0).
+1. Télécharger `odoo-tricorder_0.5.0_amd64.deb` dans la
+   [release 0.5.0](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.5.0).
 2. Depuis le dossier du téléchargement :
 
    ```bash
-   sudo apt install ./odoo-tricorder_0.4.0_amd64.deb
+   sudo apt install ./odoo-tricorder_0.5.0_amd64.deb
    ```
 
 3. Ouvrir **Odoo Tricorder** dans le menu des applications.
@@ -104,12 +79,12 @@ de Crew n’est proposé dans la barre latérale que si le dispositif manque.
    l’en-tête (le point vert signale une release ouverte). La seconde pastille est
    l’environnement des nouveaux terminaux : un repère, jamais une connexion ni
    une permission.
-3. Dans **Travail**, cliquer **Nouvelle demande**, choisir l’action et l’agent,
+3. Dans **Statut**, cliquer **Nouvelle demande**, choisir l’action et l’agent,
    puis décrire le résultat attendu. **Lancer le travail** ouvre un terminal contextualisé.
 4. **Reprendre** retrouve le terminal de la tâche s’il existe ou prépare une nouvelle
    session. Le texte original, la release et la tâche sont transmis à l’agent.
 5. Les critères et preuves sont accessibles depuis la tâche ; **Mémoire** présente
-   les décisions et retours collectés. Le terminal et le sélecteur **Skills** restent
+   les apprentissages et décisions établis. Le terminal et le sélecteur **Skills** restent
    disponibles pour les usages avancés ; `Ctrl Shift T` ouvre un shell simple.
 
 Les skills se saisissent **dans la conversation de l’agent**, pas dans le shell :
@@ -157,7 +132,7 @@ rafraîchir et aucun basculement de modèle n’en dépend.
 
 | Raccourci | Action |
 |---|---|
-| `Alt 1` à `Alt 8` | Terminal, Intentions, Plan, Mémoire, Express, Agents, Temps, Projet |
+| `Alt 1` à `Alt 7` | Statut, Terminal, Intentions, Plan, Mémoire, Express, Temps |
 | `Ctrl Shift T` | Nouveau terminal |
 | `Ctrl Shift F` | Rechercher dans le terminal |
 | `Ctrl Shift C` / `Ctrl Shift V` | Copier la sélection du terminal / coller |
@@ -166,7 +141,7 @@ rafraîchir et aucun basculement de modèle n’en dépend.
 | `Ctrl Shift P` | Palette de skills |
 | `Ctrl Alt F` | Recherche dans les documents des projets |
 
-L’onglet **Projet** regroupe les ressources en lecture seule : **Fichiers**,
+**Statut → Outils du projet** regroupe les ressources en lecture seule : **Fichiers**,
 **Environnements** et **Sources**. Les préférences règlent le terminal, la
 largeur de la barre latérale et le contraste.
 
@@ -191,8 +166,8 @@ Node.js 22+, Python 3.10+ et Odoo Crew pour les tests d’intégration :
 
 ```bash
 npm ci
-npm test            # 87 tests Python, 56 tests Node
-npm run test:ui     # 17 parcours Electron sur projets synthétiques
+npm test            # contrats Python et JavaScript
+npm run test:ui     # parcours Electron sur projets synthétiques
 npm run dist        # paquet Debian dans release/
 npm run test:packaged
 npm run checksum
@@ -212,21 +187,10 @@ sont des marques de leurs titulaires ; leurs
 [sources officielles sont documentées](assets/providers/README.md). Projet
 indépendant, sans affiliation à Odoo, OpenAI ou Anthropic.
 
-## 0.4 — Partir du travail
+## Compatibilité Crew
 
-![Accueil Travail sur projet synthétique](docs/screenshots/travail.png)
-
-L’accueil **Travail** présente la release, les tâches reçues, les points à examiner
-et les actions à poursuivre. **Nouvelle demande** transmet votre texte original,
-le projet et la release au CLI Codex ou Claude ; **Reprendre** ajoute la tâche.
-Une fenêtre récapitule l’action avant lancement dans un nouveau terminal. La
-navigation ne change pas le contexte d’une session déjà ouverte.
-
-**Terminal** et **Mémoire** restent immédiatement accessibles ; **Détails** donne
-accès aux intentions, plan, express, agents, temps et ressources du projet. Les
-raccourcis Alt+1 à Alt+8 sont conservés ; Alt+9 ouvre Travail.
-
-Avec Crew actuel, Mémoire affiche aussi les retours collectés à la réception et
-à la clôture : faits et sources, à qualifier, sans adoption automatique de règles.
-Tricorder ne modifie pas les flows du projet : les agents et les commandes Crew
-conservent la responsabilité des opérations et leurs contrôles.
+La release 0.5 utilise l’API de lecture d’Odoo Crew v2026.10.07. Les anciens
+registres restent lisibles ; les nouvelles mesures et projections exigent la
+mise à jour de Crew. Le cache des validations vit seulement pendant une lecture,
+avec réévaluation à l’actualisation. Le cockpit reste en lecture seule sur les
+projets ; les actions passent par les agents et leurs contrôles.

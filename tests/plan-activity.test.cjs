@@ -6,8 +6,8 @@ test('both boards keep a historical receipt when its current controls are stale'
   const task = { id: 'A', progress: 'received', status: 'stale', validation: 'stale', reason: 'Source consommée modifiée' };
   const global = boardCards([{ path: '/a', board: [task] }])[0];
   const local = releaseCards({ tasks: [task] })[0];
-  assert.equal(global.column, 'done'); assert.equal(local.column, 'done');
-  assert.equal(global.presentation.proof, 'Contrôle à actualiser');
+  assert.equal(global.column, 'review'); assert.equal(local.column, 'review');
+  assert.equal(global.presentation.proof, 'Tests à actualiser');
   assert.equal(local.presentation.reason, task.reason);
   assert.equal(boardCards([{ path: '/a', board: [{ id: 'B', status: 'unknown' }] }])[0].column, 'unknown');
 });
@@ -27,7 +27,7 @@ test('three simultaneous activities and their waiting states use the same filter
   const detail = { selectedRelease: 'r', tasks: [{ id: 'A', status: 'running' }, { id: 'B', status: 'running' }], orchestration: { id: 'stable-main', status: 'active' } };
   const bindings = [null, 'A', 'B'].map((task, i) => ({ task, release: 'r', provider: 'codex', role: task ? 'odoo-developer' : 'orchestrator', agents: [{ nativeId: String(i), state: i === 2 ? 'tool' : 'active', startedAt: '2026-09-15T12:00:00Z' }] }));
   assert.equal(activities(detail, bindings).filter(a => a.executing).length, 3);
-  assert.equal(filterCards(allReleaseCards(detail, bindings), 'executing').length, 3);
+  assert.equal(filterCards(allReleaseCards(detail, bindings), 'executing').length, 2);
   bindings[0].agents[0].state = 'waiting_agent'; detail.orchestration.status = 'waiting_agent';
   assert.equal(filterCards(allReleaseCards(detail, bindings), 'executing').length, 2);
   assert.equal(orchestrationCard(detail, bindings).waiting, true);

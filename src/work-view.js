@@ -1,19 +1,21 @@
-export function workView(detail, esc, badge) {
-  const tasks = detail.tasks || [], memory = detail.knowledge || {};
+import { releaseCards, effortCards } from './release-kanban.mjs';
+import { taskMeasures, knownSum } from './measurements.mjs';
+import { duration, totals } from './pilotage.mjs';
+export function workView(detail, esc, badge, observations = []) {
+  const tasks = releaseCards(detail, observations), memory = detail.knowledge || {};
   const release = (detail.releases || []).find(r => r.id === detail.selectedRelease);
-  const waiting = tasks.filter(t => ['blocked', 'stale', 'interrupted', 'awaiting_receipt', 'unverified'].includes(t.status));
-  const active = tasks.filter(t => ['running', 'ready', 'pending'].includes(t.status));
-  const questions = [...(memory.questions || []).filter(q => q.status === 'open'), ...(memory.contributions || []).filter(c => c.current && c.kind === 'question').map(c => ({ id: c.id, question: c.statement }))];
-  const requests = (detail.intentions?.items || []).filter(i => ['clarify', 'ready'].includes(i.status));
-  const last = (detail.releases || []).find(r => r.status === 'close');
-  const card = t => `<article class="info-card work-task"><div><h3>${esc(t.title || t.id)}</h3><p>${esc(t.id)} · ${badge(t.status)}</p>${t.reason && !t.reason.startsWith('.odoo-agents/flows/') ? `<p class="muted">${esc(t.reason)}</p>` : ''}</div><div class="work-actions"><button class="secondary" data-task="${esc(t.id)}">Voir les critères</button><button class="primary" data-work-resume="${esc(t.id)}">Reprendre</button></div></article>`;
-  return `<div class="page work-page"><div class="section-title"><div><span class="eyebrow">Travail</span><h2>${esc(release?.title || 'Que souhaitez-vous faire avancer ?')}</h2><p class="muted">${release ? `Release ${esc(release.id)} · ${esc(release.status === 'ouverte' ? 'ouverte' : 'clôturée')}` : 'Une demande précise, puis un agent qui poursuit le travail.'}</p></div><button class="primary" data-action="work-request">Nouvelle demande</button></div>
-  <div class="knowledge-summary"><span><strong>${tasks.filter(t => t.status === 'validated').length}/${tasks.length}</strong> tâches reçues</span><span><strong>${waiting.length + questions.length}</strong> points à examiner</span><button class="secondary" data-view="knowledge">${Number(memory.feedback?.pending || 0)} retours à qualifier</button></div>
-  ${(detail.warnings || []).length ? `<div class="knowledge-alert">${detail.warnings.map(w => `<p>${esc(w)}</p>`).join('')}</div>` : ''}
-  ${waiting.length || questions.length ? `<h3>À votre attention</h3><div class="knowledge-list">${waiting.map(card).join('')}${questions.map(q => `<article class="info-card"><h4>${esc(q.question)}</h4><button class="secondary" data-work-question="${esc(q.id)}">Apporter une précision</button></article>`).join('')}</div>` : ''}
-  ${requests.length ? `<h3>Demandes à préparer</h3><div class="knowledge-list">${requests.map(i => `<article class="info-card"><h4>${esc(i.title || i.id)}</h4><p>${esc(i.status === 'clarify' ? 'Précision attendue' : 'Prête à planifier')}</p><button class="secondary" data-view="intentions">Voir la demande</button></article>`).join('')}</div>` : ''}
-  <h3>À poursuivre</h3><div class="knowledge-list">${active.map(card).join('') || '<p class="muted">Aucune tâche en attente dans le plan sélectionné. Une nouvelle demande permet de préparer la suite.</p>'}</div>
-  <div class="work-actions"><button class="secondary" data-view="plan">Voir tout le plan</button>${release?.status === 'ouverte' ? '<button class="secondary" data-action="work-close">Préparer la clôture</button>' : ''}</div>
-  ${last ? `<p class="muted">Dernière release clôturée : ${esc(last.title || last.id)}. Le déploiement se vérifie dans les preuves de livraison.</p>` : ''}
-  </div>`;
+  const active = tasks.filter(t => ['working', 'review', 'blocked'].includes(t.column));
+  const questions = [...(memory.questions || []).filter(q => q.status === 'open'), ...(memory.contributions || []).filter(q => q.kind === 'question' && q.current && q.freshness === 'verified').map(q => ({id:q.id,question:q.statement}))];
+  const estimates = detail.effort?.rows || [];
+  const measures = totals(effortCards(detail,observations));
+  const waiting = tasks.filter(t => t.waiting);
+  const next = active.length ? active : tasks.filter(t => t.column === 'todo').slice(0, 3);
+  const card = t => `<article class="info-card work-task"><div><h3>${esc(t.title)}</h3><p>${badge(t.status, t.presentation.label)}</p><p>Prévu ${duration(t.measures.revised ?? t.measures.initial)} · Réalisé ${duration(t.measures.actual, t.measures.partial)}</p></div><div class="work-actions"><button class="secondary" data-task="${esc(t.id)}">Voir la tâche</button><button class="primary" data-work-resume="${esc(t.id)}">${t.column === 'review' ? 'Poursuivre les tests' : 'Poursuivre'}</button></div></article>`;
+  return `<div class="page work-page"><div class="section-title"><div><span class="eyebrow">Statut</span><h2>${esc(release?.title || 'Votre projet')}</h2></div><button class="primary" data-action="work-request">Nouvelle demande</button></div>
+    <div class="metrics"><div class="metric"><span>Temps prévu</span><strong>${duration(measures.revised ?? measures.initial)}</strong></div><div class="metric"><span>Temps réalisé</span><strong>${duration(measures.actual, measures.partial)}</strong></div><div class="metric"><span>À déployer</span><strong>${tasks.filter(t => t.column === 'done').length}</strong></div><div class="metric"><span>Déployées</span><strong>${tasks.filter(t => t.column === 'deployed').length} / ${tasks.length}</strong></div></div>
+    ${questions.length || waiting.length ? `<h3>Votre décision est attendue</h3>${questions.map(q => `<article class="info-card"><p>${esc(q.question)}</p><button class="secondary" data-work-question="${esc(q.id)}" data-question-text="${esc(q.question)}">Répondre à cette question</button></article>`).join('')}${waiting.filter(t => !next.includes(t)).map(card).join('')}` : ''}
+    <h3>${active.length ? 'Travail à suivre' : 'Prochaines tâches'}</h3><div class="knowledge-list">${next.map(card).join('') || '<p>Aucune tâche en cours. Consultez le plan pour les travaux à déployer ou déjà livrés.</p>'}</div>
+    <div class="work-actions"><button class="secondary" data-view="plan">Ouvrir le plan</button>${release?.status === 'ouverte' ? '<button class="secondary" data-action="work-close">Préparer la livraison</button>' : ''}</div>
+    <details class="technical-details"><summary>Outils du projet</summary><button class="secondary" data-view="documents">Fichiers</button><button class="secondary" data-view="sources">Sources</button><button class="secondary" data-view="environments">Environnements</button></details>
+    ${(detail.warnings || []).length ? `<details class="technical-details"><summary>Informations de lecture</summary>${detail.warnings.map(w => `<p>${esc(w)}</p>`).join('')}</details>` : ''}</div>`;
 }
