@@ -1,15 +1,16 @@
 # Socle visuel Tricorder
 
-## Direction (23 septembre 2026)
+## Direction (7 octobre 2026)
 
 Moderne, simple, épuré. L’interface s’efface devant le travail en cours : la
-couleur est réservée à l’état, tout le reste est graphite.
+couleur est réservée à l’état. Deux palettes neutres, claire et graphite,
+partagent la même hiérarchie et les mêmes composants.
 
 - **Une police** : IBM Plex Sans pour toute l’interface, en casse naturelle
   (titres, onglets, badges, colonnes). IBM Plex Mono uniquement pour ce qui se
   lit comme une donnée : identifiants de tâche, séries, minuteurs, chemins, code.
   Aucune capitale espacée, aucune police d’affichage.
-- **Surfaces graphite** : `--bg` (fond), `--surface-1` (barre latérale, cartes,
+- **Surfaces claires ou graphite** : `--bg` (fond), `--surface-1` (barre latérale, cartes,
   colonnes), `--surface-2` (survol, cartes de Kanban), `--surface-3` (sélection).
   Les niveaux se distinguent par la luminosité, pas par la teinte ; bordures
   `--line` fines.
@@ -46,13 +47,18 @@ Markdown, dialogues, explorateur, mesures).
   accessible avec Échap, retour au déclencheur et critères d’acceptation en premier.
 - Aucun sélecteur de tâche global ni panneau latéral de suivi. La sélection du
   projet/release reste distincte de la consultation ponctuelle d’une fiche.
-- En-tête en une ligne (`.topbar.project-header`) : nom du projet et pastilles
-  méta, sélecteurs release/environnement en pastilles (`.pill-select`, libellés
-  masqués pour les lecteurs d’écran), actions globales à droite ; onglets dessous.
-  `header()` émet le balisage final ; aucune vue ne retouche l’en-tête après rendu.
-  La bande d’activité et le compte sur l’onglet Agents n’existent que lorsqu’une
-  activité est confirmée.
-- Barre latérale sans monogramme : une ligne par projet (nom, série à droite,
+- En-tête en deux niveaux : nom du projet et commandes d’apparence discrets,
+  puis **release en titre de 26 px**, état et date en second niveau. Le titre
+  est le sélecteur accessible, au clavier comme à la souris ; les longs noms
+  reviennent à la ligne. Les onglets restent immédiatement dessous.
+- Branche Git et environnement regroupés dans le Terminal. Branche également
+  accessible dans Statut → Outils du projet. La sélection d’environnement
+  concerne les nouveaux terminaux ; les sessions existantes gardent leur contexte.
+- Clair / Sombre / Système : commande permanente dans l’en-tête et dans les
+  Préférences. Choix mémorisé ; mode Système réactif aux changements du poste.
+  Contraste renforcé disponible dans les deux palettes. Les terminaux sont
+  recolorés sur place, sans perdre le processus, le contenu ni le contexte.
+- Barre latérale sans monogramme : une ligne par projet (nom,
   point vert si activité, pastille ambre de compte si attention) ; la sélection
   est un fond discret.
 - Hiérarchie de texte à trois niveaux (`--text`, `--text-2`, `--text-3`) ;
@@ -64,8 +70,9 @@ Markdown, dialogues, explorateur, mesures).
   chemins de fichiers et phrases d’explication n’y figurent pas.
 - Taille minimale du texte : 11 px (repères, libellés en capitales), 12 px pour
   tout contenu secondaire. Les onglets et le corps restent à 13 px.
-- Un onglet ne propose pas de bouton « revenir à » un autre onglet : la navigation
-  passe par la barre d’onglets et les raccourcis Alt 1…8 (Projet est un onglet).
+- Navigation principale en sept onglets, raccourcis Alt 1…7. Le cockpit propose
+  aussi « Voir le plan » au niveau du travail à suivre. Les ressources techniques
+  sont regroupées sous Statut → Outils du projet.
 - Le Plan a trois modes (liste, Kanban, dépendances) qui partagent filtres et
   responsable ; il n’existe pas de second onglet Kanban par release.
 - Les vues sont émises en une passe : aucun `textContent` réécrit ni nœud déplacé
@@ -110,3 +117,34 @@ pas des comparaisons pixel à pixel de tous les contenus possibles.
   une remise en haut lors d’un changement de contenu. Échap ferme le dialogue ;
   dans la recherche terminal, Échap rend le focus au terminal.
 - Revue et périmètre vérifié : [passe UI/UX du 16 septembre](UI_REVIEW_2026-09-16.md).
+
+
+## Revue d’ergonomie — 7 octobre 2026
+
+Références consultées : [Linear, refonte du 12 mars 2026](https://linear.app/now/behind-the-latest-design-refresh)
+pour séparer orientation, contexte et travail ; [dashboard shadcn/ui](https://ui.shadcn.com/examples/dashboard)
+pour les surfaces neutres et la lisibilité des tableaux, observé en clair et sombre.
+Ces références guident l’adaptation ; aucun framework, asset distant ou service
+supplémentaire n’est embarqué.
+
+| Priorité | Information | Présentation |
+|---|---|---|
+| 1 | Release sélectionnée | Grand titre permanent, date et état secondaires ; le clic change la release. |
+| 2 | Décision attendue | Panneau dédié en tête du cockpit, uniquement quand nécessaire. |
+| 3 | Temps et déploiement | Trois indicateurs : prévu, réalisé, tâches déployées ; à déployer indiqué si non nul. |
+| 4 | Travail actuel | Titre de tâche ouvrable, état et temps sur une ligne, action de poursuite secondaire. |
+| 5 | Outils de travail | Shell et branche dans Terminal ; fichiers, sources et environnements à la demande. |
+| 6 | Préférences et diagnostic | Bas de la barre latérale ; actualisation discrète sauf en cas d’erreur. |
+
+Retirés du premier plan : série Odoo répétée dans la liste des projets, branche
+Git globale, sélecteur Shell local global, état « À jour », titre de release
+répété dans le cockpit, compteur « À déployer : 0 » et bouton « Voir la tâche »
+répété (le titre est un bouton). Les données absentes restent signalées avec un
+poids visuel secondaire ; aucun zéro ou pourcentage d’effort n’est inventé.
+
+Le contrôle d’apparence couvre la persistance après redémarrage, les changements
+système et manuels, le contraste renforcé, les titres longs à 125 %, les six vues
+principales renseignées et la continuité d’un vrai shell synthétique. Les trois
+niveaux de texte sont mesurés à un contraste d’au moins 4,5:1 sur les fonds de
+page, de carte et de barre latérale dans les deux thèmes. Cela ne constitue pas
+un audit exhaustif de conformité d’accessibilité.

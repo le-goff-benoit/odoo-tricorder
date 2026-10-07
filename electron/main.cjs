@@ -163,6 +163,7 @@ function wireAPI() {
       for (const [key, min, max] of [['fontSize', 11, 22], ['sidebarWidth', 210, 360]]) {
         if (Number.isFinite(patch.ui[key])) settings.ui[key] = Math.max(min, Math.min(max, Math.round(patch.ui[key])));
       }
+      if (['light', 'dark', 'system'].includes(patch.ui.theme)) settings.ui.theme = patch.ui.theme;
       if (['mono', 'liberation', 'system'].includes(patch.ui.font)) settings.ui.font = patch.ui.font;
     }
     if (patch.context && projects.has(patch.context.project)) {

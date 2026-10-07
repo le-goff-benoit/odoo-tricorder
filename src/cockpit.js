@@ -1,3 +1,4 @@
+import { resolveTheme, terminalTheme } from './appearance.mjs';
 import { releaseCards, effortCards } from './release-kanban.mjs';
 import { timeTable } from './pilotage.mjs';
 import { planViews } from './plan-view.js';
@@ -61,17 +62,17 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     if (!rows.length) return '';
     return `<section class="token-allocation"><h3>Consommation de jetons</h3><div class="table-scroll"><table><thead><tr><th>Tâche</th>${(rows[0]?.fields || []).map(f => `<th>${esc(f.label)}</th>`).join('')}<th>Relevé</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.id)}</td>${r.fields.map(f => `<td>${f.value == null ? 'Non mesuré' : f.value.toLocaleString('fr-CH') + (f.partial ? ' · partiel' : '')}</td>`).join('')}<td>${r.source}</td></tr>`).join('')}</tbody></table></div></section>`;
   }
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+  systemTheme.addEventListener('change', () => { if (!['light', 'dark'].includes(get().settings.ui?.theme)) applyPreferences(); });
   function applyPreferences() {
     const s = get(), ui = s.settings.ui || {};
+    document.documentElement.dataset.theme = resolveTheme(ui.theme, systemTheme.matches);
+    document.querySelectorAll('[data-theme-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === (ui.theme || 'system'))));
     document.documentElement.classList.toggle('high-contrast', !!ui.highContrast);
     document.documentElement.style.setProperty('--sidebar-width', `${ui.sidebarWidth || 258}px`);
     const css = getComputedStyle(document.documentElement);
-    const color = name => css.getPropertyValue(name).trim();
     for (const t of s.terminals.values()) {
-      t.term.options.theme = { background: color('--bg'), foreground: color('--text'), cursor: color('--accent'),
-        selectionBackground: color('--surface-3'), black: color('--surface-2'), red: color('--danger'),
-        green: color('--ok'), yellow: color('--warn'), blue: color('--info'), magenta: color('--orch'),
-        cyan: color('--ok'), white: color('--text') };
+      t.term.options.theme = terminalTheme(css);
       t.term.options.fontSize = ui.fontSize || 13;
       t.term.options.fontFamily = fonts[ui.font || 'mono'];
     }
@@ -182,7 +183,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   }
   function drawQuotas() {
     let root = $('#provider-quotas');
-    if (!root) { root = document.createElement('div'); root.id = 'provider-quotas'; root.className = 'provider-quotas'; $('.top-actions').prepend(root); }
+    if (!root) { root = document.createElement('div'); root.id = 'provider-quotas'; root.className = 'provider-quotas'; $('.sidebar-utilities').prepend(root); }
     const chips = ['codex', 'claude'].map(provider => {
       const q = quotaPresentation(quotaSnapshots.find(s => s.provider === provider) || { provider });
       if (q.availability === 'unavailable') return '';
@@ -241,7 +242,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
           <label>Police<select id="pref-font">${[['mono', 'DejaVu Sans Mono'], ['liberation', 'Liberation Mono'], ['system', 'Monospace système']].map(([v, l]) => `<option value="${v}" ${(ui.font || 'mono') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
           <label>Taille du texte (px)<input type="number" min="11" max="22" step="1" id="pref-size" value="${ui.fontSize || 13}" required></label>
         </div></fieldset>
-        <fieldset><legend>Affichage</legend><div class="cockpit-form">
+        <fieldset><legend>Affichage</legend><div class="cockpit-form"><label>Thème<select id="pref-theme">${[['system', 'Suivre le système'], ['light', 'Clair'], ['dark', 'Sombre']].map(([v,l]) => `<option value="${v}" ${(ui.theme || 'system') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
           <label>Largeur de la barre latérale (px)<input type="number" min="210" max="360" step="1" id="pref-sidebar" value="${ui.sidebarWidth || 258}" required></label>
           <label class="checkbox-label"><input type="checkbox" id="pref-contrast" ${ui.highContrast ? 'checked' : ''}> Contraste renforcé</label>
         </div></fieldset>
@@ -258,7 +259,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       event.preventDefault();
       if (!event.target.reportValidity()) return;
       try {
-        setSettings(await api.settings({ ui: { font: $('#pref-font').value, fontSize: Number($('#pref-size').value), sidebarWidth: Number($('#pref-sidebar').value), highContrast: $('#pref-contrast').checked } }));
+        setSettings(await api.settings({ ui: { theme: $('#pref-theme').value, font: $('#pref-font').value, fontSize: Number($('#pref-size').value), sidebarWidth: Number($('#pref-sidebar').value), highContrast: $('#pref-contrast').checked } }));
         $('#modal').close(); render();
       } catch (error) { toast(error.message); }
     });
@@ -337,7 +338,13 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   document.addEventListener('input', event => {
     if (event.target.id === 'skill-filter') for (const item of document.querySelectorAll('[data-skill]')) item.hidden = !item.textContent.toLowerCase().includes(event.target.value.toLowerCase());
   });
-  document.addEventListener('change', event => {
+  document.addEventListener('click', async event => {
+    const choice = event.target.closest('[data-theme-choice]');
+    if (!choice) return;
+    try {
+      setSettings(await api.settings({ ui: { theme: choice.dataset.themeChoice } }));
+      applyPreferences();
+    } catch (error) { toast(error.message); }
   });
   document.addEventListener('keydown', event => {
     if (document.querySelector('dialog[open]')) { if (event.key === 'Enter' && event.target.id === 'global-query') runSearch().catch(e => toast(e.message)); return; }
@@ -354,7 +361,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       if (next) { selectSession(next.id); setView('terminal'); }
     }
   });
-  $('.top-actions').insertAdjacentHTML('afterbegin', '<button class="text-button" data-cockpit="palette" title="Palette de skills · Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
+  $('.sidebar-utilities').insertAdjacentHTML('afterbegin', '<button class="text-button" data-cockpit="palette" title="Palette de skills · Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
   setInterval(refreshNative, 5000);
   setInterval(() => tickTimers(), 1000);
   setInterval(refreshQuotas, 30000);

@@ -1,5 +1,13 @@
 # Journal
 
+## 2026-10-07 — Hiérarchie et thèmes (0.5.1)
+
+- Release en titre principal ; Git et environnement recentrés sur Terminal.
+- Thèmes Clair / Sombre / Système mémorisés, contraste renforcé et palette xterm cohérente sans recréer les sessions.
+- Décisions en premier, trois indicateurs utiles, lignes de tâches compactes ; outils généraux dans la barre latérale.
+- Références Linear et shadcn/ui, choix et hiérarchie documentés dans DESIGN.md.
+- QA : 97 Python, 62 JavaScript ; 19 parcours Electron sur sources et paquet (2 optionnels ignorés). Installation utilisateur locale pour revue, sans arrêter les sessions existantes.
+
 ## 2026-10-07 — Pilotage lisible (0.5.0)
 
 - Statut, Kanban par défaut, intentions enrichies et apprentissages de release.

@@ -1,3 +1,21 @@
+# Recette ergonomie 0.5.1 — 7 octobre 2026
+
+- Revue des références publiques Linear et shadcn/ui ; décisions dans `docs/DESIGN.md`.
+- Sources : 97 tests Python et 62 JavaScript réussis ; 19 parcours Electron réussis,
+  deux parcours réels optionnels non exécutés. Aucun projet client modifié.
+- Apparence : Clair / Sombre / Système ; choix conservé après redémarrage, changements
+  système suivis uniquement en mode Système, valeurs invalides refusées par l’API.
+- Même session terminal et même contenu après changements d’apparence et redémarrage.
+- Revue visuelle de Statut, Plan, Temps et Terminal ; captures des deux thèmes.
+- Contraste des trois niveaux de texte ≥ 4,5:1 sur page, carte et barre latérale.
+- Release de titre long lisible à 1000 × 700 avec zoom 125 %, sans débordement global.
+- Paquet Debian construit par `npm run dist`, empreinte dans `release/SHA256SUMS`.
+- Recette du paquet : 19 parcours réussis, deux parcours réels optionnels ignorés.
+  Copie locale utilisateur : 94 fichiers vérifiés identiques au runtime testé.
+- Version locale installée pour revue ; aucune nouvelle publication GitHub dans cette passe.
+
+---
+
 # Recette 0.5.0 — 7 octobre 2026
 
 - Crew de référence : `1f6bbf2`, API publique de lecture et mémoire projet.

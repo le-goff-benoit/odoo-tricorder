@@ -1569,3 +1569,105 @@ test('work page starts a contextual request and resumes a task without changing 
     fs.rmSync(temp, { recursive: true, force: true });
   }
 });
+
+test('appearance: light, dark and system persist with live terminals and a readable release hierarchy', async () => {
+  test.setTimeout(90000);
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-appearance-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  require('node:child_process').execFileSync('git', ['init', '-b', 'feat/facturation-clients'], { cwd: project, stdio: 'ignore' });
+  const options = { args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, HOME: home, TRICORDER_HOME: home,
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } };
+  let app = await electron.launch(options);
+  const errors = [];
+  try {
+    let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await projectTab(page, 'work');
+    await expect(page.locator('#release-title')).toHaveText('Facturation & maintenance récurrente');
+    expect(await page.locator('#release-title').evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(22);
+    await expect(page.locator('#environment-select')).toBeHidden();
+    await expect(page.locator('.project-header')).not.toContainText('feat/facturation-clients');
+    await projectTab(page, 'terminal');
+    await expect(page.locator('.git-context')).toContainText('feat/facturation-clients');
+    await page.locator('#terminal-empty [data-action="new-terminal"]').click();
+    await expect(page.locator('.xterm-screen')).toBeVisible();
+    const terminal = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
+    await page.evaluate(id => window.tricorder.terminals.write({session: id, data: "printf 'THEME-PRESERVED\\n'\n"}), terminal.id);
+    await expect(page.locator('.xterm-screen')).toContainText('THEME-PRESERVED');
+    for (const theme of ['light', 'dark']) {
+      await page.locator(`[data-theme-choice="${theme}"]`).click();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await expect(page.locator(`[data-theme-choice="${theme}"]`)).toHaveAttribute('aria-pressed', 'true');
+      await expect(page.locator('.xterm-screen')).toContainText('THEME-PRESERVED');
+      expect((await page.evaluate(() => window.tricorder.terminals.list()))[0].id).toBe(terminal.id);
+      for (const view of ['work', 'plan', 'intentions', 'knowledge', 'effort', 'terminal']) {
+        await projectTab(page, view);
+        await page.screenshot({animations: 'disabled', path: `test-results/appearance-${theme}-${view}.png`});
+      }
+      await projectTab(page, 'work');
+      const contrast = await page.evaluate(() => {
+        const css = getComputedStyle(document.documentElement);
+        const luminance = hex => {
+          const c = hex.trim().slice(1).match(/../g).map(v => parseInt(v, 16) / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4);
+          return c[0] * .2126 + c[1] * .7152 + c[2] * .0722;
+        };
+        const ratio = (a, b) => { const x = luminance(css.getPropertyValue(a)), y = luminance(css.getPropertyValue(b)); return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); };
+        return ['--bg', '--surface-1', '--sidebar-bg'].flatMap(bg => ['--text', '--text-2', '--text-3'].map(fg => ({fg,bg,ratio:ratio(fg,bg)})));
+      });
+      for (const sample of contrast) expect(sample.ratio, `${theme} ${sample.fg} on ${sample.bg}`).toBeGreaterThanOrEqual(4.5);
+      await page.locator('[data-cockpit="preferences"]').click();
+      await expect(page.locator('#pref-theme')).toHaveValue(theme);
+      await page.locator('#pref-contrast').check();
+      await page.locator('#preferences-form button[type=submit]').click();
+      await expect(page.locator('html')).toHaveClass(/high-contrast/);
+      await page.locator('[data-cockpit="preferences"]').click();
+      await page.locator('#pref-contrast').uncheck();
+      await page.locator('#preferences-form button[type=submit]').click();
+    }
+    // A manual choice wins over OS changes; System follows changes while open.
+    await page.emulateMedia({colorScheme:'light'});
+    await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+    await page.locator('[data-theme-choice="system"]').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme','light');
+    await page.emulateMedia({colorScheme:'dark'});
+    await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+    await page.locator('[data-theme-choice="light"]').click();
+    const saved = await page.evaluate(() => window.tricorder.settings({ui:{theme:'invalid-theme'}}));
+    expect(saved.ui.theme).toBe('light');
+    // Long release titles wrap; the whole window must remain usable at 125%.
+    const longTitle = 'Facturation récurrente et suivi des interventions — consolidation des sociétés et validation des documents clients';
+    write(path.join(project, 'changelog', releaseId, 'README.md'), `<!-- release ouverte -->\n# ${longTitle}\n`);
+    await page.locator('[data-action="refresh"]').click();
+    await expect(page.locator('#release-title')).toHaveText(longTitle);
+    await app.evaluate(({BrowserWindow}) => BrowserWindow.getAllWindows()[0].webContents.setZoomFactor(1.25));
+    await page.setViewportSize({width:1000,height:700});
+    for (const theme of ['light', 'dark']) {
+      await page.locator(`[data-theme-choice="${theme}"]`).click();
+      await expect(page.locator('html')).toHaveAttribute('data-theme',theme);
+      const size = await page.evaluate(() => ({width:innerWidth,scroll:document.documentElement.scrollWidth,title:document.querySelector('#release-title').getBoundingClientRect().right}));
+      expect(size.scroll).toBeLessThanOrEqual(size.width);
+      expect(size.title).toBeLessThanOrEqual(size.width);
+      await expect(page.locator('#tabs [data-view="effort"]')).toBeInViewport();
+      await page.screenshot({animations:'disabled',path:`test-results/appearance-${theme}-compact.png`});
+    }
+    await page.locator('[data-theme-choice="light"]').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme','light');
+    await closeWindow(app);
+    app = await electron.launch(options); page = await app.firstWindow();
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    await expect(page.locator('html')).toHaveAttribute('data-theme','light');
+    await expect(page.locator('[data-theme-choice="light"]')).toHaveAttribute('aria-pressed','true');
+    await projectTab(page,'terminal');
+    await expect(page.locator('.xterm-screen')).toContainText('THEME-PRESERVED');
+    expect((await page.evaluate(() => window.tricorder.terminals.list()))[0].id).toBe(terminal.id);
+    expect(errors).toEqual([]);
+  } finally {
+    await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
+    await cleanupBroker(path.join(temp,'run/pty.sock')); fs.rmSync(temp,{recursive:true,force:true});
+  }
+});

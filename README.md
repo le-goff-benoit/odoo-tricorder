@@ -21,7 +21,13 @@ travail ; Tricorder le rend lisible.** Rien n’est modifié depuis le cockpit.
 questions à trancher, travaux à déployer et déploiements vérifiés. Les sept onglets
 sont Statut, Terminal, Intentions, Plan, Mémoire, Express et Temps.
 
-![Statut d’une release synthétique](docs/screenshots/statut.png)
+La **release active** est le titre principal. La branche Git et le choix de shell
+sont regroupés dans le Terminal ; les outils et préférences restent discrets.
+Les commandes en haut à droite proposent **Clair / Sombre / Système**, avec un
+choix mémorisé et un terminal assorti sans interruption de session.
+
+![Cockpit en thème clair](docs/screenshots/statut-light.png)
+![Cockpit en thème sombre](docs/screenshots/statut-dark.png)
 
 **Plan** ouvre le Kanban : À faire → En cours → Tests en cours → À déployer →
 Déployées. Un contrôle périmé reste indiqué « Tests à reprendre ». Une publication

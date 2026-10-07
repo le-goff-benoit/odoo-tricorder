@@ -37,6 +37,9 @@ const paths = {
   star: '<path d="m12 3 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>',
   person: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',
   tag: '<path d="M3 12V4h8l9 9-8 8z"/><circle cx="7" cy="8" r="1"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/>',
+  moon: '<path d="M20.5 13a9 9 0 0 1-9.5-9.5A9 9 0 1 0 20.5 13Z"/>',
+  monitor: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/>',
   branch: '<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 7v10m12-10a10 10 0 0 1-12 9"/>',
 };
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.grid}</svg>`;
@@ -65,15 +68,20 @@ $('#app').innerHTML = `
     <nav class="side-nav" aria-label="Vues transversales"><button class="side-item kanban-nav" data-view="kanban">${icon('grid')}<span>Kanban global</span></button></nav>
     <div class="side-heading">Projets</div>
     <div id="project-list" class="project-list"></div>
-    <div class="sidebar-bottom"><button class="install-agents" data-action="agents-link" hidden>${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="about-button" data-action="about" title="À propos de Tricorder">À propos <span id="version"></span></button></div>
+    <div class="sidebar-bottom"><div class="sidebar-utilities"></div><button class="install-agents" data-action="agents-link" hidden>${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="about-button" data-action="about" title="À propos de Tricorder">À propos <span id="version"></span></button></div>
   </aside>
   <main class="workspace">
-    <header class="topbar project-header"><div class="project-identity"><h1 id="project-title"></h1><div id="project-meta" class="project-meta"></div></div><div id="context-bar" class="context-bar"></div><div class="top-actions"><span id="sync-status" class="sync-status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header>
+    <header class="topbar project-header"><div class="project-identity"><h1 id="project-title"></h1><div id="project-meta" class="project-meta"></div></div><div class="top-actions"><div class="theme-switch" role="group" aria-label="Thème de l’interface">${[['light', 'Clair', 'sun'], ['dark', 'Sombre', 'moon'], ['system', 'Système', 'monitor']].map(([value, label, glyph]) => `<button class="icon-button" data-theme-choice="${value}" title="Thème ${label.toLowerCase()}" aria-label="Thème ${label.toLowerCase()}" aria-pressed="false">${icon(glyph)}</button>`).join('')}</div><span id="sync-status" class="sync-status" role="status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header><section id="context-bar" class="context-bar" aria-label="Release sélectionnée"></section>
     <div id="activity-strip" class="activity-strip" hidden></div><nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
-    <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button class="secondary" data-action="find-next">Suivant</button><button class="secondary" data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
+    <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div id="execution-context" class="execution-context"></div><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button class="secondary" data-action="find-next">Suivant</button><button class="secondary" data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
   </main><div id="toast" role="status" hidden></div><dialog id="modal"><div id="modal-content"></div></dialog>`;
 
 function toast(message) { const el = $('#toast'); el.textContent = message; el.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.hidden = true; }, 6500); }
+function setSyncStatus(message, error = false) {
+  $('#sync-status').textContent = message;
+  $('#sync-status').classList.toggle('sync-error', error);
+  $('[data-action="refresh"]').title = 'Actualiser · ' + message;
+}
 function attentionItems() {
   return projects.flatMap(p => [...(p.attention || []).map(t => ({ project: p, task: t })), ...(p.warnings || []).map(reason => ({ project: p, task: { id: 'État', title: 'Lecture à vérifier', reason, status: 'unverified' } }))]);
 }
@@ -82,7 +90,7 @@ function sidebar() {
   const favorites = settings.favorites || [];
   const listed = [...projects].sort((a, b) => Number(favorites.includes(b.path)) - Number(favorites.includes(a.path)) || a.name.localeCompare(b.name));
   $('#project-list').innerHTML = listed.map(p => `
-    <button class="project-item side-item ${current === p.path && !overviewMode ? 'selected' : ''}" data-project="${esc(p.path)}" aria-current="${current === p.path && !overviewMode ? 'page' : 'false'}" title="${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name">${esc(p.name)}</span><span class="project-sub">${esc(p.series || '—')}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || '<p class="muted pad">Aucun projet trouvé. Choisissez le dossier des projets dans Préférences.</p>';
+    <button class="project-item side-item ${current === p.path && !overviewMode ? 'selected' : ''}" data-project="${esc(p.path)}" aria-current="${current === p.path && !overviewMode ? 'page' : 'false'}" title="${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || '<p class="muted pad">Aucun projet trouvé. Choisissez le dossier des projets dans Préférences.</p>';
   $('.install-agents').hidden = crewInstalled;
   cockpitUI.alertSidebar();
 }
@@ -96,7 +104,7 @@ function header() {
   const project = detail || projects.find(p => p.path === current);
   $('#project-title').textContent = overviewMode ? 'Kanban global' : project?.name || 'Aucun projet';
   $('#project-meta').innerHTML = overviewMode ? `<span class="muted">${projects.length} projets</span>`
-    : project ? `${project.series ? `<span class="meta-pill" title="Série Odoo">${esc(project.series)}</span>` : ''}${detail?.branch ? `<span class="meta-pill" title="Branche Git">${icon('branch')}${esc(detail.branch)}${detail.gitChanges ? ` <em>${detail.gitChanges}</em>` : ''}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="${settings.favorites?.includes(current) ? 'Retirer des favoris' : 'Mettre en favori'}" aria-pressed="${!!settings.favorites?.includes(current)}">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier ${esc(project.path)}">${icon('external')}</button>`
+    : project ? `${project.series ? `<span class="meta-pill" title="Série Odoo">${esc(project.series)}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="${settings.favorites?.includes(current) ? 'Retirer des favoris' : 'Mettre en favori'}" aria-pressed="${!!settings.favorites?.includes(current)}">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier ${esc(project.path)}">${icon('external')}</button>`
     : '<span class="muted">Choisissez le dossier des projets dans Préférences.</span>';
   $('#context-bar').hidden = overviewMode || !project;
   $('#tabs').hidden = overviewMode;
@@ -105,7 +113,9 @@ function header() {
     const releases = detail?.releases || project.releases || [];
     const selected = releases.find(r => r.id === detail?.selectedRelease);
     const environment = detail?.environments?.find(e => e.name === context.environment);
-    $('#context-bar').innerHTML = `<label class="pill-select release-context ${selected ? selected.status : 'none'}"><span class="sr-only context-label">Release</span>${selected ? `<span class="release-summary" title="Release ${releaseLabel(selected).toLowerCase()} · ${esc(selected.id)}"><i class="status-dot ${esc(selected.status)}"></i><span class="sr-only">${releaseLabel(selected)}</span></span>` : icon('tag')}<select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${releases.map(r => `<option value="${esc(r.id)}" title="${esc(r.id)} · ${r.taskCount ?? '?'} tâches / points" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${r.id === detail?.selectedRelease ? esc(r.title || r.id) : `${esc(r.id.slice(0, 10))} · ${esc(r.title || r.id)} · ${esc(releaseLabel(r))}`}</option>`).join('')}</select>${icon('chevron')}</label><label class="pill-select environment-context ${environment?.kind === 'production' ? 'production' : ''}"><span class="sr-only context-label">Environnement</span>${icon('server')}<select id="environment-select" aria-label="Environnement" title="Repère pour les nouveaux terminaux ; ne change ni la connexion, ni les permissions, ni le terminal existant."><option value="">Shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select>${icon('chevron')}</label>`;
+    const date = selected?.id?.match(/^\d{4}-\d{2}-\d{2}/)?.[0];
+    $('#context-bar').innerHTML = `<div class="release-heading"><div class="release-kicker"><span>${selected ? 'Release' : 'Projet'}</span>${selected ? `<span class="release-summary"><i class="status-dot ${esc(selected.status)}"></i>${esc(releaseLabel(selected))}</span>` : ''}${date ? `<time datetime="${date}">${new Date(date + 'T12:00:00').toLocaleDateString('fr-CH', {day:'numeric',month:'long',year:'numeric'})}</time>` : ''}</div><label class="release-picker release-context"><h2 id="release-title">${esc(selected?.title || (selected ? selected.id : 'Préparer la prochaine release'))}</h2>${icon('chevron')}<select id="release-select" aria-label="Release"><option value="" ${!detail?.selectedRelease ? 'selected' : ''}>Aucune release</option>${releases.map(r => `<option value="${esc(r.id)}" ${r.id === detail?.selectedRelease ? 'selected' : ''}>${esc(r.id.slice(0, 10))} · ${esc(r.title || r.id)} · ${esc(releaseLabel(r))}</option>`).join('')}</select></label></div>`;
+    $('#execution-context').innerHTML = `${detail?.branch ? `<span class="git-context" title="Branche Git${detail.gitChanges ? ' · ' + esc(detail.gitChanges) + ' modification(s) locale(s)' : ''}">${icon('branch')}<span>${esc(detail.branch)}</span>${detail.gitChanges ? '<i class="git-dirty" aria-label="Modifications locales"></i>' : ''}</span>` : ''}<label class="pill-select environment-context ${environment?.kind === 'production' ? 'production' : ''}"><span class="sr-only context-label">Environnement</span>${icon('server')}<select id="environment-select" aria-label="Environnement" title="Contexte des nouveaux terminaux ; les sessions existantes sont conservées."><option value="">Shell local</option>${(detail?.environments || []).map(e => `<option value="${esc(e.name)}" ${context.environment === e.name ? 'selected' : ''}>${esc(e.name)} · ${esc(e.kind)}</option>`).join('')}</select>${icon('chevron')}</label><span class="execution-caption">Pour les nouveaux terminaux</span>`;
   }
 }
 function setView(next) {
@@ -133,7 +143,7 @@ async function followSession(id) {
 }
 function render() {
   const active = document.activeElement;
-  const focusKey = ['data-task', 'data-plan-mode', 'data-plan-filter', 'data-graph-select', 'data-intention', 'data-view', 'data-cockpit'].find(k => active?.hasAttribute(k));
+  const focusKey = ['data-task', 'data-plan-mode', 'data-plan-filter', 'data-graph-select', 'data-intention', 'data-view', 'data-cockpit', 'data-theme-choice'].find(k => active?.hasAttribute(k));
   const focusValue = focusKey ? active.getAttribute(focusKey) : null;
   const scroll = [$('#content').scrollTop, $('#content .graph-scroll')?.scrollLeft || 0, $('#content .graph-scroll')?.scrollTop || 0];
   cockpitUI.rememberBoard();
@@ -362,7 +372,7 @@ async function openDocument(relative) { const doc = await api.document(current, 
 async function setEnvironment(value) { settings = await api.settings({ context: { project: current, release: detail?.selectedRelease || '', environment: value } }); render(); toast('Contexte appliqué aux nouveaux terminaux.'); }
 async function refresh() {
   if (pollBusy) return;
-  pollBusy = true; $('#sync-status').textContent = 'Actualisation…';
+  pollBusy = true; setSyncStatus('Actualisation…');
   const project = current, ticket = generation;
   const before = JSON.stringify([projects, detail, sessions, projectError]);
   try {
@@ -396,8 +406,8 @@ async function refresh() {
     if ([...keys].some(k => !notificationKeys.has(k))) api.notify({ title: 'Tricorder · à votre attention', body: `${items.length} élément(s) à examiner dans vos projets.` });
     notificationKeys = keys;
     if (before !== JSON.stringify([projects, detail, sessions, projectError])) render();
-    $('#sync-status').textContent = 'À jour · ' + new Date().toLocaleTimeString('fr-CH', { hour: '2-digit', minute: '2-digit' });
-  } catch (error) { $('#sync-status').textContent = 'Actualisation incomplète'; toast(error.message); }
+    setSyncStatus('À jour · ' + new Date().toLocaleTimeString('fr-CH', { hour: '2-digit', minute: '2-digit' }));
+  } catch (error) { setSyncStatus('Actualisation incomplète', true); toast(error.message); }
   finally { pollBusy = false; }
 }
 document.addEventListener('click', async event => {
@@ -494,6 +504,7 @@ async function start() {
   try {
     const initial = await api.bootstrap(); projects = initial.projects; settings = initial.settings; version = initial.version; crewInstalled = initial.crewInstalled !== false;
     let revision = await api.revision(), checkingRevision = false;
+    cockpitUI.applyPreferences();
     split = !!settings.ui?.split;
     $('#version').textContent = 'v' + version;
     notificationKeys = new Set(attentionItems().map(i => `${i.project.path}:${i.task.id}:${i.task.status}`));
@@ -501,7 +512,7 @@ async function start() {
     const chosen = projects.find(p => p.path === settings.activeProject) || projects.find(p => p.attention?.length) || projects[0];
     // An early click on the global board must survive asynchronous bootstrap.
     if (chosen && !overviewMode) await chooseProject(chosen.path); else render();
-    $('#sync-status').textContent = 'À jour';
+    setSyncStatus('À jour');
     setInterval(refresh, 30000);
     setInterval(async () => {
       if (checkingRevision || pollBusy || busy) return;
@@ -513,6 +524,6 @@ async function start() {
       finally { checkingRevision = false; }
     }, 2000);
     setInterval(() => refreshSessions().catch(() => {}), 5000);
-  } catch (error) { toast(error.message); $('#sync-status').textContent = 'Chargement impossible'; render(); }
+  } catch (error) { toast(error.message); setSyncStatus('Chargement impossible', true); render(); }
 }
 start();
