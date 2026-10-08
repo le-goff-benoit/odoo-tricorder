@@ -1,18 +1,23 @@
 # Tricorder
 
 **Votre terminal, accompagné du suivi graphique de vos projets et releases.**
-Préversion publiée : **0.6.0-rc.4**.
+Préversion publiée : **0.6.0-rc.5**.
 
-[Analyse, changements et recette](release/2026-10-08_revue/README.md).
+[Revue ergonomique et captures](release/2026-10-08_design/README.md) · [Revue fonctionnelle](release/2026-10-08_revue/README.md).
 
 Une application et une fenêtre : le terminal natif et le graphique partagent
 le même espace. Les modèles peuvent être réutilisés par projet ou alimenter une
 conversation avec plusieurs tâches et plusieurs projets. Les anciens dossiers
 de release restent accessibles sans migration.
 
-![Terminal et suivi graphique dans une fenêtre](release/2026-10-08_revue/captures/terminal-workflow.png)
+![Bibliothèque de workflows](release/2026-10-08_design/captures/library-dark.png)
 
-*Capture sur projet fictif avec fournisseur simulé pour la recette d’interface.*
+*Capture sur un espace fictif, sans données client.*
+
+La bibliothèque, les projets et les réglages disposent de toute la largeur.
+**Terminal**, en haut de la fenêtre, affiche ou masque la session sans la fermer.
+Lancer une conversation ouvre le terminal avec son suivi graphique à côté.
+La recherche de modèles et les propriétés latérales facilitent la conception.
 
 ## Dessiner, lancer et converser
 
@@ -72,7 +77,8 @@ ne lit pas vos secrets. Le choix d’un fournisseur ne prouve pas sa connexion.
 
 ## Personnaliser ou exécuter un autre workflow
 
-**Workflows** retrouve le dessin en cours dans la même fenêtre. La bibliothèque,
+Depuis les vues de release, **Vue des workflows** retrouve la dernière vue ouverte
+(bibliothèque, projet ou éditeur) dans la même fenêtre. La bibliothèque,
 les workflows globaux, les récurrences et les connexions utilisent cette navigation.
 Le terminal reste disponible pendant ces changements de vue.
 

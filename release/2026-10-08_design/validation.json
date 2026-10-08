@@ -1,0 +1,28 @@
+{
+  "version": "0.6.0-rc.5",
+  "date": "2026-10-08",
+  "python": {
+    "passed": 187
+  },
+  "javascript": {
+    "passed": 74
+  },
+  "source_ui": {
+    "covered": 49,
+    "optional_real_project_skipped": 2,
+    "final_targeted_passed": 8,
+    "note": "Après la passe complète, l’attente du terminal vide a été adaptée au nouveau comportement ; huit parcours concernés ont été rejoués et réussis."
+  },
+  "packaged_ui": {
+    "passed": 49,
+    "optional_real_project_skipped": 2,
+    "failed": 0
+  },
+  "deb_sha256": "808d89dc916f9a010e6751c70a0a805b5e1cb190400bb2e1cedb9787f90939a9",
+  "app_asar_sha256": "7bd6f90abdc2534863c011ddba6ec13e0c52bb06b491c79f7f45f91e3831ff2d",
+  "deb_matches_tested_payload": {
+    "files": 41,
+    "matched": true
+  },
+  "captures": "Projets synthétiques, aucun appel IA payant ni déploiement réel."
+}

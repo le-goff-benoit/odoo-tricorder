@@ -11,9 +11,17 @@ async function studioPage() {
 
 async function quitApplication() { await app.close(); }
 
-test.beforeEach(async () => {
+test.beforeEach(async ({}, testInfo) => {
   directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-studio-ui-'));
-  app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? ['--workflow-studio'] : [root, '--workflow-studio'], env: { ...process.env, PATH: path.join(directory, 'bin') + ':' + process.env.PATH, TRICORDER_STATE_DIR: directory, TRICORDER_HOME: directory, TRICORDER_TEST_MODE: '1' }, timeout: 20000 });
+  const extraEnv = {};
+  if (testInfo.title.startsWith('optional workflow setup')) {
+    const pack = path.join(directory, 'invalid-pack'); fs.mkdirSync(pack);
+    fs.writeFileSync(path.join(pack, 'tricorder-pack.json'), '{invalid');
+    extraEnv.TRICORDER_AGENTS_DIR = pack;
+    const project = path.join(directory, 'sample-project'); fs.mkdirSync(project); fs.mkdirSync(path.join(project, '.odoo-agents'));
+    require('node:child_process').execFileSync('git', ['init', '-q', project]);
+  }
+  app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? ['--workflow-studio'] : [root, '--workflow-studio'], env: { ...process.env, PATH: path.join(directory, 'bin') + ':' + process.env.PATH, TRICORDER_STATE_DIR: directory, TRICORDER_HOME: directory, TRICORDER_TEST_MODE: '1', ...extraEnv }, timeout: 20000 });
   page = await studioPage();
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
 });
@@ -547,4 +555,100 @@ test('review: Odoo profiles, editable unresolved outcome and synthetic release c
   await expect(page.getByLabel('Agent dédié (facultatif)',{exact:true})).toHaveValue('odoo-support');
   await page.locator('#node-profile').scrollIntoViewIfNeeded();
   await page.screenshot({path:test.info().outputPath('pack-odoo.png')});
+});
+
+test('design review: library and management views use the workspace, with readable actions in both themes', async () => {
+  test.setTimeout(120000);
+  const AxeBuilder = require('@axe-core/playwright').default;
+  for (const theme of ['light', 'dark']) {
+    await page.locator(`[data-theme-choice="${theme}"]`).click();
+    for (const width of [1440, 1024, 800]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const [route, heading] of [['library', 'Bibliothèque'], ['projects', 'Vos projets'], ['global', 'Workflows globaux'], ['connections', 'Connexions'], ['schedules', 'Workflows récurrents']]) {
+        await page.locator(`[data-workflow-route="${route}"]`).click();
+        await expect(page.getByRole('heading', { name: heading, exact: true, level: route === 'projects' ? 2 : 1 })).toBeVisible();
+        await expect(page.locator('#terminal-workspace')).toBeHidden();
+        const bounds = await page.locator('#workflow-panel').boundingBox();
+        const sidebar = await page.locator('.sidebar').boundingBox();
+        expect(bounds.width).toBeGreaterThan(width - sidebar.width - 3);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        const overflow = await page.locator('.page-heading button').evaluateAll(buttons => buttons.filter(b => b.scrollWidth > b.clientWidth + 2 || b.getBoundingClientRect().right > innerWidth).map(b => b.textContent));
+        expect(overflow).toEqual([]);
+        if (width === 1440) {
+          await page.screenshot({path:test.info().outputPath(`${route}-${theme}.png`)});
+          const scan = await new AxeBuilder({page}).setLegacyMode(true).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+          expect(scan.violations.map(v => ({id:v.id, nodes:v.nodes.map(n => n.target)}))).toEqual([]);
+        }
+      }
+    }
+  }
+  await page.locator('[data-workflow-route="library"]').click();
+  await page.getByLabel('Rechercher un modèle').fill('zzzz aucun résultat');
+  await expect(page.locator('.template-card:visible')).toHaveCount(0);
+  await expect(page.locator('#template-empty')).toBeVisible();
+  await page.getByLabel('Rechercher un modèle').fill('COMMANDE LOCALE');
+  await expect(page.locator('.template-card:visible')).toHaveCount(1);
+  await expect(page.locator('#template-empty')).toBeHidden();
+  await page.getByLabel('Rechercher un modèle').clear();
+  await page.screenshot({path:test.info().outputPath('library-dark-800.png')});
+});
+
+test('terminal visibility preserves a live session while browsing and editing', async () => {
+  await example();
+  await page.getByRole('button', {name:'Ouvrir le terminal du workflow',exact:true}).click();
+  await expect(page.locator('#terminal-workspace')).toBeVisible();
+  const before = await page.evaluate(() => window.tricorder.terminals.list());
+  expect(before.length).toBe(1);
+  await page.locator('[data-workflow-route="library"]').click();
+  await expect(page.locator('#terminal-workspace')).toBeHidden();
+  await page.locator('[data-action="terminal-toggle"]').click();
+  await expect(page.locator('#terminal-workspace')).toBeVisible();
+  await expect(page.locator('.xterm-screen')).toBeVisible();
+  const after = await page.evaluate(() => window.tricorder.terminals.list());
+  expect(after[0].id).toBe(before[0].id); expect(after[0].pid).toBe(before[0].pid);
+  expect(after[0].alive).toBe(true);
+  for (const width of [1024, 800]) {
+    await page.setViewportSize({width,height:900});
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    const term = await page.locator('#terminal-workspace').boundingBox();
+    const graph = await page.locator('#workflow-panel').boundingBox();
+    if (width === 800) expect(graph.y).toBeGreaterThanOrEqual(term.y + term.height - 1);
+    else expect(graph.x).toBeGreaterThanOrEqual(term.x + term.width - 1);
+    await page.locator('[data-action="workflow-updates"]').click();
+    const dialog = await page.getByRole('dialog').boundingBox();
+    expect(dialog.width).toBeGreaterThan(500);
+    await page.getByRole('button', {name:'Fermer la fenêtre',exact:true}).click();
+  }
+  await page.locator('[data-action="terminal-toggle"]').click();
+  expect(await app.evaluate(({BrowserWindow}) => BrowserWindow.getAllWindows().length)).toBe(1);
+});
+
+test('bootstrap failure is distinct from an empty catalog and Actualiser recovers', async () => {
+  await app.evaluate(({ipcMain}) => {
+    // Fault injection is confined to this synthetic Electron instance.
+    const channel = [...ipcMain._invokeHandlers.keys()].find(key => key.endsWith('bootstrap') && !key.startsWith('studio:'));
+    global.bootstrapChannel = channel;
+    global.originalBootstrap = ipcMain._invokeHandlers.get(channel);
+    ipcMain.removeHandler(channel); ipcMain.handle(channel, () => {throw new Error('Catalogue synthétique indisponible');});
+  });
+  await page.reload();
+  await expect(page.locator('#catalog-warning')).toContainText('Catalogue synthétique indisponible');
+  await expect(page.locator('#project-list')).not.toContainText('Aucun projet trouvé');
+  await app.evaluate(({ipcMain}) => {ipcMain.removeHandler(global.bootstrapChannel);ipcMain.handle(global.bootstrapChannel,global.originalBootstrap);});
+  await page.locator('[data-action="refresh"]').click();
+  await expect(page.locator('#catalog-warning')).toBeHidden();
+  await expect(page.locator('#sync-status')).toContainText('À jour');
+});
+
+
+test('optional workflow setup failure keeps native projects and can be retried', async () => {
+  await expect(page.locator('#catalog-warning')).toBeVisible();
+  await expect(page.locator('#project-list')).toContainText('sample-project');
+  await expect(page.locator('#sync-status')).toHaveText('Workflows à vérifier');
+  fs.writeFileSync(path.join(directory, 'invalid-pack/tricorder-pack.json'), JSON.stringify({schema:1,engine_schema:1,id:'fixture',version:'1',profiles:[]}));
+  await page.locator('[data-action="refresh"]').click();
+  await expect(page.locator('#catalog-warning')).toBeHidden();
+  await expect(page.locator('#project-list')).toContainText('sample-project');
+  await page.locator('[data-workflow-route="projects"]').click();
+  await expect(page.locator('.project-card')).toContainText('sample-project');
 });

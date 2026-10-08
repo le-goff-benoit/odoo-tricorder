@@ -198,8 +198,11 @@ Commence par annoncer le workflow, son périmètre et demander ce que je souhait
   handle('bootstrap', async () => {
     const catalogProjects = await overview();
     const pack = process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents');
-    const configured = await studio.backend({ action: 'project.configure-catalog', projects: catalogProjects, pack });
-    return { projects: catalogProjects, configured, settings, initialWorkspace: initialWorkspace(), links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home,
+    let configured = [], workflowWarning = null;
+    try { configured = await studio.backend({ action: 'project.configure-catalog', projects: catalogProjects, pack }); }
+    catch (error) { workflowWarning = error.message; }
+    // The optional workflow catalog must not hide native projects and terminals.
+    return { projects: catalogProjects, configured, workflowWarning, settings, initialWorkspace: initialWorkspace(), links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home,
       crewInstalled: fs.existsSync(path.join(pack, 'scripts', 'odoo_plan.py')) };
   });
   handle('overview', overview);

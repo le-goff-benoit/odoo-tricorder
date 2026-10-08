@@ -1,3 +1,14 @@
+# Ergonomie livrée — 0.6.0-rc.5
+
+La [revue des vues](../release/2026-10-08_design/README.md) décrit la dernière passe.
+Le partage permanent n’est plus la règle : consulter et dessiner utilise l’espace ;
+lancer la conversation affiche le terminal. Le bouton Terminal reste disponible.
+Les deux parties utilisent les mêmes tokens (couleurs, typographie, contrôles).
+Les propriétés répondent à la largeur du panneau par container queries ; les
+modales restent hors de ce conteneur pour conserver la largeur de la fenêtre.
+La navigation garde ses libellés à 800 px ; le partage passe verticalement sous
+850 px. Les décisions précédentes ci-dessous constituent l’historique.
+
 # État de la conception — revue du 8 octobre 2026
 
 La [revue de release](../release/2026-10-08_revue/README.md) fait foi sur les

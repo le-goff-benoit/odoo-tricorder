@@ -314,6 +314,7 @@ test('design system: common gutters, cards and controls across every project vie
         else if (view === 'plan') { await projectTab(page, 'plan'); await page.locator('[data-plan-mode="list"]').click(); }
         else await projectTab(page, view);
         await expect(page.locator('#content > .page')).toBeVisible();
+        if (view !== 'work') await expect(page.locator('#terminal-workspace')).toBeHidden();
         const styles = await page.evaluate(() => {
           const css = q => getComputedStyle(document.querySelector(q));
           return { page: css('#content > .page').paddingLeft, right: css('#content > .page').paddingRight,
@@ -601,8 +602,8 @@ test('flow starts: delayed terminal cannot hijack navigation, ambiguous adoption
     });
     await expect(page.locator('#session-count')).toHaveCount(0);
     await expect(page.locator('.no-release')).toBeVisible();
-    await expect(page.locator('#terminal-workspace')).toBeVisible();
-    // The new layout retains the terminal but must not replace the selected view.
+    await expect(page.locator('#terminal-workspace')).toBeHidden();
+    // A late startup must not reveal an empty terminal in the newly selected project.
     await expect(page.locator('.no-release')).toBeVisible();
     await expect.poll(() => page.evaluate(async () => (await window.tricorder.terminals.list()).length)).toBe(1);
     const first = (await page.evaluate(() => window.tricorder.terminals.list()))[0];

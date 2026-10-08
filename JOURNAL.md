@@ -82,3 +82,15 @@ Les interventions antérieures restent dans l’historique Git. Le suivi détail
 - Les traces locales de projets clients restent exclues de la publication.
 
 - Réception GitHub : nettoyage des brokers synthétiques fiabilisé après ENOTEMPTY ; paquet applicatif inchangé, trois parcours ciblés verts.
+
+
+## 2026-10-08 — Ergonomie 0.6.0-rc.5
+- Revue des vues workflow, release, ressources, réglages et dialogues.
+- Bibliothèque et gestion en pleine largeur ; terminal accessible sans recréer de session.
+- Vues de release libérées du terminal vide ; session active conservée pendant le travail.
+- Recherche de modèles, actions groupées et palette commune clair/sombre.
+- Inspecteur latéral ou inférieur selon la largeur du panneau ; modales à la largeur de la fenêtre.
+- Questions en attente visibles dans l’activité ; chargement incomplet distinct du catalogue vide.
+- Reprise d’initialisation par Actualiser et indépendance du catalogue natif face aux erreurs des workflows.
+- Rapport et captures synthétiques : `release/2026-10-08_design/README.md`.
+- Recette : 187 tests Python, 74 JavaScript, 49 parcours sur le paquet ; deux scénarios réels facultatifs exclus.

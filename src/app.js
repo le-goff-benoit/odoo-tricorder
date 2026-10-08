@@ -6,6 +6,7 @@ import { SearchAddon } from '@xterm/addon-search';
 import '@xterm/xterm/css/xterm.css';
 import './style.css';
 import './design-system.css';
+import './workspace-layout.css';
 import { cockpit, providerIcon } from './cockpit.js';
 import { documentBody } from './markdown.js';
 import { newReleaseContext } from './release-context.mjs';
@@ -63,6 +64,8 @@ let notificationKeys = new Set();
 let kanbanClosed = false, kanbanExecuting = false;
 let launchingTerminal = false;
 let terminalMaximized = false;
+let terminalPreference = null;
+let catalogError = null, bootstrapped = false, starting = false;
 let workflowMode = false, workflowContext = null, workflowTerminalPath = null;
 const terminalProject = () => workflowMode ? (workflowTerminalPath || current) : current;
 
@@ -85,12 +88,12 @@ $('#app').innerHTML = `
   <aside class="sidebar" aria-label="Tricorder">
     <div class="brand"><div class="brand-mark">${icon('terminal')}</div><span class="brand-name">Tricorder</span></div>
     <nav class="side-nav" aria-label="Vues transversales"><button class="side-item" data-workflow-route="overview">${icon('plan')}<span>Activité des workflows</span></button><button class="side-item" data-workflow-route="library">${icon('folder')}<span>Bibliothèque</span></button><button class="side-item" data-workflow-route="global" aria-label="Globaux">${icon('branch')}<span>Workflows globaux</span></button><button class="side-item" data-workflow-route="projects">${icon('folder')}<span>Projets</span></button><button class="side-item kanban-nav" data-view="kanban">${icon('grid')}<span>Kanban global</span></button></nav>
-    <div class="side-heading">Projets</div>
+    <div class="side-heading">Releases par projet</div>
     <div id="project-list" class="project-list"></div>
-    <div class="sidebar-bottom"><button class="side-item" data-workflow-route="schedules">${icon('chart')}<span>Récurrences</span></button><button class="side-item" data-workflow-route="connections">${icon('server')}<span>Connexions</span></button><button class="side-item" data-action="workflow-workspace">${icon("plan")}<span>Workflows</span></button><div class="sidebar-utilities"></div><button class="install-agents" data-action="agents-link" hidden>${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="side-item" data-action="workflow-updates">${icon('refresh')}<span>Mises à jour</span></button><button class="about-button" data-action="about" title="À propos de Tricorder">À propos <span id="version"></span></button></div>
+    <div class="sidebar-bottom"><button class="side-item" data-workflow-route="schedules">${icon('chart')}<span>Récurrences</span></button><button class="side-item" data-workflow-route="connections">${icon('server')}<span>Connexions</span></button><button class="side-item" data-action="workflow-workspace">${icon("plan")}<span>Vue des workflows</span></button><div class="sidebar-utilities"></div><button class="install-agents" data-action="agents-link" hidden>${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="side-item" data-action="workflow-updates">${icon('refresh')}<span>Mises à jour</span></button><button class="about-button" data-action="about" title="À propos de Tricorder">À propos <span id="version"></span></button></div>
   </aside>
   <main class="workspace">
-    <header class="topbar project-header"><div class="project-identity"><h1 id="project-title"></h1><div id="project-meta" class="project-meta"></div></div><div class="top-actions"><label class="provider-choice">Fournisseur IA<select id="preferred-provider" aria-label="Fournisseur IA"><option value="codex">OpenAI · Codex</option><option value="claude">Anthropic · Claude</option></select></label><div class="theme-switch" role="group" aria-label="Thème de l’interface">${[['light', 'Clair', 'sun'], ['dark', 'Sombre', 'moon'], ['system', 'Système', 'monitor']].map(([value, label, glyph]) => `<button class="icon-button" data-theme-choice="${value}" title="Thème ${label.toLowerCase()}" aria-label="Thème ${label.toLowerCase()}" aria-pressed="false">${icon(glyph)}</button>`).join('')}</div><span id="sync-status" class="sync-status" role="status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header><section id="context-bar" class="context-bar" aria-label="Release sélectionnée"></section>
+    <header class="topbar project-header"><div class="project-identity"><div id="project-title" role="heading" aria-level="1"></div><div id="project-meta" class="project-meta"></div></div><div class="top-actions"><button class="secondary terminal-toggle" data-action="terminal-toggle" aria-pressed="false" title="Afficher ou masquer le terminal sans fermer les sessions">${icon('terminal')}<span>Terminal</span><span id="terminal-count"></span></button><label class="provider-choice">Fournisseur IA<select id="preferred-provider" aria-label="Fournisseur IA"><option value="codex">OpenAI · Codex</option><option value="claude">Anthropic · Claude</option></select></label><div class="theme-switch" role="group" aria-label="Thème de l’interface">${[['light', 'Clair', 'sun'], ['dark', 'Sombre', 'moon'], ['system', 'Système', 'monitor']].map(([value, label, glyph]) => `<button class="icon-button" data-theme-choice="${value}" title="Thème ${label.toLowerCase()}" aria-label="Thème ${label.toLowerCase()}" aria-pressed="false">${icon(glyph)}</button>`).join('')}</div><span id="sync-status" class="sync-status" role="status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header><div id="catalog-warning" class="catalog-warning" role="alert" hidden></div><section id="context-bar" class="context-bar" aria-label="Release sélectionnée"></section>
     <div id="activity-strip" class="activity-strip" hidden></div><nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
     <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div class="workflow-launcher"><label>Workflow<select id="workflow-choice" aria-label="Workflow">${Object.entries(WORKFLOWS).map(([id, w]) => `<option value="${id}">${w.title}</option>`).join('')}</select></label><button class="primary" data-action="workflow-start">Démarrer le workflow</button></div><div class="terminal-heading"><strong>Terminal</strong><button class="secondary" data-action="terminal-maximize">Agrandir le terminal</button></div><div id="execution-context" class="execution-context"></div><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button class="secondary" data-action="find-next">Suivant</button><button class="secondary" data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
   </main><div id="toast" role="status" hidden></div><dialog id="modal"><div id="modal-content"></div></dialog>`;
@@ -101,7 +104,7 @@ const studioUI = mountStudio(workflowHost, {
   context(context) { workflowContext = context; if (workflowMode) render(); },
   async openTerminal(project, graph, conversation) {
     const result = await api.workflowTerminal({ project: project.id, conversation });
-    workflowTerminalPath = result.project;
+    workflowTerminalPath = result.project; terminalPreference = true; terminalMaximized = false;
     selectedSession.set(result.project, result.id);
     await refreshSessions(); render(); await mountTerminal(result.id);
     terminals.get(result.id)?.term.focus();
@@ -114,7 +117,7 @@ let workflowNavigation = Promise.resolve();
 function openWorkflows(route = null) {
   workflowNavigation = workflowNavigation.catch(() => {}).then(async () => {
     workflowMode = true; overviewMode = false; terminalMaximized = false;
-    render(); if (route) await studioUI.navigate(route);
+    render(); if (route) { terminalPreference = null; await studioUI.navigate(route); }
   });
   return workflowNavigation;
 }
@@ -137,8 +140,9 @@ function sidebar() {
   const favorites = settings.favorites || [];
   const listed = [...projects].sort((a, b) => Number(favorites.includes(b.path)) - Number(favorites.includes(a.path)) || a.name.localeCompare(b.name));
   $('#project-list').innerHTML = listed.map(p => `
-    <button class="project-item side-item ${current === p.path && !overviewMode ? 'selected' : ''}" data-project="${esc(p.path)}" aria-current="${current === p.path && !overviewMode ? 'page' : 'false'}" title="${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || '<p class="muted pad">Aucun projet trouvé. Choisissez le dossier des projets dans Préférences.</p>';
+    <button class="project-item side-item ${current === p.path && !overviewMode && !workflowMode ? 'selected' : ''}" data-project="${esc(p.path)}" aria-current="${current === p.path && !overviewMode && !workflowMode ? 'page' : 'false'}" title="${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || `<p class="muted pad">${catalogError ? 'Projets indisponibles. Réessayez avec Actualiser.' : !bootstrapped ? 'Lecture des projets…' : 'Aucun projet trouvé. Choisissez le dossier des projets dans Préférences.'}</p>`;
   $('.install-agents').hidden = crewInstalled;
+  $('[data-action="workflow-workspace"]').hidden = workflowMode;
   cockpitUI.alertSidebar();
 }
 function tabs() {
@@ -168,6 +172,7 @@ function header() {
 }
 function setView(next) {
   workflowMode = false;
+  if (next === 'terminal') terminalPreference = true;
   if (next === 'kanban') { overviewMode = true; render(); $('#content').scrollTop = 0; return; }
   if (SECONDARY_VIEWS.some(([id]) => id === next) || RESOURCE_VIEWS.includes(next)) detailsOpen = true;
   if (next === 'project') next = 'documents';
@@ -198,18 +203,27 @@ function render() {
   const scroll = [$('#content').scrollTop, $('#content .graph-scroll')?.scrollLeft || 0, $('#content .graph-scroll')?.scrollTop || 0];
   cockpitUI.rememberBoard();
   sidebar(); header(); tabs();
-  workflowHost.hidden = !workflowMode || terminalMaximized;
+  if (workflowMode) { $('#project-title').removeAttribute('role'); $('#project-title').removeAttribute('aria-level'); }
+  else { $('#project-title').setAttribute('role', 'heading'); $('#project-title').setAttribute('aria-level', '1'); }
+  const autoTerminal = workflowMode ? workflowContext?.route === 'workflow' && sessions.some(s => s.alive && s.project === terminalProject()) : !overviewMode && !!current && (['work', 'terminal'].includes(view) || sessions.some(s => s.alive && s.project === current));
+  const terminalVisible = terminalPreference ?? autoTerminal;
+  workflowHost.hidden = !workflowMode || (terminalMaximized && terminalVisible);
+  $('.main-content').classList.toggle('workflow-visible', workflowMode);
+  $('.main-content').classList.toggle('terminal-docked', terminalVisible && !terminalMaximized);
+  $('#terminal-workspace').hidden = !terminalVisible;
+  $('[data-action="terminal-toggle"]').setAttribute('aria-pressed', String(terminalVisible));
+  $('#terminal-count').textContent = sessions.filter(s => s.alive && s.project === terminalProject()).length || '';
+  for (const item of document.querySelectorAll('[data-workflow-route]')) item.setAttribute('aria-current', workflowMode && item.dataset.workflowRoute === workflowContext?.activeRoute ? 'page' : 'false');
+  $('#catalog-warning').hidden = !catalogError;
+  $('#catalog-warning').textContent = catalogError ? `Chargement incomplet : ${catalogError} · Utilisez Actualiser pour réessayer.` : '';
   if (workflowMode) {
-    $('#project-title').textContent = 'Votre espace de travail';
-    for (const item of document.querySelectorAll('[data-workflow-route]')) item.setAttribute('aria-current', item.dataset.workflowRoute === workflowContext?.route ? 'page' : 'false');
+    $('#project-title').textContent = workflowContext?.title || 'Votre espace de travail';
     $('#context-bar').hidden = true; $('#tabs').hidden = true; $('#activity-strip').hidden = true;
-    $('#project-meta').textContent = workflowContext?.title || 'Dessiner, lancer et suivre';
-    $('.main-content').classList.toggle('terminal-docked', !terminalMaximized);
-    $('#terminal-workspace').hidden = false; $('#content').hidden = true;
+    $('#project-meta').textContent = '';
+    $('#content').hidden = true;
     $('[data-action="terminal-maximize"]').textContent = terminalMaximized ? 'Afficher le workflow' : 'Agrandir le terminal';
     renderTerminals(); return;
   }
-  const terminalVisible = !overviewMode && !!current;
   $('.main-content').classList.toggle('terminal-docked', terminalVisible && !terminalMaximized);
   $('[data-action="terminal-maximize"]').textContent = terminalMaximized ? 'Afficher le workflow' : 'Agrandir le terminal';
   $('#terminal-workspace').hidden = !terminalVisible;
@@ -226,7 +240,7 @@ function render() {
   if (focusKey && !active.isConnected && !document.querySelector('dialog[open]')) document.querySelector(`[${focusKey}="${CSS.escape(focusValue)}"]`)?.focus({ preventScroll: true });
 }
 async function chooseProject(project, release) {
-  workflowMode = false;
+  workflowMode = false; terminalPreference = null;
   current = project; overviewMode = false; detail = null; selectedTask = null; projectError = null; busy = true;
   const ticket = ++generation;
   try {
@@ -383,10 +397,11 @@ api.terminals.onEvent(message => {
   }
 });
 async function newTerminal(task = null, provider = null, work = undefined) {
+  terminalPreference = true;
   if (workflowMode) {
     const project = workflowContext?.project || (await window.studio.request({ action: 'workspace.get' })).project;
     await studioUI.ready; await api.workflowTerminal({ project: project.id }).then(async result => {
-      workflowTerminalPath = result.project; selectedSession.set(result.project, result.id);
+      workflowTerminalPath = result.project; terminalPreference = true; terminalMaximized = false; selectedSession.set(result.project, result.id);
       await refreshSessions(); render();
     }); return;
   }
@@ -468,13 +483,17 @@ function modal(content) {
 async function openDocument(relative) { const doc = await api.document(current, relative); if (doc.type !== 'pdf') modal(`<span class="eyebrow">Document du projet</span><h2>${esc(doc.name)}</h2>${documentBody(doc, esc)}`); }
 async function setEnvironment(value) { settings = await api.settings({ context: { project: current, release: detail?.selectedRelease || '', environment: value } }); render(); toast('Contexte appliqué aux nouveaux terminaux.'); }
 async function refresh() {
+  if (!bootstrapped) return start();
   if (pollBusy) return;
   pollBusy = true; setSyncStatus('Actualisation…');
   const project = current, ticket = generation;
   const before = JSON.stringify([projects, detail, sessions, projectError]);
   try {
     const previous = projects.find(p => p.path === project)?.releases;
-    projects = await api.overview();
+    if (catalogError) {
+      const initial = await api.bootstrap(); projects = initial.projects; catalogError = initial.workflowWarning || null;
+      render();
+    } else projects = await api.overview();
     await refreshSessions();
     const next = !overviewMode && !busy && detail && !projectError && project === current && ticket === generation
       ? newReleaseContext(previous, projects.find(p => p.path === project)?.releases || [], detail?.selectedRelease, sessions, project) : null;
@@ -503,7 +522,7 @@ async function refresh() {
     if ([...keys].some(k => !notificationKeys.has(k))) api.notify({ title: 'Tricorder · à votre attention', body: `${items.length} élément(s) à examiner dans vos projets.` });
     notificationKeys = keys;
     if (before !== JSON.stringify([projects, detail, sessions, projectError])) render();
-    setSyncStatus('À jour · ' + new Date().toLocaleTimeString('fr-CH', { hour: '2-digit', minute: '2-digit' }));
+    setSyncStatus(catalogError ? 'Workflows à vérifier' : 'À jour · ' + new Date().toLocaleTimeString('fr-CH', { hour: '2-digit', minute: '2-digit' }), !!catalogError);
   } catch (error) { setSyncStatus('Actualisation incomplète', true); toast(error.message); }
   finally { pollBusy = false; }
 }
@@ -559,6 +578,7 @@ document.addEventListener('click', async event => {
     }
     if (el.dataset.environment) return await setEnvironment(el.dataset.environment);
     switch (el.dataset.action) {
+      case 'terminal-toggle': terminalPreference = $('#terminal-workspace').hidden; terminalMaximized = false; render(); break;
       case 'terminal-maximize': terminalMaximized = !terminalMaximized; render(); break;
       case 'workflow-updates': await openWorkflows(); await studioUI.showUpdates(); break;
       case 'workflow-workspace': await api.workflows(); break;
@@ -612,8 +632,11 @@ const cockpitUI = cockpit({ api, get: () => ({ projects, settings, current, deta
   modal, toast, esc, badge, when, minutes });
 
 async function start() {
+  if (starting || bootstrapped) return;
+  starting = true; catalogError = null;
   try {
     const initial = await api.bootstrap(); projects = initial.projects; settings = initial.settings; version = initial.version; crewInstalled = initial.crewInstalled !== false;
+    bootstrapped = true; catalogError = initial.workflowWarning || null;
     let revision = await api.revision(), checkingRevision = false;
     cockpitUI.applyPreferences();
     split = !!settings.ui?.split;
@@ -624,7 +647,7 @@ async function start() {
     // An early click on the global board must survive asynchronous bootstrap.
     if (chosen && !overviewMode) await chooseProject(chosen.path); else render();
     if (initial.initialWorkspace === 'studio') await openWorkflows();
-    setSyncStatus('À jour');
+    render(); setSyncStatus(catalogError ? 'Workflows à vérifier' : 'À jour', !!catalogError);
     setInterval(refresh, 30000);
     setInterval(async () => {
       if (checkingRevision || pollBusy || busy) return;
@@ -636,6 +659,7 @@ async function start() {
       finally { checkingRevision = false; }
     }, 2000);
     setInterval(() => refreshSessions().catch(() => {}), 5000);
-  } catch (error) { toast(error.message); setSyncStatus('Chargement impossible', true); render(); }
+  } catch (error) { bootstrapped = false; catalogError = error.message; setSyncStatus('Chargement impossible', true); render(); }
+  finally { starting = false; }
 }
 start();
