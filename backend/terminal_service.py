@@ -59,6 +59,9 @@ class Terminal:
                 # Selection is metadata, never production confirmation or credentials.
                 for key in ('ODOO_PRODUCTION_CONFIRMED', 'ODOO_INSTANCE_SECRET', 'ODOO_INSTANCE_LOGIN'):
                     env.pop(key, None)
+                if request.get('cleanShell'):
+                    env['HISTFILE'] = '/dev/null'
+                    os.execve('/bin/bash', ['/bin/bash', '--noprofile', '--norc', '-i'], env)
                 os.execve(shell, [shell, '-i'], env)
             except Exception:
                 os._exit(127)

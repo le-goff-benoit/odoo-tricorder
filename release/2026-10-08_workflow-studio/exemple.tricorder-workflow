@@ -1,0 +1,125 @@
+{
+  "format": "tricorder.workflow",
+  "version": 1,
+  "workflow": {
+    "schema": 1,
+    "id": "first-workflow",
+    "title": "De l'intention au résultat",
+    "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.",
+    "parameters": {},
+    "nodes": [
+      {
+        "id": "analyse",
+        "title": "Comprendre la demande",
+        "kind": "task",
+        "position": {
+          "x": 50,
+          "y": 140
+        },
+        "phase": "Analyse",
+        "criteria": [
+          "Le résultat attendu est compréhensible."
+        ],
+        "sample": "Intention clarifiée : proposer une évolution et ses critères de réussite.",
+        "max_attempts": 2
+      },
+      {
+        "id": "build",
+        "title": "Préparer la réalisation",
+        "kind": "task",
+        "position": {
+          "x": 350,
+          "y": 60
+        },
+        "phase": "Réalisation",
+        "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié."
+      },
+      {
+        "id": "test",
+        "title": "Préparer les tests",
+        "kind": "task",
+        "position": {
+          "x": 350,
+          "y": 250
+        },
+        "phase": "Qualité",
+        "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté."
+      },
+      {
+        "id": "join",
+        "title": "Réunir les résultats",
+        "kind": "join",
+        "position": {
+          "x": 650,
+          "y": 140
+        },
+        "phase": "Validation"
+      },
+      {
+        "id": "decision",
+        "title": "Valider la suite",
+        "kind": "decision",
+        "position": {
+          "x": 950,
+          "y": 140
+        },
+        "phase": "Validation",
+        "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+        "options": [
+          "approve",
+          "reject"
+        ]
+      },
+      {
+        "id": "bilan",
+        "title": "Préparer le bilan",
+        "kind": "document",
+        "position": {
+          "x": 1250,
+          "y": 140
+        },
+        "phase": "Documentation",
+        "sample": "Bilan de démonstration : branches reçues et décision humaine conservée."
+      }
+    ],
+    "edges": [
+      {
+        "id": "analyse-build",
+        "from": "analyse",
+        "to": "build",
+        "outcome": "done"
+      },
+      {
+        "id": "analyse-test",
+        "from": "analyse",
+        "to": "test",
+        "outcome": "done"
+      },
+      {
+        "id": "build-join",
+        "from": "build",
+        "to": "join",
+        "outcome": "done"
+      },
+      {
+        "id": "test-join",
+        "from": "test",
+        "to": "join",
+        "outcome": "done"
+      },
+      {
+        "id": "join-decision",
+        "from": "join",
+        "to": "decision",
+        "outcome": "done"
+      },
+      {
+        "id": "decision-bilan",
+        "from": "decision",
+        "to": "bilan",
+        "outcome": "approve"
+      }
+    ],
+    "defaults": {}
+  }
+}

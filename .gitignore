@@ -1,6 +1,11 @@
 node_modules/
 dist/
-release/
+build-artifacts/
+# Historical installers remain local; release now holds human documentation.
+release/*.deb
+release/*.yml
+release/SHA256SUMS
+release/linux-unpacked/
 __pycache__/
 *.pyc
 test-results/

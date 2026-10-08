@@ -1,0 +1,351 @@
+"""The single writer for workflow state. Workers return results, never approvals."""
+
+import copy
+from contextlib import nullcontext
+import json
+from pathlib import Path
+import time
+import uuid
+
+from .contracts import ContractError, digest, expand, identifier, require, semantic_digest, validate, validate_outputs
+from .store import Store
+from .projects import initialize, repository
+
+TERMINAL = {"accepted", "skipped"}
+
+
+def new_id(prefix):
+    return prefix + uuid.uuid4().hex[:16]
+
+
+class Engine:
+    def __init__(self, directory):
+        self.store = Store(directory)
+
+    def projects(self):
+        with self.store.connect() as db:
+            return [p for row in db.execute("SELECT body FROM projects ORDER BY id") if not (p := self.store.body(row)).get("library") and p.get("scope", "project") == "project"]
+
+    def workspace_context(self):
+        """Global executions have their own context, not a user Git project."""
+        with self.store.transaction() as db:
+            existing = self.store.body(db.execute("SELECT body FROM projects WHERE id='workspace'").fetchone())
+            if existing:
+                return existing
+            folder = self.store.directory / "workspace"
+            folder.mkdir(exist_ok=True, mode=0o700)
+            context = {"id": "workspace", "title": "Workflows globaux", "path": str(folder), "scope": "workspace", "packs": [], "defaults": {"provider": "codex", "profile": "generalist", "model": "", "effort": "medium", "session": "delegated"}}
+            from .guidance import prepare
+            prepare(context)
+            db.execute("INSERT INTO projects VALUES (?, ?)", ("workspace", self.store.encode(context)))
+            return context
+
+    def library_project(self):
+        with self.store.transaction() as db:
+            existing = self.store.body(db.execute("SELECT body FROM projects WHERE id='library'").fetchone())
+            if existing:
+                return existing
+            folder = self.store.directory / "library"
+            folder.mkdir(exist_ok=True, mode=0o700)
+            initialize(folder)
+            project = {"id": "library", "title": "Bibliothèque de modèles", "path": str(folder), "library": True, "packs": [], "defaults": {"provider": "codex", "profile": "generalist", "model": "", "effort": "medium", "session": "delegated"}}
+            db.execute("INSERT INTO projects VALUES (?, ?)", ("library", self.store.encode(project)))
+            from .guidance import prepare
+            prepare(project)
+            return project
+
+    def create_project(self, title, path=None):
+        require(isinstance(title, str) and title.strip(), "Nom du projet requis")
+        project = {"id": new_id("p"), "title": title.strip(), "packs": [], "defaults": {"provider": "codex", "profile": "generalist", "model": "", "effort": "medium", "session": "delegated"}}
+        if path:
+            target = Path(path).expanduser().resolve()
+            project["path"] = repository(target)
+        else:
+            target = self.store.directory / "projects" / project["id"]
+            target.mkdir(parents=True, mode=0o700)
+            initialize(target)
+            project.update(path=str(target), managed=True)
+        with self.store.transaction() as db:
+            for row in db.execute("SELECT body FROM projects"):
+                require(self.store.body(row).get("path") != project["path"], "Ce dépôt Git est déjà enregistré comme projet")
+            db.execute("INSERT INTO projects VALUES (?, ?)", (project["id"], self.store.encode(project)))
+            from .guidance import prepare
+            prepare(project)
+        return project
+
+    def project(self, project_id, db=None):
+        if db is None:
+            with self.store.connect() as connection:
+                return self.project(project_id, connection)
+        project = self.store.body(db.execute("SELECT body FROM projects WHERE id=?", (project_id,)).fetchone())
+        require(project is not None, "Projet introuvable")
+        return project
+
+    def workflow_path(self, project_id, workflow_id, db=None):
+        identifier(workflow_id, "Workflow")
+        root = Path(self.project(project_id, db)["path"])
+        target = root / ".tricorder" / "workflows" / (workflow_id + ".json")
+        require(target.resolve().is_relative_to(root), "Chemin de workflow hors du projet")
+        require(not target.is_symlink(), "Un workflow ne peut pas être un lien symbolique")
+        return target
+
+    def reload(self, project_id, workflow_id, expected_revision):
+        target = self.workflow_path(project_id, workflow_id)
+        require(target.is_file() and target.stat().st_size <= 2_000_000, "Fichier de workflow absent ou trop volumineux")
+        graph = json.loads(target.read_text())
+        require(graph.get("id") == workflow_id, "L'identifiant du fichier ne correspond pas au workflow ouvert")
+        return self.save(project_id, graph, expected_revision, from_disk=True)
+
+    def save(self, project_id, graph, expected_revision=0, *, from_disk=False):
+        validate(graph)
+        graph = copy.deepcopy(graph)
+        with self.store.transaction() as db:
+            self.project(project_id, db)
+            row = db.execute("SELECT MAX(revision) AS revision FROM workflows WHERE project=? AND id=?", (project_id, graph["id"])).fetchone()
+            current = row["revision"] or 0
+            require(current == expected_revision, "Conflit : une autre révision a été enregistrée. Rechargez avant d'appliquer vos changements.")
+            target = self.workflow_path(project_id, graph["id"], db)
+            if target.exists() and not from_disk:
+                previous = self.store.body(db.execute("SELECT body FROM workflows WHERE project=? AND id=? AND revision=?", (project_id, graph["id"], current)).fetchone())
+                require(previous is not None and json.loads(target.read_text()) == previous, "Le fichier a été modifié depuis le terminal. Recharger et valider avant d'enregistrer.")
+            graph["revision"] = current + 1
+            db.execute("INSERT INTO workflows VALUES (?, ?, ?, ?)", (project_id, graph["id"], current + 1, self.store.encode(graph)))
+            target.parent.mkdir(parents=True, exist_ok=True)
+            temporary = target.with_suffix("." + uuid.uuid4().hex + ".tmp")
+            temporary.write_text(json.dumps(graph, ensure_ascii=False, indent=2) + "\n")
+            temporary.replace(target)
+        return graph
+
+    def workflows(self, project_id):
+        with self.store.connect() as db:
+            return [self.store.body(row) for row in db.execute("""SELECT body FROM workflows w WHERE project=? AND revision=(
+                SELECT MAX(revision) FROM workflows WHERE project=w.project AND id=w.id) ORDER BY id""", (project_id,))]
+
+    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None):
+        from .integrations import catalog, issues as plugin_issues
+        original = copy.deepcopy(graph)
+        resolved = expand(graph, library or {})
+        project = self.project(project_id, connection)
+        from .packs import resolve_profiles, policy_issues
+        if not simulation:
+            issues = policy_issues(project, resolved) + plugin_issues(resolved, project)
+            require(not issues, " · ".join(i["message"] for i in issues))
+            resolved = resolve_profiles(project, resolved)
+        for node in resolved["nodes"]:
+            if node["kind"] == "agent":
+                node["execution"] = {**project["defaults"], **resolved.get("defaults", {}), **{k: node[k] for k in project["defaults"] if k in node}}
+        run = {"id": new_id("r"), "project": project_id, "status": "active", "created": time.time(),
+               "scope": {"kind": project.get("scope", "library" if project.get("library") else "project"), "id": project_id},
+               "release": resolved.get("release", ""),
+               "plugins": catalog(project),
+               "packs": [{"id": p["id"], "version": p["version"], "sha256": p["sha256"]} for p in project.get("packs", [])],
+               "simulation": bool(simulation), "definition": resolved, "original": original,
+               "contract": semantic_digest(resolved), "parameters": {**resolved.get("parameters", {}), **(parameters or {})},
+               "nodes": {n["id"]: {"status": "pending", "attempt": 0} for n in resolved["nodes"]}}
+        if occurrence:
+            run["occurrence"] = occurrence
+        with (nullcontext(connection) if connection else self.store.transaction()) as db:
+            db.execute("INSERT INTO runs VALUES (?, ?)", (run["id"], self.store.encode(run)))
+            self._event(db, run, "started", simulation=run["simulation"])
+            self._advance(db, run)
+            self._save(db, run)
+        return run
+
+    def run(self, run_id, db=None):
+        if db is None:
+            with self.store.connect() as connection:
+                return self.run(run_id, connection)
+        value = self.store.body(db.execute("SELECT body FROM runs WHERE id=?", (run_id,)).fetchone())
+        require(value is not None, "Exécution introuvable")
+        return value
+
+    def runs(self, project_id):
+        with self.store.connect() as db:
+            return [r for row in db.execute("SELECT body FROM runs ORDER BY rowid DESC LIMIT 500") if (r := self.store.body(row))["project"] == project_id]
+
+    def events(self, run_id, after=0):
+        with self.store.connect() as db:
+            return [{"seq": row["seq"], **self.store.body(row)} for row in db.execute("SELECT seq, body FROM events WHERE run=? AND seq>? ORDER BY seq LIMIT 1000", (run_id, after))]
+
+    def _event(self, db, run, kind, node=None, **details):
+        event = {"at": time.time(), "type": kind, "node": node, **details}
+        db.execute("INSERT INTO events(run, body) VALUES (?, ?)", (run["id"], self.store.encode(event)))
+
+    def _save(self, db, run):
+        run["updated"] = time.time()
+        db.execute("UPDATE runs SET body=? WHERE id=?", (self.store.encode(run), run["id"]))
+
+    def _advance(self, db, run):
+        if run["status"] != "active":
+            return
+        changed = True
+        while changed:
+            changed = False
+            for node in run["definition"]["nodes"]:
+                state = run["nodes"][node["id"]]
+                if state["status"] != "pending":
+                    continue
+                incoming = [e for e in run["definition"]["edges"] if e["to"] == node["id"]]
+                if any(run["nodes"][e["from"]]["status"] not in TERMINAL for e in incoming):
+                    continue
+                active = [e for e in incoming if run["nodes"][e["from"]].get("outcome") == e.get("outcome", "done") and run["nodes"][e["from"]]["status"] == "accepted"]
+                if incoming and not active:
+                    state.update(status="skipped")
+                else:
+                    state["inputs"] = {}
+                    for edge in active:
+                        outputs = run["nodes"][edge["from"]].get("result", {}).get("outputs", {})
+                        for src, dst in edge.get("mapping", {}).items():
+                            require(src in outputs, f"{node['id']} : résultat source {src} absent")
+                            state["inputs"][dst] = outputs[src]
+                    state.update(status="ready")
+                    if node["kind"] == "join":
+                        state.update(status="accepted", outcome="done")
+                    elif node["kind"] == "condition":
+                        outcome = state["inputs"].get(node["parameter"], node.get("parameters", run["parameters"]).get(node["parameter"]))
+                        if outcome in node.get("options", []):
+                            state.update(status="accepted", outcome=outcome, result={"outputs": {k: state["inputs"].get(k) for k in node.get("outputs", {})}})
+                        else:
+                            state.update(status="blocked", reason=f"Paramètre {node['parameter']} absent ou issue inconnue")
+                    elif node["kind"] in {"decision", "review"}:
+                        state.update(status="waiting", attempt=state["attempt"] + 1, proposal=digest({"run": run["id"], "node": node, "attempt": state["attempt"] + 1, "contract": run["contract"]}), nonce=new_id("d"))
+                changed = True
+                self._event(db, run, state["status"], node["id"])
+        if all(s["status"] in TERMINAL for s in run["nodes"].values()):
+            run["status"] = "completed"
+            self._event(db, run, "completed")
+
+    def claim(self, run_id, node_id):
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            require(run["status"] == "active", "Exécution suspendue ou terminée")
+            running = sum(s["status"] == "running" for row in db.execute("SELECT body FROM runs") for s in self.store.body(row)["nodes"].values())
+            require(running < 4, "Quatre étapes sont déjà en cours : attente d'une place d'exécution")
+            node = next((n for n in run["definition"]["nodes"] if n["id"] == node_id), None)
+            require(node is not None, "Bloc inconnu")
+            state = run["nodes"][node_id]
+            require(state["status"] == "ready", "Ce bloc n'est pas prêt")
+            if node["kind"] == "external":
+                approval = run["nodes"][node["approval"]].get("decision", {})
+                require(approval.get("outcome") == "approve" and approval.get("operation") == digest(node["operation"]), "Autorisation invalide pour cette opération")
+                require(not approval.get("consumed"), "Autorisation déjà consommée")
+                approval["consumed"] = node_id
+            token = new_id("t")
+            for resource in sorted(set(node.get("resources", []))):
+                key = run["project"] + ":" + resource
+                require(not db.execute("SELECT 1 FROM resources WHERE resource=?", (key,)).fetchone(), f"Ressource occupée : {resource}")
+                db.execute("INSERT INTO resources VALUES (?, ?, ?, ?)", (key, run_id, node_id, token))
+            state.update(status="running", attempt=state["attempt"] + 1, token=token, started=time.time(), heartbeat=time.time())
+            self._event(db, run, "running", node_id, attempt=state["attempt"])
+            self._save(db, run)
+        return {"run": run, "node": node, "token": token}
+
+    def heartbeat(self, run_id, node_id, token, pid=None):
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            state = run["nodes"][node_id]
+            require(state.get("token") == token and state["status"] == "running", "Tentative périmée")
+            state["heartbeat"] = time.time()
+            if pid:
+                state["pid"] = pid
+            self._save(db, run)
+
+    def submit(self, run_id, node_id, token, result):
+        """A worker cannot accept its own result, even with a claimed success flag."""
+        require(isinstance(result, dict) and isinstance(result.get("summary"), str), "Résultat structuré requis")
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            state = run["nodes"][node_id]
+            require(state.get("token") == token and state["status"] == "running", "Résultat d'une tentative périmée ou déjà remis")
+            state.update(status="returned", result=copy.deepcopy(result), finished=time.time())
+            db.execute("DELETE FROM resources WHERE run=? AND node=? AND token=?", (run_id, node_id, token))
+            self._event(db, run, "returned", node_id, attempt=state["attempt"])
+            self._save(db, run)
+        return run
+
+    def accept(self, run_id, node_id, *, human=False, checks=None, note=""):
+        require(human, "Validation humaine requise par l'API dédiée")
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            require(run["status"] in {"active", "paused"}, "Cette exécution ne peut plus recevoir de résultat")
+            state = run["nodes"][node_id]
+            require(state["status"] == "returned", "Aucun résultat à valider")
+            node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
+            require(state["result"].get("ok") is True, "Le résultat indique un échec : correction requise")
+            validate_outputs(node, state["result"])
+            expected = node.get("criteria", [])
+            require(checks == expected, "Tous les critères doivent être explicitement examinés")
+            require(not expected or bool(note.strip()), "Une conclusion de validation est requise")
+            for evidence in state["result"].get("evidence", []):
+                self.evidence(evidence)
+            require(not node.get("evidence_required") or state["result"].get("evidence"), "Preuve requise absente")
+            state.update(status="accepted", outcome="done", receipt={"at": time.time(), "checks": checks, "note": note, "contract": run["contract"], "actor": "local-user"})
+            self._event(db, run, "accepted", node_id)
+            self._advance(db, run)
+            self._save(db, run)
+        return run
+
+    def decide(self, run_id, node_id, nonce, proposal, outcome, *, human=False, note=""):
+        require(human, "Seule l'interface de décision humaine peut répondre")
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            require(run["status"] in {"active", "paused"}, "Exécution terminée ou annulée")
+            state = run["nodes"][node_id]
+            require(state["status"] == "waiting" and state["nonce"] == nonce and state["proposal"] == proposal, "Décision périmée ou déjà appliquée")
+            node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
+            require(outcome in node.get("options", ["approve", "reject"]), "Choix inconnu")
+            state.update(status="accepted", outcome=outcome, decision={"at": time.time(), "actor": "local-user", "outcome": outcome, "proposal": proposal, "operation": digest(node.get("operation")), "note": note})
+            self._event(db, run, "decision", node_id, outcome=outcome)
+            self._advance(db, run)
+            self._save(db, run)
+        return run
+
+    def control(self, run_id, action):
+        require(action in {"pause", "resume", "cancel"}, "Commande inconnue")
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            require(run["status"] in {"active", "paused"}, "Exécution déjà terminée")
+            run["status"] = {"pause": "paused", "resume": "active", "cancel": "cancelled"}[action]
+            self._event(db, run, action)
+            self._advance(db, run)
+            self._save(db, run)
+        return run
+
+    def retry(self, run_id, node_id, note, *, human=False):
+        require(human and isinstance(note, str) and note.strip(), "Motif humain de reprise requis")
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            require(run["status"] in {"active", "paused"}, "Exécution terminée")
+            state = run["nodes"][node_id]
+            node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
+            require(state["status"] == "returned", "Seul un résultat remis peut être repris ; réconcilier d'abord une opération incertaine")
+            require(node["kind"] != "external", "Opération externe : nouvelle proposition et nouvel accord requis")
+            require(state["attempt"] < node.get("max_attempts", 1), "Limite de reprises atteinte")
+            history = state.get("history", []) + [{k: v for k, v in state.items() if k != "history"}]
+            run["nodes"][node_id] = {"status": "ready", "attempt": state["attempt"], "history": history, "reason": note}
+            self._event(db, run, "retry", node_id, note=note)
+            self._save(db, run)
+        return run
+
+    def artifact(self, content):
+        require(isinstance(content, bytes) and len(content) <= 2_000_000, "Preuve trop volumineuse")
+        import hashlib
+        sha = hashlib.sha256(content).hexdigest()
+        folder = self.store.directory / "artifacts"
+        folder.mkdir(exist_ok=True, mode=0o700)
+        path = folder / sha
+        if not path.exists():
+            path.write_bytes(content)
+            path.chmod(0o600)
+        return {"sha256": sha, "size": len(content)}
+
+    def evidence(self, reference):
+        import hashlib
+        import re
+        sha = reference.get("sha256", "")
+        require(re.fullmatch(r"[a-f0-9]{64}", sha), "Empreinte de preuve invalide")
+        path = self.store.directory / "artifacts" / sha
+        require(path.is_file() and not path.is_symlink(), "Preuve absente")
+        content = path.read_bytes()
+        require(hashlib.sha256(content).hexdigest() == sha, "Preuve altérée")
+        return content

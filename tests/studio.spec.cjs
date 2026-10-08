@@ -1,0 +1,257 @@
+const { test, expect, _electron: electron } = require('@playwright/test');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const root = path.resolve(__dirname, '..');
+let directory, app, page;
+
+test.beforeEach(async () => {
+  directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-studio-ui-'));
+  app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env: { ...process.env, TRICORDER_STATE_DIR: directory, TRICORDER_TEST_MODE: '1' }, timeout: 20000 });
+  page = await app.firstWindow();
+  await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
+});
+test.afterEach(async () => { if (app) await app.close(); if (directory) fs.rmSync(directory, { recursive: true, force: true }); });
+
+async function example() { await page.getByRole('button', { name: 'Essayer un exemple' }).click(); await expect(page.getByRole('heading', { name: "De l'intention au résultat" })).toBeVisible(); }
+async function simulate() { await page.getByRole('button', { name: 'Exécuter…' }).click(); await page.getByRole('button', { name: 'Simuler le parcours' }).click(); await expect(page.locator('#run-banner')).toContainText('Simulation'); }
+async function receive(id, hasCriteria = false) {
+  const node = page.locator(`.node[data-id="${id}"]`);
+  await expect(node).toHaveAttribute('data-status', 'returned'); await node.click();
+  if (hasCriteria) await page.locator('#receipt-form input[type=checkbox]').check();
+  await page.getByLabel('Commentaire de validation').fill('Résultat examiné dans le contexte simulé.');
+  await page.getByRole('button', { name: 'Valider le résultat' }).click();
+  await expect(node).toHaveAttribute('data-status', 'accepted');
+}
+
+test('first use: generic project, graph editing, undo, persisted workflow and keyboard list', async () => {
+  await example();
+  await expect(page.locator('.node')).toHaveCount(6);
+  await page.locator('.node[data-id="analyse"]').click();
+  await page.getByLabel('Nom du bloc', { exact: true }).fill('Clarifier le besoin métier');
+  await page.getByText('Reprises, ressources et position').click();
+  await page.getByLabel('Position X', { exact: true }).fill('110');
+  await page.getByRole('button', { name: 'Appliquer au bloc' }).click();
+  await expect(page.locator('.node[data-id="analyse"] .mission')).toHaveText('Clarifier le besoin métier');
+  await page.getByRole('button', { name: 'Annuler la modification' }).click();
+  await expect(page.locator('.node[data-id="analyse"] .mission')).toHaveText('Comprendre la demande');
+  await page.getByRole('button', { name: 'Rétablir la modification' }).click();
+  await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+  await page.getByRole('button', { name: 'Changer la vue canevas ou liste' }).click();
+  await expect(page.getByRole('cell', { name: 'Clarifier le besoin métier' })).toBeVisible();
+  await page.getByRole('button', { name: 'Projets', exact: true }).click();
+  await page.getByRole('button', { name: /Mon premier projet/ }).click();
+  await page.getByRole('button', { name: 'Ouvrir le workflow' }).click();
+  await expect(page.getByRole('cell', { name: 'Clarifier le besoin métier' })).toBeVisible();
+  await page.screenshot({ path: path.join(test.info().outputDir, 'studio-list.png'), fullPage: true });
+});
+
+test('simulation: two branches, human decision, truthful results and single documentation view', async () => {
+  await example(); await simulate();
+  await receive('analyse', true);
+  await receive('build'); await receive('test');
+  await expect(page.locator('.node[data-id="decision"]')).toHaveAttribute('data-status', 'waiting');
+  await page.locator('.node[data-id="decision"]').click();
+  await expect(page.getByRole('button', { name: 'Approuver la suite' })).toBeVisible();
+  await page.screenshot({ path: path.join(test.info().outputDir, 'studio-decision.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Approuver la suite' }).click();
+  await receive('bilan');
+  await expect(page.locator('#run-banner')).toContainText('Terminée');
+  await page.getByRole('tab', { name: 'Documentation' }).click();
+  for (const heading of ['Intention', 'Plan', 'Réalisation', 'Tests et limites', 'Livraison et documentation', 'Décisions et suite']) await expect(page.locator('#document-view').getByRole('heading', { name: heading, exact: true })).toBeVisible();
+  await expect(page.locator('#document-view')).toContainText('aucun résultat métier réel');
+});
+
+test('decisions persist after application restart and reject skips its branch', async () => {
+  await example(); await simulate(); await receive('analyse', true); await receive('build'); await receive('test');
+  await expect(page.locator('.node[data-id="decision"]')).toHaveAttribute('data-status', 'waiting');
+  await app.close();
+  app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env: { ...process.env, TRICORDER_STATE_DIR: directory, TRICORDER_TEST_MODE: '1' } });
+  page = await app.firstWindow();
+  await page.getByRole('button', { name: /Mon premier projet/ }).click();
+  await page.getByRole('button', { name: 'Consulter', exact: true }).click();
+  await page.locator('.node[data-id="decision"]').click();
+  await page.getByRole('button', { name: 'Refuser la suite' }).click();
+  await expect(page.locator('.node[data-id="bilan"]')).toHaveAttribute('data-status', 'skipped');
+});
+
+test('connections never infer native authentication and real unconfigured launch is blocked', async () => {
+  await page.getByRole('button', { name: 'Connexions', exact: true }).click();
+  await expect(page.getByText('GitHub → Odoo.sh', { exact: true })).toBeVisible();
+  await expect(page.getByText(/Aucun transport authentifié/)).toBeVisible();
+  await page.getByRole('button', { name: 'Bibliothèque', exact: true }).click();
+  await page.locator('article').filter({ has: page.getByRole('heading', { name: 'Évolution logicielle', exact: true }) }).getByRole('button', { name: 'Utiliser' }).click();
+  await page.getByRole('button', { name: 'Exécuter…' }).click();
+  await expect(page.getByRole('button', { name: 'Lancer l’exécution réelle' })).toBeDisabled();
+  await expect(page.getByRole('dialog')).toContainText('Modèle IA à définir');
+});
+
+test('live events preserve text input and focus; layout fits 1024 and dark theme', async () => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await example(); await simulate();
+  await expect(page.locator('.node[data-id="analyse"]')).toHaveAttribute('data-status', 'returned');
+  await page.locator('.node[data-id="analyse"]').click();
+  const note = page.getByLabel('Commentaire de validation'); await note.fill('Texte en cours de rédaction');
+  await page.waitForTimeout(2200);
+  await expect(note).toBeFocused(); await expect(note).toHaveValue('Texte en cours de rédaction');
+  await page.getByRole('button', { name: 'Changer le thème' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+  expect(overflow).toBe(false);
+  await page.screenshot({ path: path.join(test.info().outputDir, 'studio-dark-1024.png'), fullPage: true });
+});
+
+test('structured proposal needs preview, rejects stale revision and never starts a run', async () => {
+  await example(); await page.getByRole('button', { name: 'Assistant IA' }).click();
+  await page.getByText('Examiner une proposition structurée').click();
+  await page.getByLabel('Proposition JSON').fill(JSON.stringify({ baseRevision: 99, operations: [] }));
+  await page.getByRole('button', { name: 'Prévisualiser' }).click();
+  await expect(page.getByRole('alert')).toContainText('autre révision');
+  await page.getByLabel('Proposition JSON').fill(JSON.stringify({ baseRevision: 1, operations: [{ type: 'add-node', node: { id: 'new-step', kind: 'decision', title: 'Vérifier la publication', options: ['approve', 'reject'] } }] }));
+  await page.getByRole('button', { name: 'Prévisualiser' }).click();
+  await expect(page.getByRole('dialog')).toContainText('Ajouter « Vérifier la publication »');
+  await page.getByRole('button', { name: 'Appliquer au brouillon' }).click();
+  await expect(page.locator('.node')).toHaveCount(7);
+  await expect(page.getByRole('tab', { name: 'Exécution', exact: true })).toBeDisabled();
+});
+
+test('template creation has a real terminal; file edits require validated reload', async () => {
+  await page.getByRole('button', { name: 'Bibliothèque', exact: true }).click();
+  const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Commande locale avec validation', exact: true }) });
+  await card.getByRole('button', { name: 'Modifier le modèle' }).click();
+  await expect(page.locator('.breadcrumb')).toContainText('Bibliothèque de modèles');
+  await page.getByRole('button', { name: 'Ouvrir le terminal du workflow' }).click();
+  await expect(page.locator('.workflow-terminal')).toBeVisible();
+  const input = page.locator('.xterm-helper-textarea'); await input.focus();
+  const script = 'import json; from pathlib import Path; p=next(Path("workflows").glob("*.json")); g=json.loads(p.read_text()); g["title"]="Modèle corrigé au terminal"; p.write_text(json.dumps(g))';
+  await page.keyboard.type("python3 -c '" + script + "'"); await page.keyboard.press('Enter');
+  expect(fs.readFileSync(path.join(directory, 'library/.tricorder/AGENTS.md'), 'utf8')).toContain('sans agent dédié');
+  const files = path.join(directory, 'library/.tricorder/workflows');
+  await expect.poll(() => { const file = fs.readdirSync(files).find(n => n.endsWith('.json')); return JSON.parse(fs.readFileSync(path.join(files, file))).title; }).toBe('Modèle corrigé au terminal');
+  await page.getByRole('button', { name: 'Recharger et valider' }).click();
+  await expect(page.getByRole('heading', { name: 'Modèle corrigé au terminal' })).toBeVisible();
+  await page.screenshot({ path: path.join(test.info().outputDir, 'studio-template-terminal.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Terminer la session' }).click();
+  await expect(page.locator('.workflow-terminal')).toBeHidden();
+});
+
+test('recurrence activation shows models and persists; communication needs exact recipients', async () => {
+  await page.getByRole('button', { name: 'Bibliothèque', exact: true }).click();
+  const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Message NECA → notification', exact: true }) });
+  await card.getByRole('button', { name: 'Utiliser', exact: true }).click();
+  await page.locator('.node[data-id="notify"]').click();
+  await page.getByLabel('Canal de communication').selectOption('telegram');
+  await page.getByRole('button', { name: 'Appliquer au bloc' }).click();
+  await page.getByRole('button', { name: 'Planifier', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('Modèles IA : aucun');
+  await expect(page.getByRole('dialog')).toContainText('Connecteur telegram non connecté');
+  await page.getByLabel(/J’active cette révision/).check();
+  await page.getByRole('button', { name: 'Activer la récurrence' }).click();
+  await expect(page.getByRole('heading', { name: 'Workflows récurrents' })).toBeVisible();
+  await expect(page.locator('article.card')).toContainText('Simulation');
+  await page.locator('article.card').getByRole('button', { name: 'Suspendre' }).click();
+  await expect(page.locator('article.card')).toContainText('Suspendue');
+});
+
+test('window closes to Ubuntu tray and remains available', async () => {
+  await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].close());
+  await expect.poll(() => app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);
+  expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].isVisible())).toBe(false);
+  await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].show());
+  await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
+});
+
+test('new plugin declared in the terminal workspace is selectable without a dedicated agent', async () => {
+  await page.getByRole('button', { name: 'Bibliothèque', exact: true }).click();
+  const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Analyse', exact: true }) });
+  await card.getByRole('button', { name: 'Modifier le modèle' }).click();
+  await expect(page.locator('.breadcrumb')).toContainText('Bibliothèque de modèles');
+  await expect(page.locator('.node[data-id="work"]')).toBeVisible();
+  const plugin = { id: 'future-plugin', title: 'Nouveau plugin', provider: 'codex', operations: ['read'] };
+  const workspace = path.join(directory, 'library/.tricorder');
+  expect(fs.readFileSync(path.join(workspace, 'AGENTS.md'), 'utf8')).toContain('tricorder-guidance version=');
+  fs.writeFileSync(path.join(workspace, 'plugins.json'), JSON.stringify({ schema: 1, plugins: [plugin] }));
+  await page.locator('.node[data-id="work"]').click();
+  await page.getByRole('button', { name: 'Actualiser les capacités' }).click();
+  await page.getByLabel('Agent dédié (facultatif)').selectOption('generalist');
+  await page.getByLabel('Capacités de plugins (facultatives)').selectOption({ label: 'Nouveau plugin · read' });
+  await page.getByLabel('Modèle IA', { exact: true }).fill('explicit-test-model');
+  await page.getByRole('button', { name: 'Appliquer au bloc' }).click();
+  await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+  await page.getByRole('button', { name: 'Exécuter…' }).click();
+  await expect(page.getByRole('dialog')).toContainText('transport d’outils non qualifié');
+  await expect(page.getByRole('button', { name: 'Lancer l’exécution réelle' })).toBeDisabled();
+});
+
+test('real isolated command produces evidence, then waits for human receipt', async () => {
+  await page.getByRole('button', { name: 'Bibliothèque', exact: true }).click();
+  const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Commande locale avec validation', exact: true }) });
+  await card.getByRole('button', { name: 'Utiliser', exact: true }).click();
+  await page.getByRole('button', { name: 'Exécuter…' }).click();
+  await page.getByRole('button', { name: 'Lancer l’exécution réelle' }).click();
+  await expect(page.locator('.node[data-id="check"]')).toHaveAttribute('data-status', 'returned');
+  await page.locator('.node[data-id="check"]').click();
+  await expect(page.locator('#inspector')).toContainText('Python opérationnel');
+  await expect(page.locator('.node[data-id="decision"]')).toHaveAttribute('data-status', 'pending');
+  await receive('check', true);
+  await expect(page.locator('.node[data-id="decision"]')).toHaveAttribute('data-status', 'waiting');
+});
+
+test('global workflow runs independently of Git projects and draws right-angle links', async () => {
+  await page.getByRole('button', { name: 'Globaux', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Workflows globaux', level: 1 })).toBeVisible();
+  await page.getByRole('button', { name: 'Choisir un modèle' }).click();
+  const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Message NECA → notification', exact: true }) });
+  await card.getByRole('button', { name: 'Utiliser', exact: true }).click();
+  await expect(page.locator('.breadcrumb')).toContainText('Workflows globaux');
+  const paths = await page.locator('svg path.edge').evaluateAll(elements => elements.map(e => e.getAttribute('d')));
+  expect(paths.length).toBeGreaterThan(0);
+  for (const d of paths) { expect(d).toContain('H'); expect(d).toContain('V'); expect(d).not.toMatch(/[CQ]/); }
+  await simulate();
+  await expect(page.locator('.node[data-id="mail"]')).toHaveAttribute('data-status', 'returned');
+  await page.screenshot({ path: path.join(test.info().outputDir, 'studio-global-orthogonal.png'), fullPage: true });
+  await page.getByRole('button', { name: 'Projets', exact: true }).click();
+  await expect(page.locator('.project-card')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Globaux', exact: true }).click();
+  await page.getByRole('button', { name: 'Consulter', exact: true }).click();
+  await expect(page.locator('.node[data-id="mail"]')).toHaveAttribute('data-status', 'returned');
+});
+
+test('exported clickable file opens on another local instance as a draft without execution', async () => {
+  await example();
+  const file = path.join(directory, 'example.tricorder-workflow');
+  await app.evaluate(({ dialog }, target) => { dialog.showSaveDialog = async () => ({ canceled: false, filePath: target }); }, file);
+  await page.getByRole('button', { name: 'Exporter…', exact: true }).click();
+  await expect.poll(() => fs.existsSync(file)).toBe(true);
+  const exported = JSON.parse(fs.readFileSync(file));
+  expect(exported.format).toBe('tricorder.workflow');
+  await app.close();
+  const destination = path.join(directory, 'other-computer');
+  app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? [file] : [root, file], env: { ...process.env, TRICORDER_STATE_DIR: destination, TRICORDER_TEST_MODE: '1' } });
+  page = await app.firstWindow();
+  await expect(page.getByRole('dialog')).toContainText('Importer un workflow portable');
+  await page.getByLabel('Destination', { exact: true }).selectOption('workspace');
+  await page.getByRole('button', { name: 'Importer le brouillon' }).click();
+  await expect(page.locator('.breadcrumb')).toContainText('Workflows globaux');
+  await expect(page.locator('.node')).toHaveCount(6);
+  const data = await page.evaluate(() => window.studio.request({ action: 'project.get', project: 'workspace' }));
+  expect(data.runs).toHaveLength(0);
+  expect(data.workflows).toHaveLength(1);
+});
+
+test('update dialog is explicit and test mode makes no automatic network request', async () => {
+  await page.getByRole('button', { name: 'Mises à jour', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('Version installée');
+  await expect(page.getByRole('dialog')).toContainText('hors mode de test');
+  await expect(page.getByRole('button', { name: 'Télécharger le paquet Ubuntu' })).toHaveCount(0);
+});
+
+test('repeated example clicks never create duplicate demo projects', async () => {
+  await page.getByRole('button', { name: 'Essayer un exemple' }).evaluate(button => { button.click(); button.click(); });
+  await expect(page.getByRole('heading', { name: "De l'intention au résultat" })).toBeVisible();
+  await page.getByRole('button', { name: 'Projets', exact: true }).click();
+  await expect(page.locator('.project-card')).toHaveCount(1);
+  await example();
+  await page.getByRole('button', { name: 'Projets', exact: true }).click();
+  await expect(page.locator('.project-card')).toHaveCount(1);
+});

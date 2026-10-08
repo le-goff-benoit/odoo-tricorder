@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "release": "2026-10-08_workflow-studio",
+  "version": "0.6.0-preview.1",
+  "status": "in_progress",
+  "scope": [
+    "tricorder",
+    "odoo-crew-pack"
+  ],
+  "implemented": [
+    "global-context",
+    "git-projects",
+    "workflow-templates",
+    "immutable-runs",
+    "orthogonal-canvas",
+    "human-decisions",
+    "receipt-and-evidence",
+    "bounded-retry",
+    "scoped-terminal",
+    "versioned-guidance-setup",
+    "recurrences",
+    "ubuntu-tray",
+    "model-without-specialized-agent",
+    "declarative-plugin-capabilities",
+    "native-codex-plugin-inventory",
+    "text-only-provider-adapters",
+    "design-patch-preview",
+    "single-human-release-document",
+    "experimental-odoo-deployer",
+    "portable-clickable-workflow-file",
+    "cross-computer-draft-import",
+    "github-startup-update-check",
+    "standard-it-vocabulary"
+  ],
+  "pending": [
+    "qualified-native-tool-transports",
+    "native-provider-campaign",
+    "autonomous-receipt-policy",
+    "real-mail-watch-and-notification",
+    "real-confluence-publication",
+    "github-odoo-sh-reference-workflow-and-qualification",
+    "global-to-project-handoff",
+    "selective-evidence-reuse",
+    "full-crew-contract-migration",
+    "user-acceptance-and-wcag",
+    "large-graph-performance"
+  ],
+  "tests": {
+    "python": {
+      "passed": 133,
+      "failed": 0
+    },
+    "javascript": {
+      "passed": 70,
+      "failed": 0
+    },
+    "electron_source": {
+      "passed": 15,
+      "failed": 0
+    },
+    "electron_packaged": {
+      "passed": 15,
+      "failed": 0
+    },
+    "crew": {
+      "total": 435,
+      "skipped": 1,
+      "failed": 0
+    },
+    "crew_generated_outputs": 38,
+    "native_models": {
+      "status": "not_run"
+    },
+    "external_services": {
+      "status": "not_connected"
+    },
+    "github_public_update_api": {
+      "status": "observed",
+      "latest": "v0.5.0",
+      "update_available": false
+    },
+    "source": "preuves/tests.log"
+  },
+  "publication": {
+    "github": false,
+    "odoo_sh": false
+  },
+  "human_document": "../README.md",
+  "guidance_version": 2,
+  "artifact": {
+    "file": "build-artifacts/odoo-tricorder_0.6.0-preview.1_amd64.deb",
+    "sha256": "97bfb9ee4618be4429eb68ed899e74fb3d942911528931894d2975cff41288a0",
+    "mime_association": "application/x-tricorder-workflow",
+    "installed": false
+  },
+  "crew_commit": "6de7f58"
+}
