@@ -16,7 +16,7 @@ def cell(value):
 def markdown(run):
     graph = run["definition"]
     lines = [f"# {graph['title']}", "", "## Intention", "", graph.get("description", "Intention à préciser dans le workflow."), "",
-             "**Exécution simulée : aucun résultat métier réel n'est attesté.**" if run["simulation"] else "Exécution locale. Chaque résultat nécessite sa validation.", "", "## Plan", "", "| Travail | État | Critères |", "|---|---|---|"]
+             "**Exécution simulée : aucun résultat métier réel n'est attesté.**" if run["simulation"] else "Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.", "", "## Plan", "", "| Travail | État | Critères |", "|---|---|---|"]
     for node in graph["nodes"]:
         state = run["nodes"][node["id"]]
         lines.append(f"| {cell(node['title'])} | {LABELS[state['status']]} | {cell('; '.join(node.get('criteria', [])) or 'À préciser')} |")
@@ -28,6 +28,10 @@ def markdown(run):
             continue
         results = True
         lines += [f"### {node['title']}", "", state["result"]["summary"], "", f"État : **{LABELS[state['status']]}**. Tentative {state['attempt']}.", ""]
+        if state.get("reused_from"):
+            lines += [f"Preuves réutilisées depuis `{state['reused_from']['run']}` ; aucun nouveau test exécuté pour ce bloc.", ""]
+        if state["result"].get("receipt"):
+            lines += ["Accusé de réception externe : " + str(state["result"]["receipt"].get("id", "")), ""]
         for proof in state["result"].get("evidence", []):
             lines += [f"[Consulter la preuve](.suivi/preuves/{proof['sha256']})", ""]
         if state.get("receipt"):
@@ -35,7 +39,7 @@ def markdown(run):
     if not results:
         lines += ["Aucun résultat remis pour le moment.", ""]
     lines += ["## Tests et limites", "", "Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.", "",
-              "Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.", "", "## Livraison et documentation", "", "Aucun déploiement ni publication externe attesté par cette exécution.", "", "## Décisions et suite", ""]
+              "Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.", "", "## Livraison et documentation", "", "Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.", "", "## Décisions et suite", ""]
     for node in graph["nodes"]:
         state = run["nodes"][node["id"]]
         if state["status"] == "waiting":

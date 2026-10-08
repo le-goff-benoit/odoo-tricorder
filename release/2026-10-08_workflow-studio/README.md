@@ -1,166 +1,123 @@
-# Workflow Studio — première préversion
+# Tricorder — workflows et automatisations
 
-**0.6.0-preview.1 · 8 octobre 2026 · Réalisation en cours, release non clôturée.**
+**0.6.0-preview.2 · 8 octobre 2026 · Réalisation en cours, release non clôturée.**
 
-Cette page est l’entrée humaine du chantier : ce que nous cherchons à obtenir,
-ce qui est écrit et testé, et ce qui manque encore. Le
-[plan détaillé](../../docs/PLAN_WORKFLOWS_2026-10-08.md) conserve les critères de
-validation ; le suivi machine est regroupé dans [.suivi/release.json](.suivi/release.json).
+Cette page rassemble l’intention, les changements, leurs preuves et les limites.
+[Plan détaillé](../../docs/PLAN_WORKFLOWS_2026-10-08.md) ·
+[Suivi technique](.suivi/release.json) · [Design](../../docs/DESIGN.md)
 
 ## Intention
 
-Faire de Tricorder un éditeur générique où l’on dessine, adapte et suit des
-workflows. Odoo Crew fournit des profils métier facultatifs. Un modèle IA peut
-travailler sans agent dédié ; les actions déterministes n’exigent aucun modèle.
+Tricorder permet de **concevoir, utiliser et suivre** des workflows de développement
+ou de monitoring. L’éditeur est une fonctionnalité de l’application. Les workflows
+s’appliquent à un projet Git ou fonctionnent globalement ; les modèles de la
+bibliothèque sont réutilisables. Odoo Crew est un pack facultatif, et un modèle IA
+peut travailler sans agent dédié. Les actions déterministes n’exigent aucun LLM.
 
-Deux portées sont distinctes : **Globaux**, pour une veille de messagerie ou des
-tickets transverses ; **Projets**, pour les travaux liés à un dépôt Git précis.
-La bibliothèque contient les modèles réutilisables, pas les exécutions actives.
+Le nouveau format remplace la direction précédente, sans migration des anciens
+workflows clients. Leurs dossiers sont conservés. La documentation courante utilise
+`release/` et une entrée humaine unique ; le détail machine est regroupé en `.suivi/`.
 
-Benoît a autorisé un nouveau format, sans compatibilité avec les anciens
-workflows. Les dossiers et workflows des projets clients n’ont pas été touchés.
-La direction visuelle reprend la lisibilité des graphes Harness, avec des
-connexions à angles droits et une architecture de l’information documentée dans
-[DESIGN](../../docs/DESIGN.md).
+## Changements et état réel
 
-## Plan et état réel
-
-| Partie | État de cette préversion | Suite nécessaire |
+| Partie | Fonctionnement livré | Limite actuelle |
 |---|---|---|
-| Moteur local, branches et versions | Implémenté et testé : SQLite, contrats, verrous, événements, décisions persistantes, reprises bornées | Réutilisation sélective de preuves et invalidation fine à compléter |
-| Modèles et projets | Bibliothèque, adaptation, racine Git exigée, fichiers rechargeables ; contexte global distinct | Passage automatique d’un cas global à un projet à réaliser |
-| Canevas et suivi | Édition, déplacements, liaisons orthogonales, liste, annuler/rétablir, phases et même graphe en exécution | Routage anti-collision et qualification de grands graphes à approfondir |
-| Terminal et consignes | PTY réel dans la création/adaptation ; `AGENTS.md` installé et mis à jour automatiquement, personnalisation préservée | Aide à fusionner les consignes personnalisées à améliorer |
-| IA sans agent dédié | Sélection explicite du fournisseur, modèle, effort et profil facultatif ; sessions CLI neuves limitées au texte | Qualification native payante et exécution outillée de code non réalisées |
-| Assistant de conception | Proposition structurée, aperçu puis application, sans activation implicite | Qualifier les réponses natives avec budget et scénarios fixés |
-| Plugins polyvalents | Catalogue déclaratif extensible ; capacités liables aux blocs ; inventaire installé Codex détectable | Transport des outils natifs et inventaire Claude à qualifier/intégrer |
-| Communication et surveillance | Brouillon NECA, canaux Slack/Telegram/Signal/email, contrôles de prérequis | Aucun compte connecté dans le runtime ; aucune surveillance ni notification réelle activée |
-| Récurrences | Fréquences et fuseaux, révision figée, suspension, pas de chevauchement ni rafale de rattrapage | Politique de validation automatique des étapes déterministes à réaliser pour une veille autonome |
-| Barre Ubuntu | Icône, statuts, décisions, raccourcis ; la croix masque et laisse le processus actif | Démarrage à la connexion Ubuntu non installé ; contrôle visuel du panneau cible à confirmer |
-| Odoo Crew | Pack importable et profil `odoo-deployer` généré et installé, expérimental | Migration complète des anciens contrats Crew vers le nouveau moteur non réalisée |
-| GitHub → Odoo.sh | Contrat de candidat/accord/build/livraison et contrôles synthétiques | Dépôt, branche et cible seront fournis plus tard ; connecteur réel et parcours de référence à finir |
-| Confluence | Contrat de version, conflit et relecture vérifié sur transport synthétique | Connexion et publication réelle non qualifiées |
-| Transfert entre ordinateurs | Export `.tricorder-workflow`, dépendances intégrées, ouverture de fichier et import en brouillon | Aucun compte, accord ou planning actif transféré ; prérequis à vérifier sur le poste destinataire |
-| Mise à jour GitHub | Vérification au lancement, comparaison de versions, notes et téléchargement explicite ; échec réseau non bloquant | Installation du paquet Ubuntu par l’utilisateur ; aucun remplacement à chaud |
-| Documentation | Une page humaine par release et suivi/preuves dans `.suivi/` ; projection issue du moteur | Aucun nettoyage des anciens dossiers clients ; anciens documents techniques conservés hors du parcours actuel |
+| Navigation | Tricorder en tête ; Vue d’ensemble, workflows globaux, projets, bibliothèque, récurrences et connexions | Recette avec utilisateurs débutants/experts à effectuer |
+| Barre latérale | Sous-titre « Éditeur de workflows » et slogan retirés ; espacements compacts, icônes alignées, mode réduit accessible | Vérification locale, pas certification WCAG |
+| Moteur et canevas | Versions figées, branches, liens orthogonaux, phases, liste, annuler/rétablir, journal et décisions persistantes | Routage évitant toutes les collisions non implémenté |
+| Terminal | Création/adaptation de modèles ou workflows ; rechargement validé ; AGENTS.md version 3 installé et actualisé | Les consignes personnalisées restent conservées, fusion manuelle |
+| Exécutants IA | Fournisseur/modèle explicites, agent dédié facultatif ; lecture d’outil possible avant analyse | Sessions natives limitées au texte ; pas de développement autonome outillé qualifié |
+| Plugins | Catalogue indépendant des rôles ; inventaire Codex ; adaptateur local vérifiable et exécutable | Un plugin natif Codex/MCP nécessite son adaptateur ; aucune connexion universelle automatique |
+| Validation automatique | Option des blocs déterministes : succès, types de sorties et intégrité des preuves ; échecs visibles | Aucun critère métier ni point humain validé automatiquement |
+| Surveillance et notification | Filtre d’adresse exact, messages nouveaux, dédoublonnage durable, destinataire et révision autorisés | Parcours qualifié sur adaptateur synthétique ; aucun compte réel connecté |
+| Récurrences | Fuseaux/DST, révision et transports figés, non-chevauchement, rattrapage borné | Un changement de configuration suspend la récurrence ; Tricorder doit rester actif |
+| Passage vers un projet | Depuis une exécution globale, création d’un brouillon dans un projet Git avec les résultats validés | Pas d’activation ni de routage automatique ; aucun accord transféré |
+| Réutilisation de preuves | Option explicite pour commandes/documents, moins de 24 h, contrat et dépendances inchangés ; sources Git contrôlées pour les commandes | À désactiver pour les contrôles dépendant du temps ou d’un environnement variable |
+| Déploiement et documentation | Modèles GitHub → Odoo.sh avec deux accords distincts et branche documentaire ; modèle Confluence avec relecture | Cibles, transport métier et vérifications réelles à qualifier ; aucun déploiement réalisé |
+| Odoo Crew | Pack importable, rôle expérimental odoo-deployer généré et installé | Migration complète des anciens contrats Crew non réalisée |
+| Bureau Ubuntu | Icône, raccourcis, décisions et récurrences ; fermer masque la fenêtre | Quitter arrête le planificateur ; pas de démarrage à la connexion Ubuntu |
+| Portabilité et mise à jour | Fichier .tricorder-workflow cliquable, import en brouillon ; recherche GitHub au lancement et téléchargement explicite | Comptes, autorisations et récurrences actives non transférés ; installation explicite |
 
-## Vocabulaire de l’interface
+## Ce qui a été écrit
 
-Termes IT courants : **Éditeur de workflows**, **Tâche IA**, **À valider**,
-**Validé**, **Valider le résultat** et **Journal d’exécution**. La même règle est
-conservée dans les consignes du projet et dans l’`AGENTS.md` embarqué (version 2).
+Le [moteur](../../backend/workflow_engine/engine.py) porte les décisions, les
+validations, les transferts et les états ; [reuse.py](../../backend/workflow_engine/reuse.py)
+contrôle la réutilisation de preuves. Une branche modifiée invalide ses descendants,
+mais pas les résultats indépendants. Une preuve réutilisée affiche son origine et
+n’est jamais présentée comme un nouveau test. Les dossiers de suivi `.tricorder/`
+et `release/` sont exclus de l’empreinte des sources ; les contrôles qui en dépendent
+ne doivent pas activer cette option.
 
-## Code écrit
+Le [planificateur](../../backend/workflow_engine/schedules.py) conserve les modèles,
+packs et transports autorisés. Une occurrence invalide annule ses écritures et se
+suspend sans empêcher les autres récurrences. Un résultat arrivé pendant une pause
+ne fait pas avancer le workflow avant reprise.
 
-- [Moteur](../../backend/workflow_engine/engine.py) : exécutions immuables,
-  transitions transactionnelles, jetons de tentative, verrous et décisions exactes.
-- [Contrats](../../backend/workflow_engine/contracts.py),
-  [planificateur](../../backend/workflow_engine/schedules.py) et
-  [projets Git](../../backend/workflow_engine/projects.py) : validation et limites.
-- [Consignes de conception](../../backend/workflow_engine/guidance.py) : source
-  embarquée, empreinte de contenu et mise à jour idempotente au lancement.
-- [Catalogue de plugins](../../backend/workflow_engine/integrations.py) et
-  [inventaire natif](../../backend/connectors/discovery.py) : extensions
-  indépendantes des types de bloc, métadonnées filtrées, aucun secret affiché.
-- [Exécutants](../../backend/workflow_engine/runtime.py) et
-  [sessions IA](../../backend/connectors/providers.py) : simulation explicite,
-  vraie commande isolée, sessions texte instrumentées sans repli de modèle.
-- [Effets externes](../../backend/connectors/effects.py) : contrats testables de
-  dédoublonnage, résultat d’envoi incertain, conflit documentaire et livraison.
-  Ces fonctions ne constituent pas des connexions authentifiées actives.
-- [Interface](../../src/studio.js), [modèle visuel](../../src/studio-model.js),
-  [terminal](../../src/studio-terminal.js), [application](../../electron/studio-main.cjs)
-  et [barre Ubuntu](../../electron/studio-tray.cjs).
+Le [transport local](../../backend/connectors/local_tools.py) et son
+[exécutant](../../backend/connectors/tool_runtime.py) assurent des échanges JSON
+bornés, la vérification de l’identité de connexion, les preuves et les accusés de
+réception. Le registre des effets interdit un renvoi aveugle après une réponse
+perdue. Une tâche IA peut recevoir les données lues dans `inputs.tool_data`, avec
+ou sans profil spécialisé.
 
-Aucune édition de code projet, publication ou livraison métier réelle n’est
-attestée par une réponse IA. Dans cette préversion, les résultats de travail
-attendent leur validation ; les portes humaines restent des décisions distinctes.
+L’[interface](../../src/studio.js) distingue l’application de l’éditeur. La Vue
+d’ensemble regroupe les exécutions globales et celles des projets. La
+[barre latérale](../../src/studio.css) est vérifiée en fenêtres normale et réduite.
 
-## Utiliser le terminal et les plugins
+## Configurer un plugin depuis le terminal
 
-Dans un projet, les fichiers sont sous `<dépôt>/.tricorder/`. Les modèles et les
-workflows globaux possèdent leur propre espace dans les données locales de
-Tricorder. La fenêtre indique le chemin exact.
-
-`AGENTS.md` est livré avec l’application. À l’ajout d’un contexte et au lancement
-après installation/mise à jour, Tricorder installe ou actualise sa version si elle
-n’a pas été personnalisée. Les règles du dépôt parent ne sont jamais remplacées.
-Une personnalisation est conservée et signalée dans Connexions.
-
-Un nouveau plugin peut être configuré avec les outils natifs dans le terminal.
-« Détecter les plugins Codex » interroge `codex plugin list --json`, sans lancer
-ses outils. La liste n’affirme pas que ses comptes sont connectés. Les capacités
-souhaitées se déclarent dans `.tricorder/plugins.json` :
+Ouvrir le terminal du contexte concerné, configurer le service avec son outil
+natif puis déclarer ses capacités dans `.tricorder/plugins.json`. Exemple de
+structure, à remplacer par des chemins et un adaptateur existants :
 
 ```json
-{"schema":1,"plugins":[{"id":"mon-plugin","title":"Mon plugin",
-"provider":"codex","operations":["read","send"]}]}
+{"schema":1,"plugins":[{"id":"mon-service","title":"Mon service",
+"provider":"local","operations":["read","send"],
+"transport":{"argv":["/usr/bin/python3","/chemin/adaptateur.py"],"timeout":30}}]}
 ```
 
-Tout bloc peut référencer une capacité par `plugin` et `operation`. L’interface
-propose les capacités déclarées dans l’inspecteur. L’activation réelle reste
-bloquée tant que le fournisseur ne possède pas un transport d’outils qualifié.
-Il n’est pas nécessaire d’ajouter un bloc ou un rôle spécialisé pour chaque plugin.
+Dans **Connexions**, actualiser puis **Vérifier l’adaptateur…**. La commande est
+présentée avant exécution : elle utilise les droits de l’utilisateur et doit être
+de confiance. Son authentification reste gérée par l’outil ; aucun secret ne doit
+figurer dans le catalogue ou les arguments. Un programme ou catalogue modifié
+invalide le contrôle. Le protocole `tricorder.tool/1`, les arguments, l’identité et
+les réponses attendues sont documentés dans l’[AGENTS.md embarqué](../../backend/workflow_engine/guidance.py),
+également installé dans chaque espace de conception.
+
+Sélectionner la capacité dans le bloc. Une lecture peut alimenter une analyse IA.
+Une notification exige son destinataire exact et un accord d’activation explicite.
+Une écriture de publication exige un bloc externe et une décision liée à l’action,
+la cible et le candidat exacts. L’import d’un workflow ne donne aucun de ces accords.
 
 ## Tests et preuves
 
-[Résultats conservés](.suivi/preuves/tests.log) · [Aperçu vérifié](.suivi/preuves/apercu.png)
+[Résultats](.suivi/preuves/tests.log) · [Vue d’ensemble](.suivi/preuves/apercu.png)
 
-Les tests utilisent des dossiers temporaires et des données synthétiques.
-Aucun email réel n’a été lu, aucun message envoyé, aucune production consultée.
+**149 tests Python, 70 tests JavaScript, 18 parcours Electron sur les sources et
+18 sur l’application empaquetée : tous réussis.** Les tests couvrent
+notamment les réponses perdues, doublons, modifications de transport, preuves
+altérées, pauses, transferts et reprises, ainsi qu’un graphe de **1 000 blocs**.
+Le transport est réellement exécuté en sous-processus, avec des données et services
+synthétiques. Aucun email réel lu, message réel envoyé ou compte de production utilisé.
 
-| Contrôle | Résultat |
-|---|---|
-| Python Tricorder | 133 tests réussis, dont les contrats des effets, des plugins, des espaces globaux et des consignes |
-| JavaScript Tricorder | 70 tests réussis |
-| Parcours Electron sur les sources | 15 réussis |
-| Paquet Debian | Construit ; 15 parcours réussis sur l’exécutable empaqueté ; association MIME déclarée |
-| Crew | 435 tests, succès avec 1 cas ignoré ; graphe 59 nœuds/129 arêtes valide |
-| Génération Crew | 38 sorties conformes ; profil `odoo-deployer` validé et installé |
+Les contrôles Crew précédents restent valables pour ses sources inchangées :
+435 tests, dont 1 ignoré, graphe 59 nœuds/129 arêtes, 38 sorties générées conformes.
+Les appels payants Codex/Claude, les connexions Confluence/messagerie et le parcours
+GitHub/Odoo.sh ne sont pas qualifiés nativement. Les tests locaux ne prouvent pas
+un gain de qualité des agents ni une conformité WCAG complète.
 
-Les parcours Electron couvrent l’édition et la persistance, les branches et la
-validation, une décision après redémarrage, le blocage d’un lancement non configuré,
-le focus et l’affichage sombre à 1024 px, les propositions sans activation, le
-terminal réel et le rechargement, les récurrences, la fermeture vers la barre,
-un nouveau plugin sans agent dédié, une **vraie commande Bubblewrap avec preuve**,
-un workflow global sans projet avec liens orthogonaux, le transfert d’un fichier
-dans un espace local neuf et l’interface de mise à jour.
+## Livraison et suite
 
-Les anciens tests unitaires restent exécutés ; leurs résultats ne constituent
-pas une preuve des nouveaux parcours. Les anciennes recettes d’interface ont
-été remplacées par la suite dédiée au Studio.
+Le paquet et son empreinte se trouvent dans `build-artifacts/`. L’exécutable testé
+est installé localement dans `~/.local/opt/odoo-tricorder-0.6.0-preview.2/` ; le
+lanceur Ubuntu s’appelle **Tricorder** et l’association de fichiers est enregistrée.
+La version 0.5.1 et l’ancien lanceur sont conservés pour retour arrière. Aucune
+fenêtre en cours n’a été arrêtée ; quitter puis relancer pour charger cette version.
+Aucun push GitHub
+ni déploiement Odoo.sh n’est effectué ; Benoît fournira les cibles ultérieurement.
+Le [fichier d’exemple](exemple.tricorder-workflow) peut être importé sans activation.
 
-L’inventaire natif Codex a été interrogé en lecture : format et présence de
-plugins observés, sans appel à leurs services. Les appels de modèles Codex/Claude,
-Confluence, messagerie et GitHub/Odoo.sh n’ont pas été qualifiés nativement.
-Les essais utilisateurs débutants/experts, un audit WCAG complet et les mesures
-sur grands graphes restent à faire. Aucun gain de qualité des agents n’est affirmé.
-
-## Fichiers portables et mises à jour
-
-[Exemple exporté](exemple.tricorder-workflow) : à ouvrir avec Tricorder installé.
-Le paquet Debian déclare l’extension et son type MIME pour le double-clic Ubuntu.
-Le format ne contient que la définition ; les sous-workflows sont intégrés en
-blocs explicites. Les modèles hérités du contexte source sont conservés, les
-profils résolus et les états de compte ne le sont pas. Une importation répétée
-crée une autre définition et n’écrase pas un workflow existant.
-
-L’application consulte au lancement l’API publique de dernière release stable
-([contrat GitHub](https://docs.github.com/en/rest/releases/releases#get-the-latest-release)).
-La comparaison refuse un retour à une version antérieure. Les liens de release et
-de paquet restent limités au dépôt Tricorder. La vérification réelle du 8 octobre
-a reçu `v0.5.0`, donc aucune version stable supérieure à cette préversion 0.6.0.
-Aucun paquet distant n’a été installé par ce contrôle.
-
-## Livraison et prochaines étapes
-
-Le paquet de préversion se trouve dans `build-artifacts/` (SHA256 dans
-`build-artifacts/SHA256SUMS`). Il n’a pas remplacé l’application installée. Aucun push GitHub ni
-déploiement Odoo.sh n’a été effectué. Les profils Crew locaux ont été générés
-avec leur outil canonique ; le changement préexistant de `stack/docker-compose.yml`
-a été laissé intact.
-
-Priorités restantes : transport générique des outils et qualification native,
-validation automatique encadrée pour les veilles, workflow de déploiement complet,
-passage global → projet, puis recette d’usage et accessibilité. Les cibles de
-livraison seront précisées par Benoît. Le plan initial n’est pas déclaré terminé.
+La préversion ne clôt pas le plan : restent l’exécution native outillée des agents,
+les adaptateurs authentifiés des services retenus et leur recette réelle, la
+migration complète Crew, puis la recette humaine d’usage/accessibilité. Ces limites
+sont distinctes des fonctions locales déjà implémentées et vérifiées.

@@ -1,8 +1,8 @@
 # Tricorder
 
-Un éditeur de workflows local pour Ubuntu : concevoir un parcours, choisir ses
-modèles et ses outils, suivre les résultats et garder les décisions humaines.
-**Version de travail : 0.6.0-preview.1.** Le moteur est générique ; Odoo Crew est
+Une application locale pour concevoir, exécuter et suivre des workflows de
+développement ou de monitoring, sur un projet Git ou indépendamment des projets.
+**Version de travail : 0.6.0-preview.2.** Le moteur est générique ; Odoo Crew est
 un pack facultatif.
 
 [Avancement et limites](release/2026-10-08_workflow-studio/README.md) ·
@@ -11,6 +11,7 @@ un pack facultatif.
 
 ## Choisir son espace
 
+- **Vue d’ensemble** : exécutions, résultats à examiner et récurrences actives.
 - **Globaux** : automatisations transverses, indépendantes des projets, par
   exemple une veille de messagerie ou le traitement de tickets.
 - **Projets** : chacun correspond à la racine d’un dépôt Git local.
@@ -41,6 +42,19 @@ sessions de cette préversion sont limitées au texte ; elles ne modifient pas l
 code d’un projet. Les opérations externes non connectées restent bloquées.
 
 Les exécutions montrent les résultats remis, les preuves et les décisions.
+Les blocs déterministes peuvent valider automatiquement leurs contrôles techniques ;
+les décisions humaines restent obligatoires. Les récurrences peuvent ainsi
+s’enchaîner sans validation manuelle de chaque lecture. Un transfert global →
+projet crée un brouillon avec les résultats validés ; les accords ne suivent pas.
+Les commandes et documents peuvent réutiliser explicitement des preuves de moins
+de 24 h si les sources et dépendances contrôlées sont inchangées.
+
+Un adaptateur local peut relier un plugin à Tricorder, après examen de sa commande
+et vérification explicite dans **Connexions**. Ce transport gère lectures,
+notifications et écritures autorisées. Il exécute du code de confiance avec les
+droits utilisateur ; un plugin Codex installé n’est pas automatiquement connecté.
+Le [contrat de configuration](backend/workflow_engine/guidance.py) est aussi
+installé dans le terminal de chaque contexte.
 La croix **masque la fenêtre** : l’icône Ubuntu garde le suivi actif.
 **Quitter Tricorder** arrête le planificateur ; les processus déjà lancés peuvent
 encore terminer. Aucun démarrage automatique à la connexion Ubuntu n’est installé.

@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 import time
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from .contracts import require, validate
+from .contracts import ContractError, require, validate, expand, digest
 from .engine import new_id
 from .runtime import preflight
 
@@ -54,14 +54,32 @@ class Schedules:
         with self.engine.store.connect() as db:
             return [self.engine.store.body(row) for row in db.execute("SELECT body FROM schedules ORDER BY id")]
 
-    def create(self, project_id, graph, rule, simulation=False, now=None, library=None):
+    def create(self, project_id, graph, rule, simulation=False, now=None, library=None, notifications_authorized=False):
         validate(graph)
         now = time.time() if now is None else now
-        issues = preflight(graph, simulation, self.engine.project(project_id)["defaults"], self.engine.project(project_id))
+        project = self.engine.project(project_id)
+        graph = expand(graph, library or {})
+        from .packs import resolve_profiles, policy_issues
+        if not simulation:
+            graph = resolve_profiles(project, graph)
+        issues = preflight(graph, simulation, project["defaults"], project, self.engine)
+        if not simulation:
+            issues += policy_issues(project, graph)
+            if any(n["kind"] == "communication" for n in graph["nodes"]):
+                require(notifications_authorized, "Autoriser explicitement les notifications de cette révision avant activation")
         require(not issues, " · ".join(i["message"] for i in issues))
         schedule = {"id": new_id("s"), "project": project_id, "title": graph["title"], "definition": graph, "library": library or {}, "rule": rule,
                     "scope": {"kind": self.engine.project(project_id).get("scope", "project"), "id": project_id},
-                    "simulation": bool(simulation), "enabled": True, "created": now, "next": next_due(rule, now), "last_run": None, "last_status": "scheduled"}
+                    "notifications_authorized": bool(notifications_authorized), "simulation": bool(simulation), "enabled": True, "created": now, "next": next_due(rule, now), "last_run": None, "last_status": "scheduled"}
+        from .integrations import catalog
+        schedule["plugins_digest"] = catalog(project)["sha256"]
+        schedule["project_config_digest"] = digest({"defaults": project["defaults"], "packs": project.get("packs", [])})
+        schedule["transports"] = {}
+        if not simulation:
+            from connectors.local_tools import approved
+            for node in graph["nodes"]:
+                for binding in node.get("capabilities", []):
+                    schedule["transports"][binding["plugin"]] = approved(self.engine, project, binding["plugin"])
         with self.engine.store.transaction() as db:
             db.execute("INSERT INTO schedules VALUES (?, ?)", (schedule["id"], self.engine.store.encode(schedule)))
         return schedule
@@ -91,9 +109,27 @@ class Schedules:
                 if previous and previous["status"] in {"active", "paused"}:
                     schedule["last_status"] = "skipped-overlap"
                 else:
-                    run = self.engine.start(schedule["project"], schedule["definition"], simulation=schedule["simulation"], library=schedule["library"], connection=db,
-                                            occurrence={"schedule": schedule["id"], "due": schedule["last_due"]})
-                    schedule.update(last_run=run["id"], last_status="started")
-                    started.append(run)
+                    db.execute("SAVEPOINT occurrence")
+                    try:
+                        project = self.engine.project(schedule["project"], db)
+                        if not schedule["simulation"]:
+                            require(schedule.get("project_config_digest") == digest({"defaults": project["defaults"], "packs": project.get("packs", [])}), "Modèles ou packs du contexte modifiés : recréer la récurrence après vérification")
+                            from .integrations import catalog
+                            from connectors.local_tools import approved
+                            require(schedule.get("plugins_digest") == catalog(project)["sha256"], "Catalogue modifié : recréer la récurrence après vérification")
+                            for plugin, expected in schedule.get("transports", {}).items():
+                                require(approved(self.engine, project, plugin) == expected, "Transport modifié : recréer la récurrence après vérification")
+                            issues = preflight(schedule["definition"], False, project["defaults"], project, self.engine)
+                            require(not issues, " · ".join(i["message"] for i in issues))
+                        run = self.engine.start(schedule["project"], schedule["definition"], simulation=schedule["simulation"], library=schedule["library"], connection=db,
+                                                notifications_authorized=schedule.get("notifications_authorized", False),
+                                                occurrence={"schedule": schedule["id"], "due": schedule["last_due"], "since": schedule["created"]})
+                        schedule.update(last_run=run["id"], last_status="started")
+                        started.append(run)
+                    except (ContractError, OSError, ValueError) as exc:
+                        db.execute("ROLLBACK TO occurrence")
+                        schedule.update(enabled=False, last_status="blocked", error=str(exc))
+                    finally:
+                        db.execute("RELEASE occurrence")
                 db.execute("UPDATE schedules SET body=? WHERE id=?", (self.engine.store.encode(schedule), schedule["id"]))
         return started

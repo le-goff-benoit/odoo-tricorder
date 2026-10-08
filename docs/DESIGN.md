@@ -1,14 +1,23 @@
 # Socle visuel Tricorder
 
-## Direction cible — éditeur de workflows génériques (8 octobre 2026)
+## Direction — concevoir, utiliser et suivre des workflows (8 octobre 2026)
 
-**Statut : recherche et prescriptions de conception, pas interface livrée.**
-Cette section guide la nouvelle application demandée par Benoît. Le socle du
-7 octobre décrit plus bas la version actuelle ; ses sept onglets, dimensions et
-couleurs ne contraignent pas la refonte. Le
-[plan de développement et de tests](PLAN_WORKFLOWS_2026-10-08.md) porte les travaux
-W22/W23 et la validation UX T46–T54. La compatibilité des anciens workflows n'est
-pas requise.
+La [release](../release/2026-10-08_workflow-studio/README.md) distingue les fonctions
+livrées des prescriptions encore à qualifier. Le
+[plan de développement et de tests](PLAN_WORKFLOWS_2026-10-08.md) porte les critères.
+
+**Tricorder est l’application ; l’éditeur est une fonctionnalité.** À la demande
+de Benoît, aucun titre « Éditeur de workflows » ne coiffe la navigation globale.
+L’accueil présente l’activité. Les workflows globaux, projets Git, modèles,
+récurrences et connexions sont des destinations stables. L’éditeur, l’exécution,
+l’historique et la documentation sont les vues d’un workflow ouvert.
+
+La barre latérale aligne des icônes SVG de 19 px et des lignes de 38 px, avec
+quelques séparateurs, sans slogan ni titre de fonctionnalité. Marque et barre
+supérieure ont la même hauteur. Mises à jour et thème sont regroupés en pied.
+Sous 850 px, les icônes restent visibles avec noms accessibles et infobulles ;
+les libellés masqués ne suppriment aucune action. Ces dimensions sont des choix
+locaux, vérifiés à 1 280, 1 024 et 800 px, pas une norme universelle.
 
 ### Références et choix du projet
 

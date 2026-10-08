@@ -1,6 +1,6 @@
 {
   "name": "odoo-tricorder",
-  "version": "0.6.0-preview.1",
+  "version": "0.6.0-preview.2",
   "desktopName": "odoo-tricorder.desktop",
   "description": "Éditeur de workflows avec exécution, agents IA et validations humaines",
   "author": {

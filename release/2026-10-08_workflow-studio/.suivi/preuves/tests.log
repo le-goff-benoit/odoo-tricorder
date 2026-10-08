@@ -1,45 +1,74 @@
-# Python et JavaScript
+Tricorder 0.6.0-preview.2 — vérifications locales
+Données synthétiques ; aucun service métier externe appelé.
 
-Ran 133 tests in 8.338s
+Unités Python et JavaScript
+test_automatic_does_not_accept_failed_bad_output_or_missing_evidence (test_workflow_automation.AutomationTests) ... ok
+test_automatic_result_advances_but_never_answers_human_gate (test_workflow_automation.AutomationTests) ... ok
+test_bad_schedule_does_not_starve_other_schedules (test_workflow_automation.AutomationTests) ... ok
+test_bounded_adapter_times_out_and_limits_output (test_workflow_automation.AutomationTests) ... ok
+test_command_reuse_requires_same_source_and_intact_evidence (test_workflow_automation.AutomationTests) ... ok
+test_failed_occurrence_rolls_back_its_run_and_keeps_other_schedules (test_workflow_automation.AutomationTests) ... ok
+test_global_handoff_creates_project_draft_without_authorizations (test_workflow_automation.AutomationTests) ... ok
+test_large_graph_validation_and_execution (test_workflow_automation.AutomationTests) ... ok
+test_lost_send_receipt_never_blindly_repeats_even_on_manual_retry (test_workflow_automation.AutomationTests) ... ok
+test_notification_authorization_cannot_be_supplied_by_regular_api (test_workflow_automation.AutomationTests) ... ok
+test_pause_or_cancel_never_advances_automatic_late_result (test_workflow_automation.AutomationTests) ... ok
+test_recurring_exact_mail_filter_notifies_once_without_manual_receipts (test_workflow_automation.AutomationTests) ... ok
+test_selective_reuse_invalidates_changed_ancestors_not_siblings (test_workflow_automation.AutomationTests) ... ok
+test_tool_write_requires_exact_gate_and_cannot_hide_in_read_block (test_workflow_automation.AutomationTests) ... ok
+test_transport_requires_exact_human_trust_and_changes_revoke_it (test_workflow_automation.AutomationTests) ... ok
+test_worker_flags_cannot_select_auto_policy_and_criteria_cannot_be_skipped (test_workflow_automation.AutomationTests) ... ok
+Ran 149 tests in 13.664s
 OK
 ℹ tests 70
 ℹ pass 70
 ℹ fail 0
 
-# Interface sur sources
+Electron sources
+  ✓   1 tests/studio.spec.cjs:27:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (2.6s)
+  ✓   2 tests/studio.spec.cjs:49:1 › simulation: two branches, human decision, truthful results and single documentation view (7.4s)
+  ✓   3 tests/studio.spec.cjs:65:1 › decisions persist after application restart and reject skips its branch (6.7s)
+  ✓   4 tests/studio.spec.cjs:79:1 › connections never infer native authentication and real unconfigured launch is blocked (1.7s)
+  ✓   5 tests/studio.spec.cjs:90:1 › live events preserve text input and focus; layout fits 1024 and dark theme (5.3s)
+  ✓   6 tests/studio.spec.cjs:105:1 › structured proposal needs preview, rejects stale revision and never starts a run (1.7s)
+  ✓   7 tests/studio.spec.cjs:119:1 › template creation has a real terminal; file edits require validated reload (2.6s)
+  ✓   8 tests/studio.spec.cjs:139:1 › recurrence activation shows models and persists; communication needs exact recipients (2.5s)
+  ✓   9 tests/studio.spec.cjs:157:1 › window closes to Ubuntu tray and remains available (934ms)
+  ✓  10 tests/studio.spec.cjs:165:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (2.1s)
+  ✓  11 tests/studio.spec.cjs:187:1 › real isolated command produces evidence, then waits for human receipt (3.1s)
+  ✓  12 tests/studio.spec.cjs:201:1 › global workflow runs independently of Git projects and draws right-angle links (3.6s)
+  ✓  13 tests/studio.spec.cjs:221:1 › exported clickable file opens on another local instance as a draft without execution (2.8s)
+  ✓  14 tests/studio.spec.cjs:243:1 › update dialog is explicit and test mode makes no automatic network request (1.0s)
+  ✓  15 tests/studio.spec.cjs:250:1 › repeated example clicks never create duplicate demo projects (1.5s)
+  ✓  16 tests/studio.spec.cjs:260:1 › trusted local adapter runs through the UI and automatic validation completes without a human receipt (3.4s)
+  ✓  17 tests/studio.spec.cjs:285:1 › large workflow remains editable in canvas and keyboard list (2.2s)
+  ✓  18 tests/studio.spec.cjs:297:1 › application navigation separates overview, workflow use and editor with compact responsive spacing (2.6s)
+  18 passed (54.5s)
 
-  ✓   1 tests/studio.spec.cjs:27:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (3.0s)
-  ✓   2 tests/studio.spec.cjs:49:1 › simulation: two branches, human decision, truthful results and single documentation view (10.3s)
-  ✓   3 tests/studio.spec.cjs:65:1 › decisions persist after application restart and reject skips its branch (8.7s)
-  ✓   4 tests/studio.spec.cjs:78:1 › connections never infer native authentication and real unconfigured launch is blocked (2.9s)
-  ✓   5 tests/studio.spec.cjs:89:1 › live events preserve text input and focus; layout fits 1024 and dark theme (6.1s)
-  ✓   6 tests/studio.spec.cjs:104:1 › structured proposal needs preview, rejects stale revision and never starts a run (2.6s)
-  ✓   7 tests/studio.spec.cjs:118:1 › template creation has a real terminal; file edits require validated reload (4.9s)
-  ✓   8 tests/studio.spec.cjs:138:1 › recurrence activation shows models and persists; communication needs exact recipients (3.7s)
-  ✓   9 tests/studio.spec.cjs:156:1 › window closes to Ubuntu tray and remains available (1.7s)
-  ✓  10 tests/studio.spec.cjs:164:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (4.0s)
-  ✓  11 tests/studio.spec.cjs:186:1 › real isolated command produces evidence, then waits for human receipt (4.0s)
-  ✓  12 tests/studio.spec.cjs:200:1 › global workflow runs independently of Git projects and draws right-angle links (5.3s)
-  ✓  13 tests/studio.spec.cjs:220:1 › exported clickable file opens on another local instance as a draft without execution (3.0s)
-  ✓  14 tests/studio.spec.cjs:242:1 › update dialog is explicit and test mode makes no automatic network request (736ms)
-  ✓  15 tests/studio.spec.cjs:249:1 › repeated example clicks never create duplicate demo projects (1.3s)
-  15 passed (1.1m)
+Electron paquet
+  ✓   1 tests/studio.spec.cjs:27:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (2.6s)
+  ✓   2 tests/studio.spec.cjs:49:1 › simulation: two branches, human decision, truthful results and single documentation view (8.4s)
+  ✓   3 tests/studio.spec.cjs:65:1 › decisions persist after application restart and reject skips its branch (7.1s)
+  ✓   4 tests/studio.spec.cjs:79:1 › connections never infer native authentication and real unconfigured launch is blocked (1.7s)
+  ✓   5 tests/studio.spec.cjs:90:1 › live events preserve text input and focus; layout fits 1024 and dark theme (5.5s)
+  ✓   6 tests/studio.spec.cjs:105:1 › structured proposal needs preview, rejects stale revision and never starts a run (1.9s)
+  ✓   7 tests/studio.spec.cjs:119:1 › template creation has a real terminal; file edits require validated reload (3.2s)
+  ✓   8 tests/studio.spec.cjs:139:1 › recurrence activation shows models and persists; communication needs exact recipients (2.5s)
+  ✓   9 tests/studio.spec.cjs:157:1 › window closes to Ubuntu tray and remains available (1.1s)
+  ✓  10 tests/studio.spec.cjs:165:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (2.8s)
+  ✓  11 tests/studio.spec.cjs:187:1 › real isolated command produces evidence, then waits for human receipt (3.2s)
+  ✓  12 tests/studio.spec.cjs:201:1 › global workflow runs independently of Git projects and draws right-angle links (4.0s)
+  ✓  13 tests/studio.spec.cjs:221:1 › exported clickable file opens on another local instance as a draft without execution (3.0s)
+  ✓  14 tests/studio.spec.cjs:243:1 › update dialog is explicit and test mode makes no automatic network request (1.8s)
+  ✓  15 tests/studio.spec.cjs:250:1 › repeated example clicks never create duplicate demo projects (1.6s)
+  ✓  16 tests/studio.spec.cjs:260:1 › trusted local adapter runs through the UI and automatic validation completes without a human receipt (4.2s)
+  ✓  17 tests/studio.spec.cjs:285:1 › large workflow remains editable in canvas and keyboard list (2.5s)
+  ✓  18 tests/studio.spec.cjs:297:1 › application navigation separates overview, workflow use and editor with compact responsive spacing (2.6s)
+  18 passed (1.0m)
 
-# Interface empaquetée
-
-  ✓   1 tests/studio.spec.cjs:27:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (1.9s)
-  ✓   2 tests/studio.spec.cjs:49:1 › simulation: two branches, human decision, truthful results and single documentation view (8.2s)
-  ✓   3 tests/studio.spec.cjs:65:1 › decisions persist after application restart and reject skips its branch (6.4s)
-  ✓   4 tests/studio.spec.cjs:78:1 › connections never infer native authentication and real unconfigured launch is blocked (1.1s)
-  ✓   5 tests/studio.spec.cjs:89:1 › live events preserve text input and focus; layout fits 1024 and dark theme (5.4s)
-  ✓   6 tests/studio.spec.cjs:104:1 › structured proposal needs preview, rejects stale revision and never starts a run (1.3s)
-  ✓   7 tests/studio.spec.cjs:118:1 › template creation has a real terminal; file edits require validated reload (2.0s)
-  ✓   8 tests/studio.spec.cjs:138:1 › recurrence activation shows models and persists; communication needs exact recipients (2.0s)
-  ✓   9 tests/studio.spec.cjs:156:1 › window closes to Ubuntu tray and remains available (616ms)
-  ✓  10 tests/studio.spec.cjs:164:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (1.8s)
-  ✓  11 tests/studio.spec.cjs:186:1 › real isolated command produces evidence, then waits for human receipt (2.2s)
-  ✓  12 tests/studio.spec.cjs:200:1 › global workflow runs independently of Git projects and draws right-angle links (3.1s)
-  ✓  13 tests/studio.spec.cjs:220:1 › exported clickable file opens on another local instance as a draft without execution (2.1s)
-  ✓  14 tests/studio.spec.cjs:242:1 › update dialog is explicit and test mode makes no automatic network request (617ms)
-  ✓  15 tests/studio.spec.cjs:249:1 › repeated example clicks never create duplicate demo projects (1.2s)
-  15 passed (40.4s)
+Distribution
+npm run dist : code 0
+SHA256 86afae957cb1b123fe1ebfd027701de460a36f2e1ec6440875850c3146cbb283
+Installation utilisateur : fichiers clés identiques au paquet testé.
+desktop-file-validate : succès ; association MIME : odoo-tricorder.desktop.
+Ancienne installation conservée ; aucune fenêtre interrompue.

@@ -29,7 +29,7 @@ def sandbox_argv(argv, project=None, work=None):
     return args
 
 
-def capabilities(project=None):
+def capabilities(project=None, engine=None):
     result = []
     for provider in ("codex", "claude"):
         found = bool(shutil.which(provider))
@@ -55,16 +55,16 @@ def capabilities(project=None):
                        "reason": "Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte." if known else "Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.", "operations": ["watch"] if cid in {"gmail", "outlook"} else ["communicate"]})
     if project:
         from .integrations import capabilities as plugin_capabilities
-        result.extend(plugin_capabilities(project))
+        result.extend(plugin_capabilities(project, engine))
     return result
 
 
-def preflight(graph, simulation=False, defaults=None, project=None):
+def preflight(graph, simulation=False, defaults=None, project=None, engine=None):
     if simulation:
         return []
     catalog = {c["id"]: c for c in capabilities()}
     from .integrations import issues as plugin_issues
-    issues = plugin_issues(graph, project)
+    issues = plugin_issues(graph, project, engine)
     for node in graph["nodes"]:
         kind = node["kind"]
         if kind == "command" and not catalog["command"]["usable"]:
@@ -81,17 +81,24 @@ def preflight(graph, simulation=False, defaults=None, project=None):
             if selection.get("profile", "generalist") != "generalist" and not node.get("profile_text"):
                 issues.append({"node": node["id"], "message": "Profil spécialisé à charger depuis un pack vérifié."})
         elif kind == "external":
-            issues.append({"node": node["id"], "message": "Opération externe non connectée : aucune publication ni livraison réelle disponible."})
+            if not node.get("capabilities"):
+                issues.append({"node": node["id"], "message": "Opération externe non connectée : aucune publication ni livraison réelle disponible."})
+            if any("A_CONFIRMER" in str(v) for v in node.get("operation", {}).values()):
+                issues.append({"node": node["id"], "message": "Renseigner la cible et le candidat exacts du modèle avant exécution."})
+        elif kind == "document" and not node.get("capabilities") and not node.get("content", "").strip():
+            issues.append({"node": node["id"], "message": "Contenu du document ou capacité de lecture à configurer."})
         elif kind == "watch":
-            issues.append({"node": node["id"], "message": "Connecteur de messagerie non connecté dans Tricorder."})
+            if not node.get("capabilities"):
+                issues.append({"node": node["id"], "message": "Connecteur de messagerie non connecté dans Tricorder."})
             if not node.get("sender") or not node.get("account"):
                 issues.append({"node": node["id"], "message": "Compte et adresse d'expéditeur exacts à confirmer ; le nom NECA seul ne suffit pas."})
         elif kind == "communication":
             channel = node.get("channel", "slack")
-            issues.append({"node": node["id"], "message": f"Connecteur {channel} non connecté dans Tricorder."})
+            if not node.get("capabilities"):
+                issues.append({"node": node["id"], "message": f"Connecteur {channel} non connecté dans Tricorder."})
             if not node.get("recipient"):
                 issues.append({"node": node["id"], "message": "Canal ou destinataire exact à configurer avant activation."})
-        elif kind == "task":
+        elif kind == "task" and not node.get("capabilities"):
             issues.append({"node": node["id"], "message": "Travail de démonstration : choisir une commande ou un exécutant connecté."})
     return issues
 
@@ -134,6 +141,14 @@ def execute(engine, run_id, node_id, token):
             time.sleep(0.4)
             text = "SIMULATION — " + node.get("sample", f"Résultat d'exemple pour « {node['title']} ». Aucun outil métier ni service externe n'a été appelé.")
             result = {"ok": True, "summary": text, "simulated": True, "outputs": node.get("sample_outputs", {}), "evidence": [engine.artifact(text.encode())]}
+        elif node.get("capabilities"):
+            from connectors.tool_runtime import execute_tool
+            result = execute_tool(engine, run, node, token)
+            if node["kind"] == "agent":
+                run["nodes"][node_id].setdefault("inputs", {})["tool_data"] = result["outputs"]
+                generated = execute_text(engine, run, node, token, job)
+                generated["evidence"] = result["evidence"] + generated.get("evidence", [])
+                result = generated
         elif node["kind"] == "command":
             work = job / "work"
             work.mkdir(exist_ok=True)

@@ -121,14 +121,14 @@ class Engine:
             return [self.store.body(row) for row in db.execute("""SELECT body FROM workflows w WHERE project=? AND revision=(
                 SELECT MAX(revision) FROM workflows WHERE project=w.project AND id=w.id) ORDER BY id""", (project_id,))]
 
-    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None):
+    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None, notifications_authorized=False, reuse_from=None):
         from .integrations import catalog, issues as plugin_issues
         original = copy.deepcopy(graph)
         resolved = expand(graph, library or {})
         project = self.project(project_id, connection)
         from .packs import resolve_profiles, policy_issues
         if not simulation:
-            issues = policy_issues(project, resolved) + plugin_issues(resolved, project)
+            issues = policy_issues(project, resolved) + plugin_issues(resolved, project, self)
             require(not issues, " · ".join(i["message"] for i in issues))
             resolved = resolve_profiles(project, resolved)
         for node in resolved["nodes"]:
@@ -142,12 +142,25 @@ class Engine:
                "simulation": bool(simulation), "definition": resolved, "original": original,
                "contract": semantic_digest(resolved), "parameters": {**resolved.get("parameters", {}), **(parameters or {})},
                "nodes": {n["id"]: {"status": "pending", "attempt": 0} for n in resolved["nodes"]}}
+        run["transports"] = {}
+        if not simulation:
+            from connectors.local_tools import approved
+            for node in resolved["nodes"]:
+                for binding in node.get("capabilities", []):
+                    record = approved(self, project, binding["plugin"])
+                    if record["operations"][binding["operation"]] == "notify":
+                        require(notifications_authorized, "Autoriser explicitement les notifications de cette révision avant activation")
+                    run["transports"][binding["plugin"]] = record
+        run["notifications_authorized"] = bool(notifications_authorized)
         if occurrence:
             run["occurrence"] = occurrence
         with (nullcontext(connection) if connection else self.store.transaction()) as db:
             db.execute("INSERT INTO runs VALUES (?, ?)", (run["id"], self.store.encode(run)))
             self._event(db, run, "started", simulation=run["simulation"])
             self._advance(db, run)
+            if reuse_from:
+                from .reuse import apply
+                apply(self, db, run, self.run(reuse_from, db))
             self._save(db, run)
         return run
 
@@ -162,6 +175,13 @@ class Engine:
     def runs(self, project_id):
         with self.store.connect() as db:
             return [r for row in db.execute("SELECT body FROM runs ORDER BY rowid DESC LIMIT 500") if (r := self.store.body(row))["project"] == project_id]
+
+    def activity(self):
+        with self.store.connect() as db:
+            projects = {p["id"]: p for row in db.execute("SELECT body FROM projects") if (p := self.store.body(row))}
+            runs = [self.store.body(row) for row in db.execute("SELECT body FROM runs ORDER BY rowid DESC LIMIT 200")]
+            total = db.execute("SELECT COUNT(DISTINCT project || ':' || id) FROM workflows").fetchone()[0]
+        return {"runs": [{**run, "project_title": projects.get(run["project"], {}).get("title", run["project"])} for run in runs], "workflow_count": total}
 
     def events(self, run_id, after=0):
         with self.store.connect() as db:
@@ -178,6 +198,9 @@ class Engine:
     def _advance(self, db, run):
         if run["status"] != "active":
             return
+        incoming_by_node = {n["id"]: [] for n in run["definition"]["nodes"]}
+        for edge in run["definition"]["edges"]:
+            incoming_by_node[edge["to"]].append(edge)
         changed = True
         while changed:
             changed = False
@@ -185,7 +208,7 @@ class Engine:
                 state = run["nodes"][node["id"]]
                 if state["status"] != "pending":
                     continue
-                incoming = [e for e in run["definition"]["edges"] if e["to"] == node["id"]]
+                incoming = incoming_by_node[node["id"]]
                 if any(run["nodes"][e["from"]]["status"] not in TERMINAL for e in incoming):
                     continue
                 active = [e for e in incoming if run["nodes"][e["from"]].get("outcome") == e.get("outcome", "done") and run["nodes"][e["from"]]["status"] == "accepted"]
@@ -200,7 +223,9 @@ class Engine:
                             state["inputs"][dst] = outputs[src]
                     state.update(status="ready")
                     if node["kind"] == "join":
-                        state.update(status="accepted", outcome="done")
+                        outputs = {k: state["inputs"][k] for k in node.get("outputs", {}) if k in state["inputs"]}
+                        validate_outputs(node, {"outputs": outputs})
+                        state.update(status="accepted", outcome="done", result={"outputs": outputs})
                     elif node["kind"] == "condition":
                         outcome = state["inputs"].get(node["parameter"], node.get("parameters", run["parameters"]).get(node["parameter"]))
                         if outcome in node.get("options", []):
@@ -213,6 +238,14 @@ class Engine:
                 self._event(db, run, state["status"], node["id"])
         if all(s["status"] in TERMINAL for s in run["nodes"].values()):
             run["status"] = "completed"
+            if not run["simulation"]:
+                for node in run["definition"]["nodes"]:
+                    if node["kind"] == "watch":
+                        message = run["nodes"][node["id"]].get("result", {}).get("outputs", {}).get("message", {})
+                        if message.get("id"):
+                            key = digest({"project": run["project"], "workflow": run.get("occurrence", {}).get("schedule", run["original"]["id"]),
+                                          "node": node["id"], "account": node.get("account"), "message": message["id"]})
+                            db.execute("INSERT OR IGNORE INTO consumed_messages VALUES (?, ?)", (key, time.time()))
             self._event(db, run, "completed")
 
     def claim(self, run_id, node_id):
@@ -235,6 +268,9 @@ class Engine:
                 key = run["project"] + ":" + resource
                 require(not db.execute("SELECT 1 FROM resources WHERE resource=?", (key,)).fetchone(), f"Ressource occupée : {resource}")
                 db.execute("INSERT INTO resources VALUES (?, ?, ?, ?)", (key, run_id, node_id, token))
+            if node["kind"] == "command" and node.get("reuse"):
+                from .reuse import source_fingerprint
+                state["source_fingerprint"] = source_fingerprint(self.project(run["project"], db))
             state.update(status="running", attempt=state["attempt"] + 1, token=token, started=time.time(), heartbeat=time.time())
             self._event(db, run, "running", node_id, attempt=state["attempt"])
             self._save(db, run)
@@ -251,17 +287,41 @@ class Engine:
             self._save(db, run)
 
     def submit(self, run_id, node_id, token, result):
-        """A worker cannot accept its own result, even with a claimed success flag."""
+        """Only the saved validation policy can authorize automatic acceptance."""
         require(isinstance(result, dict) and isinstance(result.get("summary"), str), "Résultat structuré requis")
         with self.store.transaction() as db:
             run = self.run(run_id, db)
             state = run["nodes"][node_id]
             require(state.get("token") == token and state["status"] == "running", "Résultat d'une tentative périmée ou déjà remis")
+            if state.get("source_fingerprint"):
+                from .reuse import source_fingerprint
+                state["source_unchanged"] = state["source_fingerprint"] == source_fingerprint(self.project(run["project"], db))
             state.update(status="returned", result=copy.deepcopy(result), finished=time.time())
             db.execute("DELETE FROM resources WHERE run=? AND node=? AND token=?", (run_id, node_id, token))
             self._event(db, run, "returned", node_id, attempt=state["attempt"])
+            self._automatic(db, run, node_id)
+            self._advance(db, run)
             self._save(db, run)
         return run
+
+    def _automatic(self, db, run, node_id):
+        node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
+        state = run["nodes"][node_id]
+        if run["status"] != "active" or state["status"] != "returned" or node.get("validation") != "automatic":
+            return
+        try:
+            require(state["result"].get("ok") is True, "L'exécutant a signalé un échec")
+            validate_outputs(node, state["result"])
+            require(state["result"].get("evidence"), "Preuve requise pour la validation automatique")
+            for evidence in state["result"]["evidence"]:
+                self.evidence(evidence)
+        except ContractError as exc:
+            state["validation_error"] = str(exc)
+            self._event(db, run, "validation-failed", node_id, reason=str(exc))
+            return
+        state.update(status="accepted", outcome="done", receipt={"at": time.time(), "actor": "validation-policy", "contract": run["contract"],
+                     "checks": ["executor-success", "output-types", "evidence-integrity"], "note": "Contrôles techniques automatiques ; aucun critère métier attesté."})
+        self._event(db, run, "accepted", node_id, actor="validation-policy")
 
     def accept(self, run_id, node_id, *, human=False, checks=None, note=""):
         require(human, "Validation humaine requise par l'API dédiée")
@@ -307,6 +367,9 @@ class Engine:
             require(run["status"] in {"active", "paused"}, "Exécution déjà terminée")
             run["status"] = {"pause": "paused", "resume": "active", "cancel": "cancelled"}[action]
             self._event(db, run, action)
+            if action == "resume":
+                for nid in run["nodes"]:
+                    self._automatic(db, run, nid)
             self._advance(db, run)
             self._save(db, run)
         return run
@@ -322,10 +385,29 @@ class Engine:
             require(node["kind"] != "external", "Opération externe : nouvelle proposition et nouvel accord requis")
             require(state["attempt"] < node.get("max_attempts", 1), "Limite de reprises atteinte")
             history = state.get("history", []) + [{k: v for k, v in state.items() if k != "history"}]
-            run["nodes"][node_id] = {"status": "ready", "attempt": state["attempt"], "history": history, "reason": note}
+            run["nodes"][node_id] = {"status": "ready", "attempt": state["attempt"], "history": history, "reason": note, "inputs": state.get("inputs", {})}
             self._event(db, run, "retry", node_id, note=note)
             self._save(db, run)
         return run
+
+    def handoff(self, run_id, target_project, graph, *, human=False):
+        require(human, "Transfert réservé à l'interface humaine")
+        source = self.run(run_id)
+        require(source["scope"]["kind"] == "workspace", "Choisir une exécution globale à transférer")
+        project = self.project(target_project)
+        require(project.get("scope", "project") == "project" and not project.get("library"), "Destination : un projet Git enregistré")
+        repository(project["path"])
+        graph = copy.deepcopy(graph)
+        graph["id"] = new_id("handoff-")
+        graph.pop("revision", None)
+        graph["parameters"] = {**graph.get("parameters", {}), "source_context": {
+            "run": run_id, "workflow": source["original"]["id"], "simulation": source["simulation"],
+            "results": {nid: state["result"] for nid, state in source["nodes"].items() if state["status"] == "accepted" and state.get("result")}}}
+        # A new draft only: decisions, schedules and runtime authorization never move.
+        saved = self.save(target_project, graph)
+        with self.store.transaction() as db:
+            self._event(db, source, "handoff", target_project=target_project, workflow=saved["id"])
+        return saved
 
     def artifact(self, content):
         require(isinstance(content, bytes) and len(content) <= 2_000_000, "Preuve trop volumineuse")

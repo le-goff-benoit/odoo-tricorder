@@ -46,6 +46,7 @@ def validate_outputs(node, result):
 
 def validate(graph, *, expanded=False):
     require(isinstance(graph, dict) and graph.get("schema") == 1, "Schéma de workflow attendu : 1")
+    require(len(json.dumps(graph, ensure_ascii=False).encode()) <= 2_000_000, "Définition de workflow trop volumineuse")
     identifier(graph.get("id"), "Workflow")
     require(isinstance(graph.get("title"), str) and graph["title"].strip(), "Nom du workflow requis")
     nodes = graph.get("nodes")
@@ -66,6 +67,12 @@ def validate(graph, *, expanded=False):
             require(isinstance(binding, dict) and set(binding) == {"plugin", "operation"}, f"{nid} : liaison plugin/capacité attendue")
             identifier(binding["plugin"], "Plugin")
             identifier(binding["operation"], "Capacité")
+        require(isinstance(node.get("reuse", False), bool), f"{nid} : reuse doit être booléen")
+        policy = node.get("validation", "human")
+        require(policy in {"human", "automatic"}, f"{nid} : validation human ou automatic attendue")
+        if policy == "automatic":
+            require(node.get("kind") in {"command", "document", "watch", "communication"}, f"{nid} : validation automatique réservée aux exécutants déterministes")
+            require(not node.get("criteria"), f"{nid} : des critères métier exigent une validation humaine")
         if "position" in node:
             pos = node["position"]
             require(isinstance(pos, dict) and all(isinstance(pos.get(k), (int, float)) and math.isfinite(pos[k]) and 0 <= pos[k] <= 100000 for k in ("x", "y")), f"{nid} : position invalide")
@@ -158,7 +165,9 @@ def expand(graph, library, stack=()):
         for child in sub["nodes"]:
             original = child["id"]
             child["id"] = prefix + original
-            child["parameters"] = {**sub.get("parameters", {}), **node.get("parameters", {})}
+            child["parameters"] = {**sub.get("parameters", {}), **child.get("parameters", {}), **node.get("parameters", {})}
+            for key, value in sub.get("defaults", {}).items():
+                child.setdefault(key, value)
             if "approval" in child:
                 child["approval"] = prefix + child["approval"]
             child.setdefault("phase", node.get("phase", node["title"]))

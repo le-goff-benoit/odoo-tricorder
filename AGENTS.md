@@ -21,3 +21,7 @@ ne qualifie ni un fournisseur, ni un test métier, ni un service externe.
 Vocabulaire de l’interface : termes IT courants (éditeur de workflows, bloc,
 exécution, validation, journal d’exécution, planification, déploiement). Éviter
 les métaphores produit et garder les mêmes libellés entre écrans et documentation.
+
+Tricorder est l’application de conception, exécution et suivi ; l’éditeur est
+une vue d’un workflow. Ne pas utiliser « Éditeur de workflows » comme titre
+de la navigation globale. Préserver la lisibilité et la compacité de la barre latérale.

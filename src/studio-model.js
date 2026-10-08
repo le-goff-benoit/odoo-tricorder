@@ -1,5 +1,5 @@
 export const states = Object.freeze({ pending: 'Prévu', ready: 'Prêt', running: 'En cours', waiting: 'Décision attendue', returned: 'À valider', accepted: 'Validé', skipped: 'Non applicable', blocked: 'Bloqué' });
-export const kinds = Object.freeze({ task: 'Exemple simulé', agent: 'Tâche IA', command: 'Commande', decision: 'Décision humaine', condition: 'Condition', join: 'Jonction', review: 'Relecture', document: 'Document', external: 'Opération externe', subworkflow: 'Sous-workflow', watch: 'Surveillance', communication: 'Communication' });
+export const kinds = Object.freeze({ task: 'Tâche', agent: 'Tâche IA', command: 'Commande', decision: 'Décision humaine', condition: 'Condition', join: 'Jonction', review: 'Relecture', document: 'Document', external: 'Opération externe', subworkflow: 'Sous-workflow', watch: 'Surveillance', communication: 'Communication' });
 export const symbols = Object.freeze({ task: '◇', agent: '✦', command: '›_', decision: '?', condition: '⑂', join: '⋈', review: '✓', document: '▤', external: '↗', subworkflow: '⊞', watch: '◷', communication: '↗' });
 
 export function nodePosition(node, index) { return node.position || { x: 50 + (index % 4) * 300, y: 60 + Math.floor(index / 4) * 180 }; }

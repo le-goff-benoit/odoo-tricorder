@@ -45,7 +45,7 @@ journal d’exécution, planification, déploiement. Éviter les métaphores pro
 `model` est un identifiant exact à confirmer, jamais un exemple à activer.
 Identifiants : lettre initiale, puis lettres, chiffres, `.`, `_`, `-` (80 max).
 Types : agent, command, document, watch, communication, condition, decision,
-join, review, external, subworkflow ; task sert aux exemples simulés.
+join, review, external, subworkflow ; task appelle une capacité de lecture ou sert à la simulation.
 Une connexion contient `id`, `from`, `to`, `outcome` (done par défaut).
 Les décisions ont les issues approve/reject ; les conditions leurs `options`
 et un `parameter`. Aucun cycle ; les reprises sont bornées (max_attempts).
@@ -60,12 +60,46 @@ décision par approval ; cette décision doit porter la même opération exacte.
 "provider":"codex","operations":["read","send"]}]}
 ```
 
-Ce catalogue est déclaratif, sans commande ni secret. Tout bloc peut demander
+Le catalogue ne contient aucun secret. Tout bloc de travail peut demander
 `"capabilities":[{"plugin":"mon-plugin","operation":"read"}]`.
-Les fournisseurs admis sont codex, claude et local. Ne pas inventer l'installation,
-la connexion ou la disponibilité d'un outil. Les sessions IA de cette version
-sont limitées au texte : les plugins déclarés sont visibles, leur exécution
-reste bloquée tant que le transport d'outils n'est pas qualifié.
+Les fournisseurs admis sont codex, claude et local. Un plugin installé dans
+Codex ne fournit pas automatiquement un transport exécutable à Tricorder.
+
+Un adaptateur local de confiance peut déclarer dans le descripteur :
+`"transport":{"argv":["/chemin/absolu/executable","/chemin/adaptateur.py"],"timeout":30}`.
+Dans Connexions, « Vérifier l’adaptateur » présente la commande puis demande un
+contrôle explicite avec les droits utilisateur. Le programme gère sa connexion
+avec ses propres outils ; ne jamais mettre de jeton dans argv ou le catalogue.
+La réponse JSON à `{protocol:"tricorder.tool/1",action:"describe"}` contient
+`protocol`, `connected:true`, `identity` (compte/service non secret) et
+`operations:{read:"read",send:"notify",publish:"write"}`. Une modification du
+programme ou du catalogue invalide le contrôle et suspend les récurrences.
+
+Chaque appel reçoit `action:"call"`, `operation`, `arguments`, `expected_identity`
+et `idempotency_key`. Vérifier l'identité AVANT tout effet. Retourner
+`{ok:true,identity:"identité vérifiée",outputs:{...},receipt:{id:"accusé distant"}}` ;
+receipt est obligatoire pour notify/write. Utiliser la clé d'idempotence auprès
+du service, un contrôle de version et une relecture après publication si requis.
+Le transport est borné, sans shell, mais pas isolé du poste : sa confiance est
+explicite. Ce protocole est un adaptateur Tricorder, pas une connexion MCP native.
+
+Un bloc sélectionne une capacité. `read` peut alimenter les entrées `tool_data`
+d'une Tâche IA (avec ou sans profil) ; notify exige un bloc Communication avec
+un destinataire exact et un accord d'activation ; write exige un bloc externe
+précédé de sa décision humaine exacte. Un accord de publication n'autorise pas
+un déploiement : consigner et vérifier séparément publication, build et version.
+La surveillance demande `outputs.messages` (1 000 maximum) avec id, sender,
+received (timestamp), subject ; filtrage exact et dédoublonnage sont faits par
+le moteur. Une réponse d'envoi inconnue reste bloquée, jamais renvoyée à l'aveugle.
+
+`validation:"automatic"` est possible pour command/document/watch/communication
+sans critères métier. Le moteur vérifie succès, types de sorties et preuves ;
+une décision humaine n'est jamais automatique. `reuse:true` autorise une reprise
+explicite de preuves command/document de moins de 24 heures, si leur contrat,
+leurs dépendances et les sources du projet sont inchangés. Désactiver pour tout
+contrôle dépendant de l'heure, d'un service ou d'un environnement variable.
+Les anciens accords et notifications ne sont jamais repris.
+
 La configuration native d'un plugin se fait avec ses outils officiels, après
 vérification de sa provenance et dans le périmètre demandé par l'utilisateur.
 Ne jamais mettre de jetons, mots de passe ou clés dans ce dépôt ou une consigne.
@@ -81,7 +115,7 @@ La documentation humaine se regroupe dans `release/<id>/README.md` : intention,
 plan, réalisation, tests/limites et livraison. Le suivi technique va en `.suivi/`.
 """
 
-VERSION = 2
+VERSION = 3
 
 
 def managed_text(body=GUIDANCE, version=VERSION):

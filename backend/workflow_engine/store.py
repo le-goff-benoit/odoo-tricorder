@@ -15,6 +15,8 @@ class Store:
             db.executescript("""
                 PRAGMA journal_mode=WAL;
                 CREATE TABLE IF NOT EXISTS projects(id TEXT PRIMARY KEY, body TEXT NOT NULL);
+                CREATE TABLE IF NOT EXISTS tool_trust(project TEXT, plugin TEXT, body TEXT, PRIMARY KEY(project, plugin));
+                CREATE TABLE IF NOT EXISTS consumed_messages(id TEXT PRIMARY KEY, consumed REAL);
                 CREATE TABLE IF NOT EXISTS schedules(id TEXT PRIMARY KEY, body TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS workflows(
                     project TEXT NOT NULL, id TEXT NOT NULL, revision INTEGER NOT NULL,

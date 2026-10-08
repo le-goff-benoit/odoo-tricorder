@@ -68,6 +68,7 @@ test('decisions persist after application restart and reject skips its branch', 
   await app.close();
   app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env: { ...process.env, TRICORDER_STATE_DIR: directory, TRICORDER_TEST_MODE: '1' } });
   page = await app.firstWindow();
+  await page.getByRole('button', { name: 'Projets', exact: true }).click();
   await page.getByRole('button', { name: /Mon premier projet/ }).click();
   await page.getByRole('button', { name: 'Consulter', exact: true }).click();
   await page.locator('.node[data-id="decision"]').click();
@@ -254,4 +255,63 @@ test('repeated example clicks never create duplicate demo projects', async () =>
   await example();
   await page.getByRole('button', { name: 'Projets', exact: true }).click();
   await expect(page.locator('.project-card')).toHaveCount(1);
+});
+
+test('trusted local adapter runs through the UI and automatic validation completes without a human receipt', async () => {
+  const script = path.join(directory, 'adapter.py');
+  fs.writeFileSync(script, `import json,sys\np=json.load(sys.stdin)\nif p['action']=='describe':\n print(json.dumps({'protocol':'tricorder.tool/1','identity':'ui-fixture','connected':True,'operations':{'read':'read'}}))\nelse:\n print(json.dumps({'ok':True,'identity':'ui-fixture','outputs':{'value':42}}))\n`);
+  const folder = path.join(directory, 'workspace/.tricorder');
+  fs.writeFileSync(path.join(folder, 'plugins.json'), JSON.stringify({ schema: 1, plugins: [{ id: 'fixture', title: 'Adaptateur de test', provider: 'local', operations: ['read'], transport: { argv: ['/usr/bin/python3', script], timeout: 3 } }] }));
+  const graph = { schema: 1, id: 'automatic-tool', title: 'Lecture automatique', nodes: [{ id: 'read', title: 'Lire le résultat', kind: 'document', validation: 'automatic', capabilities: [{ plugin: 'fixture', operation: 'read' }], outputs: { value: 'number' } }], edges: [] };
+  await page.evaluate(graph => window.studio.request({ action: 'workflow.save', project: 'workspace', graph }), graph);
+  await page.getByRole('button', { name: 'Globaux', exact: true }).click();
+  await page.getByRole('button', { name: 'Connexions', exact: true }).click();
+  const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Adaptateur de test', exact: true }) });
+  await card.getByRole('button', { name: 'Vérifier l’adaptateur…' }).click();
+  await expect(page.getByRole('dialog')).toContainText(script);
+  await page.getByRole('button', { name: 'Exécuter le contrôle' }).click();
+  await expect(card).toContainText('Utilisable');
+  await page.getByRole('button', { name: 'Globaux', exact: true }).click();
+  await page.getByRole('button', { name: 'Ouvrir le workflow' }).click();
+  await page.getByRole('button', { name: 'Exécuter…' }).click();
+  await expect(page.getByRole('dialog')).toContainText('Validation automatique');
+  await page.getByRole('button', { name: 'Lancer l’exécution réelle' }).click();
+  await expect(page.locator('#run-banner')).toContainText('Terminée');
+  await expect(page.locator('.node[data-id="read"]')).toHaveAttribute('data-status', 'accepted');
+  await expect(page.getByRole('button', { name: 'Valider le résultat' })).toHaveCount(0);
+  await page.screenshot({ path: path.join(test.info().outputDir, 'automatic-adapter.png'), fullPage: true });
+});
+
+test('large workflow remains editable in canvas and keyboard list', async () => {
+  const graph = { schema: 1, id: 'large', title: 'Mille étapes', nodes: Array.from({ length: 1000 }, (_, i) => ({ id: `n${i}`, title: `Étape ${i}`, kind: 'join', position: { x: (i % 20) * 300, y: Math.floor(i / 20) * 170 } })), edges: Array.from({ length: 999 }, (_, i) => ({ id: `e${i}`, from: `n${i}`, to: `n${i + 1}` })) };
+  await page.evaluate(graph => window.studio.request({ action: 'workflow.save', project: 'workspace', graph }), graph);
+  await page.getByRole('button', { name: 'Globaux', exact: true }).click();
+  const start = Date.now();
+  await page.getByRole('button', { name: 'Ouvrir le workflow' }).click();
+  await expect(page.locator('.node')).toHaveCount(1000);
+  expect(Date.now() - start).toBeLessThan(10000);
+  await page.getByRole('button', { name: 'Changer la vue canevas ou liste' }).click();
+  await expect(page.getByRole('cell', { name: 'Étape 999', exact: true })).toBeAttached();
+});
+
+test('application navigation separates overview, workflow use and editor with compact responsive spacing', async () => {
+  const sidebar = page.getByRole('complementary', { name: 'Tricorder', exact: true });
+  await expect(sidebar.locator('.brand-name')).toHaveText('Tricorder');
+  await expect(sidebar).not.toContainText('Éditeur de workflows');
+  await expect(sidebar.getByRole('button', { name: 'Vue d’ensemble' })).toHaveAttribute('aria-current', 'page');
+  await example(); await simulate();
+  await page.getByRole('button', { name: 'Vue d’ensemble', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Vue d’ensemble' })).toBeVisible();
+  await expect(page.locator('.overview-stats')).toContainText('Exécutions ouvertes');
+  await page.screenshot({ path: path.join(test.info().outputDir, 'navigation-overview.png'), fullPage: true });
+  for (const width of [1280, 1024, 800]) {
+    await page.setViewportSize({ width, height: 800 });
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+    expect(overflow).toBe(false);
+    const metrics = await sidebar.locator('.nav-item').evaluateAll(elements => elements.map(e => ({ height: e.getBoundingClientRect().height, width: e.getBoundingClientRect().width })));
+    expect(metrics.every(r => r.height >= 36 && r.height <= 44)).toBe(true);
+    await expect(sidebar.getByRole('button', { name: 'Mises à jour' }).locator('svg')).toBeVisible();
+    await expect(sidebar.getByRole('button', { name: 'Changer le thème' }).locator('svg')).toBeVisible();
+  }
+  await page.screenshot({ path: path.join(test.info().outputDir, 'navigation-compact.png'), fullPage: true });
 });

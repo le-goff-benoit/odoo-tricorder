@@ -2,6 +2,11 @@
 
 8 octobre 2026 · **Plan autorisé ; implémentation en cours.**
 
+La préversion 0.6.0-preview.2 ajoute la navigation globale et la Vue d’ensemble,
+les adaptateurs locaux exécutables, les validations automatiques, le transfert
+global → projet et la réutilisation de preuves. Les qualifications natives et
+la migration complète Crew restent ouvertes.
+
 État réel et preuves : [release Workflow Studio](../release/2026-10-08_workflow-studio/README.md).
 
 Ce document consolide les demandes de Benoît dans la conversation du 8 octobre.

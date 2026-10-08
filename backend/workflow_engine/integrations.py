@@ -23,7 +23,7 @@ def catalog(project):
     seen = set()
     plugins = []
     for item in data["plugins"]:
-        require(isinstance(item, dict) and set(item) <= {"id", "title", "provider", "operations"}, "Descripteur : id, title, provider, operations uniquement ; aucun secret")
+        require(isinstance(item, dict) and set(item) <= {"id", "title", "provider", "operations", "transport"}, "Descripteur : id, title, provider, operations, transport uniquement ; aucun secret")
         pid = identifier(item.get("id"), "Plugin")
         require(pid not in seen, "Plugin dupliqué")
         seen.add(pid)
@@ -34,27 +34,53 @@ def catalog(project):
         for operation in operations:
             identifier(operation, "Capacité")
         require(len(set(operations)) == len(operations), "Capacité dupliquée")
+        if "transport" in item:
+            from connectors.local_tools import fingerprint
+            fingerprint(item["transport"])
         plugins.append({**item, "operations": list(operations)})
     return {"path": str(path), "plugins": plugins, "sha256": digest(plugins)}
 
 
-def capabilities(project):
-    return [{**item, "id": "plugin:" + item["id"], "plugin_id": item["id"],
-             "available": True, "installed": None, "connected": None, "usable": False,
-             "qualified": False, "source": "project-manifest",
-             "reason": "Déclaré dans le dépôt. Installation et accès à vérifier chez le fournisseur ; transport d’outils non qualifié dans cette version de Tricorder."}
-            for item in catalog(project)["plugins"]]
+def capabilities(project, engine=None):
+    result = []
+    for item in catalog(project)["plugins"]:
+        card = {**item, "id": "plugin:" + item["id"], "plugin_id": item["id"],
+                "available": True, "installed": None, "connected": None, "usable": False,
+                "qualified": False, "source": "project-manifest",
+                "reason": "Plugin déclaré ; transport non qualifié. Configurer un adaptateur local puis vérifier la connexion."}
+        if item.get("transport") and engine:
+            from connectors.local_tools import approved
+            from .contracts import ContractError
+            try:
+                record = approved(engine, project, item["id"])
+                card.update(installed=True, connected=True, usable=True, qualified=True,
+                            reason="Adaptateur local vérifié. Son authentification reste sous sa responsabilité.", verified_at=record["verified_at"])
+            except (ContractError, OSError) as exc:
+                card["reason"] = str(exc)
+        result.append(card)
+    return result
 
 
-def issues(graph, project=None):
+def issues(graph, project=None, engine=None):
+    from .contracts import ContractError
     known = {p["id"]: p for p in catalog(project)["plugins"]} if project else {}
     result = []
     for node in graph["nodes"]:
-        for binding in node.get("capabilities", []):
+        bindings = node.get("capabilities", [])
+        if bindings and node["kind"] not in {"watch", "communication", "external", "document", "task", "agent"}:
+            result.append({"node": node["id"], "message": "Transport non qualifié pour ce type de bloc. Choisir Tâche IA, Travail, Document, Veille, Communication ou Opération externe."})
+        if len(bindings) > 1:
+            result.append({"node": node["id"], "message": "Une capacité par bloc exécutable ; relier plusieurs blocs pour composer les opérations."})
+        for binding in bindings:
             plugin = known.get(binding["plugin"])
-            if not plugin or binding["operation"] not in plugin["operations"]:
-                message = "Capacité absente du catalogue du projet ; actualiser ou configurer le plugin."
-            else:
-                message = "Plugin déclaré, mais transport d’outils non qualifié : aucune activation réelle possible."
-            result.append({"node": node["id"], "message": message})
+            try:
+                require(plugin and binding["operation"] in plugin["operations"], "Capacité absente du catalogue du projet ; actualiser ou configurer le plugin.")
+                require(engine and plugin.get("transport"), "Plugin déclaré, mais transport d’outils non qualifié : vérifier un adaptateur local.")
+                from connectors.local_tools import approved
+                record = approved(engine, project, plugin["id"])
+                effect = record["operations"].get(binding["operation"])
+                require(effect, "Capacité absente du transport vérifié")
+                require(effect == "read" or effect == "notify" and node["kind"] == "communication" or effect == "write" and node["kind"] == "external", "Effet de l’outil incompatible : les écritures exigent un bloc externe et un accord exact")
+            except (ContractError, OSError) as exc:
+                result.append({"node": node["id"], "message": str(exc)})
     return result

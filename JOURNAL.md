@@ -1,18 +1,19 @@
 # Journal
 
-## 2026-10-08 — Préversion Workflow Studio
+## 2026-10-08 — Workflows génériques, automatisations et navigation
 
-- Nouveau moteur générique et interface de workflows ; Odoo devient un pack facultatif.
-- Portées globales et projets Git distinctes ; modèles et versions d’exécution séparés.
-- Canevas orthogonal, phases, décisions persistantes, preuves et résultats à recevoir.
-- Terminal pour concevoir/adapter ; consignes AGENTS.md embarquées, installation/mise à jour idempotente.
-- Modèle sans agent dédié, catalogue de capacités extensible, détection des plugins Codex installés.
-- Récurrences et barre Ubuntu : fermer la fenêtre conserve le suivi actif.
-- Workflow portable cliquable et aperçu d’import ; vérification GitHub au lancement, mise à jour explicite.
-- Pack Crew et rôle expérimental odoo-deployer générés, vérifiés et installés ; aucune publication externe.
-- QA et limites consolidées dans [la release](release/2026-10-08_workflow-studio/README.md).
-- Intégrations natives, veilles autonomes, déploiement et recette utilisateur restent à terminer.
-- Aucun ancien projet client modifié ; anciennes notes consultables dans l’historique Git.
+- Moteur générique, modèles réutilisables, projets Git et workflows globaux ; Odoo est facultatif.
+- Vue d’ensemble de l’activité ; Tricorder reste le titre de l’application, l’éditeur une vue du workflow.
+- Barre latérale compacte, icônes cohérentes, liens à angles droits et affichage réduit vérifié.
+- Terminal de création/adaptation et AGENTS.md version 3, mis à jour sans écraser les personnalisations.
+- Adaptateurs locaux vérifiables : lecture, données vers IA sans profil dédié, notifications et effets avec accord.
+- Validation technique automatique facultative ; décisions humaines conservées, erreurs et envois incertains bloqués.
+- Veille récurrente testée sur service synthétique : adresse exacte, messages nouveaux, dédoublonnage durable.
+- Transfert global → projet en brouillon ; preuves réutilisables explicitement, anciens accords exclus.
+- Modèles GitHub → Odoo.sh et Confluence ; aucune cible réelle activée ni publication effectuée.
+- Icône Ubuntu, fermeture en arrière-plan, fichier portable cliquable et vérification des releases GitHub.
+- [Release unique](release/2026-10-08_workflow-studio/README.md) : tests, limites et livraison ; suivi machine dans .suivi.
+- Intégrations natives, exécution IA outillée de code et recette utilisateur restent non qualifiées.
 
 ## 2026-10-07 — Hiérarchie et thèmes (0.5.1)
 

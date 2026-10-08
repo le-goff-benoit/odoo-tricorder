@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "release": "2026-10-08_workflow-studio",
-  "version": "0.6.0-preview.1",
+  "version": "0.6.0-preview.2",
   "status": "in_progress",
   "scope": [
     "tricorder",
@@ -30,24 +30,33 @@
     "portable-clickable-workflow-file",
     "cross-computer-draft-import",
     "github-startup-update-check",
-    "standard-it-vocabulary"
+    "standard-it-vocabulary",
+    "application-overview",
+    "compact-application-navigation",
+    "qualified-local-adapter-transport",
+    "tool-read-input-for-model",
+    "autonomous-receipt-policy",
+    "durable-mail-deduplication",
+    "explicit-notification-authorization",
+    "schedule-config-pinning-and-failure-isolation",
+    "global-to-project-draft-handoff",
+    "selective-evidence-reuse",
+    "github-odoo-sh-reference-template",
+    "confluence-reference-template",
+    "large-graph-local-qualification"
   ],
   "pending": [
     "qualified-native-tool-transports",
     "native-provider-campaign",
-    "autonomous-receipt-policy",
     "real-mail-watch-and-notification",
     "real-confluence-publication",
-    "github-odoo-sh-reference-workflow-and-qualification",
-    "global-to-project-handoff",
-    "selective-evidence-reuse",
+    "github-odoo-sh-real-qualification",
     "full-crew-contract-migration",
-    "user-acceptance-and-wcag",
-    "large-graph-performance"
+    "user-acceptance-and-wcag"
   ],
   "tests": {
     "python": {
-      "passed": 133,
+      "passed": 149,
       "failed": 0
     },
     "javascript": {
@@ -55,11 +64,11 @@
       "failed": 0
     },
     "electron_source": {
-      "passed": 15,
+      "passed": 18,
       "failed": 0
     },
     "electron_packaged": {
-      "passed": 15,
+      "passed": 18,
       "failed": 0
     },
     "crew": {
@@ -79,19 +88,44 @@
       "latest": "v0.5.0",
       "update_available": false
     },
-    "source": "preuves/tests.log"
+    "source": "preuves/tests.log",
+    "local_adapter": {
+      "status": "passed",
+      "protocol": "tricorder.tool/1",
+      "external_services": false,
+      "cases": "exact sender, duplicate messages, lost receipts, stale identity/configuration, automatic validation, real local subprocess"
+    },
+    "large_graph": {
+      "nodes": 1000,
+      "edges": 999,
+      "engine_budget_seconds": 3,
+      "ui_open_budget_seconds": 10,
+      "status": "passed"
+    },
+    "navigation": {
+      "widths": [
+        1280,
+        1024,
+        800
+      ],
+      "status": "passed",
+      "full_wcag_audit": false
+    }
   },
   "publication": {
     "github": false,
     "odoo_sh": false
   },
   "human_document": "../README.md",
-  "guidance_version": 2,
+  "guidance_version": 3,
   "artifact": {
-    "file": "build-artifacts/odoo-tricorder_0.6.0-preview.1_amd64.deb",
-    "sha256": "97bfb9ee4618be4429eb68ed899e74fb3d942911528931894d2975cff41288a0",
+    "file": "build-artifacts/odoo-tricorder_0.6.0-preview.2_amd64.deb",
+    "sha256": "86afae957cb1b123fe1ebfd027701de460a36f2e1ec6440875850c3146cbb283",
     "mime_association": "application/x-tricorder-workflow",
-    "installed": false
+    "installed": true,
+    "installation": "user-local-unpacked",
+    "path": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-preview.2",
+    "previous_version_preserved": "0.5.1"
   },
   "crew_commit": "6de7f58"
 }
