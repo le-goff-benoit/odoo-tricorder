@@ -10,8 +10,8 @@ def edge(source, target, outcome="done"):
 
 
 def templates():
-    demo = {"schema": 1, "id": "first-workflow", "title": "De l'intention au résultat", "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.", "parameters": {}, "nodes": [
-        node("analyse", "Comprendre la demande", x=50, y=140, phase="Analyse", criteria=["Le résultat attendu est compréhensible."], sample="Intention clarifiée : proposer une évolution et ses critères de réussite.", max_attempts=2),
+    demo = {"schema": 1, "id": "first-workflow", "title": "De la demande au résultat", "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.", "parameters": {}, "nodes": [
+        node("analyse", "Comprendre la demande", x=50, y=140, phase="Analyse", criteria=["Le résultat attendu est compréhensible."], sample="Demande clarifiée : proposer une évolution et ses critères de réussite.", max_attempts=2),
         node("build", "Préparer la réalisation", x=350, y=60, phase="Réalisation", sample="Proposition de réalisation préparée. Aucun code de projet n'a été modifié."),
         node("test", "Préparer les tests", x=350, y=250, phase="Qualité", sample="Scénarios de test proposés. Aucun test métier n'a été exécuté."),
         node("join", "Réunir les résultats", "join", x=650, y=140, phase="Validation"),
@@ -31,8 +31,8 @@ def templates():
     components = []
     for nid, title, kind in [("orchestration", "Orchestration", "join"), ("analysis", "Analyse", "agent"), ("development", "Développement", "agent"), ("quality", "Tests", "agent"), ("documentation", "Gestion documentaire", "document"), ("communication", "Communication", "document")]:
         components.append({"schema": 1, "id": nid, "title": title, "description": "Composant réutilisable à adapter au projet.", "nodes": [node("work", title, kind, prompt=title)], "edges": []})
-    mail = {"schema": 1, "id": "mail-notification", "title": "Message NECA → notification", "description": "Brouillon : détecter les nouveaux messages d'un expéditeur confirmé, puis notifier le destinataire choisi. Aucun modèle IA nécessaire pour un filtre exact.", "nodes": [
-        node("mail", "Repérer un nouveau message NECA", "watch", x=60, y=100, connection="gmail", account="", sender="", outputs={"match": "string", "message": "object"}, sample_outputs={"match": "yes", "message": {"id": "demo-message", "subject": "Exemple NECA", "sender": "demo@example.test"}}, criteria=[], validation="automatic", sample="Message synthétique NECA. Aucun email réel consulté."),
+    mail = {"schema": 1, "id": "mail-notification", "title": "Nouveau message → notification", "description": "Brouillon : détecter les nouveaux messages d'un expéditeur confirmé, puis notifier le destinataire choisi. Aucun modèle IA nécessaire pour un filtre exact.", "nodes": [
+        node("mail", "Repérer un nouveau message", "watch", x=60, y=100, connection="gmail", account="", sender="", outputs={"match": "string", "message": "object"}, sample_outputs={"match": "yes", "message": {"id": "demo-message", "subject": "Exemple de message", "sender": "demo@example.test"}}, criteria=[], validation="automatic", sample="Message synthétique. Aucun email réel consulté."),
         node("filter", "Un nouveau message correspond ?", "condition", x=370, y=100, parameter="match", options=["yes", "no"], inputs={"match": "string", "message": "object"}, outputs={"message": "object"}),
         node("notify", "Prévenir le destinataire", "communication", x=680, y=100, channel="slack", recipient="", template="Nouveau message de {sender} : {subject}", inputs={"message": "object"}, sample="Notification simulée. Aucun message envoyé.", criteria=[], validation="automatic")
     ], "edges": [{**edge("mail", "filter"), "mapping": {"match": "match", "message": "message"}}, {**edge("filter", "notify", "yes"), "mapping": {"message": "message"}}]}
@@ -62,7 +62,7 @@ def templates():
     publication = {"action": "update-page", "target": "ESPACE_PAGE_A_CONFIRMER", "candidate": "CONTENU_VERSION_A_CONFIRMER",
                    "page": "", "space": "", "base_version": 0, "title": "", "body": ""}
     confluence = {"schema": 1, "id": "confluence-publication", "title": "Documentation → Confluence", "description": "Préparer le contenu et la version de base, relire, publier après accord exact, puis relire la page distante. Configurer un adaptateur Confluence avec contrôle de version.",
-        "nodes": [node("draft", "Préparer la documentation", "document", x=60, criteria=["L’intention, les changements et les tests sont lisibles."]),
+        "nodes": [node("draft", "Préparer la documentation", "document", x=60, criteria=["La demande, les changements et les tests sont lisibles."]),
                   node("approve", "Autoriser la mise à jour Confluence", "decision", x=360, operation=publication, options=["approve", "reject"]),
                   node("publish", "Publier la version relue", "external", x=660, operation=publication, approval="approve", evidence_required=True, criteria=["La version de base n’a pas changé ; le service a accepté la nouvelle version."]),
                   node("verify", "Relire la page publiée", "document", x=960, evidence_required=True, criteria=["Espace, page, version et contenu correspondent à la proposition autorisée."])],

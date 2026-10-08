@@ -1,0 +1,41 @@
+{
+  "version": "0.6.0-rc.6",
+  "verified_at": "2026-10-08T22:02:21.734976+00:00",
+  "checks": {
+    "python": {
+      "passed": 197
+    },
+    "javascript": {
+      "passed": 74
+    },
+    "source_ui": {
+      "passed_before_menu_fix": 54,
+      "menu_and_layout_retest_passed": 3
+    },
+    "packaged_ui": {
+      "passed": 55,
+      "skipped_optional_real_projects": 2
+    },
+    "ubuntu_build": "passed"
+  },
+  "scope": "Synthetic Git repositories, substitute CLIs and local tool servers. No real model, Slack, Gmail or Odoo business validation.",
+  "artifacts": {
+    "odoo-tricorder_0.6.0-rc.6_amd64.deb": {
+      "sha256": "4b9c3e781c3e66b47a1b6a091980562f10012ad327ba6c7895bb5919cd381bc5"
+    },
+    "app.asar": {
+      "sha256": "a8171134a8bb547385ec8da2681398f18cabae8c8aeef7ae72380e7cd34e8cc3"
+    }
+  },
+  "captures": {
+    "editor-dark.png": "69e4045cdb5b8ea58134454f6b30d29b70e8e05249600a9b0e477763502ced25",
+    "editor-light.png": "f99197576afcc59d9f624904bd317d771ae9f13c37c237e8f8fc759df6221fc8",
+    "generic-work-bilan.png": "c310981cde461f9c76f8acbb68b9acd5bd58069d5e6b2604de3953c2c9b98182",
+    "library-dark.png": "bb577269b95117f3e736de2fe5deec07d96a879d77271b2412134f113de70f05",
+    "native-conversation.png": "3d3bd842b0a7949629ade78167ca860dd41d578348a5521c9ac6d4da6ee2b007",
+    "new-meeting.png": "ee237b0ea2f9bc2995be3df912d2d97e590d77e087362ce437338ffa790cf6d2",
+    "question-notification.png": "ec0f201f21d5a4f3ee3d1142cfa25f8c1b285968bb498a59d5527f57e9b92811",
+    "terminal-side.png": "09b02736ed2a9eecad64718ce6318b4867184ed3a25eadcfe36384b6790ca945",
+    "terminal-stacked.png": "c6d52afef797c6d9f7ebccc2b5060390a122ed6b752ae233e5faae6a01a2a66b"
+  }
+}

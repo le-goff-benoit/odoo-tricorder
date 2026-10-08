@@ -236,7 +236,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
   function localDate(value) { const d = new Date(value); return new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); }
   function preferences() {
     const ui = get().settings.ui || {};
-    modal(`<div class="preferences"><h2>Préférences</h2>
+    modal(`<div class="preferences"><h2>Paramètres</h2>
       <form id="preferences-form">
         <fieldset><legend>Terminal</legend><div class="cockpit-form">
           <label>Police<select id="pref-font">${[['mono', 'DejaVu Sans Mono'], ['liberation', 'Liberation Mono'], ['system', 'Monospace système']].map(([v, l]) => `<option value="${v}" ${(ui.font || 'mono') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
@@ -361,7 +361,8 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       if (next) { selectSession(next.id); setView('terminal'); }
     }
   });
-  $('.sidebar-utilities').insertAdjacentHTML('afterbegin', '<button class="text-button" data-cockpit="palette" title="Palette de skills · Ctrl Shift P">Skills</button><button class="text-button" data-cockpit="preferences">Préférences</button>');
+  $('.sidebar-utilities').insertAdjacentHTML('afterbegin', '<button class="text-button" data-cockpit="palette" title="Commandes des agents · Ctrl Shift P">Commandes des agents</button>');
+  $('.sidebar-settings').innerHTML = '<button class="side-item" data-cockpit="preferences"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6M16 14v6"/></svg><span>Paramètres</span></button>';
   setInterval(refreshNative, 5000);
   setInterval(() => tickTimers(), 1000);
   setInterval(refreshQuotas, 30000);

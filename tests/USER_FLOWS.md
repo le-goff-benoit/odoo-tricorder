@@ -44,3 +44,34 @@ jetables ; le parcours NECA optionnel contrôle des fichiers réels en lecture s
   toutes les pannes du système, du disque ou des fournisseurs Claude/Codex.
 - Ne pas transformer une donnée absente ou une ambiguïté en succès : expliquer
   l’état et permettre une reprise explicite, sans arrêt de terminal implicite.
+
+## Workflows génériques — réception 0.6.0-rc.6
+
+| Parcours | Attendu | Test |
+|---|---|---|
+| Nouveau meeting depuis un projet | Nom et destination explicites, JSON dans ce dépôt, aucune exécution avant lancement | `work journey` |
+| Intention saisie avant lancement Claude | Une demande initiale, terminal principal conservé pendant la navigation | `work journey`, `test_initial_intention_is_atomic_and_provider_independent` |
+| Clone sur un nouveau poste | Définition retrouvée, import sans réécriture de la révision ni reprise d’autorisations | `repository journey`, `test_fresh_install_adopts_versioned_workflow_without_changing_git_file` |
+| Fichier modifié après aperçu, invalide ou lié hors dépôt | Refus de l’import périmé, autres fichiers encore consultables | `test_repository_inspection_isolates_invalid_file_and_refuses_changed_or_linked_file` |
+| Meeting ou analyse en attente | Bilan enregistré dans work/, demande et question conservées, aucune release créée | `repository journey`, `test_generic_bilan_contains_actual_request_and_retains_question_without_creating_release` |
+| Express : éligible / élargi / inconnu | Correction ouverte seulement pour l’issue éligible ; recadrage ne libère pas les dépendants | `test_express_eligibility_routes_unknown_and_sensitive_work_to_reframing` |
+| Question prévue ou imprévue avec notification | Un envoi suivi séparément ; bloc encore en attente de réponse | `question journey`, `test_questions_notify_once_through_mcp_and_keep_the_work_waiting` |
+| Connecteur changé après lancement | Question conservée, notification bloquée, aucun envoi | `test_changed_connection_does_not_lose_an_unplanned_question` |
+| Agent tente d’autoriser une notification | API ordinaire refusée, décision de l’interface nécessaire | `test_conversation_notifications_require_human_ui_and_portable_import_keeps_no_authorization` |
+| Inventaire de plugins Anthropic | Métadonnées seules ; présence distincte d’une connexion utilisable | `test_anthropic_inventory_is_metadata_only_and_cannot_assert_connection` |
+
+Les réponses d’agents dans les parcours Electron sont des CLI de substitution.
+Les tests MCP exercent un véritable échange stdio avec un service synthétique,
+sans serveur Slack/Gmail ni modèle payant. Les tests de routage ne qualifient pas
+la capacité d’un LLM à détecter seul un risque métier.
+
+La revue UX ajoute deux parcours de non-régression :
+
+- Modifier un bloc, ajouter une sortie, passer à un autre bloc, enregistrer au
+  clavier puis changer de projet : titre, critères et ports doivent tous persister.
+- Ouvrir un terminal, redimensionner au clavier, passer en disposition verticale,
+  agrandir/restaurer, revenir à l’éditeur : même session, même PID et une seule fenêtre.
+
+La navigation principale contient Tableau de bord, Modèles, Workflows globaux et
+Projets. Les outils secondaires s’ouvrent avec « Outils et aide ». Les contrôles
+clairs/sombres et de largeur portent aussi sur cette hiérarchie.

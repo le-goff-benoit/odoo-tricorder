@@ -16,7 +16,7 @@ export function taskState(task, flow) {
   else if (received && validation !== 'validated') column = 'review';
   else if (testing) column = 'review';
   const label = deployed ? 'Déployée' : column === 'review' ? testing ? 'Tests en cours' : 'Tests à reprendre' : received ? 'À déployer' : ({ ready: 'À faire', pending: 'À faire', deferred: 'Reportée', running: 'En cours', claimed: 'En cours', awaiting_receipt: 'Tests en cours', blocked: 'Bloquée', waiting_human: 'Décision attendue', interrupted: 'Interrompue' }[task.status] || 'État à vérifier');
-  const proof = received ? validation === 'validated' ? '' : 'Tests à actualiser' : task.status === 'done' ? 'Réalisation déclarée · réception non vérifiée' : '';
+  const proof = received ? validation === 'validated' ? '' : 'Tests à actualiser' : task.status === 'done' ? 'Réalisation déclarée · validation non vérifiée' : '';
   return { received, deployed, validation, column, label, proof, reason: task.reason || '' };
 }
 

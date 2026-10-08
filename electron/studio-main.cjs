@@ -20,8 +20,8 @@ function queuePortable(argv) {
 }
 let tray, quitting = false, trayTimer, tickBusy = false, lastRuns = [], lastSchedules = [], trayFresh = false;
 let terminals;
-const allowed = new Set(['conversation.open', 'conversation.list', 'conversation.get', 'conversation.add', 'conversation.answer', 'run.answer', 'bootstrap', 'overview.get', 'candidate.preview', 'workflow.export-portable', 'workflow.preview-portable', 'workflow.import-portable', 'plugins.discover', 'plugins.preview', 'workspace.get', 'design.workspace', 'assistant.propose', 'pack.preview', 'pack.install', 'project.create', 'project.get', 'template.workspace', 'schedule.list', 'schedule.create', 'schedule.toggle', 'workflow.save', 'workflow.reload', 'workflow.validate', 'run.start', 'run.get', 'run.control', 'run.document', 'run.reconcile', 'release.export']);
-const human = new Set(['run.accept', 'run.decide', 'run.retry', 'plugins.qualify', 'run.handoff', 'run.reconcile-effect', 'candidate.apply', 'run.start', 'schedule.create']);
+const allowed = new Set(['conversation.open', 'conversation.list', 'conversation.get', 'conversation.add', 'conversation.answer', 'run.answer', 'bootstrap', 'overview.get', 'candidate.preview', 'workflow.export-portable', 'workflow.preview-portable', 'workflow.import-portable', 'plugins.discover', 'plugins.preview', 'workspace.get', 'design.workspace', 'assistant.propose', 'pack.preview', 'pack.install', 'project.create', 'project.get', 'template.workspace', 'schedule.list', 'schedule.create', 'schedule.toggle', 'workflow.save', 'workflow.reload', 'workflow.validate', 'run.start', 'run.get', 'run.control', 'run.document', 'run.reconcile', 'release.export', 'work.export', 'workflow.repository', 'workflow.import-repository']);
+const human = new Set(['conversation.open', 'run.accept', 'run.decide', 'run.retry', 'plugins.qualify', 'run.handoff', 'run.reconcile-effect', 'candidate.apply', 'run.start', 'schedule.create']);
 
 function backend(payload, isHuman = false) {
   return new Promise((resolve, reject) => {

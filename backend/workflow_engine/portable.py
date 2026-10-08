@@ -19,7 +19,8 @@ def clean(graph):
 
 def requirements(graph):
     models, profiles, plugins = set(), set(), set()
-    for node in graph["nodes"]:
+    from .notifications import execution_nodes
+    for node in execution_nodes(graph):
         if node["kind"] == "agent":
             effective = {**graph.get("defaults", {}), **node}
             models.add((effective.get("provider", "codex"), effective.get("model", "à définir")))

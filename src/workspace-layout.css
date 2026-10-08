@@ -43,3 +43,38 @@
   .sidebar .project-list { flex: none; overflow: visible; }
   .sidebar-bottom { margin-top: 16px; }
 }
+
+/* Navigation: primary destinations, project shortcuts, then configuration. */
+.sidebar { gap: 0; }
+.sidebar .side-nav { gap: 2px; }
+.sidebar .side-item { border: 0; font-size: 13px; line-height: 1.25; min-height: 36px; }
+.sidebar .side-heading { font-size: 11px; padding: 20px 10px 8px; }
+.sidebar #project-list { display: flex; gap: 2px; padding-bottom: 16px; }
+.sidebar #project-list .project-item { padding-left: 16px; border-left: 2px solid transparent; border-radius: 0 5px 5px 0; min-height: 32px; }
+.sidebar #project-list .project-item.selected { border-left-color: var(--accent); }
+.sidebar #project-list .pad { padding: 4px 10px; font-size: 12px; line-height: 1.5; }
+.sidebar-tools { margin-top: 6px; border-top: 1px solid var(--line); padding-top: 6px; }
+.sidebar-tools > summary { cursor: pointer; padding: 8px 10px; font-size: 12px; color: var(--text-2); border-radius: 5px; }
+.sidebar-tools > summary:hover { background: var(--hover); }
+.sidebar-tools .sidebar-utilities { padding: 0; }
+.sidebar-tools .text-button { padding-left: 10px; }
+.sidebar-tools .install-agents { margin: 8px 0; }
+.sidebar .brand-name { display: inline; }
+.terminal-layout-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+.terminal-heading { gap: 8px; }
+.terminal-heading button { font-size: 11px; padding: 5px 8px; }
+.terminal-divider { display: none; }
+.main-content.workflow-visible.terminal-docked { grid-template-columns: minmax(220px,var(--terminal-split,52%)) 6px minmax(0,1fr); grid-template-rows: minmax(0,1fr); }
+.main-content.workflow-visible.terminal-docked #terminal-workspace { grid-column: 1; grid-row: 1; min-width: 0; border-right: 0; }
+.main-content.workflow-visible.terminal-docked #workflow-panel { grid-column: 3; grid-row: 1; }
+.main-content.workflow-visible.terminal-docked .terminal-divider { display: block; grid-column: 2; grid-row: 1; background: var(--line); cursor: col-resize; touch-action: none; }
+.terminal-divider:hover,.terminal-divider:focus-visible { background: var(--accent) !important; outline: none; }
+.main-content.workflow-visible.terminal-docked[data-terminal-layout=stacked] { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(160px,var(--terminal-split,52%)) 6px minmax(220px,1fr); }
+.main-content.workflow-visible.terminal-docked[data-terminal-layout=stacked] #workflow-panel { grid-column: 1; grid-row: 3; }
+.main-content.workflow-visible.terminal-docked[data-terminal-layout=stacked] .terminal-divider { grid-column: 1; grid-row: 2; cursor: row-resize; }
+@media(max-width:850px) {
+  .main-content.workflow-visible.terminal-docked { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(160px,var(--terminal-split,52%)) 6px minmax(220px,1fr); }
+  .main-content.workflow-visible.terminal-docked #workflow-panel { grid-column: 1; grid-row: 3; }
+  .main-content.workflow-visible.terminal-docked .terminal-divider { grid-column: 1; grid-row: 2; cursor: row-resize; }
+  [data-action=terminal-layout] { display: none; }
+}

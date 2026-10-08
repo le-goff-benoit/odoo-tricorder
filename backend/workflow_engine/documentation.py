@@ -15,7 +15,7 @@ def cell(value):
 
 def markdown(run):
     graph = run["definition"]
-    lines = [f"# {graph['title']}", "", "## Intention", "", graph.get("description", "Intention à préciser dans le workflow."), "",
+    lines = [f"# {graph['title']}", "", "## Demande", "", run.get("parameters", {}).get("request") or graph.get("description", "Demande à préciser dans le workflow."), "",
              "**Exécution simulée : aucun résultat métier réel n'est attesté.**" if run["simulation"] else "Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.", "", "## Plan", "", "| Travail | État | Critères |", "|---|---|---|"]
     for node in graph["nodes"]:
         state = run["nodes"][node["id"]]
@@ -59,21 +59,32 @@ def markdown(run):
 
 
 def export_release(engine, run_id, root, release_id):
+    return export_snapshot(engine, run_id, root, "release", release_id)
+
+
+def export_work(engine, run_id, name):
+    run = engine.run(run_id)
+    return export_snapshot(engine, run_id, engine.project(run["project"])["path"], "work", name)
+
+
+def export_snapshot(engine, run_id, root, collection, release_id):
     require(isinstance(release_id, str) and re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_.-]{0,99}", release_id), "Identifiant de release invalide")
     run = engine.run(run_id)
     root = Path(root).resolve()
     require(root.is_dir(), "Dossier de destination absent")
-    folder = root / "release" / release_id
+    folder = root / collection / release_id
     # No overwriting another human document or following a path out of the project.
-    require(not folder.exists(), "Cette release existe déjà : choisir un autre identifiant d'export")
-    require((root / "release").resolve().is_relative_to(root), "Destination hors projet")
+    require(not folder.exists(), "Ce dossier existe déjà : choisir un autre identifiant d'export")
+    require((root / collection).resolve().is_relative_to(root), "Destination hors projet")
     evidence = {}
     for state in run["nodes"].values():
         for proof in state.get("result", {}).get("evidence", []):
             evidence[proof["sha256"]] = engine.evidence(proof)
     tracking = folder / ".suivi"
     tracking.mkdir(parents=True)
-    (tracking / "release.json").write_text(json.dumps(run, indent=2, ensure_ascii=False) + "\n")
+    (tracking / ("release.json" if collection == "release" else "execution.json")).write_text(json.dumps(run, indent=2, ensure_ascii=False) + "\n")
+    (tracking / "events.json").write_text(json.dumps(engine.events(run_id), indent=2, ensure_ascii=False) + "\n")
+    (tracking / "workflow.json").write_text(json.dumps(run["original"], indent=2, ensure_ascii=False) + "\n")
     if evidence:
         (tracking / "preuves").mkdir()
         for sha, content in evidence.items():

@@ -65,7 +65,7 @@ class Schedules:
         issues = preflight(graph, simulation, project["defaults"], project, self.engine)
         if not simulation:
             issues += policy_issues(project, graph)
-            if any(n["kind"] == "communication" for n in graph["nodes"]):
+            if graph.get("on_question") or any(n["kind"] == "communication" for n in graph["nodes"]):
                 require(notifications_authorized, "Autoriser explicitement les notifications de cette révision avant activation")
         require(not issues, " · ".join(i["message"] for i in issues))
         schedule = {"id": new_id("s"), "project": project_id, "title": graph["title"], "definition": graph, "library": library or {}, "rule": rule,
@@ -77,7 +77,8 @@ class Schedules:
         schedule["transports"] = {}
         if not simulation:
             from connectors.local_tools import approved
-            for node in graph["nodes"]:
+            from .notifications import execution_nodes
+            for node in execution_nodes(graph):
                 for binding in node.get("capabilities", []):
                     schedule["transports"][binding["plugin"]] = approved(self.engine, project, binding["plugin"])
         with self.engine.store.transaction() as db:

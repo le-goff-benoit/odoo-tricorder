@@ -132,6 +132,14 @@ La configuration native d'un plugin se fait avec ses outils officiels, après
 vérification de sa provenance et dans le périmètre demandé par l'utilisateur.
 Ne jamais mettre de jetons, mots de passe ou clés dans ce dépôt ou une consigne.
 
+Pour prévenir lorsqu'une question apparaît, la définition peut déclarer
+`"on_question":{"plugin":"mon-plugin","operation":"send","recipient":"canal-exact"}`.
+La capacité doit avoir l'effet notify et être vérifiée dans ce projet. L'interface
+demande l'activation explicite des notifications. Questions prévues et imprévues
+sont prises en charge ; un échec d'envoi ne perd pas la question. Le message porte
+le titre du workflow et la référence d'exécution, jamais le texte de la question.
+Les outils restent indépendants du fournisseur et du profil d'agent.
+
 ## Points humains et preuves
 
 Ne jamais modifier SQLite, les états JSON d'exécution, une décision humaine ou
@@ -139,11 +147,13 @@ une preuve pour faire avancer un workflow. Le moteur est leur seul écrivain.
 Une modification de modèle ne modifie pas les versions déjà exécutées.
 Ne pas activer de récurrence, envoyer de message, publier ou déployer au seul
 motif que le brouillon le prévoit. Une simulation n'est pas une preuve native.
-La documentation humaine se regroupe dans `release/<id>/README.md` : intention,
-plan, réalisation, tests/limites et livraison. Le suivi technique va en `.suivi/`.
+Le bilan générique s'exporte dans `work/<nom>/README.md` : intention, résultats,
+questions, décisions et limites. Le suivi technique va en `.suivi/`. Pour une
+release, conserver la convention existante du projet ; l'export `release/` reste
+disponible. Un meeting, un support ou une analyse n'exige pas de release.
 """
 
-VERSION = 4
+VERSION = 5
 
 
 def managed_text(body=GUIDANCE, version=VERSION):

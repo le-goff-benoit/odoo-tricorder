@@ -1,8 +1,8 @@
 {
   "name": "odoo-tricorder",
-  "version": "0.6.0-rc.5",
+  "version": "0.6.0-rc.6",
   "desktopName": "odoo-tricorder.desktop",
-  "description": "Projets, releases et agents IA, avec workflows personnalisables",
+  "description": "Conception de workflows, dialogue terminal et suivi du travail",
   "author": {
     "name": "Benoît Le Goff",
     "email": "le-goff-benoit@users.noreply.github.com"

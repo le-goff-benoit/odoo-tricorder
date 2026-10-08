@@ -94,3 +94,18 @@ Les interventions antérieures restent dans l’historique Git. Le suivi détail
 - Reprise d’initialisation par Actualiser et indépendance du catalogue natif face aux erreurs des workflows.
 - Rapport et captures synthétiques : `release/2026-10-08_design/README.md`.
 - Recette : 187 tests Python, 74 JavaScript, 49 parcours sur le paquet ; deux scénarios réels facultatifs exclus.
+
+## 2026-10-08 — Parcours de travail 0.6.0-rc.6
+- Analyse des usages support, express, Studio, données et meeting ; cas publics synthétiques.
+- Créer un workflow : modèle, nom, destination et demande avant lancement ; terminal principal conservé.
+- Modèles Demande ponctuelle et Express ; qualification avant correction, suite bloquée hors périmètre.
+- Reprise des workflows du dépôt et bilans génériques work/ sans release obligatoire.
+- Projets réunis dans la barre latérale ; navigation rapide sérialisée et pont vers les releases historiques.
+- Questions prévues/imprévues : notification explicite, suivi séparé et aucune réponse implicite.
+- Connexions figées pendant la conversation ; catalogues OpenAI et Anthropic distincts des accès vérifiés.
+- Contexte multi-projets nommé pour le terminal ; intention initiale atomique, sans tâche doublonnée.
+- Rapport : `release/2026-10-08_parcours/README.md` ; aucun envoi distant réel pendant les essais.
+- Navigation hiérarchisée, vocabulaire IT, statuts d’intervention et rapport attaché à la version exécutée.
+- Terminal redimensionnable et disposition verticale ; retour à l’éditeur sans perdre la session.
+- Saisie des blocs préservée entre actions, Ctrl+S dans les champs et palette intégrée corrigée.
+- Recette : 197 tests Python, 74 JavaScript et 55 parcours sur le paquet ; deux scénarios réels facultatifs exclus.

@@ -39,6 +39,8 @@ class ConversationTests(unittest.TestCase):
         self.finish(first)
         snapshot = Conversations(Engine(self.root)).snapshot(self.conversation["id"])
         self.assertEqual(len(snapshot["definition"]["nodes"]), 1)
+        self.assertEqual([(p["id"], p["title"], p["path"]) for p in snapshot["project_contexts"]],
+                         [(p["id"], p["title"], p["path"]) for p in (self.a, self.b)])
         self.assertEqual(snapshot["items"][0]["execution"]["status"], "completed")
         self.assertEqual(snapshot["items"][1]["execution"]["nodes"]["analyse"]["status"], "ready")
         self.assertEqual(snapshot["items"][1]["execution"]["project"], self.b["id"])

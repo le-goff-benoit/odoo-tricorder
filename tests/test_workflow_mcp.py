@@ -63,4 +63,63 @@ class MCPTests(unittest.TestCase):
   config=copy.deepcopy(self.config);config['operations']['read']['tool']='absent'
   with self.assertRaisesRegex(ContractError,'absent'):exchange(config,{'action':'describe'})
 
-if __name__=='__main__':unittest.main()
+
+ def test_questions_notify_once_through_mcp_and_keep_the_work_waiting(self):
+  from workflow_engine.conversations import Conversations, ask, answer
+  from workflow_engine.notifications import queue_question
+  for planned in (True, False):
+   graph={'schema':1,'id':'questions','title':'Meeting hebdomadaire','on_question':{'plugin':'mcp','operation':'send','recipient':'synthetic-channel'},'nodes':[node('work','Clarifier','question' if planned else 'agent',**({'question':'Information confidentielle ?'} if planned else {}))],'edges':[]}
+   with self.assertRaisesRegex(ContractError,'notifications'):
+    self.engine.start('workspace',graph)
+   service=Conversations(self.engine)
+   c=service.open('workspace',graph,'codex',notifications_authorized=True)
+   item=service.add(c['id'],'Préparer le compte rendu')
+   run=self.engine.run(item['run'])
+   if not planned:
+    claim=self.engine.claim(run['id'],'work')
+    run=ask(self.engine,run['id'],'work',claim['token'],'Information confidentielle imprévue ?')
+   q=run['nodes']['work']['question'];child=q['notification']['run']
+   with self.engine.store.transaction() as db:queue_question(self.engine,db,run,'work',q)
+   claim=self.engine.claim(child,'question-notification');execute(self.engine,child,'question-notification',claim['token'])
+   self.assertEqual(self.engine.run(child)['status'],'completed')
+   self.assertEqual(self.engine.run(run['id'])['nodes']['work']['status'],'waiting_input')
+   self.assertNotIn('confidentielle',(self.root/'sent').read_text())
+   answer(self.engine,run['id'],'work',q['id'],'Précision reçue')
+  self.assertEqual(len((self.root/'sent').read_text().splitlines()),2)
+
+ def test_changed_connection_does_not_lose_an_unplanned_question(self):
+  from workflow_engine.conversations import ask
+  graph={'schema':1,'id':'questions','title':'Diagnostic','on_question':{'plugin':'mcp','operation':'send','recipient':'synthetic-channel'},'nodes':[node('work','Analyser','agent')],'edges':[]}
+  run=self.engine.start('workspace',graph,notifications_authorized=True)
+  claim=self.engine.claim(run['id'],'work')
+  self.config['timeout']=4
+  manifest=Path(self.project['path'])/'.tricorder/plugins.json'
+  data=json.loads(manifest.read_text());data['plugins'][0]['transport']=self.config;manifest.write_text(json.dumps(data))
+  run=ask(self.engine,run['id'],'work',claim['token'],'Quelle cible ?')
+  self.assertEqual(run['nodes']['work']['status'],'waiting_input')
+  self.assertEqual(run['nodes']['work']['question']['notification']['status'],'blocked')
+  self.assertFalse((self.root/'sent').exists())
+
+ def test_conversation_notifications_require_human_ui_and_portable_import_keeps_no_authorization(self):
+  from studio import request
+  from workflow_engine.portable import export, preview
+  graph={'schema':1,'id':'questions','title':'Diagnostic','on_question':{'plugin':'mcp','operation':'send','recipient':'synthetic-channel'},'nodes':[node('work','Analyser','agent')],'edges':[]}
+  payload={'action':'conversation.open','project':'workspace','graph':graph,'provider':'codex','authorize_notifications':True,'request':'Analyser'}
+  with self.assertRaisesRegex(ContractError,'notifications'):request(self.engine,payload)
+  c=request(self.engine,payload,human=True)
+  self.assertTrue(c['notifications_authorized']);self.assertEqual(len(c['items']),1)
+  bundle=export(graph,{})
+  self.assertNotIn('notifications_authorized',bundle['workflow'])
+  self.assertEqual(preview(bundle)['requirements']['capabilities'],[{'plugin':'mcp','operation':'send'}])
+  graph['on_question']['operation']='read'
+  with self.assertRaisesRegex(ContractError,'notification'):request(self.engine,payload,human=True)
+
+ def test_answer_before_notification_dispatch_cancels_the_obsolete_notification(self):
+  from workflow_engine.conversations import answer
+  from workflow_engine.runtime import dispatch
+  graph={'schema':1,'id':'questions','title':'Meeting','on_question':{'plugin':'mcp','operation':'send','recipient':'synthetic-channel'},'nodes':[node('work','Préciser','question',question='Qui relit ?')],'edges':[]}
+  run=self.engine.start('workspace',graph,notifications_authorized=True)
+  q=run['nodes']['work']['question']
+  answer(self.engine,run['id'],'work',q['id'],'Réponse immédiate')
+  self.assertEqual(dispatch(self.engine,q['notification']['run'])['status'],'cancelled')
+  self.assertFalse((self.root/'sent').exists())

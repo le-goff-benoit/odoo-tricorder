@@ -1,6 +1,19 @@
+# Parcours de travail — 0.6.0-rc.6
+
+La [revue des parcours](../release/2026-10-08_parcours/README.md) complète la passe
+visuelle : modèle → destination et demande → éditeur → conversation → résultats.
+Une release, un support ou un meeting utilisent ce même socle. Le workflow du
+projet et sa révision restent distincts d’une tâche et de son exécution. Le rapport
+est générique ; le format de release reste une option.
+
+La barre latérale distingue navigation, raccourcis de projets et configuration.
+Les outils secondaires sont regroupés dans « Outils et aide ». Le terminal est
+redimensionnable au clavier ou à la souris et peut être superposé au graphe.
+La saisie des blocs est conservée avant une action ou un changement de vue.
+
 # Ergonomie livrée — 0.6.0-rc.5
 
-La [revue des vues](../release/2026-10-08_design/README.md) décrit la dernière passe.
+La [revue des vues](../release/2026-10-08_design/README.md) décrit la passe précédente.
 Le partage permanent n’est plus la règle : consulter et dessiner utilise l’espace ;
 lancer la conversation affiche le terminal. Le bouton Terminal reste disponible.
 Les deux parties utilisent les mêmes tokens (couleurs, typographie, contrôles).
@@ -71,7 +84,7 @@ l’historique et la documentation sont les vues d’un workflow ouvert.
 
 La barre latérale aligne des icônes SVG de 19 px et des lignes de 38 px, avec
 quelques séparateurs, sans slogan ni titre de fonctionnalité. Marque et barre
-supérieure ont la même hauteur. Mises à jour et thème sont regroupés en pied.
+supérieure ont la même hauteur. Le thème reste dans l’en-tête ; les mises à jour sont dans « Outils et aide ».
 Sous 850 px, les icônes restent visibles avec noms accessibles et infobulles ;
 les libellés masqués ne suppriment aucune action. Ces dimensions sont des choix
 locaux, vérifiés à 1 280, 1 024 et 800 px, pas une norme universelle.

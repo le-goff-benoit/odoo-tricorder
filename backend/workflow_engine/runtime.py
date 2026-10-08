@@ -93,7 +93,7 @@ def preflight(graph, simulation=False, defaults=None, project=None, engine=None)
             if not node.get("capabilities"):
                 issues.append({"node": node["id"], "message": "Connecteur de messagerie non connecté dans Tricorder."})
             if not node.get("sender") or not node.get("account"):
-                issues.append({"node": node["id"], "message": "Compte et adresse d'expéditeur exacts à confirmer ; le nom NECA seul ne suffit pas."})
+                issues.append({"node": node["id"], "message": "Compte et adresse d'expéditeur exacts à confirmer ; un nom de client seul ne suffit pas."})
         elif kind == "communication":
             channel = node.get("channel", "slack")
             if not node.get("capabilities"):
@@ -110,6 +110,11 @@ def dispatch(engine, run_id):
     run = engine.run(run_id)
     if run["status"] != "active":
         return run
+    if run["original"]["id"] == "question-notification" and run["parameters"].get("source_question") and all(s["status"] in {"pending", "ready"} for s in run["nodes"].values()):
+        source = engine.run(run["parameters"]["source_run"])
+        pending = source["nodes"].get(run["parameters"]["source_node"], {})
+        if source["status"] not in {"active", "paused"} or pending.get("status") != "waiting_input" or pending.get("question", {}).get("id") != run["parameters"]["source_question"]:
+            return engine.control(run_id, "cancel")
     for nid, state in run["nodes"].items():
         if state["status"] != "ready":
             continue

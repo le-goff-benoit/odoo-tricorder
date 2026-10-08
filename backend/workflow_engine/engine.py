@@ -134,6 +134,46 @@ class Engine:
             return [self.store.body(row) for row in db.execute("""SELECT body FROM workflows w WHERE project=? AND revision=(
                 SELECT MAX(revision) FROM workflows WHERE project=w.project AND id=w.id) ORDER BY id""", (project_id,))]
 
+    def repository_workflows(self, project_id):
+        """Inspect repository definitions without executing or rewriting them."""
+        root = Path(self.project(project_id)["path"]).resolve()
+        folder = root / ".tricorder" / "workflows"
+        require(folder.resolve().is_relative_to(root), "Dossier de workflows hors du projet")
+        known = {g["id"]: g for g in self.workflows(project_id)}
+        result = []
+        for path in sorted(folder.glob("*.json"))[:1000]:
+            item = {"id": path.stem, "file": str(path.relative_to(root))}
+            try:
+                target = self.workflow_path(project_id, path.stem)
+                require(target.is_file() and target.stat().st_size <= 2_000_000, "Fichier absent ou trop volumineux")
+                graph = json.loads(target.read_text())
+                validate(graph)
+                require(graph["id"] == path.stem, "Identifiant différent du nom du fichier")
+                item.update(title=graph["title"], digest=digest(graph),
+                            status="current" if graph == known.get(path.stem) else "changed" if path.stem in known else "new")
+            except (ValueError, OSError, TypeError, KeyError) as error:
+                item.update(status="invalid", error=str(error))
+            result.append(item)
+        return result
+
+    def import_repository_workflow(self, project_id, workflow_id, expected_digest):
+        """Adopt a versioned definition from Git; no run or approval is imported."""
+        target = self.workflow_path(project_id, workflow_id)
+        require(target.is_file() and target.stat().st_size <= 2_000_000, "Fichier absent ou trop volumineux")
+        graph = json.loads(target.read_text())
+        validate(graph)
+        require(graph["id"] == workflow_id and digest(graph) == expected_digest,
+                "Le fichier a changé : actualiser la liste avant import")
+        if "revision" not in graph:
+            return self.save(project_id, graph, from_disk=True)
+        revision = graph["revision"]
+        require(type(revision) is int and 0 < revision < 2 ** 31, "Révision du fichier invalide")
+        with self.store.transaction() as db:
+            require(not db.execute("SELECT 1 FROM workflows WHERE project=? AND id=?", (project_id, workflow_id)).fetchone(),
+                    "Workflow déjà enregistré : ouvrir puis recharger et valider les changements")
+            db.execute("INSERT INTO workflows VALUES (?, ?, ?, ?)", (project_id, workflow_id, revision, self.store.encode(graph)))
+        return graph
+
     def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None, notifications_authorized=False, reuse_from=None, deferred=False):
         from .integrations import catalog, issues as plugin_issues
         original = copy.deepcopy(graph)
@@ -164,7 +204,8 @@ class Engine:
             run["coordination_wait"] = True
         if not simulation:
             from connectors.local_tools import approved
-            for node in resolved["nodes"]:
+            from .notifications import execution_nodes
+            for node in execution_nodes(resolved):
                 for binding in node.get("capabilities", []):
                     record = approved(self, project, binding["plugin"])
                     if record["operations"][binding["operation"]] == "notify":
@@ -201,6 +242,7 @@ class Engine:
             runs = [self.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.status') IN ('active','paused') OR rowid IN (SELECT rowid FROM runs ORDER BY rowid DESC LIMIT 200) ORDER BY rowid DESC")]
             total = db.execute("SELECT COUNT(DISTINCT project || ':' || id) FROM workflows").fetchone()[0]
         return {"runs": [{**{k: run[k] for k in ("id", "project", "status", "created", "updated", "simulation")}, "definition": {"title": run["definition"]["title"]},
+                          "request": str(run.get("parameters", {}).get("request", ""))[:240], "completion_outcome": run.get("completion_outcome"),
                           "nodes": {nid: {"status": n["status"]} for nid, n in run["nodes"].items()},
                           "project_title": projects.get(run["project"], {}).get("title", run["project"])} for run in runs], "workflow_count": total}
 
@@ -256,6 +298,8 @@ class Engine:
                     elif node["kind"] == "question":
                         question = {"id": new_id("q"), "text": node["question"], "created": time.time(), "status": "waiting"}
                         state.update(status="waiting_input", question=question, questions=[question])
+                        from .notifications import queue_question
+                        queue_question(self, db, run, node["id"], question)
                     elif node["kind"] in {"decision", "review"}:
                         state.update(status="waiting", attempt=state["attempt"] + 1, proposal=digest({"run": run["id"], "node": node, "attempt": state["attempt"] + 1, "contract": run["contract"]}), nonce=new_id("d"))
                 changed = True

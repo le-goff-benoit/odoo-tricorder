@@ -125,7 +125,7 @@ test('simplified workspace: task dialogs, agent identity, preferences and launch
     await expect(row).toContainText('À compléter');
     await expect(row).toContainText('odoo-developer');
     await page.locator('[data-cockpit="preferences"]').click();
-    await expect(page.locator('.preferences h2')).toHaveText('Préférences');
+    await expect(page.locator('.preferences h2')).toHaveText('Paramètres');
     await expect(page.locator('#pref-inspector')).toHaveCount(0);
     await page.locator('#pref-size').fill('99');
     await page.locator('#preferences-form button[type=submit]').click();
@@ -175,6 +175,7 @@ test('global Kanban: all projects, closed-release filter and exact task navigati
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   try {
     const page = await app.firstWindow();
+    if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
     await page.locator('[data-view="kanban"]').click();
     await expect(page.locator('#project-title')).toHaveText('Kanban global');
     await expect(page.locator('#context-bar')).toBeHidden();
@@ -831,6 +832,7 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     await page.locator('[data-preview=".odoo-agents/JOURNAL.md"]').click();
     await expect(page.locator('.document-text')).toContainText('Le suivi des missions');
     await page.locator('[data-action="modal-close"]').click();
+    if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
     await page.locator('[data-action="about"]').click();
     await expect(page.locator('#modal')).toContainText('github.com/le-goff-benoit/odoo-crew');
     await expect(page.locator('#modal')).toContainText('github.com/le-goff-benoit/odoo-tricorder');
@@ -915,7 +917,7 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await expect(page.locator('.release-state')).toContainText('Close');
     await page.locator('[data-plan-mode="list"]').click();
     await expect(page.locator('.task-card')).toHaveCount(2);
-    await expect(page.locator('.task-card[data-task="P1"]')).toContainText('réception non vérifiée');
+    await expect(page.locator('.task-card[data-task="P1"]')).toContainText('validation non vérifiée');
     await projectTab(page, 'terminal');
     await expect(page.locator('#release-select')).toHaveValue(historical);
     expect((await page.evaluate(() => window.tricorder.terminals.list())).length).toBe(1);
@@ -1161,6 +1163,7 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     await page.locator('[data-cockpit="run-search"]').click();
     await expect(page.locator('.search-result').first()).toBeVisible();
     await page.locator('[data-action="modal-close"]').click();
+    if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
     await page.locator('[data-cockpit="palette"]').click();
     await page.locator('#skill-provider').selectOption('codex');
     await page.locator('#skill-filter').fill('odoo-env');
@@ -1293,6 +1296,7 @@ test('intentions, dependency graph and concurrent activities remain usable at co
     await page.setViewportSize({ width: 1000, height: 900 });
     await kanbanMode(page);
     await page.screenshot({ path: 'test-results/orchestration-1000.png' });
+    if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
     await page.locator('[data-view="kanban"]').click();
     await page.locator('[data-action="kanban-executing"]').click();
     await expect(page.locator('.kanban-card')).toHaveCount(2);
@@ -1328,6 +1332,7 @@ test('live requests appear before planning and reconcile with tasks without manu
     await expect(page.locator('[data-plan-task="intention:I01"] [data-task]')).toHaveCount(0);
     await kanbanMode(page);
     await expect(page.locator('.release-kanban [data-intention="I01"]')).toBeVisible();
+    if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
     await page.locator('[data-view="kanban"]').click();
     await page.locator('[data-kanban-intention="I01"]').click();
     await expect(page.locator('.intention-detail')).toContainText('Conserver exactement ma demande initiale');
@@ -1467,6 +1472,7 @@ test('UI review: bundled typography, expanded views and dialogs stay readable at
       await expect(page.locator('#global-results')).toContainText('orbital-industries');
       await check('search-results', width);
       await page.keyboard.press('Escape');
+      if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
       for (const [action, name] of [['palette', 'skills'], ['quotas', 'quotas'], ['preferences', 'preferences']]) {
         await page.locator(`[data-cockpit="${action}"]`).first().click();
         await expect(page.locator('#modal')).toBeVisible();
@@ -1479,7 +1485,8 @@ test('UI review: bundled typography, expanded views and dialogs stay readable at
         }
         await page.keyboard.press('Escape');
       }
-      await page.locator('[data-action="about"]').click();
+      if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
+    await page.locator('[data-action="about"]').click();
       await check('about', width);
       await page.keyboard.press('Escape');
     }
@@ -1679,6 +1686,7 @@ test('window integration preserves the native conversation while inspecting phas
     await expect(page.locator('.xterm-screen:visible')).toContainText('REPLY:Voici mon intention');
     const contentsId = await page.evaluate(() => { window.conversationMarker = 'preserved'; return true; });
     expect(contentsId).toBe(true);
+    if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
     await page.locator('[data-action=workflow-workspace]').click();
     expect(app.context().pages()).toHaveLength(1);
     const studio = page;
@@ -1693,6 +1701,7 @@ test('window integration preserves the native conversation while inspecting phas
     await page.locator('.xterm-helper-textarea:visible').focus();
     await page.keyboard.type('Je poursuis la conversation'); await page.keyboard.press('Enter');
     await expect(page.locator('.xterm-screen:visible')).toContainText('REPLY:Je poursuis la conversation');
+    if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
     await page.locator('[data-action=workflow-workspace]').click();
     await expect(studio.getByLabel('Nom du bloc', { exact: true })).toHaveValue('Brouillon non appliqué');
     expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);

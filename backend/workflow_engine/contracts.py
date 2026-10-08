@@ -69,6 +69,9 @@ def validate(graph, *, expanded=False):
     require(len(json.dumps(graph, ensure_ascii=False).encode()) <= 2_000_000, "Définition de workflow trop volumineuse")
     identifier(graph.get("id"), "Workflow")
     require(isinstance(graph.get("title"), str) and graph["title"].strip(), "Nom du workflow requis")
+    if "on_question" in graph:
+        from .notifications import notification_node
+        validate({"schema": 1, "id": "notification", "title": "Notification", "nodes": [notification_node(graph)], "edges": []})
     nodes = graph.get("nodes")
     edges = graph.get("edges")
     require(isinstance(nodes, list) and 0 < len(nodes) <= 1000, "Entre 1 et 1 000 blocs requis")

@@ -1,6 +1,7 @@
 """Durable conversations and work items. All transitions go through the engine."""
 import copy
 import time
+from contextlib import nullcontext
 
 from .contracts import require, validate, expand
 from .engine import new_id, dependency_satisfied
@@ -23,7 +24,7 @@ class Conversations:
             values = [self.engine.store.body(row) for row in db.execute("SELECT body FROM conversations ORDER BY rowid DESC")]
         return [v for v in values if project is None or project in v["projects"]]
 
-    def open(self, project, graph, provider, projects=None, library=None, model=None):
+    def open(self, project, graph, provider, projects=None, library=None, model=None, *, notifications_authorized=False, initial_request=None):
         require(provider in {"codex", "claude"}, "Fournisseur inconnu")
         validate(graph)
         ids = list(dict.fromkeys([project, *(projects or [])]))
@@ -37,19 +38,37 @@ class Conversations:
         definition.setdefault("defaults", {})["provider"] = provider
         if model:
             definition["defaults"]["model"] = model
+        from .integrations import issues
+        from .notifications import execution_nodes
+        from connectors.local_tools import approved
+        transports = {}
+        for pid in ids:
+            target = self.engine.project(pid)
+            problems = issues(definition, target, self.engine)
+            require(not problems, target["title"] + " : " + " · ".join(p["message"] for p in problems))
+            records = transports[pid] = {}
+            for node in execution_nodes(definition):
+                for binding in node.get("capabilities", []):
+                    record = approved(self.engine, target, binding["plugin"])
+                    if record["operations"][binding["operation"]] == "notify":
+                        require(notifications_authorized, "Autoriser explicitement les notifications de cette révision avant activation")
+                    records[binding["plugin"]] = record
         value = {"id": new_id("c"), "project": project, "projects": ids,
                  "definition": definition, "provider": provider, "model": definition.get("defaults", {}).get("model", ""), "effort": definition.get("defaults", {}).get("effort", "medium"), "created": time.time(),
-                 "status": "open", "items": []}
+                 "status": "open", "items": [], "notifications_authorized": bool(notifications_authorized), "transports": transports}
         with self.engine.store.transaction() as db:
             db.execute("INSERT INTO conversations VALUES (?, ?)", (value["id"], self.engine.store.encode(value)))
+            if initial_request is not None:
+                self.add(value["id"], initial_request, key="initial", connection=db)
+                value = self.get(value["id"], db)
         return value
 
-    def add(self, cid, request, project=None, key=None, depends_on=None):
+    def add(self, cid, request, project=None, key=None, depends_on=None, *, connection=None):
         require(isinstance(request, str) and 0 < len(request.strip()) <= 100_000, "Demande vide ou trop volumineuse")
         require(key is None or (isinstance(key, str) and 0 < len(key) <= 120), "Identifiant de demande invalide")
         require(depends_on is None or (isinstance(depends_on, list) and all(isinstance(i, str) for i in depends_on)), "Dépendances : liste d’identifiants attendue")
         dependencies = list(dict.fromkeys(depends_on or []))
-        with self.engine.store.transaction() as db:
+        with (nullcontext(connection) if connection else self.engine.store.transaction()) as db:
             conversation = self.get(cid, db)
             require(conversation["status"] == "open", "Conversation fermée")
             if key:
@@ -66,8 +85,11 @@ class Conversations:
             graph = copy.deepcopy(conversation["definition"])
             graph["driver"] = "conversation"
             target = self.engine.project(pid, db)
+            from connectors.local_tools import approved
+            for plugin, record in conversation.get("transports", {}).get(pid, {}).items():
+                require(approved(self.engine, target, plugin) == record, "Connexion modifiée : relancer le workflow pour examiner les nouveaux accès")
             context = {k: target[k] for k in ("series", "platform") if target.get(k)} if graph.get("domain") == "odoo" else {}
-            run = self.engine.start(pid, graph, parameters={**context, "request": request, "conversation": cid, "depends_on_runs": parent_runs}, connection=db, deferred=bool(parent_runs))
+            run = self.engine.start(pid, graph, parameters={**context, "request": request, "conversation": cid, "depends_on_runs": parent_runs}, connection=db, deferred=bool(parent_runs), notifications_authorized=conversation.get("notifications_authorized", False))
             item = {"id": new_id("w"), "project": pid, "request": request, "run": run["id"], "key": key, "depends_on": dependencies, "created": time.time()}
             conversation["items"].append(item)
             db.execute("UPDATE conversations SET body=? WHERE id=?", (self.engine.store.encode(conversation), cid))
@@ -81,6 +103,8 @@ class Conversations:
                 if all(dependency_satisfied(self.engine.run(rid)) for rid in run["parameters"]["depends_on_runs"]):
                     self.engine.control(run["id"], "resume")
         result = copy.deepcopy(conversation)
+        result["project_contexts"] = [{key: project[key] for key in ("id", "title", "path", "series", "platform") if key in project}
+                                      for pid in conversation["projects"] for project in [self.engine.project(pid)]]
         result["items"] = [{**i, "execution": self.engine.run(i["run"])} for i in conversation["items"]]
         return result
 
@@ -99,6 +123,8 @@ def ask(engine, rid, nid, token, text):
         require(run["status"] in {"active", "paused"} and state["status"] == "running" and state.get("token") == token, "Question d’une tentative périmée")
         require(len(state.get("questions", [])) < 20, "Vingt questions dans ce bloc : préciser le périmètre avant de poursuivre")
         question = {"id": new_id("q"), "text": text, "created": time.time(), "status": "waiting"}
+        from .notifications import queue_question
+        queue_question(engine, db, run, nid, question)
         state.setdefault("questions", []).append(question)
         state.update(status="waiting_input", question=question)
         db.execute("DELETE FROM resources WHERE run=? AND node=? AND token=?", (rid, nid, token))

@@ -54,7 +54,7 @@ def capabilities(project, engine=None):
             try:
                 record = approved(engine, project, item["id"])
                 card.update(installed=True, connected=True, usable=True, qualified=True,
-                            reason="Adaptateur local vérifié. Son authentification reste sous sa responsabilité.", verified_at=record["verified_at"])
+                            reason="Adaptateur local vérifié. Son authentification reste sous sa responsabilité.", verified_at=record["verified_at"], effects=record["operations"])
             except (ContractError, OSError) as exc:
                 card["reason"] = str(exc)
         result.append(card)
@@ -65,7 +65,8 @@ def issues(graph, project=None, engine=None):
     from .contracts import ContractError
     known = {p["id"]: p for p in catalog(project)["plugins"]} if project else {}
     result = []
-    for node in graph["nodes"]:
+    from .notifications import execution_nodes
+    for node in execution_nodes(graph):
         bindings = node.get("capabilities", [])
         if bindings and node["kind"] not in {"watch", "communication", "external", "document", "task", "agent"}:
             result.append({"node": node["id"], "message": "Transport non qualifié pour ce type de bloc. Choisir Tâche IA, Travail, Document, Veille, Communication ou Opération externe."})
@@ -80,6 +81,8 @@ def issues(graph, project=None, engine=None):
                 record = approved(engine, project, plugin["id"])
                 effect = record["operations"].get(binding["operation"])
                 require(effect, "Capacité absente du transport vérifié")
+                if node not in graph["nodes"]:
+                    require(effect == "notify", "Une notification de question exige une capacité de notification")
                 require(effect == "read" or effect == "notify" and node["kind"] == "communication" or effect == "write" and node["kind"] == "external", "Effet de l’outil incompatible : les écritures exigent un bloc externe et un accord exact")
             except (ContractError, OSError) as exc:
                 result.append({"node": node["id"], "message": str(exc)})

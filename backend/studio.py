@@ -42,7 +42,7 @@ def request(engine, payload, *, human=False):
             defaults = payload["graph"].get("defaults", {})
             model = defaults.get("model") if defaults.get("provider") == payload["provider"] else None
             model = model or provider_defaults().get(payload["provider"])
-            return conversations.open(payload["project"], payload["graph"], payload["provider"], payload.get("projects"), library, model)
+            return conversations.open(payload["project"], payload["graph"], payload["provider"], payload.get("projects"), library, model, notifications_authorized=human and payload.get("authorize_notifications") is True, initial_request=payload.get("request"))
         if action == "conversation.list":
             return conversations.list(payload.get("project"))
         if action == "conversation.get":
@@ -78,7 +78,7 @@ def request(engine, payload, *, human=False):
         return engine.handoff(payload["run"], payload["project"], payload["graph"], human=human)
     if action == "plugins.discover":
         from connectors.discovery import codex_plugins
-        return codex_plugins()
+        return codex_plugins(payload.get("provider", "codex"))
     if action == "workflow.export-portable":
         from workflow_engine.portable import export
         library = {g["id"]: g for g in templates() + engine.workflows("library")}
@@ -157,6 +157,10 @@ def request(engine, payload, *, human=False):
         return engine.create_project(payload["title"], payload.get("path"))
     if action == "project.get":
         return {"project": engine.project(payload["project"]), "workflows": engine.workflows(payload["project"]), "runs": engine.runs(payload["project"]), "capabilities": capabilities(engine.project(payload["project"]), engine)}
+    if action == "workflow.repository":
+        return engine.repository_workflows(payload["project"])
+    if action == "workflow.import-repository":
+        return engine.import_repository_workflow(payload["project"], payload["workflow"], payload["digest"])
     if action == "workflow.save":
         return engine.save(payload["project"], payload["graph"], payload.get("revision", 0))
     if action == "workflow.reload":
@@ -171,7 +175,8 @@ def request(engine, payload, *, human=False):
         if payload.get("project") and not payload.get("simulation", False):
             issues += policy_issues(engine.project(payload["project"]), graph)
         if action == "workflow.validate":
-            return {"valid": True, "issues": issues, "notifications": [{"title": n["title"], "recipient": n.get("recipient", ""), "template": n.get("template", ""), "capabilities": n.get("capabilities", [])} for n in graph["nodes"] if n["kind"] == "communication"], "automatic": [n["title"] for n in graph["nodes"] if n.get("validation") == "automatic"]}
+            from workflow_engine.notifications import execution_nodes
+            return {"valid": True, "issues": issues, "notifications": [{"title": n["title"], "recipient": n.get("recipient", ""), "template": n.get("template", ""), "capabilities": n.get("capabilities", [])} for n in execution_nodes(graph) if n["kind"] == "communication"], "automatic": [n["title"] for n in graph["nodes"] if n.get("validation") == "automatic"]}
         if issues:
             raise ContractError(" · ".join(i["node"] + " : " + i["message"] for i in issues))
         run = engine.start(payload["project"], payload["graph"], simulation=payload.get("simulation", False), parameters=payload.get("parameters"), library=library, notifications_authorized=human and payload.get("authorize_notifications") is True, reuse_from=payload.get("reuse_from") if human else None)
@@ -193,6 +198,9 @@ def request(engine, payload, *, human=False):
         return markdown(engine.run(payload["run"]))
     if action == "release.export":
         return export_release(engine, payload["run"], payload["path"], payload["release"])
+    if action == "work.export":
+        from workflow_engine.documentation import export_work
+        return export_work(engine, payload["run"], payload["name"])
     raise ContractError("Commande inconnue")
 
 
