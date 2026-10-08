@@ -80,3 +80,5 @@ Les interventions antérieures restent dans l’historique Git. Le suivi détail
 - Questions exportables dans le bilan, limite de preuve cohérente et artefacts CI corrigés.
 - Rapport public et captures synthétiques : `release/2026-10-08_revue/README.md`.
 - Les traces locales de projets clients restent exclues de la publication.
+
+- Réception GitHub : nettoyage des brokers synthétiques fiabilisé après ENOTEMPTY ; paquet applicatif inchangé, trois parcours ciblés verts.

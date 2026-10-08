@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
+const { cleanupBroker } = require('./terminal-fixture.cjs');
 let directory, app, page;
 async function studioPage() {
   return app.firstWindow();
@@ -16,7 +17,19 @@ test.beforeEach(async () => {
   page = await studioPage();
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
 });
-test.afterEach(async () => { if (app) await quitApplication(); if (directory) fs.rmSync(directory, { recursive: true, force: true }); });
+test.afterEach(async () => {
+  // Startup detaches a persistent broker. Wait until it has created its socket,
+  // then close this test's sessions before removing the synthetic home.
+  if (app) {
+    if (page && !page.isClosed()) await page.evaluate(() => window.tricorder.terminals.list());
+    await quitApplication();
+  }
+  if (directory) {
+    await cleanupBroker(path.join(directory, 'cockpit/odoo-tricorder/pty.sock'));
+    await cleanupBroker(path.join(directory, 'studio-pty.sock'));
+    fs.rmSync(directory, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+  }
+});
 
 async function example() { await page.getByRole('button', { name: 'Essayer un exemple' }).click(); await expect(page.getByRole('heading', { name: "De l'intention au résultat" })).toBeVisible(); }
 async function simulate() { await page.getByRole('button', { name: 'Exécuter…' }).click(); await page.getByRole('button', { name: 'Simuler le parcours' }).click(); await expect(page.locator('#run-banner')).toContainText('Simulation'); }

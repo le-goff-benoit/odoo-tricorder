@@ -112,3 +112,14 @@ préversion : l’actualiseur stable ne la propose pas automatiquement. Les mod�
 existants et les exécutions figées ne sont pas réécrits lors de l’installation.
 La nouvelle sémantique de fin bloquée s’applique aux modèles qui la déclarent ;
 les anciens brouillons doivent être comparés et adaptés explicitement.
+
+### Réception GitHub du banc
+
+La première CI (`37823456752`) a échoué pendant le nettoyage du test de fermeture
+vers la zone de notification : un broker détaché créait encore son socket pendant
+la suppression du dossier temporaire (`ENOTEMPTY`). Les assertions du parcours
+avaient réussi. Le banc attend désormais le broker puis arrête ses sessions
+synthétiques avant nettoyage ; trois parcours de fermeture/reprise/adoption
+repassent localement. Cette correction concerne uniquement les tests : le code
+applicatif et le paquet de la préversion ne changent pas. La CI complète est
+relancée sur ce correctif de banc ; sa preuve finale est jointe à la release.
