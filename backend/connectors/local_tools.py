@@ -19,7 +19,13 @@ LIMIT = 2_000_000
 
 
 def fingerprint(config):
-    require(isinstance(config, dict) and set(config) <= {"argv", "timeout"}, "Transport : argv et timeout uniquement, sans secret")
+    require(isinstance(config, dict) and set(config) <= {"argv", "timeout", "type", "identity", "operations"}, "Transport : argv et timeout uniquement, sans secret")
+    require(config.get("type", "tricorder") in {"tricorder", "mcp-stdio"}, "Type de transport inconnu")
+    if config.get("type") == "mcp-stdio":
+        from .mcp_stdio import validate_config
+        validate_config(config)
+    else:
+        require(set(config) <= {"argv", "timeout", "type"}, "Options MCP réservées au transport mcp-stdio")
     argv = config.get("argv")
     require(isinstance(argv, list) and 1 <= len(argv) <= 32 and all(isinstance(v, str) and 0 < len(v) <= 4096 and "\0" not in v for v in argv), "Arguments du transport invalides")
     require(Path(argv[0]).is_absolute() and os.access(argv[0], os.X_OK), "Exécutable absolu et installé requis")
@@ -34,6 +40,9 @@ def fingerprint(config):
 
 
 def exchange(config, payload, *, check=None, timeout=None):
+    if config.get("type") == "mcp-stdio":
+        from .mcp_stdio import exchange as mcp_exchange
+        return mcp_exchange(config, payload, check=check, timeout=timeout)
     data = json.dumps(payload, ensure_ascii=False).encode()
     require(len(data) <= LIMIT, "Requête de transport trop volumineuse")
     # No inherited tokens/API keys. Adapter-managed OAuth/configuration remains
@@ -118,7 +127,7 @@ def qualify(engine, project, plugin, expected, *, human=False):
         identifier(name, "Opération")
         require(effect in {"read", "notify", "write"}, "Effet read, notify ou write requis")
     require(inspect(engine, project, plugin) == preview, "Transport modifié pendant la vérification")
-    record = {**preview, "identity": identity, "operations": operations, "verified_at": time.time()}
+    record = {**preview, "identity": identity, "operations": operations, "tool_digest": response.get("tool_digest"), "verified_at": time.time()}
     with engine.store.transaction() as db:
         db.execute("INSERT OR REPLACE INTO tool_trust VALUES (?, ?, ?)", (project["id"], plugin, engine.store.encode(record)))
     return record

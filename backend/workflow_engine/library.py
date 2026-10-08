@@ -1,7 +1,5 @@
 """Small reusable examples. Simulated runs are explicitly identified by the engine."""
 
-import copy
-
 
 def node(nid, title, kind="task", x=70, y=100, **extra):
     return {"id": nid, "title": title, "kind": kind, "position": {"x": x, "y": y}, **extra}
@@ -24,18 +22,19 @@ def templates():
         node("check", "Vérifier le runtime Python", "command", argv=["python3", "-c", "import sys; print('Python opérationnel'); print(sys.version.split()[0])"], criteria=["Le runtime répond et sa version est visible."], evidence_required=True, max_attempts=2),
         node("decision", "Décider de la suite", "decision", x=400, question="Le contrôle est reçu. Terminer cette vérification ?", options=["approve", "reject"])
     ], "edges": [edge("check", "decision")]}
-    software = copy.deepcopy(demo)
-    software.update(id="software-change", title="Évolution logicielle", description="Analyse, développement, test et validation ; configurer les modèles avant une exécution réelle.")
-    for n in software["nodes"]:
-        if n["id"] in {"analyse", "build", "test"}:
-            n.update(kind="agent", provider="codex", profile="generalist", model="", effort="medium", session="delegated", prompt=n["title"])
+    software = {"schema": 1, "id": "software-change", "title": "Évolution logicielle", "description": "Analyser, proposer du code dans une copie isolée, tester cette copie et décider de son application locale. Choisir les modèles et adapter la commande de test au projet.", "nodes": [
+        node("analyse", "Analyser la demande", "agent", x=60, model="", prompt="Décrire le changement et les critères attendus.", outputs={"analysis":"string"}),
+        node("build", "Proposer les modifications", "agent", x=370, model="", execution_mode="edit", prompt="Réaliser la demande dans la copie isolée. Ne pas prétendre avoir exécuté les tests.", inputs={"analysis":"string"}, outputs={"candidate":"object"}, criteria=["Le diff réalise la demande sans changement hors périmètre."]),
+        node("test", "Tester la copie modifiée", "command", x=680, inputs={"candidate":"object"}, argv=["python3", "-B", "-m", "unittest", "discover", "-s", "/project/tests"], criteria=["Les tests pertinents sont présents, exécutés et réussis."], evidence_required=True),
+        node("decision", "Décider de l’application du code", "decision", x=990, question="Les tests sont reçus. Examiner le diff du bloc Développement et appliquer au dépôt local si le résultat convient.")
+    ], "edges": [{**edge("analyse","build"), "mapping":{"analysis":"analysis"}}, {**edge("build","test"), "mapping":{"candidate":"candidate"}}, edge("test","decision")]}
     components = []
     for nid, title, kind in [("orchestration", "Orchestration", "join"), ("analysis", "Analyse", "agent"), ("development", "Développement", "agent"), ("quality", "Tests", "agent"), ("documentation", "Gestion documentaire", "document"), ("communication", "Communication", "document")]:
         components.append({"schema": 1, "id": nid, "title": title, "description": "Composant réutilisable à adapter au projet.", "nodes": [node("work", title, kind, prompt=title)], "edges": []})
     mail = {"schema": 1, "id": "mail-notification", "title": "Message NECA → notification", "description": "Brouillon : détecter les nouveaux messages d'un expéditeur confirmé, puis notifier le destinataire choisi. Aucun modèle IA nécessaire pour un filtre exact.", "nodes": [
-        node("mail", "Repérer un nouveau message NECA", "watch", x=60, y=100, connection="gmail", account="", sender="", outputs={"match": "string", "message": "object"}, sample_outputs={"match": "yes", "message": {"id": "demo-message", "subject": "Exemple NECA", "sender": "demo@example.test"}}, criteria=["Le message appartient au périmètre de l'expéditeur confirmé."], sample="Message synthétique NECA. Aucun email réel consulté."),
+        node("mail", "Repérer un nouveau message NECA", "watch", x=60, y=100, connection="gmail", account="", sender="", outputs={"match": "string", "message": "object"}, sample_outputs={"match": "yes", "message": {"id": "demo-message", "subject": "Exemple NECA", "sender": "demo@example.test"}}, criteria=[], validation="automatic", sample="Message synthétique NECA. Aucun email réel consulté."),
         node("filter", "Un nouveau message correspond ?", "condition", x=370, y=100, parameter="match", options=["yes", "no"], inputs={"match": "string", "message": "object"}, outputs={"message": "object"}),
-        node("notify", "Prévenir le destinataire", "communication", x=680, y=100, channel="slack", recipient="", template="Nouveau message de {sender} : {subject}", inputs={"message": "object"}, sample="Notification simulée. Aucun message envoyé.", criteria=["Le destinataire et le contenu correspondent au périmètre autorisé."])
+        node("notify", "Prévenir le destinataire", "communication", x=680, y=100, channel="slack", recipient="", template="Nouveau message de {sender} : {subject}", inputs={"message": "object"}, sample="Notification simulée. Aucun message envoyé.", criteria=[], validation="automatic")
     ], "edges": [{**edge("mail", "filter"), "mapping": {"match": "match", "message": "message"}}, {**edge("filter", "notify", "yes"), "mapping": {"message": "message"}}]}
     deployment = {"schema": 1, "id": "github-odoo-deployment", "title": "GitHub → Odoo.sh : staging puis production",
         "description": "Configurer les cibles, le SHA testé et les adaptateurs. Publication GitHub, build Odoo.sh et vérification de la version déployée restent distincts. La documentation est facultative.",

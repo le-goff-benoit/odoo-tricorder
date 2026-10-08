@@ -24,6 +24,20 @@ def request(engine, payload, *, human=False):
             preview = inspect(engine, project, payload["plugin"])
             return {**preview, "digest": digest(preview)}
         return qualify(engine, project, payload["plugin"], payload["digest"], human=human)
+    if action in {"candidate.preview", "candidate.apply"}:
+        from connectors.candidates import load, apply
+        run = engine.run(payload["run"])
+        result = run["nodes"][payload["node"]].get("result", {})
+        reference = result.get("outputs", {}).get("candidate")
+        if not reference:
+            raise ContractError("Aucune proposition de code disponible")
+        if action == "candidate.preview":
+            candidate = load(engine, reference, run["project"])
+            return {"candidate": reference["sha256"], "changes": [c["path"] for c in candidate["changes"]], "diff": engine.evidence(result["patch"]).decode()}
+        return apply(engine, payload["run"], payload["node"], payload["candidate"], human=human)
+    if action == "run.reconcile-effect":
+        from connectors.tool_runtime import reconcile_effect
+        return reconcile_effect(engine, payload["run"], payload["node"], human=human)
     if action == "run.handoff":
         return engine.handoff(payload["run"], payload["project"], payload["graph"], human=human)
     if action == "plugins.discover":

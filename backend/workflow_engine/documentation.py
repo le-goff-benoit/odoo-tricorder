@@ -28,6 +28,9 @@ def markdown(run):
             continue
         results = True
         lines += [f"### {node['title']}", "", state["result"]["summary"], "", f"État : **{LABELS[state['status']]}**. Tentative {state['attempt']}.", ""]
+        if state["result"].get("patch"):
+            lines += [f"[Examiner les modifications de code](.suivi/preuves/{state['result']['patch']['sha256']})", "",
+                      "Code appliqué au dépôt local après confirmation." if state.get("applied_candidate") else "Proposition isolée ; code non appliqué au dépôt.", ""]
         if state.get("reused_from"):
             lines += [f"Preuves réutilisées depuis `{state['reused_from']['run']}` ; aucun nouveau test exécuté pour ce bloc.", ""]
         if state["result"].get("receipt"):

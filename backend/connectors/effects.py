@@ -45,7 +45,7 @@ class Effects:
             receipt = send(operation, key)
             require(isinstance(receipt, dict) and receipt.get("id"), "Accusé de réception distant absent")
             record.update(status="sent", receipt=receipt, finished=time.time())
-        except (TimeoutError, OSError):
+        except (TimeoutError, OSError, ValueError):
             record["reason"] = "Résultat distant inconnu : réconciliation nécessaire avant toute autre action"
         with self.store.transaction() as db:
             db.execute("UPDATE effects SET body=? WHERE id=?", (self.store.encode(record), key))

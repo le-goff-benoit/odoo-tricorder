@@ -2,7 +2,7 @@
 
 Une application locale pour concevoir, exécuter et suivre des workflows de
 développement ou de monitoring, sur un projet Git ou indépendamment des projets.
-**Version de travail : 0.6.0-preview.2.** Le moteur est générique ; Odoo Crew est
+**Version de travail : 0.6.0-rc.1.** Le moteur est générique ; Odoo Crew est
 un pack facultatif.
 
 [Avancement et limites](release/2026-10-08_workflow-studio/README.md) ·
@@ -37,9 +37,11 @@ modification, « Recharger et valider » crée une nouvelle révision. L’appli
 installe ses consignes `AGENTS.md` à la création du contexte et les synchronise
 au premier lancement après une mise à jour. Les personnalisations sont préservées.
 
-L’assistant IA propose des modifications examinables avant application. Les
-sessions de cette préversion sont limitées au texte ; elles ne modifient pas le
-code d’un projet. Les opérations externes non connectées restent bloquées.
+L’assistant IA propose des modifications examinables du workflow. Les blocs IA
+peuvent analyser ou modifier du code dans une copie isolée : diff, tests de la
+copie, puis application humaine au dépôt avec contrôle des conflits. Codex a été
+essayé nativement ; Claude reste bloqué par la politique de l’organisation.
+Les opérations externes non connectées restent bloquées.
 
 Les exécutions montrent les résultats remis, les preuves et les décisions.
 Les blocs déterministes peuvent valider automatiquement leurs contrôles techniques ;
@@ -49,7 +51,7 @@ projet crée un brouillon avec les résultats validés ; les accords ne suivent 
 Les commandes et documents peuvent réutiliser explicitement des preuves de moins
 de 24 h si les sources et dépendances contrôlées sont inchangées.
 
-Un adaptateur local peut relier un plugin à Tricorder, après examen de sa commande
+Un serveur MCP stdio ou un adaptateur local peut relier un plugin à Tricorder, après examen de sa commande
 et vérification explicite dans **Connexions**. Ce transport gère lectures,
 notifications et écritures autorisées. Il exécute du code de confiance avec les
 droits utilisateur ; un plugin Codex installé n’est pas automatiquement connecté.

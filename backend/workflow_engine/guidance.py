@@ -81,7 +81,35 @@ et `idempotency_key`. Vérifier l'identité AVANT tout effet. Retourner
 receipt est obligatoire pour notify/write. Utiliser la clé d'idempotence auprès
 du service, un contrôle de version et une relecture après publication si requis.
 Le transport est borné, sans shell, mais pas isolé du poste : sa confiance est
-explicite. Ce protocole est un adaptateur Tricorder, pas une connexion MCP native.
+explicite. Ce protocole est un adaptateur Tricorder. Un transport MCP standard est également disponible ci-dessous.
+
+Pour un serveur MCP stdio installé, utiliser `type:"mcp-stdio"`, `argv` et
+`timeout`. Ajouter `identity:{tool:"whoami",arguments:{},path:"/account"}` :
+une sonde de lecture retournant la référence exacte du compte. Déclarer les
+opérations explicitement ; les annotations du serveur ne donnent aucun droit.
+Exemple d'opération dans `transport.operations` :
+`"send":{"tool":"send_message","effect":"notify","arguments":{"channel":{"$ref":"/arguments/target"},"text":{"$ref":"/arguments/content"}},"outputs":{"sent":true},"receipt":"/id"}`.
+`$ref` utilise JSON Pointer, sans expressions. Les arguments de lecture reçoivent
+`/arguments/parameters` et `/arguments/inputs`. Les résultats MCP doivent être
+structuredContent ou un seul contenu texte JSON. La sonde d'identité, les schémas
+des outils et la commande sont revérifiés avant exécution. L'authentification
+reste gérée par le serveur installé ; aucun secret dans le manifeste.
+Le compte ne doit pas pouvoir changer pendant un appel ; configurer un serveur
+lié à un seul compte. Un plugin natif sans serveur stdio utilisable reste à
+connecter avec ses propres outils : la détection seule ne l'autorise pas.
+
+En cas de réponse perdue, le bloc peut déclarer `reconciliation:"lookup"`, une
+capacité read du même transport. Elle reçoit `effect_id` et `operation` et retourne
+`outputs:{effect_id,status:"sent",receipt:{id:"accusé"},outputs:{...}}`.
+Le bouton « Rechercher l'accusé distant » ne répète jamais l'envoi. Sans preuve
+distante, l'effet reste incertain ; une absence seule n'autorise pas une reprise.
+
+Pour modifier du code, un agent utilise `execution_mode:"edit"` et déclare
+`outputs:{candidate:"object"}`. Le moteur capture le diff dans une copie isolée.
+Relier cette sortie à `inputs:{candidate:"object"}` d'un bloc Commande avec
+`mapping:{candidate:"candidate"}` : /project désigne alors la copie modifiée.
+L'application du code au dépôt exige validation humaine, réception des tests
+liés et absence de conflit sur les sources. Aucun commit ou push implicite.
 
 Un bloc sélectionne une capacité. `read` peut alimenter les entrées `tool_data`
 d'une Tâche IA (avec ou sans profil) ; notify exige un bloc Communication avec
@@ -115,7 +143,7 @@ La documentation humaine se regroupe dans `release/<id>/README.md` : intention,
 plan, réalisation, tests/limites et livraison. Le suivi technique va en `.suivi/`.
 """
 
-VERSION = 3
+VERSION = 4
 
 
 def managed_text(body=GUIDANCE, version=VERSION):

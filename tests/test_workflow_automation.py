@@ -22,10 +22,12 @@ from pathlib import Path
 root = Path(__file__).parent
 p = json.load(sys.stdin)
 if p['action'] == 'describe':
-    print(json.dumps({'protocol':'tricorder.tool/1','connected':True,'identity':'synthetic-account','operations':{'read':'read','send':'notify','publish':'write'}}))
+    print(json.dumps({'protocol':'tricorder.tool/1','connected':True,'identity':'synthetic-account','operations':{'read':'read','send':'notify','publish':'write','lookup':'read'}}))
 else:
     with (root/'calls.jsonl').open('a') as f: f.write(json.dumps(p)+'\\n')
-    if p['operation'] == 'read':
+    if p['operation'] == 'lookup':
+        print(json.dumps({'ok':True,'identity':'synthetic-account','outputs':{'effect_id':p['arguments']['effect_id'],'status':'sent','receipt':{'id':'recovered-receipt'},'outputs':{'sent':True}}}))
+    elif p['operation'] == 'read':
         print(json.dumps({'ok':True,'identity':'synthetic-account','outputs':json.loads((root/'messages.json').read_text())}))
     else:
         if (root/'lost').exists(): sys.exit(1)
@@ -60,6 +62,20 @@ class AutomationTests(unittest.TestCase):
         claim = self.engine.claim(run['id'], nid)
         execute(self.engine, run['id'], nid, claim['token'])
         return self.engine.run(run['id'])
+
+    def test_lost_receipt_can_be_reconciled_without_sending_again(self):
+        self.qualify()
+        (self.root/'lost').touch()
+        graph = self.graph(node('send','Informer','communication',recipient='synthetic-channel',template='Test',reconciliation='lookup',validation='automatic',capabilities=[{'plugin':'fixture','operation':'send'}]))
+        run = self.execute(self.engine.start('workspace',graph,notifications_authorized=True),'send')
+        self.assertFalse(run['nodes']['send']['result']['ok'])
+        self.assertIn('effect_id',run['nodes']['send']['result'])
+        with self.assertRaises(ContractError):
+            request(self.engine,{'action':'run.reconcile-effect','run':run['id'],'node':'send'})
+        restored = request(self.engine,{'action':'run.reconcile-effect','run':run['id'],'node':'send'},human=True)
+        self.assertEqual(restored['status'],'completed')
+        calls=[json.loads(line) for line in (self.root/'calls.jsonl').read_text().splitlines()]
+        self.assertEqual([c['operation'] for c in calls],['send','lookup'])
 
     def test_automatic_result_advances_but_never_answers_human_gate(self):
         graph = self.graph(node('doc','Brouillon','document', content='Texte', validation='automatic'), node('gate','Confirmer','decision'), edges=[edge('doc','gate')])

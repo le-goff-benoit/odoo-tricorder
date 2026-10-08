@@ -22,7 +22,7 @@ def normalize(data):
                        "installed": item.get("installed") is True, "connected": None,
                        "enabled": item.get("enabled") is True, "usable": False, "qualified": False,
                        "source": "codex-cli", "operations": [],
-                       "reason": "Détecté par le catalogue natif Codex. Les outils et l’authentification restent à vérifier ; les sessions Tricorder actuelles sont limitées au texte."})
+                       "reason": "Détecté par le catalogue natif Codex. Les outils et l’authentification restent à vérifier ; configurer un transport MCP stdio ou un adaptateur local pour ces capacités."})
     return result
 
 

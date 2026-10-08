@@ -174,14 +174,16 @@ class Engine:
 
     def runs(self, project_id):
         with self.store.connect() as db:
-            return [r for row in db.execute("SELECT body FROM runs ORDER BY rowid DESC LIMIT 500") if (r := self.store.body(row))["project"] == project_id]
+            return [self.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.project')=? ORDER BY rowid DESC LIMIT 500", (project_id,))]
 
     def activity(self):
         with self.store.connect() as db:
             projects = {p["id"]: p for row in db.execute("SELECT body FROM projects") if (p := self.store.body(row))}
-            runs = [self.store.body(row) for row in db.execute("SELECT body FROM runs ORDER BY rowid DESC LIMIT 200")]
+            runs = [self.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.status') IN ('active','paused') OR rowid IN (SELECT rowid FROM runs ORDER BY rowid DESC LIMIT 200) ORDER BY rowid DESC")]
             total = db.execute("SELECT COUNT(DISTINCT project || ':' || id) FROM workflows").fetchone()[0]
-        return {"runs": [{**run, "project_title": projects.get(run["project"], {}).get("title", run["project"])} for run in runs], "workflow_count": total}
+        return {"runs": [{**{k: run[k] for k in ("id", "project", "status", "created", "updated", "simulation")}, "definition": {"title": run["definition"]["title"]},
+                          "nodes": {nid: {"status": n["status"]} for nid, n in run["nodes"].items()},
+                          "project_title": projects.get(run["project"], {}).get("title", run["project"])} for run in runs], "workflow_count": total}
 
     def events(self, run_id, after=0):
         with self.store.connect() as db:
@@ -322,6 +324,23 @@ class Engine:
         state.update(status="accepted", outcome="done", receipt={"at": time.time(), "actor": "validation-policy", "contract": run["contract"],
                      "checks": ["executor-success", "output-types", "evidence-integrity"], "note": "Contrôles techniques automatiques ; aucun critère métier attesté."})
         self._event(db, run, "accepted", node_id, actor="validation-policy")
+
+    def reconcile_effect(self, run_id, node_id, effect_id, receipt, proof):
+        self.evidence(proof)
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            state = run['nodes'][node_id]
+            require(run['status'] in {'active', 'paused'} and state['status'] == 'returned' and state.get('result', {}).get('effect_id') == effect_id, 'Réconciliation périmée')
+            ledger = self.store.body(db.execute('SELECT body FROM effects WHERE id=?', (effect_id,)).fetchone())
+            require(ledger, 'Effet inconnu')
+            ledger.update(status='sent', receipt=receipt, reconciled=time.time(), evidence=proof)
+            db.execute('UPDATE effects SET body=? WHERE id=?', (self.store.encode(ledger), effect_id))
+            state['result'] = {'ok': True, 'summary': 'Accusé distant retrouvé sans répéter l’opération.', 'outputs': receipt['outputs'], 'receipt': receipt, 'evidence': state['result'].get('evidence', []) + [proof], 'reconciled_effect': effect_id}
+            self._event(db, run, 'effect-reconciled', node_id, effect=effect_id)
+            self._automatic(db, run, node_id)
+            self._advance(db, run)
+            self._save(db, run)
+        return run
 
     def accept(self, run_id, node_id, *, human=False, checks=None, note=""):
         require(human, "Validation humaine requise par l'API dédiée")

@@ -5,7 +5,7 @@
 - Moteur générique, modèles réutilisables, projets Git et workflows globaux ; Odoo est facultatif.
 - Vue d’ensemble de l’activité ; Tricorder reste le titre de l’application, l’éditeur une vue du workflow.
 - Barre latérale compacte, icônes cohérentes, liens à angles droits et affichage réduit vérifié.
-- Terminal de création/adaptation et AGENTS.md version 3, mis à jour sans écraser les personnalisations.
+- Terminal de création/adaptation et AGENTS.md version 4, mis à jour sans écraser les personnalisations.
 - Adaptateurs locaux vérifiables : lecture, données vers IA sans profil dédié, notifications et effets avec accord.
 - Validation technique automatique facultative ; décisions humaines conservées, erreurs et envois incertains bloqués.
 - Veille récurrente testée sur service synthétique : adresse exacte, messages nouveaux, dédoublonnage durable.
@@ -13,7 +13,8 @@
 - Modèles GitHub → Odoo.sh et Confluence ; aucune cible réelle activée ni publication effectuée.
 - Icône Ubuntu, fermeture en arrière-plan, fichier portable cliquable et vérification des releases GitHub.
 - [Release unique](release/2026-10-08_workflow-studio/README.md) : tests, limites et livraison ; suivi machine dans .suivi.
-- Intégrations natives, exécution IA outillée de code et recette utilisateur restent non qualifiées.
+- Code isolé, tests du candidat, diff et application confirmée ; MCP stdio et recherche d’accusés perdus ; pack Crew 0.2.
+- Codex testé nativement ; Claude bloqué par l’organisation. Comptes/cibles réels et recette utilisateur restent à qualifier.
 
 ## 2026-10-07 — Hiérarchie et thèmes (0.5.1)
 

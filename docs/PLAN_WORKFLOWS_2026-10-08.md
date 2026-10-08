@@ -1,11 +1,11 @@
 # Tricorder — workflows génériques, exécution et décisions humaines
 
-8 octobre 2026 · **Plan autorisé ; implémentation en cours.**
+8 octobre 2026 · **Plan autorisé ; candidat local 0.6.0-rc.1.**
 
-La préversion 0.6.0-preview.2 ajoute la navigation globale et la Vue d’ensemble,
-les adaptateurs locaux exécutables, les validations automatiques, le transfert
-global → projet et la réutilisation de preuves. Les qualifications natives et
-la migration complète Crew restent ouvertes.
+Le cœur, le code isolé, les transports locaux/MCP et le contrat du pack Crew sont
+implémentés. Les preuves, les limites de qualification et les blocages externes
+sont regroupés dans la release. Ce plan conserve les critères convenus, y compris
+ceux qui nécessitent des comptes/cibles et une recette utilisateur.
 
 État réel et preuves : [release Workflow Studio](../release/2026-10-08_workflow-studio/README.md).
 
@@ -16,7 +16,7 @@ de réception. Ce document définit les critères ; seule la release indique les
 
 ## 1. Décisions et périmètre
 
-**Produit visé :** un éditeur de workflows pour agents, utilisable hors Odoo,
+**Produit visé :** une application de conception, exécution et suivi de workflows, utilisable hors Odoo,
 permettant de concevoir graphiquement un processus, de l'adapter à un projet,
 de l'exécuter et de comprendre ses résultats. Odoo Crew devient le premier pack
 métier. Un projet générique fonctionne sans installation de Crew ni sources Odoo.
@@ -297,7 +297,7 @@ opération distincte, avec ses propres critères et autorisations.
 
 ## 5. Éditeur, assistant IA et intégrations
 
-La [direction UX dans DESIGN.md](DESIGN.md#direction-cible--atelier-de-workflows-génériques-8-octobre-2026)
+La [direction UX dans DESIGN.md](DESIGN.md#direction--concevoir-utiliser-et-suivre-des-workflows-8-octobre-2026)
 précise la recherche professionnelle, la navigation, le vocabulaire, les états,
 les parcours débutants/avancés, la hiérarchie du canevas et la recette d'usage.
 Elle constitue la référence de conception de cette évolution. Le socle livré
@@ -371,7 +371,7 @@ les agents. Le principal porte l'intégration et la réception de chaque jalon.
 |---|---|---|
 | J0 — Contrat de construction | W22, W01 | Architecture de l'information, parcours, schémas et frontières compris ; prototype technique de canevas choisi |
 | J1 — Moteur fiable | W02–W08 | Workflow local avec deux branches, preuve et point humain ; crash puis reprise sans doublon |
-| J2 — Atelier utilisable | W23, W09–W12 | Parcours débutant/avancé éprouvés ; dessiner, configurer un modèle/profil et voir travailler une exécution ; répondre depuis le graphe |
+| J2 — Éditeur utilisable | W23, W09–W12 | Parcours débutant/avancé éprouvés ; dessiner, configurer un modèle/profil et voir travailler une exécution ; répondre depuis le graphe |
 | J3 — Travail connecté | W13–W16 | Demande IA → workflow ; option documentaire ; staging → décision → cible de test ; publication Confluence simulée puis native |
 | J4 — Généricité prouvée | W17–W20 | Parcours logiciel sans Crew et parcours Odoo ; capacités natives qualifiées et écarts mesurés |
 | J5 — Livraison | W21 | Installation propre, parcours dans le paquet, documentation de release lisible et suivi technique regroupé |
@@ -548,7 +548,7 @@ ces limites explicites ; elle ne satisfait pas silencieusement tout le périmèt
 | Codex/Claude | Capacités CLI réelles et comptes disponibles pour W20 | Connecteur simulé seulement, qualification native incomplète |
 | Atlassian | Installation/connexion, espace de test et droits adaptés | Conception et simulateur possibles ; publication Confluence réelle bloquée |
 | Déploiement | Premier mécanisme cible identifié : pipeline/API/commande et environnement de test | Contrat générique testable ; adaptateur réel non qualifié |
-| Distribution | Nom final, identité du paquet et emplacement de distribution | « Tricorder » reste le nom de travail ; trancher avant W21, sans migration historique imposée |
+| Distribution | Nom final, identité du paquet et emplacement de distribution | Tricorder est le nom de l’application ; identifiant technique odoo-tricorder conservé |
 | Essais UX | Participants nouveaux, expérimentés et occasionnels pour W23, protocole dans DESIGN.md | Revue experte et prototypes possibles ; validation utilisateur non acquise ; cœur indépendant peut avancer |
 
 Aucune de ces informations n'empêche de développer le cœur. Aucune n'est
@@ -567,12 +567,10 @@ Révisions observées : Tricorder `a3f51d1bd108bbdbaf1c6eef944f86c856ce6912`
 (package 0.5.1), Crew `1f6bbf28b63f3fd2bba53830d4b93208247fd9ef`.
 Ces références servent au diagnostic, pas à une obligation de compatibilité.
 
-**État au 8 octobre : plan préparé et recherche UX documentée.** La prescription
-W22 est rédigée ; les travaux restent ouverts à réception. Les prototypes,
-développements et scénarios Txx n'ont pas été exécutés dans cette préparation.
-Le présent document ne crée ni run, ni workflow actif, ni publication distante.
-Les dossiers `changelog/` existants restent hors de cette intervention de
-planification ; les nouveaux outils utiliseront exclusivement `release/`.
+**État de réalisation :** voir la release et ses preuves. Le bilan distingue les
+contrôles locaux, les essais natifs et les qualifications distantes manquantes.
+Les nouvelles releases utilisent `release/` ; les anciens projets clients restent
+intacts. Aucune préparation de modèle ne vaut activation ou publication.
 
 ## Compléments actés pendant l’implémentation
 

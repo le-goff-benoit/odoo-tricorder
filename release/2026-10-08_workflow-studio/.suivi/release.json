@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "release": "2026-10-08_workflow-studio",
-  "version": "0.6.0-preview.2",
-  "status": "in_progress",
+  "version": "0.6.0-rc.1",
+  "status": "local_release_candidate",
   "scope": [
     "tricorder",
     "odoo-crew-pack"
@@ -23,10 +23,8 @@
     "model-without-specialized-agent",
     "declarative-plugin-capabilities",
     "native-codex-plugin-inventory",
-    "text-only-provider-adapters",
     "design-patch-preview",
     "single-human-release-document",
-    "experimental-odoo-deployer",
     "portable-clickable-workflow-file",
     "cross-computer-draft-import",
     "github-startup-update-check",
@@ -43,20 +41,28 @@
     "selective-evidence-reuse",
     "github-odoo-sh-reference-template",
     "confluence-reference-template",
-    "large-graph-local-qualification"
+    "large-graph-local-qualification",
+    "isolated-code-proposals",
+    "candidate-tests-and-human-application",
+    "candidate-conflict-and-crash-recovery",
+    "mcp-stdio-transport",
+    "effect-reconciliation-without-resend",
+    "crew-runtime-contract-0.2",
+    "native-codex-text-and-code-campaign",
+    "typed-port-editor",
+    "full-external-operation-review",
+    "automated-accessibility-checks"
   ],
   "pending": [
-    "qualified-native-tool-transports",
-    "native-provider-campaign",
+    "claude-native-qualification-organization-access-blocked",
     "real-mail-watch-and-notification",
     "real-confluence-publication",
     "github-odoo-sh-real-qualification",
-    "full-crew-contract-migration",
-    "user-acceptance-and-wcag"
+    "user-acceptance-and-full-wcag-audit"
   ],
   "tests": {
     "python": {
-      "passed": 149,
+      "passed": 159,
       "failed": 0
     },
     "javascript": {
@@ -64,21 +70,34 @@
       "failed": 0
     },
     "electron_source": {
-      "passed": 18,
+      "passed": 21,
       "failed": 0
     },
     "electron_packaged": {
-      "passed": 18,
+      "passed": 21,
       "failed": 0
     },
     "crew": {
-      "total": 435,
+      "total": 436,
       "skipped": 1,
       "failed": 0
     },
     "crew_generated_outputs": 38,
     "native_models": {
-      "status": "not_run"
+      "codex": {
+        "status": "passed-synthetic-native",
+        "model_requested": "gpt-6-astra",
+        "model_observed": null,
+        "text": true,
+        "isolated_edit": true,
+        "candidate_assertions": 2
+      },
+      "claude": {
+        "status": "blocked-by-organization",
+        "model_requested": "sonnet",
+        "model_observed": "claude-sonnet-5-5"
+      },
+      "source": "preuves/native.json"
     },
     "external_services": {
       "status": "not_connected"
@@ -110,6 +129,40 @@
       ],
       "status": "passed",
       "full_wcag_audit": false
+    },
+    "mcp_stdio": {
+      "status": "passed-local-server",
+      "protocol": "2025-11-25",
+      "cases": [
+        "handshake",
+        "mapped-read",
+        "notification-receipt",
+        "changed-account",
+        "changed-tool-schema",
+        "unknown-tool"
+      ],
+      "external_service": false
+    },
+    "accessibility": {
+      "tool": "axe-core/playwright 4.13.0",
+      "violations": 0,
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "views": [
+        "navigation",
+        "canvas",
+        "inspector",
+        "dialog",
+        "external-decision"
+      ],
+      "full_wcag_audit": false
+    },
+    "dependency_audit": {
+      "runtime_vulnerabilities": 0,
+      "development_moderate_advisories": 8,
+      "note": "Non-breaking dependency fixes applied; no forced downgrade of electron-builder."
     }
   },
   "publication": {
@@ -117,15 +170,22 @@
     "odoo_sh": false
   },
   "human_document": "../README.md",
-  "guidance_version": 3,
+  "guidance_version": 4,
   "artifact": {
-    "file": "build-artifacts/odoo-tricorder_0.6.0-preview.2_amd64.deb",
-    "sha256": "86afae957cb1b123fe1ebfd027701de460a36f2e1ec6440875850c3146cbb283",
+    "file": "build-artifacts/odoo-tricorder_0.6.0-rc.1_amd64.deb",
+    "sha256": "624ad07433f2879ca49ca646f9a39a80f38f676e794ed74a3f8c2c64d1643d77",
     "mime_association": "application/x-tricorder-workflow",
     "installed": true,
     "installation": "user-local-unpacked",
-    "path": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-preview.2",
-    "previous_version_preserved": "0.5.1"
+    "path": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.1",
+    "previous_version_preserved": "0.6.0-preview.2",
+    "previous_launcher": "previous-launcher.desktop"
   },
-  "crew_commit": "6de7f58"
+  "crew_commit": "c00c315",
+  "external_blockers": {
+    "claude": "Organization disables Claude Code subscription access; no model fallback or API-key setup performed.",
+    "services": "Accounts, recipients and test spaces not designated; examples did not authorize real messages.",
+    "deployment": "User will designate GitHub target, then Odoo.sh; no push or deployment authorized yet."
+  },
+  "local_delivery": "installed-and-tested"
 }

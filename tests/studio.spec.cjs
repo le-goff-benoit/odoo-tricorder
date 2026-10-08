@@ -209,13 +209,13 @@ test('global workflow runs independently of Git projects and draws right-angle l
   expect(paths.length).toBeGreaterThan(0);
   for (const d of paths) { expect(d).toContain('H'); expect(d).toContain('V'); expect(d).not.toMatch(/[CQ]/); }
   await simulate();
-  await expect(page.locator('.node[data-id="mail"]')).toHaveAttribute('data-status', 'returned');
+  await expect(page.locator('.node[data-id="mail"]')).toHaveAttribute('data-status', 'accepted');
   await page.screenshot({ path: path.join(test.info().outputDir, 'studio-global-orthogonal.png'), fullPage: true });
   await page.getByRole('button', { name: 'Projets', exact: true }).click();
   await expect(page.locator('.project-card')).toHaveCount(0);
   await page.getByRole('button', { name: 'Globaux', exact: true }).click();
   await page.getByRole('button', { name: 'Consulter', exact: true }).click();
-  await expect(page.locator('.node[data-id="mail"]')).toHaveAttribute('data-status', 'returned');
+  await expect(page.locator('.node[data-id="mail"]')).toHaveAttribute('data-status', 'accepted');
 });
 
 test('exported clickable file opens on another local instance as a draft without execution', async () => {
@@ -314,4 +314,73 @@ test('application navigation separates overview, workflow use and editor with co
     await expect(sidebar.getByRole('button', { name: 'Changer le thème' }).locator('svg')).toBeVisible();
   }
   await page.screenshot({ path: path.join(test.info().outputDir, 'navigation-compact.png'), fullPage: true });
+});
+
+test('code proposal diff is reviewable and only explicit application changes the Git project', async () => {
+  const resources = await app.evaluate(() => process.resourcesPath);
+  const backend = process.env.TRICORDER_EXECUTABLE ? path.join(resources, 'backend') : path.join(root, 'backend');
+  const script = `import sys,json
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+from workflow_engine import Engine
+from workflow_engine.library import node
+from connectors.candidates import prepare,capture
+engine=Engine(sys.argv[2]);project=engine.create_project('Projet candidat')
+source=Path(project['path'])/'calc.py';source.write_text('value = 1\\n')
+graph={'schema':1,'id':'proposal','title':'Proposition de code','nodes':[node('edit','Modifier le code','agent',model='synthetic',execution_mode='edit',outputs={'candidate':'object'})],'edges':[]}
+engine.save(project['id'],graph)
+run=engine.start(project['id'],graph);claim=engine.claim(run['id'],'edit')
+prepared=prepare(engine,run,engine.store.directory/'synthetic-candidate');(prepared['workspace']/'calc.py').write_text('value = 2\\n')
+ref,diff=capture(engine,run,prepared)
+engine.submit(run['id'],'edit',claim['token'],{'ok':True,'summary':'Résultat synthétique pour tester la réception UI','outputs':{'candidate':ref},'patch':diff,'evidence':[ref,diff]})
+print(json.dumps({'path':str(source),'run':run['id']}))`;
+  const result = require('node:child_process').spawnSync('python3', ['-c', script, backend, directory], { encoding: 'utf8' });
+  expect(result.status, result.stderr).toBe(0);
+  const seed = JSON.parse(result.stdout);
+  await page.reload();
+  await page.getByRole('button', { name: 'Projets', exact: true }).click();
+  await page.getByRole('button', { name: /Projet candidat/ }).click();
+  await page.getByRole('button', { name: 'Consulter', exact: true }).click();
+  await page.locator('.node[data-id="edit"]').click();
+  await page.getByRole('button', { name: 'Examiner les modifications' }).click();
+  await expect(page.getByRole('dialog')).toContainText('+value = 2');
+  await expect(page.getByRole('button', { name: 'Appliquer ces modifications au dépôt' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Fermer', exact: true }).click();
+  await page.getByRole('button', { name: 'Valider le résultat' }).click();
+  expect(fs.readFileSync(seed.path, 'utf8')).toBe('value = 1\n');
+  await page.getByRole('button', { name: 'Examiner les modifications' }).click();
+  await page.getByRole('button', { name: 'Appliquer ces modifications au dépôt' }).click();
+  await expect(page.getByRole('button', { name: 'Voir le code appliqué' })).toBeVisible();
+  expect(fs.readFileSync(seed.path, 'utf8')).toBe('value = 2\n');
+});
+
+test('accessible navigation, editor, inspector and dialog in light and dark themes', async () => {
+  const AxeBuilder = require('@axe-core/playwright').default;
+  async function scan() {
+    const result = await new AxeBuilder({ page }).setLegacyMode(true).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
+    expect(result.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, reason: n.failureSummary })) }))).toEqual([]);
+  }
+  await scan();
+  await example(); await scan();
+  await page.locator('.node[data-id="analyse"]').click(); await scan();
+  await page.getByRole('button', { name: 'Changer le thème' }).click(); await scan();
+  await page.getByRole('button', { name: 'Exécuter…' }).click(); await scan();
+});
+
+
+test('human gate presents the full external content and candidate before approval', async () => {
+  await page.getByRole('button', { name: 'Globaux', exact: true }).click();
+  const operation = { action: 'update-page', target: 'synthetic-space/page', candidate: 'candidate-hash', body: 'Exact content to review', base_version: 7 };
+  const graph = { schema: 1, id: 'exact-review', title: 'Exact review', nodes: [{ id: 'approve', kind: 'decision', title: 'Review publication', operation }], edges: [] };
+  await page.evaluate(graph => window.studio.request({ action: 'workflow.save', project: 'workspace', graph }), graph);
+  await page.getByRole('button', { name: 'Globaux', exact: true }).click();
+  await page.getByRole('button', { name: 'Ouvrir le workflow', exact: true }).click();
+  await simulate();
+  await page.locator('.node[data-id="approve"]').click();
+  await expect(page.locator('#inspector')).toContainText('Exact content to review');
+  await expect(page.locator('#inspector')).toContainText('"base_version": 7');
+  await expect(page.getByRole('button', { name: 'Autoriser cette opération' })).toBeVisible();
+  const AxeBuilder = require('@axe-core/playwright').default;
+  const scan = await new AxeBuilder({ page }).setLegacyMode(true).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  expect(scan.violations.map(v => v.id)).toEqual([]);
 });

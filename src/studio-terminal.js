@@ -19,10 +19,10 @@ export class WorkflowTerminal {
   async open(project, graph) {
     this.host.hidden = false; this.active = project.id;
     this.host.querySelector('.terminal-context').textContent = project.title;
-    this.message(`Conception · ${project.path}/.tricorder · AGENTS.md guide les assistants · workflows/${graph.id}.json · Modifiez le fichier, puis « Recharger et valider ». Les commandes du terminal sont vos actions directes.`);
+    this.message(`Conception · ${project.path}/.tricorder · AGENTS.md guide les assistants · ${graph ? `workflows/${graph.id}.json · Modifiez le fichier, puis « Recharger et valider ».` : "plugins.json · Configurez les capacités puis actualisez Connexions."} Les commandes du terminal sont vos actions directes.`);
     let session = this.sessions.get(project.id);
     if (!session) {
-      const info = await this.api.terminal({ action: 'create', project: project.id, release: graph.release || null });
+      const info = await this.api.terminal({ action: 'create', project: project.id, release: graph?.release || null });
       const term = new Terminal({ fontFamily: 'IBM Plex Mono, monospace', fontSize: 13, cursorBlink: true, scrollback: 3000, theme: { background: '#151b27', foreground: '#e4eaf5', cursor: '#9caeff' } });
       const fit = new FitAddon(); term.loadAddon(fit);
       const container = document.createElement('div'); container.className = 'terminal-session'; this.host.querySelector('.terminal-body').append(container); term.open(container);

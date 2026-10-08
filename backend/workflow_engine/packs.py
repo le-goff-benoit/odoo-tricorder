@@ -1,6 +1,7 @@
 """Declarative domain packs; importing only reads bounded text, never code."""
 
 import json
+import re
 from pathlib import Path
 
 from .contracts import digest, identifier, require
@@ -25,7 +26,14 @@ def inspect_pack(folder):
         require(not relative.is_absolute() and ".." not in relative.parts, "Source de profil hors pack")
         path = (root / relative).resolve()
         require(path.is_relative_to(root) and path.is_file() and path.stat().st_size <= 80_000, "Source de profil absente ou hors pack")
-        profile["text"] = path.read_text()
+        text = path.read_text()
+        if profile.get("section"):
+            identifier(profile["section"], "Section de profil")
+            sections = re.split(r"(?m)^## ([a-zA-Z][a-zA-Z0-9_.-]*)\s*$", text)
+            matches = [sections[i+1] for i in range(1, len(sections), 2) if sections[i] == profile["section"]]
+            require(len(matches) == 1, "Section de profil absente ou dupliquée")
+            text = sections[0] + "\n## " + profile["section"] + matches[0]
+        profile["text"] = text
         profile["sha256"] = digest(profile["text"])
     pack["sha256"] = digest(pack)
     return pack
@@ -74,6 +82,9 @@ def policy_issues(project, graph):
         if policy.get("online_requires_studio") and params.get("platform") == "online" and params.get("route") != "studio":
             issues.append({"node": "workflow", "message": "Odoo Online impose la voie Studio."})
         for node in graph["nodes"]:
-            if node.get("profile") == "odoo-tester" and node.get("environment") == "production":
+            selection = {**project.get("defaults", {}), **graph.get("defaults", {}), **node}
+            if selection.get("profile") == "odoo-tester" and policy.get("qa_requires_local_copy") and (params.get("environment") != "local" or not params.get("neutralized_copy")):
+                issues.append({"node": node["id"], "message": "Pack Odoo : identifier environment=local et neutralized_copy pour la recette."})
+            if selection.get("profile") == "odoo-tester" and node.get("environment", params.get("environment")) == "production":
                 issues.append({"node": node["id"], "message": "Pack Odoo : recette sur copie locale, jamais en production."})
     return issues

@@ -102,6 +102,9 @@ def validate(graph, *, expanded=False):
             require(isinstance(argv, list) and argv and all(isinstance(a, str) and "\x00" not in a for a in argv), f"{nid} : arguments de commande requis")
             require(isinstance(node.get("timeout", 60), (int, float)) and 1 <= node.get("timeout", 60) <= 3600, f"{nid} : timeout entre 1 et 3 600 secondes")
         if node["kind"] == "agent":
+            require(node.get("execution_mode", "text") in {"text", "edit"}, f"{nid} : mode IA text ou edit attendu")
+            if node.get("execution_mode") == "edit":
+                require(node.get("outputs", {}).get("candidate") == "object", f"{nid} : sortie candidate de type object requise")
             require(node.get("provider", "codex") in {"codex", "claude"}, f"{nid} : fournisseur inconnu")
             require(node.get("session", "delegated") in {"main", "delegated"}, f"{nid} : mode de session inconnu")
     edge_ids = set()

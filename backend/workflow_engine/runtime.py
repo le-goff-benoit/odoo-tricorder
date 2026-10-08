@@ -35,8 +35,8 @@ def capabilities(project=None, engine=None):
         found = bool(shutil.which(provider))
         result.append({"id": provider, "title": "Codex" if provider == "codex" else "Claude Code", "available": True, "installed": found,
                        "connected": None, "usable": found, "qualified": False,
-                       "reason": "CLI détecté. Sessions neuves limitées au texte, sans outils ; connexion au compte et essais natifs à qualifier. Un lancement explicite peut consommer votre abonnement." if found else "CLI non installé.",
-                       "operations": ["agent", "design-assistant"]})
+                       "reason": "CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement." if found else "CLI non installé.",
+                       "operations": ["agent", "code-edit", "design-assistant"]})
     sandbox = False
     if shutil.which("bwrap"):
         try:
@@ -70,6 +70,8 @@ def preflight(graph, simulation=False, defaults=None, project=None, engine=None)
         if kind == "command" and not catalog["command"]["usable"]:
             issues.append({"node": node["id"], "message": catalog["command"]["reason"]})
         elif kind == "agent":
+            if node.get("execution_mode") == "edit" and (not project or project.get("scope") == "workspace" or project.get("library")):
+                issues.append({"node": node["id"], "message": "L’édition de code nécessite un projet Git ; adapter le modèle dans un projet."})
             selection = {**(defaults or {}), **graph.get("defaults", {}), **node}
             provider = selection.get("provider", "codex")
             if not catalog[provider]["installed"]:
@@ -153,7 +155,12 @@ def execute(engine, run_id, node_id, token):
             work = job / "work"
             work.mkdir(exist_ok=True)
             project = engine.project(run["project"])
-            args = sandbox_argv(node["argv"], project.get("path"), work)
+            source = project.get("path")
+            candidate = run["nodes"][node_id].get("inputs", {}).get("candidate")
+            if candidate:
+                from connectors.candidates import materialize
+                source = materialize(engine, candidate, run["project"], job / "candidate")
+            args = sandbox_argv(node["argv"], source, work)
             with (job / "output").open("wb") as output:
                 process = subprocess.Popen(args, stdout=output, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True, preexec_fn=_limits)
                 deadline = time.monotonic() + node.get("timeout", 60)

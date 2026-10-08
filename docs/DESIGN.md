@@ -303,7 +303,9 @@ Pour les actions courantes, rapporter le nombre réel de réussites sans aide et
 les problèmes résiduels. Sans participants, le résultat reste une revue experte
 et des tests techniques ; il ne devient pas une validation utilisateur.
 
-La première interface est implémentée et ses parcours techniques sont testés.
+L’interface est implémentée et ses parcours techniques sont testés. Un contrôle
+automatisé axe couvre navigation, canevas, inspecteur et dialogue dans les deux
+thèmes, sans violation détectée sur ces vues.
 La recette avec des utilisateurs débutants/experts et l’audit WCAG complet
 restent à réaliser. Aucune efficacité UX mesurée n’est revendiquée.
 
@@ -335,3 +337,8 @@ d’exécution**, **planification** et **déploiement**. « Modèle de workflow 
 « modèle IA » restent explicitement distincts. Les états visibles sont « À
 valider » et « Validé » ; le bouton correspondant est « Valider le résultat ».
 Une décision d’autorisation reste distincte de la validation d’un résultat.
+
+Les points de décision affichent le contenu complet de l’opération externe,
+pas seulement son titre ou son empreinte. Le parcours de code distingue le diff
+proposé, les tests de la copie et son application au dépôt. Ces deux parcours sont
+couverts par la recette Electron et le contrôle automatisé d’accessibilité.

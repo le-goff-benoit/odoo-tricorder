@@ -93,6 +93,23 @@ class SchedulesAndPacksTests(unittest.TestCase):
         with self.assertRaises(ContractError):
             inspect_pack(root)
 
+    def test_pack_section_imports_only_common_contract_and_selected_role(self):
+        from workflow_engine.packs import inspect_pack, policy_issues
+        folder = self.root / 'scoped-pack'
+        folder.mkdir()
+        (folder/'roles.md').write_text('# Shared runtime\nThe engine owns state.\n## odoo-tester\nReview local evidence.\n## other-role\nOther mission.\n')
+        (folder/'tricorder-pack.json').write_text(json.dumps({'schema':1,'engine_schema':1,'id':'crew','title':'Crew','version':'1','profiles':[{'id':'odoo-tester','title':'QA','source':'roles.md','section':'odoo-tester'}],'policies':{'domain':'odoo','qa_requires_local_copy':True}}))
+        pack=inspect_pack(folder)
+        text=pack['profiles'][0]['text']
+        self.assertIn('engine owns state',text)
+        self.assertIn('Review local evidence',text)
+        self.assertNotIn('Other mission',text)
+        project={'defaults':{},'packs':[pack]}
+        graph={'domain':'odoo','nodes':[{'id':'qa','kind':'agent','profile':'odoo-tester'}],'parameters':{'environment':'production'}}
+        self.assertTrue(policy_issues(project,graph))
+        graph['parameters']={'environment':'local','neutralized_copy':'synthetic-copy'}
+        self.assertEqual(policy_issues(project,graph),[])
+
 
 if __name__ == "__main__":
     unittest.main()

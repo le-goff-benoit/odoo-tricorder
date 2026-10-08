@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-08",
+  "scope": "Synthetic native CLI qualification; no client project or external service",
+  "codex": {
+    "cli": "0.161.0",
+    "requested_model": "gpt-6-astra",
+    "observed_model": null,
+    "text": {
+      "attempt": 1,
+      "cost_usd": null,
+      "evidence": [
+        {
+          "sha256": "c4fe5bb9e85e5ba41078cd19720b57e3678b0a0e4bcf2c5abbf25c7eef41ca43",
+          "size": 528
+        }
+      ],
+      "model_observed": null,
+      "model_requested": "gpt-6-astra",
+      "node": "work",
+      "ok": true,
+      "outputs": {
+        "answer": "READY"
+      },
+      "parent_run": "r27ec87cff1e24647",
+      "provider": "codex",
+      "scope": "Session neuve limitée au texte ; aucune modification de projet ni opération externe autorisée.",
+      "summary": "READY",
+      "thread": "01a11b5f-cc34-7be2-a87c-a129af68aecb",
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 0,
+        "input_tokens": 16360,
+        "output_tokens": 21,
+        "reasoning_output_tokens": 0
+      }
+    },
+    "edit": {
+      "attempt": 1,
+      "cost_usd": null,
+      "evidence": [
+        {
+          "sha256": "250f75d623d33ed981ae00a59eacfe933940371b93d79b1e35678c00f9bab344",
+          "size": 533
+        },
+        {
+          "sha256": "b91223e292c3691f10d2bbb3c050730f81c1295e416ffbf2dcc5c44723b2c1c9",
+          "size": 356
+        },
+        {
+          "sha256": "bccfb8a58c315cd1c5ee38f21fd20499c3a740eeef38b5b51fd62d0b75edbf1d",
+          "size": 96
+        }
+      ],
+      "model_observed": null,
+      "model_requested": "gpt-6-astra",
+      "node": "work",
+      "ok": true,
+      "outputs": {
+        "answer": "FIXED",
+        "candidate": {
+          "sha256": "b91223e292c3691f10d2bbb3c050730f81c1295e416ffbf2dcc5c44723b2c1c9",
+          "size": 356
+        }
+      },
+      "parent_run": "r3edd241c231a4bde",
+      "patch": {
+        "sha256": "bccfb8a58c315cd1c5ee38f21fd20499c3a740eeef38b5b51fd62d0b75edbf1d",
+        "size": 96
+      },
+      "provider": "codex",
+      "scope": "Copie de travail modifiée ; dépôt original inchangé. Examiner et valider avant application locale.",
+      "summary": "FIXED",
+      "thread": "01a11b5f-e34b-70b3-9e80-1605e5f8e335",
+      "usage": {
+        "cache_write_input_tokens": 0,
+        "cached_input_tokens": 14976,
+        "input_tokens": 30393,
+        "output_tokens": 140,
+        "reasoning_output_tokens": 0
+      }
+    },
+    "original_unchanged": true,
+    "actual_candidate_tests": {
+      "exit_code": 0,
+      "output": "2 assertions passed\n"
+    },
+    "diff": "--- a/calc.py\n+++ b/calc.py\n@@ -1,2 +1,2 @@\n def add(a, b):\n-    return a - b\n+    return a + b\n"
+  },
+  "claude": {
+    "cli": "2.1.288",
+    "requested_model": "sonnet",
+    "observed_model": "claude-sonnet-5-5",
+    "status": "blocked-by-organization",
+    "reason": "Organization has disabled Claude subscription access for Claude Code",
+    "inference_tokens": 0
+  },
+  "automatic_fallback": false
+}

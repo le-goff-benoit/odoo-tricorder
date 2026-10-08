@@ -127,6 +127,10 @@ class RuntimeTests(unittest.TestCase):
         self.assertIsNone(result["model_observed"])
         self.assertIsNone(result["cost_usd"])
         claude = Events("claude", "run", "node", 1)
+        claude.consume({"type":"system", "subtype":"init", "tools":["StructuredOutput"], "model":"observed-model"})
+        claude.consume({"type":"result", "is_error":True, "result":"Organization disabled subscription access", "usage":{"input_tokens":0}})
+        with self.assertRaisesRegex(ContractError, "Organization disabled"):
+            claude.finish("requested")
         with self.assertRaisesRegex(ContractError, "outils"):
             claude.consume({"type": "system", "subtype": "init", "tools": ["Bash"]})
 

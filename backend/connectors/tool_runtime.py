@@ -24,9 +24,9 @@ def execute_tool(engine, run, node, token):
 
     def invoke(arguments, key=None):
         description = exchange(record["config"], {"protocol": "tricorder.tool/1", "action": "describe"}, check=check, timeout=8)
-        require(description.get("connected") is True and description.get("identity") == record["identity"] and description.get("operations") == record["operations"], "Compte ou capacités du transport modifiés : vérifier à nouveau la connexion")
+        require(description.get("connected") is True and description.get("identity") == record["identity"] and description.get("operations") == record["operations"] and description.get("tool_digest") == record.get("tool_digest"), "Compte ou capacités du transport modifiés : vérifier à nouveau la connexion")
         response = exchange(record["config"], {"protocol": "tricorder.tool/1", "action": "call", "operation": binding["operation"],
-                            "arguments": arguments, "idempotency_key": key, "expected_identity": record["identity"]}, check=check)
+                            "arguments": arguments, "idempotency_key": key, "expected_identity": record["identity"], "expected_tool_digest": record.get("tool_digest")}, check=check)
         require(response.get("identity") == record["identity"], "La réponse provient d’une autre connexion")
         require(response.get("ok") is True, "L’outil a signalé un échec ; résultat externe à vérifier avant reprise")
         require(isinstance(response.get("outputs"), dict), "Sorties structurées de l’outil absentes")
@@ -75,7 +75,8 @@ def execute_tool(engine, run, node, token):
             require(isinstance(receipt, dict) and isinstance(receipt.get("id"), str) and receipt["id"], "Accusé de réception distant absent")
             return {**receipt, "outputs": response["outputs"]}
         ledger = Effects(engine.store).perform(operation, {"approved": True, "operation": digest(operation)}, event, send)
-        require(ledger["status"] == "sent", "Résultat externe incertain : aucune répétition automatique ; réconciliation nécessaire")
+        if ledger["status"] != "sent":
+            return {"ok": False, "summary": "Résultat externe incertain : aucune répétition automatique ; rechercher l’accusé distant.", "effect_id": ledger["id"], "outputs": {}, "evidence": [engine.artifact(json.dumps(ledger, ensure_ascii=False).encode())]}
         outputs = ledger["receipt"]["outputs"]
         summary = "Opération exécutée ; accusé de réception distant enregistré."
         response = {"receipt": ledger["receipt"], "effect_id": ledger["id"]}
@@ -87,3 +88,31 @@ def execute_tool(engine, run, node, token):
                               "receipt": response.get("receipt"), "at": time.time()}, ensure_ascii=False))
     return {"ok": True, "summary": summary, "outputs": outputs, "evidence": [engine.artifact(proof.encode())],
             "receipt": response.get("receipt"), "tool": binding}
+
+
+def reconcile_effect(engine, run_id, node_id, *, human=False):
+    require(human, "Réconciliation réservée à l’interface humaine")
+    run = engine.run(run_id)
+    state = run['nodes'][node_id]
+    effect_id = state.get('result', {}).get('effect_id')
+    require(state['status'] == 'returned' and effect_id and run['status'] in {'active', 'paused'}, 'Aucun effet incertain à réconcilier')
+    node = next(n for n in run['definition']['nodes'] if n['id'] == node_id)
+    binding = node['capabilities'][0]
+    record = approved(engine, engine.project(run['project']), binding['plugin'])
+    require(record == run['transports'][binding['plugin']], 'Transport modifié depuis le lancement')
+    operation = node.get('reconciliation')
+    require(operation and record['operations'].get(operation) == 'read', 'Déclarer une capacité de lecture reconciliation dans le bloc pour rechercher l’accusé distant')
+    with engine.store.connect() as db:
+        ledger = engine.store.body(db.execute('SELECT body FROM effects WHERE id=?', (effect_id,)).fetchone())
+    require(ledger, 'Effet absent du journal')
+    response = exchange(record['config'], {'protocol':'tricorder.tool/1','action':'call','operation':operation,
+        'arguments':{'effect_id':effect_id,'operation':ledger['operation']},'expected_identity':record['identity'],
+        'expected_tool_digest':record.get('tool_digest'),'idempotency_key':None})
+    require(response.get('identity') == record['identity'] and response.get('ok') is True, 'Lecture distante non confirmée')
+    observed = response.get('outputs', {})
+    require(observed.get('effect_id') == effect_id and observed.get('status') == 'sent', 'Résultat distant toujours inconnu : aucune répétition autorisée')
+    receipt = observed.get('receipt', {})
+    require(isinstance(receipt, dict) and isinstance(receipt.get('id'), str) and receipt['id'], 'Accusé distant requis')
+    require(isinstance(observed.get('outputs'), dict), 'Sorties distantes requises')
+    proof = engine.artifact(redact(json.dumps(observed,ensure_ascii=False)).encode())
+    return engine.reconcile_effect(run_id, node_id, effect_id, {**receipt,'outputs':observed['outputs']}, proof)
