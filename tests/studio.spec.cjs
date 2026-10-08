@@ -14,6 +14,16 @@ async function quitApplication() { await app.close(); }
 test.beforeEach(async ({}, testInfo) => {
   directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-studio-ui-'));
   const extraEnv = {};
+  if (testInfo.title.startsWith('large release history')) {
+    const project = path.join(directory, 'history-project');
+    const release = path.join(project, 'changelog', '2026-10-09_history');
+    fs.mkdirSync(release, { recursive: true });
+    fs.mkdirSync(path.join(project, '.odoo-agents'));
+    require('node:child_process').execFileSync('git', ['init', '-q', project]);
+    fs.writeFileSync(path.join(release, 'README.md'), '# Historique synthétique\n');
+    // Included in the releases and current-release views: > 4 MB in the catalog.
+    fs.writeFileSync(path.join(release, 'intentions.json'), JSON.stringify({ schema: 1, items: [{ id: 'I01', status: 'ready', title: 'Demande historique', detail: 'x'.repeat(2200000) }] }));
+  }
   if (testInfo.title.startsWith('optional workflow setup')) {
     const pack = path.join(directory, 'invalid-pack'); fs.mkdirSync(pack);
     fs.writeFileSync(path.join(pack, 'tricorder-pack.json'), '{invalid');
@@ -40,6 +50,25 @@ test.afterEach(async () => {
 });
 
 async function example() { await page.getByRole('button', { name: 'Essayer un exemple' }).click(); await expect(page.getByRole('heading', { name: "De la demande au résultat" })).toBeVisible(); }
+
+test('large release history: startup and refresh preserve projects, workflows and terminal', async () => {
+  const initial = await page.evaluate(() => window.tricorder.bootstrap());
+  expect(JSON.stringify(initial.projects).length).toBeGreaterThan(4000000);
+  expect(initial.workflowWarning).toBeNull();
+  expect(initial.configured).toEqual([expect.objectContaining({ status: 'configured' })]);
+  await expect(page.locator('#catalog-warning')).toBeHidden();
+  const workflows = await page.evaluate(() => window.studio.request({ action: 'bootstrap' }));
+  expect(workflows.projects.some(p => p.title === 'history-project')).toBe(true);
+  await page.locator('[data-action="refresh"]').click();
+  await expect(page.locator('#sync-status')).toContainText('À jour');
+  await expect(page.locator('#catalog-warning')).toBeHidden();
+  await page.locator('[data-workflow-route="projects"]').click();
+  await page.locator('.project-card').filter({ hasText: 'history-project' }).click();
+  await page.locator('[data-action="terminal-toggle"]').click();
+  await page.getByRole('button', { name: 'Ouvrir un terminal', exact: true }).click();
+  await expect.poll(async () => (await page.evaluate(() => window.tricorder.terminals.list())).filter(s => s.alive).length).toBe(1);
+  await page.screenshot({ path: test.info().outputPath('large-history-startup.png') });
+});
 async function simulate() { await page.getByRole('button', { name: 'Exécuter…' }).click(); await page.getByRole('button', { name: 'Simuler le parcours' }).click(); await expect(page.locator('#run-banner')).toContainText('Simulation'); }
 async function receive(id, hasCriteria = false) {
   const node = page.locator(`.node[data-id="${id}"]`);

@@ -1,0 +1,45 @@
+{
+  "version": "0.6.0-rc.7",
+  "verified_at": "2026-10-08T22:17:44.639641+00:00",
+  "regression_before_fix": {
+    "truncated_json_and_epipe_reproduced_together": true,
+    "python_failures": 2
+  },
+  "checks": {
+    "python": {
+      "passed": 199
+    },
+    "javascript": {
+      "passed": 81
+    },
+    "source_ui": {
+      "passed": 56,
+      "skipped_optional_real_projects": 2
+    },
+    "packaged_ui": {
+      "passed": 5,
+      "scope": [
+        "large history startup and refresh",
+        "native conversation and restart",
+        "terminal continuity",
+        "bootstrap recovery",
+        "optional setup recovery"
+      ]
+    },
+    "ubuntu_build": "passed"
+  },
+  "scope": "Synthetic Git repositories and substitute provider CLIs. Real catalog size measured read-only; no client workflow executed, real model called or external notification sent.",
+  "artifacts": {
+    "odoo-tricorder_0.6.0-rc.7_amd64.deb": {
+      "sha256": "cf289f714c95e43c2ebb807e3c9b349040e2cb82fa7991ed9afb09d1925fb3b1"
+    },
+    "app.asar": {
+      "sha256": "db29cf3fbb7bda789aac223bd598ba4140d4b47e16a74d85097fba4ddb91dc47"
+    }
+  },
+  "capture": {
+    "path": "captures/chargement-et-terminal.png",
+    "source": "packaged regression test",
+    "sha256": "0a99a7b9721fcdb2dee0acb663fef488a64eb6177811ae78b698f30f8a4e799c"
+  }
+}

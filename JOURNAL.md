@@ -109,3 +109,11 @@ Les interventions antérieures restent dans l’historique Git. Le suivi détail
 - Terminal redimensionnable et disposition verticale ; retour à l’éditeur sans perdre la session.
 - Saisie des blocs préservée entre actions, Ctrl+S dans les champs et palette intégrée corrigée.
 - Recette : 197 tests Python, 74 JavaScript et 55 parcours sur le paquet ; deux scénarios réels facultatifs exclus.
+
+## 2026-10-09 — Chargement des projets 0.6.0-rc.7
+- Reproduction du JSON tronqué et du crash EPIPE avec une même requête volumineuse.
+- Enregistrement des projets limité aux identifiants utiles, sans renvoi des historiques.
+- Taille vérifiée avant décodage ; erreurs de stdin, arrêt et délai gérés dans Electron.
+- Tests de régression du transport et parcours de démarrage avec un gros historique synthétique.
+- Détails et recette : `release/2026-10-09_chargement/README.md`.
+- Recette : 199 tests Python, 81 JavaScript, 56 parcours UI et 5 ciblés sur le paquet réussis.

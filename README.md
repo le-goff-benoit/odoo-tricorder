@@ -1,7 +1,11 @@
 # Tricorder
 
 **Dessinez vos workflows, pilotez le travail dans le terminal et suivez ses résultats.**
-Préversion publiée : **0.6.0-rc.6**.
+Préversion publiée : **0.6.0-rc.7**.
+
+[Correctif du chargement et du crash EPIPE](release/2026-10-09_chargement/README.md) :
+les historiques de projets volumineux ne sont plus renvoyés au moteur pour leur
+enregistrement. Une requête interrompue produit une erreur récupérable.
 
 [Parcours de travail et limites](release/2026-10-08_parcours/README.md) · [Revue ergonomique et captures](release/2026-10-08_design/README.md) · [Revue fonctionnelle](release/2026-10-08_revue/README.md).
 

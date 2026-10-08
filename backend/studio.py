@@ -14,6 +14,10 @@ from workflow_engine.runtime import capabilities, dispatch, execute, preflight, 
 from workflow_engine.schedules import Schedules
 from workflow_engine.packs import inspect_pack, install, resolve_profiles, policy_issues
 
+# Match electron/backend-request.cjs. Check the complete byte-boundary before
+# decoding, including callers other than Electron; never parse a truncated JSON.
+MAX_REQUEST_BYTES = 4 * 1024 * 1024
+
 
 def provider_defaults():
     """Non-secret local model policy; no credential or account probing."""
@@ -215,7 +219,10 @@ def main():
         execute(engine, *args.worker)
         return
     try:
-        payload = json.loads(sys.stdin.read(4_000_000))
+        raw = sys.stdin.buffer.read(MAX_REQUEST_BYTES + 1)
+        if len(raw) > MAX_REQUEST_BYTES:
+            raise ValueError("Requête trop volumineuse (maximum 4 Mio).")
+        payload = json.loads(raw)
         result = request(engine, payload, human=args.human_ui)
         print(json.dumps({"ok": True, "result": result}, ensure_ascii=False))
     except (ContractError, KeyError, TypeError, ValueError, OSError) as exc:

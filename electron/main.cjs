@@ -8,6 +8,7 @@ const { pathToFileURL } = require('node:url');
 const { promisify } = require('node:util');
 const { sessionContext, saveContext } = require('./terminal-context.cjs');
 const { catalogRevision } = require('./catalog-revision.cjs');
+const { workflowCatalogRequest } = require('./backend-request.cjs');
 const { initialWorkspace, statePaths } = require('./workspace-window.cjs');
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'tricorder', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
@@ -199,7 +200,7 @@ Annonce le workflow et son périmètre. Consulte status pour reprendre une deman
     const catalogProjects = await overview();
     const pack = process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents');
     let configured = [], workflowWarning = null;
-    try { configured = await studio.backend({ action: 'project.configure-catalog', projects: catalogProjects, pack }); }
+    try { configured = await studio.backend(workflowCatalogRequest(catalogProjects, pack)); }
     catch (error) { workflowWarning = error.message; }
     // The optional workflow catalog must not hide native projects and terminals.
     return { projects: catalogProjects, configured, workflowWarning, settings, initialWorkspace: initialWorkspace(), links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home,

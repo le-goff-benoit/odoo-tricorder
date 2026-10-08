@@ -1,6 +1,6 @@
 'use strict';
 const { app, ipcMain, dialog, Tray, Menu, nativeImage, shell } = require('electron');
-const { execFile } = require('node:child_process');
+const { jsonRequest } = require('./backend-request.cjs');
 const path = require('node:path');
 const fs = require('node:fs');
 const { fileURLToPath } = require('node:url');
@@ -24,20 +24,10 @@ const allowed = new Set(['conversation.open', 'conversation.list', 'conversation
 const human = new Set(['conversation.open', 'run.accept', 'run.decide', 'run.retry', 'plugins.qualify', 'run.handoff', 'run.reconcile-effect', 'candidate.apply', 'run.start', 'schedule.create']);
 
 function backend(payload, isHuman = false) {
-  return new Promise((resolve, reject) => {
-    const script = app.isPackaged ? path.join(process.resourcesPath, 'backend/studio.py') : path.join(__dirname, '../backend/studio.py');
-    const args = [script, '--state', state];
-    if (isHuman) args.push('--human-ui');
-    const child = execFile('python3', args, { timeout: 15000, maxBuffer: 8 * 1024 * 1024 }, (error, stdout) => {
-      if (error) return reject(new Error('Le moteur local ne répond pas. Les données enregistrées sont conservées.'));
-      try {
-        const response = JSON.parse(stdout);
-        if (!response.ok) return reject(new Error(response.error));
-        resolve(response.result);
-      } catch (error) { reject(error); }
-    });
-    child.stdin.end(JSON.stringify(payload));
-  });
+  const script = app.isPackaged ? path.join(process.resourcesPath, 'backend/studio.py') : path.join(__dirname, '../backend/studio.py');
+  const args = ['--state', state];
+  if (isHuman) args.push('--human-ui');
+  return jsonRequest(script, args, payload);
 }
 
 function trusted(event) {

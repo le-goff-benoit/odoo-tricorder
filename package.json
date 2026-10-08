@@ -1,6 +1,6 @@
 {
   "name": "odoo-tricorder",
-  "version": "0.6.0-rc.6",
+  "version": "0.6.0-rc.7",
   "desktopName": "odoo-tricorder.desktop",
   "description": "Conception de workflows, dialogue terminal et suivi du travail",
   "author": {
