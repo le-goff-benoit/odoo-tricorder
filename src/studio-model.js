@@ -1,6 +1,6 @@
-export const states = Object.freeze({ pending: 'Prévu', ready: 'Prêt', running: 'En cours', waiting: 'Décision attendue', returned: 'À valider', accepted: 'Validé', skipped: 'Non applicable', blocked: 'Bloqué' });
-export const kinds = Object.freeze({ task: 'Tâche', agent: 'Tâche IA', command: 'Commande', decision: 'Décision humaine', condition: 'Condition', join: 'Jonction', review: 'Relecture', document: 'Document', external: 'Opération externe', subworkflow: 'Sous-workflow', watch: 'Surveillance', communication: 'Communication' });
-export const symbols = Object.freeze({ task: '◇', agent: '✦', command: '›_', decision: '?', condition: '⑂', join: '⋈', review: '✓', document: '▤', external: '↗', subworkflow: '⊞', watch: '◷', communication: '↗' });
+export const states = Object.freeze({ waiting_input: 'Attend une information', pending: 'Prévu', ready: 'Prêt', running: 'En cours', waiting: 'Décision attendue', returned: 'À valider', accepted: 'Validé', skipped: 'Non applicable', blocked: 'Bloqué' });
+export const kinds = Object.freeze({ question: 'Question dans le terminal', task: 'Tâche', agent: 'Tâche IA', command: 'Commande', decision: 'Décision humaine', condition: 'Condition', join: 'Jonction', review: 'Relecture', document: 'Document', external: 'Opération externe', subworkflow: 'Sous-workflow', watch: 'Surveillance', communication: 'Communication' });
+export const symbols = Object.freeze({ question: '?', task: '◇', agent: '✦', command: '›_', decision: '?', condition: '⑂', join: '⋈', review: '✓', document: '▤', external: '↗', subworkflow: '⊞', watch: '◷', communication: '↗' });
 
 export function nodePosition(node, index) { return node.position || { x: 50 + (index % 4) * 300, y: 60 + Math.floor(index / 4) * 180 }; }
 
@@ -29,6 +29,17 @@ export function effectiveExecution(project, graph, node) {
     result[key] = found ? { value: found[0][key], source: found[1] } : { value: '', source: 'Non défini' };
   }
   return result;
+}
+
+export function withWorkflowAI(graph, { provider, model, effort = 'high' }) {
+  if (!['codex', 'claude'].includes(provider) || !model?.trim()) throw new Error('Choisissez un fournisseur et un modèle.');
+  const next = structuredClone(graph);
+  next.defaults = { ...next.defaults, provider, model: model.trim(), effort, session: 'delegated' };
+  for (const node of next.nodes) {
+    if (node.kind !== 'agent') continue;
+    for (const key of ['provider', 'model', 'effort', 'session']) delete node[key];
+  }
+  return next;
 }
 
 export function applyPatch(graph, patch) {

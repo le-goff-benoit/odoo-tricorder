@@ -167,3 +167,52 @@ dialog::backdrop { background: rgba(6, 7, 9, .7); backdrop-filter: blur(3px); }
 .stack-facts { grid-template-columns: 110px 1fr; align-items: baseline; margin: 0 0 var(--space-3); padding: var(--card-padding); border: 1px solid var(--line); border-radius: var(--radius-panel); background: var(--surface-1); }
 .stack-facts code { color: var(--text-2); }
 .stack-missing { display: block; margin-top: var(--space-2); color: var(--text-3); }
+
+/* Daily release actions: one visible path, no graph configuration required. */
+.provider-choice {display:flex;flex-direction:column;gap:var(--space-1);font-size:11px;color:var(--muted)}
+.provider-choice select {font:inherit;font-size:12px;max-width:175px;padding:5px 8px}
+.release-journey {margin:var(--space-4) 0 var(--space-6);padding:var(--space-4);border:1px solid var(--line);border-radius:12px}
+.release-journey h3 {margin:0}.release-journey p {margin:6px 0 12px}
+.release-steps {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.release-steps button {padding:var(--space-4) var(--space-2);text-align:left;white-space:normal;min-height:80px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1);color:var(--text)}
+.release-steps button span,.release-steps button strong {display:block}.release-steps button span {font-size:11px;margin-bottom:var(--space-2);color:var(--muted)}
+.release-steps button:disabled {opacity:.55;cursor:default}
+@media(max-width:1150px){.release-steps{grid-template-columns:repeat(3,minmax(0,1fr))}.provider-choice{max-width:165px}}
+
+/* The terminal is the primary interaction; the graphic is a persistent companion. */
+.main-content.terminal-docked {display:grid;grid-template-columns:minmax(0,3fr) minmax(340px,2fr);gap:0;overflow:hidden}
+.terminal-docked #terminal-workspace {grid-column:1;grid-row:1;min-width:0;border-right:1px solid var(--line)}
+.terminal-docked #content {grid-column:2;grid-row:1;min-width:0;overflow:auto}
+.terminal-heading {display:flex;align-items:center;justify-content:space-between;padding:var(--space-2) var(--space-4);border-bottom:1px solid var(--line);gap:8px}
+.terminal-heading strong {font-size:13px}.terminal-heading button {font-size:11px}
+.terminal-docked .page {padding:var(--page-gutter)}
+.terminal-docked .release-steps {grid-template-columns:1fr;gap:14px}
+.terminal-docked .release-steps button {min-height:58px;position:relative}
+.terminal-docked .release-steps button:not(:last-child)::after {content:'↓';position:absolute;left:50%;bottom:-16px;color:var(--muted)}
+.terminal-docked .release-steps button strong {font-size:13px}
+.terminal-docked .release-steps button span {margin-bottom:4px}
+.terminal-docked .metrics {grid-template-columns:1fr}
+.terminal-docked .work-page>.metrics {display:none}
+.terminal-docked .section-title {flex-wrap:wrap;gap:8px}
+.terminal-docked .release-journey {margin-top:var(--space-2);padding:12px}
+.terminal-docked #terminal-empty .empty {padding:28px 14px}
+.terminal-docked .work-task {flex-wrap:wrap}
+@media(max-width:1100px){.main-content.terminal-docked{grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr)}}
+
+.terminal-docked .intention-layout {display:flex;flex-direction:column;gap:var(--space-4)}
+.terminal-docked .intention-detail {min-width:0;padding:0;border-left:0;border-top:1px solid var(--line);padding-top:var(--space-4)}
+.terminal-docked .file-row {min-width:0;flex-wrap:wrap;overflow-wrap:anywhere}
+.terminal-docked .intention-list {min-width:0}
+.terminal-docked .plan-toolbar {flex-wrap:wrap}
+.terminal-docked .plan-toolbar .segmented {flex-wrap:wrap}
+.workflow-launcher {display:flex;align-items:end;flex-wrap:wrap;gap:var(--space-2);padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--line)}
+.workflow-launcher label {display:flex;flex-direction:column;gap:var(--space-1);font-size:11px;color:var(--muted);flex:1;min-width:145px}
+.workflow-launcher select {font:inherit;font-size:12px;padding:var(--space-2);width:100%}
+.workflow-launcher button {font-size:12px}
+
+#workflow-panel {grid-column:2;grid-row:1;min-width:0;min-height:0;overflow:hidden;height:100%;display:block}
+#workflow-panel[hidden] {display:none}
+.main-content:has(#workflow-panel:not([hidden])) {grid-template-columns:minmax(280px,1.25fr) minmax(360px,1fr)}
+.side-nav {display:grid;gap:3px}
+.side-nav .side-item {min-height:36px}
+@media(max-width:950px){.main-content:has(#workflow-panel:not([hidden])) {grid-template-columns:minmax(240px,1fr) minmax(280px,1fr)}}

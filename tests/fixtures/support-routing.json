@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "id": "support-routing",
+  "title": "Support critique ? — scénario synthétique",
+  "description": "Contrat de référence pour les tests du moteur. Aucun fournisseur ni déploiement réel n’est configuré.",
+  "defaults": {"provider": "codex", "model": "synthetic-model"},
+  "nodes": [
+    {
+      "id": "intake", "title": "Recevoir la demande", "kind": "task",
+      "outputs": {"ticket": "object"}
+    },
+    {
+      "id": "assess", "title": "Évaluer la criticité", "kind": "agent",
+      "prompt": "Évaluer l’impact selon les critères du workflow. Retourner critical, normal ou unknown, les faits justificatifs et les informations manquantes. L’urgence déclarée par le demandeur ne suffit pas. Ne pas confondre criticité, risque technique et autorisation de livrer.",
+      "inputs": {"ticket": "object"},
+      "outputs": {"severity": "string", "rationale": "string", "missing": "array"},
+      "criteria": ["La criticité est justifiée par les faits disponibles ; les informations manquantes sont explicites."],
+      "max_attempts": 2
+    },
+    {
+      "id": "route", "title": "Support critique ?", "kind": "condition",
+      "parameter": "severity", "options": ["critical", "normal", "unknown"],
+      "inputs": {"severity": "string", "rationale": "string", "missing": "array"},
+      "outputs": {"rationale": "string", "missing": "array"}
+    },
+    {
+      "id": "urgent", "title": "Préparer et vérifier le candidat urgent", "kind": "task",
+      "inputs": {"rationale": "string"},
+      "criteria": ["Le candidat synthétique correspond à la correction et aux contrôles de ce scénario."],
+      "evidence_required": true
+    },
+    {
+      "id": "normal", "title": "Planifier le traitement courant", "kind": "task",
+      "inputs": {"rationale": "string"}
+    },
+    {
+      "id": "question", "title": "Obtenir les informations manquantes", "kind": "decision",
+      "inputs": {"rationale": "string", "missing": "array"},
+      "question": "Les informations manquantes sont affichées dans les entrées du bloc. Reprendre le diagnostic dans une nouvelle exécution ou arrêter ?",
+      "options": ["reassess", "cancel"]
+    },
+    {
+      "id": "approval", "title": "Autoriser ce candidat en production", "kind": "decision",
+      "question": "Autoriser uniquement le candidat et la cible synthétiques affichés ?",
+      "operation": {"action": "deploy", "target": "synthetic-project/production", "candidate": "synthetic-tested-sha"},
+      "options": ["approve", "reject"]
+    },
+    {
+      "id": "deploy", "title": "Déployer directement en production", "kind": "external",
+      "operation": {"action": "deploy", "target": "synthetic-project/production", "candidate": "synthetic-tested-sha"},
+      "approval": "approval"
+    },
+    {
+      "id": "verify", "title": "Constater la version livrée", "kind": "task",
+      "evidence_required": true,
+      "criteria": ["La version observée correspond au candidat autorisé sur la cible prévue."]
+    }
+  ],
+  "edges": [
+    {"id": "intake-assess", "from": "intake", "to": "assess", "mapping": {"ticket": "ticket"}},
+    {"id": "assess-route", "from": "assess", "to": "route", "mapping": {"severity": "severity", "rationale": "rationale", "missing": "missing"}},
+    {"id": "route-urgent", "from": "route", "to": "urgent", "outcome": "critical", "mapping": {"rationale": "rationale"}},
+    {"id": "route-normal", "from": "route", "to": "normal", "outcome": "normal", "mapping": {"rationale": "rationale"}},
+    {"id": "route-question", "from": "route", "to": "question", "outcome": "unknown", "mapping": {"rationale": "rationale", "missing": "missing"}},
+    {"id": "urgent-approval", "from": "urgent", "to": "approval"},
+    {"id": "approval-deploy", "from": "approval", "to": "deploy", "outcome": "approve"},
+    {"id": "deploy-verify", "from": "deploy", "to": "verify"}
+  ]
+}

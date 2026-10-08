@@ -83,6 +83,8 @@ def policy_issues(project, graph):
             issues.append({"node": "workflow", "message": "Odoo Online impose la voie Studio."})
         for node in graph["nodes"]:
             selection = {**project.get("defaults", {}), **graph.get("defaults", {}), **node}
+            if policy.get("online_requires_studio") and params.get("platform") == "online" and selection.get("profile") == "odoo-developer":
+                issues.append({"node": node["id"], "message": "Odoo Online : remplacer le développement de module par un bloc Studio."})
             if selection.get("profile") == "odoo-tester" and policy.get("qa_requires_local_copy") and (params.get("environment") != "local" or not params.get("neutralized_copy")):
                 issues.append({"node": node["id"], "message": "Pack Odoo : identifier environment=local et neutralized_copy pour la recette."})
             if selection.get("profile") == "odoo-tester" and node.get("environment", params.get("environment")) == "production":

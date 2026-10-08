@@ -70,6 +70,45 @@ class WorkflowEngineTests(unittest.TestCase):
         with self.assertRaises(ContractError):
             self.engine.decide(*args, human=True)
 
+    def test_shared_template_adaptations_and_results_remain_project_specific(self):
+        """U03/U04: reuse across projects is distinct from a coordinated run."""
+        library = self.engine.library_project()
+        template = self.engine.save(library["id"], self.graph)
+        second = self.engine.create_project("Second projet sans Odoo")
+        adaptations = []
+        runs = []
+        for project, provider in ((self.project, "codex"), (second, "claude")):
+            adapted = copy.deepcopy(template)
+            adapted["defaults"] = {"provider": provider, "model": "synthetic-model"}
+            adapted["nodes"][0]["kind"] = "agent"
+            adapted["nodes"][0]["criteria"] = ["Critère de " + project["title"]]
+            adaptations.append(self.engine.save(project["id"], adapted))
+            runs.append(self.engine.start(project["id"], adaptations[-1], simulation=True))
+
+        self.finish(runs[0], "analyse")
+        # A newer shared definition cannot rewrite adaptations or past runs.
+        revised = copy.deepcopy(template)
+        revised["nodes"][0]["criteria"] = ["Nouveau critère du modèle"]
+        self.engine.save(library["id"], revised, template["revision"])
+        # A project-specific correction is independent of the other project.
+        revised = copy.deepcopy(adaptations[1])
+        revised["nodes"][0]["criteria"] = ["Correction locale du second projet"]
+        self.engine.save(second["id"], revised, adaptations[1]["revision"])
+
+        reopened = Engine(self.temp.name)
+        first_run, second_run = (reopened.run(run["id"]) for run in runs)
+        self.assertEqual(first_run["nodes"]["analyse"]["status"], "accepted")
+        self.assertEqual(second_run["nodes"]["analyse"]["status"], "ready")
+        for run, project, provider, adapted in zip(
+            (first_run, second_run), (self.project, second),
+            ("codex", "claude"), adaptations,
+        ):
+            self.assertEqual(run["scope"], {"kind": "project", "id": project["id"]})
+            self.assertEqual(run["definition"]["nodes"][0]["criteria"], adapted["nodes"][0]["criteria"])
+            self.assertEqual(run["definition"]["nodes"][0]["execution"]["provider"], provider)
+        self.assertEqual(reopened.workflows(self.project["id"])[0], adaptations[0])
+        self.assertEqual(reopened.runs(library["id"]), [])
+
     def test_concurrent_claim_and_resource_lock(self):
         self.graph["nodes"][0]["resources"] = ["workspace"]
         a, b = self.start(), self.start()

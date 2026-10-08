@@ -1,4 +1,50 @@
+# État de la conception — revue du 8 octobre 2026
+
+La [revue de release](../release/2026-10-08_revue/README.md) fait foi sur les
+fonctions livrées, les limites et les priorités. Le terminal natif et le graphe
+partagent désormais un renderer ; le dialogue durable est implémenté. Les notes
+ci-dessous conservent la chronologie des décisions, y compris des états antérieurs.
+
 # Socle visuel Tricorder
+
+## Direction corrigée — dessiner, alimenter et suivre (8 octobre 2026)
+
+Le terminal est la fenêtre principale d’interaction, selon la demande explicite
+de Benoît. Le workflow graphique accompagne le travail dans un panneau voisin.
+Les intentions, le plan, les décisions et les temps restent accessibles sans
+masquer la session. Les fournisseurs sont nommés OpenAI · Codex et Anthropic ·
+Claude. Le choix est mémorisé, sans changer un agent déjà lancé.
+
+La rc.2 a été refusée : séparer le cockpit et un espace « avancé » dans deux
+fenêtres contredit l’usage demandé. La rc.3 utilise un seul renderer, un terminal
+natif commun et un éditeur intégré. Les conversations, tâches et questions sont
+durables. La réception utilisateur du nouveau parcours reste distincte de sa QA.
+
+Le parcours cible est : dessiner les étapes et leurs entrées/sorties, lancer le
+workflow, puis soumettre le travail et répondre dans le terminal. Le même dessin
+montre les entrées reçues, étapes actives, questions, résultats et branches.
+L’assistance à la conception par conversation complète le dessin. Une question
+peut survenir au cours d’une étape sans avoir été prévue comme bloc.
+
+Le modèle décrit le traitement ; une exécution peut suivre une ou N tâches avec
+leurs propres questions et résultats. Les deux usages cross-projets sont requis :
+réutilisations indépendantes et coordination commune. Les cas support client et
+clôture de meeting guident la réception. L’étude n8n, les écarts moteur et les
+Les scénarios détaillés restent dans l’audit local ; leur synthèse publique est dans [la revue](../release/2026-10-08_revue/README.md).
+La piste biologique distingue rôles, opérations et signaux ; les familles
+Travail, Organisation, Aiguillage et Décision sont une proposition à éprouver.
+Les sections suivantes conservent les choix et limites de la réalisation précédente.
+
+Le bloc porte mission, entrées/sorties, critères et issues ; l’agent choisi apporte
+sa méthode et ses capacités. Fournisseur et modèle restent remplaçables sans
+redessiner ces contrats. Le cas « Support critique ? » possède trois issues :
+urgent, normal et besoin d’information. L’urgence peut prévoir une livraison
+directe en production avec les contrôles et accords définis. Support, express et
+release se composent : investigation, méthode de correction, ensemble à livrer.
+Neuf tests synthétiques vérifient le routage et les accords du moteur ; ils ne
+qualifient ni le jugement des agents ni le dialogue terminal encore à construire.
+Le moteur refuse maintenant de recevoir une valeur incompatible avec les issues
+de l’aiguillage directement relié, pour garder le résultat corrigeable à sa source.
 
 ## Direction — concevoir, utiliser et suivre des workflows (8 octobre 2026)
 
@@ -327,7 +373,8 @@ restent à réaliser. Aucune efficacité UX mesurée n’est revendiquée.
 - Le bilan vérifiable de l’interface actuelle est dans la
   [release](../release/2026-10-08_workflow-studio/README.md).
 
-Le design antérieur reste dans l’historique Git ; il ne définit plus le produit.
+Le rétablissement du cockpit dans la rc.2 est un historique de réalisation,
+remplacé par la direction corrigée en tête de ce document.
 
 ## Vocabulaire produit
 

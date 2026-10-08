@@ -80,9 +80,7 @@ async function cleanupBroker(socket) {
 }
 
 async function closeWindow(app) {
-  const exited = new Promise(resolve => app.process().once('exit', resolve));
-  await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]?.close()).catch(() => {});
-  await Promise.race([exited, new Promise((_, reject) => setTimeout(() => reject(new Error('Window close did not exit app')), 8000))]);
+  await app.close();
 }
 
 async function projectTab(page, view) {
@@ -634,7 +632,9 @@ test('flow starts: delayed terminal cannot hijack navigation, ambiguous adoption
     });
     await expect(page.locator('#session-count')).toHaveCount(0);
     await expect(page.locator('.no-release')).toBeVisible();
-    await expect(page.locator('#terminal-workspace')).toBeHidden();
+    await expect(page.locator('#terminal-workspace')).toBeVisible();
+    // The new layout retains the terminal but must not replace the selected view.
+    await expect(page.locator('.no-release')).toBeVisible();
     await expect.poll(() => page.evaluate(async () => (await window.tricorder.terminals.list()).length)).toBe(1);
     const first = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
     expect(first.project).toBe(project); expect(first.release).toBeNull();
@@ -1590,7 +1590,7 @@ test('appearance: light, dark and system persist with live terminals and a reada
     await projectTab(page, 'work');
     await expect(page.locator('#release-title')).toHaveText('Facturation & maintenance récurrente');
     expect(await page.locator('#release-title').evaluate(el => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThanOrEqual(22);
-    await expect(page.locator('#environment-select')).toBeHidden();
+    await expect(page.locator('#environment-select')).toBeVisible(); // Terminal remains visible beside the release.
     await expect(page.locator('.project-header')).not.toContainText('feat/facturation-clients');
     await projectTab(page, 'terminal');
     await expect(page.locator('.git-context')).toContainText('feat/facturation-clients');
@@ -1669,5 +1669,86 @@ test('appearance: light, dark and system persist with live terminals and a reada
   } finally {
     await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
     await cleanupBroker(path.join(temp,'run/pty.sock')); fs.rmSync(temp,{recursive:true,force:true});
+  }
+});
+
+test('window integration preserves the native conversation while inspecting phases and the library', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'tri-one-workflow-'));
+  const home = path.join(temp, 'home'); fs.mkdirSync(home);
+  const { project, releaseId } = fixture(home);
+  const bin = path.join(temp, 'bin'); fs.mkdirSync(bin);
+  for (const name of ['codex', 'claude']) {
+    const file = path.join(bin, name);
+    write(file, '#!/usr/bin/env python3\nimport sys\nprint("SELECTED:' + name + '", flush=True)\nprint("PROMPT:" + sys.argv[-1], flush=True)\nfor line in sys.stdin:\n    print("REPLY:" + line.strip(), flush=True)\n'); fs.chmodSync(file, 0o755);
+  }
+  const app = await electron.launch({ args: process.env.TRICORDER_EXECUTABLE ? [] : [root],
+    ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
+    env: { ...process.env, PATH: bin + ':' + process.env.PATH, SHELL: '/bin/bash', HOME: home, TRICORDER_HOME: home,
+      TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run'), TRICORDER_TEST_MODE: '1',
+      TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents') } });
+  try {
+    const page = await app.firstWindow();
+    await expect(page.getByRole('region', { name: 'Workflow de release' })).toBeVisible();
+    await expect(page.locator('#terminal-workspace')).toBeVisible();
+    await page.getByLabel('Fournisseur IA', { exact: true }).selectOption('claude');
+    await page.getByLabel('Workflow', { exact: true }).selectOption('release');
+    await page.getByRole('button', { name: 'Démarrer le workflow', exact: true }).click();
+    await page.locator('#workflow-form [type=submit]').click();
+    await expect(page.locator('.xterm-screen:visible')).toContainText('SELECTED:claude');
+    await expect(page.locator('.xterm-screen:visible')).toContainText('PROMPT:/odoo-plan');
+    const sessions = await page.evaluate(() => window.tricorder.terminals.list());
+    expect(sessions).toHaveLength(1);
+    expect(sessions[0].release).toBe(releaseId);
+    for (const stage of ['collect', 'plan', 'start', 'close']) {
+      await page.locator('[data-work-stage="' + stage + '"]').click();
+      expect(await page.evaluate(() => window.tricorder.terminals.list())).toHaveLength(1);
+      await page.getByRole('button', { name: 'Retrouver la conversation', exact: true }).click();
+    }
+    await page.locator('.xterm-helper-textarea:visible').focus();
+    await page.keyboard.type('Voici mon intention'); await page.keyboard.press('Enter');
+    await expect(page.locator('.xterm-screen:visible')).toContainText('REPLY:Voici mon intention');
+    const contentsId = await page.evaluate(() => { window.conversationMarker = 'preserved'; return true; });
+    expect(contentsId).toBe(true);
+    await page.locator('[data-action=workflow-workspace]').click();
+    expect(app.context().pages()).toHaveLength(1);
+    const studio = page;
+    await expect(studio.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
+    expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);
+    await studio.getByRole('button', { name: 'Essayer un exemple' }).click();
+    await studio.locator('.node[data-id="analyse"]').click();
+    await studio.getByLabel('Nom du bloc', { exact: true }).fill('Brouillon non appliqué');
+    await page.locator('#project-list [data-project=' + JSON.stringify(project) + ']').click();
+    expect(await page.evaluate(() => window.conversationMarker)).toBe('preserved');
+    expect((await page.evaluate(() => window.tricorder.terminals.list()))[0].pid).toBe(sessions[0].pid);
+    await page.locator('.xterm-helper-textarea:visible').focus();
+    await page.keyboard.type('Je poursuis la conversation'); await page.keyboard.press('Enter');
+    await expect(page.locator('.xterm-screen:visible')).toContainText('REPLY:Je poursuis la conversation');
+    await page.locator('[data-action=workflow-workspace]').click();
+    await expect(studio.getByLabel('Nom du bloc', { exact: true })).toHaveValue('Brouillon non appliqué');
+    expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);
+    await page.locator('#project-list [data-project=' + JSON.stringify(project) + ']').click();
+    await page.getByRole('button', { name: 'Agrandir le terminal', exact: true }).click();
+    await expect(page.locator('#content')).toBeHidden();
+    await page.getByRole('button', { name: 'Afficher le workflow', exact: true }).click();
+    for (const width of [1440, 1024]) {
+      await page.setViewportSize({ width, height: 900 });
+      await expect(page.locator('#terminal-workspace')).toBeVisible();
+      await expect(page.getByRole('region', { name: 'Workflow de release' })).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.screenshot({ path: test.info().outputPath(`workflow-conversation-${width}.png`) });
+    }
+    // Changing provider is an explicit new conversation; the first stays alive.
+    await page.getByLabel('Fournisseur IA', { exact: true }).selectOption('codex');
+    await page.getByRole('button', { name: 'Démarrer le workflow', exact: true }).click();
+    await page.locator('#workflow-form textarea').fill('Mon nouveau contexte');
+    await page.locator('#workflow-form [type=submit]').click();
+    await expect(page.locator('.xterm-screen:visible')).toContainText('SELECTED:codex');
+    const latest = await page.evaluate(() => window.tricorder.terminals.list());
+    expect(latest).toHaveLength(2);
+    expect(latest[0].pid).toBe(sessions[0].pid);
+  } finally {
+    await closeWindow(app);
+    await cleanupBroker(path.join(temp, 'run/pty.sock'));
+    fs.rmSync(temp, { recursive: true, force: true });
   }
 });

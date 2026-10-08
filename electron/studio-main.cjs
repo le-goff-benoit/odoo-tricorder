@@ -1,34 +1,26 @@
 'use strict';
-const { app, BrowserWindow, ipcMain, protocol, net, dialog, Tray, Menu, nativeImage, shell } = require('electron');
+const { app, ipcMain, dialog, Tray, Menu, nativeImage, shell } = require('electron');
 const { execFile } = require('node:child_process');
 const path = require('node:path');
-const os = require('node:os');
 const fs = require('node:fs');
-const { pathToFileURL, fileURLToPath } = require('node:url');
+const { fileURLToPath } = require('node:url');
 const { summarize, menuItems, trayBitmap } = require('./studio-tray.cjs');
 const updates = require('./studio-updates.cjs');
 const { TerminalBroker } = require('./studio-terminal.cjs');
 
-const state = process.env.TRICORDER_STATE_DIR || path.join(os.homedir(), '.local/share/tricorder');
+function createStudio({ window, state, showCockpit, showWorkflows }) {
 fs.mkdirSync(state, { recursive: true, mode: 0o700 });
-app.setPath('userData', path.join(state, 'chromium'));
-protocol.registerSchemesAsPrivileged([{ scheme: 'tricorder', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
-let window;
-const primaryInstance = app.requestSingleInstanceLock();
-if (!primaryInstance) app.quit();
-app.on('second-instance', (_event, argv) => { queuePortable(argv); if (window) { window.show(); window.focus(); } });
+const contents = window.webContents;
 let pendingPortable = null;
 function queuePortable(argv) {
   const file = argv.find(value => value.endsWith('.tricorder-workflow'));
   if (!file) return;
   try { pendingPortable = file.startsWith('file://') ? fileURLToPath(file) : path.resolve(file); } catch { return; }
-  if (window && !window.webContents.isLoading()) window.webContents.send('studio:navigate', { route: 'import-workflow' });
+  if (window && !contents.isLoading()) contents.send('studio:navigate', { route: 'import-workflow' });
 }
-queuePortable(process.argv);
-app.on('open-file', (event, file) => { event.preventDefault(); queuePortable([file]); });
 let tray, quitting = false, trayTimer, tickBusy = false, lastRuns = [], lastSchedules = [], trayFresh = false;
 let terminals;
-const allowed = new Set(['bootstrap', 'overview.get', 'candidate.preview', 'workflow.export-portable', 'workflow.preview-portable', 'workflow.import-portable', 'plugins.discover', 'plugins.preview', 'workspace.get', 'design.workspace', 'assistant.propose', 'pack.preview', 'pack.install', 'project.create', 'project.get', 'template.workspace', 'schedule.list', 'schedule.create', 'schedule.toggle', 'workflow.save', 'workflow.reload', 'workflow.validate', 'run.start', 'run.get', 'run.control', 'run.document', 'run.reconcile', 'release.export']);
+const allowed = new Set(['conversation.open', 'conversation.list', 'conversation.get', 'conversation.add', 'conversation.answer', 'run.answer', 'bootstrap', 'overview.get', 'candidate.preview', 'workflow.export-portable', 'workflow.preview-portable', 'workflow.import-portable', 'plugins.discover', 'plugins.preview', 'workspace.get', 'design.workspace', 'assistant.propose', 'pack.preview', 'pack.install', 'project.create', 'project.get', 'template.workspace', 'schedule.list', 'schedule.create', 'schedule.toggle', 'workflow.save', 'workflow.reload', 'workflow.validate', 'run.start', 'run.get', 'run.control', 'run.document', 'run.reconcile', 'release.export']);
 const human = new Set(['run.accept', 'run.decide', 'run.retry', 'plugins.qualify', 'run.handoff', 'run.reconcile-effect', 'candidate.apply', 'run.start', 'schedule.create']);
 
 function backend(payload, isHuman = false) {
@@ -49,13 +41,12 @@ function backend(payload, isHuman = false) {
 }
 
 function trusted(event) {
-  if (!window || event.sender !== window.webContents || event.senderFrame !== window.webContents.mainFrame || !event.senderFrame.url.startsWith('tricorder://app/')) throw new Error('Origine non autorisée');
+  if (!window || event.sender !== contents || event.senderFrame !== contents.mainFrame || !event.senderFrame.url.startsWith('tricorder://app/')) throw new Error('Origine non autorisée');
 }
 
-app.whenReady().then(() => {
-  if (!primaryInstance) return;
+
   const backendRoot = app.isPackaged ? path.join(process.resourcesPath, 'backend') : path.join(__dirname, '../backend');
-  terminals = new TerminalBroker(path.join(backendRoot, 'terminal_service.py'), path.join(state, 'studio-pty.sock'), message => { if (window && !window.isDestroyed()) window.webContents.send('studio:terminal-event', message); });
+  terminals = new TerminalBroker(path.join(backendRoot, 'terminal_service.py'), path.join(state, 'studio-pty.sock'), message => { if (window && !window.isDestroyed()) contents.send('studio:terminal-event', message); });
   ipcMain.handle('studio:terminal', async (event, request) => {
     trusted(event);
     if (request.action === 'create') {
@@ -70,15 +61,9 @@ app.whenReady().then(() => {
     if (request.action === 'stop') terminals.owned.delete(request.session);
     return result;
   });
-  const root = path.resolve(__dirname, '../dist');
-  protocol.handle('tricorder', request => {
-    const url = new URL(request.url);
-    const file = path.resolve(root, '.' + decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname));
-    if (url.hostname !== 'app' || !file.startsWith(root + path.sep)) return new Response('Forbidden', { status: 403 });
-    return net.fetch(pathToFileURL(file).href);
-  });
   ipcMain.handle('studio:request', (event, payload) => {
     trusted(event);
+    if (payload?.action === 'cockpit.open') return showCockpit();
     if (!payload || !allowed.has(payload.action)) throw new Error('Commande non autorisée');
     return backend(payload);
   });
@@ -131,13 +116,11 @@ app.whenReady().then(() => {
     const result = await dialog.showOpenDialog(window, { title: 'Choisir le dossier du projet', properties: ['openDirectory'] });
     return result.canceled ? null : result.filePaths[0];
   });
-  window = new BrowserWindow({ width: 1440, height: 960, minWidth: 800, minHeight: 600, title: 'Tricorder', backgroundColor: '#f6f7fb',
-    webPreferences: { preload: path.join(__dirname, 'studio-preload.cjs'), contextIsolation: true, sandbox: true, nodeIntegration: false } });
-  window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
-  window.webContents.on('will-navigate', (event, url) => { if (!url.startsWith('tricorder://app/')) event.preventDefault(); });
-  window.webContents.session.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
+  contents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  contents.on('will-navigate', (event, url) => { if (!url.startsWith('tricorder://app/')) event.preventDefault(); });
+  contents.session.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
   const show = () => { window.show(); if (window.isMinimized()) window.restore(); window.focus(); };
-  const navigate = destination => { show(); window.webContents.send('studio:navigate', destination); };
+  const navigate = destination => { showWorkflows(); show(); contents.send('studio:navigate', destination); };
   const quit = () => { quitting = true; app.quit(); };
   const updateTray = () => {
     if (!tray) return;
@@ -164,7 +147,8 @@ app.whenReady().then(() => {
     finally { tickBusy = false; updateTray(); }
   };
   tick(); trayTimer = setInterval(tick, 1500);
-  window.loadURL('tricorder://app/');
-});
-app.on('before-quit', () => { quitting = true; clearInterval(trayTimer); terminals?.disconnect(); });
-app.on('window-all-closed', () => { if (!tray) app.quit(); });
+  const ready = Promise.resolve();
+  app.on('before-quit', () => { quitting = true; clearInterval(trayTimer); terminals?.disconnect(); });
+  return { ready, queuePortable, backend };
+}
+module.exports = { createStudio };

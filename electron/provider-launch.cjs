@@ -32,7 +32,7 @@ function existingStatusLine(home, project) {
   return statusLine;
 }
 
-function prepareLaunch({ provider, id, folder, backend, home, project, crew, prompt }) {
+function prepareLaunch({ provider, id, folder, backend, home, project, crew, prompt, model, effort }) {
   if (!['claude', 'codex'].includes(provider)) throw new Error('Fournisseur inconnu');
   if (prompt !== undefined && (typeof prompt !== 'string' || prompt.length > 16000 || /[\x00-\x08\x0b-\x1f\x7f]/.test(prompt))) throw new Error('Message initial invalide');
   fs.mkdirSync(folder, { recursive: true, mode: 0o700 });
@@ -41,7 +41,7 @@ function prepareLaunch({ provider, id, folder, backend, home, project, crew, pro
   const observer = ['python3', path.join(backend, 'agent_hook.py'), source].map(quote).join(' ');
   const hooks = Object.fromEntries((provider === 'claude' ? CLAUDE_HOOKS : CODEX_HOOKS).map(name => [name, [{ hooks: [{ type: 'command', command: observer, timeout: name === 'Interrupt' ? 1 : 5 }] }]]));
   const guard = path.join(crew, 'scripts/odoo_orchestrate.py');
-  if (fs.existsSync(guard)) {
+  if (crew && fs.existsSync(guard)) {
     hooks.Stop[0].hooks.push({ type: 'command', command: ['python3', guard, 'hook', '--project', project, '--events', source].map(quote).join(' '), timeout: 5 });
   }
   let command, argv;
@@ -58,6 +58,15 @@ function prepareLaunch({ provider, id, folder, backend, home, project, crew, pro
     const toml = value => Array.isArray(value) ? '[' + value.map(toml).join(',') + ']' : value && typeof value === 'object' ? '{' + Object.entries(value).map(([k, v]) => `${k}=${toml(v)}`).join(',') + '}' : JSON.stringify(value);
     argv = ['codex', ...Object.entries(hooks).flatMap(([name, value]) => ['-c', `hooks.${name}=${toml(value)}`])];
     command = 'codex ' + argv.slice(1).map(quote).join(' ');
+  }
+  if (model) {
+    if (typeof model !== 'string' || model.length > 120 || /[\x00-\x20]/.test(model)) throw new Error('Modèle invalide');
+    argv.push('--model', model);
+    if (effort && ['low', 'medium', 'high', 'xhigh'].includes(effort)) {
+      if (provider === 'claude') argv.push('--effort', effort);
+      else argv.push('-c', 'model_reasoning_effort=' + JSON.stringify(effort));
+    }
+    command = argv.map(quote).join(' ');
   }
   if (prompt) {
     const launchPath = path.join(folder, id + '.launch.json');

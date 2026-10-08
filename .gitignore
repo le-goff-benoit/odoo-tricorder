@@ -12,3 +12,6 @@ test-results/
 playwright-report/
 .test-state/
 .test-tools/
+
+# Audit local contenant des références aux projets clients ; synthèse publique séparée.
+release/2026-10-08_terminal-et-release/

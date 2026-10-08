@@ -90,6 +90,33 @@ class TerminalTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(os.stat(self.socket).st_mode & 0o777, 0o600)
         self.assertFalse((self.root / 'runtime/transcript').exists())
 
+    async def test_detached_broker_does_not_retain_inherited_desktop_descriptors(self):
+        read_fd, write_fd = os.pipe()
+        process = None
+        try:
+            socket = self.root / 'separate/pty.sock'
+            process = await asyncio.create_subprocess_exec(sys.executable, str(BROKER), str(socket),
+                pass_fds=(write_fd,), stdout=asyncio.subprocess.DEVNULL, stderr=asyncio.subprocess.DEVNULL)
+            os.close(write_fd)
+            write_fd = None
+            os.set_blocking(read_fd, False)
+            for _ in range(100):
+                try:
+                    if os.read(read_fd, 1) == b'':
+                        break
+                except BlockingIOError:
+                    pass
+                await asyncio.sleep(.02)
+            else:
+                self.fail('Le broker retient la connexion du processus bureau')
+        finally:
+            os.close(read_fd)
+            if write_fd is not None:
+                os.close(write_fd)
+            if process:
+                process.terminate()
+                await process.wait()
+
     async def test_closed_session_is_not_active_and_stop_is_explicit(self):
         identifier = await self.create()
         await self.call('write', session=identifier, data='exit 7\n')

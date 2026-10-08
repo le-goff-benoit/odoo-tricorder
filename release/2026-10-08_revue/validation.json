@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-08",
+  "version": "0.6.0-rc.4",
+  "baseline_commit": "1cd692e",
+  "baseline_executable": "0.6.0-rc.3",
+  "scope": "Synthetic local and packaged UI; no client execution or paid LLM campaign.",
+  "regression_probe_before": {
+    "tests": 16,
+    "failures": 4,
+    "errors": 1,
+    "error_reason": "Documentation did not recognize waiting_input.",
+    "source": "Installed rc.3 backend with new regression cases"
+  },
+  "unit": {
+    "python": 187,
+    "javascript": 74,
+    "result": "passed"
+  },
+  "source_ui": {
+    "initial": {
+      "passed": 44,
+      "failed": 1,
+      "skipped": 2
+    },
+    "correction": "Wait for asynchronous save before reading the revision; product code unchanged.",
+    "targeted_recheck": {
+      "passed": 1,
+      "failed": 0
+    },
+    "visual_recheck": "Repeated after build completed; discarded a capture taken during a concurrent asset rebuild."
+  },
+  "packaged_ui": {
+    "passed": 45,
+    "failed": 0,
+    "skipped": 2,
+    "skip_reason": "Optional real-project scenarios excluded."
+  },
+  "package": {
+    "file": "odoo-tricorder_0.6.0-rc.4_amd64.deb",
+    "result": "built",
+    "sha256": "e8b67c0cda80f5e618b58002ea0f4b217011e78364319b68a54cab0d2207ec95",
+    "asar_sha256": "d12e37c9c4d529b2512071a94c8ace6291c6ca556e277bac3dc5f1ca775b6038"
+  },
+  "screenshots": {
+    "pack-odoo.png": {
+      "sha256": "87555db6b79d812dd96e00603df2da8a9063d6d9e29a6bddc95c887495e23560",
+      "review": "visually inspected",
+      "fixture": "Synthetic project; terminal conversation uses a fake provider CLI."
+    },
+    "terminal-workflow.png": {
+      "sha256": "a15889d6d6149b3af12f43f0322a578b511bf8d1d2727658b5208a4e1a4bf0b2",
+      "review": "visually inspected",
+      "fixture": "Synthetic project; terminal conversation uses a fake provider CLI."
+    }
+  },
+  "crew_reference": "75612ee195f08b5a764e5aac303d453741666457",
+  "limits": [
+    "No proof of native model quality or real Odoo deployment.",
+    "Existing customized workflow definitions are preserved; new template behavior requires explicit adoption.",
+    "QA-copy identity is declared, not independently certified."
+  ]
+}

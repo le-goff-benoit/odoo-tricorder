@@ -299,4 +299,14 @@ async def serve(path):
 
 
 if __name__ == '__main__':
+    # Electron can pass Chromium/inspector descriptors through spawn. This
+    # detached service owns only its stdio until serve creates its socket.
+    # Keeping those descriptors open would keep the desktop's IPC alive after
+    # its process exits, and leak them into every later terminal.
+    for inherited in Path('/proc/self/fd').iterdir():
+        if int(inherited.name) > 2:
+            try:
+                os.close(int(inherited.name))
+            except OSError:
+                pass
     asyncio.run(serve(sys.argv[1]))

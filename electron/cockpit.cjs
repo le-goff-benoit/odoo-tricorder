@@ -135,7 +135,8 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
     const prepared = prepareLaunch({ provider: request.provider, id, folder: path.join(stateDir, 'observations'), backend, home,
       project: association.project, prompt, crew: process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents') });
     settings.bindings.push({ ...association, id, provider: request.provider + '-hooks', source: prepared.source,
-      quotaSource: prepared.quotaSource, nativeId: null, pending: true }); save();
+      quotaSource: prepared.quotaSource, nativeId: null, pending: true,
+      workflow: ({ workflow: 'release', develop: 'request', diagnose: 'support' })[request.work?.action] || null }); save();
     quotaCache = null;
     return { command: prepared.command, note: prepared.note, bindingId: id };
   }

@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .contracts import identifier, require
 
-LABELS = {"pending": "Prévu", "ready": "Prêt", "running": "En cours", "waiting": "Décision attendue", "returned": "À valider", "accepted": "Validé", "skipped": "Non applicable", "blocked": "Bloqué"}
+LABELS = {"pending": "Prévu", "ready": "Prêt", "running": "En cours", "waiting": "Décision attendue", "waiting_input": "Réponse attendue", "returned": "À valider", "accepted": "Validé", "skipped": "Non applicable", "blocked": "Bloqué"}
 
 
 def cell(value):
@@ -43,8 +43,13 @@ def markdown(run):
         lines += ["Aucun résultat remis pour le moment.", ""]
     lines += ["## Tests et limites", "", "Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.", "",
               "Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.", "", "## Livraison et documentation", "", "Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.", "", "## Décisions et suite", ""]
+    if run.get("completion_outcome") in {"blocked", "rejected"}:
+        lines += ["**Travail non résolu ou refusé : les tâches dépendantes restent bloquées.**", ""]
     for node in graph["nodes"]:
         state = run["nodes"][node["id"]]
+        for question in state.get("questions", []):
+            lines += [f"- {node['title']} — question : {question['text']}"]
+            lines += [f"  Réponse : {question['answer']}" if question.get("status") == "answered" else "  Réponse attendue."]
         if state["status"] == "waiting":
             lines += [f"- **{node['title']}** : {node.get('question', 'Résultat à valider.')}"]
         elif state.get("decision"):

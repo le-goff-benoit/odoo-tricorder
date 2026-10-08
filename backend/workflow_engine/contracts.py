@@ -11,7 +11,7 @@ class ContractError(ValueError):
     pass
 
 
-KINDS = {"task", "command", "agent", "decision", "condition", "join", "review",
+KINDS = {"task", "command", "agent", "decision", "question", "condition", "join", "review",
          "document", "external", "subworkflow", "watch", "communication"}
 ID = re.compile(r"^[a-zA-Z][a-zA-Z0-9_.-]{0,79}$")
 TYPES = {"string", "number", "boolean", "object", "array", "any"}
@@ -44,6 +44,26 @@ def validate_outputs(node, result):
         require(name in values and valid(), f"Sortie {name} absente ou incompatible avec le type {kind}")
 
 
+def validate_result(graph, node, result, outcome="done"):
+    """Reject unusable routing values while their producer can still be retried."""
+    validate_outputs(node, result)
+    if node.get("route_output"):
+        require(result.get("outputs", {}).get(node["route_output"]) in node["options"],
+                f"{node['title']} : choisir une des issues prévues ou demander une précision")
+        outcome = result["outputs"][node["route_output"]]
+    targets = {n["id"]: n for n in graph["nodes"] if n["kind"] == "condition"}
+    for edge in graph["edges"]:
+        if edge["from"] != node["id"] or edge.get("outcome", "done") != outcome:
+            continue
+        target = targets.get(edge["to"])
+        if target is None:
+            continue
+        for source, destination in edge.get("mapping", {}).items():
+            if destination == target["parameter"]:
+                require(result.get("outputs", {}).get(source) in target.get("options", []),
+                        f"{node['title']} : sortie {source} incompatible avec les issues de « {target['title']} » ; corriger le résultat avant réception")
+
+
 def validate(graph, *, expanded=False):
     require(isinstance(graph, dict) and graph.get("schema") == 1, "Schéma de workflow attendu : 1")
     require(len(json.dumps(graph, ensure_ascii=False).encode()) <= 2_000_000, "Définition de workflow trop volumineuse")
@@ -69,7 +89,9 @@ def validate(graph, *, expanded=False):
             identifier(binding["operation"], "Capacité")
         require(isinstance(node.get("reuse", False), bool), f"{nid} : reuse doit être booléen")
         policy = node.get("validation", "human")
-        require(policy in {"human", "automatic"}, f"{nid} : validation human ou automatic attendue")
+        require(policy in {"human", "automatic", "contract"}, f"{nid} : validation human, automatic ou contract attendue")
+        if policy == "contract":
+            require(node.get("kind") in {"agent", "task", "document"}, f"{nid} : réception de contrat réservée au travail sans effet externe")
         if policy == "automatic":
             require(node.get("kind") in {"command", "document", "watch", "communication"}, f"{nid} : validation automatique réservée aux exécutants déterministes")
             require(not node.get("criteria"), f"{nid} : des critères métier exigent une validation humaine")
@@ -92,8 +114,18 @@ def validate(graph, *, expanded=False):
             require(isinstance(outcomes, list) and len(outcomes) >= 2 and all(isinstance(o, str) for o in outcomes) and len(set(outcomes)) == len(outcomes), f"{nid} : au moins deux issues distinctes")
             for outcome in outcomes:
                 identifier(outcome, f"{nid} issue")
+        require(node.get("completion_outcome", "succeeded") in {"succeeded", "blocked"}, f"{nid} : résultat final succeeded ou blocked attendu")
         if node["kind"] == "condition":
             require(isinstance(node.get("parameter"), str), f"{nid} : paramètre de condition requis")
+        if node["kind"] == "question":
+            require(isinstance(node.get("question"), str) and node["question"].strip(), f"{nid} : question requise")
+            require(node.get("outputs", {}) in ({}, {"answer": "string"}), f"{nid} : la réponse est une sortie answer de type string")
+        if node.get("route_output"):
+            require(node["kind"] == "agent" and node.get("outputs", {}).get(node["route_output"]) == "string", f"{nid} : l’aiguillage IA exige une sortie texte déclarée")
+            choices = node.get("options", [])
+            require(isinstance(choices, list) and len(choices) >= 2 and all(isinstance(c, str) for c in choices) and len(set(choices)) == len(choices), f"{nid} : au moins deux issues distinctes")
+            for choice in choices:
+                identifier(choice, f"{nid} issue")
         if node["kind"] == "external":
             op = node.get("operation", {})
             require(all(isinstance(op.get(k), str) and op[k].strip() for k in ("action", "target", "candidate")), f"{nid} : action, cible et candidat requis")
@@ -117,7 +149,7 @@ def validate(graph, *, expanded=False):
         source, target = edge.get("from"), edge.get("to")
         require(source in ids and target in ids, f"{edge['id']} : bloc introuvable")
         outcome = edge.get("outcome", "done")
-        allowed = by_id[source].get("options", ["approve", "reject"]) if by_id[source]["kind"] in {"decision", "condition", "review"} else ["done"]
+        allowed = by_id[source].get("options", ["approve", "reject"]) if by_id[source]["kind"] in {"decision", "condition", "review"} or by_id[source].get("route_output") else ["done"]
         require(outcome in allowed, f"{edge['id']} : issue {outcome} inconnue")
         for src, dst in edge.get("mapping", {}).items():
             st = by_id[source].get("outputs", {}).get(src)

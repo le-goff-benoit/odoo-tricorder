@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import time
 
-from .contracts import ContractError, digest, require
+from .contracts import ContractError, digest, require, validate_result
 from .projects import git_environment
 
 
@@ -86,6 +86,7 @@ def apply(engine, db, run, source):
             proof = previous.get('result', {})
             try:
                 require(proof.get('ok') is True and proof.get('evidence'), 'Preuves absentes')
+                validate_result(run['definition'], node, proof)
                 for reference in proof['evidence']:
                     engine.evidence(reference)
             except ContractError:

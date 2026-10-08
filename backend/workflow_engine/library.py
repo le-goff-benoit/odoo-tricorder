@@ -67,4 +67,11 @@ def templates():
                   node("publish", "Publier la version relue", "external", x=660, operation=publication, approval="approve", evidence_required=True, criteria=["La version de base n’a pas changé ; le service a accepté la nouvelle version."]),
                   node("verify", "Relire la page publiée", "document", x=960, evidence_required=True, criteria=["Espace, page, version et contenu correspondent à la proposition autorisée."])],
         "edges": [edge("draft", "approve"), edge("approve", "publish", "approve"), edge("publish", "verify")]}
-    return [demo, local, software, mail, deployment, confluence, *components]
+    import copy
+    direct = copy.deepcopy(deployment)
+    direct.update(id="direct-production", title="Livraison directe en production", description="Parcours sans staging imposé : candidat testé, accord exact, publication et version observée. Configurer la cible et le connecteur avant lancement.")
+    direct["nodes"] = [n for n in direct["nodes"] if not n["id"].startswith("staging-")]
+    kept = {n["id"] for n in direct["nodes"]}
+    direct["edges"] = [e for e in direct["edges"] if e["from"] in kept and e["to"] in kept]
+    from .work_templates import templates as work_templates
+    return [demo, local, software, *work_templates(), mail, deployment, direct, confluence, *components]

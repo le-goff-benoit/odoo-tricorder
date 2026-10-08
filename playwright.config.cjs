@@ -1,3 +1,3 @@
 const { defineConfig } = require('@playwright/test');
-// The old cockpit specs describe the retired UI. Studio has its own end-to-end contract.
-module.exports = defineConfig({ testDir: './tests', testMatch: 'studio.spec.cjs', workers: 1, timeout: 60000, reporter: 'list', use: { trace: 'retain-on-failure' } });
+// Both daily release work and advanced workflow design are supported entry points.
+module.exports = defineConfig({ testDir: './tests', testMatch: ['desktop.spec.cjs', 'release-opening.spec.cjs', 'studio.spec.cjs'], workers: 1, timeout: 60000, reporter: 'list', use: { trace: 'retain-on-failure' } });

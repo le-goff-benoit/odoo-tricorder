@@ -113,6 +113,9 @@ def dispatch(engine, run_id):
     for nid, state in run["nodes"].items():
         if state["status"] != "ready":
             continue
+        node = next(n for n in run["definition"]["nodes"] if n["id"] == nid)
+        if run["definition"].get("driver") == "conversation" and node["kind"] in {"agent", "task", "document"}:
+            continue  # The native conversation claims work; the graph remains authoritative.
         try:
             claim = engine.claim(run_id, nid)
         except ContractError:

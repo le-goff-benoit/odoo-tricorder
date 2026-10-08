@@ -8,6 +8,7 @@ const { pathToFileURL } = require('node:url');
 const { promisify } = require('node:util');
 const { sessionContext, saveContext } = require('./terminal-context.cjs');
 const { catalogRevision } = require('./catalog-revision.cjs');
+const { initialWorkspace, statePaths } = require('./workspace-window.cjs');
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'tricorder', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
 const LINKS = {
@@ -16,12 +17,41 @@ const LINKS = {
 };
 const exec = promisify(execFile);
 const home = process.env.TRICORDER_HOME || os.homedir();
-const stateDir = process.env.TRICORDER_STATE_DIR || path.join(process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config'), 'odoo-tricorder');
+const stores = statePaths();
+const stateDir = stores.cockpit;
 app.setPath('userData', path.join(stateDir, 'chromium'));
-const socketPath = path.join(process.env.TRICORDER_RUNTIME_DIR || path.join(process.env.XDG_RUNTIME_DIR || stateDir, 'odoo-tricorder'), 'pty.sock');
+const socketPath = path.join(process.env.TRICORDER_RUNTIME_DIR || path.join(process.env.TRICORDER_STATE_DIR ? stateDir : process.env.XDG_RUNTIME_DIR || stateDir, 'odoo-tricorder'), 'pty.sock');
 const backend = app.isPackaged ? path.join(process.resourcesPath, 'backend') : path.join(__dirname, '..', 'backend');
 let window, broker, buffer = '', nextRequest = 0, settings = {}, projects = new Set(), scanning;
 const pending = new Map();
+let studio, cockpitLoaded = false;
+let legacyTerminals;
+const adoptLegacy = s => ({ ...s, id: 'legacy:' + s.id, project: path.basename(s.project) === '.tricorder' ? path.dirname(s.project) : s.project });
+async function legacySessions() {
+  const socket = path.join(stores.studio, 'studio-pty.sock');
+  if (!fs.existsSync(socket)) return [];
+  legacyTerminals ||= new (require('./studio-terminal.cjs').TerminalBroker)(path.join(backend, 'terminal_service.py'), socket, message => {
+    if (window && !window.isDestroyed()) window.webContents.send('terminal:event', { ...message, ...(message.session ? { session: 'legacy:' + message.session } : {}) });
+  });
+  try {
+    // Adopt existing sessions only. Opening Tricorder must not start a second broker.
+    if (!legacyTerminals.client || legacyTerminals.client.destroyed) await legacyTerminals.connect();
+    return (await legacyTerminals.request({ action: 'list' })).map(adoptLegacy);
+  } catch { return []; }
+}
+async function showCockpit() {
+  if (!cockpitLoaded) { await window.loadURL('tricorder://app/'); cockpitLoaded = true; }
+  window.webContents.send('workspace:navigate', { route: 'project' });
+  window.setMinimumSize(1000, 650);
+  window.setTitle('Tricorder');
+  window.webContents.focus();
+}
+async function showWorkflows(argv = []) {
+  studio.queuePortable(argv);
+  if (!cockpitLoaded) await showCockpit();
+  window.webContents.send('workspace:navigate', { route: 'workflows' });
+  window.webContents.focus();
+}
 
 function loadSettings() {
   try { settings = JSON.parse(fs.readFileSync(path.join(stateDir, 'settings.json'), 'utf8')); } catch { settings = {}; }
@@ -108,6 +138,13 @@ async function ensureBroker() {
 }
 let connecting;
 async function terminal(request) {
+  if (request.session?.startsWith('legacy:')) {
+    if (!legacyTerminals?.client) await legacySessions();
+    if (!legacyTerminals?.client) throw new Error('Ancien terminal indisponible');
+    const result = await legacyTerminals.request({ ...request, session: request.session.slice(7) });
+    if (result?.session) result.session = adoptLegacy(result.session);
+    return result;
+  }
   if (!broker || broker.destroyed) {
     connecting ||= ensureBroker().finally(() => { connecting = null; });
     await connecting;
@@ -126,9 +163,45 @@ function handle(name, callback) {
   });
 }
 function wireAPI() {
+  handle('workflow-terminal', async request => {
+    const { project } = await studio.backend({ action: 'project.get', project: request.project });
+    const all = [...await terminal({ action: 'list' }), ...await legacySessions()];
+    settings.workflowTerminals ||= {};
+    const bound = request.conversation && all.find(s => s.id === settings.workflowTerminals[request.conversation] && s.alive);
+    if (bound) return bound;
+    if (!request.conversation) {
+      const workspace = await studio.backend({ action: 'design.workspace', project: project.id });
+      return all.find(s => s.project === project.path && s.alive) || terminal({ action: 'create', project: project.path, workingDirectory: workspace.cwd, cols: 100, rows: 30, cleanShell: process.env.TRICORDER_TEST_MODE === '1' });
+    }
+    const conversation = await studio.backend({ action: 'conversation.get', conversation: request.conversation });
+    if (conversation.project !== project.id) throw new Error('Conversation d’un autre projet');
+    const session = await terminal({ action: 'create', project: project.path, workingDirectory: project.path, cols: 100, rows: 30, cleanShell: process.env.TRICORDER_TEST_MODE === '1' });
+    const quote = value => "'" + String(value).replace(/'/g, "'\\''") + "'";
+    const command = ['python3', path.join(backend, 'workflow_cli.py'), '--state', stores.studio, '--conversation', conversation.id].map(quote).join(' ');
+    const prompt = `Tu pilotes le workflow Tricorder « ${conversation.definition.title} » dans cette conversation native. Attends ma demande, puis enregistre chaque tâche avec le pont ci-dessous. Le graphique suit les états réels du moteur. Ne crée pas un second flow historique. Les profils de blocs déterminent tes missions ; consulte-les avant le travail.
+Pont : ${command}
+Commandes : status (sans stdin), add, ready, claim, context, execute, result, ask, answer, artifact, heartbeat, prepare-candidate (objet JSON sur stdin).
+add: {request,project?,key?,depends_on?:[identifiants_de_tâches]}, ready: {run}, claim: {run,node}, result: {run,node,token,result:{ok,summary,outputs,evidence?}}, ask: {run,node,token,text}, answer: {run,node,question,text}, execute: {run,node}, artifact: {path}, context: {run,node,context:{environment:"local",neutralized_copy:"nom de la copie réellement préparée"}}. Avant une recette Odoo, préparer la copie puis enregistrer ce contexte local ; ne pas déclarer une copie fictive.
+Pendant un bloc long, heartbeat: {run,node,token} toutes les 60 secondes. Pour tester le candidat transmis par un bloc de développement, prepare-candidate: {run,node,token} crée une copie contenant ce candidat ; vérifier cette copie et joindre les preuves via artifact.
+Après chaque demande : add avec une clé stable, puis ready. claim fournit la mission, le profil, les critères, les entrées et le jeton. Applique le rôle dans le projet de la tâche et remets les sorties typées. Pour un autre fournisseur, une copie isolée ou une commande, utilise execute. Ne prétends jamais qu’une simulation prouve un résultat réel.
+Si une information manque : ask AVANT de me poser la question, puis answer après ma réponse et reprends le bloc via claim. Une réponse ordinaire ne vaut jamais autorisation de production. Pour une décision ou une réception humaine, indique le bloc dans le panneau et attends sa décision ; le pont ne peut pas l’approuver. Aucun JSON/SQLite d’état modifié directement.
+Plusieurs demandes peuvent avancer indépendamment, dans les projets autorisés : ${conversation.projects.join(', ')}. Consulter status après chaque étape et reprendre les blocs prêts jusqu’au résultat ou à une question. Les fins de diagnostic, correction, livraison et réception métier restent distinctes.
+Commence par annoncer le workflow, son périmètre et demander ce que je souhaite traiter. Tu ne lances rien à ma place avant ma demande.`;
+    const id = require('node:crypto').randomUUID();
+    const launch = require('./provider-launch.cjs').prepareLaunch({ provider: conversation.provider, model: conversation.model, effort: conversation.effort, id, folder: path.join(stateDir, 'agent-events'), backend, home, project: project.path, crew: '', prompt });
+    settings.workflowTerminals[conversation.id] = session.id; saveSettings();
+    await terminal({ action: 'write', session: session.id, data: launch.command + '\r' });
+    return session;
+  });
+  handle('workflow-workspace', async () => { await showWorkflows(); return true; });
   require('./cockpit.cjs').wireCockpit({ handle, dialog, shell, window: () => window, settings, save: saveSettings, checkedProject, catalog, terminal, stateDir, backend, home });
-  handle('bootstrap', async () => ({ projects: await overview(), settings, links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home,
-    crewInstalled: fs.existsSync(path.join(process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents'), 'scripts', 'odoo_plan.py')) }));
+  handle('bootstrap', async () => {
+    const catalogProjects = await overview();
+    const pack = process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents');
+    const configured = await studio.backend({ action: 'project.configure-catalog', projects: catalogProjects, pack });
+    return { projects: catalogProjects, configured, settings, initialWorkspace: initialWorkspace(), links: LINKS, version: app.getVersion(), home, workspaceRoot: settings.workspaceRoot || home,
+      crewInstalled: fs.existsSync(path.join(pack, 'scripts', 'odoo_plan.py')) };
+  });
   handle('overview', overview);
   handle('catalog-revision', () => catalogRevision(projects));
   handle('project', (project, release) => catalog({ action: 'project', project: checkedProject(project), release }));
@@ -157,6 +230,8 @@ function wireAPI() {
     // Only UI preferences. No command, shell or URL can be configured by renderer.
     if (typeof patch.activeProject === 'string') settings.activeProject = checkedProject(patch.activeProject);
     if (Array.isArray(patch.favorites)) settings.favorites = patch.favorites.filter(p => projects.has(p));
+    if (['codex', 'claude'].includes(patch.provider)) settings.provider = patch.provider;
+    if (['release', 'request', 'support'].includes(patch.workflow)) settings.workflow = patch.workflow;
     if (patch.ui && typeof patch.ui === 'object') {
       settings.ui ||= {};
       for (const key of ['split', 'highContrast']) if (typeof patch.ui[key] === 'boolean') settings.ui[key] = patch.ui[key];
@@ -173,7 +248,7 @@ function wireAPI() {
     saveSettings(); return settings;
   });
   handle('terminal:list', async () => {
-    const sessions = await terminal({ action: 'list' });
+    const sessions = [...await terminal({ action: 'list' }), ...await legacySessions()];
     // Contexts of sessions that no longer exist would otherwise accumulate forever.
     const stale = Object.keys(settings.terminalContexts || {}).filter(id => !sessions.some(s => s.id === id));
     if (stale.length) { for (const id of stale) delete settings.terminalContexts[id]; saveSettings(); }
@@ -238,7 +313,12 @@ function wireAPI() {
 
 if (!app.requestSingleInstanceLock()) app.quit();
 else {
-  app.on('second-instance', () => { if (window) { if (window.isMinimized()) window.restore(); window.show(); window.focus(); } });
+  app.on('second-instance', (_event, argv) => {
+    if (!window) return;
+    if (initialWorkspace(argv) === 'studio') showWorkflows(argv).catch(() => {});
+    if (window.isMinimized()) window.restore(); window.show(); window.focus();
+  });
+  app.on('open-file', (event, file) => { event.preventDefault(); if (window) showWorkflows([file]).catch(() => {}); });
   app.whenReady().then(async () => {
     loadSettings();
     protocol.handle('tricorder', request => {
@@ -250,7 +330,7 @@ else {
       return net.fetch(pathToFileURL(target).toString());
     });
     window = new BrowserWindow({ width: 1480, height: 960, minWidth: 1000, minHeight: 650,
-      title: 'Odoo Tricorder', backgroundColor: '#101519', autoHideMenuBar: true,
+      title: 'Tricorder', backgroundColor: '#101519', autoHideMenuBar: true,
       webPreferences: { preload: path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', event => event.preventDefault());
@@ -266,9 +346,11 @@ else {
       ] },
       { role: 'viewMenu' },
     ]));
+    studio = require('./studio-main.cjs').createStudio({ window, state: stores.studio, showCockpit, showWorkflows });
     wireAPI();
-    await window.loadURL('tricorder://app/');
+    if (initialWorkspace() === 'studio') await showWorkflows(process.argv);
+    else await showCockpit();
   }).catch(error => { dialog.showErrorBox('Odoo Tricorder', error.message); app.quit(); });
   app.on('window-all-closed', () => app.quit());
-  app.on('before-quit', () => broker?.end());
+  app.on('before-quit', () => { broker?.end(); legacyTerminals?.disconnect(); });
 }

@@ -1,65 +1,92 @@
 # Tricorder
 
-Une application locale pour concevoir, exécuter et suivre des workflows de
-développement ou de monitoring, sur un projet Git ou indépendamment des projets.
-**Version de travail : 0.6.0-rc.1.** Le moteur est générique ; Odoo Crew est
-un pack facultatif.
+**Votre terminal, accompagné du suivi graphique de vos projets et releases.**
+Préversion publiée : **0.6.0-rc.4**.
 
-[Avancement et limites](release/2026-10-08_workflow-studio/README.md) ·
-[Plan de développement et de tests](docs/PLAN_WORKFLOWS_2026-10-08.md) ·
-[Principes de design](docs/DESIGN.md)
+[Analyse, changements et recette](release/2026-10-08_revue/README.md).
 
-## Choisir son espace
+Une application et une fenêtre : le terminal natif et le graphique partagent
+le même espace. Les modèles peuvent être réutilisés par projet ou alimenter une
+conversation avec plusieurs tâches et plusieurs projets. Les anciens dossiers
+de release restent accessibles sans migration.
 
-- **Vue d’ensemble** : exécutions, résultats à examiner et récurrences actives.
-- **Globaux** : automatisations transverses, indépendantes des projets, par
-  exemple une veille de messagerie ou le traitement de tickets.
-- **Projets** : chacun correspond à la racine d’un dépôt Git local.
-- **Bibliothèque** : modèles réutilisables, copiés puis adaptés dans un contexte
-  global ou un projet. Une exécution conserve sa version figée.
-- **Connexions** : moyens disponibles, déclarations de plugins et détection
-  native Codex ; installation, connexion et capacité d’exécution sont distinctes.
-- **Récurrences** : fréquences, prochaines échéances et suspension des workflows.
+![Terminal et suivi graphique dans une fenêtre](release/2026-10-08_revue/captures/terminal-workflow.png)
 
-## Concevoir et suivre
+*Capture sur projet fictif avec fournisseur simulé pour la recette d’interface.*
 
-Le canevas utilise des liaisons à angles droits. L’inspecteur permet de modifier
-les blocs, leurs critères, leurs modèles et leurs connexions ; une vue liste et
-l’annulation des modifications complètent le canevas.
+## Dessiner, lancer et converser
 
-Un **travail IA** peut utiliser directement un modèle, sans agent dédié, ou
-recevoir les consignes d’un profil spécialisé. Une commande ou une condition
-peut s’exécuter sans IA. Le choix de plugins est indépendant du choix de profil.
+1. Dans **Bibliothèque**, choisir un modèle ou partir d’un workflow vide dans un
+   projet. Ouvrir les blocs pour définir mission, entrées/sorties, agent et issues.
+2. **Relier** choisit les sorties du bloc amont et les entrées du suivant. Les
+   données de même nom et type sont proposées automatiquement.
+3. Choisir OpenAI ou Anthropic, puis **Exécuter… → Lancer dans le terminal**.
+   Cocher d’autres projets pour une conversation transversale.
+4. Décrire le travail dans le terminal. L’agent enregistre les tâches et remet
+   ses résultats au moteur ; le graphique montre leurs états réels. Une question
+   attend sa réponse sans suspendre les autres tâches.
+5. Retrouver la conversation depuis le projet, même après redémarrage. Les
+   décisions et autorisations exactes se prennent sur les blocs correspondants.
 
-Le **terminal de conception** ouvre `.tricorder/`, aussi bien pour créer un
-modèle que pour adapter un workflow. Les fichiers sont dans `workflows/` ; après
-modification, « Recharger et valider » crée une nouvelle révision. L’application
-installe ses consignes `AGENTS.md` à la création du contexte et les synchronise
-au premier lancement après une mise à jour. Les personnalisations sont préservées.
+Pour un bloc de modification de code isolée, renseigner aussi un modèle explicite
+avec **Choisir l’IA** avant de lancer la conversation.
 
-L’assistant IA propose des modifications examinables du workflow. Les blocs IA
-peuvent analyser ou modifier du code dans une copie isolée : diff, tests de la
-copie, puis application humaine au dépôt avec contrôle des conflits. Codex a été
-essayé nativement ; Claude reste bloqué par la politique de l’organisation.
-Les opérations externes non connectées restent bloquées.
+Les profils précisent la méthode ; les ports, critères et branches appartiennent
+au workflow. Le bloc **Support critique ?** réunit qualification et aiguillage.
+Un parcours de livraison directe en production est disponible sans staging imposé,
+avec candidat, cible, contrôles et décision humaine exacts à configurer.
 
-Les exécutions montrent les résultats remis, les preuves et les décisions.
-Les blocs déterministes peuvent valider automatiquement leurs contrôles techniques ;
-les décisions humaines restent obligatoires. Les récurrences peuvent ainsi
-s’enchaîner sans validation manuelle de chaque lecture. Un transfert global →
-projet crée un brouillon avec les résultats validés ; les accords ne suivent pas.
-Les commandes et documents peuvent réutiliser explicitement des preuves de moins
-de 24 h si les sources et dépendances contrôlées sont inchangées.
+Le pack Odoo 0.3.1 installe deux modèles éditables par projet Odoo découvert : release
+et support. La release relie intention, plan, décision, candidat isolé, QA sur copie
+locale et proposition de livraison. Le modèle de meeting prépare compte rendu,
+actions et email ; publication et envoi demandent un connecteur et une autorisation.
+La validation technique d’un résultat ne remplace pas sa recette métier.
+Une tâche terminée avec un travail non résolu ou un refus ne libère pas ses
+successeurs. Après un échec de recette, ouvrir une tâche de correction : les
+modèles graphiques n’ont pas encore de boucle automatique de correction/recette.
+Les workflows déjà enregistrés conservent leur version ; importer une nouvelle
+copie du modèle pour bénéficier de ses nouvelles branches, puis comparer vos adaptations.
 
-Un serveur MCP stdio ou un adaptateur local peut relier un plugin à Tricorder, après examen de sa commande
-et vérification explicite dans **Connexions**. Ce transport gère lectures,
-notifications et écritures autorisées. Il exécute du code de confiance avec les
-droits utilisateur ; un plugin Codex installé n’est pas automatiquement connecté.
-Le [contrat de configuration](backend/workflow_engine/guidance.py) est aussi
-installé dans le terminal de chaque contexte.
-La croix **masque la fenêtre** : l’icône Ubuntu garde le suivi actif.
-**Quitter Tricorder** arrête le planificateur ; les processus déjà lancés peuvent
-encore terminer. Aucun démarrage automatique à la connexion Ubuntu n’est installé.
+## Travailler sur une release
+
+Tricorder ouvre vos projets existants et leurs releases. Le terminal occupe la
+partie principale ; le panneau voisin montre le workflow, les intentions, le
+plan, les décisions, les preuves et les temps. Changer de vue conserve la session.
+**Agrandir le terminal** masque temporairement le panneau ; **Afficher le workflow**
+le rétablit.
+
+1. Choisir un projet et sa release.
+2. Choisir **OpenAI · Codex** ou **Anthropic · Claude** dans l’en-tête. Le choix
+   est mémorisé pour les prochains lancements ; une session existante reste intacte.
+3. Interagir directement dans le terminal, ou utiliser une étape du panneau :
+   **Ouvrir une release → Recueillir les demandes → Préparer le plan → Exécuter
+   le plan → Recetter et clôturer**. Les boutons préparent une demande contextualisée
+   que vous pouvez relire ; **Lancer le travail** ouvre sa session d’agent.
+4. Consulter Intentions, Plan, Mémoire et Temps en gardant le terminal visible.
+
+Le parcours de release utilise Odoo Crew et les fichiers existants sous
+`changelog/` et `.odoo-agents/`. Une ouverture ou un recueil d’intentions ne lance
+pas le développement. Les écritures externes gardent leurs accords propres.
+Les fournisseurs utilisent leurs CLI et leur authentification native ; Tricorder
+ne lit pas vos secrets. Le choix d’un fournisseur ne prouve pas sa connexion.
+
+## Personnaliser ou exécuter un autre workflow
+
+**Workflows** retrouve le dessin en cours dans la même fenêtre. La bibliothèque,
+les workflows globaux, les récurrences et les connexions utilisent cette navigation.
+Le terminal reste disponible pendant ces changements de vue.
+
+Depuis la fiche d’un projet ou les workflows globaux, **Exécuter…** ouvre directement
+le récapitulatif et les prérequis, sans passer par la modification des blocs.
+**Choisir l’IA** applique OpenAI ou Anthropic et un modèle commun aux étapes IA.
+Les profils d’agents sont conservés. Les paramètres particuliers d’un bloc restent
+accessibles dans ses options ; mission et critères sont affichés en premier.
+Les ports ont des formulaires ; les paramètres supplémentaires restent repliés.
+
+Un prérequis manquant est présenté avec le nom de l’étape et un accès à sa
+configuration. La simulation reste explicitement distincte d’une exécution réelle.
+Les modèles Odoo enregistrés avant cette simplification restent des brouillons
+à compléter : ils ne remplacent pas vos releases historiques.
 
 ## Transférer un workflow et mettre à jour Tricorder
 
@@ -69,7 +96,8 @@ le double-clic affiche un aperçu puis propose d’importer un brouillon. Aucun
 accord, historique d’exécution ni récurrence active n’est transféré. Les comptes
 et capacités doivent être vérifiés sur le poste destinataire.
 
-Au lancement, Tricorder consulte la dernière release stable publique sur GitHub.
+Au lancement, Tricorder consulte la dernière
+release stable publique sur GitHub.
 Une nouvelle version propose ses notes et le téléchargement du paquet Ubuntu.
 L’installation et le redémarrage restent explicites. Hors connexion, le travail
 continue ; « Mises à jour » permet de réessayer.
@@ -102,8 +130,9 @@ npm run dist
 npm run test:packaged
 ```
 
-État local : `~/.local/share/tricorder/` (SQLite, preuves, bibliothèque, workflows
-globaux et exemples). `TRICORDER_STATE_DIR` permet une instance isolée.
+État du cockpit et des terminaux : `~/.config/odoo-tricorder/`. État des workflows : `~/.local/share/tricorder/` (SQLite, preuves, bibliothèque, workflows
+globaux et exemples). `TRICORDER_STATE_DIR` permet une instance isolée ; les données historiques
+conservent leurs emplacements, au sein de la même application.
 Pas de service TCP ni de télémétrie dans Tricorder. La vérification de mise à jour contacte GitHub au lancement, conformément à la
 préférence demandée. Les fournisseurs natifs contactent leurs services lors
 des actions demandées.

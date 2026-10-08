@@ -4,6 +4,7 @@
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from workflow_engine import ContractError, Engine, validate
 from workflow_engine.contracts import expand
@@ -14,8 +15,43 @@ from workflow_engine.schedules import Schedules
 from workflow_engine.packs import inspect_pack, install, resolve_profiles, policy_issues
 
 
+def provider_defaults():
+    """Non-secret local model policy; no credential or account probing."""
+    try:
+        path = Path.home() / '.odoo19-agents/workflows/model-policy.json'
+        policy = json.loads(path.read_text()) if path.stat().st_size < 100_000 else {}
+        principal = policy.get('principal', {}) if isinstance(policy, dict) else {}
+        if not isinstance(principal, dict):
+            principal = {}
+    except (OSError, ValueError, TypeError):
+        principal = {}
+    return {key: value for key, value in principal.items()
+            if key in ('codex', 'claude') and isinstance(value, str) and len(value) <= 100}
+
+
 def request(engine, payload, *, human=False):
     action = payload.get("action")
+    if action == "project.configure-catalog":
+        from workflow_engine.setup import configure
+        return configure(engine, payload["projects"], payload.get("pack"))
+    if action.startswith("conversation."):
+        from workflow_engine.conversations import Conversations, answer
+        conversations = Conversations(engine)
+        if action == "conversation.open":
+            library = {g["id"]: g for g in templates() + engine.workflows("library")}
+            defaults = payload["graph"].get("defaults", {})
+            model = defaults.get("model") if defaults.get("provider") == payload["provider"] else None
+            model = model or provider_defaults().get(payload["provider"])
+            return conversations.open(payload["project"], payload["graph"], payload["provider"], payload.get("projects"), library, model)
+        if action == "conversation.list":
+            return conversations.list(payload.get("project"))
+        if action == "conversation.get":
+            return conversations.snapshot(payload["conversation"])
+        if action == "conversation.add":
+            return conversations.add(payload["conversation"], payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"))
+        if action == "conversation.answer":
+            conversations.checked_run(payload["conversation"], payload["run"])
+            return answer(engine, payload["run"], payload["node"], payload["question"], payload["text"])
     if action in {"plugins.preview", "plugins.qualify"}:
         from connectors.local_tools import inspect, qualify
         from workflow_engine.contracts import digest
@@ -77,7 +113,7 @@ def request(engine, payload, *, human=False):
     if action == "bootstrap":
         from workflow_engine.guidance import sync
         setup = sync(engine)
-        return {"activity": engine.activity(), "setup": setup, "projects": engine.projects(), "templates": templates() + engine.workflows("library"), "capabilities": capabilities(engine.project(payload["project"]) if payload.get("project") else None, engine), "schedules": Schedules(engine).list()}
+        return {"activity": engine.activity(), "setup": setup, "providerDefaults": provider_defaults(), "projects": engine.projects(), "templates": templates() + engine.workflows("library"), "capabilities": capabilities(engine.project(payload["project"]) if payload.get("project") else None, engine), "schedules": Schedules(engine).list()}
     if action == "design.workspace":
         from workflow_engine.guidance import prepare
         return prepare(engine.project(payload["project"]))
@@ -85,7 +121,11 @@ def request(engine, payload, *, human=False):
         return engine.library_project()
     if action == "workspace.get":
         context = engine.workspace_context()
-        return {"project": context, "workflows": engine.workflows("workspace"), "runs": engine.runs("workspace"), "capabilities": capabilities(context, engine)}
+        from workflow_engine.conversations import Conversations
+        return {"project": context, "workflows": engine.workflows("workspace"), "runs": engine.runs("workspace"), "capabilities": capabilities(context, engine), "conversations": Conversations(engine).list("workspace")}
+    if action == "run.answer":
+        from workflow_engine.conversations import answer
+        return answer(engine, payload["run"], payload["node"], payload["question"], payload["text"])
     if action == "pack.preview":
         return inspect_pack(payload["path"])
     if action == "pack.install":

@@ -1,3 +1,4 @@
+import { mountStudio } from './studio.js';
 import { timerMarkup } from './activity.mjs';
 import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
@@ -61,20 +62,66 @@ let projectError = null, overviewMode = false, split = false, version = '', crew
 let notificationKeys = new Set();
 let kanbanClosed = false, kanbanExecuting = false;
 let launchingTerminal = false;
+let terminalMaximized = false;
+let workflowMode = false, workflowContext = null, workflowTerminalPath = null;
+const terminalProject = () => workflowMode ? (workflowTerminalPath || current) : current;
+
+const WORKFLOWS = { release: { title: 'Release Odoo', action: 'workflow' }, request: { title: 'Demande Odoo', action: 'develop' }, support: { title: 'Diagnostic Odoo', action: 'diagnose' } };
+function workflowSession() {
+  return sessions.find(s => s.alive && s.project === current && s.release === detail?.selectedRelease &&
+    (settings.bindings || []).some(b => b.terminal === s.id && b.workflow === (settings.workflow || 'release') && b.provider === (settings.provider || 'codex') + '-hooks'));
+}
+function workflowControls() {
+  $('.workflow-launcher').hidden = workflowMode;
+  if (workflowMode) return;
+  const select = $('#workflow-choice');
+  select.value = settings.workflow || 'release';
+  const launch = $('[data-action=workflow-start]');
+  launch.textContent = workflowSession() ? 'Retrouver la conversation' : 'Démarrer le workflow';
+  launch.disabled = !detail || busy;
+}
 
 $('#app').innerHTML = `
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Tricorder">
     <div class="brand"><div class="brand-mark">${icon('terminal')}</div><span class="brand-name">Tricorder</span></div>
-    <nav class="side-nav" aria-label="Vues transversales"><button class="side-item kanban-nav" data-view="kanban">${icon('grid')}<span>Kanban global</span></button></nav>
+    <nav class="side-nav" aria-label="Vues transversales"><button class="side-item" data-workflow-route="overview">${icon('plan')}<span>Activité des workflows</span></button><button class="side-item" data-workflow-route="library">${icon('folder')}<span>Bibliothèque</span></button><button class="side-item" data-workflow-route="global" aria-label="Globaux">${icon('branch')}<span>Workflows globaux</span></button><button class="side-item" data-workflow-route="projects">${icon('folder')}<span>Projets</span></button><button class="side-item kanban-nav" data-view="kanban">${icon('grid')}<span>Kanban global</span></button></nav>
     <div class="side-heading">Projets</div>
     <div id="project-list" class="project-list"></div>
-    <div class="sidebar-bottom"><div class="sidebar-utilities"></div><button class="install-agents" data-action="agents-link" hidden>${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="about-button" data-action="about" title="À propos de Tricorder">À propos <span id="version"></span></button></div>
+    <div class="sidebar-bottom"><button class="side-item" data-workflow-route="schedules">${icon('chart')}<span>Récurrences</span></button><button class="side-item" data-workflow-route="connections">${icon('server')}<span>Connexions</span></button><button class="side-item" data-action="workflow-workspace">${icon("plan")}<span>Workflows</span></button><div class="sidebar-utilities"></div><button class="install-agents" data-action="agents-link" hidden>${icon('agents')}<span>Installer les agents Odoo<small>Skills pour Claude et Codex</small></span>${icon('external')}</button><button class="side-item" data-action="workflow-updates">${icon('refresh')}<span>Mises à jour</span></button><button class="about-button" data-action="about" title="À propos de Tricorder">À propos <span id="version"></span></button></div>
   </aside>
   <main class="workspace">
-    <header class="topbar project-header"><div class="project-identity"><h1 id="project-title"></h1><div id="project-meta" class="project-meta"></div></div><div class="top-actions"><div class="theme-switch" role="group" aria-label="Thème de l’interface">${[['light', 'Clair', 'sun'], ['dark', 'Sombre', 'moon'], ['system', 'Système', 'monitor']].map(([value, label, glyph]) => `<button class="icon-button" data-theme-choice="${value}" title="Thème ${label.toLowerCase()}" aria-label="Thème ${label.toLowerCase()}" aria-pressed="false">${icon(glyph)}</button>`).join('')}</div><span id="sync-status" class="sync-status" role="status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header><section id="context-bar" class="context-bar" aria-label="Release sélectionnée"></section>
+    <header class="topbar project-header"><div class="project-identity"><h1 id="project-title"></h1><div id="project-meta" class="project-meta"></div></div><div class="top-actions"><label class="provider-choice">Fournisseur IA<select id="preferred-provider" aria-label="Fournisseur IA"><option value="codex">OpenAI · Codex</option><option value="claude">Anthropic · Claude</option></select></label><div class="theme-switch" role="group" aria-label="Thème de l’interface">${[['light', 'Clair', 'sun'], ['dark', 'Sombre', 'moon'], ['system', 'Système', 'monitor']].map(([value, label, glyph]) => `<button class="icon-button" data-theme-choice="${value}" title="Thème ${label.toLowerCase()}" aria-label="Thème ${label.toLowerCase()}" aria-pressed="false">${icon(glyph)}</button>`).join('')}</div><span id="sync-status" class="sync-status" role="status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header><section id="context-bar" class="context-bar" aria-label="Release sélectionnée"></section>
     <div id="activity-strip" class="activity-strip" hidden></div><nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
-    <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div id="execution-context" class="execution-context"></div><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button class="secondary" data-action="find-next">Suivant</button><button class="secondary" data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
+    <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div class="workflow-launcher"><label>Workflow<select id="workflow-choice" aria-label="Workflow">${Object.entries(WORKFLOWS).map(([id, w]) => `<option value="${id}">${w.title}</option>`).join('')}</select></label><button class="primary" data-action="workflow-start">Démarrer le workflow</button></div><div class="terminal-heading"><strong>Terminal</strong><button class="secondary" data-action="terminal-maximize">Agrandir le terminal</button></div><div id="execution-context" class="execution-context"></div><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button class="secondary" data-action="find-next">Suivant</button><button class="secondary" data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
   </main><div id="toast" role="status" hidden></div><dialog id="modal"><div id="modal-content"></div></dialog>`;
+
+const workflowHost = document.createElement('section'); workflowHost.id = 'workflow-panel'; workflowHost.hidden = true;
+$('.main-content').append(workflowHost);
+const studioUI = mountStudio(workflowHost, {
+  context(context) { workflowContext = context; if (workflowMode) render(); },
+  async openTerminal(project, graph, conversation) {
+    const result = await api.workflowTerminal({ project: project.id, conversation });
+    workflowTerminalPath = result.project;
+    selectedSession.set(result.project, result.id);
+    await refreshSessions(); render(); await mountTerminal(result.id);
+    terminals.get(result.id)?.term.focus();
+    return result;
+  },
+  provider: () => settings.provider || 'codex',
+  async setProvider(provider) { settings = await api.settings({provider}); $('#preferred-provider').value = provider; },
+});
+let workflowNavigation = Promise.resolve();
+function openWorkflows(route = null) {
+  workflowNavigation = workflowNavigation.catch(() => {}).then(async () => {
+    workflowMode = true; overviewMode = false; terminalMaximized = false;
+    render(); if (route) await studioUI.navigate(route);
+  });
+  return workflowNavigation;
+}
+api.onNavigate(destination => {
+  if (destination.route === 'workflows') openWorkflows().catch(e => toast(e.message));
+  else { workflowMode = false; render(); }
+});
 
 function toast(message) { const el = $('#toast'); el.textContent = message; el.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.hidden = true; }, 6500); }
 function setSyncStatus(message, error = false) {
@@ -101,6 +148,7 @@ function tabs() {
 }
 const releaseLabel = r => ({ ouverte: 'Ouverte', close: 'Close' }[r.status] || r.status);
 function header() {
+  $("#preferred-provider").value = settings.provider || "codex";
   const project = detail || projects.find(p => p.path === current);
   $('#project-title').textContent = overviewMode ? 'Kanban global' : project?.name || 'Aucun projet';
   $('#project-meta').innerHTML = overviewMode ? `<span class="muted">${projects.length} projets</span>`
@@ -119,10 +167,12 @@ function header() {
   }
 }
 function setView(next) {
+  workflowMode = false;
   if (next === 'kanban') { overviewMode = true; render(); $('#content').scrollTop = 0; return; }
   if (SECONDARY_VIEWS.some(([id]) => id === next) || RESOURCE_VIEWS.includes(next)) detailsOpen = true;
   if (next === 'project') next = 'documents';
   const changed = view !== next;
+  if (next !== 'terminal') terminalMaximized = false;
   view = next; overviewMode = false; render();
   if (changed) $('#content').scrollTop = 0;
 }
@@ -148,21 +198,35 @@ function render() {
   const scroll = [$('#content').scrollTop, $('#content .graph-scroll')?.scrollLeft || 0, $('#content .graph-scroll')?.scrollTop || 0];
   cockpitUI.rememberBoard();
   sidebar(); header(); tabs();
-  const terminalVisible = !overviewMode && view === 'terminal';
+  workflowHost.hidden = !workflowMode || terminalMaximized;
+  if (workflowMode) {
+    $('#project-title').textContent = 'Votre espace de travail';
+    for (const item of document.querySelectorAll('[data-workflow-route]')) item.setAttribute('aria-current', item.dataset.workflowRoute === workflowContext?.route ? 'page' : 'false');
+    $('#context-bar').hidden = true; $('#tabs').hidden = true; $('#activity-strip').hidden = true;
+    $('#project-meta').textContent = workflowContext?.title || 'Dessiner, lancer et suivre';
+    $('.main-content').classList.toggle('terminal-docked', !terminalMaximized);
+    $('#terminal-workspace').hidden = false; $('#content').hidden = true;
+    $('[data-action="terminal-maximize"]').textContent = terminalMaximized ? 'Afficher le workflow' : 'Agrandir le terminal';
+    renderTerminals(); return;
+  }
+  const terminalVisible = !overviewMode && !!current;
+  $('.main-content').classList.toggle('terminal-docked', terminalVisible && !terminalMaximized);
+  $('[data-action="terminal-maximize"]').textContent = terminalMaximized ? 'Afficher le workflow' : 'Agrandir le terminal';
   $('#terminal-workspace').hidden = !terminalVisible;
-  $('#content').hidden = terminalVisible;
+  $('#content').hidden = terminalVisible && terminalMaximized;
+  if (terminalVisible) renderTerminals();
   if (overviewMode) renderKanban();
-  else if (terminalVisible) renderTerminals();
-  else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
+    else if (busy && !detail) $('#content').innerHTML = empty('Lecture du projet…', 'Chargement des releases et vérification des preuves.');
   else if (projectError) $('#content').innerHTML = empty('Lecture impossible', projectError);
   else if (!detail) $('#content').innerHTML = empty('Aucun projet sélectionné', 'Choisissez un projet dans la colonne de gauche.');
-  else ({ work: () => { $('#content').innerHTML = workView(detail, esc, badge, cockpitUI.allObservations().filter(b => b.project === current)); }, intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
+  else ({ terminal: () => { $('#content').innerHTML = workView(detail, esc, badge, cockpitUI.allObservations().filter(b => b.project === current)); }, work: () => { $('#content').innerHTML = workView(detail, esc, badge, cockpitUI.allObservations().filter(b => b.project === current)); }, intentions: () => {}, plan: () => {}, knowledge: () => { $('#content').innerHTML = knowledgeView(detail.knowledge, esc); }, agents: renderAgents, environments: renderEnvironments, sources: renderSources, effort: renderEffort, documents: renderDocuments }[view] || (() => {}))();
   cockpitUI.augment();
   $('#content').scrollTop = scroll[0];
   const graph = $('#content .graph-scroll'); if (graph) { graph.scrollLeft = scroll[1]; graph.scrollTop = scroll[2]; }
   if (focusKey && !active.isConnected && !document.querySelector('dialog[open]')) document.querySelector(`[${focusKey}="${CSS.escape(focusValue)}"]`)?.focus({ preventScroll: true });
 }
 async function chooseProject(project, release) {
+  workflowMode = false;
   current = project; overviewMode = false; detail = null; selectedTask = null; projectError = null; busy = true;
   const ticket = ++generation;
   try {
@@ -210,9 +274,10 @@ function renderDocuments() {
   $('#content').innerHTML = '<div class="page"></div>';
 }
 function renderTerminals() {
-  const own = sessions.filter(s => s.project === current);
-  let id = selectedSession.get(current);
-  if (!own.some(s => s.id === id)) { id = own.at(-1)?.id; selectedSession.set(current, id); }
+  workflowControls();
+  const own = sessions.filter(s => s.project === terminalProject());
+  let id = selectedSession.get(terminalProject());
+  if (!own.some(s => s.id === id)) { id = own.at(-1)?.id; selectedSession.set(terminalProject(), id); }
   $('#terminal-tabs').innerHTML = own.map((s, i) => `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}"></span>${providerIcon(s.provider)}${esc(s.provider || s.program || 'Terminal')} ${i + 1}${s.task ? ' · ' + esc(s.task) : ''}</button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
   const selected = own.find(s => s.id === id);
   $('#terminal-tabs').insertAdjacentHTML('beforeend', `<div class="terminal-tab-tools"><button class="icon-button" data-action="find" title="Rechercher · Ctrl Shift F" aria-label="Rechercher dans le terminal">${icon('search')}</button>${own.length > 1 ? `<button class="icon-button" data-action="split" title="Diviser les terminaux" aria-label="Diviser les terminaux">${icon('grid')}</button>` : ''}</div>`);
@@ -225,9 +290,9 @@ function renderTerminals() {
   if (env?.kind === 'production') $('#terminal-context').prepend('PRODUCTION · aucune permission accordée ');
   $('#terminal-empty').hidden = own.length > 0;
   $('#terminal-hosts').hidden = own.length === 0;
-  $('#terminal-empty').innerHTML = busy || !detail
+  $('#terminal-empty').innerHTML = workflowMode ? empty('Votre terminal', 'Ouvrez un workflow, puis lancez sa conversation. Vous pouvez aussi ouvrir un shell.', `<button class="primary" data-action="new-terminal">Ouvrir un terminal</button>`) : busy || !detail
     ? empty('Chargement du projet…', 'Les commandes seront disponibles dès que son contexte sera prêt.')
-    : empty('Aucun terminal ouvert', 'Un shell dans le dossier du projet. Lancez Claude ou Codex avec suivi, ou vos commandes habituelles.', `<button class="primary" data-action="new-terminal">${icon('terminal')} Ouvrir un terminal</button><div class="launch-hints"><button class="secondary" data-launch-agent="claude">${providerIcon('claude')} Claude</button><button class="secondary" data-launch-agent="codex">${providerIcon('codex')} Codex</button></div>`);
+    : empty('Aucun terminal ouvert', 'Un shell dans le dossier du projet. Lancez Claude ou Codex avec suivi, ou vos commandes habituelles.', `<button class="primary" data-action="new-terminal">${icon('terminal')} Ouvrir un terminal</button><div class="launch-hints"><button class="secondary" data-launch-agent="claude">${providerIcon('claude')} Anthropic · Claude</button><button class="secondary" data-launch-agent="codex">${providerIcon('codex')} OpenAI · Codex</button></div>`);
   const visible = new Set(id ? [id] : []);
   if (split && own.length > 1) visible.add(own.find(s => s.id !== id).id);
   for (const [session, t] of terminals) t.host.hidden = !visible.has(session);
@@ -280,7 +345,7 @@ function closeTerminalSearch() {
   fitVisible();
   terminals.get(selectedSession.get(current))?.term.focus();
 }
-function fitVisible() { if (view !== 'terminal' || overviewMode) return; for (const t of terminals.values()) if (!t.host.hidden && t.host.clientWidth > 0 && t.host.clientHeight > 0) { try { t.fit.fit(); } catch {} } }
+function fitVisible() { if (overviewMode || $('#terminal-workspace').hidden) return; for (const t of terminals.values()) if (!t.host.hidden && t.host.clientWidth > 0 && t.host.clientHeight > 0) { try { t.fit.fit(); } catch {} } }
 new ResizeObserver(fitVisible).observe($('#terminal-hosts'));
 let reattachNeeded = false;
 function disposeTerminal(id) { const t = terminals.get(id); t?.term.dispose(); t?.host.remove(); terminals.delete(id); }
@@ -303,7 +368,7 @@ async function refreshSessions() {
   if (reattachNeeded) { reattachNeeded = false; await reattachTerminals(); }
   for (const id of [...terminals.keys()]) if (!next.some(s => s.id === id)) disposeTerminal(id);
   const changed = JSON.stringify(next) !== JSON.stringify(sessions); sessions = next;
-  if (changed && view === 'terminal' && !overviewMode) renderTerminals();
+  if (changed && !overviewMode) renderTerminals();
 }
 api.terminals.onEvent(message => {
   if (message.event === 'data') {
@@ -318,28 +383,60 @@ api.terminals.onEvent(message => {
   }
 });
 async function newTerminal(task = null, provider = null, work = undefined) {
+  if (workflowMode) {
+    const project = workflowContext?.project || (await window.studio.request({ action: 'workspace.get' })).project;
+    await studioUI.ready; await api.workflowTerminal({ project: project.id }).then(async result => {
+      workflowTerminalPath = result.project; selectedSession.set(result.project, result.id);
+      await refreshSessions(); render();
+    }); return;
+  }
   if (!current || !detail || busy) { toast('Sélectionnez un projet et attendez son chargement.'); return; }
   if (launchingTerminal) return;
   if (provider && !['claude', 'codex'].includes(provider)) return;
   launchingTerminal = true;
   try {
   const project = current, ticket = generation, startingView = view;
-  const session = await api.terminals.create({ project, release: view === 'express' ? null : detail.selectedRelease, scopeMode: view === 'express' ? 'express' : 'auto', task: view === 'express' ? null : task, environment: settings.contexts?.[project]?.environment || null });
+  const session = await api.terminals.create({ project, release: view === 'express' || work?.action === 'open' ? null : detail.selectedRelease, scopeMode: view === 'express' ? 'express' : 'auto', task: view === 'express' ? null : task, environment: settings.contexts?.[project]?.environment || null });
   if (provider) {
     const launch = await api.cockpit.prepareAgent({ project, release: session.release || null, task, terminal: session.id, provider, role: 'orchestrator', work });
     await api.terminals.write({ session: session.id, data: launch.command + '\r' });
+    settings = await api.settings({});
   }
   selectedSession.set(project, session.id); await refreshSessions();
   if (current === project && ticket === generation && view === startingView) setView('terminal');
   } finally { launchingTerminal = false; }
 }
+async function startWorkflow() {
+  if (!detail || busy) return;
+  const existing = workflowSession();
+  if (existing) { await followSession(existing.id); terminals.get(existing.id)?.term.focus(); return; }
+  const workflow = WORKFLOWS[settings.workflow || 'release'];
+  const context = { project: current, release: detail.selectedRelease, generation, provider: settings.provider || 'codex' };
+  modal(`<h2>Démarrer · ${esc(workflow.title)}</h2><p>${esc(detail.name)} · ${context.provider === 'claude' ? 'Anthropic · Claude' : 'OpenAI · Codex'}</p>
+    <form id="workflow-form" class="cockpit-form"><label>Votre intention${workflow.action === 'workflow' ? ' (facultatif)' : ''}<textarea name="text" rows="4" maxlength="12000" placeholder="Décrivez ce que vous souhaitez obtenir, ou commencez directement la conversation…"></textarea></label>
+    <p class="muted">L’agent vous accompagne dans le terminal. Poursuivez la conversation pour préciser le besoin, discuter du plan et donner vos décisions. Le graphique suit les informations enregistrées.</p>
+    <button class="primary" type="submit">Démarrer</button><p id="workflow-error" role="alert"></p></form>`);
+  $('#workflow-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    if (context.project !== current || context.release !== detail?.selectedRelease || context.generation !== generation) {
+      $('#workflow-error').textContent = 'Le contexte a changé. Rouvrez le workflow dans le projet choisi.'; return;
+    }
+    const text = new FormData(event.target).get('text');
+    if (!text.trim() && workflow.action !== 'workflow') { $('#workflow-error').textContent = 'Décrivez votre intention.'; return; }
+    const submit = event.target.querySelector('[type=submit]'); submit.disabled = true;
+    try { await newTerminal(null, context.provider, { action: workflow.action, text }); $('#modal').close(); }
+    catch (error) { $('#workflow-error').textContent = error.message; }
+    finally { submit.disabled = false; }
+  });
+  $('#workflow-form textarea').focus();
+}
 function requestWork(action = 'develop', task = null, text = '') {
   if (!detail || busy) return;
   const context = { project: current, release: detail.selectedRelease, task, generation };
-  modal(`<span class="eyebrow">${esc(detail.name)}${context.release ? ' · ' + esc(context.release) : ''}</span><h2>${task ? 'Reprendre ' + esc(task) : 'Confier une demande'}</h2>
-    <form id="work-form" class="cockpit-form"><label>Action<select name="action">${[['develop', 'Développer / configurer'], ['diagnose', 'Diagnostiquer un problème'], ['plan', 'Préparer une release'], ...(task ? [['resume', 'Reprendre cette tâche']] : []), ...(context.release ? [['close', 'Clôturer cette release']] : []), ['answer', 'Répondre à une question'], ['feedback', 'Retenir un retour']].map(([id, title]) => `<option value="${id}" ${id === action ? 'selected' : ''}>${title}</option>`).join('')}</select></label>
+  modal(`<span class="eyebrow">${esc(detail.name)}${context.release ? ' · ' + esc(context.release) : ''}</span><h2>${task ? 'Reprendre ' + esc(task) : esc(({open:'Ouvrir une release', collect:'Recueillir les intentions', plan:'Préparer le plan', start:'Exécuter le plan', close:'Recetter et clôturer'})[action] || 'Confier une demande')}</h2>
+    <form id="work-form" class="cockpit-form"><label>Action<select name="action">${[['open', 'Ouvrir une release'], ...(context.release ? [['collect', 'Recueillir les intentions'], ['start', 'Exécuter le plan']] : []), ['develop', 'Développer / configurer'], ['diagnose', 'Diagnostiquer un problème'], ['plan', 'Préparer le plan'], ...(task ? [['resume', 'Reprendre cette tâche']] : []), ...(context.release ? [['close', 'Clôturer cette release']] : []), ['answer', 'Répondre à une question'], ['feedback', 'Retenir un retour']].map(([id, title]) => `<option value="${id}" ${id === action ? 'selected' : ''}>${title}</option>`).join('')}</select></label>
     <label>Votre demande<textarea name="text" rows="6" maxlength="12000" placeholder="Résultat attendu, contraintes et précisions utiles…">${esc(text)}</textarea></label>
-    <label>Agent<select name="provider"><option value="codex">Codex</option><option value="claude">Claude</option></select></label>
+    <label>Fournisseur IA<select name="provider"><option value="codex" ${settings.provider !== "claude" ? "selected" : ""}>OpenAI · Codex</option><option value="claude" ${settings.provider === "claude" ? "selected" : ""}>Anthropic · Claude</option></select></label>
     <p class="muted">La demande sera transmise dans un nouveau terminal associé à ce contexte. L’agent reprendra les preuves et décisions du projet.</p>
     <button class="primary" type="submit">Lancer le travail</button><p id="work-error" role="alert"></p></form>`);
   const form = $('#work-form');
@@ -350,9 +447,9 @@ function requestWork(action = 'develop', task = null, text = '') {
     }
     const data = new FormData(form);
     const work = { action: data.get('action'), text: data.get('text') };
-    if (!work.text.trim() && !['resume', 'close'].includes(work.action)) { $('#work-error').textContent = 'Décrivez la demande.'; return; }
+    if (!work.text.trim() && !['resume', 'close', 'start', ...(context.release ? ['plan'] : [])].includes(work.action)) { $('#work-error').textContent = 'Décrivez la demande.'; return; }
     const submit = form.querySelector('[type=submit]'); submit.disabled = true;
-    try { await newTerminal(task, data.get('provider'), work); $('#modal').close(); }
+    try { settings = await api.settings({ provider: data.get('provider') }); await newTerminal(task, data.get('provider'), work); $('#modal').close(); }
     catch (error) { $('#work-error').textContent = error.message; }
     finally { submit.disabled = false; }
   });
@@ -413,15 +510,22 @@ async function refresh() {
 document.addEventListener('click', async event => {
   const el = event.target.closest('button, [data-view]'); if (!el) return;
   try {
+    if (el.dataset.workflowRoute) { await openWorkflows(el.dataset.workflowRoute); return; }
     if (el.dataset.action === 'work-details') { detailsOpen = !detailsOpen; tabs(); return; }
     if (el.dataset.action === 'work-request') { requestWork(); return; }
-    if (el.dataset.action === 'work-close') { requestWork('close'); return; }
+    if (el.dataset.action === 'work-close') { if (workflowSession()) { await startWorkflow(); toast('Demandez la recette et la clôture dans cette conversation.'); } else requestWork('close'); return; }
+    if (el.dataset.workStage) { setView(({ open: 'intentions', collect: 'intentions', plan: 'plan', start: 'plan', close: 'knowledge' })[el.dataset.workStage]); return; }
     if (el.dataset.workResume) {
+      if (workflowSession()) { await startWorkflow(); toast('Poursuivez cette tâche dans la conversation du workflow.'); return; }
       const existing = sessions.find(s => s.alive && s.project === current && s.release === detail?.selectedRelease && s.task === el.dataset.workResume);
       if (existing) return await followSession(existing.id);
       requestWork('resume', el.dataset.workResume); return;
     }
-    if (el.dataset.workQuestion) { requestWork('answer', null, 'Concernant la question ' + el.dataset.workQuestion + ' — ' + (el.dataset.questionText || '') + '\nMa réponse : '); return; }
+    if (el.dataset.workQuestion) {
+      if (workflowSession()) { await startWorkflow(); toast(el.dataset.questionText || 'Répondez à l’agent dans ce terminal.'); }
+      else requestWork('answer', null, 'Concernant la question ' + el.dataset.workQuestion + ' — ' + (el.dataset.questionText || '') + '\nMa réponse : ');
+      return;
+    }
     if (el.dataset.project) return await chooseProject(el.dataset.project);
     if (el.dataset.launchAgent) return await newTerminal(null, el.dataset.launchAgent);
     if (el.dataset.view) return setView(el.dataset.view);
@@ -439,6 +543,7 @@ document.addEventListener('click', async event => {
     if (el.dataset.attentionProject) { await chooseProject(el.dataset.attentionProject, el.dataset.attentionRelease); selectTask(el.dataset.taskId); setView(el.dataset.taskId.startsWith('flow:') ? 'agents' : 'plan'); return; }
     if (el.dataset.session) {
       const session = sessions.find(s => s.id === el.dataset.session);
+      if (workflowMode && session) { workflowTerminalPath = session.project; selectedSession.set(session.project, session.id); render(); return; }
       if (session && session.project !== current) await chooseProject(session.project);
       if (session?.project === current) { selectedSession.set(current, session.id); setView('terminal'); }
       return;
@@ -454,6 +559,10 @@ document.addEventListener('click', async event => {
     }
     if (el.dataset.environment) return await setEnvironment(el.dataset.environment);
     switch (el.dataset.action) {
+      case 'terminal-maximize': terminalMaximized = !terminalMaximized; render(); break;
+      case 'workflow-updates': await openWorkflows(); await studioUI.showUpdates(); break;
+      case 'workflow-workspace': await api.workflows(); break;
+      case 'workflow-start': await startWorkflow(); break;
       case 'new-terminal': await newTerminal(); break;
       case 'task-terminal': {
         const session = sessions.find(s => s.id === selectedSession.get(current) && s.alive) || sessions.find(s => s.project === current && s.alive);
@@ -479,6 +588,8 @@ document.addEventListener('click', async event => {
 });
 document.addEventListener('change', async event => {
   try {
+    if (event.target.id === 'preferred-provider') { settings = await api.settings({ provider: event.target.value }); workflowControls(); return; }
+    if (event.target.id === 'workflow-choice') { settings = await api.settings({ workflow: event.target.value }); workflowControls(); return; }
     if (event.target.id === 'release-select') await chooseProject(current, event.target.value);
     if (event.target.id === 'environment-select') await setEnvironment(event.target.value);
   } catch (error) { toast(error.message); }
@@ -512,6 +623,7 @@ async function start() {
     const chosen = projects.find(p => p.path === settings.activeProject) || projects.find(p => p.attention?.length) || projects[0];
     // An early click on the global board must survive asynchronous bootstrap.
     if (chosen && !overviewMode) await chooseProject(chosen.path); else render();
+    if (initial.initialWorkspace === 'studio') await openWorkflows();
     setSyncStatus('À jour');
     setInterval(refresh, 30000);
     setInterval(async () => {

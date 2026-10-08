@@ -7,11 +7,24 @@ from pathlib import Path
 import time
 import uuid
 
-from .contracts import ContractError, digest, expand, identifier, require, semantic_digest, validate, validate_outputs
+from .contracts import ContractError, digest, expand, identifier, require, semantic_digest, validate, validate_outputs, validate_result
 from .store import Store
 from .projects import initialize, repository
 
 TERMINAL = {"accepted", "skipped"}
+
+
+def completion_outcome(run):
+    if any(state.get("decision", {}).get("outcome") == "reject" for state in run["nodes"].values()):
+        return "rejected"
+    if any(node.get("completion_outcome") == "blocked" and run["nodes"][node["id"]]["status"] == "accepted"
+           for node in run["definition"]["nodes"]):
+        return "blocked"
+    return "succeeded"
+
+
+def dependency_satisfied(run):
+    return run["status"] == "completed" and completion_outcome(run) == "succeeded"
 
 
 def new_id(prefix):
@@ -121,20 +134,24 @@ class Engine:
             return [self.store.body(row) for row in db.execute("""SELECT body FROM workflows w WHERE project=? AND revision=(
                 SELECT MAX(revision) FROM workflows WHERE project=w.project AND id=w.id) ORDER BY id""", (project_id,))]
 
-    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None, notifications_authorized=False, reuse_from=None):
+    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None, notifications_authorized=False, reuse_from=None, deferred=False):
         from .integrations import catalog, issues as plugin_issues
         original = copy.deepcopy(graph)
         resolved = expand(graph, library or {})
         project = self.project(project_id, connection)
+        resolved["parameters"] = {**resolved.get("parameters", {}), **(parameters or {})}
         from .packs import resolve_profiles, policy_issues
         if not simulation:
-            issues = policy_issues(project, resolved) + plugin_issues(resolved, project, self)
+            policy_graph = resolved
+            if resolved.get("driver") == "conversation":
+                policy_graph = {**resolved, "nodes": [n for n in resolved["nodes"] if {**project.get("defaults", {}), **resolved.get("defaults", {}), **n}.get("profile") != "odoo-tester"]}
+            issues = policy_issues(project, policy_graph) + plugin_issues(resolved, project, self)
             require(not issues, " · ".join(i["message"] for i in issues))
             resolved = resolve_profiles(project, resolved)
         for node in resolved["nodes"]:
             if node["kind"] == "agent":
                 node["execution"] = {**project["defaults"], **resolved.get("defaults", {}), **{k: node[k] for k in project["defaults"] if k in node}}
-        run = {"id": new_id("r"), "project": project_id, "status": "active", "created": time.time(),
+        run = {"id": new_id("r"), "project": project_id, "status": "paused" if deferred else "active", "created": time.time(),
                "scope": {"kind": project.get("scope", "library" if project.get("library") else "project"), "id": project_id},
                "release": resolved.get("release", ""),
                "plugins": catalog(project),
@@ -143,6 +160,8 @@ class Engine:
                "contract": semantic_digest(resolved), "parameters": {**resolved.get("parameters", {}), **(parameters or {})},
                "nodes": {n["id"]: {"status": "pending", "attempt": 0} for n in resolved["nodes"]}}
         run["transports"] = {}
+        if deferred:
+            run["coordination_wait"] = True
         if not simulation:
             from connectors.local_tools import approved
             for node in resolved["nodes"]:
@@ -234,12 +253,16 @@ class Engine:
                             state.update(status="accepted", outcome=outcome, result={"outputs": {k: state["inputs"].get(k) for k in node.get("outputs", {})}})
                         else:
                             state.update(status="blocked", reason=f"Paramètre {node['parameter']} absent ou issue inconnue")
+                    elif node["kind"] == "question":
+                        question = {"id": new_id("q"), "text": node["question"], "created": time.time(), "status": "waiting"}
+                        state.update(status="waiting_input", question=question, questions=[question])
                     elif node["kind"] in {"decision", "review"}:
                         state.update(status="waiting", attempt=state["attempt"] + 1, proposal=digest({"run": run["id"], "node": node, "attempt": state["attempt"] + 1, "contract": run["contract"]}), nonce=new_id("d"))
                 changed = True
                 self._event(db, run, state["status"], node["id"])
         if all(s["status"] in TERMINAL for s in run["nodes"].values()):
             run["status"] = "completed"
+            run["completion_outcome"] = completion_outcome(run)
             if not run["simulation"]:
                 for node in run["definition"]["nodes"]:
                     if node["kind"] == "watch":
@@ -260,6 +283,10 @@ class Engine:
             require(node is not None, "Bloc inconnu")
             state = run["nodes"][node_id]
             require(state["status"] == "ready", "Ce bloc n'est pas prêt")
+            from .packs import policy_issues
+            context = state.get("inputs", {}).get("execution_context", {})
+            issues = [] if run["simulation"] else policy_issues(self.project(run["project"], db), {**run["definition"], "parameters": {**run["parameters"], **context}, "nodes": [node]})
+            require(not issues, " · ".join(i["message"] for i in issues))
             if node["kind"] == "external":
                 approval = run["nodes"][node["approval"]].get("decision", {})
                 require(approval.get("outcome") == "approve" and approval.get("operation") == digest(node["operation"]), "Autorisation invalide pour cette opération")
@@ -273,7 +300,8 @@ class Engine:
             if node["kind"] == "command" and node.get("reuse"):
                 from .reuse import source_fingerprint
                 state["source_fingerprint"] = source_fingerprint(self.project(run["project"], db))
-            state.update(status="running", attempt=state["attempt"] + 1, token=token, started=time.time(), heartbeat=time.time())
+            resumed = state.pop("resume_question", False)
+            state.update(status="running", attempt=state["attempt"] + (0 if resumed else 1), token=token, started=time.time(), heartbeat=time.time())
             self._event(db, run, "running", node_id, attempt=state["attempt"])
             self._save(db, run)
         return {"run": run, "node": node, "token": token}
@@ -288,9 +316,24 @@ class Engine:
                 state["pid"] = pid
             self._save(db, run)
 
+    def execution_context(self, run_id, node_id, context):
+        require(isinstance(context, dict) and set(context) <= {"environment", "neutralized_copy"}, "Seule la copie de travail peut être précisée ; ce contexte n’accorde aucun droit")
+        require(context.get("environment") == "local" and isinstance(context.get("neutralized_copy"), str) and context["neutralized_copy"].strip(), "Identifier la copie locale neutralisée")
+        with self.store.transaction() as db:
+            run = self.run(run_id, db)
+            state = run["nodes"][node_id]
+            require(run["status"] == "active" and state["status"] == "ready", "Le contexte se précise avant de prendre le bloc")
+            state.setdefault("inputs", {})["execution_context"] = context
+            self._event(db, run, "execution-context", node_id, context=context)
+            self._save(db, run)
+            return run
+
     def submit(self, run_id, node_id, token, result):
         """Only the saved validation policy can authorize automatic acceptance."""
         require(isinstance(result, dict) and isinstance(result.get("summary"), str), "Résultat structuré requis")
+        if result.get("question"):
+            from .conversations import ask
+            return ask(self, run_id, node_id, token, result["question"])
         with self.store.transaction() as db:
             run = self.run(run_id, db)
             state = run["nodes"][node_id]
@@ -309,19 +352,21 @@ class Engine:
     def _automatic(self, db, run, node_id):
         node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
         state = run["nodes"][node_id]
-        if run["status"] != "active" or state["status"] != "returned" or node.get("validation") != "automatic":
+        if run["status"] != "active" or state["status"] != "returned" or node.get("validation") not in {"automatic", "contract"}:
             return
         try:
             require(state["result"].get("ok") is True, "L'exécutant a signalé un échec")
-            validate_outputs(node, state["result"])
-            require(state["result"].get("evidence"), "Preuve requise pour la validation automatique")
-            for evidence in state["result"]["evidence"]:
+            validate_result(run["definition"], node, state["result"])
+            if node.get("validation") == "automatic" or node.get("evidence_required"):
+                require(state["result"].get("evidence"), "Preuve requise pour la validation automatique")
+            for evidence in state["result"].get("evidence", []):
                 self.evidence(evidence)
         except ContractError as exc:
             state["validation_error"] = str(exc)
             self._event(db, run, "validation-failed", node_id, reason=str(exc))
             return
-        state.update(status="accepted", outcome="done", receipt={"at": time.time(), "actor": "validation-policy", "contract": run["contract"],
+        outcome = state["result"].get("outputs", {}).get(node["route_output"]) if node.get("route_output") else "done"
+        state.update(status="accepted", outcome=outcome, receipt={"at": time.time(), "actor": "contract-policy" if node.get("validation") == "contract" else "validation-policy", "contract": run["contract"],
                      "checks": ["executor-success", "output-types", "evidence-integrity"], "note": "Contrôles techniques automatiques ; aucun critère métier attesté."})
         self._event(db, run, "accepted", node_id, actor="validation-policy")
 
@@ -351,14 +396,15 @@ class Engine:
             require(state["status"] == "returned", "Aucun résultat à valider")
             node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
             require(state["result"].get("ok") is True, "Le résultat indique un échec : correction requise")
-            validate_outputs(node, state["result"])
+            validate_result(run["definition"], node, state["result"])
             expected = node.get("criteria", [])
             require(checks == expected, "Tous les critères doivent être explicitement examinés")
             require(not expected or bool(note.strip()), "Une conclusion de validation est requise")
             for evidence in state["result"].get("evidence", []):
                 self.evidence(evidence)
             require(not node.get("evidence_required") or state["result"].get("evidence"), "Preuve requise absente")
-            state.update(status="accepted", outcome="done", receipt={"at": time.time(), "checks": checks, "note": note, "contract": run["contract"], "actor": "local-user"})
+            outcome = state["result"].get("outputs", {}).get(node["route_output"]) if node.get("route_output") else "done"
+            state.update(status="accepted", outcome=outcome, receipt={"at": time.time(), "checks": checks, "note": note, "contract": run["contract"], "actor": "local-user"})
             self._event(db, run, "accepted", node_id)
             self._advance(db, run)
             self._save(db, run)
@@ -374,6 +420,9 @@ class Engine:
             node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
             require(outcome in node.get("options", ["approve", "reject"]), "Choix inconnu")
             state.update(status="accepted", outcome=outcome, decision={"at": time.time(), "actor": "local-user", "outcome": outcome, "proposal": proposal, "operation": digest(node.get("operation")), "note": note})
+            if node.get("outputs"):
+                state["result"] = {"outputs": {key: state.get("inputs", {}).get(key) for key in node["outputs"]}}
+                validate_result(run["definition"], node, state["result"], outcome)
             self._event(db, run, "decision", node_id, outcome=outcome)
             self._advance(db, run)
             self._save(db, run)
@@ -384,6 +433,15 @@ class Engine:
         with self.store.transaction() as db:
             run = self.run(run_id, db)
             require(run["status"] in {"active", "paused"}, "Exécution déjà terminée")
+            if action == "resume" and run.get("coordination_wait"):
+                predecessors = [self.run(rid, db) for rid in run["parameters"].get("depends_on_runs", [])]
+                require(all(dependency_satisfied(r) for r in predecessors), "Les tâches précédentes ne sont pas terminées ou ont été refusées")
+                run["parameters"]["dependency_results"] = {r["id"]: {nid: s.get("result") for nid, s in r["nodes"].items() if s["status"] == "accepted"} for r in predecessors}
+                run.pop("coordination_wait", None)
+            if action == "pause" and run.get("coordination_wait"):
+                run["coordination_hold"] = True
+            if action == "resume":
+                run.pop("coordination_hold", None)
             run["status"] = {"pause": "paused", "resume": "active", "cancel": "cancelled"}[action]
             self._event(db, run, action)
             if action == "resume":
@@ -427,6 +485,17 @@ class Engine:
         with self.store.transaction() as db:
             self._event(db, source, "handoff", target_project=target_project, workflow=saved["id"])
         return saved
+
+    def project_series(self, project_id, series, *, platform=None):
+        require(isinstance(series, str) and 0 < len(series) <= 30, "Série invalide")
+        with self.store.transaction() as db:
+            project = self.project(project_id, db)
+            project["series"] = series
+            if platform is not None:
+                require(platform in {"online", "custom"}, "Plateforme inconnue")
+                project["platform"] = platform
+            db.execute("UPDATE projects SET body=? WHERE id=?", (self.store.encode(project), project_id))
+        return project
 
     def artifact(self, content):
         require(isinstance(content, bytes) and len(content) <= 2_000_000, "Preuve trop volumineuse")
