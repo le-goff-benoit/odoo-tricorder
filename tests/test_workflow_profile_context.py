@@ -106,4 +106,3 @@ class ProfileContextTests(unittest.TestCase):
                     self.assertEqual(run['parameters'][key], value)
                 claim = native_request(self.engine, conversation['id'], 'claim', {'run': run['id'], 'node': 'work'})
                 self.assertIn('token', claim)
-

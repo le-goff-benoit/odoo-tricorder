@@ -94,7 +94,7 @@ Running 75 tests using 1 worker
   ✓  75 tests/studio.spec.cjs:1126:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload (5.7s)
 
 
-  1) tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch 
+  1) tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch
 
     Error: expect(locator).toHaveValue(expected) failed
 
@@ -130,6 +130,6 @@ Running 75 tests using 1 worker
   Slow test file: tests/studio.spec.cjs (5.4m)
   Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
   1 failed
-    tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch 
+    tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch
   2 skipped
   72 passed (8.9m)

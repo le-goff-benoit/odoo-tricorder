@@ -103,12 +103,12 @@ Call log:
 
 ```ts
   9   | let directory, app, page;
-  10  | 
+  10  |
   11  | const call = (action, data = {}) => page.evaluate(payload => window.studio.request(payload), { action, ...data });
   12  | const requestField = () => page.getByLabel('Quelle demande souhaitez-vous traiter ?');
   13  | const launchButton = () => page.getByRole('button', { name: 'Lancer dans le terminal', exact: true });
   14  | const remedy = action => page.locator(`[data-action="repair-launch"][data-remedy="${action}"]`);
-  15  | 
+  15  |
   16  | test.beforeEach(async () => {
   17  |   directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-launch-repair-'));
   18  |   const bin = path.join(directory, 'bin'); fs.mkdirSync(bin);
@@ -125,7 +125,7 @@ Call log:
   29  |   page = await app.firstWindow();
   30  |   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
   31  | });
-  32  | 
+  32  |
   33  | test.afterEach(async () => {
   34  |   try {
   35  |     if (app) {
@@ -141,31 +141,31 @@ Call log:
   45  |     app = page = directory = undefined;
   46  |   }
   47  | });
-  48  | 
+  48  |
   49  | async function openWorkflow(project, graph) {
   50  |   await page.getByRole('button', { name: 'Projets', exact: true }).click();
   51  |   await page.locator('.project-card').filter({ hasText: project.title }).click();
   52  |   await page.locator('article').filter({ has: page.getByRole('heading', { name: graph.title, exact: true }) })
   53  |     .getByRole('button', { name: 'Ouvrir le workflow', exact: true }).click();
   54  | }
-  55  | 
+  55  |
   56  | async function launchDialog(text) {
   57  |   await page.getByRole('button', { name: 'Exécuter…', exact: true }).click();
   58  |   await requestField().fill(text);
   59  | }
-  60  | 
+  60  |
   61  | async function selectAdditional(project) {
   62  |   const details = page.locator('.launch-projects');
   63  |   if (!await details.evaluate(el => el.open)) await details.locator('summary').click();
   64  |   await page.locator(`[name="conversation-project"][value="${project.id}"]`).check();
   65  | }
-  66  | 
+  66  |
   67  | async function returnToLaunch(text, additional) {
   68  |   await page.getByRole('button', { name: 'Revenir au lancement', exact: true }).click();
   69  |   await expect(requestField()).toHaveValue(text);
   70  |   if (additional) await expect(page.locator(`[name="conversation-project"][value="${additional.id}"]`)).toBeChecked();
   71  | }
-  72  | 
+  72  |
   73  | async function launchInert(project, graph, text) {
   74  |   await expect(launchButton()).toBeEnabled();
   75  |   await launchButton().click();
@@ -181,14 +181,14 @@ Call log:
   85  |   expect(app.context().pages()).toHaveLength(1);
   86  |   return conversation;
   87  | }
-  88  | 
+  88  |
   89  | async function qualifyLocalAdapter() {
   90  |   const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Lecture locale synthétique', exact: true }) });
   91  |   await card.getByRole('button', { name: 'Vérifier l’adaptateur…' }).click();
   92  |   await page.getByRole('button', { name: 'Exécuter le contrôle', exact: true }).click();
   93  |   await expect(card).toContainText('Utilisable');
   94  | }
-  95  | 
+  95  |
   96  | test('repair missing model preserves request and additional project through native launch', async () => {
   97  |   const alpha = await call('project.create', { title: 'Projet Alpha synthétique' });
   98  |   const beta = await call('project.create', { title: 'Projet Bêta synthétique' });
@@ -209,7 +209,7 @@ Call log:
   112 |   expect(conversation.projects).toEqual([alpha.id, beta.id]);
   113 |   expect(conversation.model).toBe('synthetic-model');
   114 | });
-  115 | 
+  115 |
   116 | test('repair secondary-project connection diagnoses before launch and returns without retyping', async () => {
   117 |   const alpha = await call('project.create', { title: 'Projet Alpha synthétique' });
   118 |   const beta = await call('project.create', { title: 'Projet Bêta synthétique' });
@@ -240,7 +240,7 @@ Call log:
   143 |   const conversation = await launchInert(alpha, graph, text);
   144 |   expect(conversation.projects).toEqual([alpha.id, beta.id]);
   145 | });
-  146 | 
+  146 |
   147 | for (const viaProfile of [false, true]) test(`repair missing Odoo version exposes its field and preserves the launch request (${viaProfile ? 'domain from pack profile' : 'explicit domain'})`, async () => {
   148 |   const project = await call('project.create', { title: 'Projet Odoo synthétique sans version' });
   149 |   const pack = path.join(directory, 'synthetic-pack'); fs.mkdirSync(pack);
@@ -264,7 +264,7 @@ Call log:
   167 |   expect(saved.parameters.series).toBe('19.0');
   168 |   expect(await call('conversation.list', { project: project.id })).toEqual([]);
   169 | });
-  170 | 
+  170 |
   171 | test('repair global code workflow adapts into a project without changing its origin', async () => {
   172 |   const project = await call('project.create', { title: 'Projet Alpha synthétique' });
   173 |   await call('workspace.get');
@@ -290,7 +290,7 @@ Call log:
   193 |   expect(copy.nodes).toEqual(original.nodes);
   194 |   expect(await call('conversation.list', { project: project.id })).toEqual([]);
   195 | });
-  196 | 
+  196 |
   197 | test('late run response cannot navigate back after the user opens Projects', async () => {
   198 |   const project = await call('project.create', { title: 'Projet de navigation synthétique' });
   199 |   const graph = { schema: 1, id: 'navigation', title: 'Vérifier la navigation', nodes: [

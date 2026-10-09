@@ -7,7 +7,7 @@ Running 1 test using 1 worker
   ✘  1 tests/studio.spec.cjs:85:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog (7.1s)
 
 
-  1) tests/studio.spec.cjs:85:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog 
+  1) tests/studio.spec.cjs:85:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog
 
     Error: expect(locator).toBeEnabled() failed
 
@@ -43,4 +43,4 @@ Running 1 test using 1 worker
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
   1 failed
-    tests/studio.spec.cjs:85:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog 
+    tests/studio.spec.cjs:85:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog
