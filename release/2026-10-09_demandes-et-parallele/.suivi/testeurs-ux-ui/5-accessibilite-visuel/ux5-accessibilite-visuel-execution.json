@@ -1,0 +1,52 @@
+{
+  "id": "ux5-accessibilite-visuel",
+  "output": "/home/blegoff/odoo-tricorder/release/2026-10-09_demandes-et-parallele/.suivi/testeurs-ux-ui/5-accessibilite-visuel",
+  "display": 185,
+  "preparedAt": "2026-10-09T20:30:25.483Z",
+  "temporary": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust",
+  "dirs": {
+    "home": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/home",
+    "config": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/config",
+    "cache": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/cache",
+    "data": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/data",
+    "codex": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/codex",
+    "claude": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/claude",
+    "state": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/state",
+    "runtime": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/runtime",
+    "agents": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/agents",
+    "stubs": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/stubs",
+    "project": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/project"
+  },
+  "env": {
+    "PATH": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/stubs:/usr/bin:/bin",
+    "HOME": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/home",
+    "XDG_CONFIG_HOME": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/config",
+    "XDG_CACHE_HOME": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/cache",
+    "XDG_DATA_HOME": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/data",
+    "XDG_RUNTIME_DIR": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/runtime",
+    "CODEX_HOME": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/claude",
+    "TRICORDER_HOME": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/home",
+    "TRICORDER_STATE_DIR": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/runtime",
+    "TRICORDER_AGENTS_DIR": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/agents",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "DISPLAY": ":185",
+    "XAUTHORITY": "/tmp/tricorder-functional-display/auth-185",
+    "SHELL": "/bin/bash",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8"
+  },
+  "preflight": "/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/stubs/codex\ncodex 0.0.0 TRICORDER-UX-INERT\n/tmp/tricorder-ux-ux5-accessibilite-visuel-UHBust/stubs/claude\nclaude 0.0.0 TRICORDER-UX-INERT\n",
+  "guiStarted": true,
+  "brokerStarted": false,
+  "externalFixtures": "Aucune : répertoire projet vide, aucun workflow précréé.",
+  "classification": "Préparation uniquement — aucun verdict produit",
+  "candidate": {
+    "executable": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder",
+    "executableSha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/app.asar",
+    "asarSha256": "a344374116f8ada276e426dd94279450b73cee31ba46aa981ae830a1fb64f44b"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "completedAt": "2026-10-09T20:59:18.093378+00:00",
+  "sha256": {
+    "executable": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar": "a344374116f8ada276e426dd94279450b73cee31ba46aa981ae830a1fb64f44b"
+  },
+  "executableMatches": true,
+  "asarMatches": true,
+  "backendCount": 50,
+  "backendAllMatch": true,
+  "captureCount": 17,
+  "nativeCaptureCount": 1,
+  "cleanup": {
+    "appClosed": true,
+    "ownBrokersCleaned": true,
+    "xvfbPreserved": true,
+    "pageErrors": []
+  }
+}

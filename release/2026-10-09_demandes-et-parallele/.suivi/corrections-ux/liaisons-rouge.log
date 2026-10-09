@@ -1,0 +1,45 @@
+
+Running 1 test using 1 worker
+
+(node:1131300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/workflow-wiring.spec.cjs:42:1 › a new human decision exposes its default branches and keeps the selected branch when changing destination (9.0s)
+
+
+  1) tests/workflow-wiring.spec.cjs:42:1 › a new human decision exposes its default branches and keeps the selected branch when changing destination 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('#connect-form').locator('select[name=outcome] option')
+    Expected: 2
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('#connect-form').locator('select[name=outcome] option') with timeout 5000ms
+      - waiting for locator('#connect-form').locator('select[name=outcome] option')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      56 |   const decision = await form.locator('select[name=from] option').filter({ hasText: 'Autoriser la suite' }).getAttribute('value');
+      57 |   await form.locator('select[name=from]').selectOption(decision);
+    > 58 |   await expect(form.locator('select[name=outcome] option')).toHaveCount(2);
+         |                                                             ^
+      59 |   await expect(form.locator('select[name=outcome]')).toHaveValue('approve');
+      60 |   await form.locator('select[name=outcome]').selectOption('reject');
+      61 |   await form.locator('select[name=to]').selectOption('rejected');
+        at /home/blegoff/odoo-tricorder/tests/workflow-wiring.spec.cjs:58:61
+
+    Error Context: ../../../tmp/tricorder-ux-wiring-red/workflow-wiring-a-new-huma-ff828-h-when-changing-destination/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-ux-wiring-red/workflow-wiring-a-new-huma-ff828-h-when-changing-destination/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-ux-wiring-red/workflow-wiring-a-new-huma-ff828-h-when-changing-destination/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/workflow-wiring.spec.cjs:42:1 › a new human decision exposes its default branches and keeps the selected branch when changing destination 

@@ -11,4 +11,15 @@ function statePaths(env = process.env, mode = initialWorkspace(), home = os.home
     studio: env.TRICORDER_WORKFLOW_STATE_DIR || (isolated ? (mode === 'studio' ? isolated : path.join(isolated, 'workflows')) : path.join(home, '.local/share/tricorder')),
   };
 }
-module.exports = { initialWorkspace, statePaths };
+// Several entry points may arrive while the first renderer is still loading.
+// Share that navigation; a rejected load remains retryable.
+function workspaceLoader(window) {
+  let loaded = false, loading;
+  return function ensureLoaded() {
+    if (loaded) return Promise.resolve();
+    loading ||= Promise.resolve().then(() => window.loadURL('tricorder://app/'))
+      .then(() => { loaded = true; }).finally(() => { loading = null; });
+    return loading;
+  };
+}
+module.exports = { initialWorkspace, statePaths, workspaceLoader };

@@ -1,0 +1,5 @@
+{"input_type": "str", "input_length": 8, "kept": true, "bytes": 670}
+{"input_type": "str", "input_length": 128, "kept": true, "bytes": 790}
+{"input_type": "str", "input_length": 129, "kept": false, "bytes": 665}
+{"input_type": "dict", "input_length": 1, "kept": false, "bytes": 665}
+{"input_type": "NoneType", "input_length": null, "kept": false, "bytes": 664}

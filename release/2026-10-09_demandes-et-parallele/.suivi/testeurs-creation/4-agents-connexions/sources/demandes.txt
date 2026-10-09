@@ -1,0 +1,5 @@
+Atelier Boréal — société fictive de location de matériel événementiel.
+D-101 : préparer un devis de location de 20 chaises pour le 20 octobre ; retour le 21 octobre.
+D-102 : préparer une réponse pour 3 tables ; la date de retour manque.
+D-103 : demander la validation d'un brouillon de réponse avant toute diffusion.
+Ce fichier est une fixture locale. Aucun vrai client, aucun envoi.

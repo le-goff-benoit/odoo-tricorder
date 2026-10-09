@@ -9,7 +9,7 @@ const { promisify } = require('node:util');
 const { sessionContext, saveContext } = require('./terminal-context.cjs');
 const { catalogRevision } = require('./catalog-revision.cjs');
 const { workflowCatalogRequest } = require('./backend-request.cjs');
-const { initialWorkspace, statePaths } = require('./workspace-window.cjs');
+const { initialWorkspace, statePaths, workspaceLoader } = require('./workspace-window.cjs');
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'tricorder', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
 const LINKS = {
@@ -25,7 +25,7 @@ const socketPath = path.join(process.env.TRICORDER_RUNTIME_DIR || path.join(proc
 const backend = app.isPackaged ? path.join(process.resourcesPath, 'backend') : path.join(__dirname, '..', 'backend');
 let window, broker, buffer = '', nextRequest = 0, settings = {}, projects = new Set(), scanning;
 const pending = new Map();
-let studio, cockpitLoaded = false;
+let studio, ensureCockpitLoaded;
 let legacyTerminals;
 const adoptLegacy = s => ({ ...s, id: 'legacy:' + s.id, project: path.basename(s.project) === '.tricorder' ? path.dirname(s.project) : s.project });
 async function legacySessions() {
@@ -41,7 +41,7 @@ async function legacySessions() {
   } catch { return []; }
 }
 async function showCockpit() {
-  if (!cockpitLoaded) { await window.loadURL('tricorder://app/'); cockpitLoaded = true; }
+  await ensureCockpitLoaded();
   window.webContents.send('workspace:navigate', { route: 'project' });
   window.setMinimumSize(1000, 650);
   window.setTitle('Tricorder');
@@ -49,7 +49,7 @@ async function showCockpit() {
 }
 async function showWorkflows(argv = []) {
   studio.queuePortable(argv);
-  if (!cockpitLoaded) await showCockpit();
+  await ensureCockpitLoaded();
   window.webContents.send('workspace:navigate', { route: 'workflows' });
   window.webContents.focus();
 }
@@ -183,16 +183,17 @@ function wireAPI() {
     const command = ['python3', path.join(backend, 'workflow_cli.py'), '--state', stores.studio, '--conversation', conversation.id].map(quote).join(' ');
     const prompt = `Tu pilotes le workflow Tricorder « ${conversation.definition.title} » dans cette conversation native. Commence par status : reprends les tâches déjà enregistrées, sans les dupliquer ; si aucune demande n’est présente, attends ma demande. Enregistre les nouvelles tâches avec le pont ci-dessous. Le graphique suit les états réels du moteur. Ne crée pas un second flow historique. Les profils de blocs déterminent tes missions ; consulte-les avant le travail.
 Pont : ${command}
-Commandes : status (sans stdin, --offset N et --query texte pour paginer/rechercher), inspect, read, add, ready, claim, context, execute, result, ask, answer, artifact, heartbeat, prepare-candidate (objet JSON sur stdin).
+Commandes : status (sans stdin, --offset N et --query texte pour paginer/rechercher), inspect, read, add, ready, dispatch, claim, context, execute, result, ask, answer, artifact, heartbeat, prepare-candidate (objet JSON sur stdin).
 inspect: {run} ouvre le détail d’une exécution ; read: {run,sha256,offset?} lit une page d’artefact ($artifact). Consulter next pour charger la suite, ne jamais confondre un aperçu avec le contenu complet. add: {request,project?,key?,depends_on?:[identifiants_de_tâches]}, ready: {run,offset?,limit?} renvoie {items,parameters,project,total,next} ; paramètres communs une seule fois, continuer avec next pour tous les blocs. claim: {run,node}, result: {run,node,token,result:{ok,summary,outputs,evidence?}}, ask: {run,node,token,text}, answer: {run,node,question,text}, execute: {run,node}, artifact: {path}, context: {run,node,context:{environment:"local",neutralized_copy:"nom de la copie réellement préparée"}}. Avant une recette Odoo, préparer la copie puis enregistrer ce contexte local ; ne pas déclarer une copie fictive.
 Pendant un bloc long, heartbeat: {run,node,token} toutes les 60 secondes. Pour tester le candidat transmis par un bloc de développement, prepare-candidate: {run,node,token} crée une copie contenant ce candidat ; vérifier cette copie et joindre les preuves via artifact.
-Après chaque demande : add avec une clé stable, puis ready. claim fournit la mission, le profil, les critères, les entrées et le jeton. Applique le rôle dans le projet de la tâche et remets les sorties typées. Pour un autre fournisseur, une copie isolée ou une commande, utilise execute. Ne prétends jamais qu’une simulation prouve un résultat réel.
+Après validation du périmètre de travail, enregistre chaque demande métier avec add et une clé stable. Pour lancer des agents indépendants en parallèle, appelle dispatch: {runs?:[identifiants des exécutions],offset?:0,limit?:25,node_offsets?:{run_id:index}}, ou {} pour les demandes de cette conversation. dispatch démarre une vague sans attendre la fin : au plus quatre workers, sous le plafond global de quatre étapes et les verrous du projet. La réponse donne items[].started (bloc, PID, tentative) et items[].waiting (état et raison), total et next ; poursuis la pagination pour examiner les autres demandes. Les précontrôles sont bornés à 100 blocs par appel : si items[].next_node est renseigné, continue avec node_offsets pour cette exécution ; inspect/ready donnent le détail complet des attentes. Aucun travail ne démarre par la seule lecture de status. Une vague ne crée pas de file autonome : après les résultats, réponses ou décisions, consulte status/inspect puis rappelle dispatch pour la suite autorisée. Les décisions et réceptions humaines restent dans Tricorder ; ne les contourne pas. Une tentative en cours, un échec ou un effet externe incertain n’est jamais relancé par dispatch.
+Montre les demandes réellement démarrées, leurs agents, les questions et les dépendances en attente. Ne dis pas « quatre agents travaillent » si quatre blocs sont seulement prêts. Coordonne depuis ce terminal ; laisse les workers coder dans leurs copies isolées. Si une étape exige les outils propres à la conversation, une capacité indisponible ou un modèle non configuré, explique le blocage : ne convertis pas silencieusement ses paramètres. Pour le travail natif approprié, claim fournit mission, profil, critères, entrées et jeton ; remets le résultat typé via result. execute reste synchrone pour un seul bloc ; ne l’enchaîne pas pour prétendre paralléliser plusieurs demandes. Ne prétends jamais qu’une simulation prouve un résultat réel.
 Si une information manque : ask AVANT de me poser la question, puis answer après ma réponse et reprends le bloc via claim. Une réponse ordinaire ne vaut jamais autorisation de production. Pour une décision ou une réception humaine, indique le bloc dans le panneau et attends sa décision ; le pont ne peut pas l’approuver. Aucun JSON/SQLite d’état modifié directement.
 Plusieurs demandes peuvent avancer indépendamment, dans les projets autorisés : ${JSON.stringify(conversation.project_contexts)}. Utilise leur id dans add.project et leur path comme dossier de travail ; ne déduis pas le projet cible du seul terminal ouvert. Consulter status après chaque étape et reprendre les blocs prêts jusqu’au résultat ou à une question. Les fins de diagnostic, correction, livraison et réception métier restent distinctes.
 Demande depuis le terminal, par exemple « va chercher cet email et prépare une release » : tu effectues ce travail avec les outils de la CLI native, sans demander à l’utilisateur de recopier le mail dans des formulaires. Vérifie les outils et connexions réellement accessibles au fournisseur choisi. Utilise leur recherche puis lis l’original intégral et ses pièces ; pour un .eml local, lis ce fichier et ses pièces. Si plusieurs messages ou projets correspondent, pose la question dans le bloc de recueil avant de choisir. Si l’accès mail manque, annonce que la recherche n’a pas été effectuée et demande la connexion ou une source locale ; un accès absent n’est pas un résultat de recherche vide. N’invente ni outil, ni source, ni résultat.
 Prépare les fichiers locaux avec les outils du terminal : conserve une seule copie exacte de l’original et des pièces dans le dossier de travail du projet, ainsi qu’un manifeste de provenance (référence du message, empreintes, noms et chemins relatifs). Ne modifie pas l’original ; sur reprise, vérifie l’existant avant de le réutiliser. Ne mets ni images/base64 ni mail intégral dans les requêtes JSON du pont. Les demandes référencent ces fichiers et leurs observations ; les observations ne constituent pas une preuve de cause ou de QA.
 Pour une release, consulte les instructions du projet et du pack installé. Avec le pack Odoo, applique son import source, ses commandes de préparation et sa convention documentaire dans la série du projet. La préparation du plan (odoo_plan.py init) ne lance pas de flow ; ne déclenche pas son démarrage historique (start) en doublon. Garde le moteur Tricorder comme suivi de cette conversation, sans second flow d’exécution miroir. Hors Odoo, utilise la convention du dépôt ou un dossier release/<identifiant>. Prépare les documents et le plan dans le dépôt, sans commit, push, envoi ou déploiement implicite. Le dossier local est versionnable ; ne le déclare pas publié ou livré.
-Décompose le mail en besoins identifiables puis appelle add avec une clé stable par source et besoin (par exemple empreinte-original:R1), sans recopier le contenu des pièces. Reprends les mêmes clés après interruption. Le recueil initial est de la coordination ; il ne s’ajoute pas aux besoins client. Rends le plan visible dans les sorties des blocs et référence le dossier préparé. Une réponse à ask utilise answer, jamais add. Une demande en attente peut laisser les autres progresser. Toute consolidation technique obligatoire dépend explicitement des demandes concernées via depends_on ; elle se distingue des besoins client. Diagnostic, correction, QA et livraison restent distincts ; les calculs de devis ne relèvent pas d’Express.
+Décompose le mail en besoins identifiables puis appelle add avec une clé stable par source et besoin (par exemple empreinte-original:R1), sans recopier le contenu des pièces. Reprends les mêmes clés après interruption. Le recueil initial est de la coordination ; il ne s’ajoute pas aux besoins client. N’enregistre pas « chercher le mail et préparer la release » comme une demande supplémentaire de développement lorsque ses besoins métier sont créés : cette collecte ne doit pas arriver dans un bloc d’édition exigeant une modification de code. Si une telle demande existe déjà, signale-la et fais examiner son état ; ne falsifie pas un diff pour la valider. Rends le plan visible dans les sorties des blocs et référence le dossier préparé. Une réponse à ask utilise answer, jamais add. Une demande en attente peut laisser les autres progresser. Toute consolidation technique obligatoire dépend explicitement des demandes concernées via depends_on ; elle se distingue des besoins client. Diagnostic, correction, QA et livraison restent distincts ; les calculs de devis ne relèvent pas d’Express.
 Annonce le workflow et son périmètre. Consulte status pour reprendre une demande déjà enregistrée depuis l’interface ; sinon demande ce que je souhaite traiter. N’invente aucune demande.`;
     const id = require('node:crypto').randomUUID();
     settings.workflowAgents ||= {};
@@ -373,6 +374,7 @@ else {
       ] },
       { role: 'viewMenu' },
     ]));
+    ensureCockpitLoaded = workspaceLoader(window);
     studio = require('./studio-main.cjs').createStudio({ window, state: stores.studio, showCockpit, showWorkflows });
     wireAPI();
     if (initialWorkspace() === 'studio') await showWorkflows(process.argv);

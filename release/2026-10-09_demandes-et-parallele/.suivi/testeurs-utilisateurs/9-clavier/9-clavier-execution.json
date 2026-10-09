@@ -1,0 +1,52 @@
+{
+  "id": "9-clavier",
+  "output": "/home/blegoff/odoo-tricorder/release/2026-10-09_demandes-et-parallele/.suivi/testeurs-utilisateurs/9-clavier",
+  "display": 183,
+  "preparedAt": "2026-10-09T21:44:15.914Z",
+  "temporary": "/tmp/tricorder-panel-9-clavier-M8XIfH",
+  "dirs": {
+    "home": "/tmp/tricorder-panel-9-clavier-M8XIfH/home",
+    "config": "/tmp/tricorder-panel-9-clavier-M8XIfH/config",
+    "cache": "/tmp/tricorder-panel-9-clavier-M8XIfH/cache",
+    "data": "/tmp/tricorder-panel-9-clavier-M8XIfH/data",
+    "codex": "/tmp/tricorder-panel-9-clavier-M8XIfH/codex",
+    "claude": "/tmp/tricorder-panel-9-clavier-M8XIfH/claude",
+    "state": "/tmp/tricorder-panel-9-clavier-M8XIfH/state",
+    "runtime": "/tmp/tricorder-panel-9-clavier-M8XIfH/runtime",
+    "agents": "/tmp/tricorder-panel-9-clavier-M8XIfH/agents",
+    "stubs": "/tmp/tricorder-panel-9-clavier-M8XIfH/stubs",
+    "project": "/tmp/tricorder-panel-9-clavier-M8XIfH/project"
+  },
+  "env": {
+    "PATH": "/tmp/tricorder-panel-9-clavier-M8XIfH/stubs:/usr/bin:/bin",
+    "HOME": "/tmp/tricorder-panel-9-clavier-M8XIfH/home",
+    "XDG_CONFIG_HOME": "/tmp/tricorder-panel-9-clavier-M8XIfH/config",
+    "XDG_CACHE_HOME": "/tmp/tricorder-panel-9-clavier-M8XIfH/cache",
+    "XDG_DATA_HOME": "/tmp/tricorder-panel-9-clavier-M8XIfH/data",
+    "XDG_RUNTIME_DIR": "/tmp/tricorder-panel-9-clavier-M8XIfH/runtime",
+    "CODEX_HOME": "/tmp/tricorder-panel-9-clavier-M8XIfH/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tricorder-panel-9-clavier-M8XIfH/claude",
+    "TRICORDER_HOME": "/tmp/tricorder-panel-9-clavier-M8XIfH/home",
+    "TRICORDER_STATE_DIR": "/tmp/tricorder-panel-9-clavier-M8XIfH/state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tricorder-panel-9-clavier-M8XIfH/runtime",
+    "TRICORDER_AGENTS_DIR": "/tmp/tricorder-panel-9-clavier-M8XIfH/agents",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "DISPLAY": ":183",
+    "XAUTHORITY": "/tmp/tricorder-functional-display/auth-183",
+    "SHELL": "/bin/bash",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8"
+  },
+  "preflight": "/tmp/tricorder-panel-9-clavier-M8XIfH/stubs/codex\ncodex 0.0.0 TRICORDER-PANEL-INERT\n/tmp/tricorder-panel-9-clavier-M8XIfH/stubs/claude\nclaude 0.0.0 TRICORDER-PANEL-INERT\n",
+  "guiStarted": true,
+  "brokerStarted": false,
+  "externalFixtures": "Aucune : répertoire projet vide, aucun workflow précréé.",
+  "classification": "Préparation uniquement — aucun verdict produit",
+  "candidate": {
+    "executable": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder",
+    "executableSha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/app.asar",
+    "asarSha256": "71a054e6137a4fb424320954836109bd67ef2b74cb8f71ad3e49af35bb047dd7"
+  }
+}

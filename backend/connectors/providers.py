@@ -15,6 +15,8 @@ import time
 
 from workflow_engine.contracts import ContractError, digest, require
 
+PROTOCOL_ERROR = "Le fournisseur IA n’a pas renvoyé une réponse au format attendu. Vérifiez sa connexion, le modèle choisi et la version du programme, puis préparez la reprise de cette étape."
+
 
 def redact(text):
     text = re.sub(r"(?i)(authorization\s*[:=]\s*(?:bearer\s+)?)[^\s\"']+", r"\1[masqué]", str(text))
@@ -70,6 +72,7 @@ class Events:
         self.completed = False
 
     def consume(self, event):
+        require(isinstance(event, dict) and isinstance(event.get('type'), str), PROTOCOL_ERROR)
         key = digest(event)
         if key in self.seen:
             return False
@@ -78,18 +81,27 @@ class Events:
         if self.provider == "codex":
             if kind == "thread.started":
                 self.thread = event.get("thread_id")
-            if kind == "item.completed" and event.get("item", {}).get("type") == "agent_message":
-                self.result = event["item"].get("text")
+            if kind == "item.completed":
+                require(isinstance(event.get('item'), dict), PROTOCOL_ERROR)
+                if event['item'].get('type') == 'agent_message':
+                    require(isinstance(event['item'].get('text'), str), PROTOCOL_ERROR)
+                    self.result = event['item']['text']
             if kind == "turn.completed":
                 self.usage = event.get("usage")
                 self.completed = True
             if kind in {"error", "turn.failed"}:
-                self.error = redact(event.get("message") or event.get("error", {}).get("message") or "Incident du fournisseur")
+                detail = event.get('error')
+                require(detail is None or isinstance(detail, (str, dict)), PROTOCOL_ERROR)
+                message = event.get('message') or (detail.get('message') if isinstance(detail, dict) else detail)
+                require(message is None or isinstance(message, str), PROTOCOL_ERROR)
+                self.error = redact(message or "Incident du fournisseur")
         else:
             if kind == "system" and event.get("subtype") == "init":
                 self.thread = event.get("session_id")
                 self.model = event.get("model")
-                require(set(event.get("tools", [])) <= self.allowed_tools, "Le fournisseur a exposé des outils hors du périmètre autorisé")
+                tools = event.get('tools', [])
+                require(isinstance(tools, list) and all(isinstance(tool, str) for tool in tools), PROTOCOL_ERROR)
+                require(set(tools) <= self.allowed_tools, "Le fournisseur a exposé des outils hors du périmètre autorisé")
             if kind == "result":
                 self.completed = True
                 self.result = event.get("structured_output") or event.get("result")
@@ -184,6 +196,8 @@ def _execute_text(engine, run, node, token, job):
 def execute_text(engine, run, node, token, job):
     try:
         return _execute_text(engine, run, node, token, job)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise ContractError(PROTOCOL_ERROR) from None
     finally:
         for name in ("provider.ndjson", "provider-error.txt"):
             (Path(job) / name).unlink(missing_ok=True)

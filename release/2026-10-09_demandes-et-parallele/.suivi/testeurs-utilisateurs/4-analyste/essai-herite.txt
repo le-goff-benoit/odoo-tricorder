@@ -1,0 +1,121 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Atelier fictif B
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Atelier fictif B
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:39
+
+ATELIER FICTIF B / WORKFLOW
+Qualification atelier B
+
+Révision 1 · Enregistré
+
+Choisir l’IA
+Options
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+1 donnée
+normale
+urgente
+⋮⋮ Déplacer
+◇
+Qualifier la demande
+Tâche
+1 entrée → 2 sorties
+⑂
+Priorité urgente ?
+Condition
+1 entrée → 0 sortie
+◇
+Préparer la réponse normale
+Tâche
+0 entrée → 0 sortie
+◇
+Préparer la réponse urgente
+Tâche
+0 entrée → 0 sortie
+4 blocs · 3 liens
+−
+90 %
++
+Ajuster
+×
+TÂCHE
+Qualifier la demande
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+demande · Texte Retirer
+Ajouter une entrée
+Sorties
+priorite · Texte Retirer
+qualification · Texte Retirer
+Ajouter une sortie
+Données de simulation…
+1 point de conception à vérifier
+
+Ces indications ne bloquent pas les brouillons ni les étapes volontairement indépendantes.
+
+Qualifier la demande
+
+Entrée sans lien : demande. Reliez les données attendues ou retirez les entrées inutilisées.
+
+Vérifier les liens
+Contrôle de code (QA)
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Outils et plugins de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Liens entre les blocs
+Supprimer cette étape
+Données de simulation du bloc
+×
+
+Ces données servent uniquement à simuler le parcours. Elles ne prouvent aucun travail réel et n’autorisent aucune opération.
+
+Sans valeur personnalisée, Tricorder génère un exemple du type attendu. Personnalisez une sortie pour essayer une autre branche.
+
+priorite · Texte
+Définir une valeur pour cet essai
+Valeur simulée
+qualification · Texte
+Définir une valeur pour cet essai
+Valeur simulée
+Appliquer les données de simulation

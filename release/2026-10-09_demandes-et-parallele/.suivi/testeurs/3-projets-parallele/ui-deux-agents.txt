@@ -1,0 +1,17 @@
+Suivi du workflowRelease — demandes, plan, réalisation et validation2 projets · Conversation ouverteOptionsRevenir à l’éditeurAjouter une demande…Vue d’ensembleDemande4 demandes ⌄Demandes du workflow4 demandesRechercherRechercher une demandeRechercherR1 – Déterminer le validateur du texteBoréal · PrêteR2 – Préparer les imagesAtlas · En coursR3 – Relire le titreBoréal · PrêteR4 – Réparer export incompatibleBoréal · Échec · reprise nécessaireAjouter une demande…Archiver la conversation2 étapes en cours · 1 demande prête · 1 échecTerminalDemandes et activité2 étapes en cours · 1 demande prête · 1 échecLancer les demandes prêtes
+    1–4 sur 4. Seules les étapes prêtes seront lancées ; les validations restent à traiter.
+    1 étape lancée · 2 demandes en attente.R3 – Relire le titre : Capacités requises indisponibles dans ce mode : edit. Utiliser la conversation native ou configurer un exécutant adapté.R4 – Réparer export incompatible : Résultat à examiner ; aucune réception ou reprise automatique.
+    R1 – Déterminer le validateur du texteBoréalEn cours→
+      
+      Agent · OpenAI · fixture-parallelePréparer le plan · En cours
+      R2 – Préparer les imagesAtlasEn cours→
+      
+      Agent · OpenAI · fixture-parallelePréparer le plan · En cours
+      R3 – Relire le titreBoréalPrête→
+      Voir la prochaine étape · Réaliser le périmètre accepté
+      
+      R4 – Réparer export incompatibleBoréalÉchec · reprise nécessaire→
+      Examiner l’échec · Analyser la demandeÉchec synthétique R4
+      
+      
+      Rechercher une demande

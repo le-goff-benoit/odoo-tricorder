@@ -219,3 +219,50 @@ input,select,textarea {font-family:var(--font-ui);font-size:13px;font-weight:400
 .launch-return > span {flex:1;min-width:180px;}
 .launch-return > button {flex:0 0 auto;}
 .workflow-context small {display:block;margin:6px 0 10px;line-height:1.5;}
+
+/* Editing a block uses the available workflow surface on narrow panels.
+   Resizing changes only the layout: the form and terminal remain mounted. */
+#studio-content.design-view {display:flex;flex-direction:column;flex:1;min-height:0;overflow:auto;}
+.design-inspector-header,.design-inspector-actions {display:none;}
+.design-view .node .mission {font-size:14px;}
+.design-view .node .kind,.design-view .node .node-footer {font-size:12px;}
+@container workflow (max-width:760px) {
+  .design-view.properties-open {overflow:hidden;}
+  .design-view.properties-open > :not(.editor) {display:none;}
+  .embedded-workspace .design-view.properties-open > .editor {
+    display:flex;flex:1 1 0;min-height:0;overflow:hidden;
+  }
+  .design-view.properties-open .canvas-area {display:none;}
+  .embedded-workspace .design-view.properties-open .inspector:not(:empty) {
+    display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;
+    width:100%;padding:0;border:0;
+  }
+  .design-inspector-header {
+    display:flex;align-items:center;gap:12px;flex-shrink:0;
+    padding:10px 16px;border-bottom:1px solid var(--line);background:var(--surface);
+  }
+  .design-inspector-header strong {min-width:0;overflow-wrap:anywhere;font-size:14px;line-height:1.4;}
+  .design-inspector-header button {font-size:12px;}
+  .design-inspector-scroll {flex:1;min-height:0;overflow:auto;padding:12px 16px;scroll-padding-block:12px;}
+  .design-inspector-scroll > .inspector-close,
+  .design-inspector-scroll > .eyebrow,
+  .design-inspector-scroll > h2,
+  .design-inspector-scroll #node-form > .row:last-child {display:none;}
+  .design-inspector-actions {
+    display:flex;justify-content:flex-end;flex-shrink:0;padding:10px 16px;
+    border-top:1px solid var(--line);background:var(--surface);
+  }
+}
+
+/* Diagram text stays readable; wide workflows use the existing scroll surface. */
+.design-view .node .mission {-webkit-line-clamp:unset;display:block;overflow:visible}
+.node .node-footer {flex-wrap:wrap}
+.node .node-footer > span {min-width:0;max-width:100%;overflow-wrap:anywhere}
+.graph-link .edge-hit {fill:none;stroke:transparent;stroke-width:16}
+.graph-link[role=button] {pointer-events:all;cursor:pointer;outline:none}
+.graph-link[role=button] .edge-hit {pointer-events:stroke}
+.graph-label .edge-label {font-size:12px;fill:var(--muted);font-weight:500}
+.graph-label .edge-label-background {fill:var(--surface);stroke:var(--line);stroke-width:1}
+.graph-link[role=button]:hover .edge,.graph-link[role=button]:focus .edge {stroke:var(--accent);stroke-width:3}
+.graph-label[data-action] {pointer-events:all;cursor:pointer}
+.graph-label[data-action]:hover .edge-label-background {stroke:var(--accent);stroke-width:2}

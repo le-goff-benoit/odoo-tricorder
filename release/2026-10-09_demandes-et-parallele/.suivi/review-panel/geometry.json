@@ -1,0 +1,26 @@
+{
+  ".interaction-scroll": {
+    "x": 176,
+    "y": 452.70001220703125,
+    "width": 643.2000122070312,
+    "height": 62.5,
+    "scrollHeight": 3073,
+    "clientHeight": 63
+  },
+  ".interaction-footer": {
+    "x": 176,
+    "y": 515.2000122070312,
+    "width": 643.2000122070312,
+    "height": 99.20000457763672,
+    "scrollHeight": 98,
+    "clientHeight": 98
+  },
+  ".interaction-scope strong": {
+    "x": 188,
+    "y": 522,
+    "width": 619.2000122070312,
+    "height": 33,
+    "scrollHeight": 308,
+    "clientHeight": 33
+  }
+}

@@ -1,0 +1,4 @@
+/tmp/tri-tour2-evolution-utk7bckx/bin/codex
+/tmp/tri-tour2-evolution-utk7bckx/bin/claude
+codex TESTEUR2-STUB 1.0
+claude TESTEUR2-STUB 1.0

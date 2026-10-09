@@ -1,0 +1,13 @@
+Demande client — contrôle work-1826d286-91dc-413c-957c-90fe1be993ba revision 5
+edges: [('start', 'step-mv1ebml3', 'done', {}), ('step-mv1ebml3', 'step-mv1ebmrj', 'true', {}), ('step-mv1ebml3', 'step-mv1ebmvp', 'false', {}), ('step-mv1ebmrj', 'step-mv1ebn0g', 'done', {}), ('step-mv1ebmvp', 'step-mv1ebn0g', 'done', {})]
+Demande client — données work-6e8508f2-c490-41bd-a326-1aa7bfc46e4e revision 3
+edges: [('start', 'step-mv1e8jqq', 'done', {'description': 'description', 'reference': 'reference'}), ('step-mv1e8jqq', 'step-mv1e8pc4', 'done', {'reference': 'reference', 'synthese': 'synthese'}), ('start', 'step-mv1e8jqq', 'done', {'description': 'description', 'reference': 'reference'}), ('step-mv1e8jqq', 'step-mv1e8pc4', 'done', {'reference': 'reference', 'synthese': 'synthese'})]
+Demande client — simulation work-9be539e5-0a35-4104-b25c-fb6bf29fa4ce revision 3
+edges: [('start', 'step-mv1ecefb', 'done', {'critique': 'critique'}), ('step-mv1ecefb', 'step-mv1ecez6', 'done', {'critique': 'critique'}), ('step-mv1ecez6', 'step-mv1ecf7x', 'true', {}), ('step-mv1ecez6', 'step-mv1ecfcb', 'false', {}), ('step-mv1ecf7x', 'step-mv1ecffv', 'done', {}), ('step-mv1ecfcb', 'step-mv1ecffv', 'done', {}), ('step-mv1ecffv', 'step-mv1ecfjh', 'done', {})]
+Declared outputs: {'reference': 'string', 'description': 'string', 'critique': 'boolean'}
+sample_outputs: ABSENT
+Simulated output contract: ContractError Sortie reference absente ou incompatible avec le type string
+Correctly typed true boolean routing: ContractError Diagnostic : sortie critique incompatible avec les issues de « Priorité » ; corriger le résultat avant réception
+Graph validation: accepted despite boolean output / string outcomes
+Demande client — priorités work-c54c0585-d07d-4980-889d-1955543d859d revision 3
+edges: [('start', 'step-mv1e9rwq', 'done', {'critique': 'critique'}), ('step-mv1e9rwq', 'step-mv1e9sac', 'done', {'critique': 'critique'}), ('step-mv1e9sac', 'step-mv1e9zp5', 'true', {}), ('step-mv1e9sac', 'step-mv1e9zt9', 'false', {}), ('step-mv1e9zp5', 'step-mv1e9zwz', 'done', {}), ('step-mv1e9zt9', 'step-mv1e9zwz', 'done', {}), ('step-mv1e9zwz', 'step-mv1ea58q', 'done', {})]

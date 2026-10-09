@@ -1,0 +1,1 @@
+{"run": "r5a41c21ec87b42e0", "node": "step-mv1eplnf", "status": "waiting_input", "question": {"id": "q6e77e8a1123b4486", "text": "Quelle est la date de retour prévue pour les 8 chaises de la demande D-102 ?", "created": 1791577191.064767, "status": "waiting", "notification": {"status": "queued", "run": "rbe98eaf6cad84524"}}}

@@ -1,0 +1,1073 @@
+{
+  "created": 1791574182.133643,
+  "definition": {
+    "defaults": {
+      "model": "synthetic-local",
+      "provider": "codex"
+    },
+    "edges": [],
+    "id": "portefeuille-charge",
+    "nodes": [
+      {
+        "id": "work",
+        "kind": "agent",
+        "outputs": {
+          "result": "string"
+        },
+        "title": "Analyser les informations synthétiques",
+        "validation": "contract"
+      }
+    ],
+    "schema": 1,
+    "title": "Préparer et vérifier les demandes du portefeuille"
+  },
+  "effort": "medium",
+  "id": "c48e2317c72f64b67",
+  "items": [
+    {
+      "created": 1791574182.194572,
+      "depends_on": [],
+      "id": "w039ce0ba550e4d83",
+      "key": "R26",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R26 — Comparer les besoins des équipes",
+      "run": "r151dbd85c88e4bbb",
+      "request_truncated": false,
+      "execution": {
+        "id": "r151dbd85c88e4bbb",
+        "project": "pf72a6edb6a5f4d7c",
+        "status": "active",
+        "created": 1791574182.1942408,
+        "updated": 1791574182.194517,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R26 — Comparer les besoins des équipes",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.1967354,
+      "depends_on": [],
+      "id": "w94efd007d27c46b6",
+      "key": "R27",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R27 — Relire les critères de réception",
+      "run": "rba7bd1ae520f478a",
+      "request_truncated": false,
+      "execution": {
+        "id": "rba7bd1ae520f478a",
+        "project": "p5d9c88a4abb449c9",
+        "status": "active",
+        "created": 1791574182.196543,
+        "updated": 1791574182.1966994,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R27 — Relire les critères de réception",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.1998718,
+      "depends_on": [],
+      "id": "w0d682a787eca4f88",
+      "key": "R28",
+      "project": "p2b681269aca74f21",
+      "request": "R28 — Préparer les documents du comité",
+      "run": "rd1032183ec204dc4",
+      "request_truncated": false,
+      "execution": {
+        "id": "rd1032183ec204dc4",
+        "project": "p2b681269aca74f21",
+        "status": "active",
+        "created": 1791574182.1994746,
+        "updated": 1791574182.1998005,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R28 — Préparer les documents du comité",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.2027733,
+      "depends_on": [],
+      "id": "w985d5ceab1cc4211",
+      "key": "R29",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R29 — Vérifier les informations disponibles",
+      "run": "r0193d14387e24a08",
+      "request_truncated": false,
+      "execution": {
+        "id": "r0193d14387e24a08",
+        "project": "pf72a6edb6a5f4d7c",
+        "status": "active",
+        "created": 1791574182.202396,
+        "updated": 1791574182.202706,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R29 — Vérifier les informations disponibles",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.2100205,
+      "depends_on": [],
+      "id": "w8b0804f2cc554202",
+      "key": "R30",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R30 — Identifier les points à arbitrer",
+      "run": "r07ce18fb605d433a",
+      "request_truncated": false,
+      "execution": {
+        "id": "r07ce18fb605d433a",
+        "project": "p5d9c88a4abb449c9",
+        "status": "active",
+        "created": 1791574182.2096148,
+        "updated": 1791574182.2099473,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R30 — Identifier les points à arbitrer",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.2127063,
+      "depends_on": [],
+      "id": "w6c53905dc00f43a7",
+      "key": "R31",
+      "project": "p2b681269aca74f21",
+      "request": "R31 — Préparer le tableau de décisions",
+      "run": "r0fd11d9255fe46e6",
+      "request_truncated": false,
+      "execution": {
+        "id": "r0fd11d9255fe46e6",
+        "project": "p2b681269aca74f21",
+        "status": "active",
+        "created": 1791574182.2124982,
+        "updated": 1791574182.2126675,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R31 — Préparer le tableau de décisions",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.2165613,
+      "depends_on": [],
+      "id": "wf73a7ef98c7b4f4e",
+      "key": "R32",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R32 — Comparer les besoins des équipes",
+      "run": "r565424d95c4f43e6",
+      "request_truncated": false,
+      "execution": {
+        "id": "r565424d95c4f43e6",
+        "project": "pf72a6edb6a5f4d7c",
+        "status": "active",
+        "created": 1791574182.2163444,
+        "updated": 1791574182.2165222,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R32 — Comparer les besoins des équipes",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.2195556,
+      "depends_on": [],
+      "id": "wc509def947cc4cc8",
+      "key": "R33",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R33 — Relire les critères de réception",
+      "run": "r0359f3540dc24ff3",
+      "request_truncated": false,
+      "execution": {
+        "id": "r0359f3540dc24ff3",
+        "project": "p5d9c88a4abb449c9",
+        "status": "active",
+        "created": 1791574182.2191708,
+        "updated": 1791574182.2194877,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R33 — Relire les critères de réception",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.222818,
+      "depends_on": [],
+      "id": "w5ffad0fa83104981",
+      "key": "R34",
+      "project": "p2b681269aca74f21",
+      "request": "R34 — Préparer les documents du comité",
+      "run": "rcaf4a4d709b54b6b",
+      "request_truncated": false,
+      "execution": {
+        "id": "rcaf4a4d709b54b6b",
+        "project": "p2b681269aca74f21",
+        "status": "active",
+        "created": 1791574182.222393,
+        "updated": 1791574182.2227435,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R34 — Préparer les documents du comité",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.225569,
+      "depends_on": [],
+      "id": "w6b17422230c94aae",
+      "key": "R35",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R35 — URGENT — Préparer arbitrage comité de 16h",
+      "run": "r3a2b4efbe4304970",
+      "request_truncated": false,
+      "execution": {
+        "id": "r3a2b4efbe4304970",
+        "project": "pf72a6edb6a5f4d7c",
+        "status": "active",
+        "created": 1791574182.2252584,
+        "updated": 1791574182.225512,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R35 — URGENT — Préparer arbitrage comité de 16h",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574182.228539,
+      "depends_on": [],
+      "id": "wf9bb322567984fb6",
+      "key": "R36",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R36 — Identifier les points à arbitrer",
+      "run": "r1d318b6a4e404eed",
+      "request_truncated": false,
+      "execution": {
+        "id": "r1d318b6a4e404eed",
+        "project": "p5d9c88a4abb449c9",
+        "status": "active",
+        "created": 1791574182.22834,
+        "updated": 1791574182.2285018,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R36 — Identifier les points à arbitrer",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "ready",
+          "label": "Prête au lancement",
+          "ready_count": 1,
+          "worker_count": 1,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "ready",
+              "code": "worker-ready",
+              "action": "dispatch",
+              "reason": "Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574278.7680275,
+      "depends_on": [
+        "w511b42bc3f774322",
+        "w71fc9f8824fc4123",
+        "w8b0804f2cc554202"
+      ],
+      "id": "w4949e7735de348de",
+      "key": null,
+      "project": "p5d9c88a4abb449c9",
+      "request": "C37 — Consolider le comité après R02, R17 et R30",
+      "run": "ra5f12a39bc3449ed",
+      "request_truncated": false,
+      "execution": {
+        "id": "ra5f12a39bc3449ed",
+        "project": "p5d9c88a4abb449c9",
+        "status": "paused",
+        "created": 1791574278.7677062,
+        "updated": 1791574278.76797,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": true,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": null,
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "C37 — Consolider le comité après R02, R17 et R30",
+        "counts": {
+          "pending": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "pending"
+          }
+        },
+        "launch": {
+          "status": "waiting",
+          "label": "En attente",
+          "ready_count": 0,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [],
+          "nodes_total": 0,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [
+        {
+          "id": "w511b42bc3f774322",
+          "run": "rd432c59f70cf4520",
+          "project": "pf72a6edb6a5f4d7c",
+          "request": "R02 — Comparer les besoins des équipes",
+          "request_truncated": false,
+          "status": "active",
+          "completion_outcome": null,
+          "coordination_wait": null,
+          "coordination_hold": null,
+          "focus": {
+            "node": "work",
+            "title": "Analyser les informations synthétiques",
+            "status": "ready",
+            "action": "Continuer dans le terminal"
+          },
+          "counts": {
+            "ready": 1
+          },
+          "health": {
+            "status": "ok",
+            "total": 0
+          },
+          "satisfied": false
+        },
+        {
+          "id": "w71fc9f8824fc4123",
+          "run": "r1a9cb3fcf75e457f",
+          "project": "pf72a6edb6a5f4d7c",
+          "request": "R17 — Vérifier les informations disponibles",
+          "request_truncated": false,
+          "status": "active",
+          "completion_outcome": null,
+          "coordination_wait": null,
+          "coordination_hold": null,
+          "focus": {
+            "node": "work",
+            "title": "Analyser les informations synthétiques",
+            "status": "ready",
+            "action": "Continuer dans le terminal"
+          },
+          "counts": {
+            "ready": 1
+          },
+          "health": {
+            "status": "ok",
+            "total": 0
+          },
+          "satisfied": false
+        },
+        {
+          "id": "w8b0804f2cc554202",
+          "run": "r07ce18fb605d433a",
+          "project": "p5d9c88a4abb449c9",
+          "request": "R30 — Identifier les points à arbitrer",
+          "request_truncated": false,
+          "status": "active",
+          "completion_outcome": null,
+          "coordination_wait": null,
+          "coordination_hold": null,
+          "focus": {
+            "node": "work",
+            "title": "Analyser les informations synthétiques",
+            "status": "ready",
+            "action": "Continuer dans le terminal"
+          },
+          "counts": {
+            "ready": 1
+          },
+          "health": {
+            "status": "ok",
+            "total": 0
+          },
+          "satisfied": false
+        }
+      ],
+      "dependencies_total": 3,
+      "dependencies_truncated": false
+    }
+  ],
+  "model": "synthetic-local",
+  "notifications_authorized": false,
+  "project": "p2b681269aca74f21",
+  "projects": [
+    "p2b681269aca74f21",
+    "pf72a6edb6a5f4d7c",
+    "p5d9c88a4abb449c9"
+  ],
+  "provider": "codex",
+  "status": "open",
+  "project_contexts": [
+    {
+      "id": "p2b681269aca74f21",
+      "title": "Atlas — Services",
+      "path": "/tmp/tricorder-portefeuille-dependencies-xLDx2e/state/workflows/projects/p2b681269aca74f21"
+    },
+    {
+      "id": "pf72a6edb6a5f4d7c",
+      "title": "Boréal — Opérations",
+      "path": "/tmp/tricorder-portefeuille-dependencies-xLDx2e/state/workflows/projects/pf72a6edb6a5f4d7c"
+    },
+    {
+      "id": "p5d9c88a4abb449c9",
+      "title": "Céleste — Comité",
+      "path": "/tmp/tricorder-portefeuille-dependencies-xLDx2e/state/workflows/projects/p5d9c88a4abb449c9"
+    }
+  ],
+  "item_count": 37,
+  "total": 37,
+  "offset": 25,
+  "limit": 25,
+  "next": null,
+  "activity": {
+    "items": 37,
+    "running": 0,
+    "ready": 36,
+    "decisions": 0,
+    "questions": 0,
+    "failed": 0,
+    "dependencies": 1,
+    "completed": 0,
+    "paused": 0
+  }
+}

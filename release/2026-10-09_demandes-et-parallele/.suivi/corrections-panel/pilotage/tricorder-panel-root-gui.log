@@ -1,0 +1,13 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test tests/workflow-resolution-ux.spec.cjs --output=/tmp/tricorder-panel-root-gui
+PATH: /tmp/tricorder-ci-tools-4mhmuo0q:/usr/bin:/bin
+codex None
+claude None
+
+Running 2 tests using 1 worker
+
+  ✓  1 tests/workflow-resolution-ux.spec.cjs:60:1 › retry states its remaining budget without pretending to start and the completed request exposes its accepted content directly (7.2s)
+  ✓  2 tests/workflow-resolution-ux.spec.cjs:90:1 › refusing a branch shows treated and non-applicable steps separately in the completed follow-up (7.2s)
+
+  2 passed (15.1s)

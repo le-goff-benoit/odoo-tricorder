@@ -1,0 +1,54 @@
+{
+  "accepted": {
+    "attempt": 1,
+    "decision": {
+      "actor": "local-user",
+      "at": 1791583349.0254617,
+      "note": "Accord limité à la demande 1 ; aucun envoi.",
+      "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "outcome": "approve",
+      "proposal": "61888059353efbe7bdfb3a9db30184d15830c2f640be66e4dd3b4ed731ab64fa"
+    },
+    "input_sources": {
+      "proposition": {
+        "edge": "plan-gate",
+        "node": "plan",
+        "port": "proposition"
+      }
+    },
+    "inputs": {
+      "proposition": "Paragraphe 0 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 1 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 2 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 3 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 4 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 5 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 6 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 7 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 8 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 9 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 10 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 11 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 12 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 13 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 14 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 15 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 16 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 17 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 18 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 19 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 20 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 21 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 22 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 23 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 24 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 25 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 26 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 27 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 28 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 29 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 30 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 31 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 32 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 33 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 34 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 35 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 36 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 37 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 38 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 39 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 40 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 41 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 42 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 43 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 44 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe."
+    },
+    "nonce": "d35aebf25f92e4302",
+    "operation": null,
+    "outcome": "approve",
+    "proposal": "61888059353efbe7bdfb3a9db30184d15830c2f640be66e4dd3b4ed731ab64fa",
+    "status": "accepted"
+  },
+  "decisions": [
+    {
+      "seq": 17,
+      "at": 1791583349.025495,
+      "node": "gate",
+      "outcome": "approve",
+      "type": "decision"
+    }
+  ],
+  "other": {
+    "attempt": 1,
+    "input_sources": {
+      "proposition": {
+        "edge": "plan-gate",
+        "node": "plan",
+        "port": "proposition"
+      }
+    },
+    "inputs": {
+      "proposition": "Paragraphe 0 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 1 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 2 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 3 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 4 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 5 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 6 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 7 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 8 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 9 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 10 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 11 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 12 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 13 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 14 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 15 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 16 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 17 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 18 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 19 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 20 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 21 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 22 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 23 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 24 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 25 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 26 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 27 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 28 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 29 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 30 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 31 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 32 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 33 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 34 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 35 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 36 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 37 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 38 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 39 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 40 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 41 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 42 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 43 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe.\n\nParagraphe 44 : vérifier les pièces du dossier et conserver les décisions, sans aucun envoi externe."
+    },
+    "nonce": "d0a8f604da10d4aac",
+    "operation": null,
+    "proposal": "87ea4514a59ecc779794cc662c05b3d025c55cc53b49971301ed9800a13c809f",
+    "status": "waiting"
+  }
+}

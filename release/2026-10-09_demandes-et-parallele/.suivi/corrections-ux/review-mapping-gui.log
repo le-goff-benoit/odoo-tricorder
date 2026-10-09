@@ -1,0 +1,40 @@
+
+Running 1 test using 1 worker
+
+(node:1148196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:75:1 › an explicitly selected revised document replaces the automatic same-name mapping to that input (3.3s)
+
+
+  1) release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:75:1 › an explicitly selected revised document replaces the automatic same-name mapping to that input 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+      Object {
+    +   "invitation": "invitation",
+        "revised": "invitation",
+      }
+
+      83 |   await page.getByRole('button',{name:'Enregistrer',exact:true}).click();
+      84 |   await expect.poll(async()=>(await snapshot()).edges).toHaveLength(1);
+    > 85 |   expect((await snapshot()).edges[0].mapping).toEqual({revised:'invitation'});
+         |                                               ^
+      86 | });
+      87 |
+        at /home/blegoff/odoo-tricorder/release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:85:47
+
+    Error Context: ../../../tmp/tricorder-ux-review-mapping/review-reuse-safety-an-exp-066c7--name-mapping-to-that-input/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-ux-review-mapping/review-reuse-safety-an-exp-066c7--name-mapping-to-that-input/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-ux-review-mapping/review-reuse-safety-an-exp-066c7--name-mapping-to-that-input/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:75:1 › an explicitly selected revised document replaces the automatic same-name mapping to that input 

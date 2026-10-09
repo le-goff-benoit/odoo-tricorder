@@ -1,7 +1,28 @@
 // Presentation of recorded workflow activity; a live terminal is not a running step.
+export function executionProgress(run) {
+  const states = Object.values(run?.nodes || {});
+  const processed = states.filter(node => node.status === 'accepted').length;
+  const skipped = states.filter(node => node.status === 'skipped').length;
+  return { total: states.length, finished: processed + skipped, processed, skipped,
+    detail: skipped ? `${processed} traitée${processed === 1 ? '' : 's'} · ${skipped} non applicable${skipped === 1 ? '' : 's'}` : '' };
+}
+
+export function launchReadiness(run, id) {
+  let entry=run?.launch?.nodes?.find(node=>node.node===id);
+  if(!entry && run?.nodes?.[id]?.status==='ready' && run?.launch?.nodes_truncated)entry={status:'unknown',reason:'La disponibilité de ce bloc n’est pas détaillée sur cette page. Vérifiez sa configuration dans le terminal avant de le lancer.'};
+  return entry ? {...entry,label:({ready:'Prête au lancement',configuration:'À configurer',native:'À poursuivre dans le terminal',waiting:'En attente',unknown:'À vérifier'})[entry.status]} : null;
+}
+
 export function failedResult(node, definition) {
   const routedFinding = node?.result?.ok === true && definition?.route_output === 'verdict' && definition.options?.includes('fail');
   return Boolean(node?.validation_error || node?.result?.ok === false || (!routedFinding && node?.result?.outputs?.verdict === 'fail'));
+}
+
+export function retryGuidance(state, node) {
+  if (state.effect_uncertain || state.result?.effect_id || node.kind === 'external') return 'Vérifiez le résultat de l’opération externe avant toute nouvelle tentative.';
+  const limit = node.max_attempts || 1;
+  if ((state.attempt || 0) >= limit) return `${state.attempt} tentative${state.attempt > 1 ? 's' : ''} sur ${limit} utilisée${state.attempt > 1 ? 's' : ''}. Corrigez le périmètre ou le workflow, puis créez une nouvelle demande. Les résultats précédents restent consultables.`;
+  return 'Précisez la correction avant de relancer. Le résultat précédent reste dans l’historique.';
 }
 
 export function executionIssue(run) {
@@ -33,11 +54,11 @@ export function activitySummary(items) {
 
 export function executionAction(run) {
   if (!run) return { label: 'Voir le suivi', detail: 'Aucune demande sélectionnée.' };
+  if (run.status === 'cancelled') return { mode: 'document', label: 'Voir le rapport', detail: 'Exécution annulée.' };
   if (run.coordination_hold) return { label: 'Voir la suspension', detail: 'Exécution suspendue manuellement ; la reprise reste à votre initiative.' };
   if (run.coordination_wait) return { label: 'Voir les dépendances', detail: 'En attente des demandes précédentes.' };
   if (run.status === 'paused') return { label: 'Voir la suspension', detail: 'Exécution suspendue par une action explicite.' };
   if (run.status === 'completed') return { mode: 'document', label: 'Voir le rapport', detail: 'Exécution terminée.' };
-  if (run.status === 'cancelled') return { mode: 'document', label: 'Voir le rapport', detail: 'Exécution annulée.' };
   const focus = run.focus;
   const status = run.nodes?.[focus?.node]?.status || focus?.status;
   const issue = executionIssue(run);
@@ -46,6 +67,10 @@ export function executionAction(run) {
   if (issue) return { node: issue.node, label: 'Examiner l’échec', detail: issue.title };
   if (status === 'returned') return { node: focus.node, label: 'Examiner le résultat', detail: focus.title };
   if (status === 'running') return { node: focus.node, label: 'Voir l’activité', detail: focus.title };
-  if (status === 'ready') return { node: focus.node, label: 'Voir la prochaine étape', detail: focus.title };
+  if (status === 'ready') {
+    const readiness=launchReadiness(run,focus.node);
+    if(readiness && readiness.status!=='ready')return {node:focus.node,label:readiness.status==='configuration' ? 'Examiner la configuration' : readiness.status==='native' ? 'Voir les instructions' : readiness.status==='unknown' ? 'Vérifier le bloc' : 'Voir l’attente',detail:readiness.reason};
+    return { node: focus.node, label: 'Voir la prochaine étape', detail: focus.title };
+  }
   return { node: focus?.node, label: 'Voir le détail', detail: focus?.title || 'Le workflow attend ses dépendances.' };
 }

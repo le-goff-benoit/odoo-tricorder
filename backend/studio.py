@@ -10,7 +10,7 @@ from workflow_engine import ContractError, Engine, validate
 from workflow_engine.contracts import expand
 from workflow_engine.documentation import export_release, markdown
 from workflow_engine.library import templates
-from workflow_engine.runtime import capabilities, dispatch, execute, preflight, reconcile
+from workflow_engine.runtime import capabilities, dispatch, execute, preflight, reconcile, run_driver
 from workflow_engine.schedules import Schedules
 from workflow_engine.packs import inspect_pack, install, resolve_profiles, policy_readiness
 
@@ -49,12 +49,17 @@ def request(engine, payload, *, human=False):
 
 
 def schedule_summaries(engine):
-    return [{k:v for k,v in s.items() if k not in {"definition", "library", "transports"}} for s in Schedules(engine).list()]
+    return [{**{k:v for k,v in s.items() if k not in {"definition", "library", "transports"}},
+             "workflow": s["definition"]["id"], "revision": s["definition"].get("revision")}
+            for s in Schedules(engine).list()]
 
 
 def _request(engine, payload, *, human=False):
     from workflow_engine.projections import run_page, run_detail, summary, workflow_page, proof_page, payload as project_payload
     action = payload.get("action")
+    if action == 'run.attempts':
+        from workflow_engine.projections import attempt_page
+        return attempt_page(engine, payload['run'], payload['node'], payload.get('offset', 0))
     if action == "project.configure-catalog":
         from workflow_engine.setup import configure
         return configure(engine, payload["projects"], payload.get("pack"))
@@ -71,6 +76,12 @@ def _request(engine, payload, *, human=False):
             return conversations.snapshot(payload["conversation"], offset=payload.get("offset", 0), limit=payload.get("limit", 25), query=payload.get("query", ""))
         if action == "conversation.add":
             return conversations.add(payload["conversation"], payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"))
+        if action == "conversation.dispatch":
+            from workflow_engine.contracts import require
+            from workflow_engine.runtime import dispatch_conversation
+            require(human, "Lancement explicite depuis le suivi ou le terminal requis")
+            return dispatch_conversation(engine, payload["conversation"], runs=payload.get("runs"),
+                                         offset=payload.get("offset", 0), limit=payload.get("limit", 25), node_offsets=payload.get("node_offsets"))
         if action == "conversation.answer":
             conversations.checked_run(payload["conversation"], payload["run"])
             return answer(engine, payload["run"], payload["node"], payload["question"], payload["text"])
@@ -164,6 +175,12 @@ def _request(engine, payload, *, human=False):
         return install(engine, payload["project"], payload["path"], payload["digest"])
     if action == "schedule.list":
         return schedule_summaries(engine)
+    if action == "schedule.get":
+        with engine.store.connect() as db:
+            schedule = engine.store.body(db.execute("SELECT body FROM schedules WHERE id=?", (payload["schedule"],)).fetchone())
+        if schedule is None:
+            raise ContractError("Planification introuvable. Actualisez la liste des planifications.")
+        return {k: v for k, v in schedule.items() if k not in {"library", "transports"}}
     if action == "schedule.create":
         library = {g["id"]: g for g in templates() + engine.workflows("library")}
         graph = expand(payload["graph"], library)
@@ -196,7 +213,10 @@ def _request(engine, payload, *, human=False):
     if action == "workflow.list":
         return workflow_page(engine, payload["project"], payload.get("offset", 0), archived=payload.get("archived", False))
     if action == "workflow.get":
-        return next(g for g in engine.workflows(payload["project"]) if g["id"] == payload["workflow"])
+        graph = next((g for g in engine.workflows(payload["project"]) if g["id"] == payload["workflow"]), None)
+        if graph is None:
+            raise ContractError("Workflow introuvable dans ce projet. Actualisez le catalogue, puis ouvrez le workflow depuis son projet.")
+        return graph
     if action == "run.proof":
         return proof_page(engine, payload["run"], payload["sha256"], payload.get("offset", 0))
     if action == "run.recovery":
@@ -254,7 +274,11 @@ def _request(engine, payload, *, human=False):
     if action == "run.get":
         run = dispatch(engine, payload["run"])
         events = engine.events(run["id"], payload.get("after", 0), limit=101)
-        return {"run": run_detail(engine, run), "events": [{**event, "answer": project_payload(engine, event["answer"])} if "answer" in event else event for event in events[:100]],
+        detail = run_detail(engine, run)
+        if run_driver(run) == 'conversation' and run['status'] == 'active' and any(node['status'] == 'ready' for node in run['nodes'].values()):
+            from workflow_engine.launch_readiness import LaunchReadiness
+            detail['launch'] = LaunchReadiness(engine).project(run)
+        return {"run": detail, "events": [{**event, "answer": project_payload(engine, event["answer"])} if "answer" in event else event for event in events[:100]],
                 "events_next": events[99]["seq"] if len(events) > 100 else None}
     if action == "run.control":
         return engine.control(payload["run"], payload["control"])

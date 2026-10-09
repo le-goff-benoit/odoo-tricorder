@@ -1,0 +1,4 @@
+/tmp/tricorder-portefeuille-dependencies-xLDx2e/bin/codex
+/tmp/tricorder-portefeuille-dependencies-xLDx2e/bin/claude
+PORTEFEUILLE-CHARGE-STUB-CODEX 1.0-local
+PORTEFEUILLE-CHARGE-STUB-CLAUDE 1.0-local

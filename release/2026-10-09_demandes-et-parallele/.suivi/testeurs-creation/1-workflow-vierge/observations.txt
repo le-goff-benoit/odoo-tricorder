@@ -1,0 +1,1661 @@
+
+## 01 chaîne configurée
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:03
+
+SANS PROJET / WORKFLOW
+Achat matériel — demande simple
+
+Révision 1 · Modifications non enregistrées
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approuver
+◇
+Recevoir la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+◇
+Vérifier la complétude
+Tâche
+Tâche
+1 entrée → 1 sortie
+?
+Valider par le responsable
+Décision humaine
+Décision humaine
+Vous
+⋮⋮ Déplacer
+◇
+Produire le récapitulatif
+Tâche
+Tâche
+1 entrée → 1 sortie
+4 blocs · 3 liens
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Produire le récapitulatif
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+decision · Objet Retirer
+Ajouter une entrée
+Sorties
+recapitulatif · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+
+## 01 réouverture vérification
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:03
+
+SANS PROJET / WORKFLOW
+Achat matériel — demande simple
+
+Révision 2 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approuver
+◇
+Recevoir la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+⋮⋮ Déplacer
+◇
+Vérifier la complétude
+Tâche
+Tâche
+1 entrée → 1 sortie
+?
+Valider par le responsable
+Décision humaine
+Décision humaine
+Vous
+◇
+Produire le récapitulatif
+Tâche
+Tâche
+1 entrée → 1 sortie
+4 blocs · 3 liens
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Vérifier la complétude
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+demande · Objet Retirer
+Ajouter une entrée
+Sorties
+controle · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+
+## 02 précontrôle terminal
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:05
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell du projet · workspace
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-creation1-02-consignes-resultats-LRwpsO/st
+ate/workflows/workspace/.tri
+corder$ command -v codex; codex --version; c
+ommand -v claude; claude --version
+/tmp/tricorder-creation1-02-consignes-resultats-LRwpsO/stubs/codex
+codex 0.0.0 TRICORDER-CREATION-1-INERT
+/tmp/tricorder-creation1-02-consignes-resultats-LRwpsO/stubs/claude
+claude 0.0.0 TRICORDER-CREATION-1-INERT
+blegoff@wrk226:/tmp/tricorder-creation1-02-consignes-resultats-LRwpsO/st
+ate/workflows/workspace/.tricorder$  
+
+DE L'INTENTION À LA RÉALISATION
+Un workflow clair.
+Un travail que vous pouvez suivre.
+
+Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.
+
+Nouvelle demande
++ Créer un workflow
+Essayer un exemple
+
+L'exemple est simulé : aucun modèle payant, aucune publication.
+
+Vos projets
+Voir les archives
+
+Un projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.
+
++ Nouveau projet
+Importer un workflow
+Votre premier projet commence ici
+
+Ajoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.
+
+## 02 consigne vide
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:05
+
+SANS PROJET / WORKFLOW
+Achat matériel — dossier complet
+
+Révision 1 · Modifications non enregistrées
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+◇
+Collecter la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+⋮⋮ Déplacer
+◇
+Contrôler le dossier
+Tâche
+Tâche
+1 entrée → 1 sortie
+2 blocs · 0 lien
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Contrôler le dossier
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+demande · Objet Retirer
+Ajouter une entrée
+Sorties
+dossier · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+Bloc modifié. Enregistrez le workflow pour créer une révision.
+
+## 02 après sauvegarde vide
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:05
+
+SANS PROJET / WORKFLOW
+Achat matériel — dossier complet
+
+Révision 2 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+◇
+Collecter la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+⋮⋮ Déplacer
+◇
+Contrôler le dossier
+Tâche
+Tâche
+1 entrée → 1 sortie
+2 blocs · 0 lien
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Contrôler le dossier
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+demande · Objet Retirer
+Ajouter une entrée
+Sorties
+dossier · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+
+## 02 correction
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:05
+
+SANS PROJET / WORKFLOW
+Achat matériel — dossier complet
+
+Révision 2 · Modifications non enregistrées
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+⋮⋮ Déplacer
+◇
+Collecter la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+◇
+Contrôler le dossier
+Tâche
+Tâche
+1 entrée → 1 sortie
+◇
+Résumer le dossier
+Tâche
+Tâche
+1 entrée → 1 sortie
+3 blocs · 2 liens
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Collecter la demande
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+Aucune donnée déclarée
+Ajouter une entrée
+Sorties
+demande · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+Bloc modifié. Enregistrez le workflow pour créer une révision.
+
+## 02 réouverture
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:05
+
+SANS PROJET / WORKFLOW
+Achat matériel — dossier complet
+
+Révision 3 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+◇
+Collecter la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+⋮⋮ Déplacer
+◇
+Contrôler le dossier
+Tâche
+Tâche
+1 entrée → 1 sortie
+◇
+Résumer le dossier
+Tâche
+Tâche
+1 entrée → 1 sortie
+3 blocs · 2 liens
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Contrôler le dossier
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+demande · Objet Retirer
+Ajouter une entrée
+Sorties
+dossier · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+
+## 03 précontrôle terminal
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell du projet · workspace
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-creation1-03-validation-humaine-CDEJ6q/sta
+te/workflows/workspace/.tric
+order$ command -v codex; codex --version; co
+mmand -v claude; claude --version
+/tmp/tricorder-creation1-03-validation-humaine-CDEJ6q/stubs/codex
+codex 0.0.0 TRICORDER-CREATION-1-INERT
+/tmp/tricorder-creation1-03-validation-humaine-CDEJ6q/stubs/claude
+claude 0.0.0 TRICORDER-CREATION-1-INERT
+blegoff@wrk226:/tmp/tricorder-creation1-03-validation-humaine-CDEJ6q/sta
+te/workflows/workspace/.tricorder$  
+
+DE L'INTENTION À LA RÉALISATION
+Un workflow clair.
+Un travail que vous pouvez suivre.
+
+Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.
+
+Nouvelle demande
++ Créer un workflow
+Essayer un exemple
+
+L'exemple est simulé : aucun modèle payant, aucune publication.
+
+Vos projets
+Voir les archives
+
+Un projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.
+
++ Nouveau projet
+Importer un workflow
+Votre premier projet commence ici
+
+Ajoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.
+
+## 03 accord question vide enregistré
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+
+SANS PROJET / WORKFLOW
+Achat matériel — autorisation
+
+Révision 2 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+◇
+Vérifier MAT-002
+Tâche
+Tâche
+0 entrée → 1 sortie
+⋮⋮ Déplacer
+?
+Accord du responsable
+Décision humaine
+Décision humaine
+Vous
+2 blocs · 1 lien
+−
+80 %
++
+Ajuster
+×
+DÉCISION HUMAINE
+Accord du responsable
+Nom du bloc
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+controle · Objet Retirer
+Ajouter une entrée
+Sorties
+decision · Objet Retirer
+Ajouter une sortie
+Organisation de l’étape
+Question à poser
+Issues (une par ligne)
+
+Une attente humaine persiste après fermeture. Le silence n'autorise rien.
+
+Opération externe exacte
+Action
+Cible
+Candidat ou version exacte
+Utilisez @nom_entree pour une cible ou un candidat produit en amont. Les données reliées seront affichées dans la proposition exacte avant l’accord.
+Paramètres supplémentaires du connecteur
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+
+## 03 aiguillage explicite
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:06
+
+SANS PROJET / WORKFLOW
+Achat matériel — autorisation
+
+Révision 2 · Modifications non enregistrées
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+◇
+Vérifier MAT-002
+Tâche
+Tâche
+0 entrée → 1 sortie
+?
+Accord du responsable
+Décision humaine
+Décision humaine
+Vous
+⋮⋮ Déplacer
+⑂
+Seuil de 500 CHF
+Condition
+Condition
+0 entrée → 0 sortie
+3 blocs · 1 lien
+−
+80 %
++
+Ajuster
+×
+CONDITION
+Seuil de 500 CHF
+Nom du bloc
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+Aucune donnée déclarée
+Ajouter une entrée
+Sorties
+Aucune donnée déclarée
+Ajouter une sortie
+Organisation de l’étape
+Paramètre
+Issues (une par ligne)
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+Bloc modifié. Enregistrez le workflow pour créer une révision.
+
+## 03 double accord configuré
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:06
+
+SANS PROJET / WORKFLOW
+Achat matériel — autorisation
+
+Révision 3 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approuver
+approuver
+◇
+Vérifier MAT-002
+Tâche
+Tâche
+0 entrée → 1 sortie
+⋮⋮ Déplacer
+?
+Accord du responsable
+Décision humaine
+Décision humaine
+Vous
+?
+Accord des achats > 500 CHF
+Décision humaine
+Décision humaine
+Vous
+◇
+Synthétiser l’autorisation
+Tâche
+Tâche
+1 entrée → 1 sortie
+4 blocs · 3 liens
+−
+80 %
++
+Ajuster
+×
+DÉCISION HUMAINE
+Accord du responsable
+Nom du bloc
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+controle · Objet Retirer
+Ajouter une entrée
+Sorties
+decision · Objet Retirer
+Ajouter une sortie
+Organisation de l’étape
+Question à poser
+Issues (une par ligne)
+
+Une attente humaine persiste après fermeture. Le silence n'autorise rien.
+
+Opération externe exacte
+Action
+Cible
+Candidat ou version exacte
+Utilisez @nom_entree pour une cible ou un candidat produit en amont. Les données reliées seront affichées dans la proposition exacte avant l’accord.
+Paramètres supplémentaires du connecteur
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+Workflow enregistré. Les exécutions précédentes gardent leur version.
+
+## 03 réouverture deux accords
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:06
+
+SANS PROJET / WORKFLOW
+Achat matériel — autorisation
+
+Révision 3 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approuver
+approuver
+◇
+Vérifier MAT-002
+Tâche
+Tâche
+0 entrée → 1 sortie
+?
+Accord du responsable
+Décision humaine
+Décision humaine
+Vous
+⋮⋮ Déplacer
+?
+Accord des achats > 500 CHF
+Décision humaine
+Décision humaine
+Vous
+◇
+Synthétiser l’autorisation
+Tâche
+Tâche
+1 entrée → 1 sortie
+4 blocs · 3 liens
+−
+80 %
++
+Ajuster
+×
+DÉCISION HUMAINE
+Accord des achats > 500 CHF
+Nom du bloc
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+decision · Objet Retirer
+Ajouter une entrée
+Sorties
+accord_achats · Objet Retirer
+Ajouter une sortie
+Organisation de l’étape
+Question à poser
+Issues (une par ligne)
+
+Une attente humaine persiste après fermeture. Le silence n'autorise rien.
+
+Opération externe exacte
+Action
+Cible
+Candidat ou version exacte
+Utilisez @nom_entree pour une cible ou un candidat produit en amont. Les données reliées seront affichées dans la proposition exacte avant l’accord.
+Paramètres supplémentaires du connecteur
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+
+## 04 précontrôle terminal
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell du projet · workspace
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-creation1-04-premier-essai-reprise-jMjd8Z/
+state/workflows/workspace/.t
+ricorder$ command -v codex; codex --version;
+ command -v claude; claude --version
+/tmp/tricorder-creation1-04-premier-essai-reprise-jMjd8Z/stubs/codex
+codex 0.0.0 TRICORDER-CREATION-1-INERT
+/tmp/tricorder-creation1-04-premier-essai-reprise-jMjd8Z/stubs/claude
+claude 0.0.0 TRICORDER-CREATION-1-INERT
+blegoff@wrk226:/tmp/tricorder-creation1-04-premier-essai-reprise-jMjd8Z/
+state/workflows/workspace/.tricorder$  
+
+DE L'INTENTION À LA RÉALISATION
+Un workflow clair.
+Un travail que vous pouvez suivre.
+
+Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.
+
+Nouvelle demande
++ Créer un workflow
+Essayer un exemple
+
+L'exemple est simulé : aucun modèle payant, aucune publication.
+
+Vos projets
+Voir les archives
+
+Un projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.
+
++ Nouveau projet
+Importer un workflow
+Votre premier projet commence ici
+
+Ajoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.
+
+## 04 instruction premier lancement
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+
+SANS PROJET / WORKFLOW
+Achat matériel — premier essai
+
+Révision 2 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approuver
+◇
+Vérifier la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+?
+Accord du responsable
+Décision humaine
+Décision humaine
+Vous
+⋮⋮ Déplacer
+◇
+Rédiger le recapitulatif
+Tâche
+Tâche
+1 entrée → 1 sortie
+3 blocs · 2 liens
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Rédiger le recapitulatif
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+decision · Objet Retirer
+Ajouter une entrée
+Sorties
+recapitulatif · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+Lancer cette version du workflow
+×
+Quelle demande souhaitez-vous traiter ?
+
+Cette saisie est facultative : vous pouvez tout expliquer à l’agent dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.
+
+Inclure d’autres projets
+Lancer dans le terminal
+Vérifier à nouveau
+Exécution automatique sans conversation
+Simuler le parcours
+
+## 04 après lancement stub
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:07
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell occupé · ESSAI FICTIF MAT-001 : Alex Exemple, Formation, deux écrans à 240 CHF, besoin le 20 octobre 2026, remplacer deux écrans cassés. Total 480 CHF. Aucun achat réel.
+Conversation du workflow affiché · Workflows globaux
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-creation1-04-premier-e
+ssai-reprise-jMjd8Z/state/agent-events/ecacc19e-a3cb-4151-9893-c260c4762
+808.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-creation1-04-premier-essai-reprise-jMjd8Z/
+state/workflows/workspace$ 'python3' '/home/blegoff/odoo-tricorder/build
+-artifacts/linux-unpacked/resources/backend/agent_launch.py' '/tmp/trico
+rder-creation1-04-premier-essai-reprise-jMjd8Z/state/agent-events/ecacc1
+9e-a3cb-4151-9893-c260c4762808.launch.json'
+TRICORDER-CREATION-1-INERT codex — fournisseur inerte, aucune exécution 
+modèle
+blegoff@wrk226:/tmp/tricorder-creation1-04-premier-essai-reprise-jMjd8Z/
+state/workflows/workspace$  
+
+SUIVI · ACHAT MATÉRIEL — PREMIER ESSAI
+ESSAI FICTIF MAT-001 : Alex Exemple, Formation, deux écrans à 240 CHF, besoin le 20 octobre 2026, remplacer deux écrans cassés. Total 480 CHF. Aucun achat réel.
+Options
+Vue d’ensemble
+Demande
+1 demandes
+⌄
+
+Aucune étape en cours · 1 demande à prendre en charge
+
+Terminal
+À poursuivre dans le terminal
+0 / 3 étapes
+Voir les instructions
+
+Cette étape utilise les outils de la conversation. Continuez dans le terminal.
+
+Transférer vers un projet…
+Graphe
+Détail
+approuver
+◇
+Vérifier la demande
+Tâche
+Dans le terminal
+0 entrée → 1 sortie
+?
+Accord du responsable
+Décision humaine
+Prévu
+Vous
+◇
+Rédiger le recapitulatif
+Tâche
+Prévu
+1 entrée → 1 sortie
+3 blocs · 2 liens
+−
+100 %
++
+Ajuster
+
+## 04 instructions après arrêt fournisseur
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:07
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell · Codex arrêté · ESSAI FICTIF MAT-001 : Alex Exemple, Formation, deux écrans à 240 CHF, besoin le 20 octobre 2026, remplacer deux écrans cassés. Total 480 CHF. Aucun achat réel.
+Conversation du workflow affiché · Workflows globaux
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-creation1-04-premier-e
+ssai-reprise-jMjd8Z/state/agent-events/ecacc19e-a3cb-4151-9893-c260c4762
+808.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-creation1-04-premier-essai-reprise-jMjd8Z/
+state/workflows/workspace$ 'python3' '/home/blegoff/odoo-tricorder/build
+-artifacts/linux-unpacked/resources/backend/agent_launch.py' '/tmp/trico
+rder-creation1-04-premier-essai-reprise-jMjd8Z/state/agent-events/ecacc1
+9e-a3cb-4151-9893-c260c4762808.launch.json'
+TRICORDER-CREATION-1-INERT codex — fournisseur inerte, aucune exécution 
+modèle
+blegoff@wrk226:/tmp/tricorder-creation1-04-premier-essai-reprise-jMjd8Z/
+state/workflows/workspace$  
+
+SUIVI · ACHAT MATÉRIEL — PREMIER ESSAI
+ESSAI FICTIF MAT-001 : Alex Exemple, Formation, deux écrans à 240 CHF, besoin le 20 octobre 2026, remplacer deux écrans cassés. Total 480 CHF. Aucun achat réel.
+Options
+Vue d’ensemble
+Demande
+1 demandes
+⌄
+
+Aucune étape en cours · 1 demande à prendre en charge
+
+Terminal
+À poursuivre dans le terminal
+0 / 3 étapes
+
+Cette étape utilise les outils de la conversation. Continuez dans le terminal.
+
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Vérifier la demande
+→
+Accord du responsable
+
+Dans le terminal
+
+À poursuivre dans le terminal
+
+Cette étape utilise les outils de la conversation. Continuez dans le terminal.
+
+Continuer dans le terminal
+
+## 04 définition modifiée rouverte
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:07
+
+SANS PROJET / WORKFLOW
+Achat matériel — premier essai
+
+Révision 3 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approuver
+◇
+Vérifier la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+?
+Accord du responsable
+Décision humaine
+Décision humaine
+Vous
+⋮⋮ Déplacer
+◇
+Rédiger le récapitulatif
+Tâche
+Tâche
+1 entrée → 1 sortie
+3 blocs · 2 liens
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Rédiger le récapitulatif
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+decision · Objet Retirer
+Ajouter une entrée
+Sorties
+recapitulatif · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+Workflow enregistré. Les exécutions précédentes gardent leur version.
+
+## 04 historique après modification
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:07
+
+SANS PROJET / WORKFLOW
+Achat matériel — premier essai
+
+Révision 3 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approuver
+◇
+Vérifier la demande
+Tâche
+Tâche
+0 entrée → 1 sortie
+?
+Accord du responsable
+Décision humaine
+Décision humaine
+Vous
+⋮⋮ Déplacer
+◇
+Rédiger le récapitulatif
+Tâche
+Tâche
+1 entrée → 1 sortie
+3 blocs · 2 liens
+−
+80 %
++
+Ajuster
+×
+TÂCHE
+Rédiger le récapitulatif
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+decision · Objet Retirer
+Ajouter une entrée
+Sorties
+recapitulatif · Objet Retirer
+Ajouter une sortie
+Validation du candidat
+Contrôle QA du candidat
+Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Connexions de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape
+
+## 04 historique chargé
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:07
+
+SANS PROJET / WORKFLOW
+Achat matériel — premier essai
+
+Révision 3 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
+Exécutions du workflow
+Rechercher
+État
+Tous
+En cours
+Suspendues
+Terminées
+Annulées
+Exécution
+Réel et simulation
+Réel
+Simulation
+Avec archives
+Filtrer
+1 exécution(s)
+Workflow	Contexte	État	
+ESSAI FICTIF MAT-001 : Alex Exemple, Formation, deux écrans à 240 CHF, besoin le 20 octobre 2026, remplacer deux écrans cassés. Total 480 CHF. Aucun achat réel.
+Achat matériel — premier essai · Rév. 2 · 09.10.2026 22:07:08	Exécution réelle	À poursuivre dans le terminal	Consulter

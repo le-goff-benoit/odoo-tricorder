@@ -1,0 +1,52 @@
+Suivi · Bilan commun — fixture de réceptionR5 – Bilan commun Atlas + Boréal après R1, R2, R3 et R4Bilan commun · Version figée · TerminéeOptionsRevenir à l’éditeurHistoriqueRapport
+    Revenir au suivi5 demandes ⌄Demandes du workflow5 demandesRechercherRechercher une demandeRechercherR1 – Résultat reçu pour lot 1Boréal · TerminéeR2 – Résultat reçu pour lot 2Atlas · TerminéeR3 – Résultat reçu pour lot 3Boréal · TerminéeR4 – Résultat reçu pour lot 4Boréal · TerminéeR5 – Bilan commun Atlas + Boréal après R1, R2, R3 et R4Boréal · TerminéeAjouter une demande…Archiver la conversationAucune étape en cours · 5 terminéesTerminal
+    Rapport d’exécutionExporter le rapport dans le projetExport de release…Bilan commun — fixture de réception
+Demande
+R5 – Bilan commun Atlas + Boréal après R1, R2, R3 et R4
+Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.
+Plan
+
+
+
+Travail
+État
+Critères
+
+
+
+Préparer le résultat
+Validé
+À préciser
+
+
+Valider le résultat commun
+Validé
+À préciser
+
+
+Réalisation
+Préparer le résultat
+Bilan synthétique reçu ; attente de décision commune réelle en UI
+État : Validé. Tentative 1.
+Résultat
+report
+Bilan commun : R1 texte validé ; R2 images reçues ; R3 titre accepté ; R4 export corrigé. Deux projets Atlas et Boréal. Fixture de visualisation, aucune opération métier/fournisseur.
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+Valider le résultat commun
+Données reçues pour cette étape.
+État : Validé. Tentative 1.
+Entrées reçues
+report
+Bilan commun : R1 texte validé ; R2 images reçues ; R3 titre accepté ; R4 export corrigé. Deux projets Atlas et Boréal. Fixture de visualisation, aucune opération métier/fournisseur.
+
+Tests et limites
+Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.
+Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.
+Livraison et documentation
+Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.
+Décisions et suite
+
+Valider le résultat commun : approve — décision humaine conservée.
+
+Exécution r7642a8d86bbe4daf · contrat f13fcb1c9926e39b3a99801ebe5e18527c2da72ed0b5ba40998890e668ae76ae.

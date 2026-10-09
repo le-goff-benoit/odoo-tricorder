@@ -1,0 +1,138 @@
+[
+  {
+    "tag": "INPUT",
+    "class": "",
+    "rect": {
+      "x": 194,
+      "y": 599.4375,
+      "width": 583.2000122070312,
+      "height": 38,
+      "top": 599.4375,
+      "right": 777.2000122070312,
+      "bottom": 637.4375,
+      "left": 194
+    },
+    "scrollHeight": 36,
+    "clientHeight": 36,
+    "overflowY": "clip"
+  },
+  {
+    "tag": "FORM",
+    "class": "",
+    "rect": {
+      "x": 194,
+      "y": 578.2374877929688,
+      "width": 583.2000122070312,
+      "height": 973.2000122070312,
+      "top": 578.2374877929688,
+      "right": 777.2000122070312,
+      "bottom": 1551.4375,
+      "left": 194
+    },
+    "scrollHeight": 973,
+    "clientHeight": 973,
+    "overflowY": "visible"
+  },
+  {
+    "tag": "ASIDE",
+    "class": "inspector",
+    "rect": {
+      "x": 176,
+      "y": 504.63751220703125,
+      "width": 631.2000122070312,
+      "height": 151.1125030517578,
+      "top": 504.63751220703125,
+      "right": 807.2000122070312,
+      "bottom": 655.7500152587891,
+      "left": 176
+    },
+    "scrollHeight": 1190,
+    "clientHeight": 150,
+    "overflowY": "auto"
+  },
+  {
+    "tag": "DIV",
+    "class": "editor ",
+    "rect": {
+      "x": 176,
+      "y": 315.75,
+      "width": 631.2000122070312,
+      "height": 340,
+      "top": 315.75,
+      "right": 807.2000122070312,
+      "bottom": 655.75,
+      "left": 176
+    },
+    "scrollHeight": 340,
+    "clientHeight": 340,
+    "overflowY": "hidden"
+  },
+  {
+    "tag": "DIV",
+    "class": "",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0,
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 0
+    },
+    "scrollHeight": 0,
+    "clientHeight": 0,
+    "overflowY": "visible"
+  },
+  {
+    "tag": "MAIN",
+    "class": "workspace embedded-workspace",
+    "rect": {
+      "x": 176,
+      "y": 50.79999923706055,
+      "width": 643.2000122070312,
+      "height": 589.2000122070312,
+      "top": 50.79999923706055,
+      "right": 819.2000122070312,
+      "bottom": 640.0000114440918,
+      "left": 176
+    },
+    "scrollHeight": 605,
+    "clientHeight": 589,
+    "overflowY": "auto"
+  },
+  {
+    "tag": "DIV",
+    "class": "",
+    "rect": {
+      "x": 176,
+      "y": 50.79999923706055,
+      "width": 643.2000122070312,
+      "height": 589.2000122070312,
+      "top": 50.79999923706055,
+      "right": 819.2000122070312,
+      "bottom": 640.0000114440918,
+      "left": 176
+    },
+    "scrollHeight": 589,
+    "clientHeight": 589,
+    "overflowY": "visible"
+  },
+  {
+    "tag": "DIV",
+    "class": "",
+    "rect": {
+      "x": 176,
+      "y": 50.79999923706055,
+      "width": 643.2000122070312,
+      "height": 589.2000122070312,
+      "top": 50.79999923706055,
+      "right": 819.2000122070312,
+      "bottom": 640.0000114440918,
+      "left": 176
+    },
+    "scrollHeight": 589,
+    "clientHeight": 589,
+    "overflowY": "visible"
+  }
+]

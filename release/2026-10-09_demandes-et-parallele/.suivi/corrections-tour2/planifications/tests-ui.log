@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+(node:1058536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/schedule-versions.spec.cjs:41:1 › schedule snapshot is readable and replacement requires explicit archive then fresh activation (5.8s)
+  ✓  2 tests/schedule-versions.spec.cjs:81:1 › communication properties distinguish result validation from approval before sending (2.2s)
+  ✓  3 tests/schedule-versions.spec.cjs:92:1 › a rapid double click activates a replacement only once and still requires human confirmation (3.5s)
+
+  3 passed (11.9s)

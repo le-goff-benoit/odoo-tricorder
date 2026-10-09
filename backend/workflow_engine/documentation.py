@@ -2,15 +2,60 @@
 
 import json
 import re
+from datetime import datetime, timezone
 from pathlib import Path
 
 from .contracts import identifier, require
+from .business_markdown import DECISIONS, proof_link, text, value_lines
+from .projections import failed_result
 
-LABELS = {"pending": "Prévu", "ready": "Prêt", "running": "En cours", "waiting": "Décision attendue", "waiting_input": "Réponse attendue", "returned": "À valider", "accepted": "Validé", "skipped": "Non applicable", "blocked": "Bloqué"}
+LABELS = {"pending": "Prévu", "ready": "Prêt", "running": "En cours", "waiting": "Décision attendue", "waiting_input": "Réponse attendue", "returned": "À valider", "accepted": "Validé", "skipped": "Non applicable", "blocked": "Bloqué", "cancelled": "Annulé", "interrupted": "Interrompu"}
 
 
 def cell(value):
     return str(value).replace("|", "\\|").replace("\n", " ")
+
+
+def state_label(state, node):
+    return "Échec" if failed_result(state, node) else LABELS.get(state["status"], "État non renseigné")
+
+
+def attempt_lines(state, node, historical=False, retry_reason=None):
+    result = state.get("result") or {}
+    level = "#####" if historical else "####"
+    lines = value_lines(result.get("summary") or "Données reçues pour cette étape.")
+    lines += [f"État : **{state_label(state, node)}**. Tentative {state['attempt']}.", ""]
+    if result.get("simulated"):
+        lines += ["**Résultat simulé : aucun résultat métier réel n’est attesté pour cette tentative.**", ""]
+    timestamp = state.get("finished") or state.get("started")
+    if isinstance(timestamp, (int, float)):
+        try:
+            lines += ["Date enregistrée : " + datetime.fromtimestamp(timestamp, timezone.utc).strftime("%d.%m.%Y à %H:%M UTC") + ".", ""]
+        except (ValueError, OverflowError, OSError):
+            pass
+    for label, values in (("Entrées reçues", state.get("inputs")), ("Résultat", result.get("outputs"))):
+        if values:
+            lines += [level + " " + label, ""] + value_lines(values)
+    if state.get("validation_error"):
+        lines += ["**Contrôle non satisfait**", ""] + value_lines(state["validation_error"])
+    if result.get("patch"):
+        lines += [f"[Examiner les modifications de code](.suivi/preuves/{result['patch']['sha256']})", "",
+                  "Code appliqué au dépôt local après confirmation." if state.get("applied_candidate") else "Proposition isolée ; code non appliqué au dépôt.", ""]
+    if state.get("reused_from"):
+        lines += [f"Preuves réutilisées depuis `{state['reused_from']['run']}` ; aucun nouveau test exécuté pour ce bloc.", ""]
+    if result.get("receipt"):
+        lines += ["Accusé de réception externe : " + text(result["receipt"].get("id", "")), ""]
+    if result.get("evidence"):
+        lines += [level + " Preuves", ""] + ["- " + proof_link(proof, index) for index, proof in enumerate(result["evidence"])] + [""]
+    if state.get("receipt"):
+        lines += ["Validation : " + text(state["receipt"]["note"]), ""]
+    if historical:
+        for question in state.get("questions", []):
+            lines += ["**Question**", "", text(question["text"]), "", "**Réponse**", "",
+                      text(question.get("answer", "")) if question.get("status") == "answered" else "Réponse attendue.", ""]
+    if retry_reason:
+        lines += ["**Motif de la reprise suivante**", ""] + value_lines(retry_reason)
+    return lines
 
 
 def markdown(run):
@@ -19,34 +64,21 @@ def markdown(run):
              "**Exécution simulée : aucun résultat métier réel n'est attesté.**" if run["simulation"] else "Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.", "", "## Plan", "", "| Travail | État | Critères |", "|---|---|---|"]
     for node in graph["nodes"]:
         state = run["nodes"][node["id"]]
-        lines.append(f"| {cell(node['title'])} | {LABELS[state['status']]} | {cell('; '.join(node.get('criteria', [])) or 'À préciser')} |")
+        lines.append(f"| {cell(node['title'])} | {state_label(state, node)} | {cell('; '.join(node.get('criteria', [])) or 'À préciser')} |")
     lines += ["", "## Réalisation", ""]
     results = False
     for node in graph["nodes"]:
         state = run["nodes"][node["id"]]
-        if not state.get("result") and not state.get("inputs"):
+        if not state.get("result") and not state.get("inputs") and not state.get("history"):
             continue
         results = True
-        lines += [f"### {node['title']}", "", state.get("result", {}).get("summary", "Données reçues pour cette étape."), "", f"État : **{LABELS[state['status']]}**. Tentative {state['attempt']}.", ""]
-        for label, values in (("Entrées reçues", state.get("inputs", {})), ("Résultat", state.get("result", {}).get("outputs", {}))):
-            if values:
-                lines += ["#### " + label, ""]
-                for key, value in values.items():
-                    lines += ["**" + key + "**", ""]
-                    text = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, indent=2)
-                    fence = "`" * max(3, max((len(m.group()) for m in re.finditer(r"`+", text)), default=0) + 1)
-                    lines += [fence + "text", text, fence, ""]
-        if state.get("result", {}).get("patch"):
-            lines += [f"[Examiner les modifications de code](.suivi/preuves/{state['result']['patch']['sha256']})", "",
-                      "Code appliqué au dépôt local après confirmation." if state.get("applied_candidate") else "Proposition isolée ; code non appliqué au dépôt.", ""]
-        if state.get("reused_from"):
-            lines += [f"Preuves réutilisées depuis `{state['reused_from']['run']}` ; aucun nouveau test exécuté pour ce bloc.", ""]
-        if state.get("result", {}).get("receipt"):
-            lines += ["Accusé de réception externe : " + str(state["result"]["receipt"].get("id", "")), ""]
-        for proof in state.get("result", {}).get("evidence", []):
-            lines += [f"[Consulter la preuve](.suivi/preuves/{proof['sha256']})", ""]
-        if state.get("receipt"):
-            lines += ["Validation : " + state["receipt"]["note"], ""]
+        lines += [f"### {node['title']}", ""] + attempt_lines(state, node)
+        history = state.get("history", [])
+        if history:
+            lines += ["#### Tentatives précédentes", ""]
+            for index, previous in enumerate(history):
+                following = history[index + 1] if index + 1 < len(history) else state
+                lines += [f"##### Tentative {previous['attempt']}", ""] + attempt_lines(previous, node, historical=True, retry_reason=following.get("reason"))
     if not results:
         lines += ["Aucun résultat remis pour le moment.", ""]
     lines += ["## Tests et limites", "", "Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.", "",
@@ -61,7 +93,8 @@ def markdown(run):
         if state["status"] == "waiting":
             lines += [f"- **{node['title']}** : {node.get('question', 'Résultat à valider.')}"]
         elif state.get("decision"):
-            lines += [f"- {node['title']} : `{state['decision']['outcome']}` — décision humaine conservée."]
+            outcome = state['decision']['outcome']
+            lines += [f"- {node['title']} : **{text(DECISIONS.get(outcome, outcome))}** — décision humaine conservée."]
     lines += ["", f"Exécution `{run['id']}` · contrat `{run['contract']}`.", ""]
     return "\n".join(lines)
 
@@ -73,6 +106,19 @@ def export_release(engine, run_id, root, release_id):
 def export_work(engine, run_id, name):
     run = engine.run(run_id)
     return export_snapshot(engine, run_id, engine.project(run["project"])["path"], "work", name)
+
+
+def artifact_references(value):
+    """Only explicit artifact references; an ordinary SHA-like field is not a proof."""
+    if isinstance(value, dict):
+        reference = value.get("$artifact")
+        if isinstance(reference, dict) and isinstance(reference.get("sha256"), str) and re.fullmatch(r"[a-f0-9]{64}", reference["sha256"]):
+            yield reference
+        for item in value.values():
+            yield from artifact_references(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from artifact_references(item)
 
 
 def export_snapshot(engine, run_id, root, collection, release_id):
@@ -87,8 +133,13 @@ def export_snapshot(engine, run_id, root, collection, release_id):
     evidence = {}
     for state in run["nodes"].values():
         for attempt in [state, *state.get("history", [])]:
-            for proof in attempt.get("result", {}).get("evidence", []):
-                evidence[proof["sha256"]] = engine.evidence(proof)
+            result = attempt.get("result", {})
+            references = [*result.get("evidence", []), *artifact_references(attempt)]
+            if result.get("patch"):
+                references.append(result["patch"])
+            for proof in references:
+                if proof["sha256"] not in evidence:
+                    evidence[proof["sha256"]] = engine.evidence(proof)
     tracking = folder / ".suivi"
     tracking.mkdir(parents=True)
     (tracking / ("release.json" if collection == "release" else "execution.json")).write_text(json.dumps(run, indent=2, ensure_ascii=False) + "\n")

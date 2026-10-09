@@ -1,0 +1,70 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:09
+
+Sortie critique absente ou incompatible avec le type boolean
+SUIVI · DEMANDE CLIENT — SIMULATION
+Demande client — simulation
+Options
+Revenir à l’éditeur
+Suspendre
+Annuler
+Historique
+Rapport
+›_ Terminal
+Phases
+Journal d’exécution
+☷ Liste
+Résultat à valider
+0 / 7 étapes
+
+Demande reçue
+
+Simulation. Aucun modèle ni service métier appelé. Résultat à valider. 1 bloc(s) attendent votre intervention.
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Demande reçue
+→
+Diagnostic
+
+À valider
+
+SIMULATION — Résultat d'exemple pour « Demande reçue ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Examiner le résultat
+Commentaire de validation
+Valider le résultat
+Entrées, sorties et preuves
+Preuves
+Preuve 1 · 26bc5c8a
+Journal d’exécution
+×
+Exécution commencée
+09.10.2026 22:07:29
+Prêt · Demande reçue
+09.10.2026 22:07:29
+En cours · Demande reçue
+09.10.2026 22:07:29
+À valider · Demande reçue
+09.10.2026 22:07:30

@@ -1,0 +1,61 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell du projet · Shell : workspace
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-panel-support-EUvVGH/state/workflows/works
+blegoff@wrk226:/tmp/tricorder-panel-support-EUvVGH/state/workflows/works
+pace/.tricorder$ c
+ommand -v codex; codex --version; command -v claude; claude --version
+/tmp/tricorder-panel-support-EUvVGH/stubs/codex
+codex 0.0.0 TRICORDER-PANEL-INERT
+/tmp/tricorder-panel-support-EUvVGH/stubs/claude
+claude 0.0.0 TRICORDER-PANEL-INERT
+blegoff@wrk226:/tmp/tricorder-panel-support-EUvVGH/state/workflows/works
+pace/.tricorder$  
+
+DE L'INTENTION À LA RÉALISATION
+Un workflow clair.
+Un travail que vous pouvez suivre.
+
+Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.
+
+Nouvelle demande
++ Créer un workflow
+Essayer un exemple
+
+L'exemple est simulé : aucun modèle payant, aucune publication.
+
+Vos projets
+Voir les archives
+
+Un projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.
+
++ Nouveau projet
+Importer un workflow
+Votre premier projet commence ici
+
+Ajoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.

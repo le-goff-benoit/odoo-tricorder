@@ -1,0 +1,120 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+3
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:40
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell · Codex arrêté · Analyser un outil fictif de journalisation. Demander quel format de sortie adopter avant toute réalisation.
+Shell · Claude arrêté · Deuxième demande fictive avec Claude : comparer JSON et texte pour le journal.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+/tmp/tricorder-panel-developpement-kafBSA/state/workflows/workspace
+work-1e371432-e68b-4ec3-8bb3-09150fa0c2e3.json
+work-71918ceb-c717-449b-b057-6b05936297ac.json
+{
+  "schema": 1,
+  "id": "work-1e371432-e68b-4ec3-8bb3-09150fa0c2e3",
+  "title": "Analyse technique réutilisable",
+  "description": "Un exemple simulé pour découvrir les branches, la vali
+dation et les décisions humaines.",
+  "parameters": {},
+  "nodes": [
+    {
+      "id": "analyse",
+      "title": "Comprendre la demande",
+      "kind": "task",
+      "position": {
+        "x": 50,
+        "y": 140
+      },
+blegoff@wrk226:/tmp/tricorder-panel-developpement-kafBSA/state/workflows
+/workspace$  
+
+SANS PROJET / WORKFLOW
+Analyse technique réutilisable
+
+Révision 1 · Enregistré
+
+Choisir l’IA
+Options
+Réutiliser…
+Exporter…
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
+1 demande
+⌄
+
+Agent arrêté · progression conservée. Aucune étape en cours · 1 demande à prendre en charge
+
+Reprendre l’agent…
+Voir le shell
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+Approuvée
+◇
+Comprendre la demande
+Analyse
+Tâche
+0 entrée → 0 sortie
+◇
+Préparer la réalisation
+Réalisation
+Tâche
+0 entrée → 0 sortie
+◇
+Préparer les tests
+Qualité
+Tâche
+0 entrée → 0 sortie
+⋈
+Réunir les résultats
+Validation
+Jonction
+0 entrée → 0 sortie
+?
+Valider la suite
+Validation
+Décision humaine
+Vous
+▤
+Préparer le bilan
+Documentation
+Document
+0 entrée → 0 sortie
+6 blocs · 6 liens
+−
+100 %
++
+Ajuster

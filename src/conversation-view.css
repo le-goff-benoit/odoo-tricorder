@@ -1,0 +1,94 @@
+/* Conversation-level work occupies the main surface, never a second stack above the graph. */
+.conversation-scope-switch {display:flex;gap:2px;align-items:center;flex-wrap:wrap;position:relative;padding:5px 14px;border-bottom:1px solid var(--line);flex-shrink:0;background:var(--surface)}
+.conversation-scope-switch button {font-size:12px;min-height:30px;padding:5px 10px;border-color:transparent;background:transparent}
+.conversation-scope-switch button[aria-pressed=true] {background:var(--accent-soft);color:var(--accent);font-weight:600}
+#conversation-overview {min-height:0;flex:1;overflow:auto;padding:16px;background:var(--surface)}
+.conversation-overview-heading {display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.conversation-overview-heading > div {min-width:0;flex:1;min-width:180px}
+.conversation-overview-heading h2 {font-size:15px;margin:0 0 5px}
+.conversation-overview-heading p,.overview-page-scope {font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 10px}
+.conversation-overview-heading > button {font-size:12px;white-space:normal}
+.conversation-overview-rows {display:grid;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.conversation-demand {padding:10px 12px;background:var(--surface)}
+.conversation-demand + .conversation-demand {border-top:1px solid var(--line)}
+.conversation-demand-open {display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:transparent;padding:2px 0;white-space:normal;min-width:0;min-height:30px}
+.conversation-demand-title {display:grid;gap:4px;flex:1;min-width:0}
+.conversation-demand-title strong {font-size:13px;line-height:1.45;font-weight:600;overflow-wrap:anywhere}
+.conversation-demand-title small {font-size:11px;color:var(--muted)}
+.conversation-demand-state {font-size:11px;color:var(--muted);flex:0 1 145px;line-height:1.5;text-align:right}
+.conversation-demand-state.has-issue {color:var(--danger)}
+.conversation-demand-action {display:block;min-height:0;font-size:11px;line-height:1.5;color:var(--accent);margin-top:3px;overflow-wrap:anywhere;text-align:left;white-space:normal;padding:0;border:0;border-radius:2px;background:transparent}
+.conversation-demand-action:hover {text-decoration:underline;background:transparent}
+.conversation-demand-issue {font-size:12px;color:var(--danger);line-height:1.5;margin:5px 0 0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.conversation-workers {display:grid;gap:6px;padding:0;margin:8px 0 0;list-style:none}
+.conversation-workers li {display:flex;gap:7px;align-items:flex-start;font-size:11px;line-height:1.5}
+.conversation-workers li > div {display:grid;gap:2px;min-width:0;overflow-wrap:anywhere}
+.conversation-workers strong {font-weight:600}
+.conversation-workers li span:last-child {color:var(--muted)}
+.worker-dot {width:6px;height:6px;margin-top:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.stale .worker-dot {background:var(--muted)}
+.conversation-dependencies {display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin-top:8px;font-size:11px;color:var(--muted)}
+.conversation-dependencies .dependency-link {display:grid;text-align:left;gap:2px;min-height:0;padding:5px 7px;font-size:11px;white-space:normal;max-width:220px;background:var(--bg)}
+.dependency-link span {display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4}
+.dependency-link small {font-size:10px}
+.dependency-link.satisfied {opacity:.8}
+.dispatch-feedback {padding:10px 12px;background:var(--soft);border-radius:6px;margin:0 0 12px;font-size:12px;line-height:1.5}
+.dispatch-feedback details {margin:0}
+.dispatch-feedback > small {display:block;color:var(--muted);margin-bottom:3px}
+.dispatch-feedback summary {cursor:pointer}
+.overview-empty {padding:12px;color:var(--muted);font-size:13px}
+.overview-pagination {display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.overview-pagination button {font-size:12px}
+.overview-conversation-header .conversation-summary {display:none!important}
+.overview-conversation-header > button {margin-left:auto}
+#studio-content .conversation-scope-switch > .conversation-tray {position:static;flex:1;justify-content:flex-end;padding:0;margin-left:auto;border:0;background:transparent;gap:6px}
+.conversation-scope-switch > .conversation-tray > button {margin-left:0}
+.conversation-scope-switch > .conversation-tray .conversation-summary {display:none!important}
+@container workflow (max-width:480px) {
+  #conversation-overview {padding:12px}
+  .conversation-demand-open {flex-wrap:wrap;gap:4px}
+  .conversation-demand-title {flex-basis:calc(100% - 20px)}
+  .conversation-demand-state {flex-basis:100%;text-align:left;order:2}
+  .conversation-dependencies .dependency-link {max-width:100%}
+}
+.compact-height .conversation-scope-switch {padding:2px 12px}
+.compact-height #conversation-overview {padding:10px 12px}
+/* Questions take priority over nearby steps at every panel height. A tall
+   workflow panel can still have a short inspector after its navigation bars. */
+#studio-content.execution-view .editor.review-focus > .inspector:has(#question-form) {display:flex;flex-direction:column}
+#studio-content.execution-view .inspector:has(#question-form) > * {flex-shrink:0}
+#studio-content.execution-view .inspector:has(#question-form) > .step-trail {order:2;margin:12px 0 0;padding:8px 0 0;border-top:1px solid var(--line);border-bottom:0}
+.compact-height #studio-content.execution-view .inspector:has(#question-form) > p:first-of-type {margin-top:0}
+.compact-height #question-form textarea {display:block}
+
+.dependency-picker #dependency-choices {max-height:240px;overflow:auto;margin:10px 0}
+.dependency-picker #dependency-choices label {display:flex;align-items:flex-start;gap:8px;padding:6px 0}
+.dependency-picker #dependency-choices small {display:block;color:var(--muted);font-size:12px}
+.dependency-picker #dependency-query {min-width:0;flex:1}
+
+.launch-readiness {margin:6px 0;font-size:12px;line-height:1.5;color:var(--muted)}
+.launch-readiness p {margin:4px 0}
+.launch-readiness button {font-size:12px;margin:4px 8px 0 0}
+
+/* Read the full proposal in one scroll area; its actions keep their scope in
+   the panel footer, including when the terminal leaves only a short panel. */
+#studio-content.execution-view .editor.review-focus > .inspector.interaction-panel {display:flex;flex-direction:column;padding:0;overflow:hidden}
+.interaction-scroll {min-height:0;flex:1;overflow:auto;padding:12px 20px;scroll-padding-block:12px}
+.interaction-footer {flex-shrink:0;padding:10px 20px;border-top:1px solid var(--line);background:var(--surface)}
+.interaction-actions .row {flex-wrap:wrap;gap:8px}
+.interaction-actions button {white-space:normal;min-height:34px;font-size:12px}
+.interaction-scope {margin:0 0 8px;font-size:11px;line-height:1.4;overflow-wrap:anywhere}
+.interaction-scope strong {display:block;max-height:3em;overflow:auto}
+.interaction-scope span {display:block;color:var(--muted)}
+.interaction-scroll textarea {min-height:72px}
+.initial-request-copy {white-space:pre-wrap;overflow-wrap:anywhere}
+.resume-project-scope {padding:10px 12px;background:var(--soft);overflow-wrap:anywhere}
+.compact-height .interaction-scroll {padding:8px 12px}
+.compact-height .interaction-footer {padding:6px 12px}
+.compact-height .interaction-scope {margin-bottom:4px}
+
+#studio-content.execution-view .interaction-scroll > .eyebrow,
+#studio-content.execution-view .interaction-scroll > h2 {display:none}
+.compact-height #studio-content.execution-view .interaction-scroll > .step-trail,
+.compact-height #studio-content.execution-view .interaction-scroll > .decision-scope,
+.compact-height #studio-content.execution-view .interaction-scroll > p:first-of-type {display:none}

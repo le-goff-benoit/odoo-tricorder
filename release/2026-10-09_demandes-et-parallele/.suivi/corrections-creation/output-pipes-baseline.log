@@ -1,0 +1,3 @@
+ready
+{ failure: 'EPIPE', message: 'write EPIPE' }
+{ code: 1, signal: null }

@@ -1,0 +1,65 @@
+{
+  "timing": {
+    "idleObservedMs": 21.400000005960464,
+    "resumeObservedMs": 5230.70000000298,
+    "events": [
+      {
+        "ms": 26.5,
+        "scope": "Conversation du workflow affiché · Shell : Interaction review",
+        "resume": false,
+        "retrieve": true
+      },
+      {
+        "ms": 4125.4000000059605,
+        "scope": "Conversation du workflow affiché · Shell : Interaction review · Agent arrêté",
+        "resume": false,
+        "retrieve": true
+      },
+      {
+        "ms": 4875.29999999702,
+        "scope": "Conversation du workflow affiché · Shell : Interaction review · Agent arrêté",
+        "resume": true,
+        "retrieve": false
+      }
+    ]
+  },
+  "fixture": {
+    "project": {
+      "id": "p38bec585d30a43fc",
+      "title": "Interaction review",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/tricorder-review-stopped-zYCn6e/projects/p38bec585d30a43fc",
+      "managed": true
+    },
+    "conversation": "c5d642c9fe8ef4fb6",
+    "run": "r26f7d766b04b4950",
+    "second_conversation": "c006a9c1c2f5d4e32",
+    "second_run": "r6c7ea354ff6a4ce8"
+  },
+  "first": {
+    "id": "b3dacaffc9e44c659b245dcb4aa8d304",
+    "project": "/tmp/tricorder-review-stopped-zYCn6e/projects/p38bec585d30a43fc",
+    "environment": null,
+    "workingDirectory": "/tmp/tricorder-review-stopped-zYCn6e/projects/p38bec585d30a43fc",
+    "release": null,
+    "task": null,
+    "createdAt": 1791585612.486793,
+    "lastOutputAt": 1791585612.5148256,
+    "pid": 1346407,
+    "program": "codex",
+    "provider": "codex",
+    "foreground": 1346410,
+    "promptVerified": true,
+    "idleShell": false,
+    "alive": true,
+    "exitCode": null,
+    "activity": "process"
+  }
+}

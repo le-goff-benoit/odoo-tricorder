@@ -1,0 +1,2 @@
+9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3  build-artifacts/linux-unpacked/odoo-tricorder
+a344374116f8ada276e426dd94279450b73cee31ba46aa981ae830a1fb64f44b  build-artifacts/linux-unpacked/resources/app.asar

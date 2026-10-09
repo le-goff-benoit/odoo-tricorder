@@ -1,0 +1,8 @@
+{
+  "cleanup": true,
+  "empreintesEtBackendVerifies": true,
+  "pid": 1194851,
+  "temporary": "/tmp/tricorder-panel-support-EUvVGH",
+  "errors": [],
+  "note": "cleanup résolu ; accès app.process après fermeture indisponible, vérification OS séparée."
+}

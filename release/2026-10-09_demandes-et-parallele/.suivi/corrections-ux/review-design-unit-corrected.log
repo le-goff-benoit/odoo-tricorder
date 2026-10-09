@@ -1,0 +1,23 @@
+✔ overview uses global activity independently of page and search (1.669732ms)
+✔ worker identity is based on recorded work, not a configured provider (4.235014ms)
+✔ only recorded dependencies connect demands, including off-page project links (0.568957ms)
+✔ dispatch reports actionable waiting demands, excludes future blocks and never exposes PIDs (0.361375ms)
+✔ overview escapes untrusted content, shows pagination and disables archived dispatch (0.269741ms)
+✔ readiness distinguishes configuration, native work and temporary capacity without claiming work (0.5334ms)
+✔ a cancelled or refused prerequisite has its true state, never a generic to-do label (0.299746ms)
+✔ last launch feedback is historical and stays scoped to its original page and filter (15.353784ms)
+✔ dependency badges distinguish automatic waiting from a user suspension, including off-page prerequisites (0.262442ms)
+✔ deleting an intermediate block exposes its now unbound approval input, repairing the mapping clears it (2.400259ms)
+✔ a root condition can use an explicit false parameter without being falsely reported as missing (0.591964ms)
+✔ personalized simulation retains false, zero and empty text and leaves automatic ports absent (0.566808ms)
+✔ invalid imported simulation values need an explicit correction or return to automatic (4.663608ms)
+✔ each integrated template copy gets an identifiable title distinct from previous copies (0.352433ms)
+✔ reusing an expanded subworkflow removes previous execution context at both levels and preserves business settings (0.808567ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 86.925183

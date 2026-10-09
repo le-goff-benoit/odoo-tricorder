@@ -1,0 +1,951 @@
+{
+  "created": 1791574359.1324067,
+  "definition": {
+    "defaults": {
+      "model": "synthetic-local",
+      "provider": "codex"
+    },
+    "edges": [],
+    "id": "portefeuille-charge",
+    "nodes": [
+      {
+        "id": "work",
+        "kind": "agent",
+        "outputs": {
+          "result": "string"
+        },
+        "title": "Analyser les informations synthétiques",
+        "validation": "contract"
+      }
+    ],
+    "schema": 1,
+    "title": "Préparer et vérifier les demandes du portefeuille"
+  },
+  "effort": "medium",
+  "id": "c9a9e2bb132464244",
+  "items": [
+    {
+      "created": 1791574359.2161376,
+      "depends_on": [],
+      "id": "w2a850f556f274f98",
+      "key": "R26",
+      "project": "p45fc589aa0ad4575",
+      "request": "R26 — Comparer les besoins des équipes",
+      "run": "rdcbc5aa4f1514b86",
+      "request_truncated": false,
+      "execution": {
+        "id": "rdcbc5aa4f1514b86",
+        "project": "p45fc589aa0ad4575",
+        "status": "active",
+        "created": 1791574359.2159274,
+        "updated": 1791574359.2160964,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R26 — Comparer les besoins des équipes",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2181885,
+      "depends_on": [],
+      "id": "w0ddd21dc7d2a4dc2",
+      "key": "R27",
+      "project": "p3a3e502bd9844e8c",
+      "request": "R27 — Relire les critères de réception",
+      "run": "r614c4d7af51849fc",
+      "request_truncated": false,
+      "execution": {
+        "id": "r614c4d7af51849fc",
+        "project": "p3a3e502bd9844e8c",
+        "status": "active",
+        "created": 1791574359.2179892,
+        "updated": 1791574359.2181504,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R27 — Relire les critères de réception",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2205167,
+      "depends_on": [],
+      "id": "w3c58fe5743a44b09",
+      "key": "R28",
+      "project": "pb986abe4304248ee",
+      "request": "R28 — Préparer les documents du comité",
+      "run": "r4c740c8a25db4bb9",
+      "request_truncated": false,
+      "execution": {
+        "id": "r4c740c8a25db4bb9",
+        "project": "pb986abe4304248ee",
+        "status": "active",
+        "created": 1791574359.2203233,
+        "updated": 1791574359.2204802,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R28 — Préparer les documents du comité",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2226229,
+      "depends_on": [],
+      "id": "w2d6b32aa48854cf5",
+      "key": "R29",
+      "project": "p45fc589aa0ad4575",
+      "request": "R29 — Vérifier les informations disponibles",
+      "run": "rfa65a49b1be3441a",
+      "request_truncated": false,
+      "execution": {
+        "id": "rfa65a49b1be3441a",
+        "project": "p45fc589aa0ad4575",
+        "status": "active",
+        "created": 1791574359.2224367,
+        "updated": 1791574359.222588,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R29 — Vérifier les informations disponibles",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.22492,
+      "depends_on": [],
+      "id": "wb0d90e6e57174dd5",
+      "key": "R30",
+      "project": "p3a3e502bd9844e8c",
+      "request": "R30 — Identifier les points à arbitrer",
+      "run": "r81100a6980d7486f",
+      "request_truncated": false,
+      "execution": {
+        "id": "r81100a6980d7486f",
+        "project": "p3a3e502bd9844e8c",
+        "status": "active",
+        "created": 1791574359.2247355,
+        "updated": 1791574359.2248855,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R30 — Identifier les points à arbitrer",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2271163,
+      "depends_on": [],
+      "id": "w10296187c6ae4920",
+      "key": "R31",
+      "project": "pb986abe4304248ee",
+      "request": "R31 — Préparer le tableau de décisions",
+      "run": "rbd112711cf33443f",
+      "request_truncated": false,
+      "execution": {
+        "id": "rbd112711cf33443f",
+        "project": "pb986abe4304248ee",
+        "status": "active",
+        "created": 1791574359.2269099,
+        "updated": 1791574359.22707,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R31 — Préparer le tableau de décisions",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2297542,
+      "depends_on": [],
+      "id": "wc769ef1a2770413d",
+      "key": "R32",
+      "project": "p45fc589aa0ad4575",
+      "request": "R32 — Comparer les besoins des équipes",
+      "run": "r6465aaabdca342cc",
+      "request_truncated": false,
+      "execution": {
+        "id": "r6465aaabdca342cc",
+        "project": "p45fc589aa0ad4575",
+        "status": "active",
+        "created": 1791574359.229573,
+        "updated": 1791574359.2297199,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R32 — Comparer les besoins des équipes",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2320275,
+      "depends_on": [],
+      "id": "wcaeddfde59b343db",
+      "key": "R33",
+      "project": "p3a3e502bd9844e8c",
+      "request": "R33 — Relire les critères de réception",
+      "run": "r91209d831ae24e3e",
+      "request_truncated": false,
+      "execution": {
+        "id": "r91209d831ae24e3e",
+        "project": "p3a3e502bd9844e8c",
+        "status": "active",
+        "created": 1791574359.2318456,
+        "updated": 1791574359.2319932,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R33 — Relire les critères de réception",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2344704,
+      "depends_on": [],
+      "id": "w7485deaa3f534c7a",
+      "key": "R34",
+      "project": "pb986abe4304248ee",
+      "request": "R34 — Préparer les documents du comité",
+      "run": "r3279a9bde06c4975",
+      "request_truncated": false,
+      "execution": {
+        "id": "r3279a9bde06c4975",
+        "project": "pb986abe4304248ee",
+        "status": "active",
+        "created": 1791574359.2342663,
+        "updated": 1791574359.234433,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R34 — Préparer les documents du comité",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2371757,
+      "depends_on": [],
+      "id": "wfbee1f9468504546",
+      "key": "R35",
+      "project": "p45fc589aa0ad4575",
+      "request": "R35 — URGENT — Préparer arbitrage comité de 16h",
+      "run": "rf67ef3d80c104f86",
+      "request_truncated": false,
+      "execution": {
+        "id": "rf67ef3d80c104f86",
+        "project": "p45fc589aa0ad4575",
+        "status": "active",
+        "created": 1791574359.2369416,
+        "updated": 1791574359.2371352,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R35 — URGENT — Préparer arbitrage comité de 16h",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    },
+    {
+      "created": 1791574359.2412603,
+      "depends_on": [],
+      "id": "wb48a1227fbb64db3",
+      "key": "R36",
+      "project": "p3a3e502bd9844e8c",
+      "request": "R36 — Identifier les points à arbitrer",
+      "run": "r063a4c63ffdb494f",
+      "request_truncated": false,
+      "execution": {
+        "id": "r063a4c63ffdb494f",
+        "project": "p3a3e502bd9844e8c",
+        "status": "active",
+        "created": 1791574359.2408621,
+        "updated": 1791574359.2411914,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "portefeuille-charge",
+          "title": "Préparer et vérifier les demandes du portefeuille"
+        },
+        "original": {
+          "id": "portefeuille-charge"
+        },
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "R36 — Identifier les points à arbitrer",
+        "counts": {
+          "ready": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "ready"
+          }
+        },
+        "launch": {
+          "status": "configuration",
+          "label": "À configurer",
+          "ready_count": 1,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 1,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 3,
+          "max_parallel": 4,
+          "nodes": [
+            {
+              "node": "work",
+              "title": "Analyser les informations synthétiques",
+              "status": "configuration",
+              "code": "provider.cli-missing",
+              "action": "new-execution",
+              "native_available": false,
+              "reason": "CLI non installé.",
+              "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."
+            }
+          ],
+          "nodes_total": 1,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    }
+  ],
+  "model": "synthetic-local",
+  "notifications_authorized": false,
+  "project": "pb986abe4304248ee",
+  "projects": [
+    "pb986abe4304248ee",
+    "p45fc589aa0ad4575",
+    "p3a3e502bd9844e8c"
+  ],
+  "provider": "codex",
+  "status": "open",
+  "project_contexts": [
+    {
+      "id": "pb986abe4304248ee",
+      "title": "Atlas — Services",
+      "path": "/tmp/tricorder-portefeuille-capacity-yxyez3/state/workflows/projects/pb986abe4304248ee"
+    },
+    {
+      "id": "p45fc589aa0ad4575",
+      "title": "Boréal — Opérations",
+      "path": "/tmp/tricorder-portefeuille-capacity-yxyez3/state/workflows/projects/p45fc589aa0ad4575"
+    },
+    {
+      "id": "p3a3e502bd9844e8c",
+      "title": "Céleste — Comité",
+      "path": "/tmp/tricorder-portefeuille-capacity-yxyez3/state/workflows/projects/p3a3e502bd9844e8c"
+    }
+  ],
+  "item_count": 36,
+  "total": 36,
+  "offset": 25,
+  "limit": 25,
+  "next": null,
+  "activity": {
+    "items": 36,
+    "running": 3,
+    "ready": 32,
+    "decisions": 0,
+    "questions": 0,
+    "failed": 0,
+    "dependencies": 0,
+    "completed": 1,
+    "paused": 0
+  }
+}

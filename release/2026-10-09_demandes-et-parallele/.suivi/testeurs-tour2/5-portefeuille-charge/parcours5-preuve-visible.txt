@@ -1,0 +1,7 @@
+Contenu de la preuve
+×
+
+Caractères 1–531 sur 531. Texte brut, aucun contenu actif.
+
+{"ok": true, "summary": "Analyse synthétique terminée par le worker local 1027502", "outputs": {"result": "Résultat synthétique vérifiable ; aucune donnée réelle."}, "provider": "codex", "question": "", "model_requested": "synthetic-local", "model_observed": null, "usage": {"input_tokens": 1, "output_tokens": 1}, "cost_usd": null, "thread": "local-1027502", "parent_run": "rc082e12b6de14879", "node": "work", "attempt": 1, "scope": "Session neuve limitée au texte ; aucune modification de projet ni opération externe autorisée."}
+Sélectionner le texte

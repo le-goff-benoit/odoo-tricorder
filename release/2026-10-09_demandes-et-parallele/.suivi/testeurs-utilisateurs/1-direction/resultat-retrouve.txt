@@ -1,0 +1,95 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:31
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell · Codex arrêté · Réunion interne fictive du comité des locaux, 9 octobre 2026. Notes : Léa préparera un plan de rangement pour lundi ; Hugo vérifiera la capacité de la salle. Préparer un compte rendu et un brouillon de suivi, sans envoyer de message.
+Autre conversation · Shell : Workflows globaux · Agent arrêté · Réunion interne fictive du comité des locaux, 9 octobre 2026. Notes : Léa préparera un plan de rangement pour lundi ; Hugo vérifiera la capacité de la salle. Préparer un compte rendu et un brouillon de suivi, sans envoyer de message.
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-panel-direction-IU8GaM
+/state/agent-events/7dd19e1f-449f-43ec-9719-928a751c751b.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-panel-direction-IU8GaM/state/workflows/wor
+kspace$ 'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-un
+packed/resources/backend/agent_launch.py' '/tmp/tricorder-panel-directio
+n-IU8GaM/state/agent-events/7dd19e1f-449f-43ec-9719-928a751c751b.launch.
+json'
+TRICORDER-PANEL-INERT codex — fournisseur inerte, aucune exécution modèl
+e
+blegoff@wrk226:/tmp/tricorder-panel-direction-IU8GaM/state/workflows/wor
+kspace$  
+
+SUIVI · CLÔTURE DE MEETING
+Clôture de meeting
+Options
+Terminée
+3 / 3 étapes
+Voir les résultats
+Voir le rapport
+
+Exécution terminée.
+
+Simulation. Aucun modèle ni service métier appelé. Terminée. 0 bloc(s) attendent votre intervention.
+Transférer vers un projet…
+Graphe
+Détail
+
+Le rapport réunit les résultats, décisions et preuves de cette exécution. Consultez les résultats validés ou le rapport complet ci-dessus.
+
+Résultats validés de cette demande
+×
+
+Clôture de meeting
+
+Simulation · ces contenus ne prouvent aucun travail métier réel.
+
+Préparer l’email de suivi
+
+Résultat validé · tentative 1
+
+Compte rendu
+SIMULATION — Résultat d'exemple pour « Préparer l’email de suivi ». Aucun outil métier ni service externe n'a été appelé.
+Contenu produit
+Brouillon
+Exemple de brouillon : voici le compte rendu et l’action à préciser. Aucun email envoyé.
+Données techniques
+Preuves
+Preuve 1 · 95fd90d9
+Vérifier le meeting et son transcript
+
+Résultat validé · tentative 1
+
+Compte rendu
+SIMULATION — Résultat d'exemple pour « Vérifier le meeting et son transcript ». Aucun outil métier ni service externe n'a été appelé.
+Contenu produit
+Actions
+Action	Responsable	Échéance
+Confirmer le périmètre de l’atelier	À préciser	À préciser
+Minutes
+Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer.
+Données techniques
+Preuves
+Preuve 1 · 4a6bb2e5
+Fermer
+Voir le rapport complet

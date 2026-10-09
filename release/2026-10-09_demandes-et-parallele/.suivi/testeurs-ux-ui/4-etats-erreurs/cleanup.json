@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-09T20:55:32.799Z",
+  "appClosed": true,
+  "brokerCleanup": true,
+  "candidateShaCheckedByHarness": true,
+  "xvfbPreserved": true,
+  "ownRemainingProcesses": [],
+  "xvfb184Pids": [
+    890531
+  ],
+  "captures": 18,
+  "allCapturesViewed": true
+}

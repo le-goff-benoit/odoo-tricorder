@@ -1,0 +1,62 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:38
+
+SUIVI · QUALIFICATION DES DEMANDES FICTIVES
+Qualification des demandes fictives
+Options
+Résultat à valider
+3 / 4 étapes
+Examiner le résultat
+
+Préparer la réponse urgente
+
+Simulation. Aucun modèle ni service métier appelé. Résultat à valider. 1 bloc(s) attendent votre intervention.
+Transférer vers un projet…
+Graphe
+Détail
+1 donnée
+normale
+urgente
+◇
+Qualifier la demande
+Tâche
+Validé
+1 entrée → 2 sorties
+⑂
+Priorité urgente ?
+Condition
+Validé
+1 entrée → 0 sortie
+◇
+Préparer la réponse normale
+Tâche
+Non applicable
+0 entrée → 0 sortie
+◇
+Préparer la réponse urgente
+Tâche
+À valider
+0 entrée → 0 sortie
+4 blocs · 3 liens
+−
+100 %
++
+Ajuster

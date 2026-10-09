@@ -1,0 +1,35 @@
+{
+  "before": [
+    [
+      "d0b7442108f5453f9c369efda844d602",
+      1217929,
+      "/tmp/tricorder-panel-interaction-kvDScM/state/workflows/projects/pc42fd40d11ad44b0",
+      null,
+      null
+    ],
+    [
+      "09e7487fb563499ea35df673e92a062a",
+      1217948,
+      "/tmp/tricorder-panel-interaction-kvDScM/state/workflows/projects/pc42fd40d11ad44b0",
+      null,
+      null
+    ]
+  ],
+  "after": [
+    [
+      "d0b7442108f5453f9c369efda844d602",
+      1217929,
+      "/tmp/tricorder-panel-interaction-kvDScM/state/workflows/projects/pc42fd40d11ad44b0",
+      null,
+      null
+    ],
+    [
+      "09e7487fb563499ea35df673e92a062a",
+      1217948,
+      "/tmp/tricorder-panel-interaction-kvDScM/state/workflows/projects/pc42fd40d11ad44b0",
+      null,
+      null
+    ]
+  ],
+  "providerForNextLaunch": "claude"
+}

@@ -1,0 +1,3 @@
+{"case": "structured-proof-export", "link_in_report": true, "target_exists": false, "proof_readable_in_store": "Document synthétique"}
+{"case": "non-string-proof-role", "accepted_status": "accepted", "error": "TypeError(\"unhashable type: 'list'\")"}
+{"case": "nested-action-table", "markdown": "**Actions**\n\n| Action | Responsable | Échéance | Checks |\n| --- | --- | --- | --- |\n| Relire | Alice | 2026-10-10 | | Action | Responsable | Échéance | | --- | --- | --- | | Vérifier | Bob | 2026-10-09 | |\n"}

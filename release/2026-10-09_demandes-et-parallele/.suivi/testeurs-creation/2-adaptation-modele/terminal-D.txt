@@ -1,0 +1,12 @@
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-creation2-reception-prestataire-d-soVg9t/s
+tate/workflows/workspace/.tr
+icorder$ command -v codex; codex --version; 
+command -v claude; claude --version
+/tmp/tricorder-creation2-reception-prestataire-d-soVg9t/stubs/codex
+codex 0.0.0 TRICORDER-CREATION2-ADAPTATION-STUB
+/tmp/tricorder-creation2-reception-prestataire-d-soVg9t/stubs/claude
+claude 0.0.0 TRICORDER-CREATION2-ADAPTATION-STUB
+blegoff@wrk226:/tmp/tricorder-creation2-reception-prestataire-d-soVg9t/s
+tate/workflows/workspace/.tricorder$  

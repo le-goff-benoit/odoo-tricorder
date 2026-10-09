@@ -1,0 +1,176 @@
+{
+  "run": {
+    "contract": "3e806fd0621d727c55c01c9b4344632241f43d54612508683769e80e61d501f9",
+    "created": 1791574099.971545,
+    "definition": {
+      "defaults": {
+        "model": "synthetic-local",
+        "provider": "codex"
+      },
+      "edges": [],
+      "id": "portefeuille-charge",
+      "nodes": [
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "synthetic-local",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "work",
+          "kind": "agent",
+          "outputs": {
+            "result": "string"
+          },
+          "title": "Analyser les informations synthétiques",
+          "validation": "contract"
+        }
+      ],
+      "parameters": {
+        "conversation": "c00cf4d000b044b10",
+        "depends_on_runs": [],
+        "request": "R17 — Vérifier les informations disponibles"
+      },
+      "schema": 1,
+      "title": "Préparer et vérifier les demandes du portefeuille"
+    },
+    "driver": "conversation",
+    "id": "r6b27ad6a89b244fc",
+    "nodes": {
+      "work": {
+        "attempt": 1,
+        "heartbeat": 1791574100.032314,
+        "input_sources": {},
+        "inputs": {
+          "clarifications": [
+            {
+              "answer": "Comparer les besoins actuels et ceux du prochain trimestre, sans engagement de budget.",
+              "question": "Pour R17, faut-il comparer uniquement les besoins actuels ou ajouter les besoins du trimestre prochain ?"
+            }
+          ]
+        },
+        "ownership": "native",
+        "processes": [],
+        "question": {
+          "answer": "Comparer les besoins actuels et ceux du prochain trimestre, sans engagement de budget.",
+          "answered": 1791574168.2697303,
+          "created": 1791574100.0342836,
+          "id": "qc749f607e6574654",
+          "status": "answered",
+          "text": "Pour R17, faut-il comparer uniquement les besoins actuels ou ajouter les besoins du trimestre prochain ?"
+        },
+        "questions": [
+          {
+            "answer": "Comparer les besoins actuels et ceux du prochain trimestre, sans engagement de budget.",
+            "answered": 1791574168.2697303,
+            "created": 1791574100.0342836,
+            "id": "qc749f607e6574654",
+            "status": "answered",
+            "text": "Pour R17, faut-il comparer uniquement les besoins actuels ou ajouter les besoins du trimestre prochain ?"
+          }
+        ],
+        "resume_question": true,
+        "started": 1791574100.0323138,
+        "status": "ready"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "model": "synthetic-local",
+        "provider": "codex"
+      },
+      "edges": [],
+      "id": "portefeuille-charge",
+      "nodes": [
+        {
+          "id": "work",
+          "kind": "agent",
+          "outputs": {
+            "result": "string"
+          },
+          "title": "Analyser les informations synthétiques",
+          "validation": "contract"
+        }
+      ],
+      "schema": 1,
+      "title": "Préparer et vérifier les demandes du portefeuille"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "c00cf4d000b044b10",
+      "depends_on_runs": [],
+      "request": "R17 — Vérifier les informations disponibles"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-portefeuille-question-1Zkk9J/state/workflows/projects/p4a9ab30b77e248b7/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p4a9ab30b77e248b7",
+    "release": "",
+    "scope": {
+      "id": "p4a9ab30b77e248b7",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791574168.2697916,
+    "focus": {
+      "node": "work",
+      "title": "Analyser les informations synthétiques",
+      "status": "ready",
+      "action": "Continuer dans le terminal"
+    },
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 33,
+      "at": 1791574099.9718134,
+      "node": null,
+      "simulation": false,
+      "type": "started"
+    },
+    {
+      "seq": 34,
+      "at": 1791574099.971851,
+      "node": "work",
+      "type": "ready"
+    },
+    {
+      "seq": 73,
+      "at": 1791574100.0323162,
+      "attempt": 1,
+      "node": "work",
+      "type": "running"
+    },
+    {
+      "seq": 74,
+      "at": 1791574100.0343168,
+      "node": "work",
+      "question": {
+        "created": 1791574100.0342836,
+        "id": "qc749f607e6574654",
+        "status": "waiting",
+        "text": "Pour R17, faut-il comparer uniquement les besoins actuels ou ajouter les besoins du trimestre prochain ?"
+      },
+      "type": "question"
+    },
+    {
+      "seq": 78,
+      "answer": "Comparer les besoins actuels et ceux du prochain trimestre, sans engagement de budget.",
+      "at": 1791574168.2697382,
+      "node": "work",
+      "question": "qc749f607e6574654",
+      "type": "answer"
+    }
+  ],
+  "events_next": null
+}

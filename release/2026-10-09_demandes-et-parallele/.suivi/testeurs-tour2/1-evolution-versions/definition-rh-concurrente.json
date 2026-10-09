@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "id": "rh",
+  "title": "Préparer un accueil RH",
+  "description": "Modification terminal — ajouter le rendez-vous médecine du travail",
+  "defaults": {
+    "provider": "codex",
+    "model": "modele-test-v1",
+    "effort": "medium"
+  },
+  "nodes": [
+    {
+      "id": "besoin",
+      "title": "Préciser le besoin achats",
+      "kind": "question",
+      "position": {
+        "x": 70,
+        "y": 100
+      },
+      "question": "Quelle date confirmer pour l’arrivée de Camille ?",
+      "outputs": {
+        "answer": "string"
+      }
+    },
+    {
+      "id": "analyse",
+      "title": "Préparer le parcours RH",
+      "kind": "agent",
+      "position": {
+        "x": 380,
+        "y": 100
+      },
+      "prompt": "RH terminal — Préparer accès et rendez-vous médical.",
+      "inputs": {
+        "budget": "string"
+      },
+      "outputs": {
+        "synthese": "string"
+      },
+      "criteria": [
+        "Coût total, délai et garantie explicités."
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "besoin-analyse",
+      "from": "besoin",
+      "to": "analyse",
+      "outcome": "done",
+      "mapping": {
+        "answer": "budget"
+      }
+    }
+  ],
+  "revision": 1
+}

@@ -1,0 +1,6 @@
+test_unreadable_provider_output_is_actionable_and_never_releases_the_next_decision (test_provider_errors.ProviderErrorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 3.371s
+
+OK

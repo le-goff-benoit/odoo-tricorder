@@ -1,0 +1,46 @@
+
+Running 2 tests using 1 worker
+
+(node:1146235) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:43:1 › a reused composite method clears nested execution context and preserves instructions and business parameters (4.2s)
+  ✘  2 release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:63:1 › double submission of a reuse form creates one copy without a false failure after success (8.9s)
+
+
+  1) release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:63:1 › double submission of a reuse form creates one copy without a false failure after success 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('alert')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      70 |   const library=await call('project.get',{project:'library'});
+      71 |   expect(library.workflows.filter(w=>w.title==='Copie par double geste')).toHaveLength(1);
+    > 72 |   await expect(page.getByRole('alert')).toHaveCount(0);
+         |                                         ^
+      73 | });
+      74 |
+        at /home/blegoff/odoo-tricorder/release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:72:41
+
+    Error Context: ../../../tmp/tricorder-ux-review-gui/review-reuse-safety-double-81a47-false-failure-after-success/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-ux-review-gui/review-reuse-safety-double-81a47-false-failure-after-success/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-ux-review-gui/review-reuse-safety-double-81a47-false-failure-after-success/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:63:1 › double submission of a reuse form creates one copy without a false failure after success 
+  1 passed (13.6s)

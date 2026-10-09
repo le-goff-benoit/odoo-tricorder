@@ -1,0 +1,36 @@
+
+Running 1 test using 1 worker
+
+(node:1057967) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/schedule-versions.spec.cjs:92:1 › a rapid double click activates a replacement only once and still requires human confirmation (3.5s)
+
+
+  1) tests/schedule-versions.spec.cjs:92:1 › a rapid double click activates a replacement only once and still requires human confirmation 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 2
+
+      122 |   await page.getByRole('button', { name: 'Activité', exact: true }).click();
+      123 |   await expect(page.locator('.activity-page h1')).toHaveText('Activité');
+    > 124 |   expect(await app.evaluate(() => globalThis.__scheduleActivation.calls)).toBe(1);
+          |                                                                           ^
+      125 |   const schedules = await call('schedule.list');
+      126 |   expect(schedules).toHaveLength(2); expect(schedules.filter(row => row.enabled)).toHaveLength(1);
+      127 |   expect(schedules.find(row => row.id === schedule.id).archived).toBe(true);
+        at /home/blegoff/odoo-tricorder/tests/schedule-versions.spec.cjs:124:75
+
+    Error Context: ../../../tmp/tricorder-tour2-schedule-double-red/schedule-versions-a-rapid--4fdf1-requires-human-confirmation/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-tour2-schedule-double-red/schedule-versions-a-rapid--4fdf1-requires-human-confirmation/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-tour2-schedule-double-red/schedule-versions-a-rapid--4fdf1-requires-human-confirmation/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/schedule-versions.spec.cjs:92:1 › a rapid double click activates a replacement only once and still requires human confirmation 

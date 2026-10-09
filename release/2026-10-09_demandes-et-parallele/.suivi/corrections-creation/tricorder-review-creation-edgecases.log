@@ -1,0 +1,12 @@
+test_active_routed_branch_only_constrains_samples (__main__.Review) ... ok
+test_common_intersection_for_multiple_conditions (__main__.Review) ... ok
+test_disjoint_conditions_fail_with_correctable_explanation (__main__.Review) ... ok
+test_examples_are_deep_copied_without_mutating_definition (__main__.Review) ... ok
+test_explicit_invalid_sample_is_never_replaced_with_valid_default (__main__.Review) ... ok
+test_invalid_nonobject_samples_fail_without_tool_or_false_success (__main__.Review) ... ok
+test_simulation_agent_with_capability_never_calls_tool_or_provider (__main__.Review) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.083s
+
+OK

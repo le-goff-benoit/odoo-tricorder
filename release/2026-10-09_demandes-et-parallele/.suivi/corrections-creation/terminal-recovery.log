@@ -1,0 +1,15 @@
+
+Running 8 tests using 1 worker
+
+(node:1085149) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/execution-interactions.spec.cjs:90:1 › negative result remains receivable and routes to the corrective branch (6.0s)
+  ✓  2 tests/execution-interactions.spec.cjs:103:1 › uncertain local notification retains receipt lookup without sending twice (6.1s)
+  ✓  3 tests/execution-interactions.spec.cjs:111:1 › live failure updates the graph badge and accessible name without reopening the run (5.9s)
+  ✓  4 tests/execution-interactions.spec.cjs:121:1 › request menu keeps keyboard focus and a question draft while activity changes (5.9s)
+  ✓  5 tests/execution-interactions.spec.cjs:143:1 › search menu keeps its expanded state and keyboard focus when requests arrive (6.0s)
+  ✓  6 tests/execution-interactions.spec.cjs:154:1 › search draft survives polling and deferred request counts refresh after leaving the input (5.9s)
+  ✓  7 tests/execution-interactions.spec.cjs:181:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (6.9s)
+  ✓  8 tests/execution-interactions.spec.cjs:220:1 › a stopped conversation is explained and resumes explicitly without losing requests or its terminal (7.8s)
+
+  8 passed (51.1s)

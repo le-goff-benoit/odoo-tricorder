@@ -1,0 +1,29 @@
+{
+  "temporaryRoot": "/tmp/tri-tour2-evolution-utk7bckx",
+  "environment": {
+    "HOME": "/tmp/tri-tour2-evolution-utk7bckx/home",
+    "XDG_CONFIG_HOME": "/tmp/tri-tour2-evolution-utk7bckx/config",
+    "XDG_CACHE_HOME": "/tmp/tri-tour2-evolution-utk7bckx/cache",
+    "XDG_DATA_HOME": "/tmp/tri-tour2-evolution-utk7bckx/data",
+    "XDG_RUNTIME_DIR": "/tmp/tri-tour2-evolution-utk7bckx/runtime",
+    "TRICORDER_HOME": "/tmp/tri-tour2-evolution-utk7bckx/home",
+    "TRICORDER_STATE_DIR": "/tmp/tri-tour2-evolution-utk7bckx/state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tri-tour2-evolution-utk7bckx/runtime",
+    "CODEX_HOME": "/tmp/tri-tour2-evolution-utk7bckx/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tri-tour2-evolution-utk7bckx/claude",
+    "TRICORDER_AGENTS_DIR": "/tmp/tri-tour2-evolution-utk7bckx/agents",
+    "PATH": "/tmp/tri-tour2-evolution-utk7bckx/bin:/usr/bin:/bin",
+    "DISPLAY": ":181",
+    "XAUTHORITY": "/tmp/tricorder-functional-display/auth-181",
+    "LANG": "fr_CH.UTF-8",
+    "SHELL": "/bin/bash",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "package": {
+    "executable_sha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar_sha256": "74bfb78a5261899b11de76f1f25e59a31753d086de0992f229e52141885cc058"
+  },
+  "executable": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder",
+  "backend": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/backend"
+}

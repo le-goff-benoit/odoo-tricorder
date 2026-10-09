@@ -1,0 +1,78 @@
+{
+  "package": {
+    "executable": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder",
+    "executableSha": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/app.asar",
+    "asarSha": "0ddb18c66b49d3c0713c0292a997897bef144da03a7407516d14e922c4b4807a"
+  },
+  "persona": {
+    "metier": 9,
+    "technique": 3,
+    "method": "Testeur simulant ce profil, aucun utilisateur métier recruté"
+  },
+  "P1": {
+    "workflow": "Boréal — Préparer une réponse",
+    "revision": 2,
+    "prompt": "Lire une demande fictive, relever matériel, quantité et dates, puis préparer une réponse à relire",
+    "inputs": {
+      "demande": "string"
+    },
+    "outputs": {
+      "brouillon": "string"
+    },
+    "reopened": true
+  },
+  "P2": {
+    "workflow": "Boréal — Reformuler une réponse",
+    "revision": 6,
+    "provider": "claude",
+    "role": "generalist / Aucun agent dédié",
+    "prompt": "Reformuler le texte fourni en français simple, conserver quantités et dates",
+    "inputs": {
+      "texte_source": "string"
+    },
+    "outputs": {
+      "texte_reformule": "string"
+    },
+    "providerChanges": [
+      "codex",
+      "claude",
+      "codex",
+      "claude"
+    ],
+    "reopened": true
+  },
+  "P3": {
+    "workflow": "Boréal — Brouillon local",
+    "revision": 3,
+    "command": "/tmp/tricorder-t3-agents-connexions-ugPhG9/stubs/brouillon-atelier",
+    "outputs": {
+      "brouillon": "string"
+    },
+    "plugin": "boreal-local",
+    "operation": "draft",
+    "target": "brouillon-local-D-102",
+    "candidate": "texte-fictif-v1",
+    "approval": "Autoriser le brouillon local",
+    "toolQualifiedByGui": true,
+    "commandExecution": "non jouée : prérequis première étape non configuré",
+    "draftExecution": "non jouée"
+  },
+  "P4": {
+    "workflow": "Boréal — Relire et compléter",
+    "revision": 5,
+    "plannedQuestion": "Relire quantités et dates avant validation",
+    "notification": {
+      "plugin": "boreal-local",
+      "operation": "notify",
+      "recipient": "canal-local-inerte-boreal",
+      "authorization": "case GUI explicitement cochée"
+    },
+    "requestVariant": "D-102 : 8 chaises le 15 octobre ; date retour manquante. Variante jouée distincte du fichier initial 3 tables.",
+    "unplannedQuestionSource": "Fixture Engine.claim et conversations.ask, aucun modèle réel",
+    "answer": "Retour prévu le 17 octobre à 16 h.",
+    "decision": "approve par GUI",
+    "completed": true
+  },
+  "screenshotsReviewed": 13
+}

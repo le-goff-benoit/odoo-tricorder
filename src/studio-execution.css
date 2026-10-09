@@ -44,6 +44,7 @@
 .execution-label {font-size:13px;font-weight:650}
 .execution-label.has-issue {color:var(--danger)}
 .execution-progress {font-size:11px;color:var(--muted);white-space:nowrap}
+.execution-progress small {display:block;font-size:11px;white-space:normal}
 .execution-state button {font-size:12px;min-height:32px;padding:5px 10px;white-space:normal}
 .execution-next {font-size:12px;line-height:1.5;margin:5px 0 0;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 #studio-content .conversation-tray {display:flex;align-items:center;gap:10px;padding:6px 16px;position:relative;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--line)}
@@ -82,6 +83,29 @@
 
 #studio-content.execution-view .node[data-failed=true] {border-color:var(--danger)}
 .pill.failed {color:var(--danger);background:var(--danger-soft)}
+
+.attempt-history {margin:20px 0;border-top:1px solid var(--line);padding-top:16px}
+.attempt-history h3 {margin:0 0 12px;font-size:14px}
+.attempt-list {list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.attempt-card {border:1px solid var(--line);border-radius:8px;padding:14px;min-width:0}
+.attempt-heading {display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}
+.attempt-date {color:var(--muted);font-size:12px;margin-top:4px}
+.attempt-summary {margin:12px 0;line-height:1.6}
+.attempt-text {white-space:pre-wrap;overflow-wrap:anywhere;user-select:text}
+.attempt-retry,.attempt-cause {display:grid;gap:5px;margin:12px 0;line-height:1.5}
+.attempt-retry {border-left:2px solid var(--accent);padding-left:10px}
+.attempt-retry > strong,.attempt-cause > strong {font-size:12px}
+.attempt-cause {color:var(--muted)}
+.attempt-results,.attempt-technical {margin-top:12px}
+.attempt-results > summary,.attempt-technical > summary {cursor:pointer;font-size:12px}
+.attempt-technical > summary {color:var(--muted)}
+.attempt-results h4 {font-size:12px;margin:14px 0 6px}
+.attempt-fields {display:grid;gap:4px;margin:10px 0;font-size:13px}
+.attempt-fields dt {font-weight:600;color:var(--muted)}
+.attempt-fields dd {margin:0 0 8px;min-width:0;overflow-wrap:anywhere}
+.attempt-values {margin:0;padding-left:18px;display:grid;gap:6px}
+.attempt-proofs {display:flex;gap:8px;flex-wrap:wrap}
+.attempt-proofs button {font-size:12px}
 
 /* Doing work and designing workflows have separate, predictable entry points. */
 .catalog-tabs {display:flex;gap:6px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:24px}
@@ -123,9 +147,12 @@
 .step-trail [aria-current=step] {border-color:var(--accent);background:var(--accent-soft)}
 .step-trail .pill {font-size:10px;justify-self:start}
 @container workflow (max-width:650px) {.workflow-row {flex-wrap:wrap}.workflow-row > .row {justify-content:flex-start}.conversation-list button {display:grid;gap:4px}.project-work-page .page-heading {gap:10px}}
-.execution-map .node {width:var(--run-node-width);height:114px;min-height:114px;border-radius:8px}
+.execution-map .node {width:var(--run-node-width);height:auto;min-height:132px;border-radius:8px}
 .execution-map .node .node-main {padding:12px;flex:1}
-.execution-map .node .node-footer {padding:6px 10px;flex-shrink:0}
+.execution-map .node .node-footer {padding:8px 10px;flex-shrink:0;display:grid;justify-content:start;gap:5px}
+.execution-map .node .node-footer > span {max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.execution-map .node .node-footer .pill {justify-self:start}
+.execution-map .node .mission {-webkit-line-clamp:unset;display:block;overflow:visible}
 .execution-map .node .port.in {top:-5px;left:calc(50% - 4px)}
 .execution-map .node .port.out {top:auto;bottom:-5px;left:calc(50% - 4px)}
 .execution-map .node .kind {font-size:11px;margin-top:3px}
@@ -173,3 +200,7 @@
 /* The selected step is already named in the trail; keep the detail for its content. */
 #studio-content.execution-view .inspector > .eyebrow,
 #studio-content.execution-view .inspector > h2 {display:none}
+
+/* A recorded refusal is a processed decision, never an approval. */
+.pill.decision-rejected {color:var(--warn);background:var(--warn-soft)}
+.pill.decision-recorded {color:var(--muted);background:var(--soft)}

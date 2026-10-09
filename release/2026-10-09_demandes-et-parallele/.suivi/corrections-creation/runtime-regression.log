@@ -1,0 +1,14 @@
+test_backup_preserves_waiting_decision (test_workflow_runtime.RuntimeTests) ... ok
+test_cli_argv_preserves_prompt_data_no_shell_and_no_fallback (test_workflow_runtime.RuntimeTests) ... ok
+test_concurrent_human_answers_apply_once (test_workflow_runtime.RuntimeTests) ... ok
+test_conditional_join_waits_only_selected_branches (test_workflow_runtime.RuntimeTests) ... ok
+test_generic_bridge_refuses_self_approval_and_secret_redaction (test_workflow_runtime.RuntimeTests) ... ok
+test_provider_deduplicates_usage_correlates_and_refuses_broken_stream (test_workflow_runtime.RuntimeTests) ... ok
+test_simulation_exports_one_human_entry_and_verifiable_portable_evidence (test_workflow_runtime.RuntimeTests) ... ok
+test_unobserved_worker_is_not_relaunched_or_auto_accepted (test_workflow_runtime.RuntimeTests) ... ok
+test_worker_result_recovered_without_second_execution (test_workflow_runtime.RuntimeTests) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.783s
+
+OK

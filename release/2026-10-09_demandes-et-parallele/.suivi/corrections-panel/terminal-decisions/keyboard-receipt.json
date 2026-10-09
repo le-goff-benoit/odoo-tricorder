@@ -1,0 +1,30 @@
+{
+  "emptyComment": "returned; validity.valueMissing; focus on required note",
+  "accepted": {
+    "attempt": 1,
+    "finished": 1791583349.3846807,
+    "heartbeat": 1791583349.3829753,
+    "input_sources": {},
+    "inputs": {},
+    "outcome": "done",
+    "ownership": "managed",
+    "processes": [],
+    "receipt": {
+      "actor": "local-user",
+      "at": 1791583352.849845,
+      "checks": [
+        "Les pièces ont été vérifiées."
+      ],
+      "contract": "08d5b31b713eead19d802ba03a2df677fe354f46341f425726f71a005f90e7df",
+      "note": "Pièces contrôlées sur le banc synthétique."
+    },
+    "result": {
+      "ok": true,
+      "outputs": {},
+      "summary": "Résultat synthétique : les pièces sont disponibles."
+    },
+    "started": 1791583349.3829744,
+    "status": "accepted",
+    "token": "t5556b6e892f84199"
+  }
+}

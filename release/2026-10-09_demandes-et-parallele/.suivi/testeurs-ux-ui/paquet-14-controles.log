@@ -1,0 +1,21 @@
+
+Running 14 tests using 1 worker
+
+(node:1091293) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/desktop-output-pipes.spec.cjs:6:1 › a recoverable backend rejection stays in the app after its launcher closes log pipes (1.7s)
+  ✓   2 tests/execution-interactions.spec.cjs:90:1 › negative result remains receivable and routes to the corrective branch (5.9s)
+  ✓   3 tests/execution-interactions.spec.cjs:103:1 › uncertain local notification retains receipt lookup without sending twice (6.1s)
+  ✓   4 tests/execution-interactions.spec.cjs:111:1 › live failure updates the graph badge and accessible name without reopening the run (5.9s)
+  ✓   5 tests/execution-interactions.spec.cjs:121:1 › request menu keeps keyboard focus and a question draft while activity changes (5.9s)
+  ✓   6 tests/execution-interactions.spec.cjs:143:1 › search menu keeps its expanded state and keyboard focus when requests arrive (5.9s)
+  ✓   7 tests/execution-interactions.spec.cjs:154:1 › search draft survives polling and deferred request counts refresh after leaving the input (6.0s)
+  ✓   8 tests/execution-interactions.spec.cjs:181:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (7.0s)
+  ✓   9 tests/execution-interactions.spec.cjs:220:1 › a stopped conversation is explained and resumes explicitly without losing requests or its terminal (8.4s)
+  ✓  10 tests/workflow-creation-feedback.spec.cjs:42:1 › typed simulation data persists and a false boolean follows only the normal branch (7.7s)
+  ✓  11 tests/workflow-creation-feedback.spec.cjs:77:1 › removing a middle block announces detached data and launch guidance leads to a repairable link (5.6s)
+  ✓  12 tests/workflow-creation-feedback.spec.cjs:102:1 › integrated template copies are explicitly named and the source remains available (6.0s)
+  ✓  13 tests/workflow-creation-feedback.spec.cjs:121:1 › navigation records pending block edits and provider installation is not described as an authenticated connection (5.7s)
+  ✓  14 tests/workflow-creation-feedback.spec.cjs:138:1 › portable import previews named blocks and data before optional technical JSON (5.3s)
+
+  14 passed (1.4m)

@@ -1,0 +1,341 @@
+{
+  "oldRun": {
+    "contract": "6194de43ce5dfa625c5c941c857bc995e0dbed094b4229ce5440ade476e2f587",
+    "created": 1791574515.7678313,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "modele-test-v1",
+        "provider": "codex"
+      },
+      "description": "Procédure achats version un",
+      "edges": [
+        {
+          "from": "besoin",
+          "id": "besoin-analyse",
+          "mapping": {
+            "answer": "budget"
+          },
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "achats",
+      "nodes": [
+        {
+          "id": "besoin",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+          "title": "Préciser le besoin achats"
+        },
+        {
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "execution": {
+            "effort": "medium",
+            "model": "modele-test-v1",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "analyse",
+          "inputs": {
+            "budget": "string"
+          },
+          "kind": "agent",
+          "outputs": {
+            "synthese": "string"
+          },
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+          "title": "Comparer les offres"
+        }
+      ],
+      "parameters": {
+        "request": "ACH-042 — choisir une offre pour les écrans"
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Référencement fournisseur achats"
+    },
+    "driver": "automatic",
+    "id": "rd6ebfde0e1594af4",
+    "nodes": {
+      "analyse": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "besoin": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "question": {
+          "created": 1791574515.7701013,
+          "id": "qa45874e44b3a4a37",
+          "status": "waiting",
+          "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+        },
+        "questions": [
+          {
+            "created": 1791574515.7701013,
+            "id": "qa45874e44b3a4a37",
+            "status": "waiting",
+            "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+          }
+        ],
+        "status": "waiting_input"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "effort": "medium",
+        "model": "modele-test-v1",
+        "provider": "codex"
+      },
+      "description": "Procédure achats version un",
+      "edges": [
+        {
+          "from": "besoin",
+          "id": "besoin-analyse",
+          "mapping": {
+            "answer": "budget"
+          },
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "achats",
+      "nodes": [
+        {
+          "id": "besoin",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+          "title": "Préciser le besoin achats"
+        },
+        {
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "id": "analyse",
+          "inputs": {
+            "budget": "string"
+          },
+          "kind": "agent",
+          "outputs": {
+            "synthese": "string"
+          },
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+          "title": "Comparer les offres"
+        }
+      ],
+      "revision": 1,
+      "schema": 1,
+      "title": "Référencement fournisseur achats"
+    },
+    "packs": [],
+    "parameters": {
+      "request": "ACH-042 — choisir une offre pour les écrans"
+    },
+    "plugins": {
+      "path": "/tmp/tri-tour2-evolution-utk7bckx/state/workflows/projects/p799f7610454f43f1/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p799f7610454f43f1",
+    "release": "",
+    "scope": {
+      "id": "p799f7610454f43f1",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791574515.7701364
+  },
+  "workflows": [
+    {
+      "defaults": {
+        "effort": "medium",
+        "model": "modele-test-v1",
+        "provider": "codex"
+      },
+      "description": "Procédure achats version un",
+      "edges": [
+        {
+          "from": "besoin",
+          "id": "besoin-analyse",
+          "mapping": {
+            "answer": "budget"
+          },
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "achats",
+      "nodes": [
+        {
+          "id": "besoin",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+          "title": "Préciser le besoin achats"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "effort": "medium",
+          "execution_mode": "text",
+          "id": "analyse",
+          "inputs": {
+            "budget": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 1,
+          "model": "modele-test-v2",
+          "outputs": {
+            "risques": "string",
+            "synthese_v2": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "V2 — Comparer coût total, délai écrit, garantie et impact environnemental.",
+          "provider": "claude",
+          "required_capabilities": [],
+          "resources": [],
+          "session": "delegated",
+          "title": "Comparer les offres",
+          "validation": "human"
+        }
+      ],
+      "revision": 2,
+      "schema": 1,
+      "title": "Référencement fournisseur achats"
+    },
+    {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "provider": "codex"
+      },
+      "description": "Procédure achats version un",
+      "edges": [],
+      "id": "non-lancable",
+      "nodes": [
+        {
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "id": "analyse",
+          "inputs": {},
+          "kind": "agent",
+          "outputs": {
+            "synthese": "string"
+          },
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+          "title": "Comparer les offres"
+        }
+      ],
+      "revision": 1,
+      "schema": 1,
+      "title": "Procédure achats à reconfigurer"
+    },
+    {
+      "defaults": {
+        "effort": "medium",
+        "model": "modele-test-v1",
+        "provider": "codex"
+      },
+      "description": "Accueil RH version un",
+      "edges": [
+        {
+          "from": "besoin",
+          "id": "besoin-analyse",
+          "mapping": {
+            "answer": "budget"
+          },
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "rh",
+      "nodes": [
+        {
+          "id": "besoin",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "question": "Quelle date confirmer pour l’arrivée de Camille ?",
+          "title": "Préciser le besoin achats"
+        },
+        {
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "id": "analyse",
+          "inputs": {
+            "budget": "string"
+          },
+          "kind": "agent",
+          "outputs": {
+            "synthese": "string"
+          },
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "prompt": "Préparer accès, matériel et rencontre avec le tuteur.",
+          "title": "Préparer le parcours RH"
+        }
+      ],
+      "revision": 1,
+      "schema": 1,
+      "title": "Préparer un accueil RH"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "recorded_utc": "2026-10-09T22:51:42.484989+00:00",
+  "logs": {
+    "ui-source-v3.log": {
+      "source": "/tmp/tricorder-rc12-final-ui-source.log",
+      "sha256": "e55d2318859e75994a5fb52e1d4ca6b6e98fa467de18d56f01f4ca796eef1a68"
+    },
+    "ui-packaged-v2.log": {
+      "source": "/tmp/tricorder-rc12-final-ui-packaged.log",
+      "sha256": "4761a93b310cc4752dbd4f3ce8003326b441c93bd21161eac97b848ab733b5c2"
+    },
+    "unit.log": {
+      "source": "/tmp/tricorder-rc12-final-unit.log",
+      "sha256": "0fe56811c86697629acae00681d88ab196f429206d8cb8e5254d2386d7e7f69a"
+    },
+    "build.log": {
+      "source": "/tmp/tricorder-rc12-final-build.log",
+      "sha256": "70b8b66c15851828a589261ae310d7eb5e43cb5e026b188979fb77dd0d5c0c9d"
+    }
+  },
+  "artifacts": {
+    "build-artifacts/linux-unpacked/resources/app.asar": "aa118d030f1f6cbe500462921b873e2d84fef283d1218acc4064a9367356d944",
+    "dist/app.js": "4e8b38d2314aa6020cab9b8679c48092ce78792f575404d48d6c90f9f95e4342",
+    "tests/execution-interactions.spec.cjs": "5f73e2be53401f7d0473f7f75db4130d3341b837c46289533916aa261fd692ab"
+  },
+  "results": {
+    "source_gui": {
+      "passed": 146,
+      "failed": 0,
+      "skipped": 2
+    },
+    "packaged_gui": {
+      "passed": 146,
+      "failed": 0,
+      "skipped": 2
+    },
+    "python": {
+      "passed": 345,
+      "failed": 0
+    },
+    "javascript": {
+      "passed": 135,
+      "failed": 0
+    },
+    "build": "completed; exit 0 reported by parent",
+    "exit_codes": "Parent reports 0; log summaries and artifact hashes independently verified."
+  }
+}

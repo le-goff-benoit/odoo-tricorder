@@ -1,0 +1,32 @@
+{"event": "mail.search", "query": "Cherche l’email de Camille intitulé Préparation du lancement Atlas du 9 octobre, puis prépare plusieurs demandes et leur plan.", "local": true}
+{"event": "add", "request": "FAQ Atlas : préparer un guide clients à partir du mail de Camille.\nSource originale : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-source.eml\nPlan : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-plan.md", "run": "r70d9f1a21ddb4da8"}
+{"event": "add", "request": "Support Atlas : diagnostiquer le planning vide et préparer une réponse client.\nSource originale : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-source.eml\nPlan : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-plan.md", "run": "rb276bf23604a4858"}
+{"event": "add", "request": "Réunion Atlas : compte rendu, actions et brouillon d’email sans envoyer.\nSource originale : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-source.eml\nPlan : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-plan.md", "run": "rdc37dffb762143f4"}
+{"event": "result", "run": "r70d9f1a21ddb4da8", "node": "intent", "title": "Analyser la demande", "outputs": ["intent"]}
+{"event": "ask", "run": "rb276bf23604a4858", "node": "intent"}
+{"event": "result", "run": "rdc37dffb762143f4", "node": "intent", "title": "Analyser la demande", "outputs": ["intent"]}
+{"event": "result", "run": "r70d9f1a21ddb4da8", "node": "plan", "title": "Préparer le plan", "outputs": ["plan"]}
+{"event": "result", "run": "rdc37dffb762143f4", "node": "plan", "title": "Préparer le plan", "outputs": ["plan"]}
+{"event": "answer", "run": "rb276bf23604a4858", "text": "Léa utilise Firefox ; Camille voit aussi le planning vide dans Chrome."}
+{"event": "result", "run": "rb276bf23604a4858", "node": "intent", "title": "Analyser la demande", "outputs": ["intent"]}
+{"event": "result", "run": "rb276bf23604a4858", "node": "plan", "title": "Préparer le plan", "outputs": ["plan"]}
+{"event": "ask", "run": "r52b962d504b7487a", "node": "review"}
+{"event": "answer", "run": "r52b962d504b7487a", "text": "Pour ce compte rendu, le planning est seulement une action assignée à Léa ; aucune investigation support dans ce parcours."}
+{"event": "result", "run": "r52b962d504b7487a", "node": "review", "title": "Vérifier le meeting et son transcript", "outputs": ["actions", "minutes"]}
+{"event": "result", "run": "r7e33b14ff996431d", "node": "review", "title": "Vérifier le meeting et son transcript", "outputs": ["actions", "minutes"]}
+{"event": "result", "run": "r7e33b14ff996431d", "node": "mail", "title": "Préparer l’email de suivi", "outputs": ["draft"]}
+{"event": "result", "run": "r8af8fb72840c4949", "node": "clarify", "title": "Comprendre le résultat attendu", "outputs": ["brief"]}
+{"event": "result", "run": "r8af8fb72840c4949", "node": "work", "title": "Effectuer le travail demandé", "outputs": ["result"]}
+{"event": "add", "request": "Préparer une FAQ Atlas pour les nouveaux clients, avec les trois questions les plus fréquentes.", "run": "r87d47f71d6294b7b"}
+{"event": "result", "run": "r87d47f71d6294b7b", "node": "clarify", "title": "Comprendre le résultat attendu", "outputs": ["brief"]}
+{"event": "result", "run": "r87d47f71d6294b7b", "node": "work", "title": "Effectuer le travail demandé", "outputs": ["result"]}
+{"event": "mail.search", "query": "Cherche l’email de Camille intitulé Préparation du lancement Atlas du 9 octobre et prépare les trois demandes depuis le message source.", "local": true}
+{"event": "mail.read", "subject": "Préparation du lancement Atlas", "body": "Bonjour, préparez une FAQ clients ; le planning est vide pour Léa ; compte rendu de notre réunion : Camille valide la FAQ vendredi, Léa vérifie mardi. Budget à confirmer. Merci.", "path": "/tmp/tricorder-functional-intention-state-gR4f0r/atlas-source.eml"}
+{"event": "add", "request": "FAQ Atlas : préparer un guide clients à partir du mail de Camille.\nSource originale : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-source.eml\nPlan : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-plan.md", "run": "r255d252a3e1a4143"}
+{"event": "add", "request": "Support Atlas : diagnostiquer le planning vide et préparer une réponse client.\nSource originale : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-source.eml\nPlan : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-plan.md", "run": "r5ae8151d3d80474b"}
+{"event": "add", "request": "Réunion Atlas : compte rendu, actions et brouillon d’email sans envoyer.\nSource originale : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-source.eml\nPlan : /tmp/tricorder-functional-intention-state-gR4f0r/atlas-plan.md", "run": "r175e1e3e41c14a24"}
+{"event": "result", "run": "r255d252a3e1a4143", "node": "clarify", "title": "Comprendre le résultat attendu", "outputs": ["brief"]}
+{"event": "ask", "run": "r5ae8151d3d80474b", "node": "clarify"}
+{"event": "result", "run": "r175e1e3e41c14a24", "node": "clarify", "title": "Comprendre le résultat attendu", "outputs": ["brief"]}
+{"event": "result", "run": "r255d252a3e1a4143", "node": "work", "title": "Effectuer le travail demandé", "outputs": ["result"]}
+{"event": "result", "run": "r175e1e3e41c14a24", "node": "work", "title": "Effectuer le travail demandé", "outputs": ["result"]}

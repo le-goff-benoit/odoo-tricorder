@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-09T20:14:23.669Z",
+  "sha256": {
+    "executable": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar": "0ddb18c66b49d3c0713c0292a997897bef144da03a7407516d14e922c4b4807a"
+  },
+  "unchanged": true,
+  "appPid": 1063322,
+  "brokerPid": 1063440,
+  "display": ":183",
+  "capturesViewed": [
+    "01-terminal-isolement.png",
+    "02-entrees-sorties-typees.png",
+    "03-graphe-donnees-rouvert.png",
+    "04-condition-critique.png",
+    "05-branches-jonction-validation.png",
+    "06-chemin-incomplet-valide.png",
+    "07-retour-cycle-refuse.png",
+    "08-reparation-rouverte.png",
+    "09-lancement-simulation.png",
+    "10-simulation-resultat-exemple.png",
+    "11-validation-ecran-natif.png",
+    "11b-sortie-boolean-incompatible.png",
+    "12-retour-editeur-nom-conserve.png"
+  ],
+  "productChanged": false,
+  "cleanedAt": "2026-10-09T20:14:32.581Z",
+  "cleanup": {
+    "appTerminated": true,
+    "brokerCleanupCalled": true,
+    "sharedXserverUntouched": true,
+    "pidsAbsentVerified": [
+      1063322,
+      1063440,
+      1064090
+    ]
+  }
+}

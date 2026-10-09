@@ -1,0 +1,47 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Equipe Alpha — méthode transfert
+Equipe Beta — dépôt existant
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Equipe Beta — dépôt existant
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:48
+
+Equipe Beta — dépôt existant
+
+/tmp/tricorder-panel-8-integration-NazR9E/depot-beta-fictif
+
+Nouvelle demande
+Créer un workflow
+Options
+Reprendre le travail
+
+Aucune demande en cours. « Nouvelle demande » ouvre votre workflow et son terminal.
+
+Rechercher dans les exécutions
+Workflows disponibles
+Voir les archives
+Transmission méthode Beta adaptée
+
+1 étapes
+
+Exécuter…
+Ouvrir le workflow
+⋯
+Beta — deuxième workflow issu du modèle
+
+1 étapes
+
+Exécuter…
+Ouvrir le workflow
+⋯

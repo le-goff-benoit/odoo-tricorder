@@ -1,0 +1,92 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+3
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:41
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell · Codex arrêté · Analyser un outil fictif de journalisation. Demander quel format de sortie adopter avant toute réalisation.
+Shell · Claude arrêté · Deuxième demande fictive avec Claude : comparer JSON et texte pour le journal.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+/tmp/tricorder-panel-developpement-kafBSA/state/workflows/workspace
+work-1e371432-e68b-4ec3-8bb3-09150fa0c2e3.json
+work-71918ceb-c717-449b-b057-6b05936297ac.json
+{
+  "schema": 1,
+  "id": "work-1e371432-e68b-4ec3-8bb3-09150fa0c2e3",
+  "title": "Analyse technique réutilisable",
+  "description": "Un exemple simulé pour découvrir les branches, la vali
+dation et les décisions humaines.",
+  "parameters": {},
+  "nodes": [
+    {
+      "id": "analyse",
+      "title": "Comprendre la demande",
+      "kind": "task",
+      "position": {
+        "x": 50,
+        "y": 140
+      },
+blegoff@wrk226:/tmp/tricorder-panel-developpement-kafBSA/state/workflows
+/workspace$  
+
+SUIVI · ANALYSE TECHNIQUE RÉUTILISABLE
+Deuxième demande fictive avec Claude : comparer JSON et texte pour le journal.
+Options
+Vue d’ensemble
+Demande
+1 demande
+⌄
+
+Agent arrêté · progression conservée. Aucune étape en cours · 1 demande à prendre en charge
+
+Reprendre l’agent…
+Voir le shell
+Agent arrêté
+0 / 6 étapes
+Reprendre l’agent…
+
+Agent arrêté. Le terminal est au prompt du shell.
+
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Comprendre la demande
+→
+Préparer la réalisation
+Préparer les tests
+
+Dans la conversation
+
+Agent arrêté
+
+Le terminal est au prompt du shell. Reprenez l’agent pour traiter cette étape.
+
+Reprendre l’agent…
+Entrées, sorties et preuves
+Entrées reçues
+Précisions
+Question
+Quel format de sortie retenons-nous pour le journal fictif : JSON ou texte ?
+Réponse
+JSON, une ligne par événement.
+Données techniques

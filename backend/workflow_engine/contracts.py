@@ -44,6 +44,13 @@ def validate_outputs(node, result):
         require(name in values and valid(), f"Sortie {name} absente ou incompatible avec le type {kind}")
 
 
+def condition_outcome(node, value):
+    """Boolean data uses explicit true/false edge identifiers, never truthiness."""
+    if type(value) is bool and {'true', 'false'} <= set(node.get('options', [])):
+        return 'true' if value else 'false'
+    return value
+
+
 def validate_result(graph, node, result, outcome="done"):
     """Reject unusable routing values while their producer can still be retried."""
     validate_outputs(node, result)
@@ -60,7 +67,7 @@ def validate_result(graph, node, result, outcome="done"):
             continue
         for source, destination in edge.get("mapping", {}).items():
             if destination == target["parameter"]:
-                require(result.get("outputs", {}).get(source) in target.get("options", []),
+                require(condition_outcome(target, result.get("outputs", {}).get(source)) in target.get("options", []),
                         f"{node['title']} : sortie {source} incompatible avec les issues de « {target['title']} » ; corriger le résultat avant réception")
 
 
@@ -163,7 +170,12 @@ def validate(graph, *, expanded=False):
         outcome = edge.get("outcome", "done")
         allowed = by_id[source].get("options", ["done", "reject"] if by_id[source]["kind"] == "subworkflow" else ["approve", "reject"]) if by_id[source]["kind"] in {"decision", "condition", "review", "subworkflow"} or by_id[source].get("route_output") or by_id[source].get("component_exit") else ["done"]
         require(outcome in allowed, f"{edge['id']} : issue {outcome} inconnue")
-        for src, dst in edge.get("mapping", {}).items():
+        mapping = edge.get("mapping", {})
+        require(isinstance(mapping, dict) and all(isinstance(dst, str) for dst in mapping.values()),
+                f"{edge['id']} : les données transmises doivent associer chaque sortie à une entrée")
+        require(len(set(mapping.values())) == len(mapping),
+                f"{by_id[target]['title']} : choisissez une seule sortie par entrée dans ce lien ; plusieurs sorties visent la même entrée")
+        for src, dst in mapping.items():
             st = by_id[source].get("outputs", {}).get(src)
             dt = by_id[target].get("inputs", {}).get(dst)
             require(st is not None and dt is not None, f"{edge['id']} : port inconnu {src} → {dst}")

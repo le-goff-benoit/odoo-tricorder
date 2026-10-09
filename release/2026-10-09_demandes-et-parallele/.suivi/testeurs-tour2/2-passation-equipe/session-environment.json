@@ -1,0 +1,24 @@
+{
+  "temp": "/tmp/tricorder-tour2-passation-zKjsde",
+  "packagePath": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder",
+  "env": {
+    "PATH": "/tmp/tricorder-tour2-passation-zKjsde/bin:/usr/bin:/bin",
+    "HOME": "/tmp/tricorder-tour2-passation-zKjsde/home",
+    "DISPLAY": ":182",
+    "XAUTHORITY": "/tmp/tricorder-functional-display/auth-182",
+    "LANG": "C.UTF-8",
+    "XDG_CONFIG_HOME": "/tmp/tricorder-tour2-passation-zKjsde/config",
+    "XDG_CACHE_HOME": "/tmp/tricorder-tour2-passation-zKjsde/cache",
+    "XDG_DATA_HOME": "/tmp/tricorder-tour2-passation-zKjsde/data",
+    "CODEX_HOME": "/tmp/tricorder-tour2-passation-zKjsde/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tricorder-tour2-passation-zKjsde/claude",
+    "TRICORDER_HOME": "/tmp/tricorder-tour2-passation-zKjsde/tricorder",
+    "TRICORDER_STATE_DIR": "/tmp/tricorder-tour2-passation-zKjsde/state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tricorder-tour2-passation-zKjsde/runtime",
+    "TRICORDER_AGENTS_DIR": "/tmp/tricorder-tour2-passation-zKjsde/no-pack",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "source": "/tmp/tricorder-tour2-passation-zKjsde/atelier-nord",
+  "clone": "/tmp/tricorder-tour2-passation-zKjsde/atelier-sud"
+}

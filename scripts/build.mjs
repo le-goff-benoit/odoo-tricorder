@@ -7,4 +7,4 @@ await copyFile('src/index.html', 'dist/index.html');
 await rm('dist/fonts', { recursive: true, force: true });
 await cp('assets/fonts', 'dist/fonts', { recursive: true, filter: source => !source.endsWith('.md') });
 
-await writeFile('dist/studio.css', (await readFile('src/studio.css', 'utf8') + '\n' + await readFile('src/studio-execution.css', 'utf8')).replaceAll(':root[data-theme=dark]', ':host([data-theme=dark])').replaceAll(':root', ':host'));
+await writeFile('dist/studio.css', (await readFile('src/studio.css', 'utf8') + '\n' + await readFile('src/studio-execution.css', 'utf8') + '\n' + await readFile('src/conversation-view.css', 'utf8') + '\n' + await readFile('src/business-results.css', 'utf8')).replaceAll(':root[data-theme=dark]', ':host([data-theme=dark])').replaceAll(':root', ':host'));

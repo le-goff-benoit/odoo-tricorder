@@ -1,0 +1,35 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:ui
+PATH: /tmp/tricorder-ci-tools-ay_jivx5:/usr/bin:/bin
+codex None
+claude None
+
+> odoo-tricorder@0.6.0-rc.12 test:ui
+> npm run build && playwright test tests/workflow-reuse-ux.spec.cjs tests/workflow-wiring.spec.cjs tests/workflow-creation-feedback.spec.cjs tests/studio.spec.cjs tests/simplicity.spec.cjs --grep business project|new human|portable import|portable workflow|first project|mail illustration|candidate QA|mail intake: native --output=/tmp/tricorder-ux-authoring-green
+
+
+> odoo-tricorder@0.6.0-rc.12 build
+> node scripts/build.mjs
+
+
+Running 8 tests using 1 worker
+
+
+  ✓  1 tests/simplicity.spec.cjs:63:1 › first project: an empty installation can add an existing Git repository (1.9s)
+  ✓  2 tests/simplicity.spec.cjs:71:1 › catalog pagination: a workflow beyond the first project page opens and launches without a copy (4.4s)
+
+  ✓  3 tests/studio.spec.cjs:1064:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (6.0s)
+
+  ✓  4 tests/studio.spec.cjs:1109:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (6.7s)
+  ✓  5 tests/studio.spec.cjs:1161:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload (3.6s)
+  ✓  6 tests/workflow-creation-feedback.spec.cjs:138:1 › portable import previews named blocks and data before optional technical JSON (3.7s)
+  ✓  7 tests/workflow-reuse-ux.spec.cjs:42:1 › a business project needs no existing repository and its workflow can become a reusable model and an independent project copy (4.8s)
+  ✓  8 tests/workflow-wiring.spec.cjs:42:1 › a new human decision exposes its default branches and keeps the selected branch when changing destination (4.8s)
+
+  8 passed (36.7s)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

@@ -1,0 +1,14 @@
+test_automatic_receipt_also_preserves_an_invalid_result_for_correction (test_support_routing.SupportRoutingTests) ... ok
+test_changed_routing_options_prevent_reusing_an_incompatible_old_result (test_support_routing.SupportRoutingTests) ... ok
+test_critical_requires_proof_then_exact_human_decision_before_direct_production (test_support_routing.SupportRoutingTests) ... ok
+test_incomplete_agent_output_is_not_received (test_support_routing.SupportRoutingTests) ... ok
+test_rejection_and_candidate_change_cannot_reuse_approval (test_support_routing.SupportRoutingTests) ... ok
+test_same_contract_routes_identically_for_both_provider_settings (test_support_routing.SupportRoutingTests) ... ok
+test_text_not_used_as_a_branch_choice_remains_unconstrained (test_support_routing.SupportRoutingTests) ... ok
+test_unknown_preserves_question_and_inputs_after_restart (test_support_routing.SupportRoutingTests) ... ok
+test_unrecognized_answer_remains_correctable_without_selecting_a_default_branch (test_support_routing.SupportRoutingTests) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.543s
+
+OK

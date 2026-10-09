@@ -54,6 +54,8 @@
 .sidebar #project-list { display: flex; gap: 2px; padding-bottom: 16px; }
 .sidebar #project-list .project-item { padding-left: 16px; border-left: 2px solid transparent; border-radius: 0 5px 5px 0; min-height: 32px; }
 .sidebar #project-list .project-item.selected { border-left-color: var(--accent); }
+.sidebar #project-list .project-item:is(:hover,:focus-visible) { align-items:flex-start; }
+.sidebar #project-list .project-item:is(:hover,:focus-visible) .project-name { white-space:normal;overflow-wrap:anywhere;text-overflow:clip; }
 .sidebar #project-list .pad { padding: 4px 10px; font-size: 12px; line-height: 1.5; }
 .sidebar-tools { margin-top: 6px; border-top: 1px solid var(--line); padding-top: 6px; }
 .sidebar-tools > summary { cursor: pointer; padding: 8px 10px; font-size: 12px; color: var(--text-2); border-radius: 5px; }
@@ -88,7 +90,18 @@
 .workflow-visible .terminal-tabs {padding:5px 12px;min-height:38px}
 .workflow-visible #terminal-context:not(.production) {padding:3px 14px 5px;font-size:11px;line-height:1.4;color:var(--text-3)}
 .workflow-visible #execution-context[hidden] {display:none}
-.terminal-scope {display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.terminal-scope {display:block;white-space:normal;overflow-wrap:anywhere}
+.terminal-tab {flex:0 0 auto;max-width:min(280px,65%);min-width:0}
+.terminal-tab > button[data-session] {min-width:0;flex:1}
+.terminal-tab > button[data-stop] {flex-shrink:0}
+.terminal-tab-label {display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.terminal-tab-tools,#terminal-tabs > .icon-button {flex-shrink:0}
+.terminal-session-title {display:none;overflow-wrap:anywhere;font-weight:600;margin-bottom:4px;max-height:4.2em;overflow:auto}
+#terminal-workspace:has(.terminal-tab:focus-within) .terminal-session-title {display:block}
+/* A hidden full-name hint must not leave an otherwise empty context band. */
+#terminal-workspace:not(:has(.terminal-tab:focus-within)) #terminal-context:not(.production):has(> .terminal-session-title:only-child) {display:none}
+.workflow-visible #terminal-context.cross-project {padding:6px 14px;background:var(--warn-soft);color:var(--text);border-left:3px solid var(--warn)}
+.terminal-origin {display:block;font-size:10px;font-weight:400;margin-top:2px;color:var(--text-2)}
 .sidebar .project-search {display:block;padding:0 8px;margin:0 0 8px}
 .sidebar .project-search input {width:100%;min-height:30px;font-size:12px;padding:5px 8px;font-weight:400;background:var(--surface-1)}
 
@@ -98,4 +111,25 @@
   .topbar .top-actions {width:auto;flex-wrap:nowrap}
   .topbar .project-identity {min-width:60px}
   .topbar #project-title {font-size:13px}
+}
+
+/* Preserve working lines in the terminal at high zoom. Tools and session tabs
+   share a row; the scope and any production context remain visible. */
+@media (max-height:700px) {
+  .topbar.project-header {min-height:46px;padding:4px var(--page-gutter)}
+  .top-actions .provider-choice {font-size:10px;line-height:1.2;gap:0}
+  .top-actions .provider-choice select,.top-actions .terminal-toggle {min-height:30px;padding-top:4px;padding-bottom:4px}
+  .top-actions .theme-switch {min-height:30px}
+  .workflow-visible #terminal-workspace:has(.terminal-host:not([hidden])) {display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto auto auto minmax(0,1fr)}
+  .workflow-visible #terminal-workspace:has(.terminal-host:not([hidden])) .terminal-heading {grid-column:2;grid-row:1;min-height:34px;padding:3px 8px 3px 0;border-bottom:1px solid var(--line)}
+  .workflow-visible #terminal-workspace:has(.terminal-host:not([hidden])) .terminal-heading > strong {display:none}
+  .workflow-visible #terminal-tabs {grid-column:1;grid-row:1;height:34px;min-height:34px;padding:2px 8px;overflow-y:hidden}
+  .workflow-visible #execution-context {grid-column:1 / -1;grid-row:2}
+  .workflow-visible #terminal-context {grid-column:1 / -1;grid-row:3}
+  .workflow-visible #terminal-search {grid-column:1 / -1;grid-row:4}
+  .workflow-visible #terminal-hosts {grid-column:1 / -1;grid-row:5;padding:4px 8px 4px 12px}
+  .main-content.workflow-visible.terminal-docked[data-terminal-layout=stacked] {grid-template-rows:minmax(min(220px,42%),var(--terminal-split,32%)) 6px minmax(0,1fr)}
+}
+@media (max-width:850px) and (max-height:700px) {
+  .main-content.workflow-visible.terminal-docked {grid-template-rows:minmax(min(220px,42%),var(--terminal-split,32%)) 6px minmax(0,1fr)}
 }

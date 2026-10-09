@@ -1,0 +1,12 @@
+{
+  "ownBenchProcesses": [],
+  "frozenHashesMatch": {
+    "build-artifacts/linux-unpacked/odoo-tricorder": true,
+    "build-artifacts/linux-unpacked/resources/app.asar": true
+  },
+  "capturesInspected": 8,
+  "temporaryPaths": [
+    "/tmp/tricorder-panel-direction-lPqlVv",
+    "/tmp/tricorder-panel-direction-IU8GaM"
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "items": [
+    {
+      "id": "r40efd283ae3141ff",
+      "project": "workspace",
+      "status": "completed",
+      "created": 1791572026.1667325,
+      "updated": 1791572153.6808307,
+      "simulation": true,
+      "completion_outcome": "succeeded",
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "first-workflow-mv1bq6f6",
+        "title": "De la demande au résultat"
+      },
+      "original": {
+        "id": "first-workflow-mv1bq6f6"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "",
+      "counts": {
+        "accepted": 6
+      },
+      "nodes": {
+        "analyse": {
+          "status": "accepted"
+        },
+        "bilan": {
+          "status": "accepted"
+        },
+        "build": {
+          "status": "accepted"
+        },
+        "decision": {
+          "status": "accepted"
+        },
+        "join": {
+          "status": "accepted"
+        },
+        "test": {
+          "status": "accepted"
+        }
+      }
+    },
+    {
+      "id": "r36045456e4a74ad3",
+      "project": "workspace",
+      "status": "active",
+      "created": 1791571872.2244613,
+      "updated": 1791571872.6876547,
+      "simulation": true,
+      "completion_outcome": null,
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "support-conversation-mv1bms3n",
+        "title": "Support — diagnostic et suite"
+      },
+      "original": {
+        "id": "support-conversation-mv1bms3n"
+      },
+      "focus": {
+        "node": "diagnosis",
+        "title": "Support critique ?",
+        "status": "returned",
+        "action": "Examiner l’échec"
+      },
+      "health": {
+        "status": "failed",
+        "total": 1,
+        "issues": [
+          {
+            "node": "diagnosis",
+            "title": "Support critique ?",
+            "reason": "Sortie finding absente ou incompatible avec le type string"
+          }
+        ]
+      },
+      "request": "Support : les invitations ne partent plus. Préparer un diagnostic et une réponse à valider.",
+      "counts": {
+        "returned": 1,
+        "pending": 5
+      },
+      "nodes": {
+        "diagnosis": {
+          "status": "returned"
+        },
+        "clarify": {
+          "status": "pending"
+        },
+        "normal": {
+          "status": "pending"
+        },
+        "reassess": {
+          "status": "pending"
+        },
+        "unresolved": {
+          "status": "pending"
+        },
+        "urgent": {
+          "status": "pending"
+        }
+      }
+    },
+    {
+      "id": "r1f4c18ae0f224b80",
+      "project": "workspace",
+      "status": "active",
+      "created": 1791571844.6032152,
+      "updated": 1791571844.6035018,
+      "simulation": false,
+      "completion_outcome": null,
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "request-conversation-mv1bm1m8",
+        "title": "Demande ponctuelle"
+      },
+      "original": {
+        "id": "request-conversation-mv1bm1m8"
+      },
+      "focus": {
+        "node": "clarify",
+        "title": "Comprendre le résultat attendu",
+        "status": "ready",
+        "action": "Continuer dans le terminal"
+      },
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "Préparer le compte rendu de la réunion du comité : trois décisions et deux questions à valider.",
+      "counts": {
+        "pending": 2,
+        "ready": 1
+      },
+      "nodes": {
+        "clarify": {
+          "status": "ready"
+        },
+        "receipt": {
+          "status": "pending"
+        },
+        "work": {
+          "status": "pending"
+        }
+      }
+    }
+  ],
+  "total": 3,
+  "offset": 0,
+  "limit": 25,
+  "next": null
+}

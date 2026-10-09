@@ -1,0 +1,213 @@
+{
+  "fixture": "API Engine + unexpected question; all synthetic",
+  "bundle": {
+    "dist/app.js": "412d4d33f2b6b8f617303e0fc80535ead98731c486f8d4e315f639a1b630e764",
+    "dist/studio.css": "15411f7160b38d7a4ab4dc4e1a0023f63509497b00db0833d72de065fbf55f86"
+  },
+  "sessionsBefore": [
+    "18064cf534a04484956a9769f968ff00"
+  ],
+  "overview1600": {
+    "width": 1600,
+    "height": 900,
+    "horizontalOverflow": false,
+    "overview": {
+      "x": 961.8359375,
+      "y": 169.09375,
+      "width": 638.1640625,
+      "height": 730.90625,
+      "bottom": 900,
+      "scrollTop": 0,
+      "scrollHeight": 831,
+      "clientHeight": 731
+    },
+    "inspector": null,
+    "question": null,
+    "answer": null,
+    "answerButton": null,
+    "terminal": {
+      "x": 282,
+      "y": 185.8984375,
+      "width": 650,
+      "height": 705,
+      "bottom": 890.8984375,
+      "scrollTop": 0,
+      "scrollHeight": 705,
+      "clientHeight": 705
+    }
+  },
+  "question1600": {
+    "width": 1600,
+    "height": 900,
+    "horizontalOverflow": false,
+    "overview": null,
+    "inspector": {
+      "x": 961.8359375,
+      "y": 315.09375,
+      "width": 638.1640625,
+      "height": 584.90625,
+      "bottom": 900,
+      "scrollTop": 0,
+      "scrollHeight": 585,
+      "clientHeight": 585
+    },
+    "question": {
+      "x": 981.8359375,
+      "y": 511.484375,
+      "width": 598.1640625,
+      "height": 151.5,
+      "bottom": 662.984375,
+      "scrollTop": 0,
+      "scrollHeight": 152,
+      "clientHeight": 152
+    },
+    "answer": {
+      "x": 981.8359375,
+      "y": 527.484375,
+      "width": 598.1640625,
+      "height": 90,
+      "bottom": 617.484375,
+      "scrollTop": 0,
+      "scrollHeight": 88,
+      "clientHeight": 88
+    },
+    "answerButton": {
+      "x": 981.8359375,
+      "y": 626.984375,
+      "width": 82.8515625,
+      "height": 36,
+      "bottom": 662.984375,
+      "scrollTop": 0,
+      "scrollHeight": 34,
+      "clientHeight": 34
+    },
+    "terminal": {
+      "x": 282,
+      "y": 185.8984375,
+      "width": 650,
+      "height": 705,
+      "bottom": 890.8984375,
+      "scrollTop": 0,
+      "scrollHeight": 705,
+      "clientHeight": 705
+    }
+  },
+  "overview1024zoom125": {
+    "width": 819,
+    "height": 614,
+    "horizontalOverflow": false,
+    "overview": {
+      "x": 176,
+      "y": 350.8000183105469,
+      "width": 643.2000122070312,
+      "height": 263.6000061035156,
+      "bottom": 614.4000244140625,
+      "scrollTop": 0,
+      "scrollHeight": 816,
+      "clientHeight": 264
+    },
+    "inspector": null,
+    "question": null,
+    "answer": null,
+    "answerButton": null,
+    "terminal": {
+      "x": 188,
+      "y": 113,
+      "width": 603,
+      "height": 152,
+      "bottom": 265,
+      "scrollTop": 0,
+      "scrollHeight": 165,
+      "clientHeight": 152
+    }
+  },
+  "question1024zoom125": {
+    "width": 819,
+    "height": 614,
+    "horizontalOverflow": false,
+    "overview": null,
+    "inspector": {
+      "x": 176,
+      "y": 436.3999938964844,
+      "width": 643.2000122070312,
+      "height": 178,
+      "bottom": 614.3999938964844,
+      "scrollTop": 0,
+      "scrollHeight": 243,
+      "clientHeight": 178
+    },
+    "question": {
+      "x": 188,
+      "y": 526.5,
+      "width": 607.2000122070312,
+      "height": 71.5999984741211,
+      "bottom": 598.0999984741211,
+      "scrollTop": 0,
+      "scrollHeight": 72,
+      "clientHeight": 72
+    },
+    "answer": {
+      "x": 188,
+      "y": 544.1000366210938,
+      "width": 514.75,
+      "height": 54,
+      "bottom": 598.1000366210938,
+      "scrollTop": 0,
+      "scrollHeight": 52,
+      "clientHeight": 52
+    },
+    "answerButton": {
+      "x": 712.75,
+      "y": 562.1000366210938,
+      "width": 82.45000457763672,
+      "height": 36,
+      "bottom": 598.1000366210938,
+      "scrollTop": 0,
+      "scrollHeight": 34,
+      "clientHeight": 34
+    },
+    "terminal": {
+      "x": 188,
+      "y": 113,
+      "width": 603,
+      "height": 152,
+      "bottom": 265,
+      "scrollTop": 0,
+      "scrollHeight": 165,
+      "clientHeight": 152
+    }
+  },
+  "decision1024zoom125": {
+    "width": 819,
+    "height": 614,
+    "horizontalOverflow": false,
+    "overview": null,
+    "inspector": {
+      "x": 176,
+      "y": 436.3999938964844,
+      "width": 643.2000122070312,
+      "height": 178,
+      "bottom": 614.3999938964844,
+      "scrollTop": 0,
+      "scrollHeight": 773,
+      "clientHeight": 178
+    },
+    "question": null,
+    "answer": null,
+    "answerButton": null,
+    "terminal": {
+      "x": 188,
+      "y": 113,
+      "width": 603,
+      "height": 152,
+      "bottom": 265,
+      "scrollTop": 0,
+      "scrollHeight": 165,
+      "clientHeight": 152
+    }
+  },
+  "sessionsAfter": [
+    "18064cf534a04484956a9769f968ff00"
+  ],
+  "ok": true
+}

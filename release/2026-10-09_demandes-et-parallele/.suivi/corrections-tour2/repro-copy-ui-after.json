@@ -1,0 +1,26 @@
+{
+  "characters": 88000,
+  "pages": 3,
+  "calls": [
+    {
+      "action": "run.proof",
+      "run": "synthetic-run",
+      "sha256": "synthetic-sha",
+      "offset": 0
+    },
+    {
+      "action": "run.proof",
+      "run": "synthetic-run",
+      "sha256": "synthetic-sha",
+      "offset": 32000
+    },
+    {
+      "action": "run.proof",
+      "run": "synthetic-run",
+      "sha256": "synthetic-sha",
+      "offset": 64000
+    }
+  ],
+  "identical": true,
+  "originalUnchanged": true
+}

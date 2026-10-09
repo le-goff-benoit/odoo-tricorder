@@ -1,0 +1,33 @@
+{
+  "version": "0.6.0-rc.12",
+  "asar_sha256": "aa118d030f1f6cbe500462921b873e2d84fef283d1218acc4064a9367356d944",
+  "origin": "Packaged application, complete GUI suite, synthetic fixtures only",
+  "visual_review": "All five images opened and inspected by the coordinating agent; synthetic content only.",
+  "captures": [
+    {
+      "file": "demandes-et-agents.png",
+      "source": "test-results/conversation-overview-runn-e4870-licit-dispatch-are-distinct/overview-two-agents-light-1500.png",
+      "sha256": "6e12382771e779fe7ab32f0e2e5c6459d3150559875f8e26f1efe684d704b1f5"
+    },
+    {
+      "file": "terminal-et-question.png",
+      "source": "test-results/conversation-overview-comp-2cfea-wer-remain-visible-together/compact-question-terminal-light-1440-52.png",
+      "sha256": "2f6272adfd3f947e6ac7effd8a9033b7a249d0bb84dcc373a61b8d9d1882d088"
+    },
+    {
+      "file": "tentatives.png",
+      "source": "test-results/attempt-history-large-arch-2f5ec--attached-proofs-accessible/readable-attempt-history.png",
+      "sha256": "7b217146688b85e406e5995012d1f6bb0fde39e7800c252719401dd54e1032ca"
+    },
+    {
+      "file": "editeur.png",
+      "source": "test-results/panel-graph-layout-saved-i-fecac-ction-by-mouse-and-keyboard/editor-branches-readable-100.png",
+      "sha256": "951c9650666a058b32d11a71a6af9feb5a7fb4254ee0263e836b0f7aacc7d202"
+    },
+    {
+      "file": "agents-paralleles.png",
+      "source": "test-results/parallel-dispatch-one-clic-b13ed-ntly-and-preserves-the-join/three-real-local-workers.png",
+      "sha256": "61e52685197b7a61e87af7bba4ca06d97fdbce990a93c8ca98761717cf04c6bc"
+    }
+  ]
+}

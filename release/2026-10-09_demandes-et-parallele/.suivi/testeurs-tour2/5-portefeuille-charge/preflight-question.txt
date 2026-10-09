@@ -1,0 +1,4 @@
+/tmp/tricorder-portefeuille-question-1Zkk9J/bin/codex
+/tmp/tricorder-portefeuille-question-1Zkk9J/bin/claude
+PORTEFEUILLE-CHARGE-STUB-CODEX 1.0-local
+PORTEFEUILLE-CHARGE-STUB-CLAUDE 1.0-local

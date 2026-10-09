@@ -1,0 +1,1119 @@
+{
+  "created": 1791571779.1828027,
+  "definition": {
+    "defaults": {
+      "model": "fixture-parallele",
+      "provider": "codex"
+    },
+    "edges": [
+      {
+        "from": "prepare",
+        "id": "prepare-review",
+        "mapping": {
+          "report": "report"
+        },
+        "to": "review"
+      }
+    ],
+    "id": "bilan-commun-fixture",
+    "nodes": [
+      {
+        "id": "prepare",
+        "kind": "agent",
+        "outputs": {
+          "report": "string"
+        },
+        "profile": "generalist",
+        "title": "Préparer le résultat",
+        "validation": "contract"
+      },
+      {
+        "id": "review",
+        "inputs": {
+          "report": "string"
+        },
+        "kind": "decision",
+        "options": [
+          "approve",
+          "reject"
+        ],
+        "question": "Validez-vous le résultat présenté et sa portée ?",
+        "title": "Valider le résultat commun"
+      }
+    ],
+    "revision": 1,
+    "schema": 1,
+    "title": "Bilan commun — fixture de réception"
+  },
+  "effort": "medium",
+  "id": "c4f8a230b1d20453c",
+  "items": [
+    {
+      "created": 1791571779.187308,
+      "depends_on": [],
+      "id": "wf06be4c6e01044ad",
+      "key": null,
+      "project": "p18152896672c4e29",
+      "request": "R1 – Résultat reçu pour lot 1",
+      "run": "r19910413ebfc4714",
+      "execution": {
+        "completion_outcome": "succeeded",
+        "contract": "50ad49a7a75dae6244e528f160855f76d8bad64e2de6b57606d1b899bf660975",
+        "created": 1791571779.1867971,
+        "definition": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "execution": {
+                "effort": "medium",
+                "model": "fixture-parallele",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "parameters": {
+            "conversation": "c4f8a230b1d20453c",
+            "depends_on_runs": [],
+            "request": "R1 – Résultat reçu pour lot 1"
+          },
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "driver": "conversation",
+        "id": "r19910413ebfc4714",
+        "nodes": {
+          "prepare": {
+            "attempt": 1,
+            "finished": 1791571779.1918457,
+            "heartbeat": 1791571779.1901324,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "ownership": "native",
+            "processes": [],
+            "receipt": {
+              "actor": "contract-policy",
+              "at": 1791571779.1918979,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "50ad49a7a75dae6244e528f160855f76d8bad64e2de6b57606d1b899bf660975",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "ok": true,
+              "outputs": {
+                "report": "Livrable R1 : lot 1 terminé (fixture)"
+              },
+              "summary": "Résultat synthétique R1, réception préparée par fixture API"
+            },
+            "started": 1791571779.1901321,
+            "status": "accepted",
+            "token": "td82ba9d7eaca4cd8"
+          },
+          "review": {
+            "attempt": 1,
+            "decision": {
+              "actor": "local-user",
+              "at": 1791571779.1943989,
+              "note": "État initial fixture, aucune action UI prétendue",
+              "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+              "outcome": "approve",
+              "proposal": "a2aa0ee633360188ec992d9dc745f97c6b5e4a25c992d435a558e4b165a12976"
+            },
+            "input_sources": {
+              "report": {
+                "edge": "prepare-review",
+                "node": "prepare",
+                "port": "report"
+              }
+            },
+            "inputs": {
+              "report": "Livrable R1 : lot 1 terminé (fixture)"
+            },
+            "nonce": "df26826075f744e3a",
+            "operation": null,
+            "outcome": "approve",
+            "proposal": "a2aa0ee633360188ec992d9dc745f97c6b5e4a25c992d435a558e4b165a12976",
+            "status": "accepted"
+          }
+        },
+        "notifications_authorized": false,
+        "original": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "packs": [],
+        "parameters": {
+          "conversation": "c4f8a230b1d20453c",
+          "depends_on_runs": [],
+          "request": "R1 – Résultat reçu pour lot 1"
+        },
+        "plugins": {
+          "path": "/tmp/tricorder-functional-parallele-sandbox/projets/boreal/.tricorder/plugins.json",
+          "plugins": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "project": "p18152896672c4e29",
+        "release": "",
+        "scope": {
+          "id": "p18152896672c4e29",
+          "kind": "project"
+        },
+        "simulation": false,
+        "status": "completed",
+        "transports": {},
+        "updated": 1791571779.1944597
+      }
+    },
+    {
+      "created": 1791571779.1966555,
+      "depends_on": [],
+      "id": "w67da9be601fd4613",
+      "key": null,
+      "project": "p2f74363f508d45d4",
+      "request": "R2 – Résultat reçu pour lot 2",
+      "run": "r9e723265458c4241",
+      "execution": {
+        "completion_outcome": "succeeded",
+        "contract": "233e5bed4e1d4c832de0f1c82292d3cf492b0ec1e9034473d8ef2dbceb4eebd3",
+        "created": 1791571779.196447,
+        "definition": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "execution": {
+                "effort": "medium",
+                "model": "fixture-parallele",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "parameters": {
+            "conversation": "c4f8a230b1d20453c",
+            "depends_on_runs": [],
+            "request": "R2 – Résultat reçu pour lot 2"
+          },
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "driver": "conversation",
+        "id": "r9e723265458c4241",
+        "nodes": {
+          "prepare": {
+            "attempt": 1,
+            "finished": 1791571779.1995964,
+            "heartbeat": 1791571779.1987529,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "ownership": "native",
+            "processes": [],
+            "receipt": {
+              "actor": "contract-policy",
+              "at": 1791571779.1996396,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "233e5bed4e1d4c832de0f1c82292d3cf492b0ec1e9034473d8ef2dbceb4eebd3",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "ok": true,
+              "outputs": {
+                "report": "Livrable R2 : lot 2 terminé (fixture)"
+              },
+              "summary": "Résultat synthétique R2, réception préparée par fixture API"
+            },
+            "started": 1791571779.1987524,
+            "status": "accepted",
+            "token": "t71832e1943bf4288"
+          },
+          "review": {
+            "attempt": 1,
+            "decision": {
+              "actor": "local-user",
+              "at": 1791571779.2015488,
+              "note": "État initial fixture, aucune action UI prétendue",
+              "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+              "outcome": "approve",
+              "proposal": "8685a1a01ba9061f3c6ab44c78fdbcecc49d4a5c97b7cd26631fd8f64cfcc8a1"
+            },
+            "input_sources": {
+              "report": {
+                "edge": "prepare-review",
+                "node": "prepare",
+                "port": "report"
+              }
+            },
+            "inputs": {
+              "report": "Livrable R2 : lot 2 terminé (fixture)"
+            },
+            "nonce": "da9dbf56fe0894666",
+            "operation": null,
+            "outcome": "approve",
+            "proposal": "8685a1a01ba9061f3c6ab44c78fdbcecc49d4a5c97b7cd26631fd8f64cfcc8a1",
+            "status": "accepted"
+          }
+        },
+        "notifications_authorized": false,
+        "original": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "packs": [],
+        "parameters": {
+          "conversation": "c4f8a230b1d20453c",
+          "depends_on_runs": [],
+          "request": "R2 – Résultat reçu pour lot 2"
+        },
+        "plugins": {
+          "path": "/tmp/tricorder-functional-parallele-sandbox/projets/atlas/.tricorder/plugins.json",
+          "plugins": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "project": "p2f74363f508d45d4",
+        "release": "",
+        "scope": {
+          "id": "p2f74363f508d45d4",
+          "kind": "project"
+        },
+        "simulation": false,
+        "status": "completed",
+        "transports": {},
+        "updated": 1791571779.2016523
+      }
+    },
+    {
+      "created": 1791571779.2045991,
+      "depends_on": [],
+      "id": "wb87b57c14dfe4761",
+      "key": null,
+      "project": "p18152896672c4e29",
+      "request": "R3 – Résultat reçu pour lot 3",
+      "run": "r8f9d5976273648aa",
+      "execution": {
+        "completion_outcome": "succeeded",
+        "contract": "b9a9af316929fd66343316b35644ffd8ef2e8037ba039327280243a1e236ef31",
+        "created": 1791571779.2041488,
+        "definition": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "execution": {
+                "effort": "medium",
+                "model": "fixture-parallele",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "parameters": {
+            "conversation": "c4f8a230b1d20453c",
+            "depends_on_runs": [],
+            "request": "R3 – Résultat reçu pour lot 3"
+          },
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "driver": "conversation",
+        "id": "r8f9d5976273648aa",
+        "nodes": {
+          "prepare": {
+            "attempt": 1,
+            "finished": 1791571779.2106,
+            "heartbeat": 1791571779.2083466,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "ownership": "native",
+            "processes": [],
+            "receipt": {
+              "actor": "contract-policy",
+              "at": 1791571779.210685,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "b9a9af316929fd66343316b35644ffd8ef2e8037ba039327280243a1e236ef31",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "ok": true,
+              "outputs": {
+                "report": "Livrable R3 : lot 3 terminé (fixture)"
+              },
+              "summary": "Résultat synthétique R3, réception préparée par fixture API"
+            },
+            "started": 1791571779.2083464,
+            "status": "accepted",
+            "token": "t165996764a5e472c"
+          },
+          "review": {
+            "attempt": 1,
+            "decision": {
+              "actor": "local-user",
+              "at": 1791571779.2135837,
+              "note": "État initial fixture, aucune action UI prétendue",
+              "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+              "outcome": "approve",
+              "proposal": "ab5a20032050e07c8cbefd363978717a599066e547721cb618ddb5292d9f43ea"
+            },
+            "input_sources": {
+              "report": {
+                "edge": "prepare-review",
+                "node": "prepare",
+                "port": "report"
+              }
+            },
+            "inputs": {
+              "report": "Livrable R3 : lot 3 terminé (fixture)"
+            },
+            "nonce": "df7a79d5435884569",
+            "operation": null,
+            "outcome": "approve",
+            "proposal": "ab5a20032050e07c8cbefd363978717a599066e547721cb618ddb5292d9f43ea",
+            "status": "accepted"
+          }
+        },
+        "notifications_authorized": false,
+        "original": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "packs": [],
+        "parameters": {
+          "conversation": "c4f8a230b1d20453c",
+          "depends_on_runs": [],
+          "request": "R3 – Résultat reçu pour lot 3"
+        },
+        "plugins": {
+          "path": "/tmp/tricorder-functional-parallele-sandbox/projets/boreal/.tricorder/plugins.json",
+          "plugins": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "project": "p18152896672c4e29",
+        "release": "",
+        "scope": {
+          "id": "p18152896672c4e29",
+          "kind": "project"
+        },
+        "simulation": false,
+        "status": "completed",
+        "transports": {},
+        "updated": 1791571779.2136996
+      }
+    },
+    {
+      "created": 1791571779.216567,
+      "depends_on": [],
+      "id": "w5bb81083e0434818",
+      "key": null,
+      "project": "p18152896672c4e29",
+      "request": "R4 – Résultat reçu pour lot 4",
+      "run": "r9c077b9da308491d",
+      "execution": {
+        "completion_outcome": "succeeded",
+        "contract": "59b79f59796d330c97ea6e85fe2a0dcc8ca9cde4924939f0696996094bad8642",
+        "created": 1791571779.2161634,
+        "definition": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "execution": {
+                "effort": "medium",
+                "model": "fixture-parallele",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "parameters": {
+            "conversation": "c4f8a230b1d20453c",
+            "depends_on_runs": [],
+            "request": "R4 – Résultat reçu pour lot 4"
+          },
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "driver": "conversation",
+        "id": "r9c077b9da308491d",
+        "nodes": {
+          "prepare": {
+            "attempt": 1,
+            "finished": 1791571779.2224112,
+            "heartbeat": 1791571779.220289,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "ownership": "native",
+            "processes": [],
+            "receipt": {
+              "actor": "contract-policy",
+              "at": 1791571779.222497,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "59b79f59796d330c97ea6e85fe2a0dcc8ca9cde4924939f0696996094bad8642",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "ok": true,
+              "outputs": {
+                "report": "Livrable R4 : lot 4 terminé (fixture)"
+              },
+              "summary": "Résultat synthétique R4, réception préparée par fixture API"
+            },
+            "started": 1791571779.2202888,
+            "status": "accepted",
+            "token": "t8bb806544ec14a55"
+          },
+          "review": {
+            "attempt": 1,
+            "decision": {
+              "actor": "local-user",
+              "at": 1791571779.224422,
+              "note": "État initial fixture, aucune action UI prétendue",
+              "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+              "outcome": "approve",
+              "proposal": "3e48e3803062118a6773cbab5afa7d88f561b2e2c48692995a1bc9f652bbdeb7"
+            },
+            "input_sources": {
+              "report": {
+                "edge": "prepare-review",
+                "node": "prepare",
+                "port": "report"
+              }
+            },
+            "inputs": {
+              "report": "Livrable R4 : lot 4 terminé (fixture)"
+            },
+            "nonce": "db565773cac604eb8",
+            "operation": null,
+            "outcome": "approve",
+            "proposal": "3e48e3803062118a6773cbab5afa7d88f561b2e2c48692995a1bc9f652bbdeb7",
+            "status": "accepted"
+          }
+        },
+        "notifications_authorized": false,
+        "original": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "packs": [],
+        "parameters": {
+          "conversation": "c4f8a230b1d20453c",
+          "depends_on_runs": [],
+          "request": "R4 – Résultat reçu pour lot 4"
+        },
+        "plugins": {
+          "path": "/tmp/tricorder-functional-parallele-sandbox/projets/boreal/.tricorder/plugins.json",
+          "plugins": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "project": "p18152896672c4e29",
+        "release": "",
+        "scope": {
+          "id": "p18152896672c4e29",
+          "kind": "project"
+        },
+        "simulation": false,
+        "status": "completed",
+        "transports": {},
+        "updated": 1791571779.2244797
+      }
+    },
+    {
+      "created": 1791571779.2266395,
+      "depends_on": [
+        "wf06be4c6e01044ad",
+        "w67da9be601fd4613",
+        "wb87b57c14dfe4761",
+        "w5bb81083e0434818"
+      ],
+      "id": "w83f9bf4a1ec44410",
+      "key": null,
+      "project": "p18152896672c4e29",
+      "request": "R5 – Bilan commun Atlas + Boréal après R1, R2, R3 et R4",
+      "run": "r7642a8d86bbe4daf",
+      "execution": {
+        "contract": "f13fcb1c9926e39b3a99801ebe5e18527c2da72ed0b5ba40998890e668ae76ae",
+        "created": 1791571779.2264168,
+        "definition": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "execution": {
+                "effort": "medium",
+                "model": "fixture-parallele",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "parameters": {
+            "conversation": "c4f8a230b1d20453c",
+            "depends_on_runs": [
+              "r19910413ebfc4714",
+              "r9e723265458c4241",
+              "r8f9d5976273648aa",
+              "r9c077b9da308491d"
+            ],
+            "request": "R5 – Bilan commun Atlas + Boréal après R1, R2, R3 et R4"
+          },
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "driver": "conversation",
+        "id": "r7642a8d86bbe4daf",
+        "nodes": {
+          "prepare": {
+            "attempt": 1,
+            "finished": 1791571795.219442,
+            "heartbeat": 1791571795.213569,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "ownership": "native",
+            "processes": [],
+            "receipt": {
+              "actor": "contract-policy",
+              "at": 1791571795.2196264,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "f13fcb1c9926e39b3a99801ebe5e18527c2da72ed0b5ba40998890e668ae76ae",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "ok": true,
+              "outputs": {
+                "report": "Bilan commun : R1 texte validé ; R2 images reçues ; R3 titre accepté ; R4 export corrigé. Deux projets Atlas et Boréal. Fixture de visualisation, aucune opération métier/fournisseur."
+              },
+              "summary": "Bilan synthétique reçu ; attente de décision commune réelle en UI"
+            },
+            "started": 1791571795.2135687,
+            "status": "accepted",
+            "token": "t8cdbbb51a1074c6f"
+          },
+          "review": {
+            "attempt": 1,
+            "input_sources": {
+              "report": {
+                "edge": "prepare-review",
+                "node": "prepare",
+                "port": "report"
+              }
+            },
+            "inputs": {
+              "report": "Bilan commun : R1 texte validé ; R2 images reçues ; R3 titre accepté ; R4 export corrigé. Deux projets Atlas et Boréal. Fixture de visualisation, aucune opération métier/fournisseur."
+            },
+            "nonce": "d53e0bb774db64ea2",
+            "operation": null,
+            "proposal": "c22cb96af30da70f428f4c5ead39b1fcd270e5f0c9b793fdcbfdd965892606f1",
+            "status": "waiting"
+          }
+        },
+        "notifications_authorized": false,
+        "original": {
+          "defaults": {
+            "model": "fixture-parallele",
+            "provider": "codex"
+          },
+          "edges": [
+            {
+              "from": "prepare",
+              "id": "prepare-review",
+              "mapping": {
+                "report": "report"
+              },
+              "to": "review"
+            }
+          ],
+          "id": "bilan-commun-fixture",
+          "nodes": [
+            {
+              "id": "prepare",
+              "kind": "agent",
+              "outputs": {
+                "report": "string"
+              },
+              "profile": "generalist",
+              "title": "Préparer le résultat",
+              "validation": "contract"
+            },
+            {
+              "id": "review",
+              "inputs": {
+                "report": "string"
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "question": "Validez-vous le résultat présenté et sa portée ?",
+              "title": "Valider le résultat commun"
+            }
+          ],
+          "revision": 1,
+          "schema": 1,
+          "title": "Bilan commun — fixture de réception"
+        },
+        "packs": [],
+        "parameters": {
+          "conversation": "c4f8a230b1d20453c",
+          "dependency_results": {
+            "r19910413ebfc4714": {
+              "prepare": {
+                "ok": true,
+                "outputs": {
+                  "report": "Livrable R1 : lot 1 terminé (fixture)"
+                },
+                "summary": "Résultat synthétique R1, réception préparée par fixture API"
+              },
+              "review": null
+            },
+            "r8f9d5976273648aa": {
+              "prepare": {
+                "ok": true,
+                "outputs": {
+                  "report": "Livrable R3 : lot 3 terminé (fixture)"
+                },
+                "summary": "Résultat synthétique R3, réception préparée par fixture API"
+              },
+              "review": null
+            },
+            "r9c077b9da308491d": {
+              "prepare": {
+                "ok": true,
+                "outputs": {
+                  "report": "Livrable R4 : lot 4 terminé (fixture)"
+                },
+                "summary": "Résultat synthétique R4, réception préparée par fixture API"
+              },
+              "review": null
+            },
+            "r9e723265458c4241": {
+              "prepare": {
+                "ok": true,
+                "outputs": {
+                  "report": "Livrable R2 : lot 2 terminé (fixture)"
+                },
+                "summary": "Résultat synthétique R2, réception préparée par fixture API"
+              },
+              "review": null
+            }
+          },
+          "depends_on_runs": [
+            "r19910413ebfc4714",
+            "r9e723265458c4241",
+            "r8f9d5976273648aa",
+            "r9c077b9da308491d"
+          ],
+          "request": "R5 – Bilan commun Atlas + Boréal après R1, R2, R3 et R4"
+        },
+        "plugins": {
+          "path": "/tmp/tricorder-functional-parallele-sandbox/projets/boreal/.tricorder/plugins.json",
+          "plugins": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "project": "p18152896672c4e29",
+        "release": "",
+        "scope": {
+          "id": "p18152896672c4e29",
+          "kind": "project"
+        },
+        "simulation": false,
+        "status": "active",
+        "transports": {},
+        "updated": 1791571795.2204165
+      }
+    }
+  ],
+  "model": "fixture-parallele",
+  "notifications_authorized": false,
+  "project": "p18152896672c4e29",
+  "projects": [
+    "p18152896672c4e29",
+    "p2f74363f508d45d4"
+  ],
+  "provider": "codex",
+  "status": "open",
+  "transports": {
+    "p18152896672c4e29": {},
+    "p2f74363f508d45d4": {}
+  },
+  "project_contexts": [
+    {
+      "id": "p18152896672c4e29",
+      "title": "Boréal",
+      "path": "/tmp/tricorder-functional-parallele-sandbox/projets/boreal"
+    },
+    {
+      "id": "p2f74363f508d45d4",
+      "title": "Atlas",
+      "path": "/tmp/tricorder-functional-parallele-sandbox/projets/atlas"
+    }
+  ]
+}

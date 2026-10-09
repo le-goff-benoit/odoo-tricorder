@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:1148923) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/workflow-reuse-ux.spec.cjs:42:1 › a business project needs no existing repository and its workflow can become a reusable model and an independent project copy (5.2s)
+  ✓  2 tests/workflow-wiring.spec.cjs:42:1 › a new human decision exposes its default branches and keeps the selected branch when changing destination (5.0s)
+  ✓  3 tests/workflow-wiring.spec.cjs:83:1 › a renamed data connection remains readable beside the selected block and on the graph (2.9s)
+  ✓  4 tests/workflow-wiring.spec.cjs:95:1 › choosing only a data output gives an inline repair instead of silently creating an order-only link (3.5s)
+  ✓  5 tests/workflow-wiring.spec.cjs:108:1 › a processed refusal reads Refusée instead of a green Validé and does not release the approved branch (3.8s)
+  ✓  6 tests/workflow-wiring.spec.cjs:121:1 › order-only explicitly overrides automatic matching of same-name ports (3.3s)
+
+  6 passed (24.1s)

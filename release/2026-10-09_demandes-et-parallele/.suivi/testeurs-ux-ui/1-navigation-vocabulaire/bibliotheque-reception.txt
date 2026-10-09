@@ -1,0 +1,61 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Coordination atelier
+Support équipement
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Modèles
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:37
+
+MODÈLES / WORKFLOW
+Préparer une réunion
+
+Révision 1 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+◇
+Préparer les points
+Tâche
+Tâche
+0 entrée → 0 sortie
+?
+Valider l’ordre du jour
+Décision humaine
+Décision humaine
+Vous
+2 blocs · 1 lien
+−
+80 %
++
+Ajuster
+Brouillon importé. Aucun workflow ni planification activée.

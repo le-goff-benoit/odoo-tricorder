@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-09T21:34:59.601Z",
+  "windows": 1,
+  "pageErrors": [],
+  "appPid": 1195055,
+  "temporary": "/tmp/tricorder-panel-3-projets-jIIiCK",
+  "captures": 8,
+  "fixtures": "Aucune",
+  "realAI": false,
+  "cleanupPassed": true,
+  "hashesVerifiedByHarness": true,
+  "remainingBenchProcesses": [],
+  "processVerificationPassed": true
+}

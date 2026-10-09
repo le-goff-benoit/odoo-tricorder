@@ -1,0 +1,188 @@
+{
+  "viewport": {
+    "width": 819,
+    "height": 640
+  },
+  "elements": [
+    {
+      "tag": "BUTTON",
+      "text": "Activité",
+      "title": "",
+      "rect": {
+        "x": 8,
+        "y": 56,
+        "width": 159.1999969482422,
+        "height": 36,
+        "top": 56,
+        "right": 167.1999969482422,
+        "bottom": 92,
+        "left": 8
+      },
+      "font": "13px",
+      "color": "rgb(163, 166, 176)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "scrollWidth": 159,
+      "clientWidth": 159
+    },
+    {
+      "tag": "SPAN",
+      "text": "Activité",
+      "title": "",
+      "rect": {
+        "x": 40,
+        "y": 65.875,
+        "width": 43.98749923706055,
+        "height": 16.25,
+        "top": 65.875,
+        "right": 83.98749923706055,
+        "bottom": 82.125,
+        "left": 40
+      },
+      "font": "13px",
+      "color": "rgb(163, 166, 176)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "scrollWidth": 44,
+      "clientWidth": 44
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Documentation partagée",
+      "title": "",
+      "rect": {
+        "x": 8,
+        "y": 248.40000915527344,
+        "width": 159.1999969482422,
+        "height": 32,
+        "top": 248.40000915527344,
+        "right": 167.1999969482422,
+        "bottom": 280.40000915527344,
+        "left": 8
+      },
+      "font": "13px",
+      "color": "rgb(163, 166, 176)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "scrollWidth": 158,
+      "clientWidth": 158
+    },
+    {
+      "tag": "SPAN",
+      "text": "Documentation partagée",
+      "title": "",
+      "rect": {
+        "x": 25.600000381469727,
+        "y": 256.2749938964844,
+        "width": 133.60000610351562,
+        "height": 16.25,
+        "top": 256.2749938964844,
+        "right": 159.20000648498535,
+        "bottom": 272.5249938964844,
+        "left": 25.600000381469727
+      },
+      "font": "13px",
+      "color": "rgb(163, 166, 176)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "scrollWidth": 145,
+      "clientWidth": 134
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Site de la médiathèque",
+      "title": "",
+      "rect": {
+        "x": 8,
+        "y": 316.3999938964844,
+        "width": 159.1999969482422,
+        "height": 32,
+        "top": 316.3999938964844,
+        "right": 167.1999969482422,
+        "bottom": 348.3999938964844,
+        "left": 8
+      },
+      "font": "13px",
+      "color": "rgb(163, 166, 176)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "scrollWidth": 158,
+      "clientWidth": 158
+    },
+    {
+      "tag": "SPAN",
+      "text": "Site de la médiathèque",
+      "title": "",
+      "rect": {
+        "x": 25.600000381469727,
+        "y": 324.2749938964844,
+        "width": 133.60000610351562,
+        "height": 16.25,
+        "top": 324.2749938964844,
+        "right": 159.20000648498535,
+        "bottom": 340.5249938964844,
+        "left": 25.600000381469727
+      },
+      "font": "13px",
+      "color": "rgb(163, 166, 176)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "scrollWidth": 134,
+      "clientWidth": 134
+    },
+    {
+      "tag": "SPAN",
+      "text": "Terminal",
+      "title": "",
+      "rect": {
+        "x": 426.45001220703125,
+        "y": 22,
+        "width": 48.13750076293945,
+        "height": 18,
+        "top": 22,
+        "right": 474.5875129699707,
+        "bottom": 40,
+        "left": 426.45001220703125
+      },
+      "font": "12px",
+      "color": "rgb(142, 168, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "scrollWidth": 48,
+      "clientWidth": 48
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Contexte",
+      "title": "",
+      "rect": {
+        "x": 624.3624877929688,
+        "y": 53.79999923706055,
+        "width": 62.97500228881836,
+        "height": 28,
+        "top": 53.79999923706055,
+        "right": 687.3374900817871,
+        "bottom": 81.79999923706055,
+        "left": 624.3624877929688
+      },
+      "font": "11px",
+      "color": "rgb(232, 233, 236)",
+      "bg": "rgb(21, 22, 26)",
+      "scrollWidth": 61,
+      "clientWidth": 61
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Agrandir le terminal",
+      "title": "",
+      "rect": {
+        "x": 693.3375244140625,
+        "y": 53.79999923706055,
+        "width": 117.86250305175781,
+        "height": 28,
+        "top": 53.79999923706055,
+        "right": 811.2000274658203,
+        "bottom": 81.79999923706055,
+        "left": 693.3375244140625
+      },
+      "font": "11px",
+      "color": "rgb(232, 233, 236)",
+      "bg": "rgb(21, 22, 26)",
+      "scrollWidth": 116,
+      "clientWidth": 116
+    }
+  ]
+}

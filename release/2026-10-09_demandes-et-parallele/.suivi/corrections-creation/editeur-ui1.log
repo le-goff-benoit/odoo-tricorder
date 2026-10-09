@@ -1,0 +1,40 @@
+
+Running 4 tests using 1 worker
+
+(node:1078747) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/workflow-creation-feedback.spec.cjs:42:1 › typed simulation data persists and a false boolean follows only the normal branch (7.5s)
+  ✓  2 tests/workflow-creation-feedback.spec.cjs:77:1 › removing a middle block announces detached data and launch guidance leads to a repairable link (4.4s)
+  ✓  3 tests/workflow-creation-feedback.spec.cjs:100:1 › integrated template copies are explicitly named and the source remains available (4.6s)
+  ✘  4 tests/workflow-creation-feedback.spec.cjs:119:1 › navigation records pending block edits and provider installation is not described as an authenticated connection (3.4s)
+
+
+  1) tests/workflow-creation-feedback.spec.cjs:119:1 › navigation records pending block edits and provider installation is not described as an authenticated connection 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Conserver les critères acceptés pendant le changement de vue."
+    Received: undefined
+
+      123 |   await expect(page.locator('.editor-save-help')).toContainText('navigation principale enregistre');
+      124 |   await page.getByRole('tab', { name: 'Historique', exact: true }).click();
+    > 125 |   expect((await snapshot()).nodes[0].prompt).toBe('Conserver les critères acceptés pendant le changement de vue.');
+          |                                              ^
+      126 |   await openWorkflow(); await page.locator('.node[data-id=collect]').click();
+      127 |   await expect(page.getByLabel('Consigne', { exact: true })).toHaveValue('Conserver les critères acceptés pendant le changement de vue.');
+      128 |   await page.getByRole('button', { name: 'Connexions', exact: true }).click();
+        at /home/blegoff/odoo-tricorder/tests/workflow-creation-feedback.spec.cjs:125:46
+
+    Error Context: test-results/workflow-creation-feedback-42b8d-an-authenticated-connection/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-creation-feedback-42b8d-an-authenticated-connection/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-creation-feedback-42b8d-an-authenticated-connection/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/workflow-creation-feedback.spec.cjs:119:1 › navigation records pending block edits and provider installation is not described as an authenticated connection 
+  3 passed (20.3s)

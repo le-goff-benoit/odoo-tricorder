@@ -596,19 +596,34 @@ test('flow starts: delayed terminal cannot hijack navigation, ambiguous adoption
     await page.keyboard.press('Control+Shift+T');
     await expect.poll(() => app.evaluate(() => typeof globalThis.finishTerminalCreation)).toBe('function');
     await page.locator('[data-project]').filter({ hasText: 'nova-services' }).click();
-    await expect(page.locator('.no-release')).toBeVisible();
+    const nova = path.join(home, 'nova-services');
+    const expectNovaEmptyTerminal = async () => {
+      await expect(page.locator('#project-title')).toHaveText('nova-services');
+      await expect(page.locator(`[data-project="${nova}"]`)).toHaveAttribute('aria-current', 'page');
+      await expect(page.locator('.no-release')).toBeVisible();
+      await expect(page.locator('#terminal-workspace')).toBeVisible();
+      await expect(page.locator('#terminal-empty')).toBeVisible();
+      await expect(page.locator('#terminal-empty')).toContainText('Aucun terminal ouvert');
+      await expect(page.locator('#terminal-hosts')).toBeHidden();
+      await expect(page.locator('.terminal-host:visible, .terminal-tab')).toHaveCount(0);
+      expect((await page.evaluate(() => window.tricorder.terminals.list())).filter(s => s.project === nova)).toHaveLength(0);
+    };
+    // Ctrl+Shift+T deliberately keeps the terminal panel visible across projects.
+    // Nova must already be empty before the former project's IPC reply arrives.
+    await expectNovaEmptyTerminal();
+    const novaContent = await page.locator('#content').innerText();
+    expect(await page.evaluate(() => window.tricorder.terminals.list())).toHaveLength(0);
     await app.evaluate(({ ipcMain }) => {
       ipcMain.removeHandler('terminal:create'); ipcMain.handle('terminal:create', globalThis.originalTerminalCreate);
       globalThis.finishTerminalCreation();
     });
     await expect(page.locator('#session-count')).toHaveCount(0);
-    await expect(page.locator('.no-release')).toBeVisible();
-    await expect(page.locator('#terminal-workspace')).toBeHidden();
-    // A late startup must not reveal an empty terminal in the newly selected project.
-    await expect(page.locator('.no-release')).toBeVisible();
     await expect.poll(() => page.evaluate(async () => (await window.tricorder.terminals.list()).length)).toBe(1);
+    // The late reply must neither switch Nova's screen nor attach Orbital's PTY.
+    await expectNovaEmptyTerminal();
+    expect(await page.locator('#content').innerText()).toBe(novaContent);
     const first = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
-    expect(first.project).toBe(project); expect(first.release).toBeNull();
+    expect(first.project).toBe(project); expect(first.release).toBeNull(); expect(first.task).toBeNull();
     await page.locator('[data-project]').filter({ hasText: 'orbital-industries' }).click();
     await expect(page.locator('#release-select')).toHaveValue('');
     // Two ordinary conversations and an Express conversation: never guess a creator.
@@ -1202,6 +1217,14 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
     expect(terminal.workingDirectory).toBe(work);
     expect(terminal.task).toBeNull();
     await expect(page.locator('#terminal-context')).toBeHidden();
+    const activeTerminalTab = page.locator('.terminal-tab.active [data-session]');
+    await activeTerminalTab.focus();
+    await expect(page.locator('#terminal-context')).toBeVisible();
+    await expect(page.locator('.terminal-session-title')).toHaveText(await activeTerminalTab.getAttribute('aria-label'));
+    await page.locator('.xterm-helper-textarea:visible').focus();
+    await expect(page.locator('#terminal-context')).toBeHidden();
+    const terminalAfterFocus = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
+    expect([terminalAfterFocus.id, terminalAfterFocus.pid]).toEqual([terminal.id, terminal.pid]);
     await expect(page.locator('.provider-icon[aria-label="Shell"]').first()).toBeVisible();
     expect((await page.evaluate(async () => (await window.tricorder.terminals.list())[0])).task).toBeNull();
     fs.appendFileSync(native, JSON.stringify({ type: 'event_msg', timestamp: new Date().toISOString(), payload: { type: 'task_started', turn_id: 'turn2' } }) + '\n');

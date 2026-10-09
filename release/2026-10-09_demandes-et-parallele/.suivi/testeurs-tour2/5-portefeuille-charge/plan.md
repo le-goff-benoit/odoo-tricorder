@@ -1,0 +1,25 @@
+# Tour 2 — Portefeuille chargé et priorités
+
+Profil : directeur de projet / PMO, métier 9/10, technique 3/10. Application générique. Préparation indépendante ; aucun rapport d’un autre testeur consulté. Aucun paquet ni interface lancé avant réception du chemin et SHA du candidat validé.
+
+## Banc et limites déclarées
+
+Chaque parcours emploie un répertoire neuf avec HOME, XDG_CONFIG_HOME, XDG_CACHE_HOME, XDG_DATA_HOME, XDG_RUNTIME_DIR, CODEX_HOME, CLAUDE_CONFIG_DIR, TRICORDER_HOME, TRICORDER_STATE_DIR, TRICORDER_RUNTIME_DIR et TMPDIR isolés. Environnement liste blanche ; PATH fixe stubdir:/usr/bin:/bin avant tout broker. DISPLAY :185 uniquement et XAUTHORITY /tmp/tricorder-functional-display/auth-185. Entrée Electron normale, sans --workflow-studio. Moteur du paquet dans STATE/workflows.
+
+Codex ET Claude simulés, --version immédiat, marqueur visible, travail local contrôlé. Vérification command -v et marqueurs dans le terminal avant lancement de demandes. Aucun fournisseur commercial, compte, service ni donnée client. Les demandes de volume et une question en attente sont injectées exclusivement par les API validées Engine/Conversations du paquet. Aucun SQLite ou JSON d’état retouché. Les états terminés servant de contexte sont annoncés comme fixtures, pas comme résultats de parcours GUI.
+
+Les 36 demandes initiales seront réparties sur Atlas (12), Boréal (12), Céleste (12). Demandes repérables R01 à R36 ; R35 « URGENT — Préparer arbitrage comité de 16h », avec trois prérequis distants possibles R02/R17/R30. Les demandes et prérequis seront ajoutés par API ; la consolidation du parcours 3 sera créée dans l’UI, pas préconfigurée. Aucun lancement en préparation.
+
+## Cinq parcours indépendants
+
+1. **Triage du matin : retrouver l’urgence hors première page.** À partir de 36 demandes, lire la taille et l’activité globale, parcourir la dernière page puis rechercher URGENT. Comprendre le projet et l’action suivante ; revenir à la liste et vérifier la conservation du filtre/de la page. Observer clarté du résultat, portée de la recherche, orientation et absence de lancement implicite. Captures : portefeuille, dernière page, résultat urgent (3).
+2. **Réponse en cours quand le portefeuille évolue.** Ouvrir une question fixture sur R17 ; rédiger un brouillon et maintenir le focus. Faire évoluer un autre travail via API validée ou libération du stub ; introduire une réponse UI retardée contrôlée si possible. Observer conservation de texte, curseur/focus, demande sélectionnée et état nouveau. Naviguer vers une autre demande et revenir, puis répondre via l’UI. Ne pas compter une saisie perdue comme réponse envoyée. Captures : brouillon avant/après activité, réponse enregistrée (3).
+3. **Consolidation de comité : prérequis sur plusieurs pages.** Créer une demande de consolidation dans l’UI et choisir R02/R17/R30 malgré la pagination/recherche. Lire le résumé et les liens nommés, ouvrir un prérequis hors page puis revenir. Annuler un prérequis par l’UI, comprendre la conséquence pour la consolidation et la prochaine action disponible. Observer différenciation de l’annulation du formulaire et de celle d’une demande. Si l’UI ne permet pas la création, constater le manque sans la remplacer par API. Captures : sélection, consolidation, conséquence annulation (3).
+4. **Capacité occupée : quatre exécutants puis ressource indisponible.** Lancer les demandes prêtes via l’UI, avec quatre stubs locaux tenus en attente ; comparer nombre d’exécutants, files et limites. Tenter un travail supplémentaire ; vérifier qu’une attente/quota ne paraît pas un agent lancé. Libérer un worker local et observer l’admission suivante. Indisponibilité provider simulée après démarrage sans mutation PATH, avec arrêt explicite du stub ou fixture de préflight. Réponses retardées surveillées. Captures : quatre workers, refus/attente, capacité libérée (3).
+5. **Bilan et passation : global versus page filtrée, travail terminé.** Sur portefeuille >30, faire terminer un travail lancé dans ce parcours par le stub ; rechercher une seule demande, changer page, revenir. Expliquer le total global, le nombre affiché et le travail restant à un collègue ; ouvrir la demande réellement terminée, trouver résultat/preuve et distinguer une demande préconfigurée d’une exécution observée. Captures : bilan global, filtre, résultat terminé (3).
+
+## Réception et rapport
+
+Maximum 18 captures utiles (15 prévues). Pour chaque parcours : attente métier, actions GUI observées, résultat, preuves et reproduction, gravité, type UX/bug/manque de banc, prochaine action comprise et scope réellement testé. Captures intégrales Shadow DOM via Playwright local. Éviter diagnostic du produit avant constat UI. Seules les fixtures et le harness sont préparés ; les sélecteurs seront adaptés aux libellés visibles du candidat validé.
+
+Arrêt final : fermer application, arrêter uniquement brokers et stubs de ce banc, vérifier absence de processus propres. Ne pas arrêter le serveur X. Aucun produit/build/suite globale/commit modifié. Les fichiers de suivi restent dans ce dossier.

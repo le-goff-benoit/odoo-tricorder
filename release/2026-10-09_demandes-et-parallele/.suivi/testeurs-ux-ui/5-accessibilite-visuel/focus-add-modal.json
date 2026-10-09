@@ -1,0 +1,155 @@
+[
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "×",
+    "aria": "Fermer la fenêtre",
+    "rect": {
+      "x": 981.1875,
+      "y": 366.5,
+      "width": 33.8125,
+      "height": 36,
+      "top": 366.5,
+      "right": 1015,
+      "bottom": 402.5,
+      "left": 981.1875
+    },
+    "outline": "rgb(32, 39, 53) none 3px"
+  },
+  {
+    "tag": "SELECT",
+    "id": "add-kind",
+    "text": "Travail · Agent\nTravail · Tâche dans la conversation\nTravail · Command",
+    "aria": null,
+    "rect": {
+      "x": 425,
+      "y": 439.5,
+      "width": 590,
+      "height": 39,
+      "top": 439.5,
+      "right": 1015,
+      "bottom": 478.5,
+      "left": 425
+    },
+    "outline": "rgb(131, 148, 245) solid 3px"
+  },
+  {
+    "tag": "INPUT",
+    "id": "add-title",
+    "text": "",
+    "aria": null,
+    "rect": {
+      "x": 425,
+      "y": 515.5,
+      "width": 590,
+      "height": 38,
+      "top": 515.5,
+      "right": 1015,
+      "bottom": 553.5,
+      "left": 425
+    },
+    "outline": "rgb(131, 148, 245) solid 3px"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "Ajouter au workflow",
+    "aria": null,
+    "rect": {
+      "x": 872.09375,
+      "y": 577.5,
+      "width": 142.90625,
+      "height": 36,
+      "top": 577.5,
+      "right": 1015,
+      "bottom": 613.5,
+      "left": 872.09375
+    },
+    "outline": "rgb(131, 148, 245) solid 3px"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "×",
+    "aria": "Fermer la fenêtre",
+    "rect": {
+      "x": 981.1875,
+      "y": 366.5,
+      "width": 33.8125,
+      "height": 36,
+      "top": 366.5,
+      "right": 1015,
+      "bottom": 402.5,
+      "left": 981.1875
+    },
+    "outline": "rgb(131, 148, 245) solid 3px"
+  },
+  {
+    "tag": "SELECT",
+    "id": "add-kind",
+    "text": "Travail · Agent\nTravail · Tâche dans la conversation\nTravail · Command",
+    "aria": null,
+    "rect": {
+      "x": 425,
+      "y": 439.5,
+      "width": 590,
+      "height": 39,
+      "top": 439.5,
+      "right": 1015,
+      "bottom": 478.5,
+      "left": 425
+    },
+    "outline": "rgb(131, 148, 245) solid 3px"
+  },
+  {
+    "tag": "INPUT",
+    "id": "add-title",
+    "text": "",
+    "aria": null,
+    "rect": {
+      "x": 425,
+      "y": 515.5,
+      "width": 590,
+      "height": 38,
+      "top": 515.5,
+      "right": 1015,
+      "bottom": 553.5,
+      "left": 425
+    },
+    "outline": "rgb(131, 148, 245) solid 3px"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "Ajouter au workflow",
+    "aria": null,
+    "rect": {
+      "x": 872.09375,
+      "y": 577.5,
+      "width": 142.90625,
+      "height": 36,
+      "top": 577.5,
+      "right": 1015,
+      "bottom": 613.5,
+      "left": 872.09375
+    },
+    "outline": "rgb(131, 148, 245) solid 3px"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "×",
+    "aria": "Fermer la fenêtre",
+    "rect": {
+      "x": 981.1875,
+      "y": 366.5,
+      "width": 33.8125,
+      "height": 36,
+      "top": 366.5,
+      "right": 1015,
+      "bottom": 402.5,
+      "left": 981.1875
+    },
+    "outline": "rgb(131, 148, 245) solid 3px"
+  }
+]

@@ -1,0 +1,49 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Atelier fictif B
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Atelier fictif B
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:39
+
+ATELIER FICTIF B / WORKFLOW
+Qualification atelier B
+
+Révision 1 · Enregistré
+
+Choisir l’IA
+Options
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
+Exécutions du workflow
+Rechercher
+État
+Tous
+En cours
+Suspendues
+Terminées
+Annulées
+Exécution
+Réel et simulation
+Réel
+Simulation
+Avec archives
+Filtrer
+0 exécution(s)
+
+Aucune exécution lancée.

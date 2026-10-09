@@ -1,0 +1,55 @@
+{
+  "before": {
+    "attempt": 1,
+    "finished": 1791583494.4093785,
+    "heartbeat": 1791583494.4067302,
+    "input_sources": {},
+    "inputs": {},
+    "ownership": "managed",
+    "processes": [],
+    "result": {
+      "ok": true,
+      "outputs": {},
+      "summary": "Résultat synthétique : les pièces sont disponibles."
+    },
+    "started": 1791583494.40673,
+    "status": "returned",
+    "token": "t4a412ca00c074ffb"
+  },
+  "after": {
+    "attempt": 2,
+    "finished": 1791583498.926822,
+    "heartbeat": 1791583498.9241772,
+    "history": [
+      {
+        "attempt": 1,
+        "finished": 1791583494.4093785,
+        "heartbeat": 1791583494.4067302,
+        "input_sources": {},
+        "inputs": {},
+        "ownership": "managed",
+        "processes": [],
+        "result": {
+          "ok": true,
+          "outputs": {},
+          "summary": "Résultat synthétique : les pièces sont disponibles."
+        },
+        "started": 1791583494.40673,
+        "status": "returned",
+        "token": "t4a412ca00c074ffb"
+      }
+    ],
+    "inputs": {},
+    "ownership": "managed",
+    "processes": [],
+    "reason": "Contre-épreuve explicite : nouvelle remise",
+    "result": {
+      "ok": true,
+      "outputs": {},
+      "summary": "Nouveau résultat synthétique, tentative 2 à examiner."
+    },
+    "started": 1791583498.924177,
+    "status": "returned",
+    "token": "t8aaf74fb3b744302"
+  }
+}

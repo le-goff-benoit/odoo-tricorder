@@ -1,0 +1,426 @@
+[
+  {
+    "contract": "72bb6d199422bb9c03ed024745fca11e4ec0bbf192330b3a252b6a9c37056ecb",
+    "created": 1791575015.4272294,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "modele-pack-v2",
+        "provider": "codex"
+      },
+      "description": "Procédure achats version un",
+      "edges": [
+        {
+          "from": "besoin",
+          "id": "besoin-analyse",
+          "mapping": {
+            "answer": "budget"
+          },
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "achats",
+      "nodes": [
+        {
+          "id": "besoin",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+          "title": "Préciser le besoin achats"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "effort": "medium",
+          "execution": {
+            "effort": "medium",
+            "model": "modele-pack-v2",
+            "profile": "analyste-achats",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "execution_mode": "text",
+          "id": "analyse",
+          "inputs": {
+            "budget": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 1,
+          "outputs": {
+            "risques": "string",
+            "synthese_v2": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "profile": "analyste-achats",
+          "profile_sha256": "f29b53a4b09a892679cfb603e015c29ce2858671d8f768c6062dba54b3fefc4d",
+          "profile_text": "Comparer le coût complet et le délai garanti par écrit.",
+          "prompt": "V2 — Comparer coût total, délai écrit, garantie et impact environnemental.",
+          "required_capabilities": [],
+          "resources": [],
+          "session": "delegated",
+          "title": "Comparer les offres",
+          "validation": "human"
+        }
+      ],
+      "parameters": {
+        "request": "ACH-047 — pack achats V2 et nouveau fournisseur"
+      },
+      "revision": 4,
+      "schema": 1,
+      "title": "Référencement fournisseur achats"
+    },
+    "driver": "automatic",
+    "id": "re7386d60e4a0471e",
+    "nodes": {
+      "analyse": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "besoin": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "question": {
+          "created": 1791575015.4279392,
+          "id": "q0553b54d91134ddc",
+          "status": "waiting",
+          "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+        },
+        "questions": [
+          {
+            "created": 1791575015.4279392,
+            "id": "q0553b54d91134ddc",
+            "status": "waiting",
+            "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+          }
+        ],
+        "status": "waiting_input"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "effort": "medium",
+        "model": "modele-pack-v2",
+        "provider": "codex"
+      },
+      "description": "Procédure achats version un",
+      "edges": [
+        {
+          "from": "besoin",
+          "id": "besoin-analyse",
+          "mapping": {
+            "answer": "budget"
+          },
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "achats",
+      "nodes": [
+        {
+          "id": "besoin",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+          "title": "Préciser le besoin achats"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "effort": "medium",
+          "execution_mode": "text",
+          "id": "analyse",
+          "inputs": {
+            "budget": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 1,
+          "outputs": {
+            "risques": "string",
+            "synthese_v2": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "profile": "analyste-achats",
+          "prompt": "V2 — Comparer coût total, délai écrit, garantie et impact environnemental.",
+          "required_capabilities": [],
+          "resources": [],
+          "session": "delegated",
+          "title": "Comparer les offres",
+          "validation": "human"
+        }
+      ],
+      "revision": 4,
+      "schema": 1,
+      "title": "Référencement fournisseur achats"
+    },
+    "packs": [
+      {
+        "id": "proc-achats",
+        "sha256": "8a2dd82665462ecb55235348ce46460fa82d1719130f1cc2420d46e2540f925a",
+        "version": "2.0"
+      }
+    ],
+    "parameters": {
+      "request": "ACH-047 — pack achats V2 et nouveau fournisseur"
+    },
+    "plugins": {
+      "path": "/tmp/tri-tour2-evolution-utk7bckx/state/workflows/projects/p799f7610454f43f1/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p799f7610454f43f1",
+    "release": "",
+    "scope": {
+      "id": "p799f7610454f43f1",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791575015.4279628
+  },
+  {
+    "contract": "0950478352f474d6ce8dd05188cda8edd3d0dfa1a17c085ec6fd1b4f12e8e2a6",
+    "created": 1791574986.4145432,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "modele-test-v1",
+        "provider": "codex"
+      },
+      "description": "Procédure achats version un",
+      "edges": [
+        {
+          "from": "besoin",
+          "id": "besoin-analyse",
+          "mapping": {
+            "answer": "budget"
+          },
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "achats",
+      "nodes": [
+        {
+          "id": "besoin",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+          "title": "Préciser le besoin achats"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "effort": "medium",
+          "execution": {
+            "effort": "medium",
+            "model": "modele-test-v2",
+            "profile": "analyste-achats",
+            "provider": "claude",
+            "session": "delegated"
+          },
+          "execution_mode": "text",
+          "id": "analyse",
+          "inputs": {
+            "budget": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 1,
+          "model": "modele-test-v2",
+          "outputs": {
+            "risques": "string",
+            "synthese_v2": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "profile": "analyste-achats",
+          "profile_sha256": "e2d105133656652a7e0783ff501067e452109fb22ba4d14ff0a32bb7749bb527",
+          "profile_text": "Comparer le coût complet et le délai annoncé.",
+          "prompt": "V2 — Comparer coût total, délai écrit, garantie et impact environnemental.",
+          "provider": "claude",
+          "required_capabilities": [],
+          "resources": [],
+          "session": "delegated",
+          "title": "Comparer les offres",
+          "validation": "human"
+        }
+      ],
+      "parameters": {
+        "request": "ACH-046 — pack achats V1"
+      },
+      "revision": 3,
+      "schema": 1,
+      "title": "Référencement fournisseur achats"
+    },
+    "driver": "automatic",
+    "id": "r0e87bd7f016043f3",
+    "nodes": {
+      "analyse": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "besoin": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "question": {
+          "created": 1791574986.4158354,
+          "id": "q3e7cf0c65e494d9b",
+          "status": "waiting",
+          "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+        },
+        "questions": [
+          {
+            "created": 1791574986.4158354,
+            "id": "q3e7cf0c65e494d9b",
+            "status": "waiting",
+            "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+          }
+        ],
+        "status": "waiting_input"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "effort": "medium",
+        "model": "modele-test-v1",
+        "provider": "codex"
+      },
+      "description": "Procédure achats version un",
+      "edges": [
+        {
+          "from": "besoin",
+          "id": "besoin-analyse",
+          "mapping": {
+            "answer": "budget"
+          },
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "achats",
+      "nodes": [
+        {
+          "id": "besoin",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+          "title": "Préciser le besoin achats"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Coût total, délai et garantie explicités."
+          ],
+          "effort": "medium",
+          "execution_mode": "text",
+          "id": "analyse",
+          "inputs": {
+            "budget": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 1,
+          "model": "modele-test-v2",
+          "outputs": {
+            "risques": "string",
+            "synthese_v2": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 380,
+            "y": 100
+          },
+          "profile": "analyste-achats",
+          "prompt": "V2 — Comparer coût total, délai écrit, garantie et impact environnemental.",
+          "provider": "claude",
+          "required_capabilities": [],
+          "resources": [],
+          "session": "delegated",
+          "title": "Comparer les offres",
+          "validation": "human"
+        }
+      ],
+      "revision": 3,
+      "schema": 1,
+      "title": "Référencement fournisseur achats"
+    },
+    "packs": [
+      {
+        "id": "proc-achats",
+        "sha256": "9ac847c6f541b1b0006998fd878e8c02028c8cd44cdcdf1834d36ed04078d130",
+        "version": "1.0"
+      }
+    ],
+    "parameters": {
+      "request": "ACH-046 — pack achats V1"
+    },
+    "plugins": {
+      "path": "/tmp/tri-tour2-evolution-utk7bckx/state/workflows/projects/p799f7610454f43f1/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p799f7610454f43f1",
+    "release": "",
+    "scope": {
+      "id": "p799f7610454f43f1",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791574986.4158833
+  }
+]

@@ -1,0 +1,8 @@
+/tmp/tricorder-tour2-passation-zKjsde/bin/codex
+codex SYNTHETIC_PASSATION_STUB 1.0
+SYNTHETIC_PASSATION_STUB codex INERT
+SYNTHETIC_INPUT 
+/tmp/tricorder-tour2-passation-zKjsde/bin/claude
+claude SYNTHETIC_PASSATION_STUB 1.0
+SYNTHETIC_PASSATION_STUB claude INERT
+SYNTHETIC_INPUT 

@@ -1,0 +1,34 @@
+{
+  "method": "sRGB luminance relative, zones opaques uniquement",
+  "notCertification": true,
+  "pairs": [
+    {
+      "scope": "M\u00e9tadonn\u00e9es carte sombre, screenshot11",
+      "foreground": [
+        163,
+        166,
+        176
+      ],
+      "background": [
+        21,
+        22,
+        26
+      ],
+      "ratio": 7.44
+    },
+    {
+      "scope": "Texte titre carte sombre, screenshot11",
+      "foreground": [
+        232,
+        233,
+        236
+      ],
+      "background": [
+        21,
+        22,
+        26
+      ],
+      "ratio": 14.89
+    }
+  ]
+}

@@ -7,7 +7,7 @@ from pathlib import Path
 import time
 import uuid
 
-from .contracts import ContractError, digest, expand, identifier, require, semantic_digest, validate, validate_outputs, validate_result
+from .contracts import ContractError, condition_outcome, digest, expand, identifier, require, semantic_digest, validate, validate_outputs, validate_result
 from .store import Store
 from .projects import initialize, repository
 
@@ -325,6 +325,7 @@ class Engine:
                         state.update(status="accepted", outcome=outcome, result={"outputs": outputs})
                     elif node["kind"] == "condition":
                         outcome = state["inputs"].get(node["parameter"], node.get("parameters", run["parameters"]).get(node["parameter"]))
+                        outcome = condition_outcome(node, outcome)
                         if outcome in node.get("options", []):
                             state.update(status="accepted", outcome=outcome, result={"outputs": {k: state["inputs"].get(k) for k in node.get("outputs", {})}})
                         else:

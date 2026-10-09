@@ -69,12 +69,42 @@ let terminalLayout = localStorage.getItem('tricorder.terminalLayout') === 'stack
 let terminalSplit = Math.max(30, Math.min(70, Number(localStorage.getItem('tricorder.terminalSplit')) || 52));
 let terminalStackedSplit = Math.max(30, Math.min(70, Number(localStorage.getItem('tricorder.terminalStackedSplit')) || 32));
 const stackedTerminal = () => terminalLayout === 'stacked' || window.innerWidth <= 850;
-const currentTerminalSplit = () => stackedTerminal() ? terminalStackedSplit : terminalSplit;
+function terminalSplitState(preferred = stackedTerminal() ? terminalStackedSplit : terminalSplit) {
+  const stacked=stackedTerminal(), bounds=$('.main-content')?.getBoundingClientRect();
+  const extent=stacked ? bounds?.height : bounds?.width;
+  // Match the grid's minimum in workspace-layout.css without overwriting the
+  // saved preference when the window changes size or zoom level.
+  const pixels=stacked ? (window.innerHeight<=700 ? Math.min(220,(extent || 0)*.42) : 140) : 220;
+  const minimum=extent>0 ? Math.min(70,Math.max(30,100*pixels/extent)) : 30;
+  return {minimum,maximum:70,value:Math.max(minimum,Math.min(70,preferred))};
+}
+const currentTerminalSplit = () => terminalSplitState().value;
 let catalogError = null, bootstrapped = false, starting = false;
 let workflowMode = false, workflowContext = null, workflowTerminalPath = null;
 let terminalContextOpen = false;
 const sessionConversations = new Map();
+const conversationTitles = new Map(), loadingConversationTitles = new Set();
 const terminalProject = () => workflowMode ? (workflowTerminalPath || current) : current;
+
+function rememberConversationTitle(conversation) {
+  if (!conversation?.id) return;
+  const previous = conversationTitles.get(conversation.id);
+  // A search or another page must not rename the conversation's terminal.
+  const item = !conversation.query && !conversation.offset ? conversation.items?.[0] : null;
+  const first = item?.request_truncated && previous ? previous : item?.request;
+  conversationTitles.set(conversation.id, (first || previous || conversation.definition?.title || 'Conversation').split('\n')[0]);
+}
+function loadConversationTitles() {
+  for (const session of sessions.filter(s => s.alive)) {
+    const id = terminalIdentity(session).conversation;
+    if (!id || conversationTitles.has(id) || loadingConversationTitles.has(id)) continue;
+    loadingConversationTitles.add(id);
+    window.studio.request({ action: 'conversation.get', conversation: id }).then(conversation => {
+      rememberConversationTitle(conversation); renderTerminals();
+    }).catch(() => { /* A missing title never prevents access to a preserved terminal. */ })
+      .finally(() => loadingConversationTitles.delete(id));
+  }
+}
 
 const WORKFLOWS = { release: { title: 'Release Odoo', action: 'workflow' }, request: { title: 'Demande Odoo', action: 'develop' }, support: { title: 'Diagnostic Odoo', action: 'diagnose' } };
 function workflowSession() {
@@ -131,8 +161,11 @@ $('.main-content').insertBefore(terminalDivider, workflowHost);
 function applyTerminalLayout() {
   const body = $('.main-content');
   body.dataset.terminalLayout = terminalLayout;
-  body.style.setProperty('--terminal-split', currentTerminalSplit() + '%');
-  terminalDivider.setAttribute('aria-valuenow', String(Math.round(currentTerminalSplit())));
+  const split=terminalSplitState();
+  body.style.setProperty('--terminal-split', split.value + '%');
+  terminalDivider.setAttribute('aria-valuemin', String(Number(split.minimum.toFixed(1))));
+  terminalDivider.setAttribute('aria-valuemax', String(split.maximum));
+  terminalDivider.setAttribute('aria-valuenow', String(Number(split.value.toFixed(1))));
   terminalDivider.setAttribute('aria-orientation', terminalLayout === 'stacked' || window.innerWidth <= 850 ? 'horizontal' : 'vertical');
   terminalDivider.hidden = !workflowMode || $('#terminal-workspace').hidden || terminalMaximized;
   const control = $('[data-action=terminal-layout]');
@@ -140,7 +173,7 @@ function applyTerminalLayout() {
   control.textContent = terminalLayout === 'stacked' ? 'Côte à côte' : 'Disposition verticale';
 }
 function resizeTerminal(value) {
-  const split = Math.max(30, Math.min(70, value));
+  const split = terminalSplitState(value).value;
   if(stackedTerminal()) {terminalStackedSplit=split;localStorage.setItem('tricorder.terminalStackedSplit',String(split));}
   else {terminalSplit=split;localStorage.setItem('tricorder.terminalSplit',String(split));}
   applyTerminalLayout();
@@ -162,8 +195,15 @@ terminalDivider.addEventListener('pointermove', event => {
 });
 terminalDivider.addEventListener('pointerup', event => { if (terminalDivider.hasPointerCapture(event.pointerId)) terminalDivider.releasePointerCapture(event.pointerId); });
 window.addEventListener('resize', applyTerminalLayout);
+$('#terminal-tabs').addEventListener('focusin', event => {
+  const tab=event.target.closest('[data-session]');
+  if(!tab)return;
+  const fullName=$('#terminal-context .terminal-session-title');
+  if(fullName)fullName.textContent=tab.getAttribute('aria-label');
+  tab.closest('.terminal-tab').scrollIntoView({block:'nearest',inline:'nearest'});
+});
 const studioUI = mountStudio(workflowHost, {
-  context(context) { if(context.conversation?.id && context.conversation.id!==workflowContext?.conversation?.id){const existing=sessions.find(s=>s.alive && terminalIdentity(s).conversation===context.conversation.id);if(existing){workflowTerminalPath=existing.project;selectedSession.set(existing.project,existing.id);}} if (workflowContext?.route === 'workflow' && context.route === 'workflow' && context.mode && context.mode !== workflowContext.mode) { terminalPreference = null; terminalMaximized = false; } workflowContext = context; if (workflowMode) render(); },
+  context(context) { rememberConversationTitle(context.conversation); if(context.conversation?.id && context.conversation.id!==workflowContext?.conversation?.id){const existing=sessions.find(s=>s.alive && terminalIdentity(s).conversation===context.conversation.id);if(existing){workflowTerminalPath=existing.project;selectedSession.set(existing.project,existing.id);}} if (workflowContext?.route === 'workflow' && context.route === 'workflow' && context.mode && context.mode !== workflowContext.mode) terminalMaximized = false; workflowContext = context; if (workflowMode) render(); },
   async openTerminal(project, graph, conversation, resume=false) {
     const result = await api.workflowTerminal({ project: project.id, conversation, resume });
     if (conversation) sessionConversations.set(result.id, {id: conversation, provider: workflowContext?.conversation?.provider});
@@ -172,6 +212,12 @@ const studioUI = mountStudio(workflowHost, {
     await refreshSessions(); render(); await mountTerminal(result.id);
     terminals.get(result.id)?.term.focus();
     return result;
+  },
+  terminalStatus(conversation) {
+    const session = sessions.find(s => s.alive && terminalIdentity(s).conversation === conversation);
+    if (!session) return 'unknown';
+    if (session.idleShell) return 'stopped';
+    return ['codex', 'claude'].includes(session.provider) ? 'running' : 'busy';
   },
   provider: () => settings.provider || 'codex',
   hasLegacy: folder => projects.some(p => p.path === folder),
@@ -182,7 +228,8 @@ let workflowNavigation = Promise.resolve();
 function openWorkflows(route = null) {
   workflowNavigation = workflowNavigation.catch(() => {}).then(async () => {
     workflowMode = true; overviewMode = false; terminalMaximized = false;
-    render(); if (route) { terminalPreference = null; await studioUI.navigate(route); }
+    localStorage.setItem('tricorder.workspace', 'workflow');
+    render(); if (route) await studioUI.navigate(route);
   });
   return workflowNavigation;
 }
@@ -208,7 +255,7 @@ function sidebar() {
   const listed = merged.sort((a, b) => Number(favorites.includes(b.path)) - Number(favorites.includes(a.path)) || a.name.localeCompare(b.name));
   const projectQuery=$('#project-search').value.trim().toLocaleLowerCase('fr');
   $('#project-list').innerHTML = listed.filter(p=>p.name.toLocaleLowerCase('fr').includes(projectQuery)).map(p => `
-    <button class="project-item side-item ${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'selected' : ''}" ${p.workflowId && (workflowMode || p.generic) ? `data-workflow-project="${esc(p.workflowId)}"` : `data-project="${esc(p.path)}"`} aria-current="${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'page' : 'false'}" title="${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || `<p class="muted pad">${projectQuery ? 'Aucun projet ne correspond.' : catalogError ? 'Projets indisponibles. Réessayez avec Actualiser.' : !bootstrapped ? 'Lecture des projets…' : 'Ajoutez un dépôt depuis Projets, ou commencez un workflow global.'}</p>`;
+    <button class="project-item side-item ${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'selected' : ''}" ${p.workflowId && (workflowMode || p.generic) ? `data-workflow-project="${esc(p.workflowId)}"` : `data-project="${esc(p.path)}"`} aria-current="${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'page' : 'false'}" data-project-title="${esc(p.name)} · ${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}" title="${esc(p.name)} · ${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name" title="${esc(p.name)}">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || `<p class="muted pad">${projectQuery ? 'Aucun projet ne correspond.' : catalogError ? 'Projets indisponibles. Réessayez avec Actualiser.' : !bootstrapped ? 'Lecture des projets…' : 'Ajoutez un dépôt depuis Projets, ou commencez un workflow global.'}</p>`;
   $('.install-agents').hidden = crewInstalled;
   $('[data-action="workflow-workspace"]').hidden = workflowMode;
   cockpitUI.alertSidebar();
@@ -240,6 +287,7 @@ function header() {
 }
 function setView(next) {
   workflowMode = false;
+  localStorage.setItem('tricorder.workspace', 'project');
   if (next === 'terminal') terminalPreference = true;
   if (next === 'kanban') { overviewMode = true; render(); $('#content').scrollTop = 0; return; }
   if (SECONDARY_VIEWS.some(([id]) => id === next) || RESOURCE_VIEWS.includes(next)) detailsOpen = true;
@@ -308,8 +356,9 @@ function render() {
   const graph = $('#content .graph-scroll'); if (graph) { graph.scrollLeft = scroll[1]; graph.scrollTop = scroll[2]; }
   if (focusKey && !active.isConnected && !document.querySelector('dialog[open]')) document.querySelector(`[${focusKey}="${CSS.escape(focusValue)}"]`)?.focus({ preventScroll: true });
 }
-async function chooseProject(project, release) {
-  workflowMode = false; terminalPreference = null;
+async function chooseProject(project, release, remember = true) {
+  workflowMode = false;
+  if (remember) localStorage.setItem('tricorder.workspace', 'project');
   current = project; overviewMode = false; detail = null; selectedTask = null; projectError = null; busy = true;
   const ticket = ++generation;
   try {
@@ -369,9 +418,11 @@ function terminalIdentity(session) {
     else if(program && !/^(MainThread|python3?|node)$/.test(program)) label=program;
     else label=conversation && labels[provider] ? `Conversation ${labels[provider]}` : 'Terminal';
   }
-  return {conversation,provider:session.provider,label};
+  return {conversation,provider:session.provider,label,title:conversationTitles.get(conversation)};
 }
 function renderTerminals() {
+  const tabBar = $('#terminal-tabs'), tabScroll = tabBar.scrollLeft;
+  const focusedSession = tabBar.contains(document.activeElement) ? document.activeElement?.dataset.session : null;
   workflowControls();
   if (workflowMode) $('#terminal-mismatch')?.remove();
   $('#execution-context').hidden = workflowMode && !terminalContextOpen;
@@ -380,10 +431,19 @@ function renderTerminals() {
   const own = sessions.filter(s => s.project === terminalProject());
   let id = selectedSession.get(terminalProject());
   if (!own.some(s => s.id === id)) { id = own.at(-1)?.id; selectedSession.set(terminalProject(), id); }
-  $('#terminal-tabs').innerHTML = own.map((s, i) => `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}" title="${s.alive ? 'Terminal ouvert — ne prouve pas qu’une étape travaille' : 'Terminal fermé'}"></span>${providerIcon(terminalIdentity(s).provider)}${esc(terminalIdentity(s).label)} ${i + 1}${s.task ? ' · ' + esc(s.task) : ''}</button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
+  $('#terminal-tabs').innerHTML = own.map((s, i) => {
+    const identity = terminalIdentity(s);
+    const label = `${identity.label}${identity.title ? ' · ' + identity.title : ' ' + (i + 1)}${s.task ? ' · ' + s.task : ''}`;
+    return `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}" title="${esc(label)}" aria-label="${esc(label)}" aria-pressed="${s.id === id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}" title="${s.alive ? 'Terminal ouvert — ne prouve pas qu’une étape travaille' : 'Terminal fermé'}"></span>${providerIcon(identity.provider)}<span class="terminal-tab-label">${esc(label)}</span></button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`;
+  }).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
   const selected = own.find(s => s.id === id);
   $('#terminal-tabs').insertAdjacentHTML('beforeend', `<div class="terminal-tab-tools"><button class="icon-button" data-action="find" title="Rechercher · Ctrl Shift F" aria-label="Rechercher dans le terminal">${icon('search')}</button>${own.length > 1 ? `<button class="icon-button" data-action="split" title="Diviser les terminaux" aria-label="Diviser les terminaux">${icon('grid')}</button>` : ''}</div>`);
+  tabBar.scrollLeft = tabScroll;
+  if (focusedSession) tabBar.querySelector(`[data-session="${CSS.escape(focusedSession)}"]`)?.focus({preventScroll:true});
+  if (tabBar.dataset.selected !== id) tabBar.querySelector('.terminal-tab.active')?.scrollIntoView({block:'nearest',inline:'nearest'});
+  tabBar.dataset.selected = id || '';
   $('#terminal-context').replaceChildren();
+  $('#terminal-context').classList.remove('cross-project');
   if (!workflowMode && selected?.alive && detail && selected.release !== detail.selectedRelease) {
     $('#terminal-context').insertAdjacentHTML('beforeend', ` <button class="secondary" data-action="terminal-context">${detail.selectedRelease ? 'Utiliser la release affichée dans ce terminal' : 'Mettre ce terminal hors release'}</button>`);
   }
@@ -392,10 +452,17 @@ function renderTerminals() {
   if (workflowMode && selected) {
     const identity=terminalIdentity(selected);
     const matches=identity.conversation && identity.conversation===workflowContext?.conversation?.id;
-    const projectTitle=workflowContext?.project?.path===selected.project ? workflowContext.project.title : projects.find(p=>p.path===selected.project)?.name || selected.project.split('/').at(-1);
+    const contexts=[...(workflowContext?.projects || []),...(workflowContext?.conversation?.project_contexts || [])];
+    const shellProject=contexts.find(p=>p.path===selected.project) || (workflowContext?.project?.path===selected.project ? workflowContext.project : null);
+    const projectTitle=shellProject?.title || projects.find(p=>p.path===selected.project)?.name || selected.project.split('/').at(-1);
+    const requestProject=contexts.find(p=>p.id===workflowContext?.run?.project) || workflowContext?.project;
     const scope=identity.conversation ? (matches ? 'Conversation du workflow affiché' : 'Autre conversation') : 'Shell du projet';
-    $('#terminal-context').innerHTML = `<span class="terminal-scope" title="${esc(identity.conversation ? 'Conversation '+identity.conversation : selected.project)}">${scope} · ${esc(projectTitle)}</span>`;
+    const crossProject=requestProject?.path && requestProject.path!==selected.project;
+    const description = `${crossProject ? 'Shell : '+projectTitle+' · Demande affichée : '+requestProject.title+' · '+scope : scope+' · Shell : '+projectTitle}${identity.conversation && selected.idleShell ? ' · Agent arrêté' : ''}${identity.title && !matches ? ' · ' + identity.title : ''}`;
+    $('#terminal-context').classList.toggle('cross-project', !!crossProject);
+    $('#terminal-context').innerHTML = `<span class="terminal-scope" title="${esc(description)}">${esc(description)}</span>${crossProject || terminalContextOpen ? `<small class="terminal-origin">Projet du shell à son ouverture ; le dossier courant peut changer.${terminalContextOpen ? ' '+esc(selected.project) : ''}</small>` : ''}`;
   }
+  if (selected) $('#terminal-context').insertAdjacentHTML('afterbegin', `<span class="terminal-session-title">${esc(tabBar.querySelector('.terminal-tab.active [data-session]')?.getAttribute('aria-label') || '')}</span>`);
   if (env?.kind === 'production') $('#terminal-context').prepend('PRODUCTION · aucune permission accordée ');
   $('#terminal-empty').hidden = own.length > 0;
   $('#terminal-hosts').hidden = own.length === 0;
@@ -477,6 +544,7 @@ async function refreshSessions() {
   if (reattachNeeded) { reattachNeeded = false; await reattachTerminals(); }
   for (const id of [...terminals.keys()]) if (!next.some(s => s.id === id)) disposeTerminal(id);
   const changed = JSON.stringify(next) !== JSON.stringify(sessions); sessions = next;
+  loadConversationTitles();
   if (changed && !overviewMode) renderTerminals();
 }
 api.terminals.onEvent(message => {
@@ -750,9 +818,10 @@ async function start() {
     notificationKeys = new Set(attentionItems().map(i => `${i.project.path}:${i.task.id}:${i.task.status}`));
     await refreshSessions();
     const chosen = projects.find(p => p.path === settings.activeProject) || projects.find(p => p.attention?.length) || projects[0];
+    const preferWorkflows = initial.initialWorkspace === 'studio' || localStorage.getItem('tricorder.workspace') === 'workflow' || !chosen;
     // An early click on the global board must survive asynchronous bootstrap.
-    if (chosen && !overviewMode) await chooseProject(chosen.path); else render();
-    if (initial.initialWorkspace === 'studio') await openWorkflows();
+    if (chosen && !overviewMode && !workflowMode && !preferWorkflows) await chooseProject(chosen.path, undefined, false); else render();
+    if (preferWorkflows && !overviewMode) await openWorkflows();
     render(); setSyncStatus(catalogError ? 'Workflows à vérifier' : 'À jour', !!catalogError);
     setInterval(refresh, 30000);
     setInterval(async () => {

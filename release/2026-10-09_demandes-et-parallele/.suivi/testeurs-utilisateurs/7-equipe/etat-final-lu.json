@@ -1,0 +1,1112 @@
+{
+  "conversation": "ceb2b314803fd492f",
+  "urgent": {
+    "completion_outcome": "succeeded",
+    "contract": "3a5d26509f761037f779542fb8fcff90db936035b5c4029dc0e106104e7d467d",
+    "created": 1791582264.345634,
+    "definition": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.",
+      "edges": [
+        {
+          "from": "clarify",
+          "id": "clarify-work",
+          "mapping": {
+            "brief": "brief"
+          },
+          "outcome": "done",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "request-conversation-mv1hsqb6",
+      "nodes": [
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "clarify",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "brief": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire parameters.request. Préciser résultat attendu, sources, contraintes et critères. Poser les questions nécessaires avec ask. Ne pas transformer toute demande en développement ou release.",
+          "sample_outputs": {
+            "brief": "Exemple : préparer une synthèse des informations fournies."
+          },
+          "title": "Comprendre le résultat attendu",
+          "validation": "contract"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "work",
+          "inputs": {
+            "brief": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 390,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Effectuer le travail décrit dans inputs.brief, dans le périmètre autorisé. Adapter la méthode à la demande : analyse, recherche, document, code ou autre. Fournir sources et limites. Une proposition d'action externe reste une proposition tant que son opération n'est pas autorisée.",
+          "required_capabilities": [
+            "native-tools"
+          ],
+          "sample_outputs": {
+            "result": "Exemple de synthèse, à comparer aux critères de la demande."
+          },
+          "title": "Effectuer le travail demandé",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 730,
+            "y": 100
+          },
+          "question": "Le résultat répond-il à la demande et à ses critères ?",
+          "title": "Examiner le résultat"
+        }
+      ],
+      "parameters": {
+        "conversation": "ceb2b314803fd492f",
+        "depends_on_runs": [],
+        "request": "URGENT — formulaire congés : décision sur le périmètre avant le comité de 09h"
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Demande ponctuelle"
+    },
+    "driver": "conversation",
+    "id": "r516ecc3c988c47f9",
+    "nodes": {
+      "clarify": {
+        "attempt": 1,
+        "finished": 1791582274.5523224,
+        "heartbeat": 1791582274.507451,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "native",
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1117780,
+            "session": 1117780,
+            "start": "11224246"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791582274.5523868,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "3a5d26509f761037f779542fb8fcff90db936035b5c4029dc0e106104e7d467d",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "brief": "URGENT — formulaire congés : décision sur le périmètre avant le comité de 09h"
+          },
+          "summary": "Cadrage fictif effectué par un collègue"
+        },
+        "started": 1791582274.5074508,
+        "status": "accepted",
+        "token": "t81dad90550044664"
+      },
+      "receipt": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791582312.2626987,
+          "note": "Accord limité aux congés annuels, livraison vendredi 16h, sans envoi externe.",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "ff9505ccb906362d9873f36f19f332deda8ec0bd3a6385ed4caa7af7700af4be"
+        },
+        "input_sources": {
+          "result": {
+            "edge": "work-receipt",
+            "node": "work",
+            "port": "result"
+          }
+        },
+        "inputs": {
+          "result": "Décision demandée : limiter le formulaire aux congés annuels. Exclure les absences maladie et les données médicales. Livraison proposée vendredi à 16h. Coût estimé : 2 heures. Aucun envoi externe autorisé."
+        },
+        "nonce": "d9a7c588d3a7846b5",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "ff9505ccb906362d9873f36f19f332deda8ec0bd3a6385ed4caa7af7700af4be",
+        "status": "accepted"
+      },
+      "work": {
+        "attempt": 1,
+        "finished": 1791582274.904832,
+        "heartbeat": 1791582274.8419776,
+        "input_sources": {
+          "brief": {
+            "edge": "clarify-work",
+            "node": "clarify",
+            "port": "brief"
+          }
+        },
+        "inputs": {
+          "brief": "URGENT — formulaire congés : décision sur le périmètre avant le comité de 09h"
+        },
+        "outcome": "done",
+        "ownership": "native",
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1117780,
+            "session": 1117780,
+            "start": "11224246"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791582274.904897,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "3a5d26509f761037f779542fb8fcff90db936035b5c4029dc0e106104e7d467d",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "result": "Décision demandée : limiter le formulaire aux congés annuels. Exclure les absences maladie et les données médicales. Livraison proposée vendredi à 16h. Coût estimé : 2 heures. Aucun envoi externe autorisé."
+          },
+          "summary": "Proposition formulaire congés prête pour décision"
+        },
+        "started": 1791582274.8419776,
+        "status": "accepted",
+        "token": "t43110f5482824963"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.",
+      "edges": [
+        {
+          "from": "clarify",
+          "id": "clarify-work",
+          "mapping": {
+            "brief": "brief"
+          },
+          "outcome": "done",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "request-conversation-mv1hsqb6",
+      "nodes": [
+        {
+          "id": "clarify",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "brief": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire parameters.request. Préciser résultat attendu, sources, contraintes et critères. Poser les questions nécessaires avec ask. Ne pas transformer toute demande en développement ou release.",
+          "sample_outputs": {
+            "brief": "Exemple : préparer une synthèse des informations fournies."
+          },
+          "title": "Comprendre le résultat attendu",
+          "validation": "contract"
+        },
+        {
+          "id": "work",
+          "inputs": {
+            "brief": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 390,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Effectuer le travail décrit dans inputs.brief, dans le périmètre autorisé. Adapter la méthode à la demande : analyse, recherche, document, code ou autre. Fournir sources et limites. Une proposition d'action externe reste une proposition tant que son opération n'est pas autorisée.",
+          "required_capabilities": [
+            "native-tools"
+          ],
+          "sample_outputs": {
+            "result": "Exemple de synthèse, à comparer aux critères de la demande."
+          },
+          "title": "Effectuer le travail demandé",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 730,
+            "y": 100
+          },
+          "question": "Le résultat répond-il à la demande et à ses critères ?",
+          "title": "Examiner le résultat"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 1,
+      "title": "Demande ponctuelle"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "ceb2b314803fd492f",
+      "depends_on_runs": [],
+      "request": "URGENT — formulaire congés : décision sur le périmètre avant le comité de 09h"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-7-equipe-EBtN0O/state/workflows/projects/p58fb92c6a9b7400f/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p58fb92c6a9b7400f",
+    "release": "",
+    "scope": {
+      "id": "p58fb92c6a9b7400f",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791582312.2627873,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "export": {
+    "completion_outcome": "succeeded",
+    "contract": "2117349c1f6409f51d18ff99b962a7d687d1dda7547adf4b73c2a3fc87f83e42",
+    "created": 1791582264.4069946,
+    "definition": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.",
+      "edges": [
+        {
+          "from": "clarify",
+          "id": "clarify-work",
+          "mapping": {
+            "brief": "brief"
+          },
+          "outcome": "done",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "request-conversation-mv1hsqb6",
+      "nodes": [
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "clarify",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "brief": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire parameters.request. Préciser résultat attendu, sources, contraintes et critères. Poser les questions nécessaires avec ask. Ne pas transformer toute demande en développement ou release.",
+          "sample_outputs": {
+            "brief": "Exemple : préparer une synthèse des informations fournies."
+          },
+          "title": "Comprendre le résultat attendu",
+          "validation": "contract"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "work",
+          "inputs": {
+            "brief": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 390,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Effectuer le travail décrit dans inputs.brief, dans le périmètre autorisé. Adapter la méthode à la demande : analyse, recherche, document, code ou autre. Fournir sources et limites. Une proposition d'action externe reste une proposition tant que son opération n'est pas autorisée.",
+          "required_capabilities": [
+            "native-tools"
+          ],
+          "sample_outputs": {
+            "result": "Exemple de synthèse, à comparer aux critères de la demande."
+          },
+          "title": "Effectuer le travail demandé",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 730,
+            "y": 100
+          },
+          "question": "Le résultat répond-il à la demande et à ses critères ?",
+          "title": "Examiner le résultat"
+        }
+      ],
+      "parameters": {
+        "conversation": "ceb2b314803fd492f",
+        "depends_on_runs": [],
+        "request": "Export statistiques équipe : tentative échouée, reprise demandée"
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Demande ponctuelle"
+    },
+    "driver": "conversation",
+    "id": "r2261fd3710c54210",
+    "nodes": {
+      "clarify": {
+        "attempt": 1,
+        "finished": 1791582274.6633203,
+        "heartbeat": 1791582274.6081462,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "native",
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1117780,
+            "session": 1117780,
+            "start": "11224246"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791582274.6634068,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "2117349c1f6409f51d18ff99b962a7d687d1dda7547adf4b73c2a3fc87f83e42",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "brief": "Export statistiques équipe : tentative échouée, reprise demandée"
+          },
+          "summary": "Cadrage fictif effectué par un collègue"
+        },
+        "started": 1791582274.608146,
+        "status": "accepted",
+        "token": "t6f70669f1fc54702"
+      },
+      "receipt": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791582385.8738256,
+          "note": "Résultat fictif lu : totaux cohérents avec le relevé fourni.",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "f429f79a780a170c2babae239ca850f1af9252dde582685696acb37d9ada7d4a"
+        },
+        "input_sources": {
+          "result": {
+            "edge": "work-receipt",
+            "node": "work",
+            "port": "result"
+          }
+        },
+        "inputs": {
+          "result": "Export final fictif : 12 demandes, 9 clôturées, 3 ouvertes. Aucune ligne manquante. Relevé hebdomadaire fourni pour la reprise. Aucune connexion ni publication."
+        },
+        "nonce": "d41d2683729fa436f",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "f429f79a780a170c2babae239ca850f1af9252dde582685696acb37d9ada7d4a",
+        "status": "accepted"
+      },
+      "work": {
+        "attempt": 2,
+        "finished": 1791582368.208695,
+        "heartbeat": 1791582368.1567018,
+        "history": [
+          {
+            "attempt": 1,
+            "finished": 1791582275.0496662,
+            "heartbeat": 1791582274.9856596,
+            "input_sources": {
+              "brief": {
+                "edge": "clarify-work",
+                "node": "clarify",
+                "port": "brief"
+              }
+            },
+            "inputs": {
+              "brief": "Export statistiques équipe : tentative échouée, reprise demandée"
+            },
+            "ownership": "native",
+            "processes": [
+              {
+                "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+                "pid": 1117780,
+                "session": 1117780,
+                "start": "11224246"
+              }
+            ],
+            "result": {
+              "ok": false,
+              "outputs": {
+                "result": ""
+              },
+              "summary": "Export arrêté : fichier source absent. Fournir le relevé hebdomadaire avant de reprendre."
+            },
+            "started": 1791582274.9856596,
+            "status": "returned",
+            "token": "t2609f250dc8848f7",
+            "validation_error": "L'exécutant a signalé un échec"
+          }
+        ],
+        "inputs": {
+          "brief": "Export statistiques équipe : tentative échouée, reprise demandée"
+        },
+        "outcome": "done",
+        "ownership": "native",
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1117780,
+            "session": 1117780,
+            "start": "11224246"
+          }
+        ],
+        "reason": "Le collègue doit utiliser le relevé hebdomadaire fictif puis fournir le total et signaler les lignes manquantes.",
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791582368.2087572,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "2117349c1f6409f51d18ff99b962a7d687d1dda7547adf4b73c2a3fc87f83e42",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "result": "Export final fictif : 12 demandes, 9 clôturées, 3 ouvertes. Aucune ligne manquante. Relevé hebdomadaire fourni pour la reprise. Aucune connexion ni publication."
+          },
+          "summary": "Deuxième tentative fictive : relevé traité, export prêt"
+        },
+        "started": 1791582368.1567013,
+        "status": "accepted",
+        "token": "tcadb37b2582146e0",
+        "attempt_history": [
+          {
+            "status": "returned",
+            "attempt": 1,
+            "started": 1791582274.9856596,
+            "finished": 1791582275.0496662,
+            "ownership": "native",
+            "failed": true,
+            "validation_error": "L'exécutant a signalé un échec",
+            "inputs": {
+              "brief": "Export statistiques équipe : tentative échouée, reprise demandée"
+            },
+            "retry_reason": "Le collègue doit utiliser le relevé hebdomadaire fictif puis fournir le total et signaler les lignes manquantes.",
+            "result": {
+              "ok": false,
+              "summary": "Export arrêté : fichier source absent. Fournir le relevé hebdomadaire avant de reprendre.",
+              "outputs": {
+                "result": ""
+              }
+            }
+          }
+        ]
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.",
+      "edges": [
+        {
+          "from": "clarify",
+          "id": "clarify-work",
+          "mapping": {
+            "brief": "brief"
+          },
+          "outcome": "done",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "request-conversation-mv1hsqb6",
+      "nodes": [
+        {
+          "id": "clarify",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "brief": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire parameters.request. Préciser résultat attendu, sources, contraintes et critères. Poser les questions nécessaires avec ask. Ne pas transformer toute demande en développement ou release.",
+          "sample_outputs": {
+            "brief": "Exemple : préparer une synthèse des informations fournies."
+          },
+          "title": "Comprendre le résultat attendu",
+          "validation": "contract"
+        },
+        {
+          "id": "work",
+          "inputs": {
+            "brief": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 390,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Effectuer le travail décrit dans inputs.brief, dans le périmètre autorisé. Adapter la méthode à la demande : analyse, recherche, document, code ou autre. Fournir sources et limites. Une proposition d'action externe reste une proposition tant que son opération n'est pas autorisée.",
+          "required_capabilities": [
+            "native-tools"
+          ],
+          "sample_outputs": {
+            "result": "Exemple de synthèse, à comparer aux critères de la demande."
+          },
+          "title": "Effectuer le travail demandé",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 730,
+            "y": 100
+          },
+          "question": "Le résultat répond-il à la demande et à ses critères ?",
+          "title": "Examiner le résultat"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 1,
+      "title": "Demande ponctuelle"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "ceb2b314803fd492f",
+      "depends_on_runs": [],
+      "request": "Export statistiques équipe : tentative échouée, reprise demandée"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-7-equipe-EBtN0O/state/workflows/projects/p58fb92c6a9b7400f/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p58fb92c6a9b7400f",
+    "release": "",
+    "scope": {
+      "id": "p58fb92c6a9b7400f",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791582385.8739214,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "bilan": {
+    "contract": "11cfebe19597170cc609d3cc45929b538c975714562f49d852ec267eb1d7c07f",
+    "created": 1791582264.4707856,
+    "definition": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.",
+      "edges": [
+        {
+          "from": "clarify",
+          "id": "clarify-work",
+          "mapping": {
+            "brief": "brief"
+          },
+          "outcome": "done",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "request-conversation-mv1hsqb6",
+      "nodes": [
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "clarify",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "brief": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire parameters.request. Préciser résultat attendu, sources, contraintes et critères. Poser les questions nécessaires avec ask. Ne pas transformer toute demande en développement ou release.",
+          "sample_outputs": {
+            "brief": "Exemple : préparer une synthèse des informations fournies."
+          },
+          "title": "Comprendre le résultat attendu",
+          "validation": "contract"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "work",
+          "inputs": {
+            "brief": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 390,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Effectuer le travail décrit dans inputs.brief, dans le périmètre autorisé. Adapter la méthode à la demande : analyse, recherche, document, code ou autre. Fournir sources et limites. Une proposition d'action externe reste une proposition tant que son opération n'est pas autorisée.",
+          "required_capabilities": [
+            "native-tools"
+          ],
+          "sample_outputs": {
+            "result": "Exemple de synthèse, à comparer aux critères de la demande."
+          },
+          "title": "Effectuer le travail demandé",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 730,
+            "y": 100
+          },
+          "question": "Le résultat répond-il à la demande et à ses critères ?",
+          "title": "Examiner le résultat"
+        }
+      ],
+      "parameters": {
+        "conversation": "ceb2b314803fd492f",
+        "depends_on_runs": [],
+        "request": "Bilan hebdomadaire équipe : résultat final à examiner"
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Demande ponctuelle"
+    },
+    "driver": "conversation",
+    "id": "r16f2aad5b8864058",
+    "nodes": {
+      "clarify": {
+        "attempt": 1,
+        "finished": 1791582274.7770863,
+        "heartbeat": 1791582274.7177906,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "native",
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1117780,
+            "session": 1117780,
+            "start": "11224246"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791582274.7771552,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "11cfebe19597170cc609d3cc45929b538c975714562f49d852ec267eb1d7c07f",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "brief": "Bilan hebdomadaire équipe : résultat final à examiner"
+          },
+          "summary": "Cadrage fictif effectué par un collègue"
+        },
+        "started": 1791582274.7177906,
+        "status": "accepted",
+        "token": "tce26be6015bb457d"
+      },
+      "receipt": {
+        "attempt": 1,
+        "input_sources": {
+          "result": {
+            "edge": "work-receipt",
+            "node": "work",
+            "port": "result"
+          }
+        },
+        "inputs": {
+          "result": "Bilan semaine : 12 demandes reçues, 9 closes, 3 à traiter. Le formulaire congés nécessite une décision avant 09h. Export statistiques suspendu : source manquante. Limite : données entièrement fictives."
+        },
+        "nonce": "d4391c19ef50f4a14",
+        "operation": null,
+        "proposal": "4db7dd5a78c2fc4861537a619f37bae1bf15fec9614fe872abee2d375a5d2562",
+        "status": "waiting"
+      },
+      "work": {
+        "attempt": 1,
+        "finished": 1791582275.1827393,
+        "heartbeat": 1791582275.12374,
+        "input_sources": {
+          "brief": {
+            "edge": "clarify-work",
+            "node": "clarify",
+            "port": "brief"
+          }
+        },
+        "inputs": {
+          "brief": "Bilan hebdomadaire équipe : résultat final à examiner"
+        },
+        "outcome": "done",
+        "ownership": "native",
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1117780,
+            "session": 1117780,
+            "start": "11224246"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791582275.182809,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "11cfebe19597170cc609d3cc45929b538c975714562f49d852ec267eb1d7c07f",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "result": "Bilan semaine : 12 demandes reçues, 9 closes, 3 à traiter. Le formulaire congés nécessite une décision avant 09h. Export statistiques suspendu : source manquante. Limite : données entièrement fictives."
+          },
+          "summary": "Bilan hebdomadaire préparé par un collègue fictif"
+        },
+        "started": 1791582275.12374,
+        "status": "accepted",
+        "token": "t3fb4808131d04339"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.",
+      "edges": [
+        {
+          "from": "clarify",
+          "id": "clarify-work",
+          "mapping": {
+            "brief": "brief"
+          },
+          "outcome": "done",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "request-conversation-mv1hsqb6",
+      "nodes": [
+        {
+          "id": "clarify",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "brief": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire parameters.request. Préciser résultat attendu, sources, contraintes et critères. Poser les questions nécessaires avec ask. Ne pas transformer toute demande en développement ou release.",
+          "sample_outputs": {
+            "brief": "Exemple : préparer une synthèse des informations fournies."
+          },
+          "title": "Comprendre le résultat attendu",
+          "validation": "contract"
+        },
+        {
+          "id": "work",
+          "inputs": {
+            "brief": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 390,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Effectuer le travail décrit dans inputs.brief, dans le périmètre autorisé. Adapter la méthode à la demande : analyse, recherche, document, code ou autre. Fournir sources et limites. Une proposition d'action externe reste une proposition tant que son opération n'est pas autorisée.",
+          "required_capabilities": [
+            "native-tools"
+          ],
+          "sample_outputs": {
+            "result": "Exemple de synthèse, à comparer aux critères de la demande."
+          },
+          "title": "Effectuer le travail demandé",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 730,
+            "y": 100
+          },
+          "question": "Le résultat répond-il à la demande et à ses critères ?",
+          "title": "Examiner le résultat"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 1,
+      "title": "Demande ponctuelle"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "ceb2b314803fd492f",
+      "depends_on_runs": [],
+      "request": "Bilan hebdomadaire équipe : résultat final à examiner"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-7-equipe-EBtN0O/state/workflows/projects/p58fb92c6a9b7400f/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p58fb92c6a9b7400f",
+    "release": "",
+    "scope": {
+      "id": "p58fb92c6a9b7400f",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791582275.1832538,
+    "focus": {
+      "node": "receipt",
+      "title": "Examiner le résultat",
+      "status": "waiting",
+      "action": "Examiner et décider"
+    },
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "windows": 1,
+  "errors": []
+}

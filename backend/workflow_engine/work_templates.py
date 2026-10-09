@@ -56,11 +56,11 @@ def templates():
                    {**edge("work", "check"), "mapping": {"result": "result"}}, {**edge("check", "quality"), "mapping": {"verdict": "verdict", "evidence_summary": "evidence_summary"}},
                    {**edge("quality", "delivery", "pass"), "mapping": {"evidence_summary": "evidence_summary"}}, edge("quality", "failure", "fail"), {**edge("delivery", "receipt"), "mapping": {"proposal": "proposal"}},
                ]}
-    meeting = {"schema": 1, "id": "meeting-conversation", "title": "Clôture de meeting",
-               "description": "Vérifier le transcript, extraire décisions et actions, préparer le compte rendu et l’email. Ajouter vos blocs de publication selon les destinations choisies.",
+    meeting = {"schema": 1, "id": "meeting-conversation", "title": "Clôture de réunion",
+               "description": "Vérifier la transcription, extraire décisions et actions, préparer le compte rendu et l’email. Ajouter vos blocs de publication selon les destinations choisies.",
                "nodes": [
-                   work("review", "Vérifier le meeting et son transcript", outputs={"minutes": "string", "actions": "array"}, prompt="Lire la demande et le transcript fournis. Distinguer décisions, propositions et inconnues, attribuer les actions seulement lorsque c’est explicite. Poser les questions utiles. Produire un compte rendu fidèle."),
-                   node("approve", "Relire le compte rendu", "decision", x=370, inputs={"minutes": "string", "actions": "array"}, outputs={"minutes": "string", "actions": "array"}, question="Le compte rendu et les actions reflètent-ils le meeting ?", options=["approve", "reject"]),
+                   work("review", "Vérifier la réunion et sa transcription", outputs={"minutes": "string", "actions": "array"}, prompt="Lire la demande et la transcription fournies. Distinguer décisions, propositions et inconnues, attribuer les actions seulement lorsque c’est explicite. Poser les questions utiles. Produire un compte rendu fidèle."),
+                   node("approve", "Relire le compte rendu", "decision", x=370, inputs={"minutes": "string", "actions": "array"}, outputs={"minutes": "string", "actions": "array"}, question="Le compte rendu et les actions reflètent-ils la réunion ?", options=["approve", "reject"]),
                    work("mail", "Préparer l’email de suivi", x=680, inputs={"minutes": "string", "actions": "array"}, outputs={"draft": "string"}, prompt="Préparer le brouillon d’email à partir du compte rendu reçu dans cette exécution. Aucun envoi ni publication implicite. Les destinations Confluence, Slack ou mail sont des blocs configurables du workflow."),
                ], "edges": [{**edge("review", "approve"), "mapping": {"minutes": "minutes", "actions": "actions"}}, {**edge("approve", "mail", "approve"), "mapping": {"minutes": "minutes", "actions": "actions"}}]}
     request = {"schema": 1, "id": "request-conversation", "title": "Demande ponctuelle",
@@ -84,4 +84,49 @@ def templates():
         for step in flow["nodes"]:
             if step["id"] in mapping:
                 step["required_capabilities"] = mapping[step["id"]]
+    # These are explicit teaching examples, never fallback outputs for an
+    # actual executor. The simulator still enforces the same typed contracts.
+    examples = {
+        "release-conversation": {
+            "intent": {"intent": "Exemple : clarifier la demande et ses critères."},
+            "plan": {"plan": "Exemple : réaliser le périmètre accepté, puis vérifier le résultat."},
+            "work": {"result": "Exemple de résultat ; aucun fichier du projet n’a été modifié."},
+            "check": {"verdict": "pass", "evidence_summary": "Exemple de contrôle réussi ; aucun test métier exécuté."},
+            "delivery": {"proposal": "Exemple de bilan et de proposition de livraison ; aucune publication effectuée."},
+        },
+        "support-conversation": {
+            "diagnosis": {"severity": "normal", "finding": "Exemple : un utilisateur rencontre un défaut sans interruption du service.", "next_action": "Exemple : préparer la réponse et les investigations."},
+            "urgent": {"proposal": "Exemple de traitement urgent à examiner ; aucun correctif ni déploiement effectué."},
+            "normal": {"draft": "Exemple de brouillon : nous proposons de vérifier le défaut signalé. Aucun message envoyé."},
+            "reassess": {"severity": "normal", "finding": "Exemple : la précision reçue permet de limiter l’impact.", "next_action": "Exemple : préparer une réponse documentée."},
+        },
+        "meeting-conversation": {
+            "review": {"minutes": "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer.", "actions": [{"action": "Confirmer le périmètre de l’atelier", "owner": "À préciser", "due": "À préciser"}]},
+            "mail": {"draft": "Exemple de brouillon : voici le compte rendu et l’action à préciser. Aucun email envoyé."},
+        },
+        "request-conversation": {
+            "clarify": {"brief": "Exemple : préparer une synthèse des informations fournies."},
+            "work": {"result": "Exemple de synthèse, à comparer aux critères de la demande."},
+        },
+        "express-conversation": {
+            "qualify": {"eligibility": "eligible", "scope": "Exemple : corriger un libellé local, sans changement de données ni de calcul."},
+            "fix": {"result": "Exemple de correction du libellé ; aucun fichier modifié."},
+            "check": {"verdict": "pass", "evidence_summary": "Exemple de contrôle réussi ; aucun test métier exécuté."},
+        },
+    }
+    support_criteria = {
+        "diagnosis": ["Les faits, l’impact et les inconnues sont distingués.", "La criticité et la prochaine action sont justifiées par les sources reçues."],
+        "urgent": ["La proposition précise le périmètre, les contrôles et le retour arrière.", "Aucun déploiement n’est présenté comme effectué ou autorisé par le seul diagnostic."],
+        "normal": ["Le brouillon explique le constat, les inconnues et la suite proposée.", "Le message reste un brouillon, sans envoi implicite."],
+        "reassess": ["La nouvelle qualification tient compte de la précision reçue.", "Les inconnues restantes sont explicites."],
+    }
+    for step in support["nodes"]:
+        if step["id"] in support_criteria:
+            # Expected business quality, never an assertion that the automatic
+            # type/evidence checks have evaluated those criteria.
+            step["criteria"] = support_criteria[step["id"]]
+    for flow in (release, support, meeting, request, express):
+        for step in flow["nodes"]:
+            if step["id"] in examples[flow["id"]]:
+                step["sample_outputs"] = examples[flow["id"]][step["id"]]
     return [release, support, meeting, request, express]

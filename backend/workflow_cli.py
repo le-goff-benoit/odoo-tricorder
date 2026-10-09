@@ -2,9 +2,11 @@
 """Narrow bridge used by native agents. No human approval operation is exposed."""
 import argparse
 import json
+import mimetypes
 import os
 from pathlib import Path
 import sys
+import unicodedata
 
 from workflow_engine import Engine, ContractError
 from workflow_engine.contracts import require
@@ -18,10 +20,16 @@ def _request(engine, cid, action, payload):
         return conversations.snapshot(cid, offset=payload.get("offset", 0), limit=25, query=payload.get("query", ""))
     if action == "add":
         return conversations.add(cid, payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"))
+    if action == "dispatch":
+        from workflow_engine.runtime import dispatch_conversation
+        require(isinstance(payload, dict) and set(payload) <= {"runs", "offset", "limit", "node_offsets"}, "dispatch accepte runs, offset, limit et node_offsets uniquement")
+        return dispatch_conversation(engine, cid, **payload)
     if action == "artifact":
         path = Path(payload["path"]).expanduser()
         require(path.is_file() and path.stat().st_size <= 2_000_000, "Preuve absente ou trop volumineuse")
-        return engine.artifact(path.read_bytes())
+        filename = "".join(c for c in path.name if not unicodedata.category(c).startswith("C"))[:240]
+        media_type = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+        return {**engine.artifact(path.read_bytes()), "filename": filename or "Pièce jointe", "media_type": media_type}
     run = conversations.checked_run(cid, payload["run"])
     if action == "ready":
         from workflow_engine.projections import run_detail, paging
@@ -108,7 +116,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", required=True)
     parser.add_argument("--conversation", required=True)
-    parser.add_argument("action", choices=["status", "add", "ready", "claim", "context", "execute", "result", "ask", "answer", "artifact", "heartbeat", "prepare-candidate", "inspect", "read"])
+    parser.add_argument("action", choices=["status", "add", "ready", "dispatch", "claim", "context", "execute", "result", "ask", "answer", "artifact", "heartbeat", "prepare-candidate", "inspect", "read"])
     parser.add_argument("--offset", type=int, default=0)
     parser.add_argument("--query", default="")
     args = parser.parse_args()

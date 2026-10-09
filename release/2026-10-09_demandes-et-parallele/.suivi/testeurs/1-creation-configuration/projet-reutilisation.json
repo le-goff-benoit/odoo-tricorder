@@ -1,0 +1,42 @@
+{
+  "project": {
+    "defaults": {
+      "effort": "medium",
+      "model": "",
+      "profile": "generalist",
+      "provider": "codex",
+      "session": "delegated"
+    },
+    "id": "p6db47bf05f3d4890",
+    "managed": true,
+    "path": "/tmp/tricorder-functional-creation-state-6f3zmG/workflows/projects/p6db47bf05f3d4890",
+    "title": "Achats agence Genève"
+  },
+  "workflows": {
+    "items": [
+      {
+        "edges": [],
+        "id": "work-33170e25-ee16-4478-89e1-0f0c76a400c7",
+        "nodes": [
+          {
+            "id": "start",
+            "kind": "task",
+            "position": {
+              "x": 60,
+              "y": 80
+            },
+            "title": "Première étape"
+          }
+        ],
+        "parameters": {},
+        "revision": 1,
+        "schema": 1,
+        "title": "Achats version dépôt",
+        "_project": "p6db47bf05f3d4890"
+      }
+    ],
+    "total": 1,
+    "offset": 0,
+    "next": null
+  }
+}

@@ -1,0 +1,241 @@
+[
+  {
+    "type": "before",
+    "callId": "pw:api@42",
+    "stepId": "pw:api@42",
+    "startTime": 208966.592,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Focus",
+    "subtitle": "locator('.xterm-helper-textarea:visible')",
+    "params": {
+      "locator": "locator('.xterm-helper-textarea:visible')"
+    },
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 228,
+        "column": 15
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@42",
+    "endTime": 208973.626,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "pw:api@43",
+    "stepId": "pw:api@43",
+    "startTime": 208973.86,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Type \"exit\"",
+    "params": {
+      "text": "exit"
+    },
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 228,
+        "column": 44
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@43",
+    "endTime": 208986.924,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "pw:api@44",
+    "stepId": "pw:api@44",
+    "startTime": 208987.676,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Press \"Enter\"",
+    "params": {
+      "key": "Enter"
+    },
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 228,
+        "column": 78
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@44",
+    "endTime": 208990.044,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "expect@45",
+    "stepId": "expect@45",
+    "startTime": 208990.674,
+    "class": "Test",
+    "method": "expect",
+    "title": "Expect \"poll toBe\"",
+    "params": {
+      "expected": "true"
+    },
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 229,
+        "column": 94
+      }
+    ]
+  },
+  {
+    "type": "before",
+    "callId": "pw:api@46",
+    "stepId": "pw:api@46",
+    "parentId": "expect@45",
+    "startTime": 208991.736,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Evaluate",
+    "params": {},
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 222,
+        "column": 32,
+        "function": "terminals"
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@46",
+    "endTime": 208995.219,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "expect@47",
+    "stepId": "expect@47",
+    "parentId": "expect@45",
+    "startTime": 208995.739,
+    "class": "Test",
+    "method": "expect",
+    "title": "Expect \"toBe\"",
+    "params": {
+      "expected": "true"
+    },
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 229,
+        "column": 3
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "expect@47",
+    "endTime": 208995.789,
+    "annotations": []
+  },
+  {
+    "type": "after",
+    "callId": "expect@45",
+    "endTime": 208995.813,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "expect@48",
+    "stepId": "expect@48",
+    "startTime": 208996.25,
+    "class": "Test",
+    "method": "expect",
+    "title": "Expect \"toContainText\"",
+    "subtitle": "locator('#execution-overview')",
+    "params": {
+      "locator": "locator('#execution-overview')",
+      "expected": "Réponse attendue"
+    },
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 230,
+        "column": 53
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "expect@48",
+    "endTime": 209002.921,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "expect@49",
+    "stepId": "expect@49",
+    "startTime": 209003.522,
+    "class": "Test",
+    "method": "expect",
+    "title": "Expect \"toBeVisible\"",
+    "subtitle": "locator('#conversation-tray').getByRole('button', { name: 'Reprendre l’agent…', exact: true })",
+    "params": {
+      "locator": "locator('#conversation-tray').getByRole('button', { name: 'Reprendre l’agent…', exact: true })"
+    },
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 232,
+        "column": 24
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "expect@49",
+    "endTime": 214007.256,
+    "annotations": [],
+    "error": {
+      "name": "",
+      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#conversation-tray').getByRole('button', { name: 'Reprendre l’agent…', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('#conversation-tray').getByRole('button', { name: 'Reprendre l’agent…', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#conversation-tray').getByRole('button', { name: 'Reprendre l’agent…', exact: true })\u001b[22m\n",
+      "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#conversation-tray').getByRole('button', { name: 'Reprendre l’agent…', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('#conversation-tray').getByRole('button', { name: 'Reprendre l’agent…', exact: true }) with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#conversation-tray').getByRole('button', { name: 'Reprendre l’agent…', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs:232:24"
+    }
+  },
+  {
+    "type": "before",
+    "callId": "hook@50",
+    "stepId": "hook@50",
+    "startTime": 214007.855,
+    "class": "Test",
+    "method": "hook",
+    "title": "After Hooks",
+    "params": {},
+    "stack": []
+  },
+  {
+    "type": "before",
+    "callId": "hook@51",
+    "stepId": "hook@51",
+    "parentId": "hook@50",
+    "startTime": 214007.93,
+    "class": "Test",
+    "method": "hook",
+    "title": "afterEach hook",
+    "params": {},
+    "stack": [
+      {
+        "file": "/home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs",
+        "line": 83,
+        "column": 6
+      }
+    ]
+  }
+]

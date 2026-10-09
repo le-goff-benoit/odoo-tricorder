@@ -1,0 +1,89 @@
+{
+  "conversation": "c6effe4c73fcd40f7",
+  "items": [
+    {
+      "created": 1791581461.0997984,
+      "depends_on": [],
+      "id": "wa53d06b595fd47dd",
+      "key": "initial",
+      "project": "workspace",
+      "request": "Ticket fictif CAT-42 : le téléchargement du catalogue PDF échoue depuis ce matin. Le bouton Télécharger affiche Erreur. Identifier le constat et préparer la réponse client ; demander une précision sur l’impact avant de décider une correctio",
+      "run": "r944af3d3cea44f69",
+      "request_truncated": true,
+      "execution": {
+        "id": "r944af3d3cea44f69",
+        "project": "workspace",
+        "status": "completed",
+        "created": 1791581461.0991917,
+        "updated": 1791581536.687469,
+        "simulation": false,
+        "completion_outcome": "succeeded",
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "conversation": "c6effe4c73fcd40f7",
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "support-conversation-mv1hc4sx",
+          "title": "Support — diagnostic et suite",
+          "revision": 1
+        },
+        "original": {
+          "id": "support-conversation-mv1hc4sx"
+        },
+        "focus": null,
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "Ticket fictif CAT-42 : le téléchargement du catalogue PDF échoue depuis ce matin. Le bouton Télécharger affiche Erreur. Identifier le constat et préparer la réponse client ; demander une précision sur l’impact avant de décider une correctio",
+        "counts": {
+          "skipped": 4,
+          "accepted": 2
+        },
+        "nodes": {
+          "clarify": {
+            "status": "skipped"
+          },
+          "diagnosis": {
+            "status": "accepted"
+          },
+          "normal": {
+            "status": "accepted"
+          },
+          "reassess": {
+            "status": "skipped"
+          },
+          "unresolved": {
+            "status": "skipped"
+          },
+          "urgent": {
+            "status": "skipped"
+          }
+        },
+        "launch": {
+          "status": "waiting",
+          "label": "En attente",
+          "ready_count": 0,
+          "worker_count": 0,
+          "native_count": 0,
+          "configuration_count": 0,
+          "waiting_count": 0,
+          "unknown_count": 0,
+          "active_count": 0,
+          "max_parallel": 4,
+          "nodes": [],
+          "nodes_total": 0,
+          "nodes_truncated": false
+        }
+      },
+      "dependencies": [],
+      "dependencies_total": 0,
+      "dependencies_truncated": false
+    }
+  ],
+  "windows": 1,
+  "pageErrors": []
+}

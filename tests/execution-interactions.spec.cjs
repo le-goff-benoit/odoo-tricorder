@@ -65,7 +65,10 @@ test.beforeEach(async ({}, info) => {
   directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-execution-interactions-'));
   fs.mkdirSync(path.join(directory, 'bin'));
   fs.writeFileSync(path.join(directory, 'bin/codex'), '#!/bin/sh\nprintf "INERT REVIEW AGENT\\n"\nwhile IFS= read -r line; do [ "$line" = exit ] && break; printf "INPUT:%s\\n" "$line"; done\n', { mode: 0o755 });
-  environment = { ...process.env, PATH: path.join(directory,'bin') + ':/usr/bin:/bin', HOME:directory,
+  fs.writeFileSync(path.join(directory, 'bin/claude'), '#!/bin/sh\nprintf "INERT REVIEW CLAUDE ONLY\\n"\nexit 78\n', { mode: 0o755 });
+  environment = { PATH: path.join(directory,'bin') + ':/usr/bin:/bin', HOME:directory,
+    DISPLAY:process.env.DISPLAY, XAUTHORITY:process.env.XAUTHORITY, LANG:'C.UTF-8', PYTHONDONTWRITEBYTECODE:'1',
+    CODEX_HOME:path.join(directory,'codex'), CLAUDE_CONFIG_DIR:path.join(directory,'claude'),
     XDG_CONFIG_HOME:path.join(directory,'config'), XDG_CACHE_HOME:path.join(directory,'cache'), XDG_DATA_HOME:path.join(directory,'data'),
     TRICORDER_HOME:directory, TRICORDER_STATE_DIR:directory, TRICORDER_AGENTS_DIR:path.join(directory,'absent-pack'), TRICORDER_TEST_MODE:'1' };
   backend = process.env.TRICORDER_EXECUTABLE ? path.join(path.dirname(process.env.TRICORDER_EXECUTABLE),'resources/backend') : path.join(root,'backend');
@@ -177,6 +180,7 @@ test('search draft survives polling and deferred request counts refresh after le
 
 test('terminal identifies another conversation and preserves the same PTY through navigation and agent exit', async () => {
   const terminals = () => page.evaluate(() => window.tricorder.terminals.list());
+  expect(await terminals()).toHaveLength(0); // Opening the question does not launch an agent.
   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();
   await expect(page.locator('.xterm-screen:visible')).toContainText('INERT REVIEW AGENT');
   const [first] = await terminals();
@@ -209,7 +213,41 @@ test('terminal identifies another conversation and preserves the same PTY throug
   await expect.poll(async () => (await terminals()).find(s=>s.id===first.id)?.program).toBe('sleep');
   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();
   // A remembered AI provider is not evidence that this foreground program is AI.
-  await expect(page.locator('.terminal-tab.active [data-session]')).toHaveText(/^sleep \d+$/);
+  await expect(page.locator('.terminal-tab.active [data-session]')).toHaveText('sleep · R1 — Demande synthétique');
   await input.focus();await page.keyboard.press('Control+C');
   await expect.poll(async () => (await terminals()).find(s=>s.id===first.id)?.idleShell).toBe(true);
+});
+
+test('a stopped conversation with a pending question resumes explicitly without losing requests or its terminal', async () => {
+  const terminals = () => page.evaluate(() => window.tricorder.terminals.list());
+  await page.getByRole('button', {name:'Retrouver la conversation',exact:true}).click();
+  await expect(page.locator('.xterm-screen:visible')).toContainText('INERT REVIEW AGENT');
+  const [first] = await terminals();
+  const before = await call('conversation.get', {conversation:fixture.conversation});
+  const input = page.locator('.xterm-helper-textarea:visible');
+  await input.focus(); await page.keyboard.type('exit'); await page.keyboard.press('Enter');
+  await expect.poll(async () => (await terminals()).find(s => s.id === first.id)?.idleShell).toBe(true);
+  // The UI observes the broker every 5 s; the workflow then polls that cache.
+  // Verify each visible observation without forcing a refresh or navigating.
+  await expect(page.locator('.terminal-scope')).toContainText('Agent arrêté', {timeout:10000});
+  await expect(page.locator('#execution-overview')).toContainText('Réponse attendue');
+  const resume = page.locator('#conversation-tray').getByRole('button', {name:'Reprendre l’agent…',exact:true});
+  await expect(resume).toBeVisible();
+  await resume.click();
+  await expect(page.getByRole('dialog')).toContainText('sans créer une seconde conversation');
+  await page.getByRole('button', {name:'Revenir',exact:true}).click();
+  expect((await terminals()).find(s => s.id === first.id).idleShell).toBe(true);
+  expect(await terminals()).toHaveLength(1);
+  await resume.click(); await page.getByRole('button', {name:'Reprendre dans ce terminal',exact:true}).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect.poll(async () => (await terminals()).find(s => s.id === first.id)?.idleShell).toBe(false);
+  await expect(page.locator('#conversation-tray')).not.toContainText('Agent arrêté');
+  await input.focus(); await page.keyboard.type('Continuer la demande conservée'); await page.keyboard.press('Enter');
+  await expect(page.locator('.xterm-screen:visible')).toContainText('INPUT:Continuer la demande conservée');
+  const after = await call('conversation.get', {conversation:fixture.conversation});
+  expect(after.items.map(i => [i.id,i.run,i.request])).toEqual(before.items.map(i => [i.id,i.run,i.request]));
+  expect((await call('run.get', {run:fixture.run})).run.nodes.question.status).toBe('waiting_input');
+  const [current] = await terminals(); expect(current.id).toBe(first.id); expect(current.pid).toBe(first.pid);
+  expect(await terminals()).toHaveLength(1);
+  await page.screenshot({path:test.info().outputPath('conversation-resumed-same-terminal.png')});
 });

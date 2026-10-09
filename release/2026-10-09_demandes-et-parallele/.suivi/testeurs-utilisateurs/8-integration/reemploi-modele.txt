@@ -1,0 +1,97 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Equipe Alpha — méthode transfert
+Equipe Beta — dépôt existant
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Equipe Beta — dépôt existant
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:48
+
+EQUIPE BETA — DÉPÔT EXISTANT / WORKFLOW
+Beta — deuxième workflow issu du modèle
+
+Révision 1 · Enregistré
+
+Choisir l’IA
+Options
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+⋮⋮ Déplacer
+◇
+Documenter les règles de transfert Alpha
+Tâche
+0 entrée → 0 sortie
+1 bloc · 0 lien
+−
+100 %
++
+Ajuster
+×
+TÂCHE
+Documenter les règles de transfert Alpha
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+Aucune donnée déclarée
+Ajouter une entrée
+Sorties
+Aucune donnée déclarée
+Ajouter une sortie
+Données de simulation…
+Contrôle de code (QA)
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Outils et plugins de cette étape
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Liens entre les blocs
+Supprimer cette étape
+Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+[
+  {
+    "id": "node-title",
+    "value": "Documenter les règles de transfert Alpha"
+  },
+  {
+    "id": "node-prompt",
+    "value": "Préparer un guide de passage entre équipes fictives : contexte, étapes et critères vérifiables."
+  },
+  {
+    "id": "node-criteria",
+    "value": "Le guide identifie le dépôt cible\nLes étapes sont vérifiables par la seconde équipe"
+  }
+]

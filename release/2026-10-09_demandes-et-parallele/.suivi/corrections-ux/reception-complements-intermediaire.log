@@ -1,0 +1,490 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:ui
+PATH: /tmp/tricorder-ci-tools-6bi4t77n:/usr/bin:/bin
+codex None
+claude None
+
+> odoo-tricorder@0.6.0-rc.12 test:ui
+> npm run build && playwright test --grep work journey|mail intake: native|mail illustration|pause and cancellation|compact editing|stopped agent|cross-project context|design: create --output=/tmp/tricorder-ux-source-followups
+
+
+> odoo-tricorder@0.6.0-rc.12 build
+> node scripts/build.mjs
+
+
+Running 10 tests using 1 worker
+
+  ✓   1 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.1s)
+  ✓   2 tests/editor-layout-ux.spec.cjs:98:1 › compact editing retains the live terminal and shows full sidebar project names on pointer and keyboard focus (3.6s)
+  ✓   3 tests/functional-feedback.spec.cjs:63:1 › business feedback: pause and cancellation update an open inspector even when the node is unchanged (4.4s)
+  ✓   4 tests/simplicity.spec.cjs:50:1 › design: create a blank generic workflow, connect typed I/O, save and launch in the same app (3.5s)
+  ✓   5 tests/studio.spec.cjs:774:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (3.6s)
+
+  ✓   6 tests/studio.spec.cjs:1064:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (5.7s)
+
+  ✘   7 tests/studio.spec.cjs:1109:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (34.7s)
+  ✓   8 tests/terminal-resume-ux.spec.cjs:47:1 › stopped agent is resumed explicitly from overview and activity without duplicate conversation or lost shell draft (12.4s)
+  ✓   9 tests/terminal-resume-ux.spec.cjs:73:1 › cross-project context names both shell project and displayed request project (7.9s)
+
+  ✘  10 tests/terminal-resume-ux.spec.cjs:117:1 › completed request offers its result without instructing the user to resume the stopped agent (12.5s)
+
+
+  1) tests/studio.spec.cjs:1109:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal 
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('.request-selector').locator(':scope > summary')
+        - locator resolved to <summary>…</summary>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+        4 × waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 20ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+        2 × waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+          - element is not stable
+        - retrying click action
+          - waiting 20ms
+          - waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="modal">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        2 × waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="modal">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+        - locator resolved to <summary>…</summary>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="modal">…</div> intercepts pointer events
+      - retrying click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - element is not visible
+      - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 20ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="modal">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 20ms
+        3 × waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 20ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 500ms
+          - waiting for element to be visible, enabled and stable
+        - element was detached from the DOM, retrying
+          - locator resolved to <summary>…</summary>
+        - attempting click action
+          - waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+        - waiting for element to be visible, enabled and stable
+        - element is not stable
+      - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+        - locator resolved to <summary>…</summary>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <div class="modal">…</div> intercepts pointer events
+      - retrying click action
+        - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+        - locator resolved to <summary>…</summary>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+      - element was detached from the DOM, retrying
+
+
+      1043 | async function selectRequest(index) {
+      1044 |   const selector=page.locator('.request-selector');
+    > 1045 |   if(!await selector.getAttribute('open').then(value=>value!==null)) await selector.locator(':scope > summary').click();
+           |                                                                                                                 ^
+      1046 |   await page.locator('.work-items button').nth(index).click();
+      1047 |   await expect(selector).not.toHaveAttribute('open','');
+      1048 | }
+        at selectRequest (/home/blegoff/odoo-tricorder/tests/studio.spec.cjs:1045:113)
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:1121:3
+
+    Error Context: ../../../tmp/tricorder-ux-source-followups/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-ux-source-followups/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-ux-source-followups/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/terminal-resume-ux.spec.cjs:117:1 › completed request offers its result without instructing the user to resume the stopped agent 
+
+    Error: expect(locator).not.toContainText(expected) failed
+
+    Locator: locator('#conversation-tray')
+    Expected substring: not "Agent arrêté"
+    Received string: "3 demandes ⌄Demandes du workflow3 demandesRechercherRechercher une demandeRechercherR1 — Examiner les besoins AzurAtelier Azur · TerminéeR2 — Examiner les besoins CorailLaboratoire Corail · Agent arrêtéR3 — Consolider après AzurAtelier Azur · Agent arrêtéAjouter une demande…Archiver la conversationAucune étape en cours · 2 demandes à prendre en charge · 1 terminéeVoir le terminal"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "not toContainText" locator('#conversation-tray') with timeout 5000ms
+      - waiting for locator('#conversation-tray')
+        5 × locator resolved to <section id="conversation-tray" class="conversation-tray" data-conversation="c40d6498e7fc54ba1">…</section>
+          - unexpected value "3 demandes ⌄Demandes du workflow3 demandesRechercherRechercher une demandeRechercherR1 — Examiner les besoins AzurAtelier Azur · TerminéeR2 — Examiner les besoins CorailLaboratoire Corail · Agent arrêtéR3 — Consolider après AzurAtelier Azur · Attend une autre demandeAjouter une demande…Archiver la conversationAucune étape en cours · 2 demandes à prendre en charge · 1 en attente de dépendancesVoir le terminal"
+        9 × locator resolved to <section id="conversation-tray" class="conversation-tray" data-conversation="c40d6498e7fc54ba1">…</section>
+          - unexpected value "3 demandes ⌄Demandes du workflow3 demandesRechercherRechercher une demandeRechercherR1 — Examiner les besoins AzurAtelier Azur · TerminéeR2 — Examiner les besoins CorailLaboratoire Corail · Agent arrêtéR3 — Consolider après AzurAtelier Azur · Agent arrêtéAjouter une demande…Archiver la conversationAucune étape en cours · 2 demandes à prendre en charge · 1 terminéeVoir le terminal"
+
+
+      120 |   await request(0);
+      121 |   await expect(page.locator('#execution-overview')).toContainText('Terminée');
+    > 122 |   await expect(page.locator('#conversation-tray')).not.toContainText('Agent arrêté');
+          |                                                        ^
+      123 |   await expect(page.locator('#conversation-tray')).toContainText('1 terminée');
+      124 |   await expect(page.locator('#conversation-tray [data-action="resume-agent"]')).toHaveCount(0);
+      125 |   await expect(page.locator('#conversation-tray')).toContainText('Voir le terminal');
+        at /home/blegoff/odoo-tricorder/tests/terminal-resume-ux.spec.cjs:122:56
+
+    Error Context: ../../../tmp/tricorder-ux-source-followups/terminal-resume-ux-complet-9ba50-to-resume-the-stopped-agent/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-ux-source-followups/terminal-resume-ux-complet-9ba50-to-resume-the-stopped-agent/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-ux-source-followups/terminal-resume-ux-complet-9ba50-to-resume-the-stopped-agent/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/studio.spec.cjs:1109:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal 
+    tests/terminal-resume-ux.spec.cjs:117:1 › completed request offers its result without instructing the user to resume the stopped agent 
+  8 passed (1.6m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

@@ -1,0 +1,911 @@
+{
+  "runs": [
+    {
+      "contract": "117f70bf4341f4ec4e074148c76a9baaf493e71a810b44973ebde20cd9d8d03b",
+      "created": 1791574944.249919,
+      "definition": {
+        "defaults": {
+          "effort": "medium",
+          "model": "modele-test-reprise",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [],
+        "id": "work-77efca67-3b5b-4bfe-8fb2-e3dfb3e1efdd",
+        "nodes": [
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "execution": {
+              "effort": "medium",
+              "model": "modele-test-reprise",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "id": "analyse",
+            "inputs": {},
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "parameters": {
+          "conversation": "c40872528950346ab",
+          "depends_on_runs": [],
+          "request": "ACH-045 — ancienne demande conversation sans modèle"
+        },
+        "revision": 1,
+        "schema": 1,
+        "title": "Procédure achats à reconfigurer — adaptation"
+      },
+      "driver": "conversation",
+      "id": "r2f8177194a7546c8",
+      "nodes": {
+        "analyse": {
+          "attempt": 0,
+          "input_sources": {},
+          "inputs": {},
+          "status": "ready"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "defaults": {
+          "effort": "medium",
+          "model": "modele-test-reprise",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [],
+        "id": "work-77efca67-3b5b-4bfe-8fb2-e3dfb3e1efdd",
+        "nodes": [
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "id": "analyse",
+            "inputs": {},
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "parameters": {},
+        "revision": 1,
+        "schema": 1,
+        "title": "Procédure achats à reconfigurer — adaptation"
+      },
+      "packs": [],
+      "parameters": {
+        "conversation": "c40872528950346ab",
+        "depends_on_runs": [],
+        "request": "ACH-045 — ancienne demande conversation sans modèle"
+      },
+      "plugins": {
+        "path": "/tmp/tri-tour2-evolution-utk7bckx/state/workflows/projects/p799f7610454f43f1/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p799f7610454f43f1",
+      "release": "",
+      "scope": {
+        "id": "p799f7610454f43f1",
+        "kind": "project"
+      },
+      "simulation": false,
+      "status": "active",
+      "transports": {},
+      "updated": 1791574944.250158
+    },
+    {
+      "contract": "af5cd7057b8b3d9b9b43b588ef4ecbc43b7a4bca3ab3a6b90357182df1a324c4",
+      "created": 1791574886.1704886,
+      "definition": {
+        "defaults": {
+          "effort": "medium",
+          "model": "",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [],
+        "id": "non-lancable",
+        "nodes": [
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "execution": {
+              "effort": "medium",
+              "model": "",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "id": "analyse",
+            "inputs": {},
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "parameters": {
+          "conversation": "c541395a2a30f48a9",
+          "depends_on_runs": [],
+          "request": "ACH-045 — ancienne demande conversation sans modèle"
+        },
+        "revision": 1,
+        "schema": 1,
+        "title": "Procédure achats à reconfigurer"
+      },
+      "driver": "conversation",
+      "id": "r34c9f8dd40574770",
+      "nodes": {
+        "analyse": {
+          "attempt": 0,
+          "input_sources": {},
+          "inputs": {},
+          "status": "ready"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "defaults": {
+          "effort": "medium",
+          "model": "",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [],
+        "id": "non-lancable",
+        "nodes": [
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "id": "analyse",
+            "inputs": {},
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "revision": 1,
+        "schema": 1,
+        "title": "Procédure achats à reconfigurer"
+      },
+      "packs": [],
+      "parameters": {
+        "conversation": "c541395a2a30f48a9",
+        "depends_on_runs": [],
+        "request": "ACH-045 — ancienne demande conversation sans modèle"
+      },
+      "plugins": {
+        "path": "/tmp/tri-tour2-evolution-utk7bckx/state/workflows/projects/p799f7610454f43f1/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p799f7610454f43f1",
+      "release": "",
+      "scope": {
+        "id": "p799f7610454f43f1",
+        "kind": "project"
+      },
+      "simulation": false,
+      "status": "active",
+      "transports": {},
+      "updated": 1791574886.1707053
+    },
+    {
+      "contract": "895189ba37712f2c74551e4fdd106f600e3a3ac7e96d4b749dcb60ffb33b77a2",
+      "created": 1791574712.502203,
+      "definition": {
+        "defaults": {
+          "effort": "medium",
+          "model": "modele-test-v1",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [
+          {
+            "from": "besoin",
+            "id": "besoin-analyse",
+            "mapping": {
+              "answer": "budget"
+            },
+            "outcome": "done",
+            "to": "analyse"
+          }
+        ],
+        "id": "achats",
+        "nodes": [
+          {
+            "id": "besoin",
+            "kind": "question",
+            "outputs": {
+              "answer": "string"
+            },
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+            "title": "Préciser le besoin achats"
+          },
+          {
+            "candidate_check": false,
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "effort": "medium",
+            "execution": {
+              "effort": "medium",
+              "model": "modele-test-v2",
+              "profile": "generalist",
+              "provider": "claude",
+              "session": "delegated"
+            },
+            "execution_mode": "text",
+            "id": "analyse",
+            "inputs": {
+              "budget": "string"
+            },
+            "kind": "agent",
+            "max_attempts": 1,
+            "model": "modele-test-v2",
+            "outputs": {
+              "risques": "string",
+              "synthese_v2": "string"
+            },
+            "phase": "",
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "profile": "generalist",
+            "prompt": "V2 — Comparer coût total, délai écrit, garantie et impact environnemental.",
+            "provider": "claude",
+            "required_capabilities": [],
+            "resources": [],
+            "session": "delegated",
+            "title": "Comparer les offres",
+            "validation": "human"
+          }
+        ],
+        "parameters": {
+          "request": "ACH-044 — nouvelle commande V2"
+        },
+        "revision": 2,
+        "schema": 1,
+        "title": "Référencement fournisseur achats"
+      },
+      "driver": "automatic",
+      "id": "r86ec5abe6d3b4e7d",
+      "nodes": {
+        "analyse": {
+          "attempt": 0,
+          "status": "pending"
+        },
+        "besoin": {
+          "attempt": 0,
+          "input_sources": {},
+          "inputs": {},
+          "question": {
+            "created": 1791574712.5037107,
+            "id": "q106178f381864a7b",
+            "status": "waiting",
+            "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+          },
+          "questions": [
+            {
+              "created": 1791574712.5037107,
+              "id": "q106178f381864a7b",
+              "status": "waiting",
+              "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+            }
+          ],
+          "status": "waiting_input"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "defaults": {
+          "effort": "medium",
+          "model": "modele-test-v1",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [
+          {
+            "from": "besoin",
+            "id": "besoin-analyse",
+            "mapping": {
+              "answer": "budget"
+            },
+            "outcome": "done",
+            "to": "analyse"
+          }
+        ],
+        "id": "achats",
+        "nodes": [
+          {
+            "id": "besoin",
+            "kind": "question",
+            "outputs": {
+              "answer": "string"
+            },
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+            "title": "Préciser le besoin achats"
+          },
+          {
+            "candidate_check": false,
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "effort": "medium",
+            "execution_mode": "text",
+            "id": "analyse",
+            "inputs": {
+              "budget": "string"
+            },
+            "kind": "agent",
+            "max_attempts": 1,
+            "model": "modele-test-v2",
+            "outputs": {
+              "risques": "string",
+              "synthese_v2": "string"
+            },
+            "phase": "",
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "profile": "generalist",
+            "prompt": "V2 — Comparer coût total, délai écrit, garantie et impact environnemental.",
+            "provider": "claude",
+            "required_capabilities": [],
+            "resources": [],
+            "session": "delegated",
+            "title": "Comparer les offres",
+            "validation": "human"
+          }
+        ],
+        "revision": 2,
+        "schema": 1,
+        "title": "Référencement fournisseur achats"
+      },
+      "packs": [],
+      "parameters": {
+        "request": "ACH-044 — nouvelle commande V2"
+      },
+      "plugins": {
+        "path": "/tmp/tri-tour2-evolution-utk7bckx/state/workflows/projects/p799f7610454f43f1/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p799f7610454f43f1",
+      "release": "",
+      "scope": {
+        "id": "p799f7610454f43f1",
+        "kind": "project"
+      },
+      "simulation": false,
+      "status": "active",
+      "transports": {},
+      "updated": 1791574712.503734
+    },
+    {
+      "contract": "78307132d04f4d0a3a5d25cf599c6cef7ca1805c1d8f239a8f8d69d563e67cb9",
+      "created": 1791574515.7779293,
+      "definition": {
+        "defaults": {
+          "effort": "medium",
+          "model": "",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [],
+        "id": "non-lancable",
+        "nodes": [
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "execution": {
+              "effort": "medium",
+              "model": "",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "id": "analyse",
+            "inputs": {},
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "parameters": {
+          "request": "ACH-043 — procédure à reconfigurer"
+        },
+        "revision": 1,
+        "schema": 1,
+        "title": "Procédure achats à reconfigurer"
+      },
+      "driver": "automatic",
+      "id": "rf798a55c00cd44f6",
+      "nodes": {
+        "analyse": {
+          "attempt": 1,
+          "finished": 1791574516.9837105,
+          "heartbeat": 1791574516.976974,
+          "input_sources": {},
+          "inputs": {},
+          "ownership": "managed",
+          "pid": 1030097,
+          "processes": [
+            {
+              "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+              "pid": 1030097,
+              "session": 1030097,
+              "start": "10832971"
+            }
+          ],
+          "result": {
+            "ok": false,
+            "summary": "Choisir explicitement un modèle IA avant le lancement"
+          },
+          "started": 1791574516.8991008,
+          "status": "returned",
+          "token": "t00c0a1e4085f4ad5"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "defaults": {
+          "effort": "medium",
+          "model": "",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [],
+        "id": "non-lancable",
+        "nodes": [
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "id": "analyse",
+            "inputs": {},
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "revision": 1,
+        "schema": 1,
+        "title": "Procédure achats à reconfigurer"
+      },
+      "packs": [],
+      "parameters": {
+        "request": "ACH-043 — procédure à reconfigurer"
+      },
+      "plugins": {
+        "path": "/tmp/tri-tour2-evolution-utk7bckx/state/workflows/projects/p799f7610454f43f1/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p799f7610454f43f1",
+      "release": "",
+      "scope": {
+        "id": "p799f7610454f43f1",
+        "kind": "project"
+      },
+      "simulation": false,
+      "status": "active",
+      "transports": {},
+      "updated": 1791574516.9838002
+    },
+    {
+      "contract": "6194de43ce5dfa625c5c941c857bc995e0dbed094b4229ce5440ade476e2f587",
+      "created": 1791574515.7678313,
+      "definition": {
+        "defaults": {
+          "effort": "medium",
+          "model": "modele-test-v1",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [
+          {
+            "from": "besoin",
+            "id": "besoin-analyse",
+            "mapping": {
+              "answer": "budget"
+            },
+            "outcome": "done",
+            "to": "analyse"
+          }
+        ],
+        "id": "achats",
+        "nodes": [
+          {
+            "id": "besoin",
+            "kind": "question",
+            "outputs": {
+              "answer": "string"
+            },
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+            "title": "Préciser le besoin achats"
+          },
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "execution": {
+              "effort": "medium",
+              "model": "modele-test-v1",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "id": "analyse",
+            "inputs": {
+              "budget": "string"
+            },
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "parameters": {
+          "request": "ACH-042 — choisir une offre pour les écrans"
+        },
+        "revision": 1,
+        "schema": 1,
+        "title": "Référencement fournisseur achats"
+      },
+      "driver": "automatic",
+      "id": "rd6ebfde0e1594af4",
+      "nodes": {
+        "analyse": {
+          "attempt": 1,
+          "finished": 1791574734.5924175,
+          "heartbeat": 1791574734.3060577,
+          "input_sources": {
+            "budget": {
+              "edge": "besoin-analyse",
+              "node": "besoin",
+              "port": "answer"
+            }
+          },
+          "inputs": {
+            "budget": "4200 CHF — plafond validé pour ACH-042"
+          },
+          "ownership": "managed",
+          "pid": 1035960,
+          "processes": [
+            {
+              "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+              "pid": 1035959,
+              "session": 1035959,
+              "start": "10854705"
+            },
+            {
+              "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+              "pid": 1035960,
+              "session": 1035960,
+              "start": "10854709"
+            }
+          ],
+          "result": {
+            "ok": false,
+            "summary": "Expecting value: line 1 column 1 (char 0)"
+          },
+          "started": 1791574734.2417417,
+          "status": "returned",
+          "token": "t61dac64d007d4c28"
+        },
+        "besoin": {
+          "attempt": 0,
+          "input_sources": {},
+          "inputs": {
+            "clarifications": [
+              {
+                "answer": "4200 CHF — plafond validé pour ACH-042",
+                "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+              }
+            ]
+          },
+          "outcome": "done",
+          "question": {
+            "answer": "4200 CHF — plafond validé pour ACH-042",
+            "answered": 1791574734.180861,
+            "created": 1791574515.7701013,
+            "id": "qa45874e44b3a4a37",
+            "status": "answered",
+            "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+          },
+          "questions": [
+            {
+              "answer": "4200 CHF — plafond validé pour ACH-042",
+              "answered": 1791574734.180861,
+              "created": 1791574515.7701013,
+              "id": "qa45874e44b3a4a37",
+              "status": "answered",
+              "text": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?"
+            }
+          ],
+          "result": {
+            "ok": true,
+            "outputs": {
+              "answer": "4200 CHF — plafond validé pour ACH-042"
+            },
+            "summary": "Information fournie"
+          },
+          "status": "accepted"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "defaults": {
+          "effort": "medium",
+          "model": "modele-test-v1",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [
+          {
+            "from": "besoin",
+            "id": "besoin-analyse",
+            "mapping": {
+              "answer": "budget"
+            },
+            "outcome": "done",
+            "to": "analyse"
+          }
+        ],
+        "id": "achats",
+        "nodes": [
+          {
+            "id": "besoin",
+            "kind": "question",
+            "outputs": {
+              "answer": "string"
+            },
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "question": "Quel plafond budgétaire confirmer pour le dossier ACH-042 ?",
+            "title": "Préciser le besoin achats"
+          },
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "id": "analyse",
+            "inputs": {
+              "budget": "string"
+            },
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "revision": 1,
+        "schema": 1,
+        "title": "Référencement fournisseur achats"
+      },
+      "packs": [],
+      "parameters": {
+        "request": "ACH-042 — choisir une offre pour les écrans"
+      },
+      "plugins": {
+        "path": "/tmp/tri-tour2-evolution-utk7bckx/state/workflows/projects/p799f7610454f43f1/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p799f7610454f43f1",
+      "release": "",
+      "scope": {
+        "id": "p799f7610454f43f1",
+        "kind": "project"
+      },
+      "simulation": false,
+      "status": "active",
+      "transports": {},
+      "updated": 1791574734.592495
+    }
+  ],
+  "conversations": [
+    {
+      "created": 1791574944.249317,
+      "definition": {
+        "defaults": {
+          "effort": "medium",
+          "model": "modele-test-reprise",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [],
+        "id": "work-77efca67-3b5b-4bfe-8fb2-e3dfb3e1efdd",
+        "nodes": [
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "id": "analyse",
+            "inputs": {},
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "parameters": {},
+        "revision": 1,
+        "schema": 1,
+        "title": "Procédure achats à reconfigurer — adaptation"
+      },
+      "effort": "medium",
+      "id": "c40872528950346ab",
+      "items": [
+        {
+          "created": 1791574944.2502136,
+          "depends_on": [],
+          "id": "we93aa79379ff45a8",
+          "key": "initial",
+          "project": "p799f7610454f43f1",
+          "request": "ACH-045 — ancienne demande conversation sans modèle",
+          "run": "r2f8177194a7546c8"
+        }
+      ],
+      "model": "modele-test-reprise",
+      "notifications_authorized": false,
+      "project": "p799f7610454f43f1",
+      "projects": [
+        "p799f7610454f43f1"
+      ],
+      "provider": "codex",
+      "status": "open",
+      "transports": {
+        "p799f7610454f43f1": {}
+      }
+    },
+    {
+      "created": 1791574886.1699176,
+      "definition": {
+        "defaults": {
+          "effort": "medium",
+          "model": "",
+          "provider": "codex"
+        },
+        "description": "Procédure achats version un",
+        "edges": [],
+        "id": "non-lancable",
+        "nodes": [
+          {
+            "criteria": [
+              "Coût total, délai et garantie explicités."
+            ],
+            "id": "analyse",
+            "inputs": {},
+            "kind": "agent",
+            "outputs": {
+              "synthese": "string"
+            },
+            "position": {
+              "x": 380,
+              "y": 100
+            },
+            "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+            "title": "Comparer les offres"
+          }
+        ],
+        "revision": 1,
+        "schema": 1,
+        "title": "Procédure achats à reconfigurer"
+      },
+      "effort": "medium",
+      "id": "c541395a2a30f48a9",
+      "items": [
+        {
+          "created": 1791574886.1707578,
+          "depends_on": [],
+          "id": "w0b6263b943e14617",
+          "key": "initial",
+          "project": "p799f7610454f43f1",
+          "request": "ACH-045 — ancienne demande conversation sans modèle",
+          "run": "r34c9f8dd40574770"
+        }
+      ],
+      "model": "",
+      "notifications_authorized": false,
+      "project": "p799f7610454f43f1",
+      "projects": [
+        "p799f7610454f43f1"
+      ],
+      "provider": "codex",
+      "status": "open",
+      "transports": {
+        "p799f7610454f43f1": {}
+      }
+    }
+  ]
+}

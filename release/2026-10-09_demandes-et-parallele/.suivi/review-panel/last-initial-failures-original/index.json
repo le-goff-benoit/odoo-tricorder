@@ -1,0 +1,56 @@
+[
+  {
+    "campaign": "source",
+    "case": "studio.spec.cjs >> terminal visibility preserves a live session while browsing and editing",
+    "original": "/tmp/tricorder-rc12-final-ui-source/studio-terminal-visibility-42866--while-browsing-and-editing",
+    "directory": "source-studio-terminal-visibility-42866--while-browsing-and-editing"
+  },
+  {
+    "campaign": "source",
+    "case": "execution-interactions.spec.cjs >> a stopped conversation is explained and resumes explicitly without losing requests or its terminal",
+    "original": "/tmp/tricorder-rc12-final-ui-source/execution-interactions-a-s-7eeca-ng-requests-or-its-terminal",
+    "directory": "source-execution-interactions-a-s-7eeca-ng-requests-or-its-terminal"
+  },
+  {
+    "campaign": "source",
+    "case": "studio.spec.cjs >> global workflow runs independently of Git projects and draws right-angle links",
+    "original": "/tmp/tricorder-rc12-final-ui-source/studio-global-workflow-run-32b12-and-draws-right-angle-links",
+    "directory": "source-studio-global-workflow-run-32b12-and-draws-right-angle-links"
+  },
+  {
+    "campaign": "package",
+    "case": "functional-feedback.spec.cjs >> version feedback: an automatic failure can configure a new copy while preserving its results",
+    "original": "/home/blegoff/odoo-tricorder/test-results/functional-feedback-versio-411b6-hile-preserving-its-results",
+    "directory": "package-functional-feedback-versio-411b6-hile-preserving-its-results"
+  },
+  {
+    "campaign": "package",
+    "case": "studio.spec.cjs >> terminal visibility preserves a live session while browsing and editing",
+    "original": "/home/blegoff/odoo-tricorder/test-results/studio-terminal-visibility-42866--while-browsing-and-editing",
+    "directory": "package-studio-terminal-visibility-42866--while-browsing-and-editing"
+  },
+  {
+    "campaign": "package",
+    "case": "execution-interactions.spec.cjs >> a stopped conversation is explained and resumes explicitly without losing requests or its terminal",
+    "original": "/home/blegoff/odoo-tricorder/test-results/execution-interactions-a-s-7eeca-ng-requests-or-its-terminal",
+    "directory": "package-execution-interactions-a-s-7eeca-ng-requests-or-its-terminal"
+  },
+  {
+    "campaign": "package",
+    "case": "studio.spec.cjs >> global workflow runs independently of Git projects and draws right-angle links",
+    "original": "/home/blegoff/odoo-tricorder/test-results/studio-global-workflow-run-32b12-and-draws-right-angle-links",
+    "directory": "package-studio-global-workflow-run-32b12-and-draws-right-angle-links"
+  },
+  {
+    "campaign": "source",
+    "case": "studio / work journey",
+    "original": "/tmp/tricorder-rc12-final-ui-source/studio-work-journey-name-a-70210-e-and-preserve-the-terminal",
+    "directory": "source-studio-work-journey-name-a-70210-e-and-preserve-the-terminal"
+  },
+  {
+    "campaign": "package",
+    "case": "studio / work journey",
+    "original": "/home/blegoff/odoo-tricorder/test-results/studio-work-journey-name-a-70210-e-and-preserve-the-terminal",
+    "directory": "package-studio-work-journey-name-a-70210-e-and-preserve-the-terminal"
+  }
+]

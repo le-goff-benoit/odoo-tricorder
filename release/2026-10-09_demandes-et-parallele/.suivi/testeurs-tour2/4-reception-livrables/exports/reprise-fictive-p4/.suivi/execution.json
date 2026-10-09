@@ -1,0 +1,234 @@
+{
+  "completion_outcome": "succeeded",
+  "contract": "c26a563b9345af1092f1afbb559957171d34608c3ba9a18425753216afa751d6",
+  "created": 1791574117.0109854,
+  "definition": {
+    "defaults": {
+      "model": "synthetic-model",
+      "provider": "codex"
+    },
+    "description": "Fixture de parcours, aucun fournisseur ni travail client réel qualifié.",
+    "edges": [],
+    "id": "reception-fixtures",
+    "nodes": [
+      {
+        "criteria": [
+          "Les données de la source fictive sont restituées exactement.",
+          "Les limites de simulation et la suite sont explicites."
+        ],
+        "evidence_required": true,
+        "execution": {
+          "effort": "medium",
+          "model": "synthetic-model",
+          "profile": "generalist",
+          "provider": "codex",
+          "session": "delegated"
+        },
+        "id": "work",
+        "kind": "agent",
+        "max_attempts": 3,
+        "options": [
+          "pass",
+          "fail"
+        ],
+        "outputs": {
+          "report": "object",
+          "verdict": "string"
+        },
+        "prompt": "Fixture de recette, ne pas appeler de modèle réel.",
+        "route_output": "verdict",
+        "title": "Examiner le livrable fictif",
+        "validation": "human"
+      }
+    ],
+    "parameters": {
+      "conversation": "c7c45abd921f14087",
+      "depends_on_runs": [],
+      "request": "P4 — Réunion Atlas : reprendre le compte rendu s’il manque une date. FICTION DE RECETTE.\nSource : sources/reunion-atlas.md"
+    },
+    "schema": 1,
+    "title": "Réception documentaire — fixtures fictives"
+  },
+  "driver": "conversation",
+  "id": "r3cdec57dc8d74a6e",
+  "nodes": {
+    "work": {
+      "attempt": 2,
+      "finished": 1791574205.83816,
+      "heartbeat": 1791574205.8329577,
+      "history": [
+        {
+          "attempt": 1,
+          "finished": 1791574117.0467727,
+          "heartbeat": 1791574117.0446382,
+          "input_sources": {},
+          "inputs": {},
+          "ownership": "managed",
+          "processes": [],
+          "result": {
+            "evidence": [
+              {
+                "media_type": "text/markdown",
+                "name": "reunion-atlas.md",
+                "role": "source",
+                "sha256": "e0e923d666cd9494817d3b37373eb57ca3b86229ddc4d8df7102a66ba5a694fe",
+                "size": 427
+              },
+              {
+                "media_type": "text/markdown",
+                "name": "plan-reception.md",
+                "role": "plan",
+                "sha256": "7964e9cc8f4d923ca15490d13ba3ffdd4e663219bf9c693ec32c64e4639c60ce",
+                "size": 144
+              },
+              {
+                "media_type": "text/markdown",
+                "name": "compte-rendu-atlas-tentative1.md",
+                "role": "deliverable",
+                "sha256": "08c8f4fce7fd0a69b9416b18e1332829421123cb5ba233275a324fabca8a0c18",
+                "size": 160
+              }
+            ],
+            "ok": true,
+            "outputs": {
+              "report": {
+                "actions": [
+                  {
+                    "action": "Vérifier deux salles",
+                    "owner": "Alice Durand"
+                  }
+                ],
+                "decision": "Reporter la journée portes ouvertes.",
+                "notes": "Fixture incomplète à reprendre."
+              },
+              "verdict": "pass"
+            },
+            "simulated": true,
+            "summary": "FIXTURE — Première tentative : la date de l’action a été omise."
+          },
+          "started": 1791574117.044638,
+          "status": "returned",
+          "token": "t77d59053826c4c25"
+        }
+      ],
+      "inputs": {},
+      "outcome": "pass",
+      "ownership": "managed",
+      "processes": [],
+      "reason": "Ajouter l’échéance au 16 octobre 2026 et conserver la décision de report. Première tentative incomplète.",
+      "receipt": {
+        "actor": "local-user",
+        "at": 1791574219.8448904,
+        "checks": [
+          "Les données de la source fictive sont restituées exactement.",
+          "Les limites de simulation et la suite sont explicites."
+        ],
+        "contract": "c26a563b9345af1092f1afbb559957171d34608c3ba9a18425753216afa751d6",
+        "note": "Deuxième tentative examinée et reçue : date du 16 octobre ajoutée, décision de report conservée. Première tentative et motif consultés. Fixture seulement."
+      },
+      "result": {
+        "evidence": [
+          {
+            "media_type": "text/markdown",
+            "name": "reunion-atlas.md",
+            "role": "source",
+            "sha256": "e0e923d666cd9494817d3b37373eb57ca3b86229ddc4d8df7102a66ba5a694fe",
+            "size": 427
+          },
+          {
+            "media_type": "text/markdown",
+            "name": "plan-reception.md",
+            "role": "plan",
+            "sha256": "7964e9cc8f4d923ca15490d13ba3ffdd4e663219bf9c693ec32c64e4639c60ce",
+            "size": 144
+          },
+          {
+            "media_type": "text/markdown",
+            "name": "compte-rendu-atlas.md",
+            "role": "deliverable",
+            "sha256": "0de3cbeb11a5852151ac99b155d32b63c8e942c06e833d91e307e5c0921e9512",
+            "size": 172
+          }
+        ],
+        "ok": true,
+        "outputs": {
+          "report": {
+            "actions": [
+              {
+                "action": "Vérifier deux salles alternatives",
+                "due": "16 octobre 2026",
+                "owner": "Alice Durand"
+              }
+            ],
+            "decision": "Reporter la journée portes ouvertes.",
+            "next_action": "Choisir le créneau alternatif lors de la prochaine réunion.",
+            "notes": "Fixture fictive, sans réservation réelle."
+          },
+          "verdict": "pass"
+        },
+        "simulated": true,
+        "summary": "FIXTURE — Deuxième tentative corrigée : échéance au 16 octobre 2026."
+      },
+      "started": 1791574205.8329575,
+      "status": "accepted",
+      "token": "t14787514787341db"
+    }
+  },
+  "notifications_authorized": false,
+  "original": {
+    "defaults": {
+      "model": "synthetic-model",
+      "provider": "codex"
+    },
+    "description": "Fixture de parcours, aucun fournisseur ni travail client réel qualifié.",
+    "edges": [],
+    "id": "reception-fixtures",
+    "nodes": [
+      {
+        "criteria": [
+          "Les données de la source fictive sont restituées exactement.",
+          "Les limites de simulation et la suite sont explicites."
+        ],
+        "evidence_required": true,
+        "id": "work",
+        "kind": "agent",
+        "max_attempts": 3,
+        "options": [
+          "pass",
+          "fail"
+        ],
+        "outputs": {
+          "report": "object",
+          "verdict": "string"
+        },
+        "prompt": "Fixture de recette, ne pas appeler de modèle réel.",
+        "route_output": "verdict",
+        "title": "Examiner le livrable fictif",
+        "validation": "human"
+      }
+    ],
+    "schema": 1,
+    "title": "Réception documentaire — fixtures fictives"
+  },
+  "packs": [],
+  "parameters": {
+    "conversation": "c7c45abd921f14087",
+    "depends_on_runs": [],
+    "request": "P4 — Réunion Atlas : reprendre le compte rendu s’il manque une date. FICTION DE RECETTE.\nSource : sources/reunion-atlas.md"
+  },
+  "plugins": {
+    "path": "/tmp/tricorder-t2-reception-jj7xtx/project/.tricorder/plugins.json",
+    "plugins": [],
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "project": "pb5172ff28eac41aa",
+  "release": "",
+  "scope": {
+    "id": "pb5172ff28eac41aa",
+    "kind": "project"
+  },
+  "simulation": false,
+  "status": "completed",
+  "transports": {},
+  "updated": 1791574219.8449576
+}

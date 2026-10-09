@@ -1,0 +1,5 @@
+Commande : npm test (PATH sans fournisseur réel, pack de référence isolé)
+Pack Odoo : 75612ee195f08b5a764e5aac303d453741666457
+Python : 306 tests, OK
+JavaScript : 103 tests, 103 réussis, 0 échec
+Aucune qualification fournisseur commercial ou client.

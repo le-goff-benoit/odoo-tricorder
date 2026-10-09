@@ -1,0 +1,12 @@
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-creation2-cloture-comite-c-1xBd72/state/wo
+rkflows/workspace/.tricorder
+$ command -v codex; codex --version; command
+ -v claude; claude --version
+/tmp/tricorder-creation2-cloture-comite-c-1xBd72/stubs/codex
+codex 0.0.0 TRICORDER-CREATION2-ADAPTATION-STUB
+/tmp/tricorder-creation2-cloture-comite-c-1xBd72/stubs/claude
+claude 0.0.0 TRICORDER-CREATION2-ADAPTATION-STUB
+blegoff@wrk226:/tmp/tricorder-creation2-cloture-comite-c-1xBd72/state/wo
+rkflows/workspace/.tricorder$  

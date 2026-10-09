@@ -1,0 +1,17 @@
+{
+  "finishedAt": "2026-10-09T20:12:44.104311+00:00",
+  "verdict": "Réception partielle avec réserves UX",
+  "scenariosPlayed": 4,
+  "distinctScenarioImages": 12,
+  "supplementaryBenchImage": "dialogue-debug.png",
+  "allScenarioImagesVisuallyInspected": true,
+  "finalHashes": {
+    "executable": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar": "0ddb18c66b49d3c0713c0292a997897bef144da03a7407516d14e922c4b4807a"
+  },
+  "ownApplicationsClosed": true,
+  "ownBrokersStopped": true,
+  "xServerLeftRunning": true,
+  "commercialModelsQualified": false,
+  "productChanged": false
+}

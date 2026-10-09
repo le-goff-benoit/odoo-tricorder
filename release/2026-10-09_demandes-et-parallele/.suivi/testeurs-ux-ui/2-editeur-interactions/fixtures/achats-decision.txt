@@ -1,0 +1,5 @@
+Décision humaine fictive pour essai : refuser la recommandation actuelle.
+Motif : confirmer la place disponible et l'acheminement avant l'atelier.
+Reprise attendue : demander la dimension vérifiée, puis comparer à nouveau.
+Décision de second essai : accepter uniquement la préparation d'un brouillon.
+Sortie : demande d'achat fictive, explicitement NON ENVOYÉE.

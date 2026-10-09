@@ -1,0 +1,20 @@
+Suivi du workflowBilan commun — fixture de réception2 projets · Conversation ouverteOptionsRevenir à l’éditeurAjouter une demande…Vue d’ensembleDemande5 demandes ⌄Demandes du workflow5 demandesRechercherRechercher une demandeRechercherR1 – Résultat reçu pour lot 1Boréal · TerminéeR2 – Résultat reçu pour lot 2Atlas · TerminéeR3 – Résultat reçu pour lot 3Boréal · TerminéeR4 – Résultat reçu pour lot 4Boréal · TerminéeR5 – Bilan commun Atlas + Boréal après R1, R2, R3 et R4Boréal · TerminéeAjouter une demande…Archiver la conversationAucune étape en cours · 5 terminéesTerminalDemandes et activitéAucune étape en cours · 5 terminéesLancer les demandes prêtes
+    1–5 sur 5. Seules les étapes prêtes seront lancées ; les validations restent à traiter.
+    
+    R1 – Résultat reçu pour lot 1BoréalTerminée→
+      Voir le rapport · Exécution terminée.
+      
+      R2 – Résultat reçu pour lot 2AtlasTerminée→
+      Voir le rapport · Exécution terminée.
+      
+      R3 – Résultat reçu pour lot 3BoréalTerminée→
+      Voir le rapport · Exécution terminée.
+      
+      R4 – Résultat reçu pour lot 4BoréalTerminée→
+      Voir le rapport · Exécution terminée.
+      
+      R5 – Bilan commun Atlas + Boréal après R1, R2, R3 et R4BoréalTerminée→
+      Voir le rapport · Exécution terminée.
+      
+      Après :R1 – Résultat reçu pour lot 1TerminéeR2 – Résultat reçu pour lot 2TerminéeR3 – Résultat reçu pour lot 3TerminéeR4 – Résultat reçu pour lot 4Terminée
+      Rechercher une demandeDécision enregistrée.

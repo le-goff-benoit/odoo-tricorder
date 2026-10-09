@@ -57,9 +57,63 @@ def paging(offset=0, limit=PAGE):
     return offset, limit
 
 
+def conversation_activity(engine, cid):
+    """Whole-conversation totals without loading input/output payloads per run."""
+    result = dict.fromkeys(('items', 'running', 'ready', 'decisions', 'questions',
+                            'failed', 'dependencies', 'completed', 'paused'), 0)
+    with engine.store.connect() as db:
+        rows = db.execute("""
+            SELECT json_extract(r.body, '$.status') AS status,
+                   coalesce(json_extract(r.body, '$.coordination_wait'), 0) AS dependencies,
+                   (SELECT json_group_array(json_object(
+                       'status', json_extract(n.value, '$.status'),
+                       'validation_error', json_extract(n.value, '$.validation_error') IS NOT NULL,
+                       'ok', json_extract(n.value, '$.result.ok'),
+                       'verdict', json_extract(n.value, '$.result.outputs.verdict'),
+                       'routed', EXISTS (SELECT 1 FROM json_each(r.body, '$.definition.nodes') d
+                           WHERE json_extract(d.value, '$.id')=n.key
+                             AND json_extract(d.value, '$.route_output')='verdict'
+                             AND EXISTS (SELECT 1 FROM json_each(d.value, '$.options') o WHERE o.value='fail'))
+                   )) FROM json_each(r.body, '$.nodes') n) AS nodes
+            FROM runs r WHERE r.id IN (
+                SELECT json_extract(i.value, '$.run') FROM conversations c,
+                    json_each(c.body, '$.items') i WHERE c.id=?)
+        """, (cid,))
+        for row in rows:
+            result['items'] += 1
+            result['completed'] += row['status'] == 'completed'
+            result['dependencies'] += row['status'] == 'paused' and bool(row['dependencies'])
+            result['paused'] += row['status'] == 'paused' and not row['dependencies']
+            if row['status'] not in {'active', 'paused'}:
+                continue
+            nodes = json.loads(row['nodes'])
+            result['running'] += sum(n['status'] == 'running' for n in nodes)
+            result['decisions'] += sum(n['status'] == 'waiting' for n in nodes)
+            result['questions'] += sum(n['status'] == 'waiting_input' for n in nodes)
+            result['ready'] += row['status'] == 'active' and any(n['status'] == 'ready' for n in nodes)
+            result['failed'] += any(n['status'] not in {'accepted', 'skipped'} and (
+                n['validation_error'] or n['ok'] == 0 or
+                (n['verdict'] == 'fail' and not (n['ok'] == 1 and n['routed']))) for n in nodes)
+    return result
+
+
 def summary(run):
+    conversation = run.get("parameters", {}).get("conversation")
+    definitions = {node['id']: node for node in run['definition']['nodes']}
+    running = [(nid, state) for nid, state in run['nodes'].items() if state['status'] == 'running']
+    workers = []
+    for nid, state in running[:PAGE]:
+        node = definitions[nid]
+        execution = node.get('execution', {})
+        workers.append({'node': nid, 'title': node['title'][:120], 'kind': node['kind'],
+                        'provider': execution.get('provider', node.get('provider', '')),
+                        'model': execution.get('model', node.get('model', '')),
+                        'role': execution.get('profile', node.get('profile', '')),
+                        **{key: state.get(key) for key in ('ownership', 'started', 'heartbeat')}})
     return {**{key: run.get(key) for key in ("id", "project", "status", "created", "updated", "simulation", "completion_outcome", "archived", "coordination_wait", "coordination_hold")},
-            "definition": {"id": run["definition"]["id"], "title": run["definition"]["title"][:300]},
+            "conversation": conversation if isinstance(conversation, str) and len(conversation) <= 128 else None,
+            "workers": workers, "workers_total": len(running),
+            "definition": {"id": run["definition"]["id"], "title": run["definition"]["title"][:300], "revision": run["definition"].get("revision")},
             "original": {"id": run["original"]["id"]},
             "focus": focus(run),
             "health": health(run),
@@ -86,12 +140,40 @@ def run_page(engine, project=None, *, offset=0, limit=PAGE, query="", status="",
     clause = " WHERE " + " AND ".join(where) if where else ""
     # Pending human work precedes history. Filtering after pagination hides old questions.
     attention = "(json_extract(runs.body, '$.status')='paused' OR (json_extract(runs.body, '$.status')='active' AND EXISTS (SELECT 1 FROM json_each(runs.body, '$.nodes') n WHERE json_extract(n.value, '$.status') IN ('waiting_input','waiting','returned','blocked'))))"
-    order = attention + " DESC, " if attention_first else ""
+    # Sort before pagination: a recent consolidation must not hide an older
+    # question, decision or ready prerequisite on another page. This expresses
+    # available actions, never an inferred business urgency from a request title.
+    action_order = """CASE
+        WHEN json_extract(body, '$.status')='active' AND EXISTS
+            (SELECT 1 FROM json_each(runs.body, '$.nodes') n WHERE json_extract(n.value, '$.status')='waiting_input') THEN 0
+        WHEN json_extract(body, '$.status')='active' AND EXISTS
+            (SELECT 1 FROM json_each(runs.body, '$.nodes') n WHERE json_extract(n.value, '$.status')='waiting') THEN 1
+        WHEN json_extract(body, '$.status')='active' AND EXISTS
+            (SELECT 1 FROM json_each(runs.body, '$.nodes') n WHERE json_extract(n.value, '$.status') IN ('returned','blocked')) THEN 2
+        WHEN json_extract(body, '$.status')='paused' AND
+            (coalesce(json_extract(body, '$.coordination_wait'), 0)=0 OR coalesce(json_extract(body, '$.coordination_hold'), 0)=1) THEN 3
+        WHEN json_extract(body, '$.status')='active' AND EXISTS
+            (SELECT 1 FROM json_each(runs.body, '$.nodes') n WHERE json_extract(n.value, '$.status')='ready') THEN 4
+        WHEN json_extract(body, '$.status')='active' THEN 5
+        WHEN json_extract(body, '$.status')='paused' THEN 6
+        ELSE 7 END"""
+    order = action_order + ", " if attention_first else ""
     with engine.store.connect() as db:
         attention_total = db.execute("SELECT COUNT(*) FROM runs" + clause + (" AND " if where else " WHERE ") + attention, args).fetchone()[0] if attention_first else None
         total = db.execute("SELECT COUNT(*) FROM runs" + clause, args).fetchone()[0]
         rows = db.execute("SELECT body FROM runs" + clause + " ORDER BY " + order + "rowid DESC LIMIT ? OFFSET ?", [*args, limit, offset])
-        items = [summary(engine.store.body(row)) for row in rows]
+        from .launch_readiness import LaunchReadiness
+        from .runtime import run_driver
+        readiness = None
+        items = []
+        for row in rows:
+            run = engine.store.body(row)
+            item = summary(run)
+            if run_driver(run) == 'conversation' and run['status'] == 'active' and item['counts'].get('ready'):
+                if readiness is None:
+                    readiness = LaunchReadiness(engine)
+                item['launch'] = readiness.project(run)
+            items.append(item)
     return {**({"attention_total": attention_total} if attention_first else {}), "items": items, "total": total, "offset": offset, "limit": limit, "next": offset + len(items) if offset + len(items) < total else None}
 
 
@@ -108,6 +190,35 @@ def bounded(engine, value, *, threshold=16000, references=None):
     return value
 
 
+def attempt_history(engine, state, node, *, threshold=8000, references=None):
+    """Reading model only: large archived inputs must not hide a short failure reason.
+
+    The workflow contract limits attempts to ten. Bound every content field as
+    well, deriving proof references exactly as for the rest of run_detail.
+    """
+    history = state.get('history', [])
+    field_limit = max(128, threshold // max(1, len(history) * 7))
+    items = []
+    for index, previous in enumerate(history):
+        item = {key: previous[key] for key in ('status', 'attempt', 'started', 'finished', 'ownership') if key in previous}
+        item['failed'] = failed_result(previous, node)
+        for key in ('validation_error', 'inputs'):
+            if key in previous:
+                item[key] = payload(engine, previous[key], threshold=field_limit, references=references)
+        # Engine.retry puts the instruction on the next state, not the archived one.
+        following = history[index + 1] if index + 1 < len(history) else state
+        if following.get('reason'):
+            item['retry_reason'] = payload(engine, following['reason'], threshold=field_limit, references=references)
+        if previous.get('result'):
+            result = previous['result']
+            item['result'] = {key: result[key] for key in ('ok', 'simulated') if key in result}
+            for key in ('summary', 'outputs', 'evidence', 'preview'):
+                if key in result:
+                    item['result'][key] = payload(engine, result[key], threshold=field_limit, references=references)
+        items.append(item)
+    return items
+
+
 def run_detail(engine, run, *, references=None):
     result = copy.deepcopy(run)
     result['focus'] = focus(run)
@@ -115,8 +226,14 @@ def run_detail(engine, run, *, references=None):
     # Keep definitions structurally intact; their validated bound is 2 MB.
     threshold = min(8000, max(128, 1_000_000 // max(1, len(run["nodes"]) * 12)))
     result["parameters"] = {key: payload(engine, value, references=references) for key, value in result["parameters"].items()}
-    for state in result["nodes"].values():
-        for key in ("inputs", "input_sources", "history", "questions", "operation"):
+    definitions = {node['id']: node for node in run['definition']['nodes']}
+    for nid, state in result["nodes"].items():
+        if state.get('history'):
+            state['attempt_history'] = attempt_history(engine, state, definitions[nid], threshold=threshold, references=references)
+            if len(state['attempt_history']) > 3 or len(json.dumps(state['attempt_history'], ensure_ascii=False).encode()) > max(1200, threshold * 2):
+                state['attempt_history_page'] = {'total': len(state['attempt_history'])}
+                del state['attempt_history']
+        for key in ("inputs", "input_sources", "history", "questions", "operation", "reason", "validation_error"):
             if key in state:
                 state[key] = payload(engine, state[key], threshold=threshold, references=references)
         for key in ("question", "receipt", "decision"):
@@ -127,6 +244,19 @@ def run_detail(engine, run, *, references=None):
                 if key in state["result"]:
                     state["result"][key] = payload(engine, state["result"][key], threshold=threshold, references=references)
     return result
+
+
+def attempt_page(engine, rid, nid, offset=0, limit=3):
+    offset, limit = paging(offset, limit)
+    require(limit <= 3, 'Trois tentatives par page au maximum')
+    run = engine.run(rid)
+    node = next((node for node in run['definition']['nodes'] if node['id'] == nid), None)
+    require(node is not None, 'Bloc inconnu dans cette exécution')
+    threshold = min(8000, max(128, 1_000_000 // max(1, len(run['nodes']) * 12)))
+    history = attempt_history(engine, run['nodes'][nid], node, threshold=threshold)
+    end = max(0, len(history) - offset)
+    return {'items': history[max(0, end - limit):end], 'total': len(history), 'offset': offset,
+            'next': offset + limit if offset + limit < len(history) else None}
 
 
 def proof_page(engine, rid, sha, offset=0, limit=32000):
@@ -144,7 +274,7 @@ def proof_page(engine, rid, sha, offset=0, limit=32000):
             for child in value: walk(child)
     walk(run)
     walk(projected)
-    require(references, "Preuve absente de cette exécution")
+    require(references or sha in derived, "Preuve absente de cette exécution")
     text = derived.get(sha)
     if text is None:
         text = engine.evidence(references[0]).decode("utf-8", errors="replace")

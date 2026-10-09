@@ -1,0 +1,4 @@
+/tmp/tricorder-portefeuille-capacity-yxyez3/bin/codex
+/tmp/tricorder-portefeuille-capacity-yxyez3/bin/claude
+PORTEFEUILLE-CHARGE-STUB-CODEX 1.0-local
+PORTEFEUILLE-CHARGE-STUB-CLAUDE 1.0-local

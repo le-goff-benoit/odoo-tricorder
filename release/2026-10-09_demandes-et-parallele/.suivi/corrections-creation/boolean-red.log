@@ -1,0 +1,38 @@
+test_boolean_does_not_guess_the_meaning_of_arbitrary_outcome_names (test_condition_inputs.ConditionInputTests) ... ok
+test_boolean_true_and_false_select_one_branch_and_keep_its_human_decision (test_condition_inputs.ConditionInputTests) ... test_boolean_workflow_parameter_uses_the_same_explicit_outcomes (test_condition_inputs.ConditionInputTests) ... ERROR
+test_strings_numbers_and_null_are_not_coerced_into_boolean_results (test_condition_inputs.ConditionInputTests) ... ok
+
+======================================================================
+ERROR: test_boolean_workflow_parameter_uses_the_same_explicit_outcomes (test_condition_inputs.ConditionInputTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/blegoff/odoo-tricorder/tests/test_condition_inputs.py", line 70, in test_boolean_workflow_parameter_uses_the_same_explicit_outcomes
+    self.assertEqual(run['nodes']['route']['outcome'], 'false')
+KeyError: 'outcome'
+
+======================================================================
+FAIL: test_boolean_true_and_false_select_one_branch_and_keep_its_human_decision (test_condition_inputs.ConditionInputTests) (value=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/blegoff/odoo-tricorder/tests/test_condition_inputs.py", line 39, in test_boolean_true_and_false_select_one_branch_and_keep_its_human_decision
+    self.assertEqual(run['nodes']['assess']['status'], 'accepted')
+AssertionError: 'returned' != 'accepted'
+- returned
++ accepted
+
+
+======================================================================
+FAIL: test_boolean_true_and_false_select_one_branch_and_keep_its_human_decision (test_condition_inputs.ConditionInputTests) (value=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/blegoff/odoo-tricorder/tests/test_condition_inputs.py", line 39, in test_boolean_true_and_false_select_one_branch_and_keep_its_human_decision
+    self.assertEqual(run['nodes']['assess']['status'], 'accepted')
+AssertionError: 'returned' != 'accepted'
+- returned
++ accepted
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.141s
+
+FAILED (failures=2, errors=1)

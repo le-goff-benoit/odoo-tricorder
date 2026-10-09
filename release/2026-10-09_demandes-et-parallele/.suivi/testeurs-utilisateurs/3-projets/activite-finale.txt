@@ -1,0 +1,48 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Atelier Azur
+Laboratoire Corail
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:34
+
+Activité
+
+Votre travail en cours et ce qui attend votre intervention.
+
+Nouvelle demande
+Actualiser
+À traiter
+
+3 demandes affichées à traiter sur cette page.
+
+Consolider le dossier Nacre après Azur et Corail
+Atelier Azur · Lancement produit commun · Rév. 1
+Attend une autre demande
+→
+Corail — définir les critères de validation Nacre
+Laboratoire Corail · Lancement produit commun · Rév. 1
+Agent arrêté
+Reprendre l’agent…
+→
+Coordonner le lancement fictif du produit Nacre. Demande 1 prioritaire : Atelier Azur prépare la fiche de lancement. Demande 2 : Laboratoire Corail prépare les critères de validation. Demande 3 : consolider le dossier après réception des de
+Atelier Azur · Lancement produit commun · Rév. 1
+Agent arrêté
+Reprendre l’agent…
+→
+Autres demandes
+3 demandes enregistrées
+
+Aucune demande à afficher. « Nouvelle demande » vous permet de choisir un workflow et de démarrer dans le terminal.

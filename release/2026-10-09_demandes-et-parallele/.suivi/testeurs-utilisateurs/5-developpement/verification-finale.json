@@ -1,0 +1,18 @@
+{
+  "hashes": {
+    "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder": {
+      "sha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+      "expected": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+      "ok": true
+    },
+    "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/app.asar": {
+      "sha256": "71a054e6137a4fb424320954836109bd67ef2b74cb8f71ad3e49af35bb047dd7",
+      "expected": "71a054e6137a4fb424320954836109bd67ef2b74cb8f71ad3e49af35bb047dd7",
+      "ok": true
+    }
+  },
+  "leftover_processes": [],
+  "capture_count": 8,
+  "captures_opened": 8,
+  "processes_check": "isolated HOME and tmp path only"
+}

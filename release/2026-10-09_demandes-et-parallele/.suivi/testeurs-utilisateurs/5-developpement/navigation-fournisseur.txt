@@ -1,0 +1,129 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Connexions
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:37
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell · Codex arrêté · Analyser un outil fictif de journalisation. Demander quel format de sortie adopter avant toute réalisation.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-panel-developpement-ka
+fBSA/state/agent-events/fc24278b-1c47-402b-a0c4-6441267a7e5c.launch.json
+'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-panel-developpement-kafBSA/state/workflows
+/workspace$ 'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linu
+x-unpacked/resources/backend/agent_launch.py' '/tmp/tricorder-panel-deve
+loppement-kafBSA/state/agent-events/fc24278b-1c47-402b-a0c4-6441267a7e5c
+.launch.json'
+TRICORDER-PANEL-INERT codex — fournisseur inerte, aucune exécution modèl
+e
+blegoff@wrk226:/tmp/tricorder-panel-developpement-kafBSA/state/workflows
+/workspace$ export PANEL_CONTEXT=contexte_conserve; printf 'SESSION=%s\n
+' "$PANEL_CONTEXT"; pwd
+SESSION=contexte_conserve
+/tmp/tricorder-panel-developpement-kafBSA/state/workflows/workspace
+blegoff@wrk226:/tmp/tricorder-panel-developpement-kafBSA/state/workflows
+/workspace$ printf 'APRES_NAVIGATION=%s\n' "$PANEL_CONTEXT"
+APRES_NAVIGATION=contexte_conserve
+blegoff@wrk226:/tmp/tricorder-panel-developpement-kafBSA/state/workflows
+/workspace$  
+
+OUTILS ET PLUGINS
+Connexions
+
+Connectez les outils de vos workflows : messagerie, documents et services. Vérifiez une connexion avant de l’utiliser dans une étape.
+
+Configurer une connexion…
+Plugins OpenAI
+Plugins Anthropic
+Actualiser
+Contexte
+Sans projet
+Modèles
+Afficher les connexions
+
+Catalogue de Sans projet : /tmp/tricorder-panel-developpement-kafBSA/state/workflows/workspace/.tricorder/plugins.json. Modifiez-le depuis le terminal, puis actualisez. Les déclarations restent distinctes des accès vérifiés.
+
+Codex
+Installé · connexion à vérifier
+
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+
+Diagnostic de connexion
+Claude Code
+Installé · connexion à vérifier
+
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+
+Diagnostic de connexion
+Commandes locales isolées
+Utilisable
+
+Sans réseau ; projet en lecture seule ; résultats dans un dossier de travail isolé.
+
+Diagnostic de connexion
+Confluence
+À configurer
+
+Un plugin Atlassian peut être connecté séparément. Aucun transport authentifié configuré dans Tricorder.
+
+Diagnostic de connexion
+GitHub → Odoo.sh
+À configurer
+
+Renseigner dépôt, branche et projet Odoo.sh. Publication GitHub, build et déploiement seront suivis séparément.
+
+Diagnostic de connexion
+Gmail
+À configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Diagnostic de connexion
+Outlook
+À configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Diagnostic de connexion
+Slack
+À configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Diagnostic de connexion
+Telegram
+À configurer
+
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+
+Diagnostic de connexion
+Signal
+À configurer
+
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+
+Diagnostic de connexion
+
+Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.

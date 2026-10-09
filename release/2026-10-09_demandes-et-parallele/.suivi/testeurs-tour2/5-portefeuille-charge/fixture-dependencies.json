@@ -1,0 +1,383 @@
+{
+  "fixture_mode": "dependencies",
+  "engine_api_only": true,
+  "state": "/tmp/tricorder-portefeuille-dependencies-xLDx2e/state/workflows",
+  "projects": [
+    {
+      "id": "p2b681269aca74f21",
+      "title": "Atlas — Services",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/tricorder-portefeuille-dependencies-xLDx2e/state/workflows/projects/p2b681269aca74f21",
+      "managed": true
+    },
+    {
+      "id": "pf72a6edb6a5f4d7c",
+      "title": "Boréal — Opérations",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/tricorder-portefeuille-dependencies-xLDx2e/state/workflows/projects/pf72a6edb6a5f4d7c",
+      "managed": true
+    },
+    {
+      "id": "p5d9c88a4abb449c9",
+      "title": "Céleste — Comité",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/tricorder-portefeuille-dependencies-xLDx2e/state/workflows/projects/p5d9c88a4abb449c9",
+      "managed": true
+    }
+  ],
+  "conversation": "c48e2317c72f64b67",
+  "items": [
+    {
+      "id": "w19a995efde384e9e",
+      "project": "p2b681269aca74f21",
+      "request": "R01 — Préparer le tableau de décisions",
+      "run": "r8afdc12dd136473d",
+      "key": "R01",
+      "depends_on": [],
+      "created": 1791574182.1360717
+    },
+    {
+      "id": "w511b42bc3f774322",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R02 — Comparer les besoins des équipes",
+      "run": "rd432c59f70cf4520",
+      "key": "R02",
+      "depends_on": [],
+      "created": 1791574182.1379855
+    },
+    {
+      "id": "wbc202d73e77044f7",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R03 — Relire les critères de réception",
+      "run": "raf87ae1409fd426e",
+      "key": "R03",
+      "depends_on": [],
+      "created": 1791574182.140713
+    },
+    {
+      "id": "w57e429df798b41de",
+      "project": "p2b681269aca74f21",
+      "request": "R04 — Préparer les documents du comité",
+      "run": "rf2e3e10abeb347fb",
+      "key": "R04",
+      "depends_on": [],
+      "created": 1791574182.143354
+    },
+    {
+      "id": "we7a76de72d004645",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R05 — Vérifier les informations disponibles",
+      "run": "rda3974d68539456c",
+      "key": "R05",
+      "depends_on": [],
+      "created": 1791574182.1457467
+    },
+    {
+      "id": "w22748939aa3042c2",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R06 — Identifier les points à arbitrer",
+      "run": "r11a40b34e88a4fc3",
+      "key": "R06",
+      "depends_on": [],
+      "created": 1791574182.1483371
+    },
+    {
+      "id": "wdf04de37235c434d",
+      "project": "p2b681269aca74f21",
+      "request": "R07 — Préparer le tableau de décisions",
+      "run": "rafabfc16bbc54be7",
+      "key": "R07",
+      "depends_on": [],
+      "created": 1791574182.1503677
+    },
+    {
+      "id": "wd82ca6cf0cd543c3",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R08 — Comparer les besoins des équipes",
+      "run": "r25d13c739fbd4f24",
+      "key": "R08",
+      "depends_on": [],
+      "created": 1791574182.1527565
+    },
+    {
+      "id": "w2da795fb21f34032",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R09 — Relire les critères de réception",
+      "run": "r1ffc6f90cfc74ddd",
+      "key": "R09",
+      "depends_on": [],
+      "created": 1791574182.1546144
+    },
+    {
+      "id": "w60d3a8614cfc4f45",
+      "project": "p2b681269aca74f21",
+      "request": "R10 — Préparer les documents du comité",
+      "run": "r7d1c21ced3ab4a38",
+      "key": "R10",
+      "depends_on": [],
+      "created": 1791574182.1568205
+    },
+    {
+      "id": "w8efdfc5d019a47c4",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R11 — Vérifier les informations disponibles",
+      "run": "rd4ef93ffddb14eaa",
+      "key": "R11",
+      "depends_on": [],
+      "created": 1791574182.158982
+    },
+    {
+      "id": "w035c21d6b4a54815",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R12 — Identifier les points à arbitrer",
+      "run": "rd0f9293e942043ac",
+      "key": "R12",
+      "depends_on": [],
+      "created": 1791574182.16123
+    },
+    {
+      "id": "w3b63b9fa47824a37",
+      "project": "p2b681269aca74f21",
+      "request": "R13 — Préparer le tableau de décisions",
+      "run": "rd2c81a1f112d4120",
+      "key": "R13",
+      "depends_on": [],
+      "created": 1791574182.1634622
+    },
+    {
+      "id": "w184a357e5beb4bbd",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R14 — Comparer les besoins des équipes",
+      "run": "rcded7bb86bf541d3",
+      "key": "R14",
+      "depends_on": [],
+      "created": 1791574182.1656961
+    },
+    {
+      "id": "wa67b3c4934784678",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R15 — Relire les critères de réception",
+      "run": "r828c636eff334d48",
+      "key": "R15",
+      "depends_on": [],
+      "created": 1791574182.167603
+    },
+    {
+      "id": "w18a514e0cdc84a35",
+      "project": "p2b681269aca74f21",
+      "request": "R16 — Préparer les documents du comité",
+      "run": "r04796b50e1b84b18",
+      "key": "R16",
+      "depends_on": [],
+      "created": 1791574182.169887
+    },
+    {
+      "id": "w71fc9f8824fc4123",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R17 — Vérifier les informations disponibles",
+      "run": "r1a9cb3fcf75e457f",
+      "key": "R17",
+      "depends_on": [],
+      "created": 1791574182.1721385
+    },
+    {
+      "id": "w4500ff75da694ceb",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R18 — Identifier les points à arbitrer",
+      "run": "r8007e6b833b14f1e",
+      "key": "R18",
+      "depends_on": [],
+      "created": 1791574182.1744845
+    },
+    {
+      "id": "wb23c3f2363084c4f",
+      "project": "p2b681269aca74f21",
+      "request": "R19 — Préparer le tableau de décisions",
+      "run": "rcc8423e6d7e74fd9",
+      "key": "R19",
+      "depends_on": [],
+      "created": 1791574182.1765733
+    },
+    {
+      "id": "wf067578743d64702",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R20 — Comparer les besoins des équipes",
+      "run": "r42b2b8e75f0c466c",
+      "key": "R20",
+      "depends_on": [],
+      "created": 1791574182.1788454
+    },
+    {
+      "id": "w8b8f117d4ef347bd",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R21 — Relire les critères de réception",
+      "run": "r53a13464915a41d5",
+      "key": "R21",
+      "depends_on": [],
+      "created": 1791574182.1809309
+    },
+    {
+      "id": "wbbbc950745e5480b",
+      "project": "p2b681269aca74f21",
+      "request": "R22 — Préparer les documents du comité",
+      "run": "rd175e263e952463e",
+      "key": "R22",
+      "depends_on": [],
+      "created": 1791574182.1835558
+    },
+    {
+      "id": "wd1644d45b0fc4177",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R23 — Vérifier les informations disponibles",
+      "run": "r62d7fa622b7f41a4",
+      "key": "R23",
+      "depends_on": [],
+      "created": 1791574182.1863027
+    },
+    {
+      "id": "w1b8bfc886c194c6f",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R24 — Identifier les points à arbitrer",
+      "run": "r296a26a45dc14eab",
+      "key": "R24",
+      "depends_on": [],
+      "created": 1791574182.1891406
+    },
+    {
+      "id": "w1134d53bad9f48a0",
+      "project": "p2b681269aca74f21",
+      "request": "R25 — Préparer le tableau de décisions",
+      "run": "r45c4b42379154314",
+      "key": "R25",
+      "depends_on": [],
+      "created": 1791574182.1913679
+    },
+    {
+      "id": "w039ce0ba550e4d83",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R26 — Comparer les besoins des équipes",
+      "run": "r151dbd85c88e4bbb",
+      "key": "R26",
+      "depends_on": [],
+      "created": 1791574182.194572
+    },
+    {
+      "id": "w94efd007d27c46b6",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R27 — Relire les critères de réception",
+      "run": "rba7bd1ae520f478a",
+      "key": "R27",
+      "depends_on": [],
+      "created": 1791574182.1967354
+    },
+    {
+      "id": "w0d682a787eca4f88",
+      "project": "p2b681269aca74f21",
+      "request": "R28 — Préparer les documents du comité",
+      "run": "rd1032183ec204dc4",
+      "key": "R28",
+      "depends_on": [],
+      "created": 1791574182.1998718
+    },
+    {
+      "id": "w985d5ceab1cc4211",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R29 — Vérifier les informations disponibles",
+      "run": "r0193d14387e24a08",
+      "key": "R29",
+      "depends_on": [],
+      "created": 1791574182.2027733
+    },
+    {
+      "id": "w8b0804f2cc554202",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R30 — Identifier les points à arbitrer",
+      "run": "r07ce18fb605d433a",
+      "key": "R30",
+      "depends_on": [],
+      "created": 1791574182.2100205
+    },
+    {
+      "id": "w6c53905dc00f43a7",
+      "project": "p2b681269aca74f21",
+      "request": "R31 — Préparer le tableau de décisions",
+      "run": "r0fd11d9255fe46e6",
+      "key": "R31",
+      "depends_on": [],
+      "created": 1791574182.2127063
+    },
+    {
+      "id": "wf73a7ef98c7b4f4e",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R32 — Comparer les besoins des équipes",
+      "run": "r565424d95c4f43e6",
+      "key": "R32",
+      "depends_on": [],
+      "created": 1791574182.2165613
+    },
+    {
+      "id": "wc509def947cc4cc8",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R33 — Relire les critères de réception",
+      "run": "r0359f3540dc24ff3",
+      "key": "R33",
+      "depends_on": [],
+      "created": 1791574182.2195556
+    },
+    {
+      "id": "w5ffad0fa83104981",
+      "project": "p2b681269aca74f21",
+      "request": "R34 — Préparer les documents du comité",
+      "run": "rcaf4a4d709b54b6b",
+      "key": "R34",
+      "depends_on": [],
+      "created": 1791574182.222818
+    },
+    {
+      "id": "w6b17422230c94aae",
+      "project": "pf72a6edb6a5f4d7c",
+      "request": "R35 — URGENT — Préparer arbitrage comité de 16h",
+      "run": "r3a2b4efbe4304970",
+      "key": "R35",
+      "depends_on": [],
+      "created": 1791574182.225569
+    },
+    {
+      "id": "wf9bb322567984fb6",
+      "project": "p5d9c88a4abb449c9",
+      "request": "R36 — Identifier les points à arbitrer",
+      "run": "r1d318b6a4e404eed",
+      "key": "R36",
+      "depends_on": [],
+      "created": 1791574182.228539
+    }
+  ],
+  "question": null,
+  "completed_by_fixture": [],
+  "notes": [
+    "36 demandes prêtes injectées par API validée ; aucune exécution réelle.",
+    "La consolidation sera créée dans l’UI ; aucun prérequis préconfiguré.",
+    "Question préconfigurée exclusivement dans le mode question."
+  ]
+}

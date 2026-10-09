@@ -1,0 +1,53 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Equipe Alpha — méthode transfert
+Equipe Beta — dépôt existant
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Projets
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:47
+
+Vos projets
+Voir les archives
+
+Un projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.
+
++ Nouveau projet
+Importer un workflow
+Equipe Beta — dépôt existant
+/tmp/tricorder-panel-8-integration-NazR9E/depot-beta-fictif
+→
+Equipe Alpha — méthode transfert
+/tmp/tricorder-panel-8-integration-NazR9E/state/workflows/projects/p162512bd94904779
+→
+Essayer un exemple
+Importer un workflow portable
+×
+
+Transmission méthode Alpha · 1 bloc · 0 lien
+
+Modèles IA : aucun
+Agents dédiés : aucun
+Capacités : aucune déclarée
+
+Les connexions devront être vérifiées sur cet ordinateur. L’import crée un brouillon sans reprendre les exécutions, les accords ou les planifications du poste d’origine.
+
+Examiner les étapes et les données
+Configuration technique complète (JSON)
+Destination
+Sans projet
+Bibliothèque de modèles
+Equipe Beta — dépôt existant
+Equipe Alpha — méthode transfert
+Importer le brouillon

@@ -1,0 +1,22 @@
+{
+  "source_validation": "node --check src/app.js; node --check src/studio.js; node --check tests/panel-interaction.spec.cjs; git diff --check on owned files: passed",
+  "gui": [
+    {
+      "command": "DISPLAY=:182 XAUTHORITY=/tmp/tricorder-functional-display/auth-182 npx playwright test tests/panel-interaction.spec.cjs --output=/tmp/tricorder-panel-interaction-results-v2 --workers=1",
+      "result": "4 passed (20.1s)"
+    },
+    {
+      "command": "DISPLAY=:182 XAUTHORITY=/tmp/tricorder-functional-display/auth-182 npx playwright test tests/panel-interaction.spec.cjs --grep \"initial request\" --output=/tmp/tricorder-panel-interaction-six-tabs --workers=1",
+      "result": "1 passed (9.4s); strengthened fixture asserts six distinct terminals"
+    }
+  ],
+  "sha256": {
+    "src/app.js": "12f447f5165305a73d6042d7bc4824889ddcc1528c7c5b61313541001b31844d",
+    "src/workspace-layout.css": "6d55dca2e6c32ccbea68fff0b7ee295eb7841913e49e27efc689b64dd3c2a293",
+    "src/studio.js": "f316fd175a35d097f6f10128b65e3587e949acabe537fbaa69bb62facac8e389",
+    "src/conversation-view.css": "3d80d16070b3a1bfbc1d759be131e55f41cca500aca9141571c555be056ff36b",
+    "tests/panel-interaction.spec.cjs": "59dfdf7542bc7e954c194fddcd0d50034ecf1787bdfbc2675628c94cd086395f",
+    "dist/app.js": "c9912fa2b2a1dd3029e502bc2226b0f2c82be702e4053d9d577fbd423e3045e1",
+    "dist/studio.css": "53c0730e4f3154225bf2aaba7f33ccc640eba00580f93576defd9014b5c8c2db"
+  }
+}

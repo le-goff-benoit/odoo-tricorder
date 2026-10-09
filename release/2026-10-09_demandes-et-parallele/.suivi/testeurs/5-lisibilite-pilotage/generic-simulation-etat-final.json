@@ -1,0 +1,610 @@
+{
+  "run": {
+    "completion_outcome": "succeeded",
+    "contract": "0eab8170d930b31f27e58c374bc06376575251a056811fa42e11ee918768eda8",
+    "created": 1791572026.1667325,
+    "definition": {
+      "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "first-workflow-mv1bq6f6",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {
+        "request": ""
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "De la demande au résultat"
+    },
+    "driver": "automatic",
+    "id": "r40efd283ae3141ff",
+    "nodes": {
+      "analyse": {
+        "attempt": 1,
+        "finished": 1791572026.630129,
+        "heartbeat": 1791572026.217958,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 941287,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 941287,
+            "session": 941287,
+            "start": "10583898"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791572062.029544,
+          "checks": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "contract": "0eab8170d930b31f27e58c374bc06376575251a056811fa42e11ee918768eda8",
+          "note": "Parcours de simulation vérifié au clavier ; aucun résultat métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "bf5ffcbac197e3b1dfba841c5dfbae5872d5ef48b3db2549b37ec0239b08d3da",
+              "size": 90
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Demande clarifiée : proposer une évolution et ses critères de réussite."
+        },
+        "started": 1791572026.1736348,
+        "status": "accepted",
+        "token": "t9cca4557ecea43aa"
+      },
+      "bilan": {
+        "attempt": 1,
+        "finished": 1791572125.9405718,
+        "heartbeat": 1791572125.5132234,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 942916,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 942916,
+            "session": 942916,
+            "start": "10593825"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791572153.68076,
+          "checks": [],
+          "contract": "0eab8170d930b31f27e58c374bc06376575251a056811fa42e11ee918768eda8",
+          "note": "Bilan synthétique lu ; aucun travail réel attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "6639ead0abc6d1cf480418552f4c37ae85ff8da4e2fe50194bbc84abc4ff1472",
+              "size": 90
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Bilan de démonstration : branches reçues et décision humaine conservée."
+        },
+        "started": 1791572125.4401407,
+        "status": "accepted",
+        "token": "te147c08e69d74734"
+      },
+      "build": {
+        "attempt": 1,
+        "finished": 1791572062.7590406,
+        "heartbeat": 1791572062.3461514,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 941797,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 941797,
+            "session": 941797,
+            "start": "10587511"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791572109.98258,
+          "checks": [],
+          "contract": "0eab8170d930b31f27e58c374bc06376575251a056811fa42e11ee918768eda8",
+          "note": "Parcours synthétique ; aucun code réel."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "70b78a32d7cabfbe908b824d9fdde703873bf66f1d42f9425baccc89b643f89c",
+              "size": 95
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Proposition de réalisation préparée. Aucun code de projet n'a été modifié."
+        },
+        "started": 1791572062.2979994,
+        "status": "accepted",
+        "token": "t11b587fcceb64e57"
+      },
+      "decision": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791572124.6210544,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "c9a89e291b545780e43210e3f18d3db598004d4f344f4c0beace19a77d0a7326"
+        },
+        "input_sources": {},
+        "inputs": {},
+        "nonce": "de52448dab7774ff1",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "c9a89e291b545780e43210e3f18d3db598004d4f344f4c0beace19a77d0a7326",
+        "status": "accepted"
+      },
+      "join": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "result": {
+          "outputs": {}
+        },
+        "status": "accepted"
+      },
+      "test": {
+        "attempt": 1,
+        "finished": 1791572062.7676663,
+        "heartbeat": 1791572062.3504148,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 941798,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 941798,
+            "session": 941798,
+            "start": "10587511"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791572114.692223,
+          "checks": [],
+          "contract": "0eab8170d930b31f27e58c374bc06376575251a056811fa42e11ee918768eda8",
+          "note": "Validation de parcours seulement."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "5a43c3378aa919159e6f9c306a15e0012404ad3c2e63351573010acd96586054",
+              "size": 84
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Scénarios de test proposés. Aucun test métier n'a été exécuté."
+        },
+        "started": 1791572062.306675,
+        "status": "accepted",
+        "token": "t6e1382c0bf15472b"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "first-workflow-mv1bq6f6",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 1,
+      "title": "De la demande au résultat"
+    },
+    "packs": [],
+    "parameters": {
+      "request": ""
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-functional-lisibilite-state-Xiy3dW/state/workflows/workspace/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "workspace",
+    "release": "",
+    "scope": {
+      "id": "workspace",
+      "kind": "workspace"
+    },
+    "simulation": true,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791572153.6808307,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 8,
+      "at": 1791572026.1672325,
+      "node": null,
+      "simulation": true,
+      "type": "started"
+    },
+    {
+      "seq": 9,
+      "at": 1791572026.1672604,
+      "node": "analyse",
+      "type": "ready"
+    },
+    {
+      "seq": 10,
+      "at": 1791572026.1736362,
+      "attempt": 1,
+      "node": "analyse",
+      "type": "running"
+    },
+    {
+      "seq": 11,
+      "at": 1791572026.630213,
+      "attempt": 1,
+      "node": "analyse",
+      "type": "returned"
+    },
+    {
+      "seq": 12,
+      "at": 1791572062.0295463,
+      "node": "analyse",
+      "type": "accepted"
+    },
+    {
+      "seq": 13,
+      "at": 1791572062.0295975,
+      "node": "build",
+      "type": "ready"
+    },
+    {
+      "seq": 14,
+      "at": 1791572062.0296128,
+      "node": "test",
+      "type": "ready"
+    },
+    {
+      "seq": 15,
+      "at": 1791572062.2980018,
+      "attempt": 1,
+      "node": "build",
+      "type": "running"
+    },
+    {
+      "seq": 16,
+      "at": 1791572062.3066773,
+      "attempt": 1,
+      "node": "test",
+      "type": "running"
+    },
+    {
+      "seq": 17,
+      "at": 1791572062.759137,
+      "attempt": 1,
+      "node": "build",
+      "type": "returned"
+    },
+    {
+      "seq": 18,
+      "at": 1791572062.7677577,
+      "attempt": 1,
+      "node": "test",
+      "type": "returned"
+    },
+    {
+      "seq": 19,
+      "at": 1791572109.9825823,
+      "node": "build",
+      "type": "accepted"
+    },
+    {
+      "seq": 20,
+      "at": 1791572114.692225,
+      "node": "test",
+      "type": "accepted"
+    },
+    {
+      "seq": 21,
+      "at": 1791572114.6922803,
+      "node": "join",
+      "type": "accepted"
+    },
+    {
+      "seq": 22,
+      "at": 1791572114.692652,
+      "node": "decision",
+      "type": "waiting"
+    },
+    {
+      "seq": 23,
+      "at": 1791572124.6210883,
+      "node": "decision",
+      "outcome": "approve",
+      "type": "decision"
+    },
+    {
+      "seq": 24,
+      "at": 1791572124.621134,
+      "node": "bilan",
+      "type": "ready"
+    },
+    {
+      "seq": 25,
+      "at": 1791572125.4401495,
+      "attempt": 1,
+      "node": "bilan",
+      "type": "running"
+    },
+    {
+      "seq": 26,
+      "at": 1791572125.940623,
+      "attempt": 1,
+      "node": "bilan",
+      "type": "returned"
+    },
+    {
+      "seq": 27,
+      "at": 1791572153.680762,
+      "node": "bilan",
+      "type": "accepted"
+    },
+    {
+      "seq": 28,
+      "at": 1791572153.6808171,
+      "node": null,
+      "type": "completed"
+    }
+  ],
+  "events_next": null
+}

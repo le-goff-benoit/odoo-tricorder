@@ -1,0 +1,97 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Atelier Azur
+Laboratoire Corail
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Laboratoire Corail
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:34
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Coordonner le lancement fictif du produit Nacre. Demande 1 prioritaire : Atelier Azur prépare la fiche de lancement. Demande 2 : Laboratoire Corail prépare les critères de validation. Demande 3 : consolider le dossier après réception des de
+Shell : Atelier Azur · Demande affichée : Laboratoire Corail · Conversation du workflow affiché · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-panel-3-projets-jIIiCK
+/state/agent-events/054e0f96-475b-4970-b5b1-407e9f35e478.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-panel-3-projets-jIIiCK/state/workflows/pro
+jects/pfeeb6eb711a14964$ 'python3' '/home/blegoff/odoo-tricorder/build-a
+rtifacts/linux-unpacked/resources/backend/agent_launch.py' '/tmp/tricord
+er-panel-3-projets-jIIiCK/state/agent-events/054e0f96-475b-4970-b5b1-407
+e9f35e478.launch.json'
+TRICORDER-PANEL-INERT codex — fournisseur inerte, aucune exécution modèl
+e
+blegoff@wrk226:/tmp/tricorder-panel-3-projets-jIIiCK/state/workflows/pro
+jects/pfeeb6eb711a14964$ ^C
+blegoff@wrk226:/tmp/tricorder-panel-3-projets-jIIiCK/state/workflows/pro
+jects/pfeeb6eb711a14964$ 'python3' '/home/blegoff/odoo-tricorder/build-a
+rtifacts/linux-unpacked/resources/backend/agent_launch.py' '/tmp/tricord
+er-panel-3-projets-jIIiCK/state/agent-events/c5dccba9-91aa-464a-8527-5a7
+1a2465c93.launch.json'
+TRICORDER-PANEL-INERT codex — fournisseur inerte, aucune exécution modèl
+e
+blegoff@wrk226:/tmp/tricorder-panel-3-projets-jIIiCK/state/workflows/pro
+jects/pfeeb6eb711a14964$  
+
+SUIVI DU WORKFLOW
+Lancement produit commun
+Options
+Vue d’ensemble
+Demande
+3 demandes
+⌄
+Reprendre l’agent…
+Voir le shell
+Demandes et activité
+
+Aucune étape en cours · 2 demandes à prendre en charge · 1 en attente de dépendances
+
+Lancer les demandes prêtes
+
+1–3 sur 3. Seules les étapes prêtes seront lancées ; les validations restent à traiter.
+
+0 demande(s) lançable(s) sur cette page. Les autres indiquent leur prochaine action ; aucun agent ne démarre automatiquement.
+
+Coordonner le lancement fictif du produit Nacre. Demande 1 prioritaire : Atelier Azur prépare la fiche de lancement. Demande 2 : Laboratoire Corail prépare les critères de validation. Demande 3 : consolider le dossier après réception des de
+Atelier Azur
+Agent arrêté
+→
+Reprendre l’agent… · Agent arrêté. Le terminal est au prompt du shell.
+
+Analyser la demande · Reprenez l’agent pour traiter cette étape dans la conversation.
+
+Agent de bloc séparé (facultatif)
+Corail — définir les critères de validation Nacre
+Laboratoire Corail
+Agent arrêté
+→
+Reprendre l’agent… · Agent arrêté. Le terminal est au prompt du shell.
+
+Analyser la demande · Reprenez l’agent pour traiter cette étape dans la conversation.
+
+Agent de bloc séparé (facultatif)
+Consolider le dossier Nacre après Azur et Corail
+Atelier Azur
+Attend une autre demande
+→
+Voir les dépendances · En attente des demandes précédentes.
+Après :
+Coordonner le lancement fictif du produit Nacre. Demande 1 prioritaire : Atelier Azur prépare la fiche de lancement. Demande 2 : Laboratoire Corail prépare les critères de validation. Demande 3 : consolider le dossier après réception des de
+En attente de réussite
+Corail — définir les critères de validation Nacre
+En attente de réussite
+Rechercher une demande

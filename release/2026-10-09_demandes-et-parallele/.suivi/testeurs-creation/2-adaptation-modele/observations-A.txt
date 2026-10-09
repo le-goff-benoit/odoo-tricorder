@@ -1,0 +1,62 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Assistance équipe A
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Modèles
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:04
+
+MODÈLES / WORKFLOW
+Clôture de meeting
+
+Révision 1 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approve
+✦
+Vérifier le meeting et son transcript
+Tâche IA
+Tâche IA
+0 entrée → 2 sorties
+?
+Relire le compte rendu
+Décision humaine
+Décision humaine
+Vous
+✦
+Préparer l’email de suivi
+Tâche IA
+Tâche IA
+2 entrées → 1 sortie
+3 blocs · 2 liens
+−
+80 %
++
+Ajuster

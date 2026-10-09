@@ -1,0 +1,6 @@
+{
+  "fixture_directories": [],
+  "processes": [],
+  "own_output_removed": true,
+  "tests_afterEach_cleanup": true
+}

@@ -1,0 +1,3 @@
+{"case": "structured-proof-export", "link_in_report": true, "target_exists": true, "proof_readable_in_store": "Document synthétique"}
+{"case": "non-string-proof-role", "accepted_status": "accepted", "error": null, "filename_preserved": true}
+{"case": "nested-action-table", "markdown": "**Actions**\n\n**Élément 1**\n\n**Action**\n\nRelire\n\n**Responsable**\n\nAlice\n\n**Échéance**\n\n2026-10-10\n\n**Checks**\n\n| Action | Responsable | Échéance |\n| --- | --- | --- |\n| Vérifier | Bob | 2026-10-09 |\n"}

@@ -1,0 +1,38 @@
+Suivi · Préparer et vérifier les demandes du portefeuilleR35 — URGENT — Préparer arbitrage comité de 16hPréparer et vérifier les demandes du portefeuille · Version figée · TerminéeOptionsRevenir à l’éditeurHistoriqueRapport
+    Revenir au suivi36 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherR35 — URGENT — Préparer arbitrage comité de 16hBoréal — Opérations · TerminéeAjouter une demande…Archiver la conversationAucune étape en cours · 35 demandes à prendre en charge · 1 terminéeTerminal
+    Rapport d’exécutionExporter le rapport dans le projetExport de release…Préparer et vérifier les demandes du portefeuille
+Demande
+R35 — URGENT — Préparer arbitrage comité de 16h
+Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.
+Plan
+
+
+
+Travail
+État
+Critères
+
+
+
+Analyser les informations synthétiques
+Validé
+À préciser
+
+
+Réalisation
+Analyser les informations synthétiques
+Analyse synthétique terminée par le worker local 1027502
+État : Validé. Tentative 1.
+Résultat
+result
+Résultat synthétique vérifiable ; aucune donnée réelle.
+
+Consulter la preuve
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+Tests et limites
+Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.
+Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.
+Livraison et documentation
+Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.
+Décisions et suite
+Exécution rc082e12b6de14879 · contrat e68b1621e46901bc4018cecc6ffe594d042be91cc78ba7fb581c785bd8085cbb.

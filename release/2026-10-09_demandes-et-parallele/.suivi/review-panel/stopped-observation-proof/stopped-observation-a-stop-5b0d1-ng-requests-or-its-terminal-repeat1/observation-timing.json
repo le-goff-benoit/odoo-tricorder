@@ -1,0 +1,65 @@
+{
+  "timing": {
+    "idleObservedMs": 34.5,
+    "resumeObservedMs": 4719.70000000298,
+    "events": [
+      {
+        "ms": 30.299999997019768,
+        "scope": "Conversation du workflow affiché · Shell : Interaction review",
+        "resume": false,
+        "retrieve": true
+      },
+      {
+        "ms": 3925.5,
+        "scope": "Conversation du workflow affiché · Shell : Interaction review · Agent arrêté",
+        "resume": false,
+        "retrieve": true
+      },
+      {
+        "ms": 4650.29999999702,
+        "scope": "Conversation du workflow affiché · Shell : Interaction review · Agent arrêté",
+        "resume": true,
+        "retrieve": false
+      }
+    ]
+  },
+  "fixture": {
+    "project": {
+      "id": "pcef5f1f1c4684f74",
+      "title": "Interaction review",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/tricorder-review-stopped-RC44HT/projects/pcef5f1f1c4684f74",
+      "managed": true
+    },
+    "conversation": "ce967ac4161f64621",
+    "run": "r565507fa20f14f42",
+    "second_conversation": "c903c2bf4703c404f",
+    "second_run": "r4321f5ed4d7c4ad7"
+  },
+  "first": {
+    "id": "38316467b16e4b62b2a5e001af130a94",
+    "project": "/tmp/tricorder-review-stopped-RC44HT/projects/pcef5f1f1c4684f74",
+    "environment": null,
+    "workingDirectory": "/tmp/tricorder-review-stopped-RC44HT/projects/pcef5f1f1c4684f74",
+    "release": null,
+    "task": null,
+    "createdAt": 1791585604.4053001,
+    "lastOutputAt": 1791585604.4336855,
+    "pid": 1345874,
+    "program": "codex",
+    "provider": "codex",
+    "foreground": 1345883,
+    "promptVerified": true,
+    "idleShell": false,
+    "alive": true,
+    "exitCode": null,
+    "activity": "process"
+  }
+}

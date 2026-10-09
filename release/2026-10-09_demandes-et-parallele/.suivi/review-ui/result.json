@@ -1,0 +1,109 @@
+{
+  "fixture": "API Engine + unexpected question; all synthetic",
+  "bundle": {
+    "dist/app.js": "0e11f32609bd2859ca69a7c3c9f491dc72850e9e238a75d8b00341a61b77b977",
+    "dist/studio.css": "d192a642eefc2d1136a4135771d38e74579a30f4cea2639176f5dc603bcdaf2f"
+  },
+  "sessionsBefore": [
+    "e94c9f5d20e4410c912e1d646ea37db3"
+  ],
+  "overview1600": {
+    "viewport": {
+      "width": 1600,
+      "height": 900
+    },
+    "horizontalOverflow": false,
+    "overview": null,
+    "inspector": null,
+    "question": null,
+    "terminal": {
+      "x": 282,
+      "y": 185.8984375,
+      "width": 650,
+      "height": 705,
+      "scrollHeight": 705,
+      "clientHeight": 705
+    },
+    "visibleRows": 0
+  },
+  "question1600": {
+    "viewport": {
+      "width": 1600,
+      "height": 900
+    },
+    "horizontalOverflow": false,
+    "overview": null,
+    "inspector": null,
+    "question": null,
+    "terminal": {
+      "x": 282,
+      "y": 185.8984375,
+      "width": 650,
+      "height": 705,
+      "scrollHeight": 705,
+      "clientHeight": 705
+    },
+    "visibleRows": 0
+  },
+  "overview1024zoom125": {
+    "viewport": {
+      "width": 819,
+      "height": 614
+    },
+    "horizontalOverflow": false,
+    "overview": null,
+    "inspector": null,
+    "question": null,
+    "terminal": {
+      "x": 192,
+      "y": 181.60000610351562,
+      "width": 603,
+      "height": 46,
+      "scrollHeight": 165,
+      "clientHeight": 46
+    },
+    "visibleRows": 0
+  },
+  "question1024zoom125": {
+    "viewport": {
+      "width": 819,
+      "height": 614
+    },
+    "horizontalOverflow": false,
+    "overview": null,
+    "inspector": null,
+    "question": null,
+    "terminal": {
+      "x": 192,
+      "y": 181.60000610351562,
+      "width": 603,
+      "height": 46,
+      "scrollHeight": 165,
+      "clientHeight": 46
+    },
+    "visibleRows": 0
+  },
+  "decision1024zoom125": {
+    "viewport": {
+      "width": 819,
+      "height": 614
+    },
+    "horizontalOverflow": false,
+    "overview": null,
+    "inspector": null,
+    "question": null,
+    "terminal": {
+      "x": 192,
+      "y": 181.60000610351562,
+      "width": 603,
+      "height": 46,
+      "scrollHeight": 165,
+      "clientHeight": 46
+    },
+    "visibleRows": 0
+  },
+  "sessionsAfter": [
+    "e94c9f5d20e4410c912e1d646ea37db3"
+  ],
+  "ok": true
+}

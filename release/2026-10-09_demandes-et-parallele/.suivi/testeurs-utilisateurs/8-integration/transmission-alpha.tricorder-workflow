@@ -1,0 +1,42 @@
+{
+  "format": "tricorder.workflow",
+  "version": 1,
+  "workflow": {
+    "edges": [],
+    "id": "work-11d9d9c9-a369-4a91-bf26-d97ca719aee3",
+    "nodes": [
+      {
+        "candidate_check": false,
+        "capabilities": [],
+        "completion_outcome": "succeeded",
+        "criteria": [
+          "Le guide identifie le dépôt cible",
+          "Les étapes sont vérifiables par la seconde équipe"
+        ],
+        "id": "start",
+        "inputs": {},
+        "kind": "task",
+        "max_attempts": 1,
+        "outputs": {},
+        "phase": "",
+        "position": {
+          "x": 60,
+          "y": 80
+        },
+        "prompt": "Préparer un guide de passage entre équipes fictives : contexte, étapes et critères vérifiables.",
+        "resources": [],
+        "title": "Documenter les règles de transfert Alpha"
+      }
+    ],
+    "parameters": {},
+    "schema": 1,
+    "title": "Transmission méthode Alpha",
+    "defaults": {
+      "effort": "medium",
+      "model": "",
+      "profile": "generalist",
+      "provider": "codex",
+      "session": "delegated"
+    }
+  }
+}

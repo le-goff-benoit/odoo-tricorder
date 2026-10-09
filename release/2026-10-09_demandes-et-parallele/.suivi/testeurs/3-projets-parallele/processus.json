@@ -1,0 +1,44 @@
+[
+  {
+    "pid": 920811,
+    "cwd": "/tmp/tricorder-functional-parallele-sandbox/projets/boreal",
+    "argv": [
+      "/usr/bin/python3",
+      "/tmp/tricorder-functional-parallele-sandbox/bin/codex",
+      "-c",
+      "hooks.SessionStart=[{hooks=[{type=\"command\",command=\"'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_hook.py' '/tmp/tricorder-functional-parallele-sandbox/state/agent-events/13d8cfce-f361-4f62-89ed-a7db95536c24.jsonl'\",timeout=5}]}]",
+      "-c",
+      "hooks.SessionEnd=[{hooks=[{type=\"command\",command=\"'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_hook.py' '/tmp/tricorder-functional-parallele-sandbox/state/agent-events/13d8cfce-f361-4f62-89ed-a7db95536c24.jsonl'\",timeout=5}]}]",
+      "-c",
+      "hooks.UserPromptSubmit=[{hooks=[{type=\"command\",command=\"'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_hook.py' '/tmp/tricorder-functional-parallele-sandbox/state/agent-events/13d8cfce-f361-4f62-89ed-a7db95536c24.jsonl'\",timeout=5}]}]"
+    ]
+  },
+  {
+    "pid": 928638,
+    "cwd": "/tmp/tricorder-functional-parallele-sandbox/projets/boreal",
+    "argv": [
+      "/usr/bin/python3",
+      "/tmp/tricorder-functional-parallele-sandbox/bin/codex",
+      "-c",
+      "hooks.SessionStart=[{hooks=[{type=\"command\",command=\"'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_hook.py' '/tmp/tricorder-functional-parallele-sandbox/state/agent-events/05792967-e963-45a2-90d5-d4bfc6e2b015.jsonl'\",timeout=5}]}]",
+      "-c",
+      "hooks.SessionEnd=[{hooks=[{type=\"command\",command=\"'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_hook.py' '/tmp/tricorder-functional-parallele-sandbox/state/agent-events/05792967-e963-45a2-90d5-d4bfc6e2b015.jsonl'\",timeout=5}]}]",
+      "-c",
+      "hooks.UserPromptSubmit=[{hooks=[{type=\"command\",command=\"'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_hook.py' '/tmp/tricorder-functional-parallele-sandbox/state/agent-events/05792967-e963-45a2-90d5-d4bfc6e2b015.jsonl'\",timeout=5}]}]"
+    ]
+  },
+  {
+    "pid": 930539,
+    "cwd": "/tmp/tricorder-functional-parallele-sandbox/state/workflows/jobs/te3f2a82d7d6140e5",
+    "argv": [
+      "/usr/bin/python3",
+      "/tmp/tricorder-functional-parallele-sandbox/bin/codex",
+      "exec",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--skip-git-repo-check",
+      "--ephemeral",
+      "--sandbox"
+    ]
+  }
+]

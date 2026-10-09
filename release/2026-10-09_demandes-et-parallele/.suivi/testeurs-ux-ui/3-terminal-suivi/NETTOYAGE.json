@@ -1,0 +1,38 @@
+{
+  "completedAt": "2026-10-09T20:49:58.142Z",
+  "before": [
+    {
+      "pid": 1095059,
+      "name": "odoo-tricorder",
+      "display": ":183"
+    },
+    {
+      "pid": 1095178,
+      "name": "python3",
+      "display": ":183"
+    },
+    {
+      "pid": 1097816,
+      "name": "bash",
+      "display": ":183"
+    },
+    {
+      "pid": 1102518,
+      "name": "bash",
+      "display": ":183"
+    },
+    {
+      "pid": 1109797,
+      "name": "bash",
+      "display": ":183"
+    }
+  ],
+  "remainingOwnedProcesses": [],
+  "executableSha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+  "asarSha256": "a344374116f8ada276e426dd94279450b73cee31ba46aa981ae830a1fb64f44b",
+  "backendFilesChecked": 50,
+  "backendMismatches": [],
+  "integrityPassed": true,
+  "displayServerStopped": false,
+  "captures": 17
+}

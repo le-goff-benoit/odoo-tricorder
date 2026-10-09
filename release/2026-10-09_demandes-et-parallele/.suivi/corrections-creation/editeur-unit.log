@@ -1,0 +1,13 @@
+✔ deleting an intermediate block exposes its now unbound approval input, repairing the mapping clears it (1.019922ms)
+✔ a root condition can use an explicit false parameter without being falsely reported as missing (0.193273ms)
+✔ personalized simulation retains false, zero and empty text and leaves automatic ports absent (0.322408ms)
+✔ invalid imported simulation values need an explicit correction or return to automatic (0.997323ms)
+✔ each integrated template copy gets an identifiable title distinct from previous copies (0.193026ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 54.830172

@@ -1,199 +1,165 @@
 # Tricorder
 
-**Dessinez vos workflows, pilotez le travail dans le terminal et suivez ses résultats.**
-Préversion : **0.6.0-rc.11**.
+**Dessinez votre méthode de travail. Donnez vos demandes dans le terminal. Suivez ce qui se passe.**
 
-[Parcours simplifiés et captures](release/2026-10-09_simplification-parcours/README.md) :
-une navigation commune, réutilisation des workflows, terminal conservé et suivi
-centré sur l’étape actuelle. Une analyse indépendante et une seconde réception
-ont confronté les écrans aux usages : support, réunion, release, création de
-workflow et coordination de plusieurs projets.
+Tricorder réunit un éditeur de workflows, vos conversations avec Codex ou Claude
+et le suivi des demandes dans une application de bureau. Il sert à préparer une
+release, analyser un ticket, clôturer une réunion ou organiser votre propre processus.
+Les projets Odoo sont un usage possible ; le pack Odoo reste facultatif.
 
-![Terminal et suivi d’une demande](release/2026-10-09_simplification-parcours/captures/terminal-et-suivi.png)
+**Préversion 0.6.0-rc.12 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.12)
+· [Nouveautés](release/2026-10-09_demandes-et-parallele/README.md)
+· [Guide d’utilisation](docs/WORKFLOW-RUNTIME.md)
 
-*Application réelle, projet et agent de test. Aucun contenu client publié.*
+![Le terminal et le suivi des demandes dans Tricorder](release/2026-10-09_demandes-et-parallele/captures/demandes-et-agents.png)
 
-## Commencer et reprendre le travail
+*Captures de l’application avec des projets et exécutants fictifs.*
 
-La barre latérale contient trois destinations principales :
+## Du workflow au résultat
 
-| Destination | Utilisation |
+1. **Choisir ou dessiner.** Ouvrez **Workflows**, partez d’un modèle ou créez votre
+   workflow. Décrivez les blocs, leurs consignes, les données échangées et les décisions.
+2. **Lancer.** Depuis **Nouvelle demande** ou **Exécuter…**, choisissez le workflow
+   et son périmètre : sans projet, dans un projet, ou dans plusieurs projets.
+3. **Dialoguer.** **Lancer dans le terminal** ouvre la conversation liée au suivi.
+   Donnez votre intention, par exemple « Lis cet email et prépare les demandes
+   de support ». L’agent peut demander une précision pendant le travail.
+4. **Suivre et décider.** Le panneau montre l’étape actuelle, les questions,
+   les validations et les résultats. **Vue d’ensemble** permet de passer d’une
+   demande à l’autre. Le terminal conserve sa session.
+5. **Reprendre.** **Activité** retrouve le travail en cours. Une interruption
+   conserve les demandes et les tentatives ; une reprise indique ce qui va se passer.
+
+Vous pouvez commencer par le terminal. Le bouton **Terminal** l’affiche à tout
+moment ; votre choix de l’afficher ou de le masquer est conservé pendant la navigation. Le séparateur ajuste sa place. **Disposition verticale** superpose
+terminal et suivi, et **Agrandir le terminal** lui donne toute la surface.
+
+## Votre méthode, vos blocs
+
+L’éditeur relie des tâches, agents, documents, décisions, conditions et opérations.
+Chaque bloc explique son travail, ses entrées, ses sorties et ses critères.
+Les liens montrent quelles données passent au bloc suivant. Un lien peut aussi
+servir uniquement à définir l’ordre du travail. **Réorganiser le graphe** range les branches sans changer leur fonctionnement ; vous pouvez annuler ce geste. Sélectionnez un lien pour examiner les données transmises ou le retirer.
+
+La méthode appartient au workflow. **Choisir l’IA** règle le fournisseur et le
+modèle ; les profils d’agents précisent les compétences et les consignes de chaque
+bloc. Vous pouvez adapter ces choix sans redessiner votre méthode, sous réserve
+des outils et capacités réellement disponibles chez l’exécutant choisi.
+
+**Données de simulation…** permet d’essayer des branches et des valeurs d’exemple.
+La simulation sert à vérifier le parcours ; elle ne réalise pas le travail métier.
+
+![L’éditeur de workflows](release/2026-10-09_demandes-et-parallele/captures/editeur.png)
+
+Sur un petit écran, les propriétés utilisent le panneau workflow avec des actions
+fixes. Le formulaire conserve la saisie lorsque vous redimensionnez la fenêtre.
+
+## Un workflow, plusieurs usages
+
+| Besoin | Exemple de parcours |
 |---|---|
-| **Activité** | Reprendre une conversation et traiter les questions, décisions ou échecs. Les attentes passent avant l’historique. |
-| **Workflows** | Retrouver ses workflows de tous les projets, les lancer, les modifier ou partir d’un modèle. |
-| **Projets** | Retrouver le travail d’un dépôt et y enregistrer ses workflows. |
+| Support | Demande client → analyse → clarification → constat → proposition de réponse |
+| Réunion | Transcription → compte rendu → actions → relecture → brouillon d’email |
+| Release | Intentions → plan → décision → réalisation → contrôles → proposition de livraison |
+| Travail transversal | Demandes dans plusieurs projets → dépendances → consolidation |
+| Processus personnalisé | Vos blocs, vos données et vos règles de décision |
 
-1. Cliquer **Nouvelle demande**, choisir un workflow existant ou un modèle, puis
-   son projet principal — ou **Sans projet**. Une adaptation vers un autre projet
-   est annoncée avant d’être enregistrée ; réutiliser un workflow ne le copie pas.
-2. Examiner le lancement et, au besoin, ajouter d’autres projets à coordonner.
-   **Lancer dans le terminal** ouvre la conversation et son suivi dans la même fenêtre.
-3. Donner l’intention dans le terminal : analyser une demande client, préparer
-   une release depuis un email, rédiger un compte rendu, ou tout autre travail
-   prévu par le workflow. Le champ de demande initiale reste facultatif.
-4. Suivre la demande, l’étape actuelle et la prochaine action. **Graphe** montre
-   le parcours ; **Détail** laisse la place à la question, au plan ou au résultat.
-   Répondre dans le terminal ou dans le panneau. Les décisions restent explicites.
-5. Reprendre depuis **Activité** ou le projet. Une conversation sans tâche reste
-   accessible ; changer de vue conserve la session et les brouillons de réponse.
+**Projets → Nouveau projet** crée un espace local ou associe un dépôt Git existant.
+Aucune préparation de dépôt n’est nécessaire pour commencer dans un nouvel espace.
 
-Le terminal peut aussi être ouvert avant de choisir un projet. **Terminal**, en
-haut de la fenêtre, l’affiche ou le masque sans fermer ses sessions. Le séparateur
-redimensionne terminal et suivi ; **Disposition verticale** les superpose.
-**Agrandir le terminal** lui donne toute la surface de travail.
+**Options → Réutiliser…** crée une copie vers les modèles ou un autre projet.
+Les copies évoluent indépendamment ; les anciennes demandes, résultats, décisions
+et planifications ne sont pas transférés. Un même workflow peut aussi servir à
+plusieurs exécutions sans créer une nouvelle définition à chaque lancement. Les exemples personnalisés de simulation sont retirés de la copie, sauf si vous choisissez de les conserver.
 
-Le sélecteur **IA des prochains lancements** choisit OpenAI · Codex ou Anthropic ·
-Claude pour les nouvelles conversations. Une conversation déjà ouverte conserve
-son fournisseur. Le choix d’un fournisseur ne prouve pas sa connexion.
+Dans un dépôt, les définitions sont enregistrées dans `.tricorder/workflows/`,
+prêtes à être versionnées. **Éditeur → Fichier JSON du workflow…** montre le fichier enregistré. **Options → Workflows du dépôt** les retrouve après
+un clone. Les commits restent sous votre contrôle ; l’historique d’exécution reste local.
 
-## Dessiner et configurer un workflow
+## Comprendre le travail en cours
 
-Dans **Workflows**, choisir **Créer un workflow**, partir d’un workflow vide ou
-d’un modèle, puis nommer le workflow et choisir où l’enregistrer. L’éditeur prend
-toute la largeur ; les terminaux déjà ouverts restent disponibles.
+**Vue d’ensemble** rassemble les demandes, les exécutants et leur dernier état
+observé, ainsi que les attentes. Une question, une décision, une dépendance et un échec ont des actions
+propres. **Graphe** montre le parcours ; **Détail** donne la place au contenu à lire.
+Une demande terminée propose **Voir les résultats**, puis son rapport complet. Les branches non applicables sont comptées séparément. Les décisions disposent de leurs actions en pied de panneau, même avec un long contenu à lire.
 
-Ajouter les blocs, renseigner leurs consignes et critères, définir les entrées et
-sorties, puis les **Relier**. Les données de même nom et type sont proposées.
-**Choisir l’IA** applique un fournisseur et un modèle communs aux étapes IA ; les
-options de chaque bloc permettent de choisir un agent spécialisé et ses réglages.
-Les profils précisent la méthode ; les entrées, sorties et branches appartiennent
-au workflow. Aucun pack Odoo n’est requis pour un workflow générique.
+Les tentatives précédentes présentent leur compte rendu, leurs preuves et le
+motif de reprise. Une reprise annonce son budget et distingue la préparation de
+l’étape du démarrage de l’agent. **Agent arrêté** et **Demande suspendue** sont
+traités séparément.
 
-**Exécuter…** retrouve le lancement. Les réglages manquants désignent le bloc
-concerné et donnent accès à sa configuration. **Revenir au lancement** conserve
-la demande et les projets choisis. Une copie locale de recette Odoo peut être
-préparée pendant la conversation, avant l’étape de QA.
+**Lancer les demandes prêtes** démarre une vague de travail, avec jusqu’à quatre
+exécutants et les verrous nécessaires. Le terminal peut faire la même chose.
+Les demandes qui attendent une réponse ou une validation restent visibles.
+Ce lancement n’installe pas une file autonome : les étapes suivantes demandent
+une nouvelle vague après leurs prérequis.
 
-Les définitions sont enregistrées dans `.tricorder/workflows/` du dépôt choisi,
-prêtes à être versionnées. **Options → Workflows du dépôt** permet de les retrouver
-après un clone. Les commits restent sous votre contrôle. Les exécutions actives,
-leurs décisions et leurs autorisations restent locales. Le dessin enregistré
-conserve ses positions ; le suivi utilise une disposition verticale adaptée au
-panneau voisin du terminal.
+## Fournisseurs, outils et connexions
 
-## Support, meeting, release et travail transversal
+**IA des prochains lancements** choisit OpenAI · Codex ou Anthropic · Claude.
+Les conversations déjà ouvertes conservent leur fournisseur. Tricorder utilise
+leurs CLI et leur authentification native ; sélectionner un fournisseur ne
+connecte pas automatiquement son compte.
 
-Les modèles **Demande ponctuelle**, **Support**, **Clôture de meeting**,
-**Correction express** et release utilisent le même éditeur et le même suivi.
-Un workflow peut être réutilisé séparément dans plusieurs projets, ou une seule
-conversation peut coordonner plusieurs projets avec leurs demandes et dépendances.
+Dans une conversation, l’agent utilise ses outils disponibles pour rechercher
+un email, lire une source locale ou préparer un brouillon. **Connexions** présente
+les plugins détectés. Une opération autonome dans un workflow — notification,
+email ou autre service — demande une capacité vérifiée pour ce connecteur.
+Un brouillon local ne devient pas automatiquement un brouillon dans la messagerie.
 
-Le pack Odoo 0.3.1 installe deux modèles éditables par projet Odoo découvert : release
-et support. La release relie intention, plan, décision, candidat isolé, QA sur copie
-locale et proposition de livraison. L’express qualifie le périmètre avant de
-travailler. Le modèle de meeting prépare compte rendu, actions et email.
+Pour faire relire un contenu avant un envoi, placez une **Décision humaine**
+avant le bloc de communication. La validation du résultat de ce bloc intervient
+après l’opération.
 
-Depuis le terminal lié au workflow, l’agent peut rechercher un email avec ses
-connexions disponibles, conserver les sources et enregistrer les demandes.
-Dans **Paramètres du workflow**, une opération de notification vérifiée peut
-prévenir lorsqu’une question apparaît. **Connexions** détecte les plugins OpenAI
-et Anthropic ; les opérations réellement utilisables doivent être vérifiées.
-Le parcours de brouillon local ne prouve pas la création d’un brouillon dans
-une messagerie : celle-ci nécessite une opération de connecteur adaptée.
+## Planifier et partager
 
-Les résultats et preuves restent consultables avant une décision. Une tâche
-refusée ou non résolue ne libère pas ses successeurs. Après un échec de recette,
-une tâche de correction reste nécessaire : les modèles n’intègrent pas encore
-une boucle automatique de correction/recette. Un parcours de déploiement direct
-peut être configuré avec candidat, cible, contrôles et autorisation précise.
+**Planifier** règle la fréquence, le fuseau et le mode d’exécution. La planification
+conserve une version du workflow, consultable dans **Version planifiée**.
+Modifier le dessin ne change pas une planification active ; son remplacement
+est explicite. La fréquence reste visible et les réglages horaires sont repris lors du remplacement ; vous vérifiez à nouveau le mode et les autorisations.
 
-Le [guide de fonctionnement et de reprise](docs/WORKFLOW-RUNTIME.md) décrit les
-contrôles du moteur et les intégrations. Les [preuves de cette version](release/2026-10-09_simplification-parcours/README.md)
-portent sur des projets synthétiques, un vrai terminal et des agents déterministes.
-Elles ne qualifient ni les réponses d’un modèle commercial, ni un service externe,
-ni une recette métier Odoo.
+**Options → Exporter…** produit un fichier `.tricorder-workflow` avec ses
+composants. À l’ouverture sur un autre poste, Tricorder présente un aperçu avant
+import. Les comptes, autorisations et anciennes exécutions ne sont pas transférés.
 
-## Travailler sur une release
+## Installer et mettre à jour
 
-Tricorder ouvre vos projets existants et leurs releases. Le terminal occupe la
-partie principale ; le panneau voisin montre le workflow, les intentions, le
-plan, les décisions, les preuves et les temps. Changer de vue conserve la session.
-**Agrandir le terminal** masque temporairement le panneau ; **Afficher le workflow**
-le rétablit.
+Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.12),
+installez-le avec le gestionnaire de paquets Ubuntu, puis ouvrez **Tricorder**.
+**Essayer un exemple** permet de découvrir un parcours simulé sans modèle payant.
 
-1. Choisir un projet et sa release.
-2. Choisir **OpenAI · Codex** ou **Anthropic · Claude** dans l’en-tête. Le choix
-   est mémorisé pour les prochains lancements ; une session existante reste intacte.
-3. Interagir directement dans le terminal, ou utiliser une étape du panneau :
-   **Ouvrir une release → Recueillir les demandes → Préparer le plan → Exécuter
-   le plan → Recetter et clôturer**. Les boutons préparent une demande contextualisée
-   que vous pouvez relire ; **Lancer le travail** ouvre sa session d’agent.
-4. Consulter Demandes, Plan, Mémoire et Temps en gardant le terminal visible.
+Les mises à jour stables sont signalées depuis GitHub. L’installation et le
+redémarrage restent explicites. Fermer la fenêtre conserve les sessions terminal ;
+pour appliquer une mise à jour, quittez Tricorder depuis son icône système puis
+relancez-le. Un agent déjà ouvert conserve ses instructions jusqu’à sa reprise.
 
-Le parcours de release utilise Odoo Crew et les fichiers existants sous
-`changelog/` et `.odoo-agents/`. Une ouverture ou un recueil d’intentions ne lance
-pas le développement. Les écritures externes gardent leurs accords propres.
-Les fournisseurs utilisent leurs CLI et leur authentification native ; Tricorder
-ne lit pas vos secrets. Le choix d’un fournisseur ne prouve pas sa connexion.
+## État de la préversion
 
-## Personnaliser ou exécuter un autre workflow
+Cette version améliore création, dialogue et suivi. Le cycle complet de release
+parallèle — approbation commune, intégration des candidats et QA commune — reste
+à construire. Les demandes utilisent encore des exécutions distinctes : le suivi
+ne les présente pas comme des sous-blocs d’une exécution parent inexistante.
 
-Depuis les vues de release, **Outils et aide → Reprendre le workflow** retrouve la dernière vue ouverte
-(catalogue, projet ou éditeur) dans la même fenêtre. **Workflows** réunit les
-définitions enregistrées et les modèles ; les planifications et connexions restent accessibles dans la barre latérale.
-Le terminal reste disponible pendant ces changements de vue.
+Les [notes et preuves de réception](release/2026-10-09_demandes-et-parallele/README.md)
+distinguent essais GUI, simulations et limites. Elles ne qualifient ni un modèle
+commercial, ni un service externe, ni une release cliente réelle.
 
-Depuis la fiche d’un projet ou **Workflows → Mes workflows**, **Exécuter…** ouvre directement
-le récapitulatif et les prérequis, sans passer par la modification des blocs.
-**Choisir l’IA** applique OpenAI ou Anthropic et un modèle commun aux étapes IA.
-Les profils d’agents sont conservés. Les paramètres particuliers d’un bloc restent
-accessibles dans ses options ; consigne et critères sont affichés en premier.
-Les ports ont des formulaires ; les paramètres supplémentaires restent repliés.
+## Développer Tricorder
 
-Un prérequis manquant est présenté avec le nom de l’étape et un accès à sa
-configuration. La simulation reste explicitement distincte d’une exécution réelle.
-Les modèles Odoo enregistrés avant cette simplification restent des brouillons
-à compléter : ils ne remplacent pas vos releases historiques.
-
-## Transférer un workflow et mettre à jour Tricorder
-
-« Exporter… » produit un fichier `.tricorder-workflow`, avec ses sous-workflows
-intégrés et ses choix de modèles. Sur un autre ordinateur équipé de Tricorder,
-le double-clic affiche un aperçu puis propose d’importer un brouillon. Aucun
-accord, historique d’exécution ni récurrence active n’est transféré. Les comptes
-et capacités doivent être vérifiés sur le poste destinataire.
-
-Au lancement, Tricorder consulte la dernière
-release stable publique sur GitHub.
-Une nouvelle version propose ses notes et le téléchargement du paquet Ubuntu.
-L’installation et le redémarrage restent explicites. Hors connexion, le travail
-continue ; « Mises à jour » permet de réessayer.
-
-## Documentation lisible
-
-Une release possède une seule entrée humaine : `release/<id>/README.md`, pour
-l’intention, le plan, la réalisation, les tests et la livraison. Le suivi machine
-et les preuves sont regroupés dans `.suivi/`. Les installateurs sont dans
-`build-artifacts/`, distincts de la documentation.
-
-## Essayer et développer
-
-Prérequis : Ubuntu avec Python 3, Git, Node/npm et Bubblewrap pour les commandes
-isolées. L’intégration de l’icône dépend de la zone de notification du bureau.
+Ubuntu, Python 3, Git, Node/npm et Bubblewrap pour les commandes isolées :
 
 ```bash
 npm install
 npm start
-```
-
-« Essayer un exemple » crée un dépôt Git de démonstration et propose un parcours
-simulé : aucun modèle payant ni service métier n’est appelé. Dans **Nouvelle demande**, choisir **Sans projet** permet aussi de lancer
-un workflow sans créer de dépôt.
-
-```bash
 npm test
 npm run test:ui
 npm run dist
 npm run test:packaged
 ```
 
-État du cockpit et des terminaux : `~/.config/odoo-tricorder/`. État des workflows : `~/.local/share/tricorder/` (SQLite, preuves, bibliothèque, workflows
-globaux et exemples). `TRICORDER_STATE_DIR` permet une instance isolée ; les données historiques
-conservent leurs emplacements, au sein de la même application.
-Pas de service TCP ni de télémétrie dans Tricorder. La vérification de mise à jour contacte GitHub au lancement, conformément à la
-préférence demandée. Les fournisseurs natifs contactent leurs services lors
-des actions demandées.
-
-Les anciens écrans et leurs références restent dans l’historique et certains
-fichiers sources ; ils ne sont plus le point d’entrée de l’application. Aucun
-ancien workflow client n’a été migré ou supprimé.
+Le terminal utilise Electron et xterm.js ; le moteur de workflows est en Python.
+État du bureau : `~/.config/odoo-tricorder/`. État des workflows :
+`~/.local/share/tricorder/`. `TRICORDER_STATE_DIR` permet un banc isolé.
+Tricorder n’expose pas de service TCP et n’envoie pas de télémétrie. La vérification
+de mise à jour contacte GitHub ; les fournisseurs et connecteurs contactent leurs
+services lors des actions demandées.

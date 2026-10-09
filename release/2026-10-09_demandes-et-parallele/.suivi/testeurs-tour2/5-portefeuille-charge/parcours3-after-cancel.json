@@ -1,0 +1,147 @@
+{
+  "join": {
+    "created": 1791574278.7680275,
+    "depends_on": [
+      "w511b42bc3f774322",
+      "w71fc9f8824fc4123",
+      "w8b0804f2cc554202"
+    ],
+    "id": "w4949e7735de348de",
+    "key": null,
+    "project": "p5d9c88a4abb449c9",
+    "request": "C37 — Consolider le comité après R02, R17 et R30",
+    "run": "ra5f12a39bc3449ed",
+    "request_truncated": false,
+    "execution": {
+      "id": "ra5f12a39bc3449ed",
+      "project": "p5d9c88a4abb449c9",
+      "status": "paused",
+      "created": 1791574278.7677062,
+      "updated": 1791574278.76797,
+      "simulation": false,
+      "completion_outcome": null,
+      "archived": null,
+      "coordination_wait": true,
+      "coordination_hold": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "portefeuille-charge",
+        "title": "Préparer et vérifier les demandes du portefeuille"
+      },
+      "original": {
+        "id": "portefeuille-charge"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "C37 — Consolider le comité après R02, R17 et R30",
+      "counts": {
+        "pending": 1
+      },
+      "nodes": {
+        "work": {
+          "status": "pending"
+        }
+      },
+      "launch": {
+        "status": "waiting",
+        "label": "En attente",
+        "ready_count": 0,
+        "worker_count": 0,
+        "native_count": 0,
+        "configuration_count": 0,
+        "waiting_count": 0,
+        "unknown_count": 0,
+        "active_count": 0,
+        "max_parallel": 4,
+        "nodes": [],
+        "nodes_total": 0,
+        "nodes_truncated": false
+      }
+    },
+    "dependencies": [
+      {
+        "id": "w511b42bc3f774322",
+        "run": "rd432c59f70cf4520",
+        "project": "pf72a6edb6a5f4d7c",
+        "request": "R02 — Comparer les besoins des équipes",
+        "request_truncated": false,
+        "status": "cancelled",
+        "completion_outcome": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "counts": {
+          "ready": 1
+        },
+        "health": {
+          "status": "ok",
+          "total": 0
+        },
+        "satisfied": false
+      },
+      {
+        "id": "w71fc9f8824fc4123",
+        "run": "r1a9cb3fcf75e457f",
+        "project": "pf72a6edb6a5f4d7c",
+        "request": "R17 — Vérifier les informations disponibles",
+        "request_truncated": false,
+        "status": "active",
+        "completion_outcome": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "counts": {
+          "ready": 1
+        },
+        "health": {
+          "status": "ok",
+          "total": 0
+        },
+        "satisfied": false
+      },
+      {
+        "id": "w8b0804f2cc554202",
+        "run": "r07ce18fb605d433a",
+        "project": "p5d9c88a4abb449c9",
+        "request": "R30 — Identifier les points à arbitrer",
+        "request_truncated": false,
+        "status": "active",
+        "completion_outcome": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "focus": {
+          "node": "work",
+          "title": "Analyser les informations synthétiques",
+          "status": "ready",
+          "action": "Continuer dans le terminal"
+        },
+        "counts": {
+          "ready": 1
+        },
+        "health": {
+          "status": "ok",
+          "total": 0
+        },
+        "satisfied": false
+      }
+    ],
+    "dependencies_total": 3,
+    "dependencies_truncated": false
+  },
+  "text": "C37 — Consolider le comité après R02, R17 et R30\nCéleste — Comité\nAttend une autre demande\n→\nVoir les dépendances · En attente des demandes précédentes.\nAprès :\nR02 — Comparer les besoins des équipes\nAnnulée · hors page\nR17 — Vérifier les informations disponibles\nEn attente de réussite · hors page\nR30 — Identifier les points à arbitrer\nEn attente de réussite"
+}

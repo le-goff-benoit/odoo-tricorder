@@ -1,0 +1,42 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Equipe Alpha — méthode transfert
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Projets
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:45
+
+Vos projets
+Voir les archives
+
+Un projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.
+
++ Nouveau projet
+Importer un workflow
+Equipe Alpha — méthode transfert
+/tmp/tricorder-panel-8-integration-NazR9E/state/workflows/projects/p162512bd94904779
+→
+Essayer un exemple
+Créer un projet
+×
+Nom du projet
+Emplacement
+Nouvel espace local
+Dépôt Git existant
+Racine du dépôt Git local
+Choisir…
+
+Choisissez la racine du dépôt. Aucun commit ni envoi distant.
+
+Créer le projet

@@ -54,7 +54,7 @@ class Conversations:
             values = [self.engine.store.body(row) for row in db.execute("SELECT body FROM conversations ORDER BY rowid DESC")]
         values = [v for v in values if project is None or project in v["projects"]]
         if compact:
-            return [{**{k: v[k] for k in ("id", "project", "projects", "status", "created", "provider", "model")}, "definition": {"title": v["definition"]["title"]}, "item_count": len(v["items"]), "archived": v.get("archived", False)} for v in values]
+            return [{**{k: v[k] for k in ("id", "project", "projects", "status", "created", "provider", "model")}, "definition": {"title": v["definition"]["title"]}, "request_excerpt": (v["items"][0]["request"].strip().splitlines()[0][:200] if v["items"] else ""), "item_count": len(v["items"]), "archived": v.get("archived", False)} for v in values]
         return values
 
     def open(self, project, graph, provider, projects=None, library=None, model=None, *, notifications_authorized=False, initial_request=None):
@@ -121,7 +121,7 @@ class Conversations:
         from .projections import PAGE, paging, summary
         conversation = self.get(cid)
         with self.engine.store.connect() as db:
-            waiting = [self.engine.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.parameters.conversation')=? AND json_extract(body, '$.coordination_wait')=1 AND json_extract(body, '$.status')='paused'", (cid,))]
+            waiting = [self.engine.store.body(row) for row in db.execute("SELECT body FROM runs WHERE id IN (SELECT json_extract(i.value, '$.run') FROM conversations c, json_each(c.body, '$.items') i WHERE c.id=?) AND json_extract(body, '$.coordination_wait')=1 AND json_extract(body, '$.status')='paused'", (cid,))]
         for run in waiting:
             if not run.get("coordination_hold"):
                 if all(dependency_satisfied(self.engine.run(rid)) for rid in run["parameters"]["depends_on_runs"]):
@@ -140,6 +140,8 @@ class Conversations:
             # rather than whole runs, whose evidence may be very large.
             authorized = {item['id']: item for item in conversation['items']}
             observed = {}
+            from .launch_readiness import LaunchReadiness
+            readiness = LaunchReadiness(self.engine, conversation)
             def execution(rid):
                 if rid not in observed:
                     run = self.engine.run(rid)
@@ -169,11 +171,13 @@ class Conversations:
                 dependencies.sort(key=lambda dependency: dependency['satisfied'])
                 result['items'].append({
                     **item, 'request': item['request'][:240], 'request_truncated': len(item['request']) > 240,
-                    'execution': execution(item['run'])[0],
+                    'execution': {**execution(item['run'])[0], 'launch': readiness.project(self.engine.run(item['run']))},
                     'dependencies': dependencies[:PAGE], 'dependencies_total': len(dependencies),
                     'dependencies_truncated': len(dependencies) > PAGE,
                 })
             result.pop("transports", None)
+            from .projections import conversation_activity
+            result['activity'] = conversation_activity(self.engine, cid)
         else:
             result["items"] = [{**i, "execution": self.engine.run(i["run"])} for i in items]
         return result

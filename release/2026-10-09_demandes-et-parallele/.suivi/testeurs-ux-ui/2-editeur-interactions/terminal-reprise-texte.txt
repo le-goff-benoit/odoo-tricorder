@@ -1,0 +1,83 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:50
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell · Codex arrêté · Préparer le compte rendu fictif Jardin du Canal à partir des notes. Aucun envoi.
+Conversation du workflow affiché · Workflows globaux
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-ux-editeur-interaction
+s-Shc1pQ/state/agent-events/9f6d88d4-01be-42c8-ad79-f743ee16cdcc.launch.
+json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+lows/workspace$ 'python3' '/home/blegoff/odoo-tricorder/build-artifacts/
+linux-unpacked/resources/backend/agent_launch.py' '/tmp/tricorder-ux-edi
+teur-interactions-Shc1pQ/state/agent-events/9f6d88d4-01be-42c8-ad79-f743
+ee16cdcc.launch.json'
+TRICORDER-UX-INERT codex — fournisseur inerte, aucune exécution modèle
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+lows/workspace$ ^C
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+lows/workspace$ 'python3' '/home/blegoff/odoo-tricorder/build-artifacts/
+linux-unpacked/resources/backend/agent_launch.py' '/tmp/tricorder-ux-edi
+teur-interactions-Shc1pQ/state/agent-events/8c2b5870-c867-41fd-b6d2-8d62
+389a5c9c.launch.json'
+TRICORDER-UX-INERT codex — fournisseur inerte, aucune exécution modèle
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+lows/workspace$  
+
+SUIVI · RÉUNION — JARDIN PARTAGÉ
+Préparer le compte rendu fictif Jardin du Canal à partir des notes. Aucun envoi.
+Options
+Vue d’ensemble
+Demande
+1 demandes
+⌄
+
+Agent arrêté · progression conservée. Aucune étape en cours · 1 demande à prendre en charge
+
+Reprendre l’agent…
+À poursuivre dans le terminal
+0 / 4 étapes
+
+Cette étape utilise les outils de la conversation. Continuez dans le terminal.
+
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Notes de réunion
+→
+Synthétiser la réunion
+
+Dans le terminal
+
+À poursuivre dans le terminal
+
+Cette étape utilise les outils de la conversation. Continuez dans le terminal.
+
+Agent arrêté · progression conservée. Reprenez la conversation pour continuer cette étape.
+
+Reprendre l’agent…

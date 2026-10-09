@@ -1,0 +1,8 @@
+test_duplicate_destination_is_rejected_before_execution_and_explicit_replacement_is_valid (test_workflow_connections.ConnectionContractTests) ... ok
+test_invalid_mapping_shape_has_an_actionable_contract_error (test_workflow_connections.ConnectionContractTests) ... ok
+test_separate_prerequisites_can_still_supply_the_same_join_input (test_workflow_connections.ConnectionContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK

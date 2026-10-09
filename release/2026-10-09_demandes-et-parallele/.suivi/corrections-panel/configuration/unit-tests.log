@@ -1,0 +1,18 @@
+✔ reusing a method removes previous trial outputs by default and retains business settings (2.541645ms)
+✔ root input guidance explains request context without treating it as an input binding (0.502206ms)
+✔ schedule cards describe intervals, local times and actual selected weekdays (0.789022ms)
+✔ replacing a schedule prepopulates recurrence, with no inherited permission or real execution mode (1.129784ms)
+✔ deleting an intermediate block exposes its now unbound approval input, repairing the mapping clears it (1.440935ms)
+✔ a root condition can use an explicit false parameter without being falsely reported as missing (0.260619ms)
+✔ personalized simulation retains false, zero and empty text and leaves automatic ports absent (0.294537ms)
+✔ invalid imported simulation values need an explicit correction or return to automatic (1.101138ms)
+✔ each integrated template copy gets an identifiable title distinct from previous copies (0.161166ms)
+✔ reusing an expanded subworkflow removes previous execution context at both levels and preserves business settings (0.384694ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 58.614494

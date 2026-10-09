@@ -1,0 +1,116 @@
+[
+  {
+    "campaign": "source",
+    "case": "simplicity-reuse",
+    "trace": "/tmp/tricorder-rc12-final-ui-source/simplicity-reuse-two-launc-dc4ea-ing-keeps-the-same-terminal/trace.zip",
+    "sha256": "57413656a9085118234b2d5539b91ed39d703359bc39feb876a5d31b8d3c52c7",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "pw:api@53",
+        "endTime": 462917.481,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n",
+          "stack": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/simplicity.spec.cjs:22:724"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "source",
+    "case": "studio-native",
+    "trace": "/tmp/tricorder-rc12-final-ui-source/studio-native-conversation-c09c6-same-terminal-after-restart/trace.zip",
+    "sha256": "bce609719877b95fe17a27a6963e335a5818be7c1bbc2e8ebc885f22db02dc87",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "pw:api@60",
+        "endTime": 680911.633,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n",
+          "stack": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:613:81"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "source",
+    "case": "studio-layout",
+    "trace": "/tmp/tricorder-rc12-final-ui-source/studio-workspace-layout-fo-257e8--preserve-the-same-terminal/trace.zip",
+    "sha256": "562cd02472d230644e661063342d6a6417cabf8b47958b259636b106aac040d1",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "expect@68",
+        "endTime": 733294.957,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-workspace')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-workspace') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-workspace')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-workspace\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+          "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-workspace')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-workspace') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-workspace')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-workspace\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:924:53"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "package",
+    "case": "simplicity-reuse",
+    "trace": "/home/blegoff/odoo-tricorder/test-results/simplicity-reuse-two-launc-dc4ea-ing-keeps-the-same-terminal/trace.zip",
+    "sha256": "91330711e8a18ee8e2c9fcdccc895e8191dd17aaf57c99ff821ccb6d2c29cbe4",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "pw:api@52",
+        "endTime": 483668.214,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n",
+          "stack": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/simplicity.spec.cjs:22:724"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "package",
+    "case": "studio-native",
+    "trace": "/home/blegoff/odoo-tricorder/test-results/studio-native-conversation-c09c6-same-terminal-after-restart/trace.zip",
+    "sha256": "1ad6f24d23b2f89285a03cb09ae0edb72f80b1a7502da12d26d52ef6288c9bba",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "pw:api@57",
+        "endTime": 710254.967,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n",
+          "stack": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:613:81"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "package",
+    "case": "studio-layout",
+    "trace": "/home/blegoff/odoo-tricorder/test-results/studio-workspace-layout-fo-257e8--preserve-the-same-terminal/trace.zip",
+    "sha256": "88d0a95799a147389234857db554cf887010226a319de71ea9c6620c87d18ac9",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "expect@67",
+        "endTime": 768706.986,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-workspace')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-workspace') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-workspace')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-workspace\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+          "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-workspace')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-workspace') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-workspace')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-workspace\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:924:53"
+        }
+      }
+    ]
+  }
+]

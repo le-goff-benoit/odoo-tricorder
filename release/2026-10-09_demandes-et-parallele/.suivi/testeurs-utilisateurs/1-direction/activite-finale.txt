@@ -1,0 +1,51 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+3
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:32
+
+Activité
+
+Votre travail en cours et ce qui attend votre intervention.
+
+Nouvelle demande
+Actualiser
+À traiter
+
+1 demande affichée à traiter sur cette page.
+
+Réunion interne fictive du comité des locaux, 9 octobre 2026. Notes : Léa préparera un plan de rangement pour lundi ; Hugo vérifiera la capacité de la salle. Préparer un compte rendu et un brouillon de suivi, sans envoyer de message.
+Sans projet · Clôture de meeting · Rév. 1
+Agent arrêté
+Reprendre l’agent…
+→
+Autres demandes
+4 demandes enregistrées
+Réunion interne fictive du 12 octobre 2026 : préparer le prochain point des locaux. Établir un compte rendu et un brouillon, aucun envoi.
+Sans projet · Clôture de meeting · Rév. 1
+À traiter dans la conversation
+Continuer dans la conversation
+→
+Clôture de meeting
+Sans projet · Clôture de meeting · Rév. 1 · Simulation
+Terminée
+→
+Clôture de meeting
+Sans projet · Clôture de meeting · Rév. 1 · Simulation
+Terminée · refusée
+→

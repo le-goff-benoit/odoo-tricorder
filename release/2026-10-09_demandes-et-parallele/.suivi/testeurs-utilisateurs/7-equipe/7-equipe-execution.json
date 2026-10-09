@@ -1,0 +1,52 @@
+{
+  "id": "7-equipe",
+  "output": "/home/blegoff/odoo-tricorder/release/2026-10-09_demandes-et-parallele/.suivi/testeurs-utilisateurs/7-equipe",
+  "display": 182,
+  "preparedAt": "2026-10-09T21:42:39.040Z",
+  "temporary": "/tmp/tricorder-panel-7-equipe-EBtN0O",
+  "dirs": {
+    "home": "/tmp/tricorder-panel-7-equipe-EBtN0O/home",
+    "config": "/tmp/tricorder-panel-7-equipe-EBtN0O/config",
+    "cache": "/tmp/tricorder-panel-7-equipe-EBtN0O/cache",
+    "data": "/tmp/tricorder-panel-7-equipe-EBtN0O/data",
+    "codex": "/tmp/tricorder-panel-7-equipe-EBtN0O/codex",
+    "claude": "/tmp/tricorder-panel-7-equipe-EBtN0O/claude",
+    "state": "/tmp/tricorder-panel-7-equipe-EBtN0O/state",
+    "runtime": "/tmp/tricorder-panel-7-equipe-EBtN0O/runtime",
+    "agents": "/tmp/tricorder-panel-7-equipe-EBtN0O/agents",
+    "stubs": "/tmp/tricorder-panel-7-equipe-EBtN0O/stubs",
+    "project": "/tmp/tricorder-panel-7-equipe-EBtN0O/project"
+  },
+  "env": {
+    "PATH": "/tmp/tricorder-panel-7-equipe-EBtN0O/stubs:/usr/bin:/bin",
+    "HOME": "/tmp/tricorder-panel-7-equipe-EBtN0O/home",
+    "XDG_CONFIG_HOME": "/tmp/tricorder-panel-7-equipe-EBtN0O/config",
+    "XDG_CACHE_HOME": "/tmp/tricorder-panel-7-equipe-EBtN0O/cache",
+    "XDG_DATA_HOME": "/tmp/tricorder-panel-7-equipe-EBtN0O/data",
+    "XDG_RUNTIME_DIR": "/tmp/tricorder-panel-7-equipe-EBtN0O/runtime",
+    "CODEX_HOME": "/tmp/tricorder-panel-7-equipe-EBtN0O/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tricorder-panel-7-equipe-EBtN0O/claude",
+    "TRICORDER_HOME": "/tmp/tricorder-panel-7-equipe-EBtN0O/home",
+    "TRICORDER_STATE_DIR": "/tmp/tricorder-panel-7-equipe-EBtN0O/state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tricorder-panel-7-equipe-EBtN0O/runtime",
+    "TRICORDER_AGENTS_DIR": "/tmp/tricorder-panel-7-equipe-EBtN0O/agents",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "DISPLAY": ":182",
+    "XAUTHORITY": "/tmp/tricorder-functional-display/auth-182",
+    "SHELL": "/bin/bash",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8"
+  },
+  "preflight": "/tmp/tricorder-panel-7-equipe-EBtN0O/stubs/codex\ncodex 0.0.0 TRICORDER-PANEL-INERT\n/tmp/tricorder-panel-7-equipe-EBtN0O/stubs/claude\nclaude 0.0.0 TRICORDER-PANEL-INERT\n",
+  "guiStarted": true,
+  "brokerStarted": false,
+  "externalFixtures": "Aucune : répertoire projet vide, aucun workflow précréé.",
+  "classification": "Préparation uniquement — aucun verdict produit",
+  "candidate": {
+    "executable": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder",
+    "executableSha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/app.asar",
+    "asarSha256": "71a054e6137a4fb424320954836109bd67ef2b74cb8f71ad3e49af35bb047dd7"
+  }
+}

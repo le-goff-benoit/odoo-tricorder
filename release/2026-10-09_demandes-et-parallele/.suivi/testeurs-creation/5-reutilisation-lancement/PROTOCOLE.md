@@ -1,0 +1,12 @@
+# Protocole du banc PMO
+
+1. Exécuter `node --check harness.cjs` puis `node harness.cjs --prepare`. Ces commandes ne lancent ni Electron ni broker. Elles produisent `preparation-manifest.json` et `preflight.txt` dans ce dossier ; le manifeste décrit uniquement des emplacements synthétiques.
+2. Attendre le suivi du responsable fournissant le paquet corrigé, le chemin absolu de l'exécutable, le SHA256 exécutable et le SHA256 de `resources/app.asar`. Aucune valeur supposée et aucun ancien paquet.
+3. Appeler `launch(manifest, executable, expectedExecutableSha, expectedAsarSha)` uniquement après cette autorisation. Les deux empreintes sont vérifiées avant le chargement d'Electron. Le harness ne transmet qu'une liste blanche d'environnement ; ses stubs sont en tête du PATH. L'entrée est celle de l'application normale.
+4. Observer l'accueil, les textes et les contrôles visibles. Utiliser exclusivement les gestes GUI pour ajouter les projets, créer, configurer, enregistrer, importer, exporter, réutiliser et suivre. Les fichiers `CONTEXTE.md` des projets sont des documents métier, pas des fixtures de configuration.
+5. Ouvrir le terminal de l'application. Y saisir `command -v codex; codex --version; command -v claude; claude --version`. Les deux chemins doivent être ceux du manifeste, et deux marqueurs `TRICORDER-T3-PMO-STUB` doivent être visibles. Aucun workflow ne démarre avant cette preuve. La preuve CLI du préflight ne remplace pas cette vérification dans le terminal réel.
+6. Si un chemin fournisseur n'est pas celui du stub, arrêter le lancement des workflows et relever le blocage. Ne modifier ni configuration réelle, ni trousseau, ni états du moteur.
+7. Exécuter les quatre parcours du plan en observant les libellés ; adapter seulement les gestes à la GUI effectivement présente. Tenir les notes dans ce dossier. Répartir les captures selon leur utilité, au maximum douze au total.
+8. À la fin, fermer la GUI avec `cleanup()`. Conserver l'environnement synthétique pour la traçabilité jusqu'à décision du responsable ; aucun nettoyage de dossier client. Le suivi de brokers résiduels éventuels porte exclusivement sur les processus créés dans ce banc, sans import de code produit.
+
+La méthode `visibleText()` observe seulement les textes affichés et les arbres de composants ; elle ne lit aucun état interne d'application. `capture()` refuse la treizième capture. Le harness n'est pas un scénario automatique : les parcours doivent être joués réellement, à partir des contrôles observés.

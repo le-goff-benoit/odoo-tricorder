@@ -1,0 +1,24 @@
+{
+  "trace.zip": {
+    "source": "/tmp/tricorder-rc12-final-ui-source-v2/execution-interactions-a-s-4803a-ng-requests-or-its-terminal/trace.zip",
+    "sha256": "c0cd7a0fefa8ade1773b42d7016156673b95b313a8a3b9c679ada93151a6e458"
+  },
+  "error-context.md": {
+    "source": "/tmp/tricorder-rc12-final-ui-source-v2/execution-interactions-a-s-4803a-ng-requests-or-its-terminal/error-context.md",
+    "sha256": "76eeb1cfb2c376e512e4716867ad1899a76a21104303a46fc251b66f0765e7d2"
+  },
+  "source-v2.log": {
+    "source": "/tmp/tricorder-rc12-final-ui-source.log",
+    "sha256": "caffba56be3522f29a27e7fd4e16b7f196864de6374de420835487ddf12c454b"
+  },
+  "source_hashes": {
+    "src/app.js": "12f447f5165305a73d6042d7bc4824889ddcc1528c7c5b61313541001b31844d",
+    "src/studio.js": "00f98d3b3889c3f5dacb2f4578d68386210d756281e3a5d448477b67eabc87dc",
+    "dist/app.js": "4e8b38d2314aa6020cab9b8679c48092ce78792f575404d48d6c90f9f95e4342",
+    "tests/execution-interactions.spec.cjs": "56de743b511a94e1f9f9164170351cc23ef325ac18fd3002ff8b32a7c0d8a868"
+  },
+  "packaged-v2.log": {
+    "source": "/tmp/tricorder-rc12-final-ui-packaged.log",
+    "sha256": "4761a93b310cc4752dbd4f3ce8003326b441c93bd21161eac97b848ab733b5c2"
+  }
+}

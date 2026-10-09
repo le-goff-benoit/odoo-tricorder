@@ -1,0 +1,192 @@
+{
+  "completion_outcome": "succeeded",
+  "contract": "84be4385115021780417ef55f8afb62239abf7bbc1d80ce1866339c27c35fbe6",
+  "created": 1791574117.0145392,
+  "definition": {
+    "defaults": {
+      "model": "synthetic-model",
+      "provider": "codex"
+    },
+    "description": "Fixture de parcours, aucun fournisseur ni travail client réel qualifié.",
+    "edges": [],
+    "id": "reception-fixtures",
+    "nodes": [
+      {
+        "criteria": [
+          "Les données de la source fictive sont restituées exactement.",
+          "Les limites de simulation et la suite sont explicites."
+        ],
+        "evidence_required": true,
+        "execution": {
+          "effort": "medium",
+          "model": "synthetic-model",
+          "profile": "generalist",
+          "provider": "codex",
+          "session": "delegated"
+        },
+        "id": "work",
+        "kind": "agent",
+        "max_attempts": 3,
+        "options": [
+          "pass",
+          "fail"
+        ],
+        "outputs": {
+          "report": "object",
+          "verdict": "string"
+        },
+        "prompt": "Fixture de recette, ne pas appeler de modèle réel.",
+        "route_output": "verdict",
+        "title": "Examiner le livrable fictif",
+        "validation": "human"
+      }
+    ],
+    "parameters": {
+      "conversation": "c7c45abd921f14087",
+      "depends_on_runs": [],
+      "request": "P5 — Bilan de passation après plusieurs demandes : résultats, reprises, limites et suite. FICTION DE RECETTE."
+    },
+    "schema": 1,
+    "title": "Réception documentaire — fixtures fictives"
+  },
+  "driver": "conversation",
+  "id": "r0c8dc70c3f5f4317",
+  "nodes": {
+    "work": {
+      "attempt": 1,
+      "finished": 1791574234.286148,
+      "heartbeat": 1791574234.2813532,
+      "input_sources": {},
+      "inputs": {},
+      "outcome": "pass",
+      "ownership": "managed",
+      "processes": [],
+      "receipt": {
+        "actor": "local-user",
+        "at": 1791574244.2764163,
+        "checks": [
+          "Les données de la source fictive sont restituées exactement.",
+          "Les limites de simulation et la suite sont explicites."
+        ],
+        "contract": "84be4385115021780417ef55f8afb62239abf7bbc1d80ce1866339c27c35fbe6",
+        "note": "Bilan fictif comparé aux demandes reçues : avis défavorable distinct de panne, lieu clarifié, reprise datée, limites explicites. Aucun modèle ni service externe qualifié."
+      },
+      "result": {
+        "evidence": [
+          {
+            "media_type": "text/markdown",
+            "name": "plan-reception.md",
+            "role": "plan",
+            "sha256": "7964e9cc8f4d923ca15490d13ba3ffdd4e663219bf9c693ec32c64e4639c60ce",
+            "size": 144
+          },
+          {
+            "media_type": "text/markdown",
+            "name": "bilan-passation-fictif.md",
+            "role": "deliverable",
+            "sha256": "f87a24401676aa058b46edc6e6bc9b19e905df5aef6701a5b34e0add6abbb8f6",
+            "size": 432
+          }
+        ],
+        "ok": true,
+        "outputs": {
+          "report": {
+            "findings": [
+              {
+                "request": "P1 Réunion Atlas",
+                "result": "Report ; Alice vérifie deux salles au 16 octobre.",
+                "status": "Reçu par le testeur, fixture"
+              },
+              {
+                "request": "P2 Contrat fictif",
+                "result": "650 € > 500 €, avis défavorable ; traitement réussi.",
+                "status": "Reçu par le testeur, fixture"
+              },
+              {
+                "request": "P2 incident technique",
+                "result": "Aucun livrable ; destination indisponible.",
+                "status": "À reprendre"
+              },
+              {
+                "request": "P3 Invitation",
+                "result": "Lieu précisé : Salle des Érables, 12 rue imaginaire. Aucun envoi.",
+                "status": "Brouillon reçu, fixture"
+              },
+              {
+                "request": "P4 Reprise",
+                "result": "Tentative 1 : date omise. Motif : ajouter le 16 octobre et conserver le report. Tentative 2 : date corrigée.",
+                "status": "Deuxième tentative reçue, fixture"
+              }
+            ],
+            "next_action": "Collègue : corriger la destination de la demande technique. Aucun fournisseur réel ni service externe qualifié.",
+            "notes": "Bilan rédigé par le banc, pas une synthèse IA réellement produite. Produit évalué : affichage, réception et export.",
+            "summary": "Bilan fictif de réception documentaire : cinq demandes métier et un incident distinct."
+          },
+          "verdict": "pass"
+        },
+        "simulated": true,
+        "summary": "FIXTURE — Bilan de passation remis après plusieurs demandes."
+      },
+      "started": 1791574234.281353,
+      "status": "accepted",
+      "token": "t4689650ee1c14361"
+    }
+  },
+  "notifications_authorized": false,
+  "original": {
+    "defaults": {
+      "model": "synthetic-model",
+      "provider": "codex"
+    },
+    "description": "Fixture de parcours, aucun fournisseur ni travail client réel qualifié.",
+    "edges": [],
+    "id": "reception-fixtures",
+    "nodes": [
+      {
+        "criteria": [
+          "Les données de la source fictive sont restituées exactement.",
+          "Les limites de simulation et la suite sont explicites."
+        ],
+        "evidence_required": true,
+        "id": "work",
+        "kind": "agent",
+        "max_attempts": 3,
+        "options": [
+          "pass",
+          "fail"
+        ],
+        "outputs": {
+          "report": "object",
+          "verdict": "string"
+        },
+        "prompt": "Fixture de recette, ne pas appeler de modèle réel.",
+        "route_output": "verdict",
+        "title": "Examiner le livrable fictif",
+        "validation": "human"
+      }
+    ],
+    "schema": 1,
+    "title": "Réception documentaire — fixtures fictives"
+  },
+  "packs": [],
+  "parameters": {
+    "conversation": "c7c45abd921f14087",
+    "depends_on_runs": [],
+    "request": "P5 — Bilan de passation après plusieurs demandes : résultats, reprises, limites et suite. FICTION DE RECETTE."
+  },
+  "plugins": {
+    "path": "/tmp/tricorder-t2-reception-jj7xtx/project/.tricorder/plugins.json",
+    "plugins": [],
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "project": "pb5172ff28eac41aa",
+  "release": "",
+  "scope": {
+    "id": "pb5172ff28eac41aa",
+    "kind": "project"
+  },
+  "simulation": false,
+  "status": "completed",
+  "transports": {},
+  "updated": 1791574244.2774997
+}

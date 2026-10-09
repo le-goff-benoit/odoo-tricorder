@@ -1,0 +1,5 @@
+{
+  "remaining_processes": [],
+  "isolation": "HOME/XDG/CODEX_HOME/CLAUDE_CONFIG_DIR/TRICORDER state and runtime temporary; PATH strict stubs:/usr/bin:/bin; provider stubs exit78; no real account/provider/client",
+  "cleanup": "Electron closed; exact temporary PTY broker cleaned; temporary fixture directories removed by afterEach"
+}

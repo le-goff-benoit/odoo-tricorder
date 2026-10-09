@@ -1,0 +1,27 @@
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-portefeuille-capacity-
+yxyez3/state/agent-events/d6e4b3f4-971f-4819-a95b-842f32b29c3e.launch.js
+on'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-portefeuille-capacity-yxyez3/state/workflo
+ws/projects/pb986abe4304248ee$ 'python3' '/home/blegoff/odoo-tricorder/b
+uild-artifacts/linux-unpacked/resources/backend/agent_launch.py' '/tmp/t
+ricorder-portefeuille-capacity-yxyez3/state/agent-events/d6e4b3f4-971f-4
+819-a95b-842f32b29c3e.launch.json'
+PORTEFEUILLE-CHARGE-STUB-CODEX COORDINATEUR LOCAL PRÊT
+^CTraceback (most recent call last):
+  File "/tmp/tricorder-portefeuille-capacity-yxyez3/bin/codex", line 25,
+ in <module>
+    for line in sys.stdin:
+KeyboardInterrupt
+c
+blegoff@wrk226:/tmp/tricorder-portefeuille-capacity-yxyez3/state/workflo
+ws/projects/pb986abe4304248ee$ command -v codex; command -v claude; code
+x --version; claude --version
+/tmp/tricorder-portefeuille-capacity-yxyez3/bin/codex
+/tmp/tricorder-portefeuille-capacity-yxyez3/bin/claude
+PORTEFEUILLE-CHARGE-STUB-CODEX 1.0-local
+PORTEFEUILLE-CHARGE-STUB-CLAUDE 1.0-local
+blegoff@wrk226:/tmp/tricorder-portefeuille-capacity-yxyez3/state/workflo
+ws/projects/pb986abe4304248ee$  

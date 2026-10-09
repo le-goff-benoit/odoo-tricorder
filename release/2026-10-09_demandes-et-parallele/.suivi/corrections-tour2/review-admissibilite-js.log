@@ -1,0 +1,16 @@
+✔ each ready block uses its own executor state and an omitted check never promises readiness (0.818191ms)
+✔ a live conversation is not work in progress; questions, decisions and dependencies remain distinct (0.650985ms)
+✔ failure action opens the failed block even if another block is ready (0.879646ms)
+✔ accepted negative QA with a corrective branch is not an unresolved execution failure (0.21018ms)
+✔ authoritative health does not fall back to a historical failure; dependencies have no invented active block (0.121212ms)
+✔ finished and cancelled runs open their report instead of an empty block inspector (0.115657ms)
+✔ retry guidance explains exhaustion without suggesting an unsafe external replay (0.345863ms)
+✔ cancelled dependent work opens the report instead of an obsolete wait (0.103775ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60.738733

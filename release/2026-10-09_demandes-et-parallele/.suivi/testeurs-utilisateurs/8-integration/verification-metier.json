@@ -1,0 +1,52 @@
+{
+  "alpha": [
+    {
+      "id": "node-title",
+      "value": "Documenter les règles de transfert Alpha"
+    },
+    {
+      "id": "node-prompt",
+      "value": "Préparer un guide de passage entre équipes fictives : contexte, étapes et critères vérifiables."
+    },
+    {
+      "id": "node-criteria",
+      "value": "Le guide identifie le dépôt cible\nLes étapes sont vérifiables par la seconde équipe"
+    }
+  ],
+  "modele": [
+    {
+      "id": "node-title",
+      "value": "Documenter les règles de transfert Alpha"
+    },
+    {
+      "id": "node-prompt",
+      "value": "Préparer un guide de passage entre équipes fictives : contexte, étapes et critères vérifiables."
+    },
+    {
+      "id": "node-criteria",
+      "value": "Le guide identifie le dépôt cible\nLes étapes sont vérifiables par la seconde équipe"
+    }
+  ],
+  "copieDepuisModele": [
+    {
+      "id": "node-title",
+      "value": "Documenter les règles de transfert Alpha"
+    },
+    {
+      "id": "node-prompt",
+      "value": "Préparer un guide de passage entre équipes fictives : contexte, étapes et critères vérifiables."
+    },
+    {
+      "id": "node-criteria",
+      "value": "Le guide identifie le dépôt cible\nLes étapes sont vérifiables par la seconde équipe"
+    }
+  ],
+  "betaTitre": "Adaptation Beta — contrôle dépôt cible",
+  "alphaRevision": "Révision 2",
+  "betaRevision": "Révision 3",
+  "windows": 1,
+  "firstPid": 1204386,
+  "restartPid": 1207954,
+  "exportExists": true,
+  "pageerrors": []
+}

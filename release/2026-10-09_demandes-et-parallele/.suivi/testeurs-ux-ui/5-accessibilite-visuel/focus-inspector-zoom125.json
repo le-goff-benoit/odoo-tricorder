@@ -1,0 +1,210 @@
+[
+  {
+    "tag": "INPUT",
+    "id": "node-title",
+    "text": "",
+    "rect": {
+      "x": 194,
+      "y": 599.4375,
+      "width": 583.2000122070312,
+      "height": 38,
+      "top": 599.4375,
+      "right": 777.2000122070312,
+      "bottom": 637.4375,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "TEXTAREA",
+    "id": "node-prompt",
+    "text": "",
+    "rect": {
+      "x": 194,
+      "y": 561.8375244140625,
+      "width": 583.2000122070312,
+      "height": 90,
+      "top": 561.8375244140625,
+      "right": 777.2000122070312,
+      "bottom": 651.8375244140625,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "TEXTAREA",
+    "id": "node-criteria",
+    "text": "",
+    "rect": {
+      "x": 194,
+      "y": 561.8375244140625,
+      "width": 583.2000122070312,
+      "height": 90,
+      "top": 561.8375244140625,
+      "right": 777.2000122070312,
+      "bottom": 651.8375244140625,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "Ajouter une entrée",
+    "rect": {
+      "x": 206.8000030517578,
+      "y": 562.2374877929688,
+      "width": 134.375,
+      "height": 36,
+      "top": 562.2374877929688,
+      "right": 341.1750030517578,
+      "bottom": 598.2374877929688,
+      "left": 206.8000030517578
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "Ajouter une sortie",
+    "rect": {
+      "x": 206.8000030517578,
+      "y": 562.2374877929688,
+      "width": 129.6999969482422,
+      "height": 36,
+      "top": 562.2374877929688,
+      "right": 336.5,
+      "bottom": 598.2374877929688,
+      "left": 206.8000030517578
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "Données de simulation…",
+    "rect": {
+      "x": 194,
+      "y": 604.6375122070312,
+      "width": 169.5,
+      "height": 36,
+      "top": 604.6375122070312,
+      "right": 363.5,
+      "bottom": 640.6375122070312,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "SUMMARY",
+    "id": "",
+    "text": "Contrôle de code (QA)",
+    "rect": {
+      "x": 194,
+      "y": 556.6375122070312,
+      "width": 583.2000122070312,
+      "height": 16.80000114440918,
+      "top": 556.6375122070312,
+      "right": 777.2000122070312,
+      "bottom": 573.4375133514404,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "SUMMARY",
+    "id": "",
+    "text": "Organisation de l’étape",
+    "rect": {
+      "x": 194,
+      "y": 602.2374877929688,
+      "width": 583.2000122070312,
+      "height": 16.80000114440918,
+      "top": 602.2374877929688,
+      "right": 777.2000122070312,
+      "bottom": 619.0374889373779,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "SELECT",
+    "id": "node-effort",
+    "text": "Utiliser le niveau de la conversation\nlow\nmedium\nhigh\nxhigh",
+    "rect": {
+      "x": 194,
+      "y": 546.6375122070312,
+      "width": 583.2000122070312,
+      "height": 38,
+      "top": 546.6375122070312,
+      "right": 777.2000122070312,
+      "bottom": 584.6375122070312,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "SUMMARY",
+    "id": "",
+    "text": "Outils et plugins de cette étape",
+    "rect": {
+      "x": 194,
+      "y": 613.4375,
+      "width": 583.2000122070312,
+      "height": 16.80000114440918,
+      "top": 613.4375,
+      "right": 777.2000122070312,
+      "bottom": 630.2375011444092,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "SUMMARY",
+    "id": "",
+    "text": "Entrées et sorties",
+    "rect": {
+      "x": 194,
+      "y": 556.6375122070312,
+      "width": 583.2000122070312,
+      "height": 16.80000114440918,
+      "top": 556.6375122070312,
+      "right": 777.2000122070312,
+      "bottom": 573.4375133514404,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "SUMMARY",
+    "id": "",
+    "text": "Reprises, ressources et position",
+    "rect": {
+      "x": 194,
+      "y": 602.2374877929688,
+      "width": 583.2000122070312,
+      "height": 16.80000114440918,
+      "top": 602.2374877929688,
+      "right": 777.2000122070312,
+      "bottom": 619.0374889373779,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  },
+  {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "Appliquer au bloc",
+    "rect": {
+      "x": 194,
+      "y": 547.4375,
+      "width": 583.2000122070312,
+      "height": 36,
+      "top": 547.4375,
+      "right": 777.2000122070312,
+      "bottom": 583.4375,
+      "left": 194
+    },
+    "outline": "rgb(131, 148, 245) solid 2.4px"
+  }
+]

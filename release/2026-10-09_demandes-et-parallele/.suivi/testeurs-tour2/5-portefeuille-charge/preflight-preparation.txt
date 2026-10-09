@@ -1,0 +1,4 @@
+/tmp/tricorder-portefeuille-preparation-1Lfa3Q/bin/codex
+/tmp/tricorder-portefeuille-preparation-1Lfa3Q/bin/claude
+PORTEFEUILLE-CHARGE-STUB-CODEX 1.0-local
+PORTEFEUILLE-CHARGE-STUB-CLAUDE 1.0-local

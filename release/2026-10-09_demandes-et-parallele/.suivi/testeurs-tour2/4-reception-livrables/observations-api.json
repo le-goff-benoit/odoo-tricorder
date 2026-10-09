@@ -1,0 +1,59 @@
+{
+  "pageErrors": [],
+  "items": [
+    {
+      "request": "P1 — Réunion Atlas : restituer décision, responsable et échéance. FICTION DE RECETTE.\nSource : sources/reunion-atlas.md",
+      "run": "rf6cb39d76e814d9d",
+      "status": "completed",
+      "outcome": "succeeded",
+      "work": {
+        "status": "accepted"
+      }
+    },
+    {
+      "request": "P2 — Contrat fictif : comparer 650 € au budget de 500 € et rendre un avis. FICTION DE RECETTE.\nSource : sources/contrat-fictif.md",
+      "run": "r65574ee953c14059",
+      "status": "completed",
+      "outcome": "succeeded",
+      "work": {
+        "status": "accepted"
+      }
+    },
+    {
+      "request": "P2-technique — Génération interrompue ; incident technique simulé, aucun livrable produit.",
+      "run": "rc0c415f605bd45b6",
+      "status": "active",
+      "outcome": null,
+      "work": {
+        "status": "returned"
+      }
+    },
+    {
+      "request": "P3 — Atelier Boréal : préparer un brouillon d’invitation et demander le lieu manquant. FICTION, AUCUN ENVOI.\nSource : sources/demande-boreal.md",
+      "run": "r404cd321319441b8",
+      "status": "completed",
+      "outcome": "succeeded",
+      "work": {
+        "status": "accepted"
+      }
+    },
+    {
+      "request": "P4 — Réunion Atlas : reprendre le compte rendu s’il manque une date. FICTION DE RECETTE.\nSource : sources/reunion-atlas.md",
+      "run": "r3cdec57dc8d74a6e",
+      "status": "completed",
+      "outcome": "succeeded",
+      "work": {
+        "status": "accepted"
+      }
+    },
+    {
+      "request": "P5 — Bilan de passation après plusieurs demandes : résultats, reprises, limites et suite. FICTION DE RECETTE.",
+      "run": "r0c8dc70c3f5f4317",
+      "status": "completed",
+      "outcome": "succeeded",
+      "work": {
+        "status": "accepted"
+      }
+    }
+  ]
+}

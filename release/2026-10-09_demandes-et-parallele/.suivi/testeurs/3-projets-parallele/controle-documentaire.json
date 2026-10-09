@@ -1,0 +1,15 @@
+{
+  "scope": "Artefacts déjà collectés du seul testeur 3",
+  "images_initiales_inspectees": 20,
+  "captures_conservees": 19,
+  "textes_json_markdown_inspectes": 11,
+  "emails_comptes_tokens_sessions_privees_observes": false,
+  "sortie_reelle_retiree": {
+    "nom": "08-terminal-multidemandes.png",
+    "raison": "Accueil générique du vrai CLI, sortie non synthétique",
+    "original_prive": "/tmp/tricorder-functional-parallele-private-audit/08-terminal-multidemandes.png",
+    "sha256_original": "e0e312f8094f6b103b59d67f9956b65fed138c0c4c0b684d4a7658031cc55002",
+    "modifie": false
+  },
+  "comptes_journaux_reels_ouverts": false
+}

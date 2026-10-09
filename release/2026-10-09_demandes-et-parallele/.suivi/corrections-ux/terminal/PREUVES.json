@@ -1,0 +1,38 @@
+{
+  "candidate": "source renderer; not packaged application",
+  "renderer_sha256": "6bf00be3b50c9e2d0876f893f8dbbe8b0f8b3e893e4e30542bb77cf41a940c0c",
+  "tests": "4 passed (42.1s), completed case strengthened and passed (8.9s)",
+  "captures_visually_reviewed": true,
+  "captures": [
+    {
+      "file": "captures/cross-project-named-context.png",
+      "sha256": "0ea9642f0a768487a54e2d854492f05da730ed5c832bc8fc0584ddf73dcf1879",
+      "bytes": 129741
+    },
+    {
+      "file": "captures/completed-without-agent-restart.png",
+      "sha256": "ee7fc1cd89406ee88f70305979103d1dcacf678e870985a184970bcecf1ede4e",
+      "bytes": 128538
+    },
+    {
+      "file": "captures/manual-suspension-next-action.png",
+      "sha256": "0e5669bbfdfa3530bb3758101cf4232e363b7f1fedfbbe433f3c6a382b514d30",
+      "bytes": 165817
+    },
+    {
+      "file": "captures/automatic-dependency-without-resume.png",
+      "sha256": "bcd964a1dd2a98c88cb92d17a3cd9c340945d37dc1a76c35455c4c4a39e8d117",
+      "bytes": 166121
+    },
+    {
+      "file": "captures/same-terminal-after-explicit-resume.png",
+      "sha256": "26b72415144766422eb376c09183add733ec4f622158aba7f1dc6eeebcc670ab",
+      "bytes": 168429
+    },
+    {
+      "file": "captures/activity-agent-stopped.png",
+      "sha256": "191b44a29c445cec9900b62a0ee6f7024f50d28b06949fd0a97c38545326442b",
+      "bytes": 78373
+    }
+  ]
+}

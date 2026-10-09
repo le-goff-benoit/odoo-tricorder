@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+(node:1152228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:43:1 › a reused composite method clears nested execution context and preserves instructions and business parameters (5.3s)
+  ✓  2 release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:63:1 › double submission of a reuse form creates one copy without a false failure after success (3.8s)
+  ✓  3 release/2026-10-09_demandes-et-parallele/.suivi/corrections-ux/review-reuse-safety.spec.cjs:75:1 › an explicitly selected revised document replaces the automatic same-name mapping to that input (3.9s)
+
+  3 passed (13.5s)

@@ -1,0 +1,14 @@
+
+Running 7 tests using 1 worker
+
+(node:1082797) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/studio.spec.cjs:246:1 › template creation has a real terminal; file edits require validated reload (5.5s)
+  ✓  2 tests/studio.spec.cjs:296:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (5.5s)
+  ✓  3 tests/workflow-creation-feedback.spec.cjs:42:1 › typed simulation data persists and a false boolean follows only the normal branch (6.6s)
+  ✓  4 tests/workflow-creation-feedback.spec.cjs:77:1 › removing a middle block announces detached data and launch guidance leads to a repairable link (4.1s)
+  ✓  5 tests/workflow-creation-feedback.spec.cjs:102:1 › integrated template copies are explicitly named and the source remains available (3.5s)
+  ✓  6 tests/workflow-creation-feedback.spec.cjs:121:1 › navigation records pending block edits and provider installation is not described as an authenticated connection (4.3s)
+  ✓  7 tests/workflow-creation-feedback.spec.cjs:138:1 › portable import previews named blocks and data before optional technical JSON (3.7s)
+
+  7 passed (33.9s)

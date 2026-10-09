@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-09T20:08:24.086Z",
+  "executable": {
+    "path": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder",
+    "sha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3"
+  },
+  "asar": {
+    "path": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/app.asar",
+    "sha256": "0ddb18c66b49d3c0713c0292a997897bef144da03a7407516d14e922c4b4807a"
+  },
+  "sameCandidate": true,
+  "captures": [
+    "01-commande-simple-01-depart-terminal.png",
+    "01-dessin-termine.png",
+    "01-reouverture.png",
+    "02-consignes-resultats-01-configuration-incomplete.png",
+    "02-consignes-resultats-02-correction.png",
+    "02-consignes-resultats-03-reouverture.png",
+    "03-validation-humaine-01-question-vide.png",
+    "03-validation-humaine-02-validation-configuree.png",
+    "03-validation-humaine-03-dessin-reouvert.png",
+    "04-premier-essai-reprise-01-instruction-essai.png",
+    "04-premier-essai-reprise-02-retour-stub.png",
+    "04-premier-essai-reprise-03-definition-modifiee.png"
+  ],
+  "cleanup": "Application et broker de chaque banc fermés, aucun Xserver arrêté.",
+  "stubExecutablesRemoved": true
+}

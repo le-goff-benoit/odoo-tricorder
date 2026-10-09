@@ -1,0 +1,82 @@
+
+Running 7 tests using 1 worker
+
+(node:1080777) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/studio.spec.cjs:246:1 › template creation has a real terminal; file edits require validated reload (5.6s)
+  ✓  2 tests/studio.spec.cjs:296:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (5.5s)
+  ✓  3 tests/workflow-creation-feedback.spec.cjs:42:1 › typed simulation data persists and a false boolean follows only the normal branch (6.7s)
+  ✘  4 tests/workflow-creation-feedback.spec.cjs:77:1 › removing a middle block announces detached data and launch guidance leads to a repairable link (4.0s)
+(node:1081811) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 tests/workflow-creation-feedback.spec.cjs:100:1 › integrated template copies are explicitly named and the source remains available (3.8s)
+  ✓  6 tests/workflow-creation-feedback.spec.cjs:119:1 › navigation records pending block edits and provider installation is not described as an authenticated connection (4.6s)
+  ✘  7 tests/workflow-creation-feedback.spec.cjs:136:1 › portable import previews named blocks and data before optional technical JSON (3.3s)
+
+
+  1) tests/workflow-creation-feedback.spec.cjs:77:1 › removing a middle block announces detached data and launch guidance leads to a repairable link 
+
+    Error: expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 0
+    Received array:  []
+
+       95 |   await page.getByRole('button', { name: 'Créer la connexion', exact: true }).click();
+       96 |   await page.getByRole('button', { name: 'Exécuter…', exact: true }).click(); await expect(page.getByRole('dialog').locator('.design-guidance')).toHaveCount(0);
+    >  97 |   expect((await snapshot()).edges).toHaveLength(1);
+          |                                    ^
+       98 | });
+       99 |
+      100 | test('integrated template copies are explicitly named and the source remains available', async () => {
+        at /home/blegoff/odoo-tricorder/tests/workflow-creation-feedback.spec.cjs:97:36
+
+    Error Context: test-results/workflow-creation-feedback-c68d0--leads-to-a-repairable-link/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-creation-feedback-c68d0--leads-to-a-repairable-link/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-creation-feedback-c68d0--leads-to-a-repairable-link/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/workflow-creation-feedback.spec.cjs:136:1 › portable import previews named blocks and data before optional technical JSON 
+
+    Error: expect(locator).toBeHidden() failed
+
+    Locator: getByRole('dialog').locator('pre')
+    Expected: hidden
+    Error: strict mode violation: getByRole('dialog').locator('pre') resolved to 3 elements:
+        1) <pre tabindex="0">{↵  "consigne": "Synthétiser les besoins du clien…</pre> aka getByText('{ "consigne": "Synthétiser')
+        2) <pre tabindex="0">{↵  "entrées": {↵    "dossier": "string"↵  },↵  "…</pre> aka getByText('{ "entrées": { "dossier": "')
+        3) <pre>{↵  "edges": [↵    {↵      "from": "collect",↵   …</pre> aka getByText('{ "edges": [ { "from": "')
+
+    Call log:
+      - Expect "toBeHidden" getByRole('dialog').locator('pre') with timeout 5000ms
+      - waiting for getByRole('dialog').locator('pre')
+
+
+      148 |   await expect(dialog).toContainText('Synthétiser les besoins du client fictif.');
+      149 |   await expect(dialog).toContainText('Préparer le dossier métier → Relire le dossier métier');
+    > 150 |   await expect(dialog.locator('pre')).toBeHidden();
+          |                                       ^
+      151 |   await page.screenshot({ path: test.info().outputPath('portable-business-preview.png') });
+      152 |   await dialog.getByLabel('Destination', { exact: true }).selectOption(project.id); await dialog.getByRole('button', { name: 'Importer le brouillon', exact: true }).click();
+      153 |   await expect(page.getByRole('dialog')).toHaveCount(0);
+        at /home/blegoff/odoo-tricorder/tests/workflow-creation-feedback.spec.cjs:150:39
+
+    Error Context: test-results/workflow-creation-feedback-38bb9-ore-optional-technical-JSON/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/workflow-creation-feedback-38bb9-ore-optional-technical-JSON/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/workflow-creation-feedback-38bb9-ore-optional-technical-JSON/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/workflow-creation-feedback.spec.cjs:77:1 › removing a middle block announces detached data and launch guidance leads to a repairable link 
+    tests/workflow-creation-feedback.spec.cjs:136:1 › portable import previews named blocks and data before optional technical JSON 
+  5 passed (34.5s)

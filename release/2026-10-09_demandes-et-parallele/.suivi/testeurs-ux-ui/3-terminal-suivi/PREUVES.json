@@ -1,0 +1,76 @@
+{
+  "captures": [
+    {
+      "file": "captures/terminal-suivi-01-entree.png",
+      "sha256": "457ded9e62db11c8ff605480210e51dce70a395a1997ed39f4f11e7d2e370d86"
+    },
+    {
+      "file": "captures/terminal-suivi-03-projet.png",
+      "sha256": "85bf2516dd43de5d3d9d779ee1bd54827b3483890de52aba96621cffb3cba76f"
+    },
+    {
+      "file": "captures/terminal-suivi-05-preflight-terminal.png",
+      "sha256": "672a80286f473c62ea4192f73f4ff4982c531415dd32104a9ab569d841a470d1"
+    },
+    {
+      "file": "captures/terminal-suivi-06-saisie-avant.png",
+      "sha256": "29250e975bc91a0c4b99d99b0ca05181ae671beca005808a6d95d1b563354931"
+    },
+    {
+      "file": "captures/terminal-suivi-09-apres-navigation.png",
+      "sha256": "9da0f476365af7161a76e308a4aeff05cf520bc6b8abcc467b9e713fb4e099cf"
+    },
+    {
+      "file": "captures/terminal-suivi-10-retour-terminal.png",
+      "sha256": "3244aeeea0392d38d3c6c7b0f15c062e003658806e2e9423ea41a3c4c0664251"
+    },
+    {
+      "file": "captures/terminal-suivi-11-split-horizontal.png",
+      "sha256": "83ca726db1699a40598c4efddd3ff320eeec74833d6b592419a593c47935ea0a"
+    },
+    {
+      "file": "captures/terminal-suivi-12-split-1280.png",
+      "sha256": "c00a0f8159eb3efaf1e12a45f980a772c99d7b2b664ecbdb50994886bdaf8653"
+    },
+    {
+      "file": "captures/terminal-suivi-13-workflow-release.png",
+      "sha256": "3a99f5f895e6e790f8ac27ff8da9cf386c1fa72e4a4d8efdef48f099d10c7bc8"
+    },
+    {
+      "file": "captures/terminal-suivi-14-sortie-stub.png",
+      "sha256": "8f5ced75aa208793f487636d910557dddb4d6b32b0ecc00258fe8626b7975235"
+    },
+    {
+      "file": "captures/terminal-suivi-15-liste-demandes-arret.png",
+      "sha256": "388fd170d52cdbbd6124b2841d79898189db262e6934a766639b2a377100841d"
+    },
+    {
+      "file": "captures/terminal-suivi-16-r2-dependance.png",
+      "sha256": "29442c1f10f1f2a34e263261b7d103ba9ff2b780fa278a9841dad3978dedcd29"
+    },
+    {
+      "file": "captures/terminal-suivi-17-r3-cross-projet-creation.png",
+      "sha256": "35a62dd734c733afbddc8a4534abec45af59a188010b60541e9a7cb3b9c2ee68"
+    },
+    {
+      "file": "captures/terminal-suivi-18-vue-ensemble-r1-r4.png",
+      "sha256": "3fe96f142328bfc50cf1735404a8c908576cf6c1ab5083802a6448c8fc3e411b"
+    },
+    {
+      "file": "captures/terminal-suivi-19-r3-contexte.png",
+      "sha256": "61cf98475ec51ad94d0530bfc6f083973bd191e71442752adc955beced7bfe5e"
+    },
+    {
+      "file": "captures/terminal-suivi-20-prerequis-attente-suspension.png",
+      "sha256": "9b97e0fd1adce344b10cac71863fc060d2a64bfb889a06ac2537eb269d18763a"
+    },
+    {
+      "file": "captures/terminal-suivi-21-suspension-journal.png",
+      "sha256": "9c5433b0c6ddb13a1988fe7138fa946370863c5637b8c2e6d3dc848a17e715d5"
+    }
+  ],
+  "count": 17,
+  "observedVisually": true,
+  "AIWorkExecuted": false,
+  "engineStateInjected": false
+}

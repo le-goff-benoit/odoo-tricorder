@@ -1,0 +1,76 @@
+[
+  {
+    "campaign": "source",
+    "trace": "/tmp/tricorder-rc12-final-ui-source/execution-interactions-ter-e2b07-h-navigation-and-agent-exit/trace.zip",
+    "sha256": "a46c6d0a5bacedda6f11892fd092de5a2032ccf726217cda54d7e2d790c58f81",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "pw:api@38",
+        "endTime": 233904.251,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n",
+          "stack": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs:183:80"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "package",
+    "trace": "/home/blegoff/odoo-tricorder/test-results/execution-interactions-ter-e2b07-h-navigation-and-agent-exit/trace.zip",
+    "sha256": "9d2f033926739bc2da78096982ff2a8c1fe2c1d6a656a5f34b9026c090398b86",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "pw:api@37",
+        "endTime": 242032.139,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n",
+          "stack": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs:183:80"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "source",
+    "case": "a stopped conversation",
+    "trace": "/tmp/tricorder-rc12-final-ui-source/execution-interactions-a-s-7eeca-ng-requests-or-its-terminal/trace.zip",
+    "sha256": "4d7e5c1e64070f879e3d0181199ff60af4158c0e8cf2540eaf0becc9d2493108",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "pw:api@42",
+        "endTime": 265964.921,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n",
+          "stack": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs:222:81"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "package",
+    "case": "a stopped conversation",
+    "trace": "/home/blegoff/odoo-tricorder/test-results/execution-interactions-a-s-7eeca-ng-requests-or-its-terminal/trace.zip",
+    "sha256": "bf2738da3fac68207f60079d6e39dc5a61784f2d7d800099615d31dcecd3d738",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "pw:api@41",
+        "endTime": 274382.375,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n",
+          "stack": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retrouver la conversation', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs:222:81"
+        }
+      }
+    ]
+  }
+]

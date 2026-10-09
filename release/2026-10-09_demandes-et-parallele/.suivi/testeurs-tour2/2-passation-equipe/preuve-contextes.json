@@ -1,0 +1,731 @@
+{
+  "original": {
+    "contract": "72dbe3d6d500a1783b909f26942840314471c09eddccb51af8e43fcb20aec36f",
+    "created": 1791574113.752321,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "description": "Coordonner les bénévoles et faire valider le programme de l’exposition.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "work-e0e2053c-b332-4f26-9de3-cb68fbc857bf-import-966a370a77fe",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {
+        "conversation": "cee9f1864ba634ce0",
+        "depends_on_runs": [],
+        "request": "Valider le programme Nord, preuve synthetique PROGRAMME-NORD-01."
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Préparer une exposition — Nord"
+    },
+    "driver": "conversation",
+    "id": "r759e13b95e5b491d",
+    "nodes": {
+      "analyse": {
+        "attempt": 1,
+        "finished": 1791574160.7595575,
+        "heartbeat": 1791574160.748181,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791574172.3630192,
+          "checks": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "contract": "72dbe3d6d500a1783b909f26942840314471c09eddccb51af8e43fcb20aec36f",
+          "note": "Programme Nord compris et relu. Validation synthetique limitee au contexte Nord."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {},
+          "summary": "PROGRAMME-NORD-01 : trois ateliers confirmes, preuve synthetique."
+        },
+        "started": 1791574160.7481806,
+        "status": "accepted",
+        "token": "t1f176dcf1c28420c"
+      },
+      "bilan": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "status": "ready"
+      },
+      "build": {
+        "attempt": 1,
+        "finished": 1791574182.052159,
+        "heartbeat": 1791574182.0474672,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791574190.889758,
+          "checks": [],
+          "contract": "72dbe3d6d500a1783b909f26942840314471c09eddccb51af8e43fcb20aec36f",
+          "note": "Programme accepte pour Nord uniquement."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "31ec75f6955c2d205208433f55b8f761da22077609a2eea0bde09b159d5bb0db",
+              "size": 64
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "summary": "Programme Nord propose : PROGRAMME-NORD-01."
+        },
+        "started": 1791574182.047467,
+        "status": "accepted",
+        "token": "tf087e67ab3424369"
+      },
+      "decision": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791574205.9211526,
+          "note": "Autorise uniquement le bilan du programme Nord PROGRAMME-NORD-01.",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "749274c8aa22ba6665e288bdd2d33fae3e7ac56023568e5c433b974e1adc4fe4"
+        },
+        "input_sources": {},
+        "inputs": {},
+        "nonce": "d8f743b3cc1ab4796",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "749274c8aa22ba6665e288bdd2d33fae3e7ac56023568e5c433b974e1adc4fe4",
+        "status": "accepted"
+      },
+      "join": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "result": {
+          "outputs": {}
+        },
+        "status": "accepted"
+      },
+      "test": {
+        "attempt": 1,
+        "finished": 1791574182.0577714,
+        "heartbeat": 1791574182.0551438,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791574195.5488508,
+          "checks": [],
+          "contract": "72dbe3d6d500a1783b909f26942840314471c09eddccb51af8e43fcb20aec36f",
+          "note": "Verification synthetique Nord recue."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {},
+          "summary": "Les trois ateliers Nord sont presentes. Verification synthetique."
+        },
+        "started": 1791574182.0551436,
+        "status": "accepted",
+        "token": "te8448b341ed34bbd"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "description": "Coordonner les bénévoles et faire valider le programme de l’exposition.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "work-e0e2053c-b332-4f26-9de3-cb68fbc857bf-import-966a370a77fe",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 1,
+      "title": "Préparer une exposition — Nord"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "cee9f1864ba634ce0",
+      "depends_on_runs": [],
+      "request": "Valider le programme Nord, preuve synthetique PROGRAMME-NORD-01."
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-tour2-passation-zKjsde/atelier-nord/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "pef5f0faefc234d48",
+    "release": "",
+    "scope": {
+      "id": "pef5f0faefc234d48",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791574205.9212558
+  },
+  "nouveau": {
+    "contract": "de18c2375add29c9b5e6eeb53781331a5877816d21287a3199fbb362d48e9780",
+    "created": 1791574275.292347,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "description": "Programme Sud : cinq ateliers. Chaque equipe doit valider ses propres resultats.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "work-e0e2053c-b332-4f26-9de3-cb68fbc857bf-import-966a370a77fe",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {
+        "conversation": "c761590bb89c24736",
+        "depends_on_runs": [],
+        "request": "Preparer cinq ateliers Sud, sans reprendre accord Nord."
+      },
+      "revision": 2,
+      "schema": 1,
+      "title": "Préparer une exposition — Sud v2"
+    },
+    "driver": "conversation",
+    "id": "r3eb4e17f8b594286",
+    "nodes": {
+      "analyse": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "status": "ready"
+      },
+      "bilan": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "build": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "decision": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "join": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "test": {
+        "attempt": 0,
+        "status": "pending"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "description": "Programme Sud : cinq ateliers. Chaque equipe doit valider ses propres resultats.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "work-e0e2053c-b332-4f26-9de3-cb68fbc857bf-import-966a370a77fe",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {},
+      "revision": 2,
+      "schema": 1,
+      "title": "Préparer une exposition — Sud v2"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "c761590bb89c24736",
+      "depends_on_runs": [],
+      "request": "Preparer cinq ateliers Sud, sans reprendre accord Nord."
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-tour2-passation-zKjsde/atelier-sud-modele/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "pe51865cd63774d1b",
+    "release": "",
+    "scope": {
+      "id": "pe51865cd63774d1b",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791574275.2929611
+  },
+  "comparaison": {
+    "accordNordConserve": true,
+    "preuveNordConservee": true,
+    "nouvelAccord": false,
+    "nouvellePreuve": false
+  }
+}

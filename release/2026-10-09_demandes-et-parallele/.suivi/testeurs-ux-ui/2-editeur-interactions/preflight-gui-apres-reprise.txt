@@ -1,0 +1,20 @@
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+lows/workspace/.tricorder$ c
+ommand -v codex; codex --version; command -v claude; claude --version
+/tmp/tricorder-ux-editeur-interactions-Shc1pQ/stubs/codex
+codex 0.0.0 TRICORDER-UX-INERT
+/tmp/tricorder-ux-editeur-interactions-Shc1pQ/stubs/claude
+claude 0.0.0 TRICORDER-UX-INERT
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+lows/workspace/.tricorder$ command -v codex; codex --version; command -v
+ claude; claude --version
+/tmp/tricorder-ux-editeur-interactions-Shc1pQ/stubs/codex
+codex 0.0.0 TRICORDER-UX-INERT
+/tmp/tricorder-ux-editeur-interactions-Shc1pQ/stubs/claude
+claude 0.0.0 TRICORDER-UX-INERT
+blegoff@wrk226:/tmp/tricorder-ux-editeur-interactions-Shc1pQ/state/workf
+lows/workspace/.tricorder$  

@@ -1,0 +1,5 @@
+{"input": "null", "state": "returned", "summary": "'NoneType' object has no attribute 'get'", "next": "pending", "transcripts_remaining": 0}
+{"input": "[]", "state": "returned", "summary": "'list' object has no attribute 'get'", "next": "pending", "transcripts_remaining": 0}
+{"input": "42", "state": "returned", "summary": "'int' object has no attribute 'get'", "next": "pending", "transcripts_remaining": 0}
+{"input": "\"unexpected\"", "state": "returned", "summary": "'str' object has no attribute 'get'", "next": "pending", "transcripts_remaining": 0}
+{"input": "{\"type\":\"item.completed\",\"item\":null}", "state": "returned", "summary": "'NoneType' object has no attribute 'get'", "next": "pending", "transcripts_remaining": 0}

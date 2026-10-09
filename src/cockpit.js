@@ -105,7 +105,11 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       const waiting = awaiting.has(el.dataset.project);
       el.classList.toggle('needs-human', waiting);
       el.querySelector('.human-alert')?.remove();
-      if (waiting) { el.insertAdjacentHTML('beforeend', '<span class="human-alert" aria-label="Décision humaine attendue">!</span>'); el.title = 'Dernière attente humaine non résolue : ouvrir le terminal ou le workflow.'; }
+      const title = el.dataset.projectTitle || el.querySelector('.project-name')?.title || '';
+      if (waiting) {
+        el.insertAdjacentHTML('beforeend', '<span class="human-alert" aria-label="Décision humaine attendue">!</span>');
+        el.title = `${title}${title ? '\n' : ''}Dernière attente humaine non résolue : ouvrir le terminal ou le workflow.`;
+      } else if (title) el.title = title;
       else el.removeAttribute('title');
     }
   }

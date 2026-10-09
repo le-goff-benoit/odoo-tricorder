@@ -1,0 +1,35 @@
+{
+  "defaults": {
+    "model": "synthetic-model",
+    "provider": "codex"
+  },
+  "description": "Fixture de parcours, aucun fournisseur ni travail client réel qualifié.",
+  "edges": [],
+  "id": "reception-fixtures",
+  "nodes": [
+    {
+      "criteria": [
+        "Les données de la source fictive sont restituées exactement.",
+        "Les limites de simulation et la suite sont explicites."
+      ],
+      "evidence_required": true,
+      "id": "work",
+      "kind": "agent",
+      "max_attempts": 3,
+      "options": [
+        "pass",
+        "fail"
+      ],
+      "outputs": {
+        "report": "object",
+        "verdict": "string"
+      },
+      "prompt": "Fixture de recette, ne pas appeler de modèle réel.",
+      "route_output": "verdict",
+      "title": "Examiner le livrable fictif",
+      "validation": "human"
+    }
+  ],
+  "schema": 1,
+  "title": "Réception documentaire — fixtures fictives"
+}

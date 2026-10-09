@@ -1,0 +1,62 @@
+[
+  {
+    "seq": 9,
+    "at": 1791574117.011291,
+    "node": null,
+    "simulation": false,
+    "type": "started"
+  },
+  {
+    "seq": 10,
+    "at": 1791574117.0113344,
+    "node": "work",
+    "type": "ready"
+  },
+  {
+    "seq": 21,
+    "at": 1791574117.044641,
+    "attempt": 1,
+    "node": "work",
+    "type": "running"
+  },
+  {
+    "seq": 22,
+    "at": 1791574117.0468009,
+    "attempt": 1,
+    "node": "work",
+    "type": "returned"
+  },
+  {
+    "seq": 32,
+    "at": 1791574203.447169,
+    "node": "work",
+    "note": "Ajouter l’échéance au 16 octobre 2026 et conserver la décision de report. Première tentative incomplète.",
+    "type": "retry"
+  },
+  {
+    "seq": 33,
+    "at": 1791574205.83296,
+    "attempt": 2,
+    "node": "work",
+    "type": "running"
+  },
+  {
+    "seq": 34,
+    "at": 1791574205.8382018,
+    "attempt": 2,
+    "node": "work",
+    "type": "returned"
+  },
+  {
+    "seq": 35,
+    "at": 1791574219.8448925,
+    "node": "work",
+    "type": "accepted"
+  },
+  {
+    "seq": 36,
+    "at": 1791574219.8449452,
+    "node": null,
+    "type": "completed"
+  }
+]

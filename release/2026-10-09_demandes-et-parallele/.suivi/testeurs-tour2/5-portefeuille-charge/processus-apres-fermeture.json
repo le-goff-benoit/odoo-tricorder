@@ -1,0 +1,32 @@
+[
+  {
+    "pid": 998009,
+    "executable": "chromium --gpu-preferences=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --field-trial-handle=3,i,654257787663933971,14168839773560688189,262144 --enable-features=PdfUseShowSaveFilePicker --disable-features=DropInputEventsWhilePaintHolding,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --pseudonymization-salt-handle=7,i,3231915278358181237,7420313348576972149,4 --trace-process-track-uuid=3190708988185955192",
+    "command": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder --type=gpu-process --no-sandbox --ozone-platform=x11 --enable-crash-reporter=ef2d1eb2-1afd-4c73-bb00-bdcbe5b9db97,no_channel --user-data-dir=/tmp/tricorder-portefeuille-volume-7vYIrw/state/chromium --gpu-preferences=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --field-trial-handle=3,i,654257787663933971,14168839773560688189,262144 --enable-features=PdfUseShowSaveFilePicker --disable-features=DropInputEventsWhilePaintHolding,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --pseudonymization-salt-handle=7,i,3231915278358181237,7420313348576972149,4 --trace-process-track-uuid=3190708988185955192 "
+  },
+  {
+    "pid": 998014,
+    "executable": "chromium --standard-schemes=tricorder --secure-schemes=tricorder --fetch-schemes=tricorder --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,654257787663933971,14168839773560688189,262144 --enable-features=PdfUseShowSaveFilePicker --disable-features=DropInputEventsWhilePaintHolding,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --pseudonymization-salt-handle=7,i,3231915278358181237,7420313348576972149,4 --trace-process-track-uuid=3190708989122997041",
+    "command": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --no-sandbox --enable-crash-reporter=ef2d1eb2-1afd-4c73-bb00-bdcbe5b9db97,no_channel --user-data-dir=/tmp/tricorder-portefeuille-volume-7vYIrw/state/chromium --standard-schemes=tricorder --secure-schemes=tricorder --fetch-schemes=tricorder --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,654257787663933971,14168839773560688189,262144 --enable-features=PdfUseShowSaveFilePicker --disable-features=DropInputEventsWhilePaintHolding,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --pseudonymization-salt-handle=7,i,3231915278358181237,7420313348576972149,4 --trace-process-track-uuid=3190708989122997041 "
+  },
+  {
+    "pid": 998022,
+    "executable": "app.asar --enable-sandbox --no-sandbox --remote-debugging-port=0 --ozone-platform=x11 --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=4 --launch-time-ticks=86389982320 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,654257787663933971,14168839773560688189,262144 --enable-features=PdfUseShowSaveFilePicker --disable-features=DropInputEventsWhilePaintHolding,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --pseudonymization-salt-handle=7,i,3231915278358181237,7420313348576972149,4 --trace-process-track-uuid=3190708990060038890",
+    "command": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder --type=renderer --enable-crash-reporter=ef2d1eb2-1afd-4c73-bb00-bdcbe5b9db97,no_channel --user-data-dir=/tmp/tricorder-portefeuille-volume-7vYIrw/state/chromium --standard-schemes=tricorder --secure-schemes=tricorder --fetch-schemes=tricorder --app-path=/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/app.asar --enable-sandbox --no-sandbox --remote-debugging-port=0 --ozone-platform=x11 --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=4 --launch-time-ticks=86389982320 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,654257787663933971,14168839773560688189,262144 --enable-features=PdfUseShowSaveFilePicker --disable-features=DropInputEventsWhilePaintHolding,LocalNetworkAccessChecks,ScreenAIOCREnabled,SpareRendererForSitePerProcess,TraceSiteInstanceGetProcessCreation --variations-seed-version --pseudonymization-salt-handle=7,i,3231915278358181237,7420313348576972149,4 --trace-process-track-uuid=3190708990060038890 "
+  },
+  {
+    "pid": 1027098,
+    "executable": "python3",
+    "command": "python3 /home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/backend/terminal_service.py /tmp/tricorder-portefeuille-bilan-Bp8AYv/pty/pty.sock "
+  },
+  {
+    "pid": 1027461,
+    "executable": "bash",
+    "command": "/bin/bash --noprofile --rcfile /tmp/tricorder-portefeuille-bilan-Bp8AYv/tmp/tricorder-shell-1nkpjh_e -i "
+  },
+  {
+    "pid": 1033152,
+    "executable": "python3",
+    "command": "/usr/bin/python3 /tmp/tricorder-portefeuille-bilan-Bp8AYv/bin/codex app-server proxy "
+  }
+]

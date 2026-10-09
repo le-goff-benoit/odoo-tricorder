@@ -1,0 +1,7 @@
+Annuler cette exécution
+×
+
+Les étapes non commencées ne seront plus lancées. Les outils en cours reçoivent l’annulation ; un effet externe peut déjà avoir eu lieu. Les résultats, décisions et preuves restent conservés.
+
+Revenir
+Annuler l’exécution

@@ -1,0 +1,152 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+3
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:53
+
+SUIVI · DEMANDE PONCTUELLE
+Préparer le programme fictif d’un atelier de dessin pour six personnes, durée 45 minutes. [UX4 simulation locale]
+
+Demande ponctuelle · Révision 1 figée · Terminée
+
+Options
+Revenir au suivi
+1 demandes
+⌄
+
+Agent arrêté · progression conservée. Aucune étape en cours · 1 terminée
+
+Reprendre l’agent…
+Rapport d’exécution
+Exporter le rapport dans le projet
+Export de release…
+Demande ponctuelle
+Demande
+
+Préparer le programme fictif d’un atelier de dessin pour six personnes, durée 45 minutes. [UX4 simulation locale]
+
+Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.
+
+Plan
+Travail	État	Critères
+Comprendre le résultat attendu	Validé	À préciser
+Effectuer le travail demandé	Validé	À préciser
+Examiner le résultat	Validé	À préciser
+Réalisation
+Comprendre le résultat attendu
+
+[RÉSULTAT SYNTHÉTIQUE UX4] Besoin clarifié : invitation française pour 6 personnes, atelier de 45 minutes.
+
+État : Validé. Tentative 1.
+
+Date enregistrée : 09.10.2026 à 20:50 UTC.
+
+Entrées reçues
+
+Précisions
+
+Élément 1
+
+Réponse
+
+Français. [réponse GUI UX4]
+
+Question
+
+[ÉTAT SYNTHÉTIQUE UX4] Quelle langue souhaitez-vous pour l’invitation à l’atelier fictif ?
+
+Résultat
+
+Brief
+
+Préparer une invitation en français pour 6 personnes, durée 45 minutes. [SYNTHÉTIQUE UX4]
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Effectuer le travail demandé
+
+[RÉSULTAT SYNTHÉTIQUE UX4] Invitation fictive disponible pour votre validation.
+
+État : Validé. Tentative 2.
+
+Date enregistrée : 09.10.2026 à 20:51 UTC.
+
+Entrées reçues
+
+Brief
+
+Préparer une invitation en français pour 6 personnes, durée 45 minutes. [SYNTHÉTIQUE UX4]
+
+Résultat
+
+Résultat
+
+[SYNTHÉTIQUE UX4] Venez dessiner ensemble pendant 45 minutes. Six places sont prévues ; rendez-vous dans la salle imaginaire.
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Tentatives précédentes
+Tentative 1
+
+[ÉCHEC SYNTHÉTIQUE UX4] Fournisseur local indisponible (sortie 78) ; aucune invitation produite.
+
+État : Échec. Tentative 1.
+
+Date enregistrée : 09.10.2026 à 20:50 UTC.
+
+Entrées reçues
+
+Brief
+
+Préparer une invitation en français pour 6 personnes, durée 45 minutes. [SYNTHÉTIQUE UX4]
+
+Contrôle non satisfait
+
+L'exécutant a signalé un échec
+
+Motif de la reprise suivante
+
+[UX4 GUI] Réessayer après disponibilité du fournisseur fictif ; conserver la clarification française.
+
+Examiner le résultat
+
+Données reçues pour cette étape.
+
+État : Validé. Tentative 1.
+
+Entrées reçues
+
+Résultat
+
+[SYNTHÉTIQUE UX4] Venez dessiner ensemble pendant 45 minutes. Six places sont prévues ; rendez-vous dans la salle imaginaire.
+
+Tests et limites
+
+Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.
+
+Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.
+
+Livraison et documentation
+
+Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.
+
+Décisions et suite
+Comprendre le résultat attendu — question : [ÉTAT SYNTHÉTIQUE UX4] Quelle langue souhaitez-vous pour l’invitation à l’atelier fictif ? Réponse : Français. [réponse GUI UX4]
+Examiner le résultat : Approuvée — décision humaine conservée.
+
+Exécution r8be25da25948424d · contrat d41330d95d6f509169186024ada45ebb518f51c48eb6c75b7c6b32122f43a628.

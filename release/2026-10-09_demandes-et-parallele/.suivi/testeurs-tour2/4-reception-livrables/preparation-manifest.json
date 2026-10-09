@@ -1,0 +1,41 @@
+{
+  "preparedAt": "2026-10-09T19:25:19.629Z",
+  "temporary": "/tmp/tricorder-t2-reception-jj7xtx",
+  "dirs": {
+    "home": "/tmp/tricorder-t2-reception-jj7xtx/home",
+    "config": "/tmp/tricorder-t2-reception-jj7xtx/config",
+    "cache": "/tmp/tricorder-t2-reception-jj7xtx/cache",
+    "data": "/tmp/tricorder-t2-reception-jj7xtx/data",
+    "codex": "/tmp/tricorder-t2-reception-jj7xtx/codex",
+    "claude": "/tmp/tricorder-t2-reception-jj7xtx/claude",
+    "state": "/tmp/tricorder-t2-reception-jj7xtx/state",
+    "runtime": "/tmp/tricorder-t2-reception-jj7xtx/runtime",
+    "agents": "/tmp/tricorder-t2-reception-jj7xtx/agents",
+    "stubs": "/tmp/tricorder-t2-reception-jj7xtx/stubs",
+    "project": "/tmp/tricorder-t2-reception-jj7xtx/project"
+  },
+  "env": {
+    "PATH": "/tmp/tricorder-t2-reception-jj7xtx/stubs:/usr/bin:/bin",
+    "HOME": "/tmp/tricorder-t2-reception-jj7xtx/home",
+    "XDG_CONFIG_HOME": "/tmp/tricorder-t2-reception-jj7xtx/config",
+    "XDG_CACHE_HOME": "/tmp/tricorder-t2-reception-jj7xtx/cache",
+    "XDG_DATA_HOME": "/tmp/tricorder-t2-reception-jj7xtx/data",
+    "XDG_RUNTIME_DIR": "/tmp/tricorder-t2-reception-jj7xtx/runtime",
+    "CODEX_HOME": "/tmp/tricorder-t2-reception-jj7xtx/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tricorder-t2-reception-jj7xtx/claude",
+    "TRICORDER_HOME": "/tmp/tricorder-t2-reception-jj7xtx/home",
+    "TRICORDER_STATE_DIR": "/tmp/tricorder-t2-reception-jj7xtx/state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tricorder-t2-reception-jj7xtx/runtime",
+    "TRICORDER_AGENTS_DIR": "/tmp/tricorder-t2-reception-jj7xtx/agents",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "DISPLAY": ":184",
+    "XAUTHORITY": "/tmp/tricorder-functional-display/auth-184",
+    "SHELL": "/bin/bash",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8"
+  },
+  "preflight": "/tmp/tricorder-t2-reception-jj7xtx/stubs/codex\ncodex 0.0.0 TRICORDER-T2-RECEPTION-STUB\n/tmp/tricorder-t2-reception-jj7xtx/stubs/claude\nclaude 0.0.0 TRICORDER-T2-RECEPTION-STUB\n",
+  "guiStarted": false,
+  "classification": "Préparation du banc — aucun verdict produit"
+}

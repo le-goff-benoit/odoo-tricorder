@@ -1,0 +1,13 @@
+test_dst_gap_skipped_repeated_hour_once_and_weekdays (test_workflow_schedules.SchedulesAndPacksTests) ... ok
+test_invalid_interval_and_timezone_refused (test_workflow_schedules.SchedulesAndPacksTests) ... ok
+test_library_is_independent_and_import_only_reads_bounded_profile_text (test_workflow_schedules.SchedulesAndPacksTests) ... ok
+test_occurrence_is_atomic_no_overlap_no_catchup_storm (test_workflow_schedules.SchedulesAndPacksTests) ... ok
+test_pack_section_imports_only_common_contract_and_selected_role (test_workflow_schedules.SchedulesAndPacksTests) ... ok
+test_schedule_read_model_exposes_frozen_revision_without_expanding_lists (test_workflow_schedules.SchedulesAndPacksTests) ... ok
+test_terminal_reload_validates_definition_preserves_running_snapshot (test_workflow_schedules.SchedulesAndPacksTests) ... ok
+test_unknown_schedule_has_recoverable_read_error (test_workflow_schedules.SchedulesAndPacksTests) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.206s
+
+OK

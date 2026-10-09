@@ -1,0 +1,5 @@
+Entrée : notes brutes d'une réunion fictive.
+Action : produire une synthèse en français, décisions, actions et questions ouvertes.
+Sortie : compte rendu avec objet, trois décisions/actions et responsables/échéances.
+Validation humaine : confirmer la date de l'atelier et corriger les engagements.
+Diffusion : produire un brouillon seulement ; aucun envoi.

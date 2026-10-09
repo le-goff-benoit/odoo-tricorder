@@ -1,0 +1,33 @@
+[
+  {
+    "case": "mixed-node-label",
+    "selected": {
+      "node": "task",
+      "title": "Tâche terminal",
+      "status": "native",
+      "code": "native-step",
+      "action": "terminal",
+      "native_available": true,
+      "reason": "Cette étape utilise les outils de la conversation. Continuez dans le terminal.",
+      "label": "À poursuivre dans le terminal"
+    },
+    "action": {
+      "node": "task",
+      "label": "Voir les instructions",
+      "detail": "Cette étape utilise les outils de la conversation. Continuez dans le terminal."
+    }
+  },
+  {
+    "case": "node-not-projected",
+    "selected": {
+      "status": "unknown",
+      "reason": "La disponibilité de ce bloc n’est pas détaillée sur cette page. Vérifiez sa configuration dans le terminal avant de le lancer.",
+      "label": "À vérifier"
+    },
+    "action": {
+      "node": "task",
+      "label": "Vérifier le bloc",
+      "detail": "La disponibilité de ce bloc n’est pas détaillée sur cette page. Vérifiez sa configuration dans le terminal avant de le lancer."
+    }
+  }
+]

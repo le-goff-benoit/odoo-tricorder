@@ -1,0 +1,7 @@
+/tmp/tricorder-t3-pmo-G65P8c/stubs/codex
+codex 0.0.0 TRICORDER-T3-PMO-STUB
+/tmp/tricorder-t3-pmo-G65P8c/stubs/claude
+claude 0.0.0 TRICORDER-T3-PMO-STUB
+codex: exit=78 TRICORDER-T3-PMO-STUB codex — fournisseur inerte, aucun modèle appelé
+claude: exit=78 TRICORDER-T3-PMO-STUB claude — fournisseur inerte, aucun modèle appelé
+No GUI or broker started.

@@ -1,0 +1,24 @@
+{
+  "copied_parameters": {
+    "timezone": "Europe/Zurich"
+  },
+  "nested_parameters": {
+    "request": "ANCIENNE_DEMANDE_SYNTHETIQUE",
+    "source_context": {
+      "results": {
+        "old": {
+          "summary": "ANCIEN_RESULTAT_SYNTHETIQUE"
+        }
+      }
+    },
+    "language": "fr"
+  },
+  "destination_runs": 0,
+  "original_parameters": {
+    "request": "DEMANDE_PARENTE",
+    "source_context": {
+      "run": "ANCIEN_RUN"
+    },
+    "timezone": "Europe/Zurich"
+  }
+}

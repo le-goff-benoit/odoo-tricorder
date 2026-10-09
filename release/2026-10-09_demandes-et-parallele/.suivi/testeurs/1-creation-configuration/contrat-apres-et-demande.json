@@ -1,0 +1,516 @@
+{
+  "graph": {
+    "defaults": {
+      "model": "modele-synthetique-claude",
+      "provider": "claude"
+    },
+    "description": "Recevoir une demande, qualifier l’impact, poser les questions utiles et préparer la suite. Agent et branches modifiables.",
+    "edges": [
+      {
+        "from": "diagnosis",
+        "id": "route-urgent",
+        "mapping": {
+          "finding": "finding",
+          "next_action": "next_action"
+        },
+        "outcome": "critical",
+        "to": "urgent"
+      },
+      {
+        "from": "diagnosis",
+        "id": "route-normal",
+        "mapping": {
+          "finding": "finding",
+          "next_action": "next_action"
+        },
+        "outcome": "normal",
+        "to": "normal"
+      },
+      {
+        "from": "diagnosis",
+        "id": "route-clarify",
+        "outcome": "unknown",
+        "to": "clarify"
+      },
+      {
+        "from": "clarify",
+        "id": "clarify-reassess",
+        "mapping": {
+          "answer": "answer"
+        },
+        "outcome": "done",
+        "to": "reassess"
+      },
+      {
+        "from": "reassess",
+        "id": "reassess-urgent",
+        "mapping": {
+          "finding": "finding",
+          "next_action": "next_action"
+        },
+        "outcome": "critical",
+        "to": "urgent"
+      },
+      {
+        "from": "reassess",
+        "id": "reassess-normal",
+        "mapping": {
+          "finding": "finding",
+          "next_action": "next_action"
+        },
+        "outcome": "normal",
+        "to": "normal"
+      },
+      {
+        "from": "reassess",
+        "id": "reassess-unresolved",
+        "outcome": "unknown",
+        "to": "unresolved"
+      }
+    ],
+    "id": "work-10d039ff-ebb4-4c4b-808e-0236d9cec6dd",
+    "nodes": [
+      {
+        "candidate_check": false,
+        "capabilities": [],
+        "completion_outcome": "succeeded",
+        "criteria": [
+          "Le besoin est explicite",
+          "Le budget est rapproché de la pièce source"
+        ],
+        "effort": "medium",
+        "execution_mode": "text",
+        "id": "diagnosis",
+        "inputs": {},
+        "kind": "agent",
+        "max_attempts": 2,
+        "options": [
+          "critical",
+          "normal",
+          "unknown"
+        ],
+        "outputs": {
+          "finding": "string",
+          "next_action": "string",
+          "severity": "string"
+        },
+        "phase": "",
+        "position": {
+          "x": 70,
+          "y": 100
+        },
+        "profile": "controleur",
+        "prompt": "Identifier le besoin et le budget, puis qualifier l’urgence : critical, normal ou unknown. Conserver les pièces ; aucune modification de commande.",
+        "required_capabilities": [],
+        "resources": [],
+        "route_output": "severity",
+        "session": "delegated",
+        "title": "Support critique ?",
+        "validation": "contract"
+      },
+      {
+        "id": "urgent",
+        "inputs": {
+          "finding": "string",
+          "next_action": "string"
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "proposal": "string"
+        },
+        "position": {
+          "x": 680,
+          "y": 40
+        },
+        "profile": "generalist",
+        "prompt": "Proposer le traitement urgent à partir du constat. Distinguer urgence et risque. Préciser contrôles, candidat, cible et retour arrière. Ne pas déployer ; le parcours de livraison se dessine et s’autorise séparément.",
+        "title": "Préparer le traitement urgent",
+        "validation": "contract"
+      },
+      {
+        "id": "normal",
+        "inputs": {
+          "finding": "string",
+          "next_action": "string"
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "draft": "string"
+        },
+        "position": {
+          "x": 680,
+          "y": 230
+        },
+        "profile": "generalist",
+        "prompt": "Préparer un brouillon de réponse et les travaux utiles. Diagnostic, correction et livraison restent distincts. Ne pas envoyer.",
+        "title": "Préparer la réponse et la suite",
+        "validation": "contract"
+      },
+      {
+        "id": "clarify",
+        "kind": "question",
+        "outputs": {
+          "answer": "string"
+        },
+        "position": {
+          "x": 680,
+          "y": 430
+        },
+        "question": "Quels faits permettent de préciser l’impact et l’urgence ?",
+        "title": "Préciser l’impact"
+      },
+      {
+        "id": "reassess",
+        "inputs": {
+          "answer": "string"
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "options": [
+          "critical",
+          "normal",
+          "unknown"
+        ],
+        "outputs": {
+          "finding": "string",
+          "next_action": "string",
+          "severity": "string"
+        },
+        "position": {
+          "x": 990,
+          "y": 430
+        },
+        "profile": "generalist",
+        "prompt": "Réévaluer parameters.request avec inputs.answer. severity vaut critical, normal ou unknown. Conserver les inconnues ; ne pas inventer une urgence.",
+        "route_output": "severity",
+        "title": "Réévaluer avec la précision reçue",
+        "validation": "contract"
+      },
+      {
+        "completion_outcome": "blocked",
+        "id": "unresolved",
+        "kind": "question",
+        "outputs": {
+          "answer": "string"
+        },
+        "position": {
+          "x": 1300,
+          "y": 430
+        },
+        "question": "L’impact reste indéterminé. Quelle investigation faut-il ouvrir dans une nouvelle tâche ?",
+        "title": "Diagnostic encore indéterminé"
+      }
+    ],
+    "parameters": {},
+    "revision": 6,
+    "schema": 1,
+    "title": "Support achats internes"
+  },
+  "conversations": [
+    {
+      "created": 1791571075.2094855,
+      "definition": {
+        "defaults": {
+          "model": "modele-synthetique-achats",
+          "provider": "codex"
+        },
+        "description": "Recevoir une demande, qualifier l’impact, poser les questions utiles et préparer la suite. Agent et branches modifiables.",
+        "edges": [
+          {
+            "from": "diagnosis",
+            "id": "route-urgent",
+            "mapping": {
+              "finding": "finding",
+              "next_action": "next_action"
+            },
+            "outcome": "critical",
+            "to": "urgent"
+          },
+          {
+            "from": "diagnosis",
+            "id": "route-normal",
+            "mapping": {
+              "finding": "finding",
+              "next_action": "next_action"
+            },
+            "outcome": "normal",
+            "to": "normal"
+          },
+          {
+            "from": "diagnosis",
+            "id": "route-clarify",
+            "outcome": "unknown",
+            "to": "clarify"
+          },
+          {
+            "from": "clarify",
+            "id": "clarify-reassess",
+            "mapping": {
+              "answer": "answer"
+            },
+            "outcome": "done",
+            "to": "reassess"
+          },
+          {
+            "from": "reassess",
+            "id": "reassess-urgent",
+            "mapping": {
+              "finding": "finding",
+              "next_action": "next_action"
+            },
+            "outcome": "critical",
+            "to": "urgent"
+          },
+          {
+            "from": "reassess",
+            "id": "reassess-normal",
+            "mapping": {
+              "finding": "finding",
+              "next_action": "next_action"
+            },
+            "outcome": "normal",
+            "to": "normal"
+          },
+          {
+            "from": "reassess",
+            "id": "reassess-unresolved",
+            "outcome": "unknown",
+            "to": "unresolved"
+          }
+        ],
+        "id": "work-10d039ff-ebb4-4c4b-808e-0236d9cec6dd",
+        "nodes": [
+          {
+            "id": "diagnosis",
+            "kind": "agent",
+            "max_attempts": 2,
+            "options": [
+              "critical",
+              "normal",
+              "unknown"
+            ],
+            "outputs": {
+              "finding": "string",
+              "next_action": "string",
+              "severity": "string"
+            },
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "profile": "generalist",
+            "prompt": "Lire la demande dans parameters.request. Établir faits, impact, inconnues et suite proposée. severity vaut critical, normal ou unknown. Demander les faits manquants avec ask plutôt que les inventer. Aucun correctif ou envoi implicite.",
+            "route_output": "severity",
+            "title": "Support critique ?",
+            "validation": "contract"
+          },
+          {
+            "id": "urgent",
+            "inputs": {
+              "finding": "string",
+              "next_action": "string"
+            },
+            "kind": "agent",
+            "max_attempts": 2,
+            "outputs": {
+              "proposal": "string"
+            },
+            "position": {
+              "x": 680,
+              "y": 40
+            },
+            "profile": "generalist",
+            "prompt": "Proposer le traitement urgent à partir du constat. Distinguer urgence et risque. Préciser contrôles, candidat, cible et retour arrière. Ne pas déployer ; le parcours de livraison se dessine et s’autorise séparément.",
+            "title": "Préparer le traitement urgent",
+            "validation": "contract"
+          },
+          {
+            "id": "normal",
+            "inputs": {
+              "finding": "string",
+              "next_action": "string"
+            },
+            "kind": "agent",
+            "max_attempts": 2,
+            "outputs": {
+              "draft": "string"
+            },
+            "position": {
+              "x": 680,
+              "y": 230
+            },
+            "profile": "generalist",
+            "prompt": "Préparer un brouillon de réponse et les travaux utiles. Diagnostic, correction et livraison restent distincts. Ne pas envoyer.",
+            "title": "Préparer la réponse et la suite",
+            "validation": "contract"
+          },
+          {
+            "id": "clarify",
+            "kind": "question",
+            "outputs": {
+              "answer": "string"
+            },
+            "position": {
+              "x": 680,
+              "y": 430
+            },
+            "question": "Quels faits permettent de préciser l’impact et l’urgence ?",
+            "title": "Préciser l’impact"
+          },
+          {
+            "id": "reassess",
+            "inputs": {
+              "answer": "string"
+            },
+            "kind": "agent",
+            "max_attempts": 2,
+            "options": [
+              "critical",
+              "normal",
+              "unknown"
+            ],
+            "outputs": {
+              "finding": "string",
+              "next_action": "string",
+              "severity": "string"
+            },
+            "position": {
+              "x": 990,
+              "y": 430
+            },
+            "profile": "generalist",
+            "prompt": "Réévaluer parameters.request avec inputs.answer. severity vaut critical, normal ou unknown. Conserver les inconnues ; ne pas inventer une urgence.",
+            "route_output": "severity",
+            "title": "Réévaluer avec la précision reçue",
+            "validation": "contract"
+          },
+          {
+            "completion_outcome": "blocked",
+            "id": "unresolved",
+            "kind": "question",
+            "outputs": {
+              "answer": "string"
+            },
+            "position": {
+              "x": 1300,
+              "y": 430
+            },
+            "question": "L’impact reste indéterminé. Quelle investigation faut-il ouvrir dans une nouvelle tâche ?",
+            "title": "Diagnostic encore indéterminé"
+          }
+        ],
+        "parameters": {},
+        "revision": 2,
+        "schema": 1,
+        "title": "Support achats internes"
+      },
+      "effort": "medium",
+      "id": "c70fcf8abae7647e8",
+      "items": [
+        {
+          "created": 1791571075.211999,
+          "depends_on": [],
+          "id": "wf9aa46628ae24781",
+          "key": "initial",
+          "project": "workspace",
+          "request": "Le budget d’une commande semble incorrect. Comprendre l’écart sans modifier les commandes.",
+          "run": "rf354eb39cfaf4d66",
+          "request_truncated": false,
+          "execution": {
+            "id": "rf354eb39cfaf4d66",
+            "project": "workspace",
+            "status": "active",
+            "created": 1791571075.2111526,
+            "updated": 1791571075.2118003,
+            "simulation": false,
+            "completion_outcome": null,
+            "archived": null,
+            "coordination_wait": null,
+            "coordination_hold": null,
+            "workers": [],
+            "workers_total": 0,
+            "definition": {
+              "id": "work-10d039ff-ebb4-4c4b-808e-0236d9cec6dd",
+              "title": "Support achats internes"
+            },
+            "original": {
+              "id": "work-10d039ff-ebb4-4c4b-808e-0236d9cec6dd"
+            },
+            "focus": {
+              "node": "diagnosis",
+              "title": "Support critique ?",
+              "status": "ready",
+              "action": "Continuer dans le terminal"
+            },
+            "health": {
+              "status": "ok",
+              "total": 0,
+              "issues": []
+            },
+            "request": "Le budget d’une commande semble incorrect. Comprendre l’écart sans modifier les commandes.",
+            "counts": {
+              "pending": 5,
+              "ready": 1
+            },
+            "nodes": {
+              "clarify": {
+                "status": "pending"
+              },
+              "diagnosis": {
+                "status": "ready"
+              },
+              "normal": {
+                "status": "pending"
+              },
+              "reassess": {
+                "status": "pending"
+              },
+              "unresolved": {
+                "status": "pending"
+              },
+              "urgent": {
+                "status": "pending"
+              }
+            }
+          },
+          "dependencies": [],
+          "dependencies_total": 0,
+          "dependencies_truncated": false
+        }
+      ],
+      "model": "modele-synthetique-achats",
+      "notifications_authorized": false,
+      "project": "workspace",
+      "projects": [
+        "workspace"
+      ],
+      "provider": "codex",
+      "status": "open",
+      "project_contexts": [
+        {
+          "id": "workspace",
+          "title": "Workflows globaux",
+          "path": "/tmp/tricorder-functional-creation-state-6f3zmG/workflows/workspace"
+        }
+      ],
+      "item_count": 1,
+      "total": 1,
+      "offset": 0,
+      "limit": 25,
+      "next": null,
+      "activity": {
+        "items": 1,
+        "running": 0,
+        "ready": 1,
+        "decisions": 0,
+        "questions": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0
+      }
+    }
+  ]
+}

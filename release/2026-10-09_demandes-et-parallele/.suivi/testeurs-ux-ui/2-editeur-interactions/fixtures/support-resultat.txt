@@ -1,0 +1,6 @@
+Sortie attendue : fiche de diagnostic fictive.
+Symptôme : page vide après connexion.
+Informations manquantes : navigateur/version, heure, périmètre autres utilisateurs.
+Questions à poser : trois questions courtes sans demander de mot de passe.
+Réponse : brouillon empathique résumant le symptôme et les informations demandées.
+Validation humaine : vérifier que les questions sont adaptées avant tout envoi.

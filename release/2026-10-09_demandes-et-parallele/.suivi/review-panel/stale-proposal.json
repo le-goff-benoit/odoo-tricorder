@@ -1,0 +1,26 @@
+{
+  "result": {
+    "scopeErrors": [
+      "Error invoking remote method 'studio:human': Error: Décision périmée ou déjà appliquée",
+      "Error invoking remote method 'studio:human': Error: Décision périmée ou déjà appliquée"
+    ],
+    "message": "Error invoking remote method 'studio:human': Error: Exécution terminée ou annulée"
+  },
+  "decision": {
+    "actor": "local-user",
+    "at": 1791583581.954562,
+    "note": "Refus humain concurrent préparé par API validée",
+    "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "outcome": "reject",
+    "proposal": "6d7d862e44c48382e8bbfdc69ba4ce44e4a904c4e19d4522f6e62a121a98205e"
+  },
+  "events": [
+    {
+      "seq": 17,
+      "at": 1791583581.9545927,
+      "node": "gate",
+      "outcome": "reject",
+      "type": "decision"
+    }
+  ]
+}

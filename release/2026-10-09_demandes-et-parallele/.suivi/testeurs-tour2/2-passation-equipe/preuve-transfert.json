@@ -1,0 +1,349 @@
+{
+  "global": {
+    "contract": "6c96c65cffd7364e9798f731a39d800ca45735345152e3a03b2568727b953973",
+    "created": 1791574475.272802,
+    "definition": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Coordonner les bénévoles et faire valider le programme de l’exposition.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "work-e0e2053c-b332-4f26-9de3-cb68fbc857bf",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {
+        "conversation": "ce9941a25cebe4e6b",
+        "depends_on_runs": [],
+        "request": "Programme commun global, puis passation vers projet Sud."
+      },
+      "revision": 2,
+      "schema": 1,
+      "title": "Préparer une exposition — Nord"
+    },
+    "driver": "conversation",
+    "id": "r414e9e087db843d7",
+    "nodes": {
+      "analyse": {
+        "attempt": 1,
+        "finished": 1791574490.7850325,
+        "heartbeat": 1791574490.7798579,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791574496.6848395,
+          "checks": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "contract": "6c96c65cffd7364e9798f731a39d800ca45735345152e3a03b2568727b953973",
+          "note": "Programme commun compris : deux ateliers."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {},
+          "summary": "Resultat global valide : programme commun de deux ateliers."
+        },
+        "started": 1791574490.7798579,
+        "status": "accepted",
+        "token": "tea8780d0869e4dcb"
+      },
+      "bilan": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "build": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "status": "ready"
+      },
+      "decision": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "join": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "test": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "status": "ready"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Coordonner les bénévoles et faire valider le programme de l’exposition.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "work-e0e2053c-b332-4f26-9de3-cb68fbc857bf",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {},
+      "revision": 2,
+      "schema": 1,
+      "title": "Préparer une exposition — Nord"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "ce9941a25cebe4e6b",
+      "depends_on_runs": [],
+      "request": "Programme commun global, puis passation vers projet Sud."
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-tour2-passation-zKjsde/state/workflows/workspace/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "workspace",
+    "release": "",
+    "scope": {
+      "id": "workspace",
+      "kind": "workspace"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791574496.6849213
+  },
+  "parametresBrouillon": {
+    "source_context": {
+      "run": "r414e9e087db843d7",
+      "workflow": "work-e0e2053c-b332-4f26-9de3-cb68fbc857bf",
+      "simulation": false,
+      "results": {
+        "analyse": {
+          "ok": true,
+          "outputs": {},
+          "summary": "Resultat global valide : programme commun de deux ateliers."
+        }
+      }
+    }
+  }
+}

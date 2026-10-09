@@ -1,0 +1,42 @@
+{
+  "gestes": [
+    "Choisir…",
+    "xdotool windowfocus fenêtre nommée Choisir le dossier du projet",
+    "Ctrl+L",
+    "saisie du dossier fictif Beta",
+    "Return",
+    "dialogue fermé, champ Racine resté vide ; même résultat deux essais"
+  ],
+  "chemin": "/tmp/tricorder-panel-8-integration-NazR9E/depot-beta-fictif",
+  "console": [],
+  "stderr": [
+    "Error creating proxy: Unknown or unsupported transport “disabled” for address “disabled:” (g-io-error-quark, 13)\nError creating proxy: Unknown or unsupported transport “disabled” for address “disabled:” (g-io-error-quark, 13)\nError creating proxy: Unknown or unsupported transport “disabled” for address “disabled:” (g-io-error-quark, 13)\n",
+    "Error creating proxy: Unknown or unsupported transport “disabled” for address “disabled:” (g-io-error-quark, 13)\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.079: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.097: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.113: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.132: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.149: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.166: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.183: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.201: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.216: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.232: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.247: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.264: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.281: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.298: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.315: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.332: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.348: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.368: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:31.384: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:37.357: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:37.378: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:41.075: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:41.093: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:41.110: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:41.299: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n",
+    "\n(odoo-tricorder:1204386): dconf-WARNING **: 23:45:41.300: failed to commit changes to dconf: Unknown or unsupported transport “disabled” for address “disabled:”\n"
+  ],
+  "pageerrors": []
+}

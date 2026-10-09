@@ -1,0 +1,76 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+3
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:32
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell · Codex arrêté · Réunion interne fictive du comité des locaux, 9 octobre 2026. Notes : Léa préparera un plan de rangement pour lundi ; Hugo vérifiera la capacité de la salle. Préparer un compte rendu et un brouillon de suivi, sans envoyer de message.
+Shell occupé · Réunion interne fictive du 12 octobre 2026 : préparer le prochain point des locaux. Établir un compte rendu et un brouillon, aucun envoi.
+Conversation du workflow affiché · Shell : Workflows globaux
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-panel-direction-IU8GaM
+/state/agent-events/bf52b9fc-4446-4c37-a944-e47d11b795a0.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-panel-direction-IU8GaM/state/workflows/wor
+kspace$ 'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-un
+packed/resources/backend/agent_launch.py' '/tmp/tricorder-panel-directio
+n-IU8GaM/state/agent-events/bf52b9fc-4446-4c37-a944-e47d11b795a0.launch.
+json'
+TRICORDER-PANEL-INERT codex — fournisseur inerte, aucune exécution modèl
+e
+blegoff@wrk226:/tmp/tricorder-panel-direction-IU8GaM/state/workflows/wor
+kspace$  
+
+SUIVI · CLÔTURE DE MEETING
+Réunion interne fictive du 12 octobre 2026 : préparer le prochain point des locaux. Établir un compte rendu et un brouillon, aucun envoi.
+Options
+Vue d’ensemble
+Demande
+1 demande
+⌄
+
+Aucune étape en cours · 1 demande à prendre en charge
+
+Terminal
+À traiter dans la conversation
+0 / 3 étapes
+Continuer dans la conversation
+
+Cette étape peut être traitée par l’agent de la conversation.
+
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Vérifier le meeting et son transcript
+→
+Relire le compte rendu
+
+Dans la conversation
+
+À traiter dans la conversation
+
+Cette étape peut être traitée par l’agent de la conversation.
+
+Continuer dans la conversation
+Agent de bloc séparé (facultatif)

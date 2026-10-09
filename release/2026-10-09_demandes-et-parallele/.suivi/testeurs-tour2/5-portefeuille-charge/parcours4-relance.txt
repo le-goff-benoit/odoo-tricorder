@@ -1,0 +1,99 @@
+Demandes et activité
+
+4 étapes en cours · 31 demandes à prendre en charge · 1 terminée
+
+Lancer les demandes prêtes
+
+26–36 sur 36. Le lancement porte uniquement sur les demandes affichées.
+
+0 demande(s) lançable(s) sur cette page. Les autres indiquent leur prochaine action ; aucun agent ne démarre automatiquement.
+
+1 étape lancée · 10 demandes en attente.
+R26 — Comparer les besoins des équipes
+Boréal — Opérations
+En cours
+→
+Agent · OpenAI · synthetic-local
+Analyser les informations synthétiques · En cours
+R27 — Relire les critères de réception
+Céleste — Comité
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R28 — Préparer les documents du comité
+Atlas — Services
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R29 — Vérifier les informations disponibles
+Boréal — Opérations
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R30 — Identifier les points à arbitrer
+Céleste — Comité
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R31 — Préparer le tableau de décisions
+Atlas — Services
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R32 — Comparer les besoins des équipes
+Boréal — Opérations
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R33 — Relire les critères de réception
+Céleste — Comité
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R34 — Préparer les documents du comité
+Atlas — Services
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R35 — URGENT — Préparer arbitrage comité de 16h
+Boréal — Opérations
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+R36 — Identifier les points à arbitrer
+Céleste — Comité
+En attente
+→
+Voir la prochaine étape · Analyser les informations synthétiques
+
+Analyser les informations synthétiques · Quatre étapes sont déjà en cours. Une place se libérera à leur arrêt ; le lancement reste explicite.
+
+Demandes précédentes
+Rechercher une demande

@@ -1,0 +1,81 @@
+{
+  "id": "navigation-vocabulaire",
+  "output": "/home/blegoff/odoo-tricorder/release/2026-10-09_demandes-et-parallele/.suivi/testeurs-ux-ui/1-navigation-vocabulaire",
+  "display": 181,
+  "preparedAt": "2026-10-09T20:27:17.884Z",
+  "temporary": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW",
+  "dirs": {
+    "home": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/home",
+    "config": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/config",
+    "cache": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/cache",
+    "data": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/data",
+    "codex": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/codex",
+    "claude": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/claude",
+    "state": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/state",
+    "runtime": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/runtime",
+    "agents": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/agents",
+    "stubs": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/stubs",
+    "project": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/project"
+  },
+  "env": {
+    "PATH": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/stubs:/usr/bin:/bin",
+    "HOME": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/home",
+    "XDG_CONFIG_HOME": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/config",
+    "XDG_CACHE_HOME": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/cache",
+    "XDG_DATA_HOME": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/data",
+    "XDG_RUNTIME_DIR": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/runtime",
+    "CODEX_HOME": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/claude",
+    "TRICORDER_HOME": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/home",
+    "TRICORDER_STATE_DIR": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/runtime",
+    "TRICORDER_AGENTS_DIR": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/agents",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "DISPLAY": ":181",
+    "XAUTHORITY": "/tmp/tricorder-functional-display/auth-181",
+    "SHELL": "/bin/bash",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8"
+  },
+  "preflight": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/stubs/codex\ncodex 0.0.0 TRICORDER-UX-INERT\n/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/stubs/claude\nclaude 0.0.0 TRICORDER-UX-INERT\n",
+  "guiStarted": true,
+  "brokerStarted": false,
+  "externalFixtures": "Trois dépôts Git synthétiques locaux sans remote ; README seulement, aucun workflow ni état d’exécution précréé.",
+  "classification": "Préparation uniquement — aucun verdict produit",
+  "fixtures": [
+    {
+      "slug": "coordination-atelier",
+      "title": "Coordination atelier",
+      "description": "Préparer une réunion de coordination : recueillir les points, proposer un ordre du jour, obtenir une validation.",
+      "path": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/project/coordination-atelier",
+      "workflowPrecreated": false,
+      "executionStateCreated": false,
+      "gitRemote": false
+    },
+    {
+      "slug": "support-equipement",
+      "title": "Support équipement",
+      "description": "Qualifier un incident synthétique de lecteur de badges : symptôme, reproduction locale, décision de traitement.",
+      "path": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/project/support-equipement",
+      "workflowPrecreated": false,
+      "executionStateCreated": false,
+      "gitRemote": false
+    },
+    {
+      "slug": "suivi-formation",
+      "title": "Suivi formation",
+      "description": "Organiser une session interne fictive : disponibilité, contenu, revue et validation.",
+      "path": "/tmp/tricorder-ux-navigation-vocabulaire-bicJaW/project/suivi-formation",
+      "workflowPrecreated": false,
+      "executionStateCreated": false,
+      "gitRemote": false
+    }
+  ],
+  "candidate": {
+    "executable": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/odoo-tricorder",
+    "executableSha256": "9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3",
+    "asar": "/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/app.asar",
+    "asarSha256": "a344374116f8ada276e426dd94279450b73cee31ba46aa981ae830a1fb64f44b"
+  }
+}

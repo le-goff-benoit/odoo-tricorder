@@ -1,0 +1,9 @@
+test_boolean_does_not_guess_the_meaning_of_arbitrary_outcome_names (test_condition_inputs.ConditionInputTests) ... ok
+test_boolean_true_and_false_select_one_branch_and_keep_its_human_decision (test_condition_inputs.ConditionInputTests) ... ok
+test_boolean_workflow_parameter_uses_the_same_explicit_outcomes (test_condition_inputs.ConditionInputTests) ... ok
+test_strings_numbers_and_null_are_not_coerced_into_boolean_results (test_condition_inputs.ConditionInputTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.143s
+
+OK

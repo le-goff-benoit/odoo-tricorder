@@ -1,0 +1,69 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Atelier fictif B
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Atelier fictif B
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:39
+
+ATELIER FICTIF B / WORKFLOW
+Qualification atelier B
+
+Révision 1 · Enregistré
+
+Choisir l’IA
+Options
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+1 donnée
+normale
+urgente
+◇
+Qualifier la demande
+Tâche
+1 entrée → 2 sorties
+⑂
+Priorité urgente ?
+Condition
+1 entrée → 0 sortie
+◇
+Préparer la réponse normale
+Tâche
+0 entrée → 0 sortie
+◇
+Préparer la réponse urgente
+Tâche
+0 entrée → 0 sortie
+4 blocs · 3 liens
+−
+90 %
++
+Ajuster
+Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.

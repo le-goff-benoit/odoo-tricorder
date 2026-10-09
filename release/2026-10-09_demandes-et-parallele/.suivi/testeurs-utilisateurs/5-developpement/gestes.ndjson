@@ -1,0 +1,75 @@
+{"time":"2026-10-09T21:35:13.696Z","code":"return {text:await bench.visibleText(),dom:await page.locator('button,input,select,textarea').evaluateAll(es=>es.map(e=>({tag:e.tagName,text:e.innerText,placeholder:e.placeholder,title:e.title,aria:e.getAttribute('aria-label')})))};"}
+{"time":"2026-10-09T21:35:17.162Z","code":"await page.getByRole('button',{name:'Terminal',exact:true}).first().click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:35:20.974Z","code":"await page.getByRole('button',{name:'Ouvrir un terminal',exact:true}).click(); await page.locator('.xterm-helper-textarea').fill('command -v codex; codex --version; command -v claude; claude --version'); await page.locator('.xterm-helper-textarea').press('Enter');"}
+{"time":"2026-10-09T21:35:24.139Z","code":"await bench.capture('01-precontrole'); return await bench.visibleText();"}
+{"time":"2026-10-09T21:35:31.082Z","code":"fs.writeFileSync(out+'/precontrole-terminal.txt',await bench.visibleText()); await page.getByRole('button',{name:'+ Créer un workflow',exact:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:35:36.727Z","code":"return await page.locator('input,select,textarea').evaluateAll(es=>es.map(e=>({tag:e.tagName,placeholder:e.placeholder,aria:e.getAttribute('aria-label'),type:e.type,options:e.tagName==='SELECT'?[...e.options].map(o=>({value:o.value,text:o.text})):null})));"}
+{"time":"2026-10-09T21:35:40.774Z","code":"await page.getByLabel('Modèle de workflow').selectOption('software-change'); await page.getByLabel('Nom du workflow').fill('Contrôle technique isolé'); await page.getByRole('button',{name:'Créer et ouvrir le workflow',exact:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:35:43.818Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:35:47.487Z","code":"await page.getByRole('button',{name:'Exécuter…',exact:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:35:51.536Z","code":"return {text:await bench.visibleText(),inputs:await page.locator('input,select,textarea').evaluateAll(es=>es.map(e=>({tag:e.tagName,placeholder:e.placeholder,aria:e.getAttribute('aria-label'),id:e.id,type:e.type})))};"}
+{"time":"2026-10-09T21:35:57.098Z","code":"await page.getByRole('button',{name:'×',exact:true}).click(); await page.getByRole('button',{name:'Workflows',exact:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:36:02.101Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:36:12.769Z","code":"return await page.locator('button').evaluateAll(es=>es.filter(e=>e.getClientRects().length).map(e=>({text:e.innerText,aria:e.getAttribute('aria-label'),title:e.title})));"}
+{"time":"2026-10-09T21:36:16.437Z","code":"await page.getByRole('button',{name:'Fermer la fenêtre',exact:true}).click(); await page.getByRole('button',{name:'Workflows',exact:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:36:20.054Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:36:24.533Z","code":"await page.getByRole('button',{name:'Créer un workflow',exact:true}).click(); await page.getByLabel('Modèle de workflow').selectOption('first-workflow'); await page.getByLabel('Nom du workflow').fill('Analyse technique réutilisable'); await page.getByRole('button',{name:'Créer et ouvrir le workflow',exact:true}).click();"}
+{"time":"2026-10-09T21:36:27.823Z","code":"await page.getByRole('button',{name:'Exécuter…',exact:true}).click();"}
+{"time":"2026-10-09T21:36:30.698Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:36:35.246Z","code":"await page.getByPlaceholder('Décrivez-la ici ou directement dans le terminal.').fill('Analyser un outil fictif de journalisation. Demander quel format de sortie adopter avant toute réalisation.'); await page.getByRole('button',{name:'Lancer dans le terminal',exact:true}).click();"}
+{"time":"2026-10-09T21:36:40.801Z","code":"await bench.capture('02-lancement-codex'); fs.writeFileSync(out+'/lancement-codex.txt',await bench.visibleText()); return {text:await bench.visibleText(),windows:await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows().length)};"}
+{"time":"2026-10-09T21:36:49.851Z","code":"await page.locator('.xterm-helper-textarea').filter({visible:true}).fill(\"export PANEL_CONTEXT=contexte_conserve; printf 'SESSION=%s\\\\n' \\\"$PANEL_CONTEXT\\\"; pwd\"); await page.locator('.xterm-helper-textarea').filter({visible:true}).press('Enter'); await page.getByRole('button',{name:'Contexte',exact:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:36:54.294Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:36:59.367Z","code":"await page.getByRole('button',{name:'Connexions',exact:true}).click();"}
+{"time":"2026-10-09T21:37:02.505Z","code":"await page.getByRole('combobox',{name:'Fournisseur IA',exact:true}).selectOption('claude'); return await bench.visibleText();"}
+{"time":"2026-10-09T21:37:06.939Z","code":"await page.getByTitle('Afficher ou masquer le terminal sans fermer les sessions').click(); await page.locator('.xterm-helper-textarea').filter({visible:true}).fill(\"printf 'APRES_NAVIGATION=%s\\\\n' \\\"$PANEL_CONTEXT\\\"\"); await page.locator('.xterm-helper-textarea').filter({visible:true}).press('Enter');"}
+{"time":"2026-10-09T21:37:12.987Z","code":"await bench.capture('03-claude-prochain-codex-conserve'); fs.writeFileSync(out+'/navigation-fournisseur.txt',await bench.visibleText()); return await bench.visibleText();"}
+{"time":"2026-10-09T21:37:21.362Z","code":"await page.getByRole('button',{name:'Activité',exact:true}).click();"}
+{"time":"2026-10-09T21:37:24.660Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:37:29.198Z","code":"await page.getByRole('button',{name:'Reprendre l’agent…',exact:true}).click();"}
+{"time":"2026-10-09T21:37:34.199Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:37:44.266Z","code":"await page.getByText('Reprendre l’agent…',{exact:true}).click();"}
+{"time":"2026-10-09T21:37:49.392Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:37:52.945Z","code":"await page.getByRole('button',{name:'Reprendre dans ce terminal',exact:true}).click();"}
+{"time":"2026-10-09T21:37:57.914Z","code":"fs.writeFileSync(out+'/reprise-fournisseur.txt',await bench.visibleText()); return await bench.visibleText();"}
+{"time":"2026-10-09T21:38:01.747Z","code":"await page.getByRole('button',{name:'Workflows',exact:true}).click();"}
+{"time":"2026-10-09T21:38:06.034Z","code":"return await page.locator('button').evaluateAll(es=>es.filter(e=>e.getClientRects().length).map(e=>({text:e.innerText,aria:e.getAttribute('aria-label')})));"}
+{"time":"2026-10-09T21:38:09.259Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:38:12.428Z","code":"await page.getByRole('button',{name:'Exécuter…',exact:true}).first().click();"}
+{"time":"2026-10-09T21:38:15.440Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:38:19.244Z","code":"await page.getByPlaceholder('Décrivez-la ici ou directement dans le terminal.').fill('Deuxième demande fictive avec Claude : comparer JSON et texte pour le journal.'); await page.getByRole('button',{name:'Lancer dans le terminal',exact:true}).click();"}
+{"time":"2026-10-09T21:38:22.707Z","code":"await bench.capture('04-lancement-claude'); fs.writeFileSync(out+'/lancement-claude.txt',await bench.visibleText()); return await bench.visibleText();"}
+{"time":"2026-10-09T21:38:30.123Z","code":"await page.getByRole('button',{name:'Options',exact:true}).filter({visible:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:38:40.887Z","code":"await page.getByText('Options',{exact:true}).filter({visible:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:38:45.403Z","code":"await page.getByRole('button',{name:'Suspendre',exact:true}).click();"}
+{"time":"2026-10-09T21:38:49.226Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:38:54.061Z","code":"await bench.capture('05-demande-suspendue'); fs.writeFileSync(out+'/demande-suspendue.txt',await bench.visibleText()); await page.getByRole('button',{name:'Activité',exact:true}).click();"}
+{"time":"2026-10-09T21:39:01.812Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:39:06.550Z","code":"await page.getByText('Deuxième demande fictive avec Claude : comparer JSON et texte pour le journal.',{exact:true}).click();"}
+{"time":"2026-10-09T21:39:10.338Z","code":"await page.getByRole('button',{name:'Reprendre la demande',exact:true}).click();"}
+{"time":"2026-10-09T21:39:13.679Z","code":"fs.writeFileSync(out+'/demande-reprise.txt',await bench.visibleText()); return await bench.visibleText();"}
+{"time":"2026-10-09T21:39:18.652Z","code":"await page.getByText('Options',{exact:true}).filter({visible:true}).click(); await page.getByRole('button',{name:'Revenir à l’éditeur',exact:true}).click();"}
+{"time":"2026-10-09T21:39:22.114Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:39:25.608Z","code":"await page.getByText('Options',{exact:true}).filter({visible:true}).first().click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:39:29.084Z","code":"await page.getByRole('button',{name:'Exporter…',exact:true}).click();"}
+{"time":"2026-10-09T21:39:32.279Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:39:43.516Z","code":"await app.evaluate(({dialog},target)=>{dialog.showSaveDialog=async()=>({canceled:false,filePath:target});},out+'/analyse-technique-export.tricorder.json'); await page.getByRole('button',{name:'Exporter…',exact:true}).click();"}
+{"time":"2026-10-09T21:39:48.500Z","code":"await page.getByRole('button',{name:'Ouvrir le terminal existant',exact:true}).click(); await page.locator('.xterm-helper-textarea').filter({visible:true}).fill(\"pwd; ls -la .tricorder/workflows; python3 '\" + root + \"/build-artifacts/linux-unpacked/resources/backend/workflow_cli.py' --help\"); await page.locator('.xterm-helper-textarea').filter({visible:true}).press('Enter');"}
+{"time":"2026-10-09T21:39:59.725Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:40:05.372Z","code":"await page.getByTitle('Afficher ou masquer le terminal sans fermer les sessions').click(); await page.locator('.xterm-helper-textarea').filter({visible:true}).fill(\"pwd; ls -la .tricorder/workflows; python3 '\" + root + \"/build-artifacts/linux-unpacked/resources/backend/workflow_cli.py' --help\"); await page.locator('.xterm-helper-textarea').filter({visible:true}).press('Enter');"}
+{"time":"2026-10-09T21:40:08.768Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:40:21.253Z","code":"await page.locator('.xterm-helper-textarea').filter({visible:true}).fill(\"clear; pwd; ls .tricorder/workflows; head -15 .tricorder/workflows/work-1e371432-e68b-4ec3-8bb3-09150fa0c2e3.json\"); await page.locator('.xterm-helper-textarea').filter({visible:true}).press('Enter');"}
+{"time":"2026-10-09T21:40:25.225Z","code":"await bench.capture('06-definition-versionnable'); fs.writeFileSync(out+'/definition-versionnable.txt',await bench.visibleText()); return await bench.visibleText();"}
+{"time":"2026-10-09T21:40:41.060Z","code":"const {spawnSync}=require('node:child_process'); const bridge=(command,payload)=>{const r=spawnSync('/usr/bin/python3',[root+'/build-artifacts/linux-unpacked/resources/backend/workflow_cli.py','--state',manifest.dirs.state+'/workflows','--conversation','cdc470319d64d4375',command],{env:manifest.env,input:payload?JSON.stringify(payload):undefined,encoding:'utf8'}); fs.appendFileSync(out+'/fixture-pont.ndjson',JSON.stringify({command,payload,status:r.status,stdout:r.stdout,stderr:r.stderr})+'\\n'); return JSON.parse(r.stdout);}; global.bridge=bridge; return bridge('status');"}
+{"time":"2026-10-09T21:40:44.569Z","code":"const claim=global.bridge('claim',{run:'r077345d545154c8c',node:'analyse'}); global.claim=claim; return claim;"}
+{"time":"2026-10-09T21:40:48.689Z","code":"return global.bridge('ask',{run:'r077345d545154c8c',node:'analyse',token:global.claim.result.token,text:'Quel format de sortie retenons-nous pour le journal fictif : JSON ou texte ?'});"}
+{"time":"2026-10-09T21:40:53.426Z","code":"await page.getByRole('button',{name:'Activité',exact:true}).click();"}
+{"time":"2026-10-09T21:40:56.520Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:41:01.006Z","code":"await page.getByText('Deuxième demande fictive avec Claude : comparer JSON et texte pour le journal.',{exact:true}).click();"}
+{"time":"2026-10-09T21:41:04.620Z","code":"return await bench.visibleText();"}
+{"time":"2026-10-09T21:41:10.522Z","code":"await page.getByRole('button',{name:'Répondre à la question',exact:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:41:14.393Z","code":"await bench.capture('07-question-bloquante'); fs.writeFileSync(out+'/question-bloquante.txt',await bench.visibleText()); await page.getByLabel('Votre réponse',{exact:true}).fill('JSON, une ligne par événement.'); await page.getByRole('button',{name:'Répondre',exact:true}).click();"}
+{"time":"2026-10-09T21:41:21.204Z","code":"return {text:await bench.visibleText(),state:global.bridge('inspect',{run:'r077345d545154c8c'}).result};"}
+{"time":"2026-10-09T21:41:27.082Z","code":"await page.getByText('Entrées, sorties et preuves',{exact:true}).click(); return await bench.visibleText();"}
+{"time":"2026-10-09T21:41:31.547Z","code":"await bench.capture('08-reponse-conservee'); fs.writeFileSync(out+'/reponse-conservee.txt',await bench.visibleText()); fs.writeFileSync(out+'/reponse-etat.json',JSON.stringify(global.bridge('inspect',{run:'r077345d545154c8c'}),null,2)); return {windows:await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows().length),errors:bench.errors};"}
+{"time":"2026-10-09T21:41:52.931Z","code":"const pid=app.process().pid; await bench.cleanup(); fs.writeFileSync(out+'/cleanup-harness.json',JSON.stringify({at:new Date().toISOString(),electronPid:pid,cleanup:'passed',hashes:'executable, ASAR et backend conformes au paquet',errors:bench.errors},null,2)); return {cleanup:'passed',pid};"}

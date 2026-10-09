@@ -1,0 +1,59 @@
+{
+  "created": 1791574886.1699176,
+  "definition": {
+    "defaults": {
+      "effort": "medium",
+      "model": "",
+      "provider": "codex"
+    },
+    "description": "Procédure achats version un",
+    "edges": [],
+    "id": "non-lancable",
+    "nodes": [
+      {
+        "criteria": [
+          "Coût total, délai et garantie explicités."
+        ],
+        "id": "analyse",
+        "inputs": {},
+        "kind": "agent",
+        "outputs": {
+          "synthese": "string"
+        },
+        "position": {
+          "x": 380,
+          "y": 100
+        },
+        "prompt": "Comparer deux offres selon le coût total, délai et garantie.",
+        "title": "Comparer les offres"
+      }
+    ],
+    "revision": 1,
+    "schema": 1,
+    "title": "Procédure achats à reconfigurer"
+  },
+  "effort": "medium",
+  "id": "c541395a2a30f48a9",
+  "items": [
+    {
+      "created": 1791574886.1707578,
+      "depends_on": [],
+      "id": "w0b6263b943e14617",
+      "key": "initial",
+      "project": "p799f7610454f43f1",
+      "request": "ACH-045 — ancienne demande conversation sans modèle",
+      "run": "r34c9f8dd40574770"
+    }
+  ],
+  "model": "",
+  "notifications_authorized": false,
+  "project": "p799f7610454f43f1",
+  "projects": [
+    "p799f7610454f43f1"
+  ],
+  "provider": "codex",
+  "status": "open",
+  "transports": {
+    "p799f7610454f43f1": {}
+  }
+}

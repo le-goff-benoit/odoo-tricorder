@@ -1,0 +1,30 @@
+# Avis indépendant — profil 7, responsable d’équipe
+
+**Conclusion : pilotage réalisable sur ce petit portefeuille fictif.** Les décisions restent ciblées, et l’échec puis sa reprise sont compréhensibles. Le classement des urgences et la place du terminal demandent davantage d’effort à un responsable peu technique. Aucun bug bloquant constaté dans ces trois parcours.
+
+Réception GUI du 9 octobre 2026, paquet 0.6.0-rc.12. Aucun code produit ni rapport des autres lu avant la première utilisation GUI. Le CLI du paquet a ensuite été lu pour préparer les fixtures autorisées. Une fenêtre, zéro erreur renderer relevée.
+
+## Trois parcours réellement effectués
+
+| Intention | Gestes GUI, résultat observé | Verdict et conséquence |
+|---|---|---|
+| Identifier quoi traiter avant le comité | Création du projet local et d’une demande GUI, puis réception d’un portefeuille de collègues fictifs. Ouverture d’Activité : deux décisions, un échec et l’agent arrêté apparaissent. Le formulaire marqué « URGENT… avant 09h » est choisi malgré sa troisième position. | **Partiel pour la priorisation** : états faciles à repérer ; ordre métier à reconstituer depuis les titres. [02](captures/7-equipe-02-portefeuille.png). |
+| Examiner une décision sans approuver les autres | Ouverture du formulaire, « Examiner la décision », lecture du résultat reçu : périmètre congés annuels, délai vendredi 16h, 2 heures, aucun envoi externe. Commentaire puis « Approuver la suite ». Retour à Activité. | **Réussi** : seule cette demande passe à Terminée ; le bilan reste à décider et l’export reste en échec. [03](captures/7-equipe-03-decision-contenu.png), [04](captures/7-equipe-04-accord-cible.png). |
+| Comprendre l’échec, reprendre après détour, lire le résultat final | Depuis Activité, ouverture export. Lecture cause « fichier source absent » et tentative 1/2. « Préparer la reprise », saisie correction, préparation puis reprise GUI de l’agent. Après le second retour fictif collègue : lecture du résultat et historique de la tentative précédente, puis accord ciblé. Retour au portefeuille, ouverture du bilan et lecture seule. | **Réussi pour le suivi et les gestes de reprise** : l’échec, le motif, le résultat final restent lisibles ; export Terminée, bilan toujours Décision attendue. Aucun travail IA réel reçu. [05](captures/7-equipe-05-reprise-explicite.png), [06](captures/7-equipe-06-historique-resultat.png), [07](captures/7-equipe-07-portefeuille-final.png), [08](captures/7-equipe-08-bilan-sans-accord.png). |
+
+## Constats prioritaires
+
+1. **P2 — manque fonctionnel dans la vue observée : priorité métier.** Activité classe ici le bilan avant l’export et l’urgence. Aucun champ de priorité, échéance ou tri métier n’est présenté dans cette vue. L’urgence repose sur un titre bien rédigé ; un responsable doit lire toutes les lignes avant de choisir. Preuve 02. Constat limité à la vue utilisée.
+2. **P2 — friction : le terminal revient lors de l’ouverture d’une demande.** Après fermeture sur Activité, ouvrir le formulaire ou le bilan réaffiche le shell arrêté. Il occupe environ la moitié de la fenêtre, alors que le geste attendu est lire/décider. Le bouton Terminal permet de récupérer la largeur ; la lecture en 08 est plus directe. Preuves 03 et 08. Le bandeau global « Agent arrêté » peut également détourner l’attention de la décision disponible.
+3. **P3 — friction : compteur ambigu sous “Autres demandes”.** À la fin, la section affiche « 4 demandes enregistrées » au-dessus de deux demandes terminées, tandis que deux autres figurent dans “À traiter”. Le total est correct pour le portefeuille entier, mais son placement fait d’abord attendre quatre lignes dans cette section. Preuve 07.
+4. **Limite du banc : aucune évaluation de qualité IA ni de travail externe.** Le lancement et la reprise GUI appellent le stub qui annonce son inertie puis s’arrête. Les résultats, échec et deuxième tentative sont ceux de fixtures moteur déclarées ; ils attestent le suivi et les décisions GUI, pas la réalisation du travail par Codex/Claude. Preuve [01](captures/7-equipe-01-fournisseurs.png).
+
+## Ce qui fonctionne et cadre des preuves
+
+Le détail nomme explicitement la demande concernée et la portée proposition/tentative de l’accord. L’historique conserve cause, contrôle non satisfait et correction de reprise. La préparation de reprise explique qu’elle ne démarre pas l’agent. Le résultat accepté par contrôles techniques précise qu’aucun critère métier n’est attesté. Le retour à Activité rend visible la séparation terminé/à traiter.
+
+Fixture exacte : projet, adaptation de workflow “Demande ponctuelle” et conversation initiale créés GUI. Le collègue fictif ajoute trois demandes par `workflow_cli.py add`, réalise les trois cadrages par `claim` + `result`, puis rend deux résultats réussis et un résultat `ok:false` sur le bloc work. Après la préparation et la reprise GUI de l’export, il rend un deuxième résultat réussi par `claim` + `result`. Aucun accord ou retry moteur hors GUI. Les commandes et réponses complètes sont conservées dans [fixtures-journal.jsonl](fixtures-journal.jsonl). Les lectures `inspect` servent uniquement à corroborer l’état final, conservé dans [etat-final-lu.json](etat-final-lu.json). Le bilan demeure non approuvé ; son texte est un instantané fictif antérieur aux accords.
+
+[parcours.cjs](parcours.cjs) conserve le pilote utilisé ; [gestes-reception.cjs](gestes-reception.cjs) conserve les gestes GUI et fixtures de la session. Huit captures, toutes ouvertes et vérifiées. Aucun sélecteur natif remplacé, aucune installation/build/commit, aucun compte/projet réel, aucune connexion réseau volontaire. HOME/XDG/fournisseurs/état isolés et PATH strict du harness. Prévol puis contrôle terminal GUI des deux versions TRICORDER-PANEL-INERT avant le lancement.
+
+`cleanup()` exécuté. [cleanup.json](cleanup.json) atteste zéro processus restant de ce banc et les empreintes inchangées : exécutable `9578f5ece2da6cbba4b5d0fb7e7adaaf8f07d44684bddfdab92024c84d80d2f3`, ASAR `71a054e6137a4fb424320954836109bd67ef2b74cb8f71ad3e49af35bb047dd7`. Aucun autre processus touché. Exploration terminée.

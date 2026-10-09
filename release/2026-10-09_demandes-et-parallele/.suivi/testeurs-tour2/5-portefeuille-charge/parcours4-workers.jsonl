@@ -1,0 +1,8 @@
+{"at": 1791574360.7340777, "pid": 1022411, "provider": "codex", "kind": "coordinator-start"}
+{"at": 1791574367.9743352, "pid": 1022925, "provider": "codex", "kind": "coordinator-start"}
+{"at": 1791574369.046068, "pid": 1022955, "provider": "codex", "kind": "worker-start"}
+{"at": 1791574369.0509834, "pid": 1022954, "provider": "codex", "kind": "worker-start"}
+{"at": 1791574369.059202, "pid": 1022957, "provider": "codex", "kind": "worker-start"}
+{"at": 1791574369.0752773, "pid": 1022958, "provider": "codex", "kind": "worker-start"}
+{"at": 1791574390.0259087, "pid": 1022955, "provider": "codex", "kind": "worker-completed"}
+{"at": 1791574431.0220866, "pid": 1025883, "provider": "codex", "kind": "worker-start"}

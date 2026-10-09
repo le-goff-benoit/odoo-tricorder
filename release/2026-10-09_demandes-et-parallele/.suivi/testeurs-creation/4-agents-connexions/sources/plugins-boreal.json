@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "plugins": [
+    {
+      "id": "boreal-local",
+      "title": "Atelier Boréal — adaptateur local inerte",
+      "provider": "local",
+      "operations": [
+        "draft",
+        "notify"
+      ],
+      "transport": {
+        "argv": [
+          "/tmp/tricorder-t3-agents-connexions-ugPhG9/stubs/adaptateur-boreal"
+        ],
+        "timeout": 8
+      }
+    }
+  ]
+}

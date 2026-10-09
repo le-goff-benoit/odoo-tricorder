@@ -1,0 +1,64 @@
+{
+  "scope": "Independent final panel review; source application launched with args [repository], without build or packaging.",
+  "display": ":184",
+  "command": "DISPLAY=:184 XAUTHORITY=/tmp/tricorder-functional-display/auth-184 node node_modules/@playwright/test/cli.js test --config release/2026-10-09_demandes-et-parallele/.suivi/review-panel/playwright.config.cjs",
+  "cases": [
+    {
+      "case": "Long request and proposal; 1024x768; 125 percent; terminal visible",
+      "status": "passed",
+      "seconds": 3.5,
+      "evidence": [
+        "geometry.json",
+        "long-content-1024x768-125.png"
+      ]
+    },
+    {
+      "case": "Stale nonce and proposal rejected while active, refusal remains single; other request isolated",
+      "status": "passed",
+      "seconds": 5.0,
+      "evidence": [
+        "stale-proposal.json"
+      ]
+    },
+    {
+      "case": "New receipt attempt clears old note and checked criteria",
+      "status": "passed",
+      "seconds": 5.0,
+      "evidence": [
+        "new-attempt.json",
+        "new-attempt-cleared-draft.png"
+      ]
+    }
+  ],
+  "execution_history": [
+    {
+      "selection": "all 3",
+      "result": "2 passed; 1 harness locator failure",
+      "seconds": 44.2,
+      "explanation": "Second request already opened in Detail. Test redundantly waited for Examiner la décision; no product correction."
+    },
+    {
+      "selection": "state change after locator correction",
+      "result": "1 passed",
+      "seconds": 7.2
+    },
+    {
+      "selection": "state change after adding explicit invalid nonce and proposal checks",
+      "result": "1 passed",
+      "seconds": 5.4
+    }
+  ],
+  "isolation": "Temporary HOME/XDG/provider configuration/state/runtime; fixed PATH inert stubs:/usr/bin:/bin; real PTY preflight confirms stubs; fixture transitions through Engine API only.",
+  "source_bundle_sha256": {
+    "dist/app.js": "c9912fa2b2a1dd3029e502bc2226b0f2c82be702e4053d9d577fbd423e3045e1",
+    "dist/studio.css": "53c0730e4f3154225bf2aaba7f33ccc640eba00580f93576defd9014b5c8c2db"
+  },
+  "captures_visually_inspected": [
+    "long-content-1024x768-125.png",
+    "new-attempt-cleared-draft.png",
+    "../corrections-panel/configuration/captures/replacement-retained-frequency.png",
+    "../corrections-panel/graphes/captures/support-joins-1440.png",
+    "../corrections-panel/terminal-decisions/terminal-context-compact.png",
+    "../corrections-panel/terminal-decisions/receipt-required-keyboard.png"
+  ]
+}

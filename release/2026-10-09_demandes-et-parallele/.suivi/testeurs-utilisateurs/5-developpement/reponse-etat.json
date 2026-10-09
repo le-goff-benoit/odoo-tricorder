@@ -1,0 +1,359 @@
+{
+  "ok": true,
+  "result": {
+    "contract": "a7a605d47c0c3f5635c6451d8083fb98297051fb1bda124c6aa33e2462bb892a",
+    "created": 1791581899.4008517,
+    "definition": {
+      "defaults": {
+        "provider": "claude"
+      },
+      "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "work-1e371432-e68b-4ec3-8bb3-09150fa0c2e3",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {
+        "conversation": "cdc470319d64d4375",
+        "depends_on_runs": [],
+        "request": "Deuxième demande fictive avec Claude : comparer JSON et texte pour le journal."
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Analyse technique réutilisable"
+    },
+    "driver": "conversation",
+    "id": "r077345d545154c8c",
+    "nodes": {
+      "analyse": {
+        "attempt": 1,
+        "heartbeat": 1791582044.634134,
+        "input_sources": {},
+        "inputs": {
+          "clarifications": [
+            {
+              "answer": "JSON, une ligne par événement.",
+              "question": "Quel format de sortie retenons-nous pour le journal fictif : JSON ou texte ?"
+            }
+          ]
+        },
+        "ownership": "native",
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1117780,
+            "session": 1117780,
+            "start": "11224246"
+          }
+        ],
+        "question": {
+          "answer": "JSON, une ligne par événement.",
+          "answered": 1791582074.6169357,
+          "created": 1791582048.7419844,
+          "id": "q1700cf874a4e4db4",
+          "status": "answered",
+          "text": "Quel format de sortie retenons-nous pour le journal fictif : JSON ou texte ?"
+        },
+        "questions": [
+          {
+            "answer": "JSON, une ligne par événement.",
+            "answered": 1791582074.6169357,
+            "created": 1791582048.7419844,
+            "id": "q1700cf874a4e4db4",
+            "status": "answered",
+            "text": "Quel format de sortie retenons-nous pour le journal fictif : JSON ou texte ?"
+          }
+        ],
+        "resume_question": true,
+        "started": 1791582044.634134,
+        "status": "ready"
+      },
+      "bilan": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "build": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "decision": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "join": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "test": {
+        "attempt": 0,
+        "status": "pending"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "provider": "claude"
+      },
+      "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        }
+      ],
+      "id": "work-1e371432-e68b-4ec3-8bb3-09150fa0c2e3",
+      "nodes": [
+        {
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "kind": "task",
+          "max_attempts": 2,
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre la demande"
+        },
+        {
+          "id": "build",
+          "kind": "task",
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer la réalisation"
+        },
+        {
+          "id": "test",
+          "kind": "task",
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Préparer les tests"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "id": "bilan",
+          "kind": "document",
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Préparer le bilan"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 1,
+      "title": "Analyse technique réutilisable"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "cdc470319d64d4375",
+      "depends_on_runs": [],
+      "request": "Deuxième demande fictive avec Claude : comparer JSON et texte pour le journal."
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-developpement-kafBSA/state/workflows/workspace/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "workspace",
+    "release": "",
+    "scope": {
+      "id": "workspace",
+      "kind": "workspace"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791582074.6170013,
+    "focus": {
+      "node": "analyse",
+      "title": "Comprendre la demande",
+      "status": "ready",
+      "action": "Continuer dans le terminal"
+    },
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "classification": "Intentions synthétiques préparées ; aucun état moteur créé",
+  "projects": [
+    {"name": "Guide associatif", "purpose": "Préparer et relire un guide interne fictif"},
+    {"name": "Site de la médiathèque", "purpose": "Concevoir une page d'information fictive"},
+    {"name": "Documentation partagée", "purpose": "Coordonner une vérification commune aux deux projets"}
+  ],
+  "workflowIntents": [
+    {
+      "name": "Relecture du guide",
+      "scope": "Guide associatif",
+      "steps": ["Préparer le texte", "Relire les termes", "Valider le contenu"],
+      "description": "Workflow générique de rédaction. Toutes les données sont fictives.",
+      "humanQuestion": "Quelle formulation convient au titre du guide ?",
+      "choices": ["Guide pratique", "Repères pour démarrer"]
+    },
+    {
+      "name": "Vérification de la cohérence des informations et validation du guide public pour les nouveaux participants",
+      "scope": ["Site de la médiathèque", "Documentation partagée"],
+      "steps": ["Comparer les informations", "Identifier les divergences", "Décider ensemble", "Publier la synthèse locale"],
+      "description": "Titre volontairement long pour observer troncature et densité.\nDeuxième ligne : le travail concerne plusieurs projets fictifs.\nTroisième ligne : aucun envoi ni publication externe.",
+      "humanQuestion": "Les deux projets doivent-ils employer le même intitulé ?",
+      "choices": ["Intitulé commun", "Intitulés spécifiques"]
+    }
+  ],
+  "terminalCommands": [
+    "command -v codex; codex --version; command -v claude; claude --version",
+    "printf '%s\\n' 'Message local synthétique : relire la deuxième ligne du guide.'"
+  ],
+  "volumeIntent": {
+    "optional": true,
+    "count": 8,
+    "purpose": "Observer listes et densité Activité uniquement",
+    "creationRule": "API Engine validée après déclaration ; aucun SQLite/JSON modifié, aucun geste testé contourné"
+  }
+}

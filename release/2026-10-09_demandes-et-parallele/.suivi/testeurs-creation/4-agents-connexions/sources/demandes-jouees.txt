@@ -1,0 +1,1 @@
+Variante synthétique réellement jouée en P4 : D-102, 8 chaises le 15 octobre, date de retour manquante. Réponse humaine saisie : retour le 17 octobre à 16 h. Le fichier initial demandes.txt (3 tables) n’a pas été utilisé comme donnée injectée.

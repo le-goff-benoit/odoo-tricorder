@@ -1,0 +1,5 @@
+{
+  "remaining_processes": [],
+  "remaining_fixture_directories": [],
+  "method": "app.close + cleanupBroker exact per-fixture socket + afterEach temp HOME removal; copied useful evidence; removed own result directories only"
+}

@@ -1,6 +1,7 @@
 """Bounded local executors. No shell, network, credentials or runtime DB in jobs."""
 
 import json
+from collections import Counter, deque
 import os
 from pathlib import Path
 import resource
@@ -59,14 +60,14 @@ def capabilities(project=None, engine=None):
     return result
 
 
-def preflight(graph, simulation=False, defaults=None, project=None, engine=None, mode="automatic", provider=None, model=None, *, primary=True):
+def preflight(graph, simulation=False, defaults=None, project=None, engine=None, mode="automatic", provider=None, model=None, *, primary=True, _catalog=None):
     if "driver" in graph:
         return [{"node": "workflow", "code": "workflow.runtime-context", "stage": "launch", "action": "save-workflow",
                  "message": "Ce modèle contient le contexte d’une ancienne conversation.",
                  "remedy": "Enregistrez le workflow à nouveau puis revérifiez le lancement. L’exécution historique restera inchangée."}]
     if simulation:
         return []
-    catalog = {c["id"]: c for c in capabilities()}
+    catalog = _catalog if _catalog is not None else {c["id"]: c for c in capabilities()}
     from .integrations import issues as plugin_issues
     issues = plugin_issues(graph, project, engine)
     from .packs import profile_issues
@@ -157,19 +158,145 @@ def dispatch(engine, run_id):
         if run_driver(run) == "conversation" and node["kind"] in {"agent", "task", "document"}:
             continue  # The native conversation claims work; the graph remains authoritative.
         try:
-            claim = engine.claim(run_id, nid)
+            _spawn_worker(engine, run_id, nid)
         except ContractError:
             continue  # Another dispatcher/lock owner won the transaction.
-        try:
-            worker = subprocess.Popen([sys.executable, str(Path(__file__).parents[1] / "studio.py"), "--state", str(engine.store.directory), "--worker", run_id, nid, claim["token"]],
-                             stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True, close_fds=True)
-            try:
-                engine.heartbeat(run_id, nid, claim["token"], worker.pid)
-            except ContractError:
-                pass  # Worker may already have returned.
-        except OSError as exc:
-            engine.submit(run_id, nid, claim["token"], {"ok": False, "summary": f"Lancement impossible : {exc.__class__.__name__}"})
     return engine.run(run_id)
+
+
+def _spawn_worker(engine, run_id, node_id):
+    """Reserve atomically before a detached spawn; never wait for worker output."""
+    claim = engine.claim(run_id, node_id)
+    current = engine.run(run_id)
+    if current['status'] != 'active':
+        engine.submit(run_id, node_id, claim['token'], {'ok': False, 'summary': 'Lancement interrompu : exécution suspendue ou annulée avant le démarrage.'})
+        return None
+    try:
+        worker = subprocess.Popen([sys.executable, str(Path(__file__).parents[1] / 'studio.py'), '--state', str(engine.store.directory), '--worker', run_id, node_id, claim['token']],
+                                  stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True, close_fds=True)
+    except OSError as exc:
+        engine.submit(run_id, node_id, claim['token'], {'ok': False, 'summary': f'Lancement impossible : {exc.__class__.__name__}. Vérifiez les ressources du système avant de demander une reprise.'})
+        return None
+    try:
+        engine.heartbeat(run_id, node_id, claim['token'], worker.pid)
+    except ContractError:
+        pass  # Worker may already have returned. Never spawn a replacement.
+    return {'node': node_id, 'pid': worker.pid, 'attempt': claim['run']['nodes'][node_id]['attempt']}
+
+
+def worker_preflight(engine, run, node, project, *, catalog=None):
+    """Read-only executor check shared by the overview and explicit dispatch.
+
+    The claim still owns quota, locks and authorization atomically. Readiness is
+    only an observation, never a reservation or permission to run future work.
+    """
+    if node['kind'] not in {'agent', 'command', 'document'}:
+        return [{'node': node['id'], 'code': 'native-step', 'action': 'terminal',
+                 'message': 'Ce bloc se traite dans la conversation du terminal.'}]
+    checked_node = {**node, **node.get('execution', {})}
+    context = run['nodes'][node['id']].get('inputs', {}).get('execution_context', {})
+    graph = {**run['definition'], 'nodes': [checked_node], 'edges': [],
+             'parameters': {**run['parameters'], **context}}
+    issues = preflight(graph, simulation=run['simulation'], defaults=project.get('defaults'),
+                       project=project, engine=engine, _catalog=catalog)
+    if not run['simulation']:
+        from .packs import policy_issues
+        issues += policy_issues(project, graph)
+    return issues
+
+
+def dispatch_conversation(engine, cid, *, runs=None, offset=0, limit=25, node_offsets=None):
+    """Explicit one-wave launch. Reads/status never enroll future paid work.
+
+    At most four starts and 100 eligibility checks per call, round-robin across
+    up to 25 requests. Repeated calls observe the durable claims and never retry
+    a running/returned attempt. The engine owns locks, quota and all transitions.
+    """
+    from .conversations import Conversations
+    service = Conversations(engine)
+    conversation = service.get(cid)
+    require(conversation['status'] == 'open' and not conversation.get('archived'), 'Conversation fermée ou archivée')
+    require(runs is None or isinstance(runs, list) and len(runs) <= 1000 and all(isinstance(r, str) for r in runs), 'Sélection attendue : au plus 1 000 identifiants d’exécution')
+    require(type(offset) is int and 0 <= offset <= 1000 and type(limit) is int and 1 <= limit <= 25, 'Pagination : offset positif et limit entre 1 et 25')
+    authorized = {item['run'] for item in conversation['items']}
+    selected = list(dict.fromkeys(runs)) if runs is not None else [item['run'] for item in conversation['items']]
+    require(all(rid in authorized for rid in selected), 'Tâche d’une autre conversation ; aucun lancement effectué')
+    require(node_offsets is None or isinstance(node_offsets, dict) and all(rid in selected and type(index) is int and 0 <= index <= 1000 for rid, index in node_offsets.items()), 'Curseurs de blocs invalides ou hors de la sélection')
+    node_offsets = node_offsets or {}
+    page = selected[offset:offset + limit]
+    records, queues = {}, {}
+    for rid in page:
+        run = service.checked_run(cid, rid)
+        require(run_driver(run) == 'conversation', 'Cette exécution n’est pas pilotée par la conversation')
+        record = records[rid] = {'run': rid, 'project': run['project'], 'started': [], 'problems': {}}
+        if run['status'] == 'paused' and run.get('coordination_wait') and not run.get('coordination_hold'):
+            try:
+                run = engine.control(rid, 'resume')
+            except ContractError as exc:
+                record['run_wait'] = {'code': 'dependencies', 'reason': str(exc)[:500]}
+        if run['status'] == 'active':
+            queues[rid] = deque((index, n) for index, n in enumerate(run['definition']['nodes']) if index >= node_offsets.get(rid, 0) and run['nodes'][n['id']]['status'] == 'ready')
+    starts = checks = 0
+    catalog = None
+    while any(queues.values()) and starts < 4 and checks < 100:
+        for rid, queue in queues.items():
+            if not queue or starts >= 4 or checks >= 100:
+                continue
+            _, node = queue.popleft(); nid = node['id']; checks += 1
+            record = records[rid]
+            run = engine.run(rid)
+            project = engine.project(run['project'])
+            # Check this executor, not unrelated future stages or the native
+            # coordinator's broader tool access. Frozen node selection is kept.
+            if catalog is None:
+                catalog = {c['id']: c for c in capabilities()}
+            issues = worker_preflight(engine, run, node, project, catalog=catalog)
+            if issues:
+                record['problems'][nid] = {'code': issues[0].get('code', 'executor-unavailable'),
+                                          'reason': ' · '.join(i['message'] for i in issues)[:500]}
+                continue
+            try:
+                started = _spawn_worker(engine, rid, nid)
+                if started:
+                    record['started'].append(started); starts += 1
+                else:
+                    record['problems'][nid] = {'code': 'launch-failed', 'reason': 'Aucun worker démarré. Consultez le résultat enregistré avant de demander une reprise.'}
+            except ContractError as exc:
+                record['problems'][nid] = {'code': 'claim-blocked', 'reason': str(exc)[:500]}
+    with engine.store.connect() as db:
+        active_count = db.execute("SELECT COUNT(*) FROM runs, json_each(runs.body, '$.nodes') AS steps WHERE json_extract(steps.value, '$.status')='running'").fetchone()[0]
+    items = []
+    messages = {'running': ('running', 'Tentative déjà en cours ; aucun nouvel exécutant lancé.'),
+                'waiting_input': ('question', 'Réponse à la question attendue avant de poursuivre.'),
+                'waiting': ('decision', 'Décision humaine attendue dans Tricorder.'),
+                'returned': ('receipt', 'Résultat à examiner ; aucune réception ou reprise automatique.'),
+                'blocked': ('blocked', 'Blocage à examiner avant de poursuivre.'),
+                'pending': ('dependencies', 'Attend les étapes précédentes du workflow.'),
+                'ready': ('batch-limit', 'D’autres étapes sont prêtes. Relancez les demandes prêtes après les résultats en cours.')}
+    for rid in page:
+        record, run = records[rid], engine.run(rid)
+        started_ids = {entry['node'] for entry in record['started']}
+        waiting = []
+        if run['status'] == 'paused':
+            waiting.append({'node': None, 'status': 'paused', **record.get('run_wait', {'code': 'paused', 'reason': 'Exécution suspendue manuellement ; reprise explicite requise dans Tricorder.'})})
+        elif run['status'] == 'cancelled':
+            waiting.append({'node': None, 'status': 'cancelled', 'code': 'cancelled', 'reason': 'Exécution annulée ; aucun lancement.'})
+        else:
+            for nid, state in run['nodes'].items():
+                if nid in started_ids or state['status'] not in messages:
+                    continue
+                code, reason = messages[state['status']]
+                if state['status'] == 'ready' and active_count >= 4:
+                    code, reason = 'quota', 'Quatre étapes sont déjà en cours : attente d’une place d’exécution, puis rappeler dispatch.'
+                waiting.append({'node': nid, 'status': state['status'], **record['problems'].get(nid, {'code': code, 'reason': reason})})
+        items.append({'run': rid, 'project': run['project'], 'status': run['status'], 'started': record['started'],
+                      'counts': dict(Counter(s['status'] for s in run['nodes'].values())),
+                      'waiting': waiting[:25], 'waiting_total': len(waiting), 'waiting_truncated': len(waiting) > 25,
+                      'next_node': queues[rid][0][0] if queues.get(rid) else None})
+    return {'conversation': cid, 'items': items, 'offset': offset, 'limit': limit, 'total': len(selected),
+            'next': offset + len(page) if offset + len(page) < len(selected) else None,
+            'started_count': starts, 'checks': checks, 'max_parallel': 4, 'active_count': active_count,
+            'continuation': 'Vague explicite terminée. Consulter status/inspect puis rappeler dispatch après les résultats ou les décisions ; aucune file de lancements futurs créée.'}
 
 
 def _limits():
@@ -187,9 +314,10 @@ def execute(engine, run_id, node_id, token):
     try:
         require(run["status"] != "cancelled", "Exécution annulée avant lancement de l'outil")
         if run["simulation"]:
+            from .simulation import output_examples
             time.sleep(0.4)
             text = "SIMULATION — " + node.get("sample", f"Résultat d'exemple pour « {node['title']} ». Aucun outil métier ni service externe n'a été appelé.")
-            result = {"ok": True, "summary": text, "simulated": True, "outputs": node.get("sample_outputs", {}), "evidence": [engine.artifact(text.encode())]}
+            result = {"ok": True, "summary": text, "simulated": True, "outputs": output_examples(run['definition'], node), "evidence": [engine.artifact(text.encode())]}
         elif node.get("capabilities"):
             from connectors.tool_runtime import execute_tool
             result = execute_tool(engine, run, node, token)

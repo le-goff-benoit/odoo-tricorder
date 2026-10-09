@@ -1,0 +1,34 @@
+# Avis utilisateur 5 — développement
+
+Profil : développeuse expérimentée, terminal quotidien. Paquet reçu : **0.6.0-rc.12**, ASAR `71a054e6137a4fb424320954836109bd67ef2b74cb8f71ad3e49af35bb047dd7`. Avis formé depuis les écrans, sans lecture du code produit ni des autres rapports.
+
+**Verdict : les trois parcours sont accomplis dans les limites du banc.** Aucun bug bloquant établi. Le terminal reste utilisable et les états d'arrêt, de suspension et de question sont distingués. Les principales difficultés concernent l'accès continu au terminal et la lisibilité du contexte quand plusieurs onglets s'accumulent.
+
+## Parcours réellement effectués
+
+| Intention et gestes | Attendu / observé | Résultat et conséquence |
+|---|---|---|
+| Ouvrir un vrai shell, contrôler les stubs, créer puis lancer un workflow générique. Détour : modèle « Évolution logicielle » sans projet Git, refus expliqué ; création de « Analyse technique réutilisable » depuis « De la demande au résultat ». Lancement Codex avec demande fictive. Variable shell `PANEL_CONTEXT`, navigation Connexions puis Activité et retour au suivi. | Les précontrôles terminal renvoient les chemins isolés et deux versions `TRICORDER-PANEL-INERT`. Le lancement ouvre une conversation dans la même fenêtre. Le stub s'arrête ; l'interface dit « Agent arrêté » et conserve 0/6 étapes. La variable vaut `contexte_conserve` avant et après navigation. | **Réussi pour contexte/navigation.** La continuité du shell et de la demande est prouvée ; aucune réalisation IA revendiquée. Captures 01–03, `precontrole-terminal.txt`, `navigation-fournisseur.txt`. |
+| Changer « IA des prochains lancements » de Codex à Claude, conserver le terminal existant ; depuis Activité reprendre l'ancien agent, puis lancer une deuxième demande du même workflow. | Le choix global affiche Claude, l'ancien onglet reste Codex. La reprise dans cet onglet invoque encore le stub Codex et garde la conversation. Le lancement suivant invoque le stub Claude dans un troisième onglet. | **Réussi.** La préférence et la session existante sont séparées de façon compréhensible. Captures 03–04, `reprise-fournisseur.txt`, `lancement-claude.txt`. La session fournisseur réellement active n'est pas évaluée : les stubs se terminent immédiatement. |
+| Retrouver une définition versionnable et une demande bloquée, puis reprendre. Depuis Options : suspension, détour Activité, réouverture et « Reprendre la demande ». Retour éditeur, Options → Exporter ; lecture terminal du JSON dans `.tricorder/workflows/`. Fixture `claim`/`ask` pour une question, ouverture via Activité puis « Répondre à la question », saisie GUI « JSON, une ligne par événement. ». | La demande reprend sans relancer le processus fournisseur. Le JSON porte titre, identifiant, blocs et liens ; l'export existe. La question apparaît « Réponse attendue ». Après réponse GUI, le moteur met l'analyse à `ready` et conserve la clarification, visible dans « Entrées, sorties et preuves ». | **Réussi pour définition et reprise.** Suspension de demande, reprise d'agent et question sont bien distinctes. Captures 05–08, export, `fixture-pont.ndjson`, `reponse-etat.json`. Le travail après la clarification n'est pas exécuté. |
+
+## Constats priorisés
+
+1. **P2 — friction : la navigation principale masque le terminal déjà ouvert.** Connexions, Activité et Workflows présentent leur page seule ; il faut le réafficher avec le bouton du bandeau. Le shell est conservé, mais ce geste répété interrompt le parcours d'une utilisatrice qui considère le terminal comme interaction principale. Observation : `navigation-fournisseur.txt`, captures 02–03 ; aucun défaut de persistance constaté. Amélioration souhaitée : conserver la visibilité choisie lors des changements de page.
+2. **P2 — friction : les onglets deviennent difficiles à identifier avec des demandes longues.** À trois onglets, le nom complet reprend la demande ; l'onglet Claude déborde et une barre horizontale apparaît. Le workflow n'est pas nommé dans l'onglet ; la sélection exige de lire le suivi à droite ou de faire défiler. Capture 04. Amélioration souhaitée : titre court réglable et accès immédiat au contexte complet.
+3. **P3 — friction : l'emplacement exact de la définition se retrouve plus facilement par le shell que dans l'éditeur.** La création annonce `.tricorder/workflows/` du dossier choisi, mais « Sans projet » ne fournit pas alors le chemin exact ni le fichier UUID. J'ai utilisé `pwd`, `ls` et `head` pour rattacher le JSON au workflow. L'export est disponible dans Options et fonctionne. Capture 06, `definition-versionnable.txt`. Amélioration souhaitée : afficher/coller le chemin du fichier depuis l'éditeur. Pas de manque d'export établi.
+
+Points réussis : séparation des fournisseurs futurs/existants ; refus explicite d'édition sans projet Git ; même fenêtre pour shell et suivi ; état « Agent arrêté » sans promesse de résultat ; réponses conservées dans les entrées ; reprise de demande distincte de la relance de l'agent. Aucun message `pageerror` pendant le parcours.
+
+## Banc et limites
+
+- `harness.cjs`, démarrage normal, display 181, HOME/XDG/état/runtime/configurations isolés ; PATH fixe avec fournisseurs inertes. Aucun compte, clé, service externe ou projet client. Aucun build, installation, commit, SQL ni édition de JSON d'exécution.
+- Le modèle d'exemple a été lancé **dans le terminal**, sans utiliser « Simuler le parcours ». Les stubs quittent avec 78 : ni qualité modèle, ni authentification, ni livraison réelle ne sont reçues.
+- La question est une **fixture déclarée** : `status`, `claim`, `ask` par le pont validé du paquet dans l'état isolé. Elle ne prouve pas qu'une IA aurait posé cette question. La réponse est effectivement faite par les contrôles GUI ; `inspect` confirme sa conservation. Aucune sortie métier fictive soumise.
+- Le dialogue natif d'export a été annulé avec Escape sur le display dédié, puis seul son chemin sélectionné a été remplacé par un chemin de preuve local via `dialog.showSaveDialog`. L'exporteur est reçu ; le sélecteur natif ne l'est pas.
+- Huit captures prises **et ouvertes**. `parcours.cjs` contient le lanceur Playwright Electron ; `gestes.ndjson` conserve les gestes et tentatives de sélection exacts. Les échecs de sélecteur accessibles dans cette trace sont des erreurs d'automatisation, pas des bugs produit.
+- Une première ouverture technique sans stdin persistant a été fermée avant la réception ; ses processus ont été arrêtés de façon ciblée. Le banc reçu est `developpement-kafBSA` dans les manifestes.
+
+## Nettoyage et preuves finales
+
+`cleanup()` exécuté avec succès. Une seule fenêtre applicative observée aux contrôles ; aucun processus restant avec le HOME ou le chemin temporaire de ce banc. Exécutable, ASAR et backend conformes au manifeste gelé en fin. Voir `cleanup-harness.json` et `verification-finale.json`. Aucune exploration supplémentaire après le rapport.

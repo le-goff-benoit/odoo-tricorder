@@ -1,0 +1,105 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Suivi prestataires D
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Suivi prestataires D
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:09
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Réception de la procédure de support et du tableau des responsabilités. Vérifier document daté, validation du responsable et réception signée.
+Conversation du workflow affiché · Suivi prestataires D
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-creation2-reception-pr
+estataire-d-soVg9t/state/agent-events/ad157a9d-c266-44ed-a6b6-6ef977ecbe
+00.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-creation2-reception-prestataire-d-soVg9t/s
+tate/workflows/projects/p23cb2d1746d14ac8$ 'python3' '/home/blegoff/odoo
+-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_launch
+.py' '/tmp/tricorder-creation2-reception-prestataire-d-soVg9t/state/agen
+t-events/ad157a9d-c266-44ed-a6b6-6ef977ecbe00.launch.json'
+TRICORDER-CREATION2-ADAPTATION-STUB codex — fixture inerte, modèle non q
+ualifié
+blegoff@wrk226:/tmp/tricorder-creation2-reception-prestataire-d-soVg9t/s
+tate/workflows/projects/p23cb2d1746d14ac8$  
+
+SUIVI · RÉCEPTION PRESTATAIRE D
+Réception de la procédure de support et du tableau des responsabilités. Vérifier document daté, validation du responsable et réception signée.
+Options
+Vue d’ensemble
+Demande
+1 demandes
+⌄
+
+Aucune étape en cours · 1 demande à prendre en charge
+
+Terminal
+À configurer
+0 / 7 étapes
+Examiner la configuration
+
+Aucun modèle explicite pour un agent de bloc. Vous pouvez continuer cette demande dans le terminal. Pour utiliser un agent de bloc, configurez un nouveau lancement ; cette exécution conserve sa version.
+
+Graphe
+Détail
+critical
+normal
+unknown
+critical
+normal
+unknown
+✦
+Qualifier les livrables du prestataire
+Tâche IA
+À configurer
+0 entrée → 3 sorties
+✦
+Préparer le traitement urgent
+Tâche IA
+Prévu
+2 entrées → 1 sortie
+✦
+Préparer la réponse et la suite
+Tâche IA
+Prévu
+2 entrées → 1 sortie
+?
+Préciser l’impact
+Question
+Prévu
+0 entrée → 1 sortie
+✦
+Réévaluer avec la précision reçue
+Tâche IA
+Prévu
+1 entrée → 3 sorties
+?
+Diagnostic encore indéterminé
+Question
+Prévu
+0 entrée → 1 sortie
+?
+Vérifier les preuves
+Décision humaine
+Prévu
+Vous
+7 blocs · 8 liens
+−
+100 %
++
+Ajuster

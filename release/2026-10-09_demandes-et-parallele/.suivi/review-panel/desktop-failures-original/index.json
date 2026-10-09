@@ -1,0 +1,78 @@
+[
+  {
+    "campaign": "source",
+    "case": "roadmap",
+    "trace": "/tmp/tricorder-rc12-final-ui-source/desktop-roadmap-observatio-f6306-preparation-and-preferences/trace.zip",
+    "sha256": "85588289a82e505b82e166212a9ff71b8019e78026d0d1817106eabeb3ab1317",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "expect@127",
+        "endTime": 108223.537,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-context')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-context') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-context')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-context\" class=\"terminal-context\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+          "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-context')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-context') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-context')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-context\" class=\"terminal-context\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:1204:53"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "source",
+    "case": "flow-starts",
+    "trace": "/tmp/tricorder-rc12-final-ui-source/desktop-flow-starts-delaye-d1f83-ous-adoption-stays-explicit/trace.zip",
+    "sha256": "2242ca1f4119abd4184e6319e18923dd1b0ddf2b153b8265777c26f87e7b6e47",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "expect@47",
+        "endTime": 74589.814,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-workspace')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-workspace') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-workspace')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-workspace\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+          "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-workspace')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-workspace') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-workspace')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-workspace\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:606:55"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "package",
+    "case": "roadmap",
+    "trace": "/home/blegoff/odoo-tricorder/test-results/desktop-roadmap-observatio-f6306-preparation-and-preferences/trace.zip",
+    "sha256": "4584a91bd6a089fc2eedbdb3225cfc15f78eca19ffa9c8b6a322a418b2a9c326",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "expect@126",
+        "endTime": 112663.466,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-context')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-context') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-context')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-context\" class=\"terminal-context\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+          "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-context')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-context') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-context')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-context\" class=\"terminal-context\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:1204:53"
+        }
+      }
+    ]
+  },
+  {
+    "campaign": "package",
+    "case": "flow-starts",
+    "trace": "/home/blegoff/odoo-tricorder/test-results/desktop-flow-starts-delaye-d1f83-ous-adoption-stays-explicit/trace.zip",
+    "sha256": "3eba840d3b36edc830c2fd6c98f4e9bb405a961f6d0e463faf3db5378d855c70",
+    "failures": [
+      {
+        "type": "after",
+        "callId": "expect@46",
+        "endTime": 77495.391,
+        "annotations": [],
+        "error": {
+          "name": "",
+          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-workspace')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-workspace') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-workspace')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-workspace\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n",
+          "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#terminal-workspace')\nExpected: hidden\nReceived: visible\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeHidden\" locator('#terminal-workspace') with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#terminal-workspace')\u001b[22m\n\u001b[2m    14 × locator resolved to <div id=\"terminal-workspace\">…</div>\u001b[22m\n\u001b[2m       - unexpected value \"visible\"\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:606:55"
+        }
+      }
+    ]
+  }
+]

@@ -246,9 +246,10 @@ test('structured proposal needs preview, rejects stale revision and never starts
 test('template creation has a real terminal; file edits require validated reload', async () => {
   await library();
   const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Commande locale avec validation', exact: true }) });
-  await card.getByRole('button', { name: 'Modifier le modèle' }).click();
+  await card.getByRole('button', { name: 'Personnaliser une copie…' }).click();
+  await page.getByRole('button', { name: 'Créer la copie et l’ouvrir', exact: true }).click();
   await expect(page.locator('.breadcrumb')).toContainText('Modèles / Workflow');
-  await page.getByRole('button', { name: 'Ouvrir le terminal du workflow' }).click();
+  await page.getByRole('button', { name: 'Ouvrir le terminal existant' }).click();
   await expect(page.locator('#terminal-workspace')).toBeVisible();
   const input = page.locator('.xterm-helper-textarea'); await input.focus();
   const script = 'import json; from pathlib import Path; p=next(Path("workflows").glob("*.json")); g=json.loads(p.read_text()); g["title"]="Modèle corrigé au terminal"; p.write_text(json.dumps(g))';
@@ -272,7 +273,7 @@ test('recurrence activation shows models and persists; communication needs exact
   await page.locator('.node[data-id="notify"]').click();
   await page.getByLabel('Canal de communication').selectOption('telegram');
   await page.getByRole('button', { name: 'Appliquer au bloc' }).click();
-  if (!(await page.locator('.workflow-options').evaluate(el => el.open))) await page.locator('.workflow-options > summary').click();
+  if (!(await page.locator('.design-menu').evaluate(el => el.open))) await page.locator('.design-menu > summary').click();
   await page.getByRole('button', { name: 'Planifier', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('Modèles IA : aucun');
   await expect(page.getByRole('dialog')).toContainText('Connecteur telegram non connecté');
@@ -295,7 +296,8 @@ test('window closes to Ubuntu tray and remains available', async () => {
 test('new plugin declared in the terminal workspace is selectable without a dedicated agent', async () => {
   await library();
   const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Analyse', exact: true }) });
-  await card.getByRole('button', { name: 'Modifier le modèle' }).click();
+  await card.getByRole('button', { name: 'Personnaliser une copie…' }).click();
+  await page.getByRole('button', { name: 'Créer la copie et l’ouvrir', exact: true }).click();
   await expect(page.locator('.breadcrumb')).toContainText('Modèles / Workflow');
   await expect(page.locator('.node[data-id="work"]')).toBeVisible();
   const plugin = { id: 'future-plugin', title: 'Nouveau plugin', provider: 'codex', operations: ['read'] };
@@ -303,7 +305,7 @@ test('new plugin declared in the terminal workspace is selectable without a dedi
   expect(fs.readFileSync(path.join(workspace, 'AGENTS.md'), 'utf8')).toContain('tricorder-guidance version=');
   fs.writeFileSync(path.join(workspace, 'plugins.json'), JSON.stringify({ schema: 1, plugins: [plugin] }));
   await page.locator('.node[data-id="work"]').click();
-  await page.getByText('Connexions de cette étape', { exact: true }).click();
+  await page.getByText('Outils et plugins de cette étape', { exact: true }).click();
   await page.getByRole('button', { name: 'Actualiser les outils' }).click();
   await page.getByText('Agent et modèle pour cette étape', { exact: true }).click();
   await page.getByLabel('Agent dédié (facultatif)').selectOption('generalist');
@@ -343,7 +345,27 @@ test('global workflow runs independently of Git projects and draws right-angle l
   await expect(page.locator('.breadcrumb')).toContainText('Sans projet');
   const paths = await page.locator('svg path.edge').evaluateAll(elements => elements.map(e => e.getAttribute('d')));
   expect(paths.length).toBeGreaterThan(0);
-  for (const d of paths) { expect(d).toContain('H'); expect(d).toContain('V'); expect(d).not.toMatch(/[CQ]/); }
+  for (const d of paths) {
+    const tokenPattern = /[MLHVmlhv]|[-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?/gi;
+    // Reject curves/unknown commands; SVG can express an axis-aligned line as L.
+    expect(d.replace(tokenPattern, '').replace(/[\s,]/g, '')).toBe('');
+    const tokens = d.match(tokenPattern) || [];
+    let index = 0, command, x = 0, y = 0, segments = 0;
+    const coordinate = () => { const value = Number(tokens[index++]); expect(Number.isFinite(value)).toBe(true); return value; };
+    while (index < tokens.length) {
+      if (/^[MLHV]$/i.test(tokens[index])) command = tokens[index++];
+      expect(command).toMatch(/^[MLHV]$/i);
+      const kind = command.toUpperCase(), relative = command !== kind;
+      const nextX = kind === 'V' ? x : coordinate() + (relative ? x : 0);
+      const nextY = kind === 'H' ? y : coordinate() + (relative ? y : 0);
+      if (kind !== 'M') {
+        expect(nextX === x || nextY === y, `Non-orthogonal segment in ${d}`).toBe(true);
+        segments++;
+      } else command = relative ? 'l' : 'L';
+      x = nextX; y = nextY;
+    }
+    expect(segments).toBeGreaterThan(0);
+  }
   await simulate();
   await expect(page.locator('.node[data-id="mail"]')).toHaveAttribute('data-status', 'accepted');
   await page.screenshot({ path: path.join(test.info().outputDir, 'studio-global-orthogonal.png'), fullPage: true });
@@ -358,6 +380,7 @@ test('exported clickable file opens on another local instance as a draft without
   await example();
   const file = path.join(directory, 'example.tricorder-workflow');
   await app.evaluate(({ dialog }, target) => { dialog.showSaveDialog = async () => ({ canceled: false, filePath: target }); }, file);
+  await page.locator('.design-menu > summary').click();
   await page.getByRole('button', { name: 'Exporter…', exact: true }).click();
   await expect.poll(() => fs.existsSync(file)).toBe(true);
   const exported = JSON.parse(fs.readFileSync(file));
@@ -625,7 +648,7 @@ test('previous studio terminal is adopted in the main terminal without a new she
     const data = await window.studio.request({action:'bootstrap'});
     return window.studio.terminal({action:'create',project:data.projects[0].id});
   });
-  await page.getByRole('button',{name:'Ouvrir le terminal du workflow'}).click();
+  await page.getByRole('button',{name:'Ouvrir le terminal existant'}).click();
   const sessions = await page.evaluate(() => window.tricorder.terminals.list());
   expect(sessions).toHaveLength(1);
   expect(sessions[0].id).toBe('legacy:' + old.id);
@@ -709,11 +732,13 @@ test('design review: library and management views use the workspace, with readab
 
 test('terminal visibility preserves a live session while browsing and editing', async () => {
   await example();
-  await page.getByRole('button', {name:'Ouvrir le terminal du workflow',exact:true}).click();
+  await page.getByRole('button', {name:'Ouvrir le terminal existant',exact:true}).click();
   await expect(page.locator('#terminal-workspace')).toBeVisible();
   const before = await page.evaluate(() => window.tricorder.terminals.list());
   expect(before.length).toBe(1);
   await library();
+  await expect(page.locator('#terminal-workspace')).toBeVisible();
+  await page.locator('[data-action="terminal-toggle"]').click();
   await expect(page.locator('#terminal-workspace')).toBeHidden();
   await page.locator('[data-action="terminal-toggle"]').click();
   await expect(page.locator('#terminal-workspace')).toBeVisible();
@@ -804,9 +829,10 @@ for line in sys.stdin:
   await expect(page.locator('.node[data-id=review]')).toHaveAttribute('data-status','ready');
   const before = await page.evaluate(() => window.tricorder.terminals.list());
   await library();
-  await page.locator('[data-action=terminal-toggle]').click();
+  await expect(page.locator('#terminal-workspace')).toBeVisible();
   await expect(page.locator('.xterm-screen:visible')).toContainText('INTENTION:Préparer');
   const after = await page.evaluate(() => window.tricorder.terminals.list());
+  expect(after.map(s=>[s.id,s.pid,s.provider,s.alive])).toEqual(before.map(s=>[s.id,s.pid,s.provider,s.alive]));
   expect(after[0].pid).toBe(before[0].pid); expect(app.context().pages()).toHaveLength(1);
   await page.evaluate(id => window.tricorder.terminals.write({session:id,data:'exit\nexit\n'}),before[0].id);
 });
@@ -891,7 +917,7 @@ test('workspace layout: focused navigation, adjustable split and editor preserve
   await expect(page.locator('.sidebar-tools')).not.toHaveAttribute('open','');
   await expect(page.locator('[data-cockpit="preferences"]')).toHaveText('Paramètres');
   await example();
-  await page.getByRole('button',{name:'Ouvrir le terminal du workflow',exact:true}).click();
+  await page.getByRole('button',{name:'Ouvrir le terminal existant',exact:true}).click();
   await expect(page.locator('.xterm-screen')).toBeVisible();
   const before = await page.evaluate(() => window.tricorder.terminals.list());
   expect(before).toHaveLength(1);
@@ -918,6 +944,10 @@ test('workspace layout: focused navigation, adjustable split and editor preserve
   await simulate();
   await page.locator('.workflow-heading .compact-menu > summary').click();
   await page.getByRole('button',{name:'Revenir à l’éditeur',exact:true}).click();
+  // Returning to design preserves the user's terminal visibility choice.
+  await expect(page.locator('#terminal-workspace')).toBeVisible();
+  await expect(page.locator('.xterm-screen')).toContainText('WORKSPACE-CONTINUITY');
+  await page.locator('[data-action="terminal-toggle"]').click();
   await expect(page.locator('#terminal-workspace')).toBeHidden();
   await page.locator('[data-action="terminal-toggle"]').click();
   await expect(page.locator('.xterm-screen')).toBeVisible();
@@ -987,7 +1017,7 @@ test('audit reception: decision shows the delivered text, provenance and safe pr
   await expect(page.locator('.editor.review-focus')).toBeVisible();
   await page.screenshot({path:path.join(test.info().outputDir,'audit-decision-readable.png'),fullPage:true});
   await page.getByRole('button',{name:'Graphe',exact:true}).click();
-  await page.locator('.node[data-id="minutes"]').click();await page.getByRole('button',{name:'Consulter la preuve 1',exact:true}).click();
+  await page.locator('.node[data-id="minutes"]').click();await page.locator('#inspector .business-proof').first().click();
   await expect(page.getByRole('dialog')).toContainText('SIMULATION');
   await page.getByRole('button',{name:'Fermer la fenêtre',exact:true}).click();
   await page.locator('.execution-menu > summary').click();await page.getByRole('tab',{name:'Rapport',exact:true}).click();await expect(page.locator('#document-view')).toContainText('MINUTES_SENTINEL');
@@ -1078,8 +1108,9 @@ test('mail intake: native terminal prepares four requests, source files and plan
   await expect(page.locator('.work-items strong').first()).toHaveText('R1: Règle de distance contradictoire dans les devis.');
   await page.locator('.request-selector > summary').click();
   await page.locator('.conversation-search-details > summary').click();
-  const search=await page.locator('#conversation-query').boundingBox(),searchButton=await page.locator('#conversation-search button').boundingBox();expect(Math.abs(searchButton.y-search.y)).toBeLessThan(8);await page.locator('.conversation-search-details > summary').click();
-  await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+  await expect(page.locator('#conversation-query')).toBeVisible();await expect.poll(()=>page.locator('#conversation-search').evaluate(form=>{const input=form.querySelector('input'),button=form.querySelector('button');return input.offsetHeight && button.offsetHeight ? Math.abs(button.getBoundingClientRect().y-input.getBoundingClientRect().y) : Infinity;})).toBeLessThan(8);await page.locator('.conversation-search-details > summary').click();
+  await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+  await expect(page.getByRole('button',{name:'Reprendre l’agent…',exact:true}).first()).toBeVisible();
   await selectRequest(0);await page.locator('.node[data-id=scope]').click();await expect(page.locator('#inspector')).toContainText('Règle de distance');
   await page.screenshot({path:test.info().outputPath('mail-release-plan.png'),fullPage:true});
   await expect.poll(async()=> (await page.evaluate(()=>window.tricorder.terminals.list())).find(s=>s.id===terminal.id)?.idleShell).toBe(true);
@@ -1111,9 +1142,9 @@ test('mail illustration: four independent states, selected question and QA failu
   const script=`import json,sys\nsys.path.insert(0,sys.argv[1])\nfrom workflow_engine import Engine\ne=Engine(sys.argv[2]);items=json.loads(sys.argv[3])\nfor index,item in enumerate(items[1:],2):\n r=e.run(item['run']);s=r['nodes']['scope'];e.decide(r['id'],'scope',s['nonce'],s['proposal'],'approve',human=True);claim=e.claim(r['id'],'work')\n if index==2:continue\n e.submit(r['id'],'work',claim['token'],{'ok':True,'summary':'Proposition synthétique, aucune application client modifiée.','outputs':{'result':f'Résultat R{index} : proposition prête pour contrôle, pas encore validée.'}})\n if index==4:\n  claim=e.claim(r['id'],'check');e.submit(r['id'],'check',claim['token'],{'ok':True,'summary':'QA synthétique en échec.','outputs':{'verdict':'fail','evidence_summary':'Le sous-total ne respecte pas le résultat attendu dans le scénario synthétique.'},'evidence':[e.artifact(b'Synthetic failed QA fixture, no client test performed.')]})\n`;
   const seeded=require('node:child_process').spawnSync('python3',['-c',script,backend,directory,JSON.stringify(initial.items)],{encoding:'utf8'});expect(seeded.status,seeded.stderr).toBe(0);
   await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:initial.project_contexts[0].title}).click();await page.locator('[data-action=open-conversation]').click();
-  await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+  await expect(page.locator('.xterm-screen:visible')).toBeVisible();await expect(page.locator('#conversation-tray')).toContainText('Agent arrêté');
   const cards=page.locator('.work-items button');await expect(cards).toHaveCount(4);
-  await expect(cards.nth(0)).toContainText('Réponse attendue');await expect(cards.nth(1)).toContainText('En cours');await expect(cards.nth(2)).toContainText('Prête');await expect(cards.nth(3)).toContainText('Réponse attendue');await expect(cards.nth(3)).not.toContainText('Échec · reprise nécessaire');
+  await expect(cards.nth(0)).toContainText('Réponse attendue');await expect(cards.nth(1)).toContainText('En cours');await expect(cards.nth(2)).toContainText('Agent arrêté');await expect(cards.nth(3)).toContainText('Réponse attendue');await expect(cards.nth(3)).not.toContainText('Échec · reprise nécessaire');
   await selectRequest(0);await expect(page.locator('.workflow-heading h1')).toHaveText('R1: Règle de distance contradictoire dans les devis.');await expect(page.locator('.breadcrumb')).toContainText('Suivi · Release');
   await expect(page.locator('#inspector')).toContainText('Quelle règle de distance');await expect(page.locator('#inspector')).toContainText('original.eml');await expect(cards.nth(0)).toHaveAttribute('aria-pressed','true');
   await page.getByRole('button',{name:'Détail',exact:true}).click();
@@ -1126,7 +1157,7 @@ test('mail illustration: four independent states, selected question and QA failu
   for(let i=0;i<4;i++)await expect.poll(async()=>{const box=await cards.nth(i).boundingBox();return !!box && box.x+box.width<=1024;}).toBe(true);
   await page.locator('.request-selector > summary').press('Escape');
   await page.screenshot({path:test.info().outputPath('mail-mixed-states-1024.png'),fullPage:true});
-  await selectRequest(2);await expect(page.locator('#inspector')).toContainText('Résultat R3');await expect(page.locator('#inspector')).toContainText('Poursuivez dans le terminal');
+  await selectRequest(2);await expect(page.locator('#inspector')).toContainText('Résultat R3');await expect(page.locator('#inspector').getByRole('button',{name:'Reprendre l’agent…',exact:true})).toBeVisible();await page.locator('#inspector summary').filter({hasText:'Agent de bloc séparé (facultatif)'}).click();await expect(page.locator('#inspector')).toContainText('Aucun modèle explicite pour un agent de bloc');await expect(page.locator('#inspector').getByRole('button',{name:'Configurer un nouveau lancement…',exact:true})).toBeVisible();
   await expect(cards.nth(2)).toHaveAttribute('aria-pressed','true');
   await page.screenshot({path:test.info().outputPath('mail-r3-next-action-1024.png'),fullPage:true});
   await selectRequest(3);await expect(page.locator('.editor.review-focus')).toBeVisible();
@@ -1157,6 +1188,7 @@ test('mail illustration: four independent states, selected question and QA failu
 test('candidate QA: explicit editor control persists typed ports and remains visible after reload', async()=>{
   await example();await page.locator('.node[data-id=analyse]').click();
   await page.getByLabel('Nom du bloc',{exact:true}).fill('Vérifier le candidat sans agent imposé');
+  await page.locator('#node-form details').filter({has:page.getByText('Contrôle de code (QA)',{exact:true})}).locator('summary').click();
   await page.getByLabel('Contrôle QA du candidat',{exact:true}).check();
   await page.reload();await page.locator('[data-workflow-route=projects]').click();await page.locator('.project-card').first().click();await page.getByRole('button',{name:'Ouvrir le workflow',exact:true}).click();
   await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();

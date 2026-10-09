@@ -1,0 +1,26 @@
+[
+  {
+    "case": "stopped-observation-a-stop-5b0d1-ng-requests-or-its-terminal",
+    "idle_ms": 45.599999994039536,
+    "terminal_ms": 4100.5,
+    "resume_ms": 4852.0999999940395,
+    "lag_after_terminal_ms": 751.5999999940395,
+    "assertion_resolved_ms": 5263.5999999940395
+  },
+  {
+    "case": "stopped-observation-a-stop-5b0d1-ng-requests-or-its-terminal-repeat1",
+    "idle_ms": 34.5,
+    "terminal_ms": 3925.5,
+    "resume_ms": 4650.29999999702,
+    "lag_after_terminal_ms": 724.7999999970198,
+    "assertion_resolved_ms": 4719.70000000298
+  },
+  {
+    "case": "stopped-observation-a-stop-5b0d1-ng-requests-or-its-terminal-repeat2",
+    "idle_ms": 21.400000005960464,
+    "terminal_ms": 4125.4000000059605,
+    "resume_ms": 4875.29999999702,
+    "lag_after_terminal_ms": 749.8999999910593,
+    "assertion_resolved_ms": 5230.70000000298
+  }
+]

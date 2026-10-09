@@ -1,0 +1,5 @@
+Message fictif : depuis ce matin, le tableau d'inscription de notre club affiche
+une page vide après connexion. Le bouton actualiser ne change rien. J'utilise
+un ordinateur partagé. Je ne sais pas si les autres membres rencontrent le
+problème. Pouvez-vous m'aider à préciser les informations utiles au diagnostic ?
+Aucune adresse, identifiant, donnée client, journal ou service réel.

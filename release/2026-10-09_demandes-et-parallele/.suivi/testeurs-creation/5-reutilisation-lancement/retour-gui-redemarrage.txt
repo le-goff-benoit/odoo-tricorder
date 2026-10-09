@@ -1,0 +1,108 @@
+2026-10-09T20:23:28.561Z
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Atlas
+Boreal
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Atlas
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+
+ATLAS / WORKFLOW
+Feu vert comité Atlas
+
+Révision 2 · Enregistré
+
+Choisir l’IA
+Exporter…
+Enregistrer
+Exécuter…
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Options
+✦ Assistant IA
+☷ Liste
+approve
+◇
+Comprendre la demande
+Analyse
+Tâche
+0 entrée → 0 sortie
+◇
+Préparer la réalisation
+Réalisation
+Tâche
+0 entrée → 0 sortie
+◇
+Préparer les tests
+Qualité
+Tâche
+0 entrée → 0 sortie
+⋈
+Réunir les résultats
+Validation
+Jonction
+0 entrée → 0 sortie
+⋮⋮ Déplacer
+?
+Feu vert comité Atlas
+Validation
+Décision humaine
+Vous
+▤
+Préparer le bilan
+Documentation
+Document
+0 entrée → 0 sortie
+6 blocs · 6 liens
+−
+80 %
++
+Ajuster
+×
+DÉCISION HUMAINE
+Feu vert comité Atlas
+Nom du bloc
+Critères d’acceptation (un par ligne)
+Entrées et sorties
+Entrées
+Aucune donnée déclarée
+Ajouter une entrée
+Sorties
+Aucune donnée déclarée
+Ajouter une sortie
+Organisation de l’étape
+Question à poser
+Issues (une par ligne)
+
+Une attente humaine persiste après fermeture. Le silence n'autorise rien.
+
+Opération externe exacte
+Action
+Cible
+Candidat ou version exacte
+Utilisez @nom_entree pour une cible ou un candidat produit en amont. Les données reliées seront affichées dans la proposition exacte avant l’accord.
+Paramètres supplémentaires du connecteur
+Entrées et sorties
+Reprises, ressources et position
+Appliquer au bloc
+Connexions
+Supprimer cette étape

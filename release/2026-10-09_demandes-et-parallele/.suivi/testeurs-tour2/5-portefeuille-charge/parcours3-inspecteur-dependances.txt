@@ -1,0 +1,15 @@
+Une demande préalable est annulée ou terminée sans autoriser la suite. Cette exécution ne peut pas reprendre avec ces dépendances.
+
+R02 — Comparer les besoins des équipes
+Annulée
+→
+R17 — Vérifier les informations disponibles
+Prête
+→
+R30 — Identifier les points à arbitrer
+Prête
+→
+
+Vous pouvez consulter et traiter chaque attente sans changer les dépendances.
+
+Créer une demande de remplacement

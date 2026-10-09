@@ -1,0 +1,71 @@
+{
+  "defaults": {
+    "effort": "medium",
+    "model": "modele-test-v1",
+    "provider": "codex"
+  },
+  "description": "Modification terminal — ajouter le rendez-vous médecine du travail",
+  "edges": [
+    {
+      "from": "besoin",
+      "id": "besoin-analyse",
+      "mapping": {
+        "answer": "budget"
+      },
+      "outcome": "done",
+      "to": "analyse"
+    }
+  ],
+  "id": "rh",
+  "nodes": [
+    {
+      "id": "besoin",
+      "kind": "question",
+      "outputs": {
+        "answer": "string"
+      },
+      "position": {
+        "x": 70,
+        "y": 100
+      },
+      "question": "Quelle date confirmer pour l’arrivée de Camille ?",
+      "title": "Préciser le besoin achats"
+    },
+    {
+      "candidate_check": false,
+      "capabilities": [],
+      "completion_outcome": "succeeded",
+      "criteria": [
+        "Coût total, délai et garantie explicités."
+      ],
+      "effort": "medium",
+      "execution_mode": "text",
+      "id": "analyse",
+      "inputs": {
+        "budget": "string"
+      },
+      "kind": "agent",
+      "max_attempts": 1,
+      "model": "modele-test-v1",
+      "outputs": {
+        "synthese": "string"
+      },
+      "phase": "",
+      "position": {
+        "x": 380,
+        "y": 100
+      },
+      "profile": "generalist",
+      "prompt": "RH local — Préparer accès, matériel, tuteur et visite de sécurité.",
+      "provider": "codex",
+      "required_capabilities": [],
+      "resources": [],
+      "session": "delegated",
+      "title": "Préparer le parcours RH",
+      "validation": "human"
+    }
+  ],
+  "revision": 2,
+  "schema": 1,
+  "title": "Préparer un accueil RH"
+}

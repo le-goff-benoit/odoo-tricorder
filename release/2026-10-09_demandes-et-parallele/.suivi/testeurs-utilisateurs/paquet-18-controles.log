@@ -1,0 +1,30 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:packaged
+PATH: /tmp/tricorder-ci-tools-2upxcalj:/usr/bin:/bin
+codex None
+claude None
+
+Running 18 tests using 1 worker
+
+  ✓   1 tests/desktop-output-pipes.spec.cjs:6:1 › a recoverable backend rejection stays in the app after its launcher closes log pipes (1.8s)
+  ✓   2 tests/editor-layout-ux.spec.cjs:59:1 › design opens at readable scale and compact properties use the panel without losing edits on resize (9.9s)
+  ✓   3 tests/editor-layout-ux.spec.cjs:98:1 › compact editing retains the live terminal and shows full sidebar project names on pointer and keyboard focus (4.5s)
+  ✓   4 tests/startup-navigation.spec.cjs:60:1 › normal first launch offers a new request without configuring a project (5.8s)
+  ✓   5 tests/startup-navigation.spec.cjs:71:1 › normal restart discovers generic work and names preserved terminals by intention (11.3s)
+  ✓   6 tests/startup-navigation.spec.cjs:95:1 › existing project remains selectable and explicit workspace choice survives restart (16.8s)
+  ✓   7 tests/terminal-resume-ux.spec.cjs:47:1 › stopped agent is resumed explicitly from overview and activity without duplicate conversation or lost shell draft (12.6s)
+  ✓   8 tests/terminal-resume-ux.spec.cjs:73:1 › cross-project context names both shell project and displayed request project (7.8s)
+  ✓   9 tests/terminal-resume-ux.spec.cjs:92:1 › resuming an agent keeps manual suspension and dependency waits until explicit request resume (13.2s)
+
+  ✓  10 tests/terminal-resume-ux.spec.cjs:117:1 › completed request offers its result without instructing the user to resume the stopped agent (8.4s)
+  ✓  11 tests/workflow-resolution-ux.spec.cjs:60:1 › retry states its remaining budget without pretending to start and the completed request exposes its accepted content directly (5.8s)
+  ✓  12 tests/workflow-reuse-ux.spec.cjs:42:1 › a business project needs no existing repository and its workflow can become a reusable model and an independent project copy (6.5s)
+  ✓  13 tests/workflow-wiring.spec.cjs:42:1 › a new human decision exposes its default branches and keeps the selected branch when changing destination (5.5s)
+  ✓  14 tests/workflow-wiring.spec.cjs:83:1 › a renamed data connection remains readable beside the selected block and on the graph (3.3s)
+  ✓  15 tests/workflow-wiring.spec.cjs:95:1 › choosing only a data output gives an inline repair instead of silently creating an order-only link (4.0s)
+  ✓  16 tests/workflow-wiring.spec.cjs:108:1 › a processed refusal reads Refusée instead of a green Validé and does not release the approved branch (4.4s)
+  ✓  17 tests/workflow-wiring.spec.cjs:121:1 › order-only explicitly overrides automatic matching of same-name ports (3.9s)
+  ✓  18 tests/workflow-wiring.spec.cjs:132:1 › choosing the revised output replaces the automatically matched source for that input (3.7s)
+
+  18 passed (2.2m)

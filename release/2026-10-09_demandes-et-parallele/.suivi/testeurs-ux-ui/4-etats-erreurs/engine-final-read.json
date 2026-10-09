@@ -1,0 +1,220 @@
+{
+  "synthetic_states": true,
+  "conversations": [
+    {
+      "id": "c54f7e1cb68f04a6a",
+      "project": "workspace",
+      "projects": [
+        "workspace"
+      ],
+      "status": "open",
+      "created": 1791579157.5279717,
+      "provider": "codex",
+      "model": "",
+      "definition": {
+        "title": "Demande ponctuelle"
+      },
+      "request_excerpt": "Préparer un second atelier fictif de 30 minutes. [UX4 B fournisseur inerte]",
+      "item_count": 1,
+      "archived": false
+    },
+    {
+      "id": "cea1d1a7aac6443d8",
+      "project": "workspace",
+      "projects": [
+        "workspace"
+      ],
+      "status": "open",
+      "created": 1791578929.2030356,
+      "provider": "codex",
+      "model": "",
+      "definition": {
+        "title": "Demande ponctuelle"
+      },
+      "request_excerpt": "Préparer le programme fictif d’un atelier de dessin pour six personnes, durée 45 minutes. [UX4 simulation locale]",
+      "item_count": 1,
+      "archived": false
+    }
+  ],
+  "runs": [
+    {
+      "id": "r91d3983470fe4efa",
+      "status": "active",
+      "parameters": {
+        "conversation": "c54f7e1cb68f04a6a",
+        "depends_on_runs": [],
+        "request": "Préparer un second atelier fictif de 30 minutes. [UX4 B fournisseur inerte]"
+      },
+      "nodes": {
+        "clarify": {
+          "attempt": 0,
+          "input_sources": {},
+          "inputs": {},
+          "status": "ready"
+        },
+        "receipt": {
+          "attempt": 0,
+          "status": "pending"
+        },
+        "work": {
+          "attempt": 0,
+          "status": "pending"
+        }
+      }
+    },
+    {
+      "id": "r8be25da25948424d",
+      "status": "completed",
+      "parameters": {
+        "conversation": "cea1d1a7aac6443d8",
+        "depends_on_runs": [],
+        "request": "Préparer le programme fictif d’un atelier de dessin pour six personnes, durée 45 minutes. [UX4 simulation locale]"
+      },
+      "nodes": {
+        "clarify": {
+          "attempt": 1,
+          "finished": 1791579034.9859655,
+          "heartbeat": 1791579034.9806614,
+          "input_sources": {},
+          "inputs": {
+            "clarifications": [
+              {
+                "answer": "Français. [réponse GUI UX4]",
+                "question": "[ÉTAT SYNTHÉTIQUE UX4] Quelle langue souhaitez-vous pour l’invitation à l’atelier fictif ?"
+              }
+            ]
+          },
+          "outcome": "done",
+          "ownership": "native",
+          "processes": [],
+          "question": {
+            "answer": "Français. [réponse GUI UX4]",
+            "answered": 1791579028.6064012,
+            "created": 1791579000.427179,
+            "id": "qb610b5eb1b0342fd",
+            "status": "answered",
+            "text": "[ÉTAT SYNTHÉTIQUE UX4] Quelle langue souhaitez-vous pour l’invitation à l’atelier fictif ?"
+          },
+          "questions": [
+            {
+              "answer": "Français. [réponse GUI UX4]",
+              "answered": 1791579028.6064012,
+              "created": 1791579000.427179,
+              "id": "qb610b5eb1b0342fd",
+              "status": "answered",
+              "text": "[ÉTAT SYNTHÉTIQUE UX4] Quelle langue souhaitez-vous pour l’invitation à l’atelier fictif ?"
+            }
+          ],
+          "receipt": {
+            "actor": "contract-policy",
+            "at": 1791579034.98601,
+            "checks": [
+              "executor-success",
+              "output-types",
+              "evidence-integrity"
+            ],
+            "contract": "d41330d95d6f509169186024ada45ebb518f51c48eb6c75b7c6b32122f43a628",
+            "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+          },
+          "result": {
+            "ok": true,
+            "outputs": {
+              "brief": "Préparer une invitation en français pour 6 personnes, durée 45 minutes. [SYNTHÉTIQUE UX4]"
+            },
+            "summary": "[RÉSULTAT SYNTHÉTIQUE UX4] Besoin clarifié : invitation française pour 6 personnes, atelier de 45 minutes."
+          },
+          "started": 1791579034.9806614,
+          "status": "accepted",
+          "token": "t1900b206323f442d"
+        },
+        "receipt": {
+          "attempt": 1,
+          "decision": {
+            "actor": "local-user",
+            "at": 1791579099.3256123,
+            "note": "[GUI UX4] Validation du parcours uniquement ; ce contenu est synthétique.",
+            "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "outcome": "approve",
+            "proposal": "36cea3284f35639a96ca03a1e7a77bcd49be4f5f3ada042b02e60ece076d4167"
+          },
+          "input_sources": {
+            "result": {
+              "edge": "work-receipt",
+              "node": "work",
+              "port": "result"
+            }
+          },
+          "inputs": {
+            "result": "[SYNTHÉTIQUE UX4] Venez dessiner ensemble pendant 45 minutes. Six places sont prévues ; rendez-vous dans la salle imaginaire."
+          },
+          "nonce": "dde4b0d6917f04e08",
+          "operation": null,
+          "outcome": "approve",
+          "proposal": "36cea3284f35639a96ca03a1e7a77bcd49be4f5f3ada042b02e60ece076d4167",
+          "status": "accepted"
+        },
+        "work": {
+          "attempt": 2,
+          "finished": 1791579078.1511471,
+          "heartbeat": 1791579078.1463323,
+          "history": [
+            {
+              "attempt": 1,
+              "finished": 1791579035.028938,
+              "heartbeat": 1791579035.0255673,
+              "input_sources": {
+                "brief": {
+                  "edge": "clarify-work",
+                  "node": "clarify",
+                  "port": "brief"
+                }
+              },
+              "inputs": {
+                "brief": "Préparer une invitation en français pour 6 personnes, durée 45 minutes. [SYNTHÉTIQUE UX4]"
+              },
+              "ownership": "native",
+              "processes": [],
+              "result": {
+                "ok": false,
+                "outputs": {},
+                "summary": "[ÉCHEC SYNTHÉTIQUE UX4] Fournisseur local indisponible (sortie 78) ; aucune invitation produite."
+              },
+              "started": 1791579035.025567,
+              "status": "returned",
+              "token": "tefdf0438e6f441a3",
+              "validation_error": "L'exécutant a signalé un échec"
+            }
+          ],
+          "inputs": {
+            "brief": "Préparer une invitation en français pour 6 personnes, durée 45 minutes. [SYNTHÉTIQUE UX4]"
+          },
+          "outcome": "done",
+          "ownership": "native",
+          "processes": [],
+          "reason": "[UX4 GUI] Réessayer après disponibilité du fournisseur fictif ; conserver la clarification française.",
+          "receipt": {
+            "actor": "contract-policy",
+            "at": 1791579078.1512513,
+            "checks": [
+              "executor-success",
+              "output-types",
+              "evidence-integrity"
+            ],
+            "contract": "d41330d95d6f509169186024ada45ebb518f51c48eb6c75b7c6b32122f43a628",
+            "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+          },
+          "result": {
+            "ok": true,
+            "outputs": {
+              "result": "[SYNTHÉTIQUE UX4] Venez dessiner ensemble pendant 45 minutes. Six places sont prévues ; rendez-vous dans la salle imaginaire."
+            },
+            "summary": "[RÉSULTAT SYNTHÉTIQUE UX4] Invitation fictive disponible pour votre validation."
+          },
+          "started": 1791579078.1463318,
+          "status": "accepted",
+          "token": "t44c29e5b0a6943d3"
+        }
+      }
+    }
+  ]
+}

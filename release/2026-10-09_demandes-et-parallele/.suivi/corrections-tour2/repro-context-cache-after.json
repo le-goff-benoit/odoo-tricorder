@@ -1,0 +1,11 @@
+{
+  "context": {
+    "provider": "codex",
+    "model": "synthetic",
+    "effort": "medium",
+    "status": "open",
+    "archived": null
+  },
+  "only_required_fields": true,
+  "database_unchanged": true
+}

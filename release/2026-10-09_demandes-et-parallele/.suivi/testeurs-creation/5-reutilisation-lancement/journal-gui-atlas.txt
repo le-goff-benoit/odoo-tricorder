@@ -1,0 +1,116 @@
+2026-10-09T20:23:14.092Z
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Atlas
+Boreal
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Kanban des releases
+Quotas
+Commandes des agents
+Installer le pack Odoo
+Agents pour Claude et Codex
+Mises à jour
+À propos
+v0.6.0-rc.12
+Atlas
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 22:22
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Comité mensuel Boreal BOREAL-COMITE-002 : routine importée Atlas ; ne contacter aucun service.
+Autre conversation · boreal · Comité mensuel Boreal BOREAL-COMITE-002 : routine importée Atlas ; ne contacter aucun service.
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-t3-pmo-G65P8c/state/ag
+ent-events/05e63cd2-feb1-4edb-9a7a-bda03bcecde1.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:/tmp/tricorder-t3-pmo-G65P8c/projects/boreal$ 'python3' '
+/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/resources/ba
+ckend/agent_launch.py' '/tmp/tricorder-t3-pmo-G65P8c/state/agent-events/
+05e63cd2-feb1-4edb-9a7a-bda03bcecde1.launch.json'
+TRICORDER-T3-PMO-STUB codex — fournisseur inerte, aucun modèle appelé
+blegoff@wrk226:/tmp/tricorder-t3-pmo-G65P8c/projects/boreal$ command -v 
+codex; codex --version; command -v claude; claude --version
+/tmp/tricorder-t3-pmo-G65P8c/stubs/codex
+codex 0.0.0 TRICORDER-T3-PMO-STUB
+/tmp/tricorder-t3-pmo-G65P8c/stubs/claude
+claude 0.0.0 TRICORDER-T3-PMO-STUB
+blegoff@wrk226:/tmp/tricorder-t3-pmo-G65P8c/projects/boreal$  
+
+SUIVI · FEU VERT COMITÉ ATLAS
+Feu vert comité Atlas
+Options
+Revenir à l’éditeur
+Suspendre
+Annuler
+Historique
+Rapport
+›_ Terminal
+Phases
+Journal d’exécution
+☷ Liste
+Résultat à valider
+1 / 6 étapes
+Examiner le résultat
+
+Préparer la réalisation
+
+Simulation. Aucun modèle ni service métier appelé. Résultat à valider. 2 bloc(s) attendent votre intervention.
+Graphe
+Détail
+Étape sélectionnée
+Comprendre la demande
+→
+Préparer la réalisation
+Préparer les tests
+
+Validé
+
+SIMULATION — Demande clarifiée : proposer une évolution et ses critères de réussite.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Résultat validé
+
+Reçu uniquement comme simulation UI ; aucun résultat de comité réel.
+
+Entrées, sorties et preuves
+Preuves
+Preuve 1 · bf5ffcba
+Journal d’exécution
+×
+Exécution commencée
+09.10.2026 22:21:14
+Prêt · Comprendre la demande
+09.10.2026 22:21:14
+En cours · Comprendre la demande
+09.10.2026 22:21:14
+À valider · Comprendre la demande
+09.10.2026 22:21:15
+Validé · Comprendre la demande
+09.10.2026 22:23:01
+Prêt · Préparer la réalisation
+09.10.2026 22:23:01
+Prêt · Préparer les tests
+09.10.2026 22:23:01
+En cours · Préparer la réalisation
+09.10.2026 22:23:01
+En cours · Préparer les tests
+09.10.2026 22:23:01
+À valider · Préparer la réalisation
+09.10.2026 22:23:01
+À valider · Préparer les tests
+09.10.2026 22:23:01

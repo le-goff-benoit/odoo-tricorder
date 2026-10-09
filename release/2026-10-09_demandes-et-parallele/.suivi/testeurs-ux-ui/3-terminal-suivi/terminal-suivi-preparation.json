@@ -1,0 +1,50 @@
+{
+  "id": "terminal-suivi",
+  "output": "/home/blegoff/odoo-tricorder/release/2026-10-09_demandes-et-parallele/.suivi/testeurs-ux-ui/3-terminal-suivi",
+  "display": 183,
+  "preparedAt": "2026-10-09T20:29:39.299Z",
+  "temporary": "/tmp/tricorder-ux-terminal-suivi-ntZVq5",
+  "dirs": {
+    "home": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/home",
+    "config": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/config",
+    "cache": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/cache",
+    "data": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/data",
+    "codex": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/codex",
+    "claude": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/claude",
+    "state": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/state",
+    "runtime": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/runtime",
+    "agents": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/agents",
+    "stubs": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/stubs",
+    "project": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/project"
+  },
+  "env": {
+    "PATH": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/stubs:/usr/bin:/bin",
+    "HOME": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/home",
+    "XDG_CONFIG_HOME": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/config",
+    "XDG_CACHE_HOME": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/cache",
+    "XDG_DATA_HOME": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/data",
+    "XDG_RUNTIME_DIR": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/runtime",
+    "CODEX_HOME": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/claude",
+    "TRICORDER_HOME": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/home",
+    "TRICORDER_STATE_DIR": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/runtime",
+    "TRICORDER_AGENTS_DIR": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/agents",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "DISPLAY": ":183",
+    "XAUTHORITY": "/tmp/tricorder-functional-display/auth-183",
+    "SHELL": "/bin/bash",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8"
+  },
+  "preflight": "/tmp/tricorder-ux-terminal-suivi-ntZVq5/stubs/codex\ncodex 0.0.0 TRICORDER-UX-INERT\n/tmp/tricorder-ux-terminal-suivi-ntZVq5/stubs/claude\nclaude 0.0.0 TRICORDER-UX-INERT\n",
+  "guiStarted": false,
+  "brokerStarted": false,
+  "externalFixtures": "Deux dossiers et README synthétiques : atelier-azur et laboratoire-corail. Aucun workflow ni état Engine précréé.",
+  "classification": "Préparation uniquement — aucun verdict produit",
+  "fixtureProjects": [
+    "/tmp/tricorder-ux-terminal-suivi-ntZVq5/project/atelier-azur",
+    "/tmp/tricorder-ux-terminal-suivi-ntZVq5/project/laboratoire-corail"
+  ]
+}

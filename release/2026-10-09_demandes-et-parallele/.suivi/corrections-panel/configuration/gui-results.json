@@ -1,0 +1,52 @@
+{
+  "command": "DISPLAY=:183 XAUTHORITY=/tmp/tricorder-functional-display/auth-183 npx playwright test tests/panel-configuration.spec.cjs --workers=1 --output=/tmp/tricorder-panel-configuration-ui-results",
+  "result": "3 passed",
+  "duration_seconds": 19.2,
+  "tests": [
+    {
+      "name": "schedule recurrence remains readable and replacement retains it with fresh permissions",
+      "duration_seconds": 5.5
+    },
+    {
+      "name": "reuse removes old trial examples unless explicitly kept, without carrying request context",
+      "duration_seconds": 5.4
+    },
+    {
+      "name": "a pasted repository is validated and the new block receives keyboard focus",
+      "duration_seconds": 7.8
+    }
+  ],
+  "isolation": "Temporary HOME, XDG, provider configurations, state/runtime, fixed PATH with inert codex/claude stubs; GUI terminal precheck before every test.",
+  "cleanup": "app.close, cleanupBroker for synthetic sockets and removal of every synthetic HOME completed by successful afterEach hooks.",
+  "captures": [
+    {
+      "file": "captures/reuse-simulation-choice.png",
+      "sha256": "0581ce3d81432c2823ae09efc49d8cc4883182bab8c5d1bd3473ff37b8346f45",
+      "visually_inspected": true
+    },
+    {
+      "file": "captures/new-block-focus-and-required-capability.png",
+      "sha256": "d5bd82667358008d7d9fc3d3dfbab51b37eac94f80df676de0044ccad573577d",
+      "visually_inspected": true
+    },
+    {
+      "file": "captures/actual-workflow-json-path.png",
+      "sha256": "37b48e056288f293bc754863fbd8b2b149b35b0cfd2a741c8b5e404a8e078827",
+      "visually_inspected": true
+    },
+    {
+      "file": "captures/replacement-retained-frequency.png",
+      "sha256": "f429148fc7c64c79eb524ba252f83fb84d1632d366162cc2f578576fd75e789f",
+      "visually_inspected": true
+    },
+    {
+      "file": "captures/schedule-frequency-card.png",
+      "sha256": "479cd64505c2d67dac028556738bd6709f5cd7dfe53311ba34c6223e844f6c1c",
+      "visually_inspected": true
+    }
+  ],
+  "limitations": [
+    "No real provider, message, external service or periodic occurrence was executed.",
+    "Pasted repository fallback tested; native folder picker not qualified."
+  ]
+}

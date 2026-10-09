@@ -1,0 +1,35 @@
+test_activity_detail_and_conversation_agree_on_launch_configuration_without_writing (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_activity_readiness_shares_a_bounded_check_budget_across_conversations (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_all_shipped_templates_reach_completion_through_real_simulation_contracts (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_automatic_simulated_task_is_not_reported_as_missing_conversation_executor (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_compact_conversations_expose_intention_without_reading_every_run (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_different_model_cannot_be_silently_delegated_to_native_terminal (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_express_reframe_and_failed_checks_never_receive_work (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_missing_catalog_workflow_returns_an_actionable_error (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_missing_model_is_configuration_with_native_alternative_and_no_write (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_missing_outputs_in_a_custom_simulation_still_fail_the_contract (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... FAIL
+test_named_artifact_keeps_original_bytes_digest_and_run_authorization (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_native_tools_are_not_advertised_as_workers (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_question_decision_and_paused_runs_have_no_launchable_workers (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_quota_and_resource_contention_are_temporary_waits (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_readiness_has_bounded_checks_and_does_not_resume_dependencies (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_release_rejection_and_optional_documentation_preserve_decisions (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_support_critical_normal_and_unknown_branches_have_valid_examples (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_support_still_unknown_ends_blocked_not_received (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+test_task_and_document_inherit_high_effort_from_native_conversation (test_functional_feedback_backend.FunctionalFeedbackBackendTests) ... ok
+
+======================================================================
+FAIL: test_missing_outputs_in_a_custom_simulation_still_fail_the_contract (test_functional_feedback_backend.FunctionalFeedbackBackendTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/blegoff/odoo-tricorder/tests/test_functional_feedback_backend.py", line 147, in test_missing_outputs_in_a_custom_simulation_still_fail_the_contract
+    self.assertEqual(state['status'], 'returned')
+AssertionError: 'accepted' != 'returned'
+- accepted
++ returned
+
+
+----------------------------------------------------------------------
+Ran 19 tests in 1.557s
+
+FAILED (failures=1)

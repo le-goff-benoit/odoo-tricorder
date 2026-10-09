@@ -1,0 +1,28 @@
+{
+  "unit": {
+    "command": "node --test tests/execution-layout.test.cjs tests/panel-graph-layout.test.cjs",
+    "passed": 6,
+    "failed": 0
+  },
+  "gui": {
+    "command": "DISPLAY=:181 XAUTHORITY=/tmp/tricorder-functional-display/auth-181 ./node_modules/.bin/playwright test tests/panel-graph-layout.spec.cjs --output=/tmp/tricorder-panel-graph-final-results --workers=1",
+    "passed": 2,
+    "failed": 0,
+    "duration_seconds": 13.4,
+    "page_errors": 0,
+    "windows_per_test": 1,
+    "cleanup": "Electron fermé, trois sockets de broker nettoyés, HOME temporaire supprimé par afterEach"
+  },
+  "source_bundle_sha256": {
+    "dist/app.js": "c9912fa2b2a1dd3029e502bc2226b0f2c82be702e4053d9d577fbd423e3045e1",
+    "dist/studio.css": "53c0730e4f3154225bf2aaba7f33ccc640eba00580f93576defd9014b5c8c2db"
+  },
+  "captures_inspected": [
+    "avant-ordre-svg-support.png",
+    "editor-branches-readable-100.png",
+    "support-terminal-upper-1440.png",
+    "support-joins-1440.png"
+  ],
+  "provider": "Stubs TRICORDER-PANEL-INERT-GRAPH uniquement, contrôle dans xterm ; aucune exécution fournisseur au-delà de --version",
+  "fixture": "workflow.save et conversation.open validés, dans état isolé ; aucun SQL/JSON modifié pour une transition"
+}

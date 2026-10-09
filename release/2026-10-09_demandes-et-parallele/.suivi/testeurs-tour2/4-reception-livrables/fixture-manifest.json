@@ -1,0 +1,122 @@
+{
+  "project": {
+    "defaults": {
+      "effort": "medium",
+      "model": "",
+      "profile": "generalist",
+      "provider": "codex",
+      "session": "delegated"
+    },
+    "id": "pb5172ff28eac41aa",
+    "packs": [],
+    "path": "/tmp/tricorder-t2-reception-jj7xtx/project",
+    "title": "Recette — passation des livrables fictifs"
+  },
+  "conversation": "c7c45abd921f14087",
+  "items": [
+    {
+      "id": "w0c6e10830a8c4106",
+      "project": "pb5172ff28eac41aa",
+      "request": "P1 — Réunion Atlas : restituer décision, responsable et échéance. FICTION DE RECETTE.\nSource : sources/reunion-atlas.md",
+      "run": "rf6cb39d76e814d9d",
+      "key": null,
+      "depends_on": [],
+      "created": 1791574116.9964252
+    },
+    {
+      "id": "w1c78e3e324484233",
+      "project": "pb5172ff28eac41aa",
+      "request": "P2 — Contrat fictif : comparer 650 € au budget de 500 € et rendre un avis. FICTION DE RECETTE.\nSource : sources/contrat-fictif.md",
+      "run": "r65574ee953c14059",
+      "key": null,
+      "depends_on": [],
+      "created": 1791574116.9994645
+    },
+    {
+      "id": "wda1bf67a7e0c4e9b",
+      "project": "pb5172ff28eac41aa",
+      "request": "P2-technique — Génération interrompue ; incident technique simulé, aucun livrable produit.",
+      "run": "rc0c415f605bd45b6",
+      "key": null,
+      "depends_on": [],
+      "created": 1791574117.0035079
+    },
+    {
+      "id": "we7e71d404cc34ac6",
+      "project": "pb5172ff28eac41aa",
+      "request": "P3 — Atelier Boréal : préparer un brouillon d’invitation et demander le lieu manquant. FICTION, AUCUN ENVOI.\nSource : sources/demande-boreal.md",
+      "run": "r404cd321319441b8",
+      "key": null,
+      "depends_on": [],
+      "created": 1791574117.0068045
+    },
+    {
+      "id": "w0e4b09d124674b68",
+      "project": "pb5172ff28eac41aa",
+      "request": "P4 — Réunion Atlas : reprendre le compte rendu s’il manque une date. FICTION DE RECETTE.\nSource : sources/reunion-atlas.md",
+      "run": "r3cdec57dc8d74a6e",
+      "key": null,
+      "depends_on": [],
+      "created": 1791574117.0114465
+    },
+    {
+      "id": "w2e6e00d01c13416c",
+      "project": "pb5172ff28eac41aa",
+      "request": "P5 — Bilan de passation après plusieurs demandes : résultats, reprises, limites et suite. FICTION DE RECETTE.",
+      "run": "r0c8dc70c3f5f4317",
+      "key": null,
+      "depends_on": [],
+      "created": 1791574117.0149767
+    }
+  ],
+  "source": {
+    "reunion-atlas.md": {
+      "sha256": "e0e923d666cd9494817d3b37373eb57ca3b86229ddc4d8df7102a66ba5a694fe",
+      "size": 427,
+      "name": "reunion-atlas.md",
+      "role": "source",
+      "media_type": "text/markdown"
+    },
+    "contrat-fictif.md": {
+      "sha256": "a69e00d9986bfdc442d989cacd7d31b9ed34f6e7ca4b268c4cc317bc545713e5",
+      "size": 501,
+      "name": "contrat-fictif.md",
+      "role": "source",
+      "media_type": "text/markdown"
+    },
+    "demande-boreal.md": {
+      "sha256": "1cf0d4345c6426442c347cd1695f585022b1f9ae22b8ba8f8aa6a1cde17af1ce",
+      "size": 487,
+      "name": "demande-boreal.md",
+      "role": "source",
+      "media_type": "text/markdown"
+    }
+  },
+  "plan": {
+    "sha256": "7964e9cc8f4d923ca15490d13ba3ffdd4e663219bf9c693ec32c64e4639c60ce",
+    "size": 144,
+    "name": "plan-reception.md",
+    "role": "plan",
+    "media_type": "text/markdown"
+  },
+  "meeting": {
+    "decision": "Reporter la journée portes ouvertes.",
+    "actions": [
+      {
+        "action": "Vérifier deux salles alternatives",
+        "owner": "Alice Durand",
+        "due": "16 octobre 2026"
+      }
+    ],
+    "next_action": "Choisir le créneau alternatif lors de la prochaine réunion.",
+    "notes": "Fixture fictive, sans réservation réelle."
+  },
+  "meeting_proof": {
+    "sha256": "0de3cbeb11a5852151ac99b155d32b63c8e942c06e833d91e307e5c0921e9512",
+    "size": 172,
+    "name": "compte-rendu-atlas.md",
+    "role": "deliverable",
+    "media_type": "text/markdown"
+  },
+  "classification": "Résultats métier fictifs via Engine, exécution IA non qualifiée"
+}

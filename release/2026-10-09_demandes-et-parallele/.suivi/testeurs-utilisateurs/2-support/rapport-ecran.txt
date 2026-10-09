@@ -1,0 +1,131 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+2
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 23:32
+
+SUIVI · SUPPORT — DIAGNOSTIC ET SUITE
+Ticket fictif CAT-42 : le téléchargement du catalogue PDF échoue depuis ce matin. Le bouton Télécharger affiche Erreur. Identifier le constat et préparer la réponse client ; demander une précision sur l’impact avant de décider une correctio
+
+Support · Révision 1 figée · Terminée
+
+Options
+Revenir au suivi
+1 demande
+⌄
+
+Aucune étape en cours · 1 terminée
+
+Voir le terminal
+Rapport d’exécution
+Exporter le rapport dans le projet
+Export de release…
+Support — diagnostic et suite
+Demande
+
+Ticket fictif CAT-42 : le téléchargement du catalogue PDF échoue depuis ce matin. Le bouton Télécharger affiche Erreur. Identifier le constat et préparer la réponse client ; demander une précision sur l’impact avant de décider une correction. Aucun compte ou client réel.
+
+Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.
+
+Plan
+Travail	État	Critères
+Support critique ?	Validé	À préciser
+Préparer le traitement urgent	Non applicable	À préciser
+Préparer la réponse et la suite	Validé	À préciser
+Préciser l’impact	Non applicable	À préciser
+Réévaluer avec la précision reçue	Non applicable	À préciser
+Diagnostic encore indéterminé	Non applicable	À préciser
+Réalisation
+Support critique ?
+
+Fixture : constat limité, aucune correction effectuée.
+
+État : Validé. Tentative 1.
+
+Date enregistrée : 09.10.2026 à 21:32 UTC.
+
+Entrées reçues
+
+Précisions
+
+Élément 1
+
+Réponse
+
+Une seule personne fictive est bloquée. Le catalogue reste consultable sur la page web ; aucune interruption générale. Le téléchargement PDF reste à investiguer.
+
+Question
+
+Fixture de test : combien de personnes sont bloquées et existe-t-il un autre moyen de consulter le catalogue ?
+
+Résultat
+
+Constat
+
+Fixture : un utilisateur ne peut pas télécharger le PDF. Consultation web possible. Cause inconnue ; aucun correctif réalisé.
+
+Suite proposée
+
+Préparer un brouillon proposant la consultation web et ouvrir une investigation du PDF.
+
+Criticité
+
+Normale
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Préparer la réponse et la suite
+
+Fixture : brouillon préparé, aucune correction, aucun envoi.
+
+État : Validé. Tentative 1.
+
+Date enregistrée : 09.10.2026 à 21:32 UTC.
+
+Entrées reçues
+
+Constat
+
+Fixture : un utilisateur ne peut pas télécharger le PDF. Consultation web possible. Cause inconnue ; aucun correctif réalisé.
+
+Suite proposée
+
+Préparer un brouillon proposant la consultation web et ouvrir une investigation du PDF.
+
+Résultat
+
+Brouillon
+
+Fixture — Brouillon client CAT-42 : vous pouvez consulter le catalogue sur la page web pendant notre investigation du téléchargement PDF. Cause non établie. Aucun correctif, aucune livraison, aucun message envoyé.
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Tests et limites
+
+Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.
+
+Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.
+
+Livraison et documentation
+
+Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.
+
+Décisions et suite
+Support critique ? — question : Fixture de test : combien de personnes sont bloquées et existe-t-il un autre moyen de consulter le catalogue ? Réponse : Une seule personne fictive est bloquée. Le catalogue reste consultable sur la page web ; aucune interruption générale. Le téléchargement PDF reste à investiguer.
+
+Exécution r944af3d3cea44f69 · contrat 5aef544c1514ccde3e3cd2bdcb7e340a3ce0f800b33da2c306b76db2ba6972f3.

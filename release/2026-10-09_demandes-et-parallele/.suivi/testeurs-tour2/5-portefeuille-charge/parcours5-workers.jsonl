@@ -1,0 +1,5 @@
+{"at": 1791574453.9035723, "pid": 1027085, "provider": "codex", "kind": "coordinator-start"}
+{"at": 1791574464.3825426, "pid": 1027464, "provider": "codex", "kind": "coordinator-start"}
+{"at": 1791574465.5484796, "pid": 1027502, "provider": "codex", "kind": "worker-start"}
+{"at": 1791574467.50922, "pid": 1027502, "provider": "codex", "kind": "worker-completed"}
+{"at": 1791574513.869115, "pid": 1029841, "provider": "codex", "kind": "coordinator-start"}

@@ -1,0 +1,9 @@
+{
+  "src/studio.js": "00f98d3b3889c3f5dacb2f4578d68386210d756281e3a5d448477b67eabc87dc",
+  "src/workspace-layout.css": "75e40fc6c0e82b390f668948ade39f573aa135b4a64cd3667168be2866b18305",
+  "tests/desktop.spec.cjs": "0628c326f7735e12d12925fbb69d10d37d2587c6c36c71fc1dc9207ce61b92b9",
+  "tests/execution-interactions.spec.cjs": "56de743b511a94e1f9f9164170351cc23ef325ac18fd3002ff8b32a7c0d8a868",
+  "tests/panel-interaction.spec.cjs": "8d9096cd3199414813183f36fdae1cd277bb698a2042b7bc328787999c8153ca",
+  "tests/studio.spec.cjs": "246b3d70797efa13f7a2d008b7698ce9b2ab9adeafb6ce90faaeadefaffdbe9d",
+  "tests/functional-feedback.spec.cjs": "9c053eca1c8528cbfc85ed85d1bbb80610379a03dd4228ac8c0799c28002aaad"
+}

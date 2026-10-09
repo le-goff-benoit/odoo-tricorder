@@ -1,0 +1,26 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:ui
+PATH: /tmp/tricorder-ci-tools-p6r_lpf1:/usr/bin:/bin
+codex None
+claude None
+
+> odoo-tricorder@0.6.0-rc.12 test:ui
+> npm run build && playwright test --grep mail illustration --output=/tmp/tricorder-ux-mail-final
+
+
+> odoo-tricorder@0.6.0-rc.12 build
+> node scripts/build.mjs
+
+
+Running 1 test using 1 worker
+
+
+  ✓  1 tests/studio.spec.cjs:1109:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (7.5s)
+
+  1 passed (8.2s)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

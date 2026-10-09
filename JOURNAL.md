@@ -1,5 +1,33 @@
 # Journal
 
+## 2026-10-10 — Création, terminal et suivi des workflows (0.6.0-rc.12)
+
+- Vue d’ensemble des demandes, états, exécutants observés et dépendances entre projets.
+- Lancement explicite non bloquant des blocs prêts depuis le terminal ou le suivi.
+- Quatre exécutants maximum, verrous et accords conservés ; les agents de conversation attendent un lancement explicite.
+- Historique des tentatives formaté, y compris lorsque les entrées dépassent la taille d’une page.
+- Nombre de tentatives expliqué et accès au choix d’un workflow adapté.
+- En disposition compacte, terminal et réponse visibles ensemble ; séparateur utilisable au clavier et au zoom.
+- Analyse indépendante : contrat parent/demandes, validations communes, exécuteurs et intégration parallèle restent à construire.
+- Première campagne de cinq testeurs métier : accueil, états périmés, dépendances multiples, admissibilité et simulations corrigés.
+- Résultats structurés lisibles, preuves nommées, intentions dans les onglets ; version figée préservée lors des adaptations.
+- Deuxième campagne de cinq testeurs : rapports et exports nommés, provenance, versions et configuration de reprise clarifiés.
+- Planifications : version consultable, remplacement explicite et double activation empêchée ; validation Communication située après opération.
+- Création : simulation typée et booléens corrigés, copies/imports lisibles, liens orphelins signalés, sauvegarde annoncée.
+- Arrêt fournisseur observé avec reprise explicite dans le même terminal ; réponses mal formées expliquées et erreurs EPIPE des journaux traitées.
+- UX création : espace local sans préparation Git, copie directe vers projet/modèles, branches implicites des décisions et données transmises lisibles.
+- UX suivi : reprises explicites, contexte multi-projet nommé, budget de tentatives et accès direct aux résultats validés.
+- Éditeur compact : propriétés plein panneau, actions fixes, noms complets et terminal conservé ; liaisons ambiguës refusées.
+- Cinq campagnes terminées : 20 profils métier/création/UX puis neuf profils utilisateurs variés ; constats et limites conservés.
+- Terminal : préférence visible/masquée maintenue ; onglets bornés et portée entre projets plus explicite.
+- Réception complète : suppression d’une bande vide ; accès à la conversation et reprise conservés lorsqu’une question ou décision attend une réponse.
+- Graphe : branches/labels lisibles, organisation explicite annulable et correction des liens accessible.
+- Décisions : actions en pied de panneau, portée de l’accord conservée, commentaire requis annoncé et double geste contrôlé.
+- Planification : fréquence visible et reprise des réglages lors du remplacement, sans reprise des autorisations.
+- Réutilisation : exemples de simulation optionnels ; aide sur les entrées, accès au fichier JSON et chemin de dépôt collable.
+- Activité : actions possibles avant attentes, totaux contextualisés ; branches non applicables séparées du travail traité.
+- README réorienté produit ; captures et réception : `release/2026-10-09_demandes-et-parallele/README.md`.
+
 ## 2026-10-09 — Parcours simplifiés (0.6.0-rc.11)
 
 - Analyse indépendante des sources et des parcours, puis réception par un second agent.

@@ -11,6 +11,7 @@ from workflow_engine import Engine, ContractError
 from workflow_engine.library import node
 from workflow_engine.schedules import Schedules, next_due
 from workflow_engine.packs import inspect_pack, install, policy_issues
+from studio import request
 
 
 class SchedulesAndPacksTests(unittest.TestCase):
@@ -50,6 +51,31 @@ class SchedulesAndPacksTests(unittest.TestCase):
         for rule in ({"kind": "interval", "minutes": 0}, {"kind": "daily", "time": "25:00"}, {"kind": "daily", "timezone": "unknown"}):
             with self.assertRaises(ValueError):
                 next_due(rule, 1000)
+
+    def test_schedule_read_model_exposes_frozen_revision_without_expanding_lists(self):
+        saved = self.engine.save(self.project["id"], self.graph)
+        schedule = Schedules(self.engine).create(self.project["id"], saved, {"kind": "interval", "minutes": 5}, simulation=True)
+        changed = dict(saved, title="Nouvelle version du contrôle")
+        self.engine.save(self.project["id"], changed, saved["revision"])
+        with self.engine.store.connect() as db:
+            before = list(db.iterdump())
+        summaries = request(self.engine, {"action": "schedule.list"})
+        self.assertEqual(summaries[0]["revision"], 1)
+        self.assertEqual(summaries[0]["workflow"], saved["id"])
+        self.assertEqual(summaries[0]["title"], "Récurrent")
+        self.assertNotIn("definition", summaries[0])
+        detail = request(self.engine, {"action": "schedule.get", "schedule": schedule["id"]})
+        self.assertEqual(detail["definition"], saved)
+        self.assertNotIn("library", detail)
+        self.assertNotIn("transports", detail)
+        self.assertTrue(detail["enabled"])
+        self.assertIsNone(detail["last_run"])
+        with self.engine.store.connect() as db:
+            self.assertEqual(list(db.iterdump()), before)
+
+    def test_unknown_schedule_has_recoverable_read_error(self):
+        with self.assertRaisesRegex(ContractError, "Actualisez la liste"):
+            request(self.engine, {"action": "schedule.get", "schedule": "missing"})
 
     def test_terminal_reload_validates_definition_preserves_running_snapshot(self):
         saved = self.engine.save(self.project["id"], self.graph)
