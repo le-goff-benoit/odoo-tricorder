@@ -1,0 +1,6 @@
+test_qa_disk_full_after_copy_cleans_partial_candidate_but_preserves_existing_target (test_candidate_workspace.CandidateWorkspaceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.079s
+
+OK

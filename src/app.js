@@ -69,6 +69,8 @@ let terminalLayout = localStorage.getItem('tricorder.terminalLayout') === 'stack
 let terminalSplit = Math.max(30, Math.min(70, Number(localStorage.getItem('tricorder.terminalSplit')) || 52));
 let catalogError = null, bootstrapped = false, starting = false;
 let workflowMode = false, workflowContext = null, workflowTerminalPath = null;
+let terminalContextOpen = false;
+const sessionConversations = new Map();
 const terminalProject = () => workflowMode ? (workflowTerminalPath || current) : current;
 
 const WORKFLOWS = { release: { title: 'Release Odoo', action: 'workflow' }, request: { title: 'Demande Odoo', action: 'develop' }, support: { title: 'Diagnostic Odoo', action: 'diagnose' } };
@@ -113,7 +115,7 @@ $('#app').innerHTML = `
   <main class="workspace">
     <header class="topbar project-header"><div class="project-identity"><div id="project-title" role="heading" aria-level="1"></div><div id="project-meta" class="project-meta"></div></div><div class="top-actions"><button class="secondary terminal-toggle" data-action="terminal-toggle" aria-pressed="false" title="Afficher ou masquer le terminal sans fermer les sessions">${icon('terminal')}<span>Terminal</span><span id="terminal-count"></span></button><label class="provider-choice">Fournisseur IA<select id="preferred-provider" aria-label="Fournisseur IA"><option value="codex">OpenAI · Codex</option><option value="claude">Anthropic · Claude</option></select></label><div class="theme-switch" role="group" aria-label="Thème de l’interface">${[['light', 'Clair', 'sun'], ['dark', 'Sombre', 'moon'], ['system', 'Système', 'monitor']].map(([value, label, glyph]) => `<button class="icon-button" data-theme-choice="${value}" title="Thème ${label.toLowerCase()}" aria-label="Thème ${label.toLowerCase()}" aria-pressed="false">${icon(glyph)}</button>`).join('')}</div><span id="sync-status" class="sync-status" role="status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header><div id="catalog-warning" class="catalog-warning" role="alert" hidden></div><section id="context-bar" class="context-bar" aria-label="Release sélectionnée"></section>
     <div id="activity-strip" class="activity-strip" hidden></div><nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
-    <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div class="workflow-launcher"><label>Workflow<select id="workflow-choice" aria-label="Workflow">${Object.entries(WORKFLOWS).map(([id, w]) => `<option value="${id}">${w.title}</option>`).join('')}</select></label><button class="primary" data-action="workflow-start">Démarrer le workflow</button></div><div class="terminal-heading"><strong>Terminal</strong><div class="terminal-layout-controls"><button class="secondary" data-action="terminal-layout" title="Changer la disposition du terminal et du workflow">Disposition verticale</button><button class="secondary" data-action="terminal-maximize">Agrandir le terminal</button></div></div><div id="execution-context" class="execution-context"></div><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button class="secondary" data-action="find-next">Suivant</button><button class="secondary" data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
+    <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div class="workflow-launcher"><label>Workflow<select id="workflow-choice" aria-label="Workflow">${Object.entries(WORKFLOWS).map(([id, w]) => `<option value="${id}">${w.title}</option>`).join('')}</select></label><button class="primary" data-action="workflow-start">Démarrer le workflow</button></div><div class="terminal-heading"><strong>Terminal</strong><div class="terminal-layout-controls"><button class="secondary" data-action="terminal-options" aria-expanded="false">Contexte</button><button class="secondary" data-action="terminal-layout" title="Changer la disposition du terminal et du workflow">Disposition verticale</button><button class="secondary" data-action="terminal-maximize">Agrandir le terminal</button></div></div><div id="execution-context" class="execution-context"></div><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button class="secondary" data-action="find-next">Suivant</button><button class="secondary" data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
   </main><div id="toast" role="status" hidden></div><dialog id="modal"><div id="modal-content"></div></dialog>`;
 
 const workflowHost = document.createElement('section'); workflowHost.id = 'workflow-panel'; workflowHost.hidden = true;
@@ -159,6 +161,7 @@ const studioUI = mountStudio(workflowHost, {
   context(context) { if (workflowContext?.route === 'workflow' && context.route === 'workflow' && context.mode && context.mode !== workflowContext.mode) { terminalPreference = null; terminalMaximized = false; } workflowContext = context; if (workflowMode) render(); },
   async openTerminal(project, graph, conversation, resume=false) {
     const result = await api.workflowTerminal({ project: project.id, conversation, resume });
+    if (conversation) sessionConversations.set(result.id, {id: conversation, provider: workflowContext?.conversation?.provider});
     workflowTerminalPath = result.project; terminalPreference = true; terminalMaximized = false;
     selectedSession.set(result.project, result.id);
     await refreshSessions(); render(); await mountTerminal(result.id);
@@ -347,20 +350,46 @@ function renderDocuments() {
   // Rich view rendered by cockpitUI.augment().
   $('#content').innerHTML = '<div class="page"></div>';
 }
+function terminalIdentity(session) {
+  const remembered=sessionConversations.get(session.id);
+  const conversation=remembered?.id || Object.entries(settings.workflowTerminals || {}).find(([,id])=>id===session.id)?.[0];
+  const provider=session.provider || remembered?.provider || settings.workflowAgents?.[conversation]?.provider || (conversation && conversation===workflowContext?.conversation?.id ? workflowContext.conversation.provider : null);
+  const labels={codex:'Codex',claude:'Claude'};
+  const program=session.program || '';
+  let label=labels[session.provider];
+  if(session.idleShell) label=conversation && labels[provider] ? `Shell · ${labels[provider]} arrêté` : 'Shell';
+  else if(!label) {
+    if (/^(bash|zsh|sh)$/.test(program)) label='Shell occupé';
+    else if(program && !/^(MainThread|python3?|node)$/.test(program)) label=program;
+    else label=conversation && labels[provider] ? `Conversation ${labels[provider]}` : 'Terminal';
+  }
+  return {conversation,provider:session.provider,label};
+}
 function renderTerminals() {
   workflowControls();
+  if (workflowMode) $('#terminal-mismatch')?.remove();
+  $('#execution-context').hidden = workflowMode && !terminalContextOpen;
+  $('[data-action=terminal-options]').hidden = !workflowMode;
+  $('[data-action=terminal-options]').setAttribute('aria-expanded', String(terminalContextOpen));
   const own = sessions.filter(s => s.project === terminalProject());
   let id = selectedSession.get(terminalProject());
   if (!own.some(s => s.id === id)) { id = own.at(-1)?.id; selectedSession.set(terminalProject(), id); }
-  $('#terminal-tabs').innerHTML = own.map((s, i) => `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}"></span>${providerIcon(s.provider)}${esc(s.provider || s.program || 'Terminal')} ${i + 1}${s.task ? ' · ' + esc(s.task) : ''}</button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
+  $('#terminal-tabs').innerHTML = own.map((s, i) => `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}" title="${s.alive ? 'Terminal ouvert — ne prouve pas qu’une étape travaille' : 'Terminal fermé'}"></span>${providerIcon(terminalIdentity(s).provider)}${esc(terminalIdentity(s).label)} ${i + 1}${s.task ? ' · ' + esc(s.task) : ''}</button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
   const selected = own.find(s => s.id === id);
   $('#terminal-tabs').insertAdjacentHTML('beforeend', `<div class="terminal-tab-tools"><button class="icon-button" data-action="find" title="Rechercher · Ctrl Shift F" aria-label="Rechercher dans le terminal">${icon('search')}</button>${own.length > 1 ? `<button class="icon-button" data-action="split" title="Diviser les terminaux" aria-label="Diviser les terminaux">${icon('grid')}</button>` : ''}</div>`);
   $('#terminal-context').replaceChildren();
-  if (selected?.alive && detail && selected.release !== detail.selectedRelease) {
+  if (!workflowMode && selected?.alive && detail && selected.release !== detail.selectedRelease) {
     $('#terminal-context').insertAdjacentHTML('beforeend', ` <button class="secondary" data-action="terminal-context">${detail.selectedRelease ? 'Utiliser la release affichée dans ce terminal' : 'Mettre ce terminal hors release'}</button>`);
   }
   const env = detail?.environments.find(e => e.name === selected?.environment);
   $('#terminal-context').classList.toggle('production', env?.kind === 'production');
+  if (workflowMode && selected) {
+    const identity=terminalIdentity(selected);
+    const matches=identity.conversation && identity.conversation===workflowContext?.conversation?.id;
+    const projectTitle=workflowContext?.project?.path===selected.project ? workflowContext.project.title : projects.find(p=>p.path===selected.project)?.name || selected.project.split('/').at(-1);
+    const scope=identity.conversation ? (matches ? 'Conversation du workflow affiché' : 'Autre conversation') : 'Shell du projet';
+    $('#terminal-context').innerHTML = `<span class="terminal-scope" title="${esc(identity.conversation ? 'Conversation '+identity.conversation : selected.project)}">${scope} · ${esc(projectTitle)}</span>`;
+  }
   if (env?.kind === 'production') $('#terminal-context').prepend('PRODUCTION · aucune permission accordée ');
   $('#terminal-empty').hidden = own.length > 0;
   $('#terminal-hosts').hidden = own.length === 0;
@@ -639,6 +668,7 @@ document.addEventListener('click', async event => {
     }
     if (el.dataset.environment) return await setEnvironment(el.dataset.environment);
     switch (el.dataset.action) {
+      case 'terminal-options': terminalContextOpen=!terminalContextOpen;renderTerminals();break;
       case 'terminal-layout': terminalLayout = terminalLayout === 'side' ? 'stacked' : 'side'; localStorage.setItem('tricorder.terminalLayout', terminalLayout); applyTerminalLayout(); break;
       case 'terminal-toggle': terminalPreference = $('#terminal-workspace').hidden; terminalMaximized = false; render(); break;
       case 'terminal-maximize': terminalMaximized = !terminalMaximized; render(); break;

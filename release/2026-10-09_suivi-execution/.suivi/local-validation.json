@@ -1,0 +1,26 @@
+{
+  "version": "0.6.0-rc.10",
+  "python": 277,
+  "javascript": 89,
+  "source_ui": {
+    "desktop_passed": 20,
+    "workflow_passed_before_last_adjustments": 55,
+    "failed_workflow_cases_replayed_successfully": 5,
+    "optional_real_project_checks_skipped": 2,
+    "note": "Source evidence is a union of targeted campaigns; the complete final source suite is required in CI."
+  },
+  "packaged_ui": {
+    "passed": 80,
+    "optional_real_project_checks_skipped": 2
+  },
+  "independent_layout": {
+    "passed": 15,
+    "captures": 18,
+    "same_terminal_pid": true
+  },
+  "artifact": {
+    "filename": "odoo-tricorder_0.6.0-rc.10_amd64.deb",
+    "sha256": "26198907bec5f2dc0107a426d8440582cf0a1f86df29bc4c2621ea42dfc61e2f"
+  },
+  "scope": "Synthetic projects, inert CLI and local adapters. No real client workflow execution."
+}

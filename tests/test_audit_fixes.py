@@ -221,7 +221,9 @@ class AuditFixes(unittest.TestCase):
         answer(self.engine,run['id'],'work',run['nodes']['work']['question']['id'],'Expected business result')
         claim=self.engine.claim(run['id'],'work')
         run=self.engine.submit(run['id'],'work',claim['token'],{'ok':True,'summary':'Malformed provider output','outputs':[]})
-        self.assertEqual(summary(run)['focus']['status'],'failed')
+        self.assertEqual(summary(run)['focus']['status'],'returned')
+        self.assertEqual(summary(run)['health']['status'],'failed')
+        self.assertEqual(summary(run)['health']['issues'][0]['node'],'work')
         self.assertEqual(summary(run)['focus']['node'],'work')
 
     def test_four_support_requests_keep_sources_question_scope_and_release_dependencies(self):
@@ -392,14 +394,16 @@ class AuditFixes(unittest.TestCase):
 
     def test_failed_branch_keeps_independent_question_actionable(self):
         from workflow_engine.conversations import ask
-        from workflow_engine.projections import focus
+        from workflow_engine.projections import focus, health
         run = self.engine.start(self.project['id'], graph([task('qa',validation='contract'),task('clarify')]))
-        run = self.done(run, 'qa', {'verdict':'fail'})
+        claim = self.engine.claim(run['id'], 'qa')
+        run = self.engine.submit(run['id'], 'qa', claim['token'], {'ok':False,'summary':'Synthetic execution failure','outputs':{'verdict':'fail'}})
         claim = self.engine.claim(run['id'], 'clarify')
         run = ask(self.engine, run['id'], 'clarify', claim['token'], 'Which business rule?')
         selected = focus(run)
-        self.assertEqual(selected['node'],'clarify');self.assertEqual(selected['status'],'failed')
-        self.assertIn('Répondre',selected['action']);self.assertIn('échec',selected['action'])
+        self.assertEqual(selected['node'],'clarify');self.assertEqual(selected['status'],'waiting_input')
+        self.assertIn('Répondre',selected['action']);self.assertNotIn('échec',selected['action'])
+        self.assertEqual(health(run)['status'],'failed');self.assertEqual(health(run)['issues'][0]['node'],'qa')
 
     def test_native_ready_pages_share_context_and_mutations_use_readable_references(self):
         from workflow_cli import request as native

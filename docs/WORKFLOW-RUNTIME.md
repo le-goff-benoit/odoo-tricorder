@@ -33,11 +33,18 @@ automatiquement avec les contrôles habituels et de nouvelles décisions.
 
 ## Lire avant de décider
 
-Sélectionner un bloc d’exécution affiche ses **Entrées reçues**, leurs sources,
-son **Résultat** et ses **Preuves**. Une décision présente les données à examiner
-avant ses boutons. **Lire le résultat** donne toute la largeur du panneau à la
-revue ; **Graphe et détail** remet le graphique, dans la même fenêtre. Le terminal
-reste disponible avec la disposition mémorisée.
+La vue Exécution conserve le terminal et une seule surface de lecture à côté :
+**Graphe** ou **Détail**. Le titre nomme la demande sélectionnée. Le sélecteur
+**N demandes** ouvre sa liste, la recherche et l’ajout ; il se referme après le
+choix. L’état et une action directe restent au-dessus de la surface.
+
+Une décision présente le plan ou l’opération exacte avant ses boutons et nomme
+la demande concernée. Une question montre d’abord son texte et la réponse. Un
+échec montre d’abord sa cause, puis **Préparer la reprise** si elle est autorisée.
+Les entrées techniques et l’historique restent consultables dans les détails.
+Un effet externe incertain conserve **Rechercher l’accusé distant**, sans renvoi
+aveugle. Un résultat QA négatif prévu par une branche reste recevable : accepter
+le constat permet d’emprunter la branche corrective, cela ne valide pas le code.
 
 Les valeurs sont affichées en texte brut, sélectionnables pour copie. Une preuve
 s’ouvre dans un lecteur local paginé (32 000 caractères par page), lié à
@@ -52,28 +59,23 @@ précédentes.
 Une question reste une **Réponse attendue**, y compris dans une phase repliée et
 l’icône système. Le clic dans l’icône sélectionne le bloc concerné.
 
-La conversation résume les états des demandes affichées : question, décision,
-travail en cours, étape prête et échec sont distingués. Chaque carte nomme son
-étape utile ; le titre au-dessus du graphe est celui de la demande sélectionnée,
-pas celui d’une release entière. Sélectionner une demande ouvre son étape à
-traiter et centre le graphe dessus. Le polling ne recentre pas la vue. Le mode
-lecture reste conservé quand on passe à une autre demande. Les sources d’une
-question sont repliables sous son texte, et les chaînes de texte métier utilisent
-la police de lecture ; JSON et preuves brutes gardent une police monospace.
+La synthèse distingue étapes en cours, questions, décisions, erreurs et demandes
+attendant d’autres demandes. Le statut du bloc sélectionné reste distinct des
+échecs des autres blocs. Le détail d’une attente liste ses prédécesseurs avec leur
+nom et leur état ; un refus ou une fin non résolue ne libère pas la suite. Une
+suspension manuelle reste explicite même après la réussite des dépendances.
 
-Quand le panneau sous le terminal mesure moins de 480 px de haut, la synthèse
-des demandes devient un sélecteur repliable. Ouvrez-le pour choisir une demande ;
-la sélection conserve le mode lecture. Le titre, l’état et les actions utiles
-restent dans le panneau sans changer votre ratio terminal/workflow. À 1440 × 900,
-la question et sa réponse sont visibles avec un terminal à 52 %. À 800 px de
-large, le contenu reste défilable ; ce n’est pas une vue simultanée de toutes
-les informations. En mode graphe, changer de demande centre son bloc courant ;
-les rafraîchissements suivants conservent votre position.
+En mode graphe, la sélection initiale centre l’étape à traiter. Le suivi peut
+avancer vers la nouvelle étape courante lorsque l’on suivait la précédente ;
+la lecture d’un détail et la saisie ne sont jamais déplacées par cette mise à jour.
+Le choix Graphe/Détail reste conservé entre demandes. Le menu est utilisable au
+clavier et Échap le ferme, y compris après un rafraîchissement.
 
-Les commandes secondaires d’exécution sont regroupées dans **Workflow** et
-**Outils** ; celles de la conversation dans **Actions**. **Rechercher** déplie
-le filtre des demandes. Lorsqu’un agent est arrêté, **Reprendre l’agent…** est
-affiché directement ; le shell encore ouvert ne passe pas pour un agent actif.
+Le terminal garde sa session pendant les changements de demande, de vue et de
+disposition. **Contexte** déplie ses réglages ; l’onglet distingue Codex, Claude
+et le shell après arrêt de l’agent. Une autre conversation reste identifiée comme
+telle : **Terminal** dans le suivi retrouve celle du workflow affiché. Les actions
+secondaires se trouvent dans **Actions** et **Outils**.
 
 ## Historique et usage quotidien
 

@@ -1,0 +1,606 @@
+{
+  "method": "SQLite mode=ro + PRAGMA query_only=ON + read transaction; no application API",
+  "privacy": "No request, title, source, result content, customer identifier or timestamp exported",
+  "same_original_definition": true,
+  "items": [
+    {
+      "item": 1,
+      "depends_on_items": [],
+      "status": "active",
+      "coordination_wait": false,
+      "manual_hold": false,
+      "nodes": [
+        {
+          "position": 1,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 2,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 3,
+          "kind": "question",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 4,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 5,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 6,
+          "kind": "condition",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 7,
+          "kind": "decision",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 8,
+          "kind": "decision",
+          "state": "accepted",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": true,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 9,
+          "kind": "agent",
+          "state": "returned",
+          "ok": 0,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": true
+        }
+      ]
+    },
+    {
+      "item": 2,
+      "depends_on_items": [],
+      "status": "active",
+      "coordination_wait": false,
+      "manual_hold": false,
+      "nodes": [
+        {
+          "position": 1,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 2,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 3,
+          "kind": "question",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 4,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 5,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 6,
+          "kind": "condition",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 7,
+          "kind": "decision",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 8,
+          "kind": "decision",
+          "state": "waiting",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 9,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        }
+      ]
+    },
+    {
+      "item": 3,
+      "depends_on_items": [],
+      "status": "active",
+      "coordination_wait": false,
+      "manual_hold": false,
+      "nodes": [
+        {
+          "position": 1,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 2,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 3,
+          "kind": "question",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 4,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 5,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 6,
+          "kind": "condition",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 7,
+          "kind": "decision",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 8,
+          "kind": "decision",
+          "state": "waiting",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 9,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        }
+      ]
+    },
+    {
+      "item": 4,
+      "depends_on_items": [],
+      "status": "active",
+      "coordination_wait": false,
+      "manual_hold": false,
+      "nodes": [
+        {
+          "position": 1,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 2,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 3,
+          "kind": "question",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 4,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 5,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 6,
+          "kind": "condition",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 7,
+          "kind": "decision",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 8,
+          "kind": "decision",
+          "state": "waiting",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 9,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        }
+      ]
+    },
+    {
+      "item": 5,
+      "depends_on_items": [],
+      "status": "active",
+      "coordination_wait": false,
+      "manual_hold": false,
+      "nodes": [
+        {
+          "position": 1,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 2,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 3,
+          "kind": "question",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 4,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 5,
+          "kind": "agent",
+          "state": "accepted",
+          "ok": 1,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 6,
+          "kind": "condition",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 7,
+          "kind": "decision",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 8,
+          "kind": "decision",
+          "state": "waiting",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 1,
+          "has_validation_error": false
+        },
+        {
+          "position": 9,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        }
+      ]
+    },
+    {
+      "item": 6,
+      "depends_on_items": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "status": "paused",
+      "coordination_wait": true,
+      "manual_hold": false,
+      "nodes": [
+        {
+          "position": 1,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 2,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 3,
+          "kind": "question",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 4,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 5,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 6,
+          "kind": "condition",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 7,
+          "kind": "decision",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 8,
+          "kind": "decision",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        },
+        {
+          "position": 9,
+          "kind": "agent",
+          "state": "pending",
+          "ok": null,
+          "failed_verdict": false,
+          "approved": false,
+          "attempt": 0,
+          "has_validation_error": false
+        }
+      ]
+    }
+  ]
+}

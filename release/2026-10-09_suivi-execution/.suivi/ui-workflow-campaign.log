@@ -1,0 +1,261 @@
+
+Running 60 tests using 1 worker
+
+(node:686351) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/execution-interactions.spec.cjs:87:1 › negative result remains receivable and routes to the corrective branch (6.2s)
+  ✓   2 tests/execution-interactions.spec.cjs:100:1 › uncertain local notification retains receipt lookup without sending twice (6.3s)
+  ✓   3 tests/execution-interactions.spec.cjs:108:1 › live failure updates the graph badge and accessible name without reopening the run (6.1s)
+  ✓   4 tests/execution-interactions.spec.cjs:118:1 › request menu keeps keyboard focus and a question draft while activity changes (6.5s)
+  ✓   5 tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive (6.2s)
+  ✓   6 tests/execution-interactions.spec.cjs:151:1 › search draft survives polling and deferred request counts refresh after leaving the input (6.0s)
+  ✓   7 tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (7.1s)
+  ✓   8 tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch (6.1s)
+  ✓   9 tests/launch-repair.spec.cjs:146:1 › repair secondary-project connection diagnoses before launch and returns without retyping (6.9s)
+  ✓  10 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain) (6.0s)
+  ✓  11 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile) (6.2s)
+  ✓  12 tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin (6.0s)
+  ✓  13 tests/launch-repair.spec.cjs:227:1 › late run response cannot navigate back after the user opens Projects (6.0s)
+  ✓  14 tests/launch-repair.spec.cjs:260:1 › repair missing profile preserves it until the user explicitly chooses generalist (6.1s)
+
+  ✓  15 tests/studio.spec.cjs:85:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog (5.6s)
+
+  ✓  16 tests/studio.spec.cjs:104:1 › large release history: startup and refresh preserve projects, workflows and terminal (5.6s)
+  ✓  17 tests/studio.spec.cjs:145:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (5.5s)
+  ✘  18 tests/studio.spec.cjs:167:1 › simulation: two branches, human decision, truthful results and single documentation view (5.6s)
+(node:690571) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  19 tests/studio.spec.cjs:183:1 › decisions persist after application restart and reject skips its branch (5.6s)
+(node:690745) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  20 tests/studio.spec.cjs:197:1 › connections never infer native authentication and real unconfigured launch is blocked (5.6s)
+  ✓  21 tests/studio.spec.cjs:210:1 › live events preserve text input and focus; layout fits 1024 and dark theme (5.7s)
+  ✓  22 tests/studio.spec.cjs:225:1 › structured proposal needs preview, rejects stale revision and never starts a run (5.9s)
+  ✓  23 tests/studio.spec.cjs:239:1 › template creation has a real terminal; file edits require validated reload (5.8s)
+  ✓  24 tests/studio.spec.cjs:260:1 › recurrence activation shows models and persists; communication needs exact recipients (5.6s)
+  ✓  25 tests/studio.spec.cjs:280:1 › window closes to Ubuntu tray and remains available (5.6s)
+  ✓  26 tests/studio.spec.cjs:288:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (5.5s)
+  ✘  27 tests/studio.spec.cjs:313:1 › real isolated command produces evidence, then waits for human receipt (33.8s)
+(node:693235) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  28 tests/studio.spec.cjs:329:1 › global workflow runs independently of Git projects and draws right-angle links (5.6s)
+  ✓  29 tests/studio.spec.cjs:350:1 › exported clickable file opens on another local instance as a draft without execution (11.2s)
+  ✓  30 tests/studio.spec.cjs:372:1 › update dialog is explicit and test mode makes no automatic network request (5.6s)
+  ✓  31 tests/studio.spec.cjs:380:1 › repeated example clicks never create duplicate demo projects (5.6s)
+  ✓  32 tests/studio.spec.cjs:390:1 › trusted local adapter runs through the UI and automatic validation completes without a human receipt (5.6s)
+  ✓  33 tests/studio.spec.cjs:416:1 › large workflow remains editable in canvas and keyboard list (5.6s)
+  ✓  34 tests/studio.spec.cjs:428:1 › application navigation separates overview, workflow use and editor with compact responsive spacing (5.6s)
+  ✘  35 tests/studio.spec.cjs:451:1 › code proposal diff is reviewable and only explicit application changes the Git project (5.6s)
+(node:695422) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  36 tests/studio.spec.cjs:490:1 › accessible navigation, editor, inspector and dialog in light and dark themes (5.9s)
+  ✓  37 tests/studio.spec.cjs:504:1 › human gate presents the full external content and candidate before approval (6.1s)
+  ✓  38 tests/studio.spec.cjs:521:1 › one provider choice applies to all AI steps and the project offers direct execution (5.7s)
+  ✓  39 tests/studio.spec.cjs:547:1 › native conversation: provider choice, durable questions, live graph and same terminal after restart (12.8s)
+  ✓  40 tests/studio.spec.cjs:615:1 › previous studio terminal is adopted in the main terminal without a new shell (6.0s)
+  ✓  41 tests/studio.spec.cjs:633:1 › review: Odoo profiles, editable unresolved outcome and synthetic release capture (5.7s)
+  ✓  42 tests/studio.spec.cjs:667:1 › design review: library and management views use the workspace, with readable actions in both themes (13.6s)
+  ✓  43 tests/studio.spec.cjs:703:1 › terminal visibility preserves a live session while browsing and editing (6.2s)
+  ✓  44 tests/studio.spec.cjs:734:1 › bootstrap failure is distinct from an empty catalog and Actualiser recovers (5.7s)
+
+  ✓  45 tests/studio.spec.cjs:752:1 › optional workflow setup failure keeps native projects and can be retried (5.8s)
+  ✓  46 tests/studio.spec.cjs:764:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (5.8s)
+  ✓  47 tests/studio.spec.cjs:807:1 › repository journey: resume a cloned workflow, simulate a question and export a generic work dossier (5.8s)
+  ✘  48 tests/studio.spec.cjs:834:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question (35.8s)
+(node:699974) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  49 tests/studio.spec.cjs:881:1 › workspace layout: focused navigation, adjustable split and editor preserve the same terminal (5.6s)
+  ✓  50 tests/studio.spec.cjs:925:1 › configuration: pending fields survive I/O editing, block selection and keyboard save (5.6s)
+  ✓  51 tests/studio.spec.cjs:953:1 › embedded theme: workflow controls use the shared surface colors (5.6s)
+  ✓  52 tests/studio.spec.cjs:964:1 › audit reception: decision shows the delivered text, provenance and safe proof reader (5.6s)
+  ✓  53 tests/studio.spec.cjs:990:1 › audit reception: concurrent terminal edit merges with the persisted editor draft (5.6s)
+  ✓  54 tests/studio.spec.cjs:1007:1 › audit reception: stopped native agent resumes explicitly in the same terminal (5.6s)
+  ✓  55 tests/studio.spec.cjs:1020:1 › audit reception: history pages and archives preserve the completed work (5.6s)
+
+  ✓  56 tests/studio.spec.cjs:1053:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (7.8s)
+
+  ✓  57 tests/studio.spec.cjs:1087:43 › mail intake: missing access becomes a visible question without inventing a source (5.7s)
+
+  ✓  58 tests/studio.spec.cjs:1087:43 › mail intake: ambiguous access becomes a visible question without inventing a source (5.6s)
+
+  ✓  59 tests/studio.spec.cjs:1097:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (7.9s)
+  ✓  60 tests/studio.spec.cjs:1149:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload (5.8s)
+
+
+  1) tests/studio.spec.cjs:167:1 › simulation: two branches, human decision, truthful results and single documentation view
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Valider le résultat' }) resolved to 2 elements:
+        1) <button class="primary" data-action="execution-next-action">Valider le résultat</button> aka getByRole('region', { name: 'État et prochaine action' }).getByRole('button', { name: 'Valider le résultat' })
+        2) <button type="submit" class="primary">Valider le résultat</button> aka getByRole('complementary', { name: 'Inspecteur du bloc' }).getByRole('button', { name: 'Valider le résultat' })
+
+    Call log:
+      - waiting for getByRole('button', { name: 'Valider le résultat' })
+
+
+      139 |   if (hasCriteria) await page.locator('#receipt-form input[type=checkbox]').check();
+      140 |   await page.getByLabel('Commentaire de validation').fill('Résultat examiné dans le contexte simulé.');
+    > 141 |   await page.getByRole('button', { name: 'Valider le résultat' }).click();
+          |                                                                   ^
+      142 |   await expect(node).toHaveAttribute('data-status', 'accepted');
+      143 | }
+      144 |
+        at receive (/home/blegoff/odoo-tricorder/tests/studio.spec.cjs:141:67)
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:169:3
+
+    Error Context: test-results/studio-simulation-two-bran-6f48c-d-single-documentation-view/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-simulation-two-bran-6f48c-d-single-documentation-view/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-simulation-two-bran-6f48c-d-single-documentation-view/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/studio.spec.cjs:183:1 › decisions persist after application restart and reject skips its branch
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Valider le résultat' }) resolved to 2 elements:
+        1) <button class="primary" data-action="execution-next-action">Valider le résultat</button> aka getByRole('region', { name: 'État et prochaine action' }).getByRole('button', { name: 'Valider le résultat' })
+        2) <button type="submit" class="primary">Valider le résultat</button> aka getByRole('complementary', { name: 'Inspecteur du bloc' }).getByRole('button', { name: 'Valider le résultat' })
+
+    Call log:
+      - waiting for getByRole('button', { name: 'Valider le résultat' })
+
+
+      139 |   if (hasCriteria) await page.locator('#receipt-form input[type=checkbox]').check();
+      140 |   await page.getByLabel('Commentaire de validation').fill('Résultat examiné dans le contexte simulé.');
+    > 141 |   await page.getByRole('button', { name: 'Valider le résultat' }).click();
+          |                                                                   ^
+      142 |   await expect(node).toHaveAttribute('data-status', 'accepted');
+      143 | }
+      144 |
+        at receive (/home/blegoff/odoo-tricorder/tests/studio.spec.cjs:141:67)
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:184:38
+
+    Error Context: test-results/studio-decisions-persist-a-271a9-and-reject-skips-its-branch/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-decisions-persist-a-271a9-and-reject-skips-its-branch/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-decisions-persist-a-271a9-and-reject-skips-its-branch/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/studio.spec.cjs:313:1 › real isolated command produces evidence, then waits for human receipt
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('.node[data-id="check"]')
+        - locator resolved to <button data-id="check" data-failed="false" class="node selected" data-status="returned" data-action="select-node" aria-label="Vérifier le runtime Python · À valider">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        58 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      136 | async function receive(id, hasCriteria = false) {
+      137 |   const node = page.locator(`.node[data-id="${id}"]`);
+    > 138 |   await expect(node).toHaveAttribute('data-status', 'returned'); await node.click();
+          |                                                                             ^
+      139 |   if (hasCriteria) await page.locator('#receipt-form input[type=checkbox]').check();
+      140 |   await page.getByLabel('Commentaire de validation').fill('Résultat examiné dans le contexte simulé.');
+      141 |   await page.getByRole('button', { name: 'Valider le résultat' }).click();
+        at receive (/home/blegoff/odoo-tricorder/tests/studio.spec.cjs:138:77)
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:325:3
+
+    Error Context: test-results/studio-real-isolated-comma-2d9ea-hen-waits-for-human-receipt/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-real-isolated-comma-2d9ea-hen-waits-for-human-receipt/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-real-isolated-comma-2d9ea-hen-waits-for-human-receipt/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/studio.spec.cjs:451:1 › code proposal diff is reviewable and only explicit application changes the Git project
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Valider le résultat' }) resolved to 2 elements:
+        1) <button class="primary" data-action="execution-next-action">Valider le résultat</button> aka getByRole('region', { name: 'État et prochaine action' }).getByRole('button', { name: 'Valider le résultat' })
+        2) <button type="submit" class="primary">Valider le résultat</button> aka getByRole('complementary', { name: 'Inspecteur du bloc' }).getByRole('button', { name: 'Valider le résultat' })
+
+    Call log:
+      - waiting for getByRole('button', { name: 'Valider le résultat' })
+
+
+      479 |   await page.locator('.node[data-id="edit"]').click();
+      480 |   await page.getByRole('button', { name: 'Examiner les modifications' }).click();
+    > 481 |   await expect(page.getByRole('dialog')).toContainText('+value = 2');
+          |                                                                   ^
+      482 |   await expect(page.getByRole('button', { name: 'Appliquer ces modifications au dépôt' })).toHaveCount(0);
+      483 |   await page.getByRole('button', { name: 'Fermer', exact: true }).click();
+      484 |   await page.getByRole('button', { name: 'Valider le résultat' }).click();
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:481:67
+
+    Error Context: test-results/studio-code-proposal-diff--b8a00-ion-changes-the-Git-project/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-code-proposal-diff--b8a00-ion-changes-the-Git-project/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-code-proposal-diff--b8a00-ion-changes-the-Git-project/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/studio.spec.cjs:834:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('.node[data-id=clarify]')
+        - locator resolved to <button data-id="clarify" data-failed="false" class="node selected" data-action="select-node" data-status="waiting_input" aria-label="Identifier le relecteur · Réponse attendue">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        58 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      871 |   await expect.poll(() => fs.existsSync(path.join(directory,'notifications.txt'))).toBe(true);
+      872 |   await page.getByRole('button',{name:'Suivre la notification'}).click();
+    > 873 |   await expect(page.locator('#run-banner')).toContainText('Terminée');
+          |                                                ^
+      874 |   await page.getByRole('button',{name:'Revenir à l’exécution'}).click();
+      875 |   await expect(page.locator('.node[data-id=clarify]')).toHaveAttribute('data-status','waiting_input');
+      876 |   await page.locator('.node[data-id=clarify]').click();
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:873:48
+
+    Error Context: test-results/studio-question-journey-co-828d8-hout-answering-the-question/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-question-journey-co-828d8-hout-answering-the-question/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-question-journey-co-828d8-hout-answering-the-question/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    tests/studio.spec.cjs:167:1 › simulation: two branches, human decision, truthful results and single documentation view
+    tests/studio.spec.cjs:183:1 › decisions persist after application restart and reject skips its branch
+    tests/studio.spec.cjs:313:1 › real isolated command produces evidence, then waits for human receipt
+    tests/studio.spec.cjs:451:1 › code proposal diff is reviewable and only explicit application changes the Git project
+    tests/studio.spec.cjs:834:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question
+  55 passed (7.3m)

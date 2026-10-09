@@ -1,0 +1,10 @@
+{
+  "scope": "UI interactions review; application files read only by reviewer",
+  "files": {
+    "src/app.js": "16a11becd8f506e6dd29ea964333223d3055ee2f8ca33bd163f496415f441884",
+    "src/studio.js": "8da6e7ad882fcd05e4d617e20bb630c3366c368d43731a81f9219edcddd9d3d4",
+    "src/execution-view.mjs": "ed4520c801cd0a79cdbe6939d45170ae545099d1c74b288bac8ee7128e2cd3c7",
+    "src/studio-execution.css": "29a16e3b13ea98d636d743d24cfcad0a7856af8dad858ad4767b9943d4c62b27",
+    "tests/execution-interactions.spec.cjs": "3bb8848cc3b9261145ed3bc799e13e698c4ac7074f67f340b97a6fe61dafa262"
+  }
+}

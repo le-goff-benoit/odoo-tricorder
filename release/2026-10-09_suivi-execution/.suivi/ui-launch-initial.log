@@ -1,0 +1,155 @@
+
+Running 53 tests using 1 worker
+
+(node:682183) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch (9.6s)
+(node:682701) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/launch-repair.spec.cjs:146:1 › repair secondary-project connection diagnoses before launch and returns without retyping (19.6s)
+(node:683670) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain) (6.6s)
+(node:684121) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile) (7.0s)
+(node:684551) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   5 tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin (1.0s)
+
+
+  1) tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByLabel('Quelle demande souhaitez-vous traiter ?')
+    Expected: "Comparer les observations du client sur Alpha et Bêta."
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Quelle demande souhaitez-vous traiter ?') with timeout 5000ms
+      - waiting for getByLabel('Quelle demande souhaitez-vous traiter ?')
+
+
+      130 |   await aiDialog.getByLabel('Modèle', { exact: true }).fill('synthetic-model');
+      131 |   await aiDialog.getByRole('button', { name: 'Appliquer ce choix et vérifier', exact: true }).click();
+    > 132 |   await expect(requestField()).toHaveValue(text);
+          |                                ^
+      133 |   await expect(page.locator(`[name="conversation-project"][value="${beta.id}"]`)).toBeChecked();
+      134 |   const conversation = await launchInert(alpha, graph, text);
+      135 |   expect(conversation.projects).toEqual([alpha.id, beta.id]);
+        at /home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:132:32
+
+    Error Context: test-results/launch-repair-repair-missi-dc0e1-oject-through-native-launch/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/launch-repair-repair-missi-dc0e1-oject-through-native-launch/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/launch-repair-repair-missi-dc0e1-oject-through-native-launch/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/launch-repair.spec.cjs:146:1 › repair secondary-project connection diagnoses before launch and returns without retyping
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByLabel('Quelle demande souhaitez-vous traiter ?')
+    Expected: "Comparer les minutes des deux projets, garder cette demande."
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Quelle demande souhaitez-vous traiter ?') with timeout 5000ms
+      - waiting for getByLabel('Quelle demande souhaitez-vous traiter ?')
+
+
+      67 | async function returnToLaunch(text, additional) {
+      68 |   await page.getByRole('button', { name: 'Revenir au lancement', exact: true }).click();
+    > 69 |   await expect(requestField()).toHaveValue(text);
+         |                                ^
+      70 |   if (additional) await expect(page.locator(`[name="conversation-project"][value="${additional.id}"]`)).toBeChecked();
+      71 | }
+      72 |
+        at returnToLaunch (/home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:69:32)
+        at /home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:171:3
+
+    Error Context: test-results/launch-repair-repair-secon-7b81c-nd-returns-without-retyping/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/launch-repair-repair-secon-7b81c-nd-returns-without-retyping/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/launch-repair-repair-secon-7b81c-nd-returns-without-retyping/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain)
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Revenir au lancement', exact: true }) resolved to 2 elements:
+        1) <button class="" data-action="return-to-launch">Revenir au lancement</button> aka locator('#studio-content').getByRole('button', { name: 'Revenir au lancement' })
+        2) <button class="" data-action="return-to-launch">Revenir au lancement</button> aka getByRole('dialog').getByRole('button', { name: 'Revenir au lancement' })
+
+    Call log:
+      - waiting for getByRole('button', { name: 'Revenir au lancement', exact: true })
+
+
+      66 |
+      67 | async function returnToLaunch(text, additional) {
+    > 68 |   await page.getByRole('button', { name: 'Revenir au lancement', exact: true }).click();
+         |                                                                                 ^
+      69 |   await expect(requestField()).toHaveValue(text);
+      70 |   if (additional) await expect(page.locator(`[name="conversation-project"][value="${additional.id}"]`)).toBeChecked();
+      71 | }
+        at returnToLaunch (/home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:68:81)
+        at /home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:194:9
+
+    Error Context: test-results/launch-repair-repair-missi-88ce8-ch-request-explicit-domain-/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/launch-repair-repair-missi-88ce8-ch-request-explicit-domain-/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/launch-repair-repair-missi-88ce8-ch-request-explicit-domain-/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile)
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Revenir au lancement', exact: true }) resolved to 2 elements:
+        1) <button class="" data-action="return-to-launch">Revenir au lancement</button> aka locator('#studio-content').getByRole('button', { name: 'Revenir au lancement' })
+        2) <button class="" data-action="return-to-launch">Revenir au lancement</button> aka getByRole('dialog').getByRole('button', { name: 'Revenir au lancement' })
+
+    Call log:
+      - waiting for getByRole('button', { name: 'Revenir au lancement', exact: true })
+
+
+      66 |
+      67 | async function returnToLaunch(text, additional) {
+    > 68 |   await page.getByRole('button', { name: 'Revenir au lancement', exact: true }).click();
+         |                                                                                 ^
+      69 |   await expect(requestField()).toHaveValue(text);
+      70 |   if (additional) await expect(page.locator(`[name="conversation-project"][value="${additional.id}"]`)).toBeChecked();
+      71 | }
+        at returnToLaunch (/home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:68:81)
+        at /home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:194:9
+
+    Error Context: test-results/launch-repair-repair-missi-702f6-t-domain-from-pack-profile-/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/launch-repair-repair-missi-702f6-t-domain-from-pack-profile-/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/launch-repair-repair-missi-702f6-t-domain-from-pack-profile-/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch
+    tests/launch-repair.spec.cjs:146:1 › repair secondary-project connection diagnoses before launch and returns without retyping
+    tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain)
+    tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile)
+  1 interrupted
+    tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin
+  48 did not run

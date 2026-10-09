@@ -7,23 +7,49 @@ from .contracts import require
 PAGE = 25
 
 
+def failed_result(state, node=None):
+    """A current problem, not a negative outcome already handled by the graph."""
+    if state['status'] in {'accepted', 'skipped'}:
+        return False
+    result = state.get('result') or {}
+    outputs = result.get('outputs') or {}
+    routed_negative = result.get('ok') is True and node and node.get('route_output') == 'verdict' and 'fail' in node.get('options', [])
+    return bool(state.get('validation_error')) or result.get('ok') is False or (isinstance(outputs, dict) and outputs.get('verdict') == 'fail' and not routed_negative)
+
+
+def health(run):
+    """Bounded unresolved causes, independently of the next actionable block."""
+    definitions = {node['id']: node for node in run['definition']['nodes']}
+    issues, total = [], 0
+    for nid, state in run['nodes'].items():
+        node = definitions.get(nid, {})
+        if not failed_result(state, node):
+            continue
+        total += 1
+        if len(issues) >= PAGE:
+            continue
+        result = state.get('result') or {}
+        # For executor failures the result usually carries the concrete cause;
+        # the validator only adds the generic "executor signalled a failure".
+        reasons = [result.get('summary'), state.get('validation_error')] if result.get('ok') is False else [state.get('validation_error'), result.get('summary')]
+        reason = next((value.strip() for value in reasons if isinstance(value, str) and value.strip()), 'Le contrôle signale un résultat non conforme.')
+        if state.get('effect_uncertain'):
+            reason = 'Effet externe incertain : vérifier avant toute reprise. ' + reason
+        issues.append({'node': nid, 'title': node.get('title', nid)[:120], 'reason': reason[:600]})
+    return {'status': 'failed' if total else 'ok', 'total': total, 'issues': issues}
+
+
 def focus(run):
     """One bounded next action, without transporting every block definition."""
     nodes = run['nodes']
-    def failed_result(state):
-        result = state.get('result') or {}
-        outputs = result.get('outputs') or {}
-        return bool(state.get('validation_error')) or result.get('ok') is False or (isinstance(outputs, dict) and outputs.get('verdict') == 'fail')
-    failed = [nid for nid, state in nodes.items() if failed_result(state)]
     priority = ('waiting_input', 'blocked', 'waiting', 'returned', 'running', 'ready')
     selected = next(((nid, s) for status in priority for nid, s in nodes.items() if s['status'] == status), None)
     if not selected:
         return None
     nid, state = selected
-    status = 'failed' if failed else state['status']
-    actions = {'waiting_input': 'Répondre à la question', 'blocked': 'Vérifier le blocage', 'waiting': 'Examiner et décider', 'returned': 'Examiner le résultat', 'running': 'Travail en cours', 'ready': 'Continuer dans le terminal', 'failed': 'Préparer une reprise après l’échec'}
     node = next(n for n in run['definition']['nodes'] if n['id'] == nid)
-    return {'node': nid, 'title': node['title'][:120], 'status': status, 'action': actions[state['status']] + (' · échec à reprendre' if failed else '')}
+    actions = {'waiting_input': 'Répondre à la question', 'blocked': 'Vérifier le blocage', 'waiting': 'Examiner et décider', 'returned': 'Examiner l’échec' if failed_result(state, node) else 'Examiner le résultat', 'running': 'Travail en cours', 'ready': 'Continuer dans le terminal'}
+    return {'node': nid, 'title': node['title'][:120], 'status': state['status'], 'action': actions[state['status']]}
 
 
 def paging(offset=0, limit=PAGE):
@@ -32,10 +58,11 @@ def paging(offset=0, limit=PAGE):
 
 
 def summary(run):
-    return {**{key: run.get(key) for key in ("id", "project", "status", "created", "updated", "simulation", "completion_outcome", "archived", "coordination_wait")},
+    return {**{key: run.get(key) for key in ("id", "project", "status", "created", "updated", "simulation", "completion_outcome", "archived", "coordination_wait", "coordination_hold")},
             "definition": {"id": run["definition"]["id"], "title": run["definition"]["title"][:300]},
             "original": {"id": run["original"]["id"]},
             "focus": focus(run),
+            "health": health(run),
             "request": str(run.get("parameters", {}).get("request", ""))[:240],
             "counts": {status: sum(s["status"] == status for s in run["nodes"].values()) for status in {s["status"] for s in run["nodes"].values()}},
             "nodes": {nid: {"status": state["status"]} for nid, state in sorted(run["nodes"].items(), key=lambda pair: pair[1]["status"] not in {"waiting_input", "waiting", "returned", "blocked"})[:100]}}
@@ -80,6 +107,7 @@ def bounded(engine, value, *, threshold=16000, references=None):
 def run_detail(engine, run, *, references=None):
     result = copy.deepcopy(run)
     result['focus'] = focus(run)
+    result['health'] = health(run)
     # Keep definitions structurally intact; their validated bound is 2 MB.
     threshold = min(8000, max(128, 1_000_000 // max(1, len(run["nodes"]) * 12)))
     result["parameters"] = {key: payload(engine, value, references=references) for key, value in result["parameters"].items()}

@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive (6.2s)
+  ✓  2 tests/execution-interactions.spec.cjs:151:1 › search draft survives polling and deferred request counts refresh after leaving the input (6.5s)
+  ✓  3 tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (12.7s)
+
+  3 passed (25.9s)

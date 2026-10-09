@@ -1,0 +1,22 @@
+{
+  "executable": "build-artifacts/linux-unpacked/odoo-tricorder",
+  "app_asar_sha256": "0b528dfa1672d947855de1164f527bd2339f4f191b21ec6942277ef66755e4cb",
+  "deb": "build-artifacts/odoo-tricorder_0.6.0-rc.10_amd64.deb",
+  "deb_sha256": "26198907bec5f2dc0107a426d8440582cf0a1f86df29bc4c2621ea42dfc61e2f",
+  "release_captures": {
+    "release/2026-10-09_suivi-execution/captures/terminal-et-suivi.png": {
+      "source": "docs/audits/2026-10-09-execution-lisibilite/packaged-final-failed-graph-1440.png",
+      "sha256": "291d22e4ce7ce0c4892230ae1fad1026381816ca7c285c489030bc922617964d"
+    },
+    "release/2026-10-09_suivi-execution/captures/cause-et-reprise.png": {
+      "source": "docs/audits/2026-10-09-execution-lisibilite/packaged-final-failed-detail-1024.png",
+      "sha256": "2fabcf4d78ca4a5c8eaddd2b8dcad7762e4917e7560ca8e97fdf6639c8373ade"
+    },
+    "release/2026-10-09_suivi-execution/captures/dependances.png": {
+      "source": "docs/audits/2026-10-09-execution-lisibilite/packaged-final-dependent-detail-1440.png",
+      "sha256": "3ea7687905e20f73010c6276921d0eb0973cb5e3fc934adac1a8ab0f42d29767"
+    }
+  },
+  "deb_app_asar_path": "./opt/Tricorder/resources/app.asar",
+  "deb_app_asar_sha256": "0b528dfa1672d947855de1164f527bd2339f4f191b21ec6942277ef66755e4cb"
+}

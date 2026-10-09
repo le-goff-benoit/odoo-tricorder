@@ -1,0 +1,57 @@
+test_completed_unresolved_work_does_not_release_dependents (test_workflow_conversations.ConversationTests) ... ok
+test_cross_project_dependency_waits_then_receives_predecessor_results (test_workflow_conversations.ConversationTests) ... ok
+test_documentation_preserves_pending_and_answered_questions (test_workflow_conversations.ConversationTests) ... ok
+test_idempotent_key_cannot_silently_change_dependencies (test_workflow_conversations.ConversationTests) ... ok
+test_manual_pause_is_not_undone_by_dependency_polling (test_workflow_conversations.ConversationTests) ... ok
+test_native_bridge_cannot_answer_a_human_gate_or_change_provider (test_workflow_conversations.ConversationTests) ... ok
+test_native_provider_question_is_persisted_without_accepting_missing_outputs (test_workflow_conversations.ConversationTests) ... ok
+test_odoo_setup_preserves_custom_workflow_and_enforces_qa_at_claim (test_workflow_conversations.ConversationTests) ... ok
+test_other_projects_and_other_conversation_runs_are_rejected (test_workflow_conversations.ConversationTests) ... ok
+test_planned_free_answer_does_not_approve_following_production_gate (test_workflow_conversations.ConversationTests) ... ok
+test_rejected_upstream_work_does_not_release_dependent_task (test_workflow_conversations.ConversationTests) ... ok
+test_release_qa_failure_stays_unresolved_after_answer_but_green_receipt_succeeds (test_workflow_conversations.ConversationTests) ... ok
+test_single_agent_routes_critical_normal_and_unknown_and_rejects_invalid_choice (test_workflow_conversations.ConversationTests) ... ok
+test_support_clarification_routes_again_and_unknown_never_becomes_success (test_workflow_conversations.ConversationTests) ... ok
+test_switching_provider_does_not_retain_other_provider_model (test_workflow_conversations.ConversationTests) ... ok
+test_two_projects_share_a_definition_and_keep_independent_work_and_results (test_workflow_conversations.ConversationTests) ... ok
+test_unplanned_question_is_durable_scoped_and_does_not_stop_other_work (test_workflow_conversations.ConversationTests) ... ok
+test_archival_is_reversible_preserves_proofs_and_refuses_active_work (test_audit_fixes.AuditFixes) ... ok
+test_automatic_text_mode_cannot_claim_editing_or_tests (test_audit_fixes.AuditFixes) ... ok
+test_candidate_checks_are_explicit_composable_and_not_documentary (test_audit_fixes.AuditFixes) ... ok
+test_candidate_qa_selected_branch_and_explicit_controls (test_audit_fixes.AuditFixes) ... ok
+test_candidate_requires_agent_qa_same_reference_and_approval (test_audit_fixes.AuditFixes) ... ok
+test_conversation_focus_distinguishes_ready_running_question_and_failed_contract (test_audit_fixes.AuditFixes) ... ok
+test_dynamic_publication_freezes_exact_body_and_candidate (test_audit_fixes.AuditFixes) ... ok
+test_execution_event_pages_reach_the_complete_history (test_audit_fixes.AuditFixes) ... ok
+test_failed_branch_keeps_independent_question_actionable (test_audit_fixes.AuditFixes) ... FAIL
+test_four_support_requests_keep_sources_question_scope_and_release_dependencies (test_audit_fixes.AuditFixes) ... ok
+test_large_conversation_is_paged_and_last_request_accessible (test_audit_fixes.AuditFixes) ... ok
+test_legacy_unidentified_attempt_requires_verified_reboot (test_audit_fixes.AuditFixes) ... ok
+test_live_worker_blocks_recovery_and_late_result_is_stale (test_audit_fixes.AuditFixes) ... ok
+test_multi_megabyte_result_is_readable_without_growing_proof_store (test_audit_fixes.AuditFixes) ... ok
+test_native_claim_never_expires_into_permission_to_recover (test_audit_fixes.AuditFixes) ... ok
+test_native_cli_exit_does_not_hide_a_surviving_terminal_child (test_audit_fixes.AuditFixes) ... ok
+test_native_ready_pages_share_context_and_mutations_use_readable_references (test_audit_fixes.AuditFixes) ... ok
+test_native_task_qa_materializes_exact_candidate_without_touching_original (test_audit_fixes.AuditFixes) ... ok
+test_nested_component_rejection_does_not_release_success_path (test_audit_fixes.AuditFixes) ... ok
+test_orphan_recovery_releases_locks_and_slots_without_respawn (test_audit_fixes.AuditFixes) ... ok
+test_subworkflow_data_roundtrip_and_terminal_decision (test_audit_fixes.AuditFixes) ... ok
+test_thousand_demands_search_and_last_page (test_audit_fixes.AuditFixes) ... ok
+test_three_way_conflict_keeps_both_changes_and_rechecks_file (test_audit_fixes.AuditFixes) ... ok
+test_visible_decision_output_and_safe_paginated_evidence (test_audit_fixes.AuditFixes) ... ok
+
+======================================================================
+FAIL: test_failed_branch_keeps_independent_question_actionable (test_audit_fixes.AuditFixes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/blegoff/odoo-tricorder/tests/test_audit_fixes.py", line 403, in test_failed_branch_keeps_independent_question_actionable
+    self.assertEqual(selected['node'],'clarify');self.assertEqual(selected['status'],'failed')
+AssertionError: 'waiting_input' != 'failed'
+- waiting_input
++ failed
+
+
+----------------------------------------------------------------------
+Ran 41 tests in 36.658s
+
+FAILED (failures=1)

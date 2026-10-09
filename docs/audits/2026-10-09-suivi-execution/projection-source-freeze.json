@@ -1,0 +1,9 @@
+{
+  "scope": "Projection implementation ready for independent review; no transition or validation change",
+  "files": {
+    "backend/workflow_engine/projections.py": "624d9bf21e9a288f84ffd00b229e404d144fa5bc92de3bf17f391dde3a3ec317",
+    "backend/workflow_engine/conversations.py": "c65b47f36f6f2f54374d3ab4e43e95bb6016468016cd517df9b703eebcf85ff6",
+    "tests/test_execution_projections.py": "86eb8d1f16263f56a6baa86ef588306ebb250d605a8c886ddb86445cd4b3f24d",
+    "tests/test_audit_fixes.py": "6faa1c22c335a114a097e3e72409a808a643ce89fbf2e511f15ec0f76c56ce65"
+  }
+}

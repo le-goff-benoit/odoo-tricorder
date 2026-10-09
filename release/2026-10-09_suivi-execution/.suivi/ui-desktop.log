@@ -1,0 +1,31 @@
+
+Running 22 tests using 1 worker
+
+(node:675386) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (6.4s)
+  ✓   2 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (2.4s)
+  ✓   3 tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (4.5s)
+  ✓   4 tests/desktop.spec.cjs:292:1 › design system: common gutters, cards and controls across every project view (10.2s)
+  ✓   5 tests/desktop.spec.cjs:355:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (3.0s)
+  ✓   6 tests/desktop.spec.cjs:408:1 › effort: partial recorded time survives missing roles, task filtering and refresh (3.4s)
+  ✓   7 tests/desktop.spec.cjs:450:1 › effort: open release updates task and agent percentages before closure (3.8s)
+  ✓   8 tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence (7.8s)
+  ✓   9 tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (4.8s)
+  ✓  10 tests/desktop.spec.cjs:666:1 › Markdown preview: readable safe content and recovery from a project read error (4.2s)
+  ✓  11 tests/desktop.spec.cjs:719:1 › email removed: no UI or API, old private records preserved, project still usable (3.3s)
+  ✓  12 tests/desktop.spec.cjs:770:1 › desktop: projects, proof status, sources, real terminal and persistence (6.6s)
+  ✓  13 tests/desktop.spec.cjs:869:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (8.4s)
+  -  14 tests/desktop.spec.cjs:989:1 › real project: read-only release/task/mission screens
+  ✓  15 tests/desktop.spec.cjs:1077:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (12.3s)
+  ✓  16 tests/desktop.spec.cjs:1213:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (7.2s)
+  ✓  17 tests/desktop.spec.cjs:1310:1 › live requests appear before planning and reconcile with tasks without manual refresh (8.4s)
+  ✓  18 tests/desktop.spec.cjs:1364:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (10.9s)
+
+  ✓  19 tests/desktop.spec.cjs:1500:1 › work page starts a contextual request and resumes a task without changing its state (4.5s)
+  ✓  20 tests/desktop.spec.cjs:1550:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (8.5s)
+  ✓  21 tests/desktop.spec.cjs:1652:1 › window integration preserves the native conversation while inspecting phases and the library (6.3s)
+  -  22 tests/release-opening.spec.cjs:25:1 › large release opens with validated memory in read-only mode
+
+  2 skipped
+  20 passed (2.1m)

@@ -1,0 +1,370 @@
+
+Running 75 tests using 1 worker
+
+(node:667241) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (11.4s)
+(node:667650) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (3.5s)
+  ✘   3 tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (8.7s)
+(node:668201) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   4 tests/desktop.spec.cjs:292:1 › design system: common gutters, cards and controls across every project view (12.7s)
+  ✓   5 tests/desktop.spec.cjs:355:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (3.7s)
+  ✓   6 tests/desktop.spec.cjs:408:1 › effort: partial recorded time survives missing roles, task filtering and refresh (3.3s)
+  ✓   7 tests/desktop.spec.cjs:450:1 › effort: open release updates task and agent percentages before closure (4.4s)
+  ✘   8 tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence (9.7s)
+(node:670243) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   9 tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (10.1s)
+(node:671125) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 tests/desktop.spec.cjs:666:1 › Markdown preview: readable safe content and recovery from a project read error (3.4s)
+  ✓  11 tests/desktop.spec.cjs:719:1 › email removed: no UI or API, old private records preserved, project still usable (3.0s)
+  ✘  12 tests/desktop.spec.cjs:770:1 › desktop: projects, proof status, sources, real terminal and persistence (8.2s)
+(node:671843) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  13 tests/desktop.spec.cjs:869:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (7.3s)
+(node:672263) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  -  14 tests/desktop.spec.cjs:989:1 › real project: read-only release/task/mission screens
+  ✘  15 tests/desktop.spec.cjs:1077:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (15.7s)
+(node:672890) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  16 tests/desktop.spec.cjs:1213:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (7.8s)
+  ✓  17 tests/desktop.spec.cjs:1310:1 › live requests appear before planning and reconcile with tasks without manual refresh (8.3s)
+  ✘  18 tests/desktop.spec.cjs:1364:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (6.9s)
+(node:673537) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+  ✘  19 tests/desktop.spec.cjs:1500:1 › work page starts a contextual request and resumes a task without changing its state (12.0s)
+(node:673978) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  20 tests/desktop.spec.cjs:1550:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (2.4s)
+
+
+  1) tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.xterm-screen')
+    Expected substring: "FAKE-CLAUDE:/tmp/tri-simple-sF2dGq/home/orbital-industries"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('.xterm-screen') with timeout 5000ms
+      - waiting for locator('.xterm-screen')
+
+
+      101 |     await expect(page.locator('#tabs [data-view="express"]')).toHaveAttribute('aria-keyshortcuts', 'Alt+6');
+      102 |     await page.locator('[data-launch-agent="claude"]').evaluate(button => { button.click(); button.click(); });
+    > 103 |     await expect(page.locator('.xterm-screen')).toContainText('FAKE-CLAUDE:' + project);
+          |                                                 ^
+      104 |     const [before] = await page.evaluate(() => window.tricorder.terminals.list());
+      105 |     expect((await page.evaluate(() => window.tricorder.terminals.list())).length).toBe(1);
+      106 |     expect(before.task).toBeNull();
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:103:49
+
+    Error Context: test-results/desktop-simplified-workspa-0bd23-ferences-and-launch-buttons/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-simplified-workspa-0bd23-ferences-and-launch-buttons/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-simplified-workspa-0bd23-ferences-and-launch-buttons/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.terminal-tab')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.terminal-tab') with timeout 5000ms
+      - waiting for locator('.terminal-tab')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      229 |     await expect(page.locator('#release-select')).toHaveValue(releaseId);
+      230 |     await page.keyboard.press('Control+Shift+T');
+    > 231 |     await expect(page.locator('.terminal-tab')).toHaveCount(1);
+          |                                                 ^
+      232 |     const [terminal] = await page.evaluate(() => window.tricorder.terminals.list());
+      233 |     await kanbanMode(page);
+      234 |     await expect(page.locator('.release-kanban .kanban-card')).toHaveCount(3);
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:231:49
+
+    Error Context: test-results/desktop-release-Kanban-rec-0784d-isting-terminal-stay-scoped/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-release-Kanban-rec-0784d-isting-terminal-stay-scoped/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-release-Kanban-rec-0784d-isting-terminal-stay-scoped/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  locator('#release-select')
+    Expected: "2026-09-12_01_nouvelle-release"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" locator('#release-select') with timeout 5000ms
+      - waiting for locator('#release-select')
+        14 × locator resolved to <select id="release-select" aria-label="Release">…</select>
+           - unexpected value ""
+
+
+      523 |     write(path.join(project, 'changelog', newId, 'README.md'), '<!-- release ouverte -->\n# Nouvelle release\n');
+      524 |     await page.locator('[data-action="refresh"]').evaluate(el => el.click());
+    > 525 |     await expect(page.locator('#release-select')).toHaveValue(newId);
+          |                                                   ^
+      526 |     await expect.poll(async () => (await page.evaluate(() => window.tricorder.terminals.list()))[0].release).toBe(newId);
+      527 |     const updated = (await page.evaluate(() => window.tricorder.terminals.list()))[0];
+      528 |     expect(updated.id).toBe(original.id); expect(updated.pid).toBe(original.pid); expect(updated.alive).toBe(true);
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:525:51
+
+    Error Context: test-results/desktop-release-context-no-718e9-me-terminal-and-persistence/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-release-context-no-718e9-me-terminal-and-persistence/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-release-context-no-718e9-me-terminal-and-persistence/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  locator('#release-select')
+    Expected: "2026-09-12_01_ambiguite"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" locator('#release-select') with timeout 5000ms
+      - waiting for locator('#release-select')
+        14 × locator resolved to <select id="release-select" aria-label="Release">…</select>
+           - unexpected value ""
+
+
+      620 |     write(path.join(project, 'changelog', newId, 'README.md'), '<!-- release ouverte -->\n# Nouvelle release\n');
+      621 |     await page.locator('[data-action="refresh"]').evaluate(el => el.click());
+    > 622 |     await expect(page.locator('#release-select')).toHaveValue(newId);
+          |                                                   ^
+      623 |     const unchanged = await page.evaluate(() => window.tricorder.terminals.list());
+      624 |     expect(unchanged).toHaveLength(3);
+      625 |     expect(unchanged.every(s => s.release === null)).toBe(true);
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:622:51
+
+    Error Context: test-results/desktop-flow-starts-delaye-d1f83-ous-adoption-stays-explicit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-flow-starts-delaye-d1f83-ous-adoption-stays-explicit/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-flow-starts-delaye-d1f83-ous-adoption-stays-explicit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/desktop.spec.cjs:770:1 › desktop: projects, proof status, sources, real terminal and persistence
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.terminal-host')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.terminal-host') with timeout 5000ms
+      - waiting for locator('.terminal-host')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      803 |     await page.locator('[data-environment="staging"]').click();
+      804 |     await page.keyboard.press('Control+Shift+T');
+    > 805 |     await expect(page.locator('.terminal-host')).toHaveCount(1);
+          |                                                  ^
+      806 |     const first = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+      807 |     expect(first.environment).toBe('staging');
+      808 |     expect(first.project).toBe(project);
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:805:50
+
+    Error Context: test-results/desktop-desktop-projects-p-d49eb-al-terminal-and-persistence/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-desktop-projects-p-d49eb-al-terminal-and-persistence/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-desktop-projects-p-d49eb-al-terminal-and-persistence/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/desktop.spec.cjs:869:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.terminal-host')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.terminal-host') with timeout 5000ms
+      - waiting for locator('.terminal-host')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      905 |     await projectTab(page, 'terminal');
+      906 |     await page.locator('#terminal-tabs [data-action="new-terminal"]').click();
+    > 907 |     await expect(page.locator('.terminal-host')).toHaveCount(1);
+          |                                                  ^
+      908 |     const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+      909 |     await page.locator('#release-select').selectOption(historical);
+      910 |     await projectTab(page, 'terminal');
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:907:50
+
+    Error Context: test-results/desktop-lifecycle-releases-425af-ention-and-rapid-navigation/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-lifecycle-releases-425af-ention-and-rapid-navigation/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-lifecycle-releases-425af-ention-and-rapid-navigation/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests/desktop.spec.cjs:1077:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.terminal-host')
+    Expected: 1
+    Received: 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.terminal-host') with timeout 5000ms
+      - waiting for locator('.terminal-host')
+        14 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      1192 |     await projectTab(page, 'plan');
+      1193 |     await page.keyboard.press('Control+Shift+T');
+    > 1194 |     await expect(page.locator('.terminal-host')).toHaveCount(1);
+           |                                                  ^
+      1195 |     const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+      1196 |     expect(terminal.workingDirectory).toBe(work);
+      1197 |     expect(terminal.task).toBeNull();
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:1194:50
+
+    Error Context: test-results/desktop-roadmap-observatio-f6306-preparation-and-preferences/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-roadmap-observatio-f6306-preparation-and-preferences/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-roadmap-observatio-f6306-preparation-and-preferences/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests/desktop.spec.cjs:1364:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.xterm-screen')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.xterm-screen') with timeout 5000ms
+      - waiting for locator('.xterm-screen')
+
+
+      1418 |         await check('terminal-empty', width);
+      1419 |         await page.locator('#terminal-empty [data-action="new-terminal"]').click();
+    > 1420 |         await expect(page.locator('.xterm-screen')).toBeVisible();
+           |                                                     ^
+      1421 |       }
+      1422 |       await page.locator('[data-action="find"]').click();
+      1423 |       await expect(page.locator('#terminal-search input')).toBeFocused();
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:1420:53
+
+    Error Context: test-results/desktop-UI-review-bundled--011ad-at-desktop-and-compact-zoom/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-UI-review-bundled--011ad-at-desktop-and-compact-zoom/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-UI-review-bundled--011ad-at-desktop-and-compact-zoom/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) tests/desktop.spec.cjs:1500:1 › work page starts a contextual request and resumes a task without changing its state
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.xterm-screen')
+    Expected substring: "sauf société B."
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('.xterm-screen') with timeout 10000ms
+      - waiting for locator('.xterm-screen')
+
+
+      1526 |     await page.locator('#work-form textarea').fill(request);
+      1527 |     await page.locator('#work-form [type="submit"]').click();
+    > 1528 |     await expect(page.locator('.xterm-screen')).toContainText('sauf société B.', { timeout: 10000 });
+           |                                                 ^
+      1529 |     await expect(page.locator('.xterm-screen')).toContainText('PROMPT:/odoo-new');
+      1530 |     const before = fs.readFileSync(path.join(project, 'changelog', releaseId, 'plan.json'), 'utf8');
+      1531 |     await projectTab(page, 'work');
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:1528:49
+
+    Error Context: test-results/desktop-work-page-starts-a-f7be8--without-changing-its-state/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/desktop-work-page-starts-a-f7be8--without-changing-its-state/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/desktop-work-page-starts-a-f7be8--without-changing-its-state/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9 failed
+    tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons
+    tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped
+    tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence
+    tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit
+    tests/desktop.spec.cjs:770:1 › desktop: projects, proof status, sources, real terminal and persistence
+    tests/desktop.spec.cjs:869:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation
+    tests/desktop.spec.cjs:1077:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences
+    tests/desktop.spec.cjs:1364:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom
+    tests/desktop.spec.cjs:1500:1 › work page starts a contextual request and resumes a task without changing its state
+  1 interrupted
+    tests/desktop.spec.cjs:1550:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy
+  1 skipped
+  55 did not run
+  9 passed (2.5m)

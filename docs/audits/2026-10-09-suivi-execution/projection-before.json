@@ -1,0 +1,398 @@
+{
+  "method": "Pure projections on in-memory synthetic runs; no engine, model or service",
+  "source_sha256": "fa48e2c5093d61a0a0f89c226441feab016fc0e44ce074a4786f04d94eb52380",
+  "cases": {
+    "failure_and_question_and_running": {
+      "input": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "active",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic",
+          "nodes": [
+            {
+              "id": "work_failed",
+              "title": "work_failed",
+              "kind": "task"
+            },
+            {
+              "id": "clarification",
+              "title": "clarification",
+              "kind": "task"
+            },
+            {
+              "id": "parallel_work",
+              "title": "parallel_work",
+              "kind": "task"
+            }
+          ]
+        },
+        "original": {
+          "id": "generic"
+        },
+        "nodes": {
+          "work_failed": {
+            "status": "returned",
+            "result": {
+              "ok": false,
+              "summary": "Synthetic copy failure"
+            }
+          },
+          "clarification": {
+            "status": "waiting_input",
+            "question": {
+              "text": "Synthetic question"
+            }
+          },
+          "parallel_work": {
+            "status": "running",
+            "started": 1791545282.876882,
+            "heartbeat": 1791545432.876882
+          }
+        },
+        "parameters": {
+          "request": "Synthetic request"
+        }
+      },
+      "summary": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "active",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic"
+        },
+        "original": {
+          "id": "generic"
+        },
+        "focus": {
+          "node": "clarification",
+          "title": "clarification",
+          "status": "failed",
+          "action": "Répondre à la question · échec à reprendre"
+        },
+        "request": "Synthetic request",
+        "counts": {
+          "waiting_input": 1,
+          "returned": 1,
+          "running": 1
+        },
+        "nodes": {
+          "work_failed": {
+            "status": "returned"
+          },
+          "clarification": {
+            "status": "waiting_input"
+          },
+          "parallel_work": {
+            "status": "running"
+          }
+        }
+      }
+    },
+    "two_independent_decisions": {
+      "input": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "active",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic",
+          "nodes": [
+            {
+              "id": "plan_a",
+              "title": "plan_a",
+              "kind": "task"
+            },
+            {
+              "id": "plan_b",
+              "title": "plan_b",
+              "kind": "task"
+            }
+          ]
+        },
+        "original": {
+          "id": "generic"
+        },
+        "nodes": {
+          "plan_a": {
+            "status": "waiting"
+          },
+          "plan_b": {
+            "status": "waiting"
+          }
+        },
+        "parameters": {
+          "request": "Synthetic request"
+        }
+      },
+      "summary": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "active",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic"
+        },
+        "original": {
+          "id": "generic"
+        },
+        "focus": {
+          "node": "plan_a",
+          "title": "plan_a",
+          "status": "waiting",
+          "action": "Examiner et décider"
+        },
+        "request": "Synthetic request",
+        "counts": {
+          "waiting": 2
+        },
+        "nodes": {
+          "plan_a": {
+            "status": "waiting"
+          },
+          "plan_b": {
+            "status": "waiting"
+          }
+        }
+      }
+    },
+    "native_work_between_expected_heartbeats": {
+      "input": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "active",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic",
+          "nodes": [
+            {
+              "id": "work",
+              "title": "work",
+              "kind": "task"
+            }
+          ]
+        },
+        "original": {
+          "id": "generic"
+        },
+        "nodes": {
+          "work": {
+            "status": "running",
+            "started": 1791545282.876882,
+            "heartbeat": 1791545432.876882,
+            "ownership": "native"
+          }
+        },
+        "parameters": {
+          "request": "Synthetic request"
+        }
+      },
+      "summary": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "active",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic"
+        },
+        "original": {
+          "id": "generic"
+        },
+        "focus": {
+          "node": "work",
+          "title": "work",
+          "status": "running",
+          "action": "Travail en cours"
+        },
+        "request": "Synthetic request",
+        "counts": {
+          "running": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "running"
+          }
+        }
+      }
+    },
+    "dependency_wait": {
+      "input": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "paused",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic",
+          "nodes": [
+            {
+              "id": "work",
+              "title": "work",
+              "kind": "task"
+            }
+          ]
+        },
+        "original": {
+          "id": "generic"
+        },
+        "nodes": {
+          "work": {
+            "status": "pending"
+          }
+        },
+        "parameters": {
+          "depends_on_runs": [
+            "synthetic_parent"
+          ]
+        },
+        "coordination_wait": true
+      },
+      "summary": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "paused",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": true,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic"
+        },
+        "original": {
+          "id": "generic"
+        },
+        "focus": null,
+        "request": "",
+        "counts": {
+          "pending": 1
+        },
+        "nodes": {
+          "work": {
+            "status": "pending"
+          }
+        }
+      }
+    },
+    "failed_result_accepted_on_failure_branch": {
+      "input": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "active",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic",
+          "nodes": [
+            {
+              "id": "quality",
+              "title": "quality",
+              "kind": "task"
+            },
+            {
+              "id": "repair_question",
+              "title": "repair_question",
+              "kind": "task"
+            }
+          ]
+        },
+        "original": {
+          "id": "generic"
+        },
+        "nodes": {
+          "quality": {
+            "status": "accepted",
+            "outcome": "fail",
+            "result": {
+              "ok": true,
+              "outputs": {
+                "verdict": "fail"
+              }
+            }
+          },
+          "repair_question": {
+            "status": "waiting_input",
+            "question": {
+              "text": "What should change?"
+            }
+          }
+        },
+        "parameters": {
+          "request": "Synthetic request"
+        }
+      },
+      "summary": {
+        "id": "synthetic",
+        "project": "synthetic",
+        "status": "active",
+        "created": 1791545462.876882,
+        "updated": 1791545462.876882,
+        "simulation": true,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "definition": {
+          "id": "generic",
+          "title": "Synthetic"
+        },
+        "original": {
+          "id": "generic"
+        },
+        "focus": {
+          "node": "repair_question",
+          "title": "repair_question",
+          "status": "failed",
+          "action": "Répondre à la question · échec à reprendre"
+        },
+        "request": "Synthetic request",
+        "counts": {
+          "waiting_input": 1,
+          "accepted": 1
+        },
+        "nodes": {
+          "repair_question": {
+            "status": "waiting_input"
+          },
+          "quality": {
+            "status": "accepted"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,17 @@
 # Journal
 
+## 2026-10-09 — Suivi d’exécution (0.6.0-rc.10)
+
+- Cas utilisateur reproduit : six demandes, neuf blocs, validations multiples et copie de dépôt bloquée.
+- Exécution : sélecteur compact, état/action/cause visibles, graphe ou détail en pleine hauteur.
+- Décisions rattachées à leur demande ; dépendances nommées et navigation sans fermer le terminal.
+- Échecs, questions et constats QA négatifs routables distingués ; accusé distant encore accessible.
+- Terminal identifié, contexte repliable, shell après arrêt distinct ; focus clavier et saisie préservés.
+- Copie isolée par flux, espace disque contrôlé ; dépôt synthétique de 140 Mio vérifié jusqu’à application.
+- Intégrité des pièces inchangées, conflits, annulation et récupération couverts par contre-épreuves.
+- Reviews indépendantes et recette détaillées dans `release/2026-10-09_suivi-execution/README.md`.
+- Réception locale : 277 tests Python, 89 JavaScript, 80 parcours sur le paquet et 15 contrôles de layout ; CI complète requise avant livraison.
+
 ## 2026-10-09 — Lancement et dépannage (0.6.0-rc.9)
 
 - Retour utilisateur reproduit sur le dialogue réel de rc.8 : la copie QA empêchait même de commencer l’analyse.

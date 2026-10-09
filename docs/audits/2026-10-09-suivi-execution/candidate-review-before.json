@@ -1,0 +1,38 @@
+{
+  "large_unchanged_piece": {
+    "source_bytes": 29360128,
+    "preserved_before_qa_and_after_apply": true,
+    "max_stream_read": 1048576,
+    "read_calls": 132,
+    "source_inode_distinct": true
+  },
+  "disk_full_during_candidate_materialization": {
+    "error": {
+      "type": "OSError",
+      "message": "[Errno 28] Synthetic disk full after source snapshot"
+    },
+    "partial_target_remains": true,
+    "partial_first_change_applied": true,
+    "source_unchanged": true
+  },
+  "partial_apply_rollback": {
+    "both_sources_restored": true,
+    "applied_flag_absent": true,
+    "journal_removed": true
+  },
+  "rollback_preserves_new_user_edit": {
+    "error": {
+      "type": "ContractError",
+      "message": "Application interrompue et fichier modifié "
+    },
+    "user_edit_preserved": true,
+    "recovery_journal_retained": true,
+    "applied_flag_absent": true
+  },
+  "source_sha256": {
+    "backend/connectors/candidate_sources.py": "e38d95076d074d6fa9e44b897df9a6b2908258dcd5bd2ea1311bafa0b43a476e",
+    "backend/connectors/candidates.py": "682e31ff944d620df03ecae9461e89876b20cac147c00b9bf6b87f851a8a1b79",
+    "backend/connectors/providers.py": "9111659a0ed766c878cb0837f33e746a0d3bc26a6b3a7d8089c2a9d9904314d9",
+    "tests/test_candidate_workspace.py": "671d211bd461151b547b753a8e719be333df54512dff0c052f53d4eab8cc6727"
+  }
+}

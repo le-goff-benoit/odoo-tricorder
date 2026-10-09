@@ -4,7 +4,7 @@ import time
 from contextlib import nullcontext
 
 from .contracts import require, validate, expand
-from .engine import new_id, dependency_satisfied
+from .engine import new_id, dependency_satisfied, completion_outcome
 
 
 def native_preflight(engine, project, graph, provider, projects=None, model=None):
@@ -118,7 +118,7 @@ class Conversations:
             return item
 
     def snapshot(self, cid, *, offset=0, limit=None, query=""):
-        from .projections import paging, summary
+        from .projections import PAGE, paging, summary
         conversation = self.get(cid)
         with self.engine.store.connect() as db:
             waiting = [self.engine.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.parameters.conversation')=? AND json_extract(body, '$.coordination_wait')=1 AND json_extract(body, '$.status')='paused'", (cid,))]
@@ -135,7 +135,44 @@ class Conversations:
             items = [i for i in items if query.lower() in i["request"].lower()]
             result.update(item_count=len(conversation["items"]), total=len(items), offset=offset, limit=limit, next=offset + limit if offset + limit < len(items) else None)
             items = items[offset:offset + limit]
-            result["items"] = [{**i, "request": i["request"][:240], "request_truncated": len(i["request"]) > 240, "execution": summary(self.engine.run(i["run"]))} for i in items]
+            # Resolve names through this conversation, never arbitrary run IDs
+            # from a caller or just the current filtered page. Cache projections
+            # rather than whole runs, whose evidence may be very large.
+            authorized = {item['id']: item for item in conversation['items']}
+            observed = {}
+            def execution(rid):
+                if rid not in observed:
+                    run = self.engine.run(rid)
+                    projection = summary(run)
+                    if run['status'] == 'completed':
+                        projection['completion_outcome'] = completion_outcome(run)
+                    observed[rid] = projection, dependency_satisfied(run)
+                return observed[rid]
+
+            result['items'] = []
+            for item in items:
+                dependencies = []
+                for did in item.get('depends_on', []):
+                    parent = authorized.get(did)
+                    require(parent is not None, 'Dépendance hors de la conversation')
+                    previous, satisfied = execution(parent['run'])
+                    dependencies.append({
+                        'id': parent['id'], 'run': parent['run'], 'project': parent['project'],
+                        'request': parent['request'][:240], 'request_truncated': len(parent['request']) > 240,
+                        **{key: previous.get(key) for key in ('status', 'completion_outcome', 'coordination_wait', 'coordination_hold', 'focus', 'counts')},
+                        'health': {key: previous['health'][key] for key in ('status', 'total')},
+                        'satisfied': satisfied,
+                    })
+                # A page of 100 items can each depend on up to 999 others.
+                # Keep attention-worthy prerequisites first and make the bound
+                # explicit; depends_on retains every authorized item ID.
+                dependencies.sort(key=lambda dependency: dependency['satisfied'])
+                result['items'].append({
+                    **item, 'request': item['request'][:240], 'request_truncated': len(item['request']) > 240,
+                    'execution': execution(item['run'])[0],
+                    'dependencies': dependencies[:PAGE], 'dependencies_total': len(dependencies),
+                    'dependencies_truncated': len(dependencies) > PAGE,
+                })
             result.pop("transports", None)
         else:
             result["items"] = [{**i, "execution": self.engine.run(i["run"])} for i in items]

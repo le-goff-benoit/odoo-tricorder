@@ -1,0 +1,21 @@
+{
+  "disk_full_during_materialization": {
+    "contract_error": "Le disque est plein pendant la préparation du candidat pour la QA. La copie partielle a été supprimée ; libérez de l’espace puis reprenez ce bloc. Le dépôt original reste intact.",
+    "partial_copy_removed": true,
+    "source_unchanged": true
+  },
+  "preexisting_target": {
+    "rejected": true,
+    "existing_file_preserved": true
+  },
+  "fresh_retry_after_freeing_space": {
+    "complete_candidate_materialized": true,
+    "source_unchanged": true
+  },
+  "source_sha256": {
+    "backend/connectors/candidate_sources.py": "e38d95076d074d6fa9e44b897df9a6b2908258dcd5bd2ea1311bafa0b43a476e",
+    "backend/connectors/candidates.py": "56f48881e4b813f5dc3ccb78473f15e5b9fe04ffeb391d042727ceb94ba0cb8f",
+    "backend/connectors/providers.py": "9111659a0ed766c878cb0837f33e746a0d3bc26a6b3a7d8089c2a9d9904314d9",
+    "tests/test_candidate_workspace.py": "d2a08a993f0aa6ae4e35f0db927c7926ca74f39632b6545c69d6b3b92f13e9af"
+  }
+}

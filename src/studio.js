@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify';
+import { activitySummary, executionAction, executionIssue, failedResult } from './execution-view.mjs';
 import { marked } from 'marked';
 import { states, kinds, symbols, nodePosition, effectiveExecution, History, applyPatch, patchSummary, displayGraph, orthogonalPath, withWorkflowAI } from './studio-model.js';
 
@@ -46,9 +47,12 @@ function persistDraft() { if (state.graph && state.dirty) localStorage.setItem(d
 function edit(mutator) {
   const next = clone(state.graph); mutator(next); state.history.push(state.graph); state.graph = next; state.dirty = true; persistDraft(); renderEditor();
 }
+function nodeFailed(node, definition) { return node && !['accepted','skipped'].includes(node.status) && failedResult(node, definition); }
+function nodeBadge(node, definition) { return nodeFailed(node, definition) ? '<span class="pill failed">Échec</span>' : badge(node?.status || 'pending'); }
 function badge(status) { return `<span class="pill ${esc(status)}">${esc(states[status] || status)}</span>`; }
 function updateRunBanner() {
   const banner = document.querySelector('#run-banner');
+  if (state.mode === 'run') renderExecutionOverview();
   if (banner && state.run) banner.innerHTML = `${state.run.simulation ? '<strong>Simulation.</strong> Aucun modèle ni service métier appelé. ' : '<strong>Exécution réelle.</strong> '}${esc(runLabel(state.run))}. ${Object.values(state.run.nodes).filter(n => ['waiting', 'waiting_input', 'returned'].includes(n.status)).length} bloc(s) attendent votre intervention.`;
   const pause = document.querySelector('[data-action=pause]');
   if (pause && state.run && !['active','paused'].includes(state.run.status)) pause.remove();
@@ -131,8 +135,8 @@ function shell() {
   const title = state.route === 'workflow' ? state.project.title : { overview: 'Tableau de bord', projects: 'Projets', project: state.project?.title, library: 'Modèles de workflows', connections: 'Connexions', schedules: 'Planifications' }[state.route];
   const activeRoute = ['workflow', 'project'].includes(state.route) ? (state.project?.library ? 'library' : state.project?.scope === 'workspace' ? 'global' : 'projects') : state.route;
   const navItem = (route, label, accessible = label) => `<button data-action="navigate" data-route="${route}" class="nav-item ${activeRoute === route ? 'active' : ''}" ${activeRoute === route ? 'aria-current="page"' : ''} aria-label="${accessible}" title="${label}">${navIcon(route)}<span class="nav-label">${label}</span></button>`;
-  app.innerHTML = `<main class="workspace embedded-workspace"><div id="feedback"></div><div id="studio-content" style="display:contents"></div></main>`;
-  integration.context({ projects: state.projects, project: state.project, graph: currentGraph(), run: state.run, route: state.route, activeRoute, title });
+  app.innerHTML = `<main class="workspace embedded-workspace"><div id="feedback"></div><div id="studio-content"></div></main>`;
+  integration.context({ projects: state.projects, project: state.project, graph: currentGraph(), run: state.run, conversation: state.conversation, route: state.route, activeRoute, title });
   if (state.route === 'overview') renderOverview();
   if (state.route === 'projects') renderProjects();
   if (state.route === 'project') renderProject();
@@ -146,7 +150,7 @@ function shell() {
   if (state.project?.id !== terminal.active) terminal.host.hidden = true;
 }
 
-function content(html) { document.querySelector('#studio-content').innerHTML = html; }
+function content(html) { const target = document.querySelector('#studio-content'); target.classList.toggle('execution-view', state.route === 'workflow' && state.mode === 'run' && !!state.run); target.innerHTML = html; }
 function renderOverview() {
   const activity = state.activity || { runs: [], workflow_count: 0 };
   if (!state.projects.length && !activity.workflow_count && !activity.runs.length) { renderProjects(); return; }
@@ -178,10 +182,17 @@ function runTable(runs) {
   return `<table><thead><tr><th>Workflow</th><th>Contexte</th><th>État</th><th></th></tr></thead><tbody>${runs.map(r => `<tr><td>${esc((r.request || r.parameters?.request || r.definition.title).split('\n')[0])}<br><small>${esc(r.definition.title)} · ${new Date(r.created * 1000).toLocaleString('fr-CH')}</small></td><td>${r.simulation ? 'Simulation' : 'Exécution réelle'}</td><td>${esc(runLabel(r))}</td><td>${button('open-run', 'Consulter', '', `data-id="${r.id}"`)}${!['active','paused'].includes(r.status) ? button('archive-item',r.archived ? 'Restaurer' : 'Archiver','flat',`data-kind="run" data-id="${r.id}" data-archived="${!!r.archived}"`) : ''}</td></tr>`).join('')}</tbody></table>`;
 }
 function runLabel(run) {
+  if (run.coordination_hold) return 'Suspendue manuellement';
+  if (run.coordination_wait) return 'Attend une autre demande';
   if (run.status === 'active') {
+    if (run.health?.status === 'failed') {
+      if (run.focus?.status==='waiting_input') return 'Réponse attendue · échec à examiner';
+      if (run.focus?.status==='waiting') return 'Décision attendue · échec à examiner';
+      return 'Échec · reprise nécessaire';
+    }
     if (run.focus) return ({failed:'Échec · reprise nécessaire',blocked:'Bloquée',waiting_input:'Réponse attendue',waiting:'Décision attendue',returned:'Résultat à valider',running:'En cours',ready:'Prête'})[run.focus.status] || 'Attend une dépendance';
     const nodes=Object.values(run.nodes || {});
-    if(nodes.some(n=>n.result?.ok===false || n.result?.outputs?.verdict==='fail'))return 'Échec · reprise nécessaire';
+    if(executionIssue(run))return 'Échec · reprise nécessaire';
     for(const [status,label] of [['blocked','Bloquée'],['waiting_input','Réponse attendue'],['waiting','Décision attendue'],['returned','Résultat à valider'],['running','En cours'],['ready','Prête']])if(run.counts?.[status] || nodes.some(n=>n.status===status))return label;
     return 'Attend une dépendance';
   }
@@ -223,45 +234,73 @@ function renderEditor() {
   const running = ['run', 'document'].includes(state.mode) && state.run;
   const selectedRequest = running && state.conversation?.items.find(i=>i.run===state.run.id);
   const heading = selectedRequest ? selectedRequest.request.split('\n')[0] : graph.title;
-  integration.context({ projects: state.projects, project: state.project, graph, run: state.run, route: state.route, mode: state.mode, activeRoute: state.project?.library ? 'library' : state.project?.scope === 'workspace' ? 'global' : 'projects', title: state.project.title });
+  integration.context({ projects: state.projects, project: state.project, graph, run: state.run, conversation: state.conversation, route: state.route, mode: state.mode, activeRoute: state.project?.library ? 'library' : state.project?.scope === 'workspace' ? 'global' : 'projects', title: state.project.title });
   const scroll = document.querySelector('.canvas-scroll');
   const position = scroll ? [scroll.scrollLeft, scroll.scrollTop] : [0, 0];
   content(`<div class="workflow-heading ${running ? 'execution-heading' : ''}"><div><div class="eyebrow breadcrumb">${selectedRequest ? 'Workflow de la demande sélectionnée' : esc(state.project.title)+' / Workflow'}</div><h1 title="${esc(heading)}">${esc(heading)}</h1><p title="${esc(graph.title)}">${selectedRequest ? esc(graph.title.split('—')[0].trim())+' · ' : ''}${running ? `Version figée · ${esc(runLabel(state.run))}${selectedRequest ? '' : ' · '+new Date(state.run.created * 1000).toLocaleString('fr-CH')}` : `Révision ${state.savedRevision || 'initiale'} · ${state.dirty ? 'Modifications non enregistrées' : 'Enregistré'}`}</p></div><div class="row">${!running ? button('workflow-ai', 'Choisir l’IA') + button('export-workflow', 'Exporter…') + button('save', 'Enregistrer', '', state.dirty ? '' : 'disabled') + button('start-preview', 'Exécuter…', 'primary') : button('back-design', 'Revenir à l’éditeur') + (['active', 'paused'].includes(state.run.status) ? button('pause', state.run.status === 'paused' ? 'Reprendre' : 'Suspendre') + button('cancel', 'Annuler', 'flat') : '')}</div></div>
     ${launchReturnNotice()}<div class="tabs" role="tablist" aria-label="Vues du workflow">${[['design', 'Éditeur'], ['run', 'Exécution'], ['history', 'Historique'], ['document', 'Rapport']].map(([mode, label]) => `<button role="tab" aria-selected="${state.mode === mode}" class="${state.mode === mode ? 'active' : ''}" data-action="mode" data-mode="${mode}" ${['run', 'document'].includes(mode) && !state.run ? 'disabled' : ''}>${label}</button>`).join('')}</div>
     ${state.mode === 'history' ? `<section class="page"><h2>Exécutions du workflow</h2>${runTools()}${runTable(state.runs.filter(r => r.original.id === state.graph.id))}</section>` : state.mode === 'document' ? '<section class="page"><div class="row between"><h2>Rapport d’exécution</h2><div class="row"><button data-action="export-work">Exporter le rapport dans le projet</button><button data-action="export-release" class="flat">Export de release…</button></div></div><article class="document" id="document-view">Chargement…</article></section>' : `
     ${running && state.run.parameters?.source_run ? `<div class="notice">Notification liée à une question. ${button('notification-run', 'Revenir à l’exécution', '', `data-id="${esc(state.run.parameters.source_run)}"`)}</div>` : ''}${running ? `<div class="banner ${state.run.simulation ? 'amber' : ''}" id="run-banner">${state.run.simulation ? '<strong>Simulation.</strong> Aucun modèle ni service métier appelé. ' : '<strong>Exécution réelle.</strong> '}${Object.values(state.run.nodes).filter(n => n.status === 'waiting').length} décision(s) attendue(s) · un résultat remis reste à valider.</div>` : ''}
-    <div class="toolbar">${!running ? button('add-node', '+ Ajouter un bloc') + button('connect', 'Relier') + button('workflow-settings', 'Paramètres du workflow') + '<span class="separator"></span>' + button('undo', '↶', '', `aria-label="Annuler la modification" ${state.history.past.length ? '' : 'disabled'}`) + button('redo', '↷', '', `aria-label="Rétablir la modification" ${state.history.future.length ? '' : 'disabled'}`) : ''}<span class="fill"></span>${!running ? button('assistant', '✦ Assistant IA') : button('review-layout', state.reviewFocus ? 'Graphe et détail' : 'Lire le résultat') + button('timeline', 'Journal d’exécution')}${button('view', state.view === 'canvas' ? '☷ Liste' : '⑂ Graphe', '', 'aria-label="Changer la vue graphe ou liste"')}</div>
+    <div class="toolbar">${!running ? button('add-node', '+ Ajouter un bloc') + button('connect', 'Relier') + button('workflow-settings', 'Paramètres du workflow') + '<span class="separator"></span>' + button('undo', '↶', '', `aria-label="Annuler la modification" ${state.history.past.length ? '' : 'disabled'}`) + button('redo', '↷', '', `aria-label="Rétablir la modification" ${state.history.future.length ? '' : 'disabled'}`) : ''}<span class="fill"></span>${!running ? button('assistant', '✦ Assistant IA') : `<div class="execution-switch" role="group" aria-label="Affichage du suivi">${button('execution-graph', 'Graphe', state.reviewFocus ? '' : 'active', `aria-pressed="${!state.reviewFocus}"`)}${button('execution-details', 'Détail', state.reviewFocus ? 'active' : '', `aria-pressed="${!!state.reviewFocus}"`)}</div>` + button('timeline', 'Journal d’exécution')}${button('view', state.view === 'canvas' ? '☷ Liste' : '⑂ Graphe', '', 'aria-label="Changer la vue graphe ou liste"')}</div>
     <div class="editor ${running && state.reviewFocus ? 'review-focus' : ''}"><div class="canvas-area">${state.view === 'canvas' ? '<div class="canvas-scroll" tabindex="0" aria-label="Graphe du workflow"><div class="canvas-size"><div class="canvas"><svg aria-hidden="true"></svg><div id="nodes"></div></div></div></div>' : '<div class="table-wrap" id="node-list"></div>'}<div class="canvas-footer"><span>${graph.nodes.length} bloc${graph.nodes.length > 1 ? 's' : ''} · ${graph.edges.length} lien${graph.edges.length > 1 ? 's' : ''}</span><div class="row">${button('zoom-out', '−', 'flat', 'aria-label="Réduire le graphe"')}<span id="zoom-label">${Math.round(state.zoom * 100)} %</span>${button('zoom-in', '+', 'flat', 'aria-label="Agrandir le graphe"')}${button('fit', 'Ajuster', 'flat')}</div></div></div><aside class="inspector" aria-label="Inspecteur du bloc" id="inspector"></aside></div>`}`);
   if (['design', 'run'].includes(state.mode)) { document.querySelector('.toolbar .fill').insertAdjacentHTML('beforebegin', (state.mode === 'run' && state.project.scope === 'workspace' ? button('handoff', 'Transférer vers un projet…') : '') + button('terminal', '›_ Terminal', '', 'aria-label="Ouvrir le terminal du workflow"') + (state.mode === 'design' ? '<details class="workflow-options"><summary>Options</summary><div>' + button('phases', 'Phases') + button('reload-file', 'Recharger et valider') + (localStorage.getItem(draftKey()+':previous') ? button('restore-previous-draft','Récupérer le brouillon précédent') : '') + button('schedule', 'Planifier') + '</div></details>' : button('phases', 'Phases'))); renderGraph(); renderInspector(); const nextScroll = document.querySelector('.canvas-scroll'); if (nextScroll) { nextScroll.scrollLeft = position[0]; nextScroll.scrollTop = position[1]; } }
   if (state.mode === 'document') safe(loadDocument);
   renderConversation();
+  renderExecutionOverview();
   if(running){
-    const controls=document.querySelector('.workflow-heading > .row');const menu=document.createElement('details');menu.className='compact-menu';menu.innerHTML='<summary>Workflow</summary><div></div>';while(controls.firstChild)menu.lastChild.append(controls.firstChild);controls.append(menu);
+    const controls=document.querySelector('.workflow-heading > .row');const menu=document.createElement('details');menu.className='compact-menu';menu.innerHTML='<summary>Actions</summary><div></div>';while(controls.firstChild)menu.lastChild.append(controls.firstChild);controls.append(menu);
     const toolbar=document.querySelector('.toolbar');if(toolbar){const tools=document.createElement('details');tools.className='compact-menu';tools.innerHTML='<summary>Outils</summary><div></div>';for(const action of ['terminal','phases','timeline','view']){const button=toolbar.querySelector(`[data-action=${action}]`);if(button)tools.lastChild.append(button);}toolbar.append(tools);}
   }
 }
 
-function renderConversation() {
-  document.querySelector('#conversation-tray')?.remove();
-  if (!state.conversation) return;
-  const c = state.conversation;
-  const totals={};for(const item of c.items){const label=runLabel(item.execution || {status:'active'});totals[label]=(totals[label] || 0)+1;}
-  const shortLabels={'Réponse attendue':'question','Décision attendue':'décision','Échec · reprise nécessaire':'échec','Résultat à valider':'à valider'};
-  const summary=Object.entries(totals).map(([label,count])=>count+' '+(shortLabels[label] || label.toLocaleLowerCase('fr'))).join(' · ');
-  const tray = document.createElement('section'); tray.id = 'conversation-tray'; tray.className = 'conversation-tray';
-  tray.innerHTML = `<div class="row between"><strong>${c.item_count ?? c.items.length} demande(s)</strong>${state.agentState==='stopped' ? button('resume-agent','Reprendre l’agent…','', 'title="Agent arrêté, shell disponible"') : button('conversation-terminal', 'Retrouver la conversation')}<details class="compact-menu"><summary>Actions</summary><div>${button('conversation-terminal','Retrouver la conversation','flat')}${state.agentState==='stopped' ? '' : button('resume-agent','Reprendre l’agent…','flat')}${c.status === 'open' ? button('conversation-add', 'Ajouter une demande…') : '<span class="pill">Conversation archivée</span>'}${button('archive-conversation', c.archived ? 'Restaurer' : 'Clôturer et archiver', 'flat')}</div></details></div>
-    <p class="conversation-summary">${c.total > c.items.length ? esc(c.items.length+' demandes affichées : ') : ''}${esc(summary)}</p>${conversationPager(c)}${c.items.length ? `<div class="work-items">${c.items.map(i => `<button data-action="conversation-item" data-id="${esc(i.run)}" aria-pressed="${state.run?.id === i.run}" class="${state.run?.id === i.run ? 'active' : ''}"><strong title="${esc(i.request.split('\n')[0])}">${esc(i.request.split('\n')[0])}</strong><small>${c.projects?.length>1 ? esc(state.projects.find(p=>p.id===i.project)?.title || i.project)+' · ' : ''}${i.execution?.coordination_wait ? 'Attend une autre tâche' : esc(runLabel(i.execution || {status:'active'}))}</small>${i.execution?.focus ? `<small class="next-action" title="${esc(i.execution.focus.title+' · '+i.execution.focus.action)}">${esc(i.execution.focus.status==='failed' ? i.execution.focus.action : i.execution.focus.title)}</small>` : ''}</button>`).join('')}</div>` : '<p>Le workflow est lancé. Décrivez votre demande dans le terminal ; chaque tâche apparaîtra ici.</p>'}`;
-  if(state.compactHeight && c.items.length) {
-    const details=document.createElement('details');details.className='request-selector';
-    details.innerHTML=`<summary>${c.item_count ?? c.items.length} demandes · ${esc(summary)}</summary><div class="request-options"></div>`;
-    for(const child of [...tray.children].slice(1))details.lastChild.append(child);
-    details.querySelector('.conversation-summary')?.remove();
-    details.open=!!state.compactRequestsOpen;
-    details.addEventListener('toggle',()=>{state.compactRequestsOpen=details.open;});
-    tray.prepend(details);
-  }
-  document.querySelector('.tabs')?.after(tray);
+function dependencyItems() {
+  const item = state.conversation?.items.find(i => i.run === state.run?.id);
+  if (item?.dependencies) return item.dependencies.map(i=>({...i,title:i.request || i.title,execution:i.execution || i}));
+  const ids = state.run?.parameters?.depends_on_runs || [];
+  return ids.map(id => {
+    const related = state.conversation?.items.find(i => i.run === id);
+    return { run: id, title: related?.request.split('\n')[0] || 'Demande précédente', execution: related?.execution };
+  });
 }
+function executionEmptyDetail() {
+  if (!state.run) return '<p>Sélectionnez une étape du graphe.</p>';
+  if (['completed','cancelled'].includes(state.run.status)) return `<h2>${esc(runLabel(state.run))}</h2><p>Le rapport réunit les résultats, décisions et preuves de cette exécution. Ouvrez-le avec « Voir le rapport » ci-dessus.</p>`;
+  if (state.run.coordination_wait) return `<h2>${state.run.coordination_hold ? 'Exécution suspendue manuellement' : 'En attente d’autres demandes'}</h2><p>${state.run.coordination_hold ? 'La reprise reste à votre initiative, depuis Actions. Les dépendances ci-dessous doivent aussi être satisfaites.' : 'Cette demande commencera après la réussite des demandes suivantes.'}</p><div class="dependency-list">${dependencyItems().map(i => `<button data-action="conversation-item" data-id="${esc(i.run)}"><strong>${esc(i.title)}</strong><span>${esc(i.execution ? runLabel(i.execution) : i.status || 'En attente')}</span><span aria-hidden="true">→</span></button>`).join('')}</div>${state.conversation?.items.find(i=>i.run===state.run.id)?.dependencies_truncated ? '<p class="muted">Les 25 premières dépendances sont affichées, en priorité celles qui restent à traiter. La liste complète reste consultable dans le terminal.</p>' : ''}<p class="muted">Vous pouvez consulter et traiter chaque attente sans changer les dépendances.</p>`;
+  return `<h2>${esc(runLabel(state.run))}</h2><p>${state.run.status === 'paused' ? 'Le workflow est suspendu. Vous pouvez le reprendre depuis Actions.' : 'Sélectionnez une étape dans le graphe pour consulter son résultat.'}</p>`;
+}
+function renderExecutionOverview() {
+  let target = document.querySelector('#execution-overview');
+  if (state.mode !== 'run' || !state.run) { target?.remove(); return; }
+  if (!target) { target=document.createElement('section');target.id='execution-overview';target.setAttribute('aria-label','État et prochaine action');(document.querySelector('#conversation-tray') || document.querySelector('.tabs'))?.after(target); }
+  const run=state.run, action=executionAction(run), issue=executionIssue(run);
+  const accepted=Object.values(run.nodes).filter(n => ['accepted','skipped'].includes(n.status)).length;
+  const cause=issue?.reason || run.nodes[run.focus?.node]?.reason;
+  const dependencies=run.coordination_wait ? dependencyItems() : [];
+  const detail=dependencies.length ? 'Après : '+dependencies.map(i=>i.title).join(' · ') : cause || action.detail;
+  const html=`<div class="execution-state"><div><strong class="execution-label ${issue ? 'has-issue' : ''}">${esc(runLabel(run))}</strong><span class="execution-progress">${accepted} / ${Object.keys(run.nodes).length} étapes</span></div>${button('execution-next-action',esc(action.label),'primary')}</div><p class="execution-next" title="${esc(detail)}">${esc(detail)}</p>`;
+  if(target.innerHTML!==html)target.innerHTML=html;
+}
+function renderConversation() {
+  const old=document.querySelector('#conversation-tray'), c=state.conversation;
+  const same=Boolean(old && c && old.dataset.conversation===c.id);
+  if (same && old?.contains(document.activeElement) && document.activeElement.matches('input')) { state.conversationPaintPending=true;renderExecutionOverview(); return; }
+  const active=same && old?.contains(document.activeElement) ? document.activeElement : null;
+  const focused=active?.dataset?.id ? `[data-id="${CSS.escape(active.dataset.id)}"]` : active?.dataset?.action ? `[data-action="${CSS.escape(active.dataset.action)}"]` : active?.matches('.conversation-search-details > summary') ? '.conversation-search-details > summary' : active?.matches('summary') ? '.request-selector > summary' : active?.matches('#conversation-search button') ? '#conversation-search button' : null;
+  const search=same ? {value:old.querySelector('#conversation-query')?.value,open:old.querySelector('.conversation-search-details')?.open} : null;
+  old?.remove();state.conversationPaintPending=false;
+  if (!c) return;
+  const items=c.items.map(i=>i.run===state.run?.id ? {...i,execution:state.run} : i);
+  const counts=activitySummary(items);
+  const summary=!c.items.length ? (c.query ? 'Aucune demande ne correspond à la recherche.' : 'Décrivez votre demande dans le terminal pour commencer.') : [counts.running ? `${counts.running} étape${counts.running>1?'s':''} en cours` : 'Aucune étape en cours',counts.questions ? `${counts.questions} question${counts.questions>1?'s':''}` : '',counts.decisions ? `${counts.decisions} décision${counts.decisions>1?'s':''}` : '',counts.failed ? `${counts.failed} échec${counts.failed>1?'s':''}` : '',counts.dependencies ? `${counts.dependencies} en attente de dépendances` : ''].filter(Boolean).join(' · ');
+  const tray=document.createElement('section');tray.id='conversation-tray';tray.className='conversation-tray';tray.dataset.conversation=c.id;
+  tray.innerHTML=`<details class="request-selector" ${state.compactRequestsOpen ? 'open' : ''}><summary>${c.item_count ?? c.items.length} demandes <span aria-hidden="true">⌄</span></summary><div class="request-options"><div class="request-list-heading"><strong>Demandes du workflow</strong><span>${c.total > c.items.length ? `${c.items.length} affichées sur ${c.total}` : `${c.items.length} demandes`}</span></div>${conversationPager(c)}<div class="work-items">${items.map(i=>`<button data-action="conversation-item" data-id="${esc(i.run)}" aria-pressed="${state.run?.id===i.run}" class="${state.run?.id===i.run?'active':''}"><strong>${esc(i.request.split('\n')[0])}</strong><small>${c.projects?.length>1 ? esc(state.projects.find(p=>p.id===i.project)?.title || i.project)+' · ' : ''}${esc(runLabel(i.execution || {status:'active'}))}</small></button>`).join('')}</div><div class="request-list-actions">${c.status==='open'?button('conversation-add','Ajouter une demande…','flat'):''}${button('archive-conversation',c.archived?'Restaurer':'Archiver la conversation','flat')}</div></div></details><p class="conversation-summary" title="${esc(summary)}">${c.total>c.items.length?'Cette page : ':''}${esc(summary)}</p>${state.agentState==='stopped'?button('resume-agent','Reprendre l’agent…','flat'):button('conversation-terminal','Terminal','flat','aria-label="Retrouver la conversation" title="Retrouver la conversation"')}`;
+  const selector=tray.querySelector('.request-selector');selector.addEventListener('toggle',()=>{if(selector.isConnected)state.compactRequestsOpen=selector.open;});
+  document.querySelector('.tabs')?.after(tray);
+  if(search) { tray.querySelector('.conversation-search-details').open=search.open;tray.querySelector('#conversation-query').value=search.value || ''; }
+  if(focused)tray.querySelector(focused)?.focus({preventScroll:true});
+  renderExecutionOverview();
+}
+
 async function launchConversation() {
   rememberLaunchDraft();
   const request = document.querySelector('#initial-request')?.value.trim();
@@ -280,7 +319,7 @@ function renderGraph() {
   const graph = document.querySelector('#node-list') ? currentGraph() : displayGraph(currentGraph(), state.collapsed, running ? state.run : null);
   const list = document.querySelector('#node-list');
   if (list) {
-    list.innerHTML = `<table><thead><tr><th>Étape</th><th>Type</th><th>Phase</th><th>État</th><th></th></tr></thead><tbody>${graph.nodes.map(n => `<tr><td>${esc(n.title)}</td><td>${kinds[n.kind]}</td><td>${esc(n.phase || '—')}</td><td>${badge(running ? state.run.nodes[n.id]?.status || 'pending' : 'pending')}</td><td>${button('select-node', 'Ouvrir', '', `data-id="${n.id}"`)}</td></tr>`).join('')}</tbody></table>`;
+    list.innerHTML = `<table><thead><tr><th>Étape</th><th>Type</th><th>Phase</th><th>État</th><th></th></tr></thead><tbody>${graph.nodes.map(n => `<tr><td>${esc(n.title)}</td><td>${kinds[n.kind]}</td><td>${esc(n.phase || '—')}</td><td>${running ? nodeBadge(state.run.nodes[n.id], n) : badge('pending')}</td><td>${button('select-node', 'Ouvrir', '', `data-id="${n.id}"`)}</td></tr>`).join('')}</tbody></table>`;
     return;
   }
   const canvas = document.querySelector('.canvas'); if (!canvas) return;
@@ -299,15 +338,16 @@ function renderGraph() {
   nodeContainer.innerHTML = graph.nodes.map((n, i) => {
     const p = nodePosition(n, i), status = n.kind === 'group' ? n.status : running ? state.run.nodes[n.id]?.status || 'pending' : 'pending';
     if (n.kind === 'group') return `<button class="node" data-action="expand-phase" data-phase="${esc(n.phase)}" data-group="${esc(n.phase)}" data-status="${status}" style="left:${p.x}px;top:${p.y}px" aria-label="Déplier la phase ${esc(n.title)}"><span class="node-main"><span class="icon">⊞</span><span><span class="mission" title="${esc(n.title)}">${esc(n.title)}</span><span class="kind">${n.members.length} étapes · déplier</span></span></span><span class="node-footer">${badge(status)}</span></button>`;
-    return `<button class="node ${state.selected === n.id ? 'selected' : ''}" data-action="select-node" data-id="${n.id}" data-status="${status}" style="left:${p.x}px;top:${p.y}px" aria-label="${esc(n.title)} · ${running ? states[status] : kinds[n.kind]}"><span class="port in" aria-hidden="true"></span><span class="port out" aria-hidden="true"></span>${!running ? '<span class="drag-handle" aria-hidden="true">⋮⋮ Déplacer</span>' : ''}<span class="node-main"><span class="icon" aria-hidden="true">${symbols[n.kind]}</span><span><span class="mission" title="${esc(n.title)}">${esc(n.title)}</span><span class="kind">${esc(n.phase || kinds[n.kind])}</span></span></span><span class="node-footer">${running ? badge(status) : `<span>${esc(kinds[n.kind])}</span>`}<span title="${esc('Entrées : ' + (Object.keys(n.inputs || {}).join(', ') || 'aucune') + ' · Sorties : ' + (Object.keys(n.outputs || {}).join(', ') || 'aucune'))}">${n.kind === 'decision' ? 'Vous' : portSummary(n)}</span></span></button>`;
+    return `<button class="node ${state.selected === n.id ? 'selected' : ''}" data-action="select-node" data-id="${n.id}" data-status="${status}" data-failed="${running && nodeFailed(state.run.nodes[n.id], n) ? 'true' : 'false'}" style="left:${p.x}px;top:${p.y}px" aria-label="${esc(n.title)} · ${running ? (nodeFailed(state.run.nodes[n.id], n) ? 'Échec' : states[status]) : kinds[n.kind]}"><span class="port in" aria-hidden="true"></span><span class="port out" aria-hidden="true"></span>${!running ? '<span class="drag-handle" aria-hidden="true">⋮⋮ Déplacer</span>' : ''}<span class="node-main"><span class="icon" aria-hidden="true">${symbols[n.kind]}</span><span><span class="mission" title="${esc(n.title)}">${esc(n.title)}</span><span class="kind">${esc(n.phase || kinds[n.kind])}</span></span></span><span class="node-footer">${running ? nodeBadge(state.run.nodes[n.id], n) : `<span>${esc(kinds[n.kind])}</span>`}<span title="${esc('Entrées : ' + (Object.keys(n.inputs || {}).join(', ') || 'aucune') + ' · Sorties : ' + (Object.keys(n.outputs || {}).join(', ') || 'aucune'))}">${n.kind === 'decision' ? 'Vous' : portSummary(n)}</span></span></button>`;
   }).join('');
 }
 
 function renderInspector() {
   const target = document.querySelector('#inspector'); if (!target) return;
+  if (state.mode === 'run' && state.run?.coordination_wait) { target.innerHTML=executionEmptyDetail(); target.dataset.node='dependencies'; return; }
   const graph = currentGraph(); const node = graph.nodes.find(n => n.id === state.selected);
   const opened = target.dataset.node === node?.id ? [...target.querySelectorAll('details[open] > summary')].map(s => s.textContent) : [];
-  if (!node) { target.innerHTML = ''; return; }
+  if (!node) { target.innerHTML = state.mode === 'run' ? executionEmptyDetail() : ''; return; }
   target.innerHTML = `${button('close-inspector', '×', 'flat inspector-close','aria-label="Fermer les propriétés"')}<div class="eyebrow">${esc(node.route_output ? 'Condition évaluée par un agent' : kinds[node.kind])}</div><h2>${esc(node.title)}</h2>${state.mode === 'run' && state.run ? runInspector(node) : designInspector(node)}`;
   target.dataset.node = node.id;
   const form = target.querySelector('#node-form'); if (form) {form.dataset.signature = formSignature(form);if(state.restoreForm?.node === node.id) {for(const [name,value] of Object.entries(state.restoreForm.values)) {const control=form.elements.namedItem(name);if(control){if(control.type==='checkbox')control.checked=value===true || value==='on';else control.value=value;}}state.restoreForm=null;}}
@@ -428,7 +468,14 @@ function runInspector(node) {
   const received = dataView('Entrées reçues', values.inputs) + (values.input_sources && Object.keys(values.input_sources).length && !values.input_sources.$artifact ? `<p class="muted">Sources : ${Object.entries(values.input_sources).map(([key, source]) => `${esc(key)} ← ${button('select-node', esc(source.node), 'flat', `data-id="${esc(source.node)}"`)}`).join(' · ')}</p>` : '') + (values.input_sources?.$artifact ? dataView('Sources des entrées',values.input_sources) : '') + dataView('Résultat', values.result?.outputs) + evidenceView(values) + dataView('Tentatives précédentes',values.history);
   if (state.run.nodes[node.id].status === 'waiting_input') return `${pendingQuestion.text?.$artifact ? dataView('Question',pendingQuestion.text) : `<p>${esc(pendingQuestion.text)}</p>`}${pendingQuestion.notification?.run ? button('notification-run', 'Suivre la notification', '', `data-id="${esc(pendingQuestion.notification.run)}"`) : pendingQuestion.notification?.status === 'blocked' ? `<p class="notice">Notification bloquée : ${esc(pendingQuestion.notification.reason)}</p>` : ''}${received ? `<details class="question-context"><summary>${sourceNames.length ? 'Sources référencées : '+esc(sourceNames.join(', ')) : 'Entrées et sources de la demande'}</summary>${received}</details>` : ''}<p class="muted question-help">Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.</p><form id="question-form"><label>Votre réponse<textarea name="answer" required></textarea></label><button class="primary">Répondre</button></form>`;
   const data = state.run.nodes[node.id]; if (!data) return '';
-  let html = `<p>${badge(data.status)}</p>` + received;
+  if (failedResult(data, node) && !['accepted','skipped'].includes(data.status)) {
+    const reason=(data.result?.ok===false && data.result?.summary) || data.validation_error || data.result?.summary || data.reason || 'Le résultat ne satisfait pas le contrôle demandé.';
+    const canRetry=data.status==='returned' && node.kind!=='external' && !data.result?.effect_id && data.attempt<(node.max_attempts || 1);
+    return `<section class="failure-summary"><strong>Cette étape a échoué</strong>${reason?.$artifact ? dataView('Cause',reason) : `<p>${esc(reason)}</p>`}</section><div class="failure-actions">${data.result?.effect_id ? button('reconcile-effect','Rechercher l’accusé distant','primary') : ''}${canRetry ? button('retry','Préparer la reprise','primary') : ''}${state.conversation ? button('conversation-terminal','Retrouver la conversation') : ''}</div><p class="muted">${canRetry ? 'Précisez la correction avant de relancer. Le résultat précédent reste dans l’historique.' : 'La reprise automatique n’est pas autorisée pour cette tentative. Examinez le résultat et les possibilités de reprise dans le terminal.'}</p>${data.validation_error && data.validation_error!==reason ? `<p class="muted">${esc(data.validation_error)}</p>` : ''}<details class="result-context"><summary>Entrées, résultat technique et historique</summary>${received}</details>`;
+  }
+  let html = `<p>${badge(data.status)}</p>`;
+  if(data.status==='waiting') html += `<p class="decision-scope">Décision pour cette demande : ${esc(state.conversation?.items.find(i=>i.run===state.run.id)?.request.split('\n')[0] || state.run.definition.title)}.</p>` + received;
+
   const operation=data.operation || node.operation;
   if (data.status === 'waiting') {
     html += `<div class="notice amber"><strong>Votre décision est attendue</strong><p>${esc(node.question || 'Examiner le résultat avant la suite.')}</p>${operation?.$artifact ? dataView('Contenu exact de l’opération',operation) : operation ? `<p>Action : <strong>${esc(operation.action)}</strong><br>Cible : <strong>${esc(operation.target)}</strong><br>Candidat : <code>${esc(operation.candidate)}</code></p><details open><summary>Contenu exact de l’opération</summary><pre>${esc(JSON.stringify(operation, null, 2))}</pre></details>` : ''}</div><form id="decision-form"><label for="decision-note">Commentaire (facultatif)</label><textarea id="decision-note" name="note"></textarea><div class="stack" style="margin-top:16px">${(node.options || ['approve', 'reject']).map(o => `<button type="submit" name="outcome" value="${esc(o)}" class="${o === 'approve' ? 'primary' : ''}">${o === 'approve' ? operation ? 'Autoriser cette opération' : 'Approuver la suite' : o === 'reject' ? 'Refuser la suite' : esc(o)}</button>`).join('')}</div></form><p class="muted">La réponse s'applique à cette proposition et à cette tentative uniquement.</p>`;
@@ -440,12 +487,13 @@ function runInspector(node) {
     if (data.status === 'returned') html += `<form id="receipt-form"><h3>Examiner le résultat</h3>${(node.criteria || []).map((c, i) => `<label><input type="checkbox" name="criterion" value="${i}" required>${esc(c)}</label>`).join('')}<label for="receipt-note">Commentaire de validation</label><textarea id="receipt-note" name="note" ${node.criteria?.length ? 'required' : ''} placeholder="Ce que vous avez vérifié…"></textarea><div class="stack" style="margin-top:16px"><button type="submit" class="primary" ${data.result.ok ? '' : 'disabled'}>Valider le résultat</button>${node.kind !== 'external' && data.attempt < (node.max_attempts || 1) ? button('retry', 'Demander une reprise') : ''}</div></form>`;
     if (data.receipt) html += `<div class="notice"><strong>Résultat validé</strong>${data.receipt.note?.$artifact ? dataView('Commentaire',data.receipt.note) : `<p>${esc(data.receipt.note || 'Validation enregistrée.')}</p>`}</div>`;
   }
-  if (data.status === 'running') html += `<p>Le travail a commencé. Une fin de processus ne vaut pas validation.</p><p class="muted">Dernier signal : ${new Date((data.heartbeat || data.started) * 1000).toLocaleTimeString('fr-CH')}. ${Date.now() / 1000 - (data.heartbeat || 0) > 10 ? 'Observation ancienne : activité actuelle inconnue.' : ''}</p>${button('reconcile', 'Rechercher un résultat enregistré')}${button('recover-attempt','Vérifier la tentative interrompue')}`;
+  if (data.status === 'running') html += `<p>Le travail a commencé. Une fin de processus ne vaut pas validation.</p><p class="muted">Dernier signal : ${new Date((data.heartbeat || data.started) * 1000).toLocaleTimeString('fr-CH')}. ${Date.now() / 1000 - (data.heartbeat || data.started || 0) > 120 ? 'Observation ancienne : activité actuelle inconnue.' : ''}</p>${button('reconcile', 'Rechercher un résultat enregistré')}${button('recover-attempt','Vérifier la tentative interrompue')}`;
   if (data.validation_error) html += `<p class="notice">Validation automatique interrompue : ${esc(data.validation_error)}</p>`;
   if (data.reused_from) html += `<p class="notice">Preuves réutilisées depuis ${esc(data.reused_from.run)}. Aucun nouveau test exécuté pour ce bloc.</p>`;
   if (data.reason) html += `<p class="notice">${esc(data.reason)}</p>`;
   if (data.decision) html += `<p class="notice">Décision humaine : <strong>${esc(data.decision.outcome)}</strong>.</p>`;
   if (['ready', 'pending', 'skipped'].includes(data.status)) html += `<p class="muted">${data.status === 'ready' ? (state.run.driver ?? state.run.definition.driver) === 'conversation' && ['agent', 'task', 'document'].includes(node.kind) ? 'Cette étape est prête. Poursuivez dans le terminal de la conversation.' : 'Le moteur lancera cette étape dès que ses ressources seront disponibles.' : data.status === 'skipped' ? 'Cette branche n’a pas été sélectionnée.' : 'Cette étape attend ses dépendances.'}</p>`;
+  if(data.status!=='waiting' && received) html += `<details class="result-context" ${data.result && data.status!=='running' ? 'open' : ''}><summary>Entrées, sorties et preuves</summary>${received}</details>`;
   return html;
 }
 
@@ -518,7 +566,7 @@ async function openRun(id, stillCurrent = null) {
   if (project) Object.assign(state, project);
   state.run = data.run; state.events = data.events; state.eventsNext = data.events_next; state.conversation = conversation;
   if (!state.graph || state.graph.id !== data.run.original.id) { state.graph = clone(data.run.original); state.savedRevision = state.graph.revision || 0; state.dirty = false; }
-  state.mode = 'run'; state.route = 'workflow'; state.reviewFocus=!!(state.conversation && state.reviewFocus); state.selected = data.run.focus?.node || Object.keys(data.run.nodes).find(id => ['waiting_input','waiting','returned'].includes(data.run.nodes[id].status)) || null;
+  state.mode = 'run'; state.route = 'workflow'; state.reviewFocus=!!state.reviewFocus; state.selected = data.run.focus?.node || Object.keys(data.run.nodes).find(id => ['waiting_input','waiting','returned'].includes(data.run.nodes[id].status)) || null;
   const selected = data.run.definition.nodes.find(n=>n.id===state.selected);
   if(selected?.phase)state.collapsed.delete(selected.phase);
   shell();requestAnimationFrame(focusSelectedNode);
@@ -573,6 +621,9 @@ const actions = {
   async 'restore-previous-draft'() {const previous=localStorage.getItem(draftKey()+':previous');if(previous) {localStorage.setItem(draftKey(),previous);await openWorkflow(state.graph);toast('Brouillon précédent récupéré. Comparez-le avec le fichier courant.');}},
   async 'template-page'(el) {state.template_page=await call('workflow.list',{project:'library',offset:Number(el.dataset.offset)});state.templates=[...state.templates.filter(g=>!g._project),...state.template_page.items];renderLibrary();},
   async 'overview-page'(el) {state.activity=(await call('overview.get',{offset:Number(el.dataset.offset)})).activity;renderOverview();},
+  'execution-graph'() { state.reviewFocus=false;renderEditor();requestAnimationFrame(focusSelectedNode); },
+  'execution-details'() { state.reviewFocus=true; if(!state.selected) state.selected=state.run?.focus?.node || null;renderEditor(); },
+  'execution-next-action'() { const action=executionAction(state.run);state.selected=action.node || null;if(action.mode)state.mode=action.mode;else state.reviewFocus=true;renderEditor(); },
   'review-layout'() { state.reviewFocus=!state.reviewFocus;if(!state.selected)state.selected=Object.keys(state.run.nodes).find(id=>['waiting','waiting_input','returned'].includes(state.run.nodes[id].status)) || state.run.definition.nodes[0].id;renderEditor();if(!state.reviewFocus)requestAnimationFrame(focusSelectedNode); },
   'run-page': el => loadRunPage(Number(el.dataset.offset)),
   'toggle-archives'() {state.showArchives=!state.showArchives;shell();},
@@ -676,13 +727,13 @@ const actions = {
   },
   async terminal() { if (!state.project) await ensureProject(); if (state.dirty) await save(); await terminal.open(state.project, state.graph); },
   async 'reload-file'() { if (state.dirty) return showConflict(); const graph = await call('workflow.reload', { project: state.project.id, workflow: state.graph.id, revision: state.savedRevision }); state.graph = graph; state.savedRevision = graph.revision; state.history = new History(); renderEditor(); toast('Fichier validé et nouvelle révision chargée. Les exécutions existantes sont inchangées.'); },
-  'select-node'(el) { state.selected = el.dataset.id; document.querySelectorAll('.node').forEach(n => n.classList.toggle('selected', n.dataset.id === state.selected)); renderInspector(); },
+  'select-node'(el) { state.selected = el.dataset.id; if (state.mode === 'run') { state.reviewFocus = true; renderEditor(); return; } document.querySelectorAll('.node').forEach(n => n.classList.toggle('selected', n.dataset.id === state.selected)); renderInspector(); },
   'workflow-settings'() { modal('Paramètres du workflow', `<form id="workflow-form"><label for="workflow-title">Nom</label><input id="workflow-title" name="title" value="${esc(state.graph.title)}" required><label for="workflow-description">Description</label><textarea id="workflow-description" name="description">${esc(state.graph.description || '')}</textarea>${questionNotificationForm()}${odooWorkflowFields()}<details><summary>Paramètres supplémentaires</summary><label for="workflow-parameters">Paramètres (objet JSON)</label><textarea id="workflow-parameters" name="parameters" spellcheck="false">${esc(JSON.stringify(workflowExtraParameters(), null, 2))}</textarea></details><div class="modal-actions"><button class="primary" type="submit">Appliquer</button></div></form>`, state.launchReturn ? button('return-to-launch', state.launchReturn.kind === 'schedule' ? 'Revenir à la planification' : 'Revenir au lancement') : ''); },
   'add-node'() { modal('Ajouter une étape', `<form id="add-node-form"><label for="add-kind">Type d'étape</label><select id="add-kind" name="kind">${options([['agent', 'Travail · Agent'], ['task', 'Travail · Tâche dans la conversation'], ['command', 'Travail · Commande'], ['document', 'Travail · Document'], ['agent-route', 'Aiguillage · Évaluation par un agent'], ['condition', 'Aiguillage · Règle explicite'], ['decision', 'Décision · Accord humain'], ['question', 'Décision · Question ouverte'], ['join', 'Organisation · Réunir'], ['subworkflow', 'Organisation · Sous-workflow'], ['watch', 'Organisation · Surveillance'], ['external', 'Travail · Opération externe'], ['communication', 'Travail · Communication']], 'agent')}</select><label for="add-title">Nom du bloc</label><input id="add-title" name="title" required placeholder="Quel résultat attendre ?"><div class="modal-actions"><button class="primary" type="submit">Ajouter au workflow</button></div></form>`); },
   connect() { modal('Relier deux étapes', `<form id="connect-form"><label for="edge-from">Depuis</label><select id="edge-from" name="from">${options(state.graph.nodes.map(n => [n.id,n.title]), state.selected || state.graph.nodes[0].id)}</select><label for="edge-outcome">Après l’issue</label><select id="edge-outcome" name="outcome"></select><label for="edge-to">Vers</label><select id="edge-to" name="to">${options(state.graph.nodes.map(n => [n.id,n.title]), state.graph.nodes.find(n => n.id !== (state.selected || state.graph.nodes[0].id))?.id)}</select><p class="mapping-summary"></p><label>Sortie à transmettre<select name="output"></select></label><label>Entrée destinataire<select name="input"></select></label><details><summary>Configuration des échanges</summary><label for="edge-mapping">Données transmises (JSON : sortie → entrée)</label><textarea id="edge-mapping" name="mapping">{}</textarea></details><div class="modal-actions"><button class="primary">Créer la connexion</button></div></form>`); refreshConnectionForm(); },
   'add-port'(el) { modal('Décrire une donnée', `<form id="port-form"><input type="hidden" name="direction" value="${el.dataset.direction}"><label>Nom (sans espaces)<input name="port" required pattern="[a-zA-Z][a-zA-Z0-9_.-]{0,79}" placeholder="criticite"></label><label>Type<select name="type">${options([['string','Texte'],['object','Objet structuré'],['array','Liste'],['boolean','Oui / non'],['number','Nombre']])}</select></label><button class="primary">Ajouter la donnée</button></form>`); },
   'remove-port'(el) { edit(g => { delete g.nodes.find(n => n.id === state.selected)[el.dataset.direction][el.dataset.port]; }); },
-  'close-inspector'() { state.selected = null; renderInspector(); },
+  'close-inspector'() { if(state.mode === 'run') { state.reviewFocus=false;renderEditor();requestAnimationFrame(focusSelectedNode);return; } state.selected = null; renderInspector(); },
   'delete-edge'(el) { edit(g => { g.edges = g.edges.filter(e => e.id !== el.dataset.id); }); },
   'delete-node'() { if (state.graph.nodes.length === 1) return error('Conservez au moins une étape.'); edit(g => { g.nodes = g.nodes.filter(n => n.id !== state.selected); g.edges = g.edges.filter(e => e.from !== state.selected && e.to !== state.selected); state.selected = null; }); },
   undo() { state.graph = state.history.undo(state.graph); state.dirty = true; persistDraft(); renderEditor(); },
@@ -700,7 +751,7 @@ const actions = {
   'expand-phase'(el) { state.collapsed.delete(el.dataset.phase); renderGraph(); },
   fit() { const g = currentGraph(), width = Math.max(...g.nodes.map((n, i) => nodePosition(n, i).x + 320)); state.zoom = Math.max(0.4, Math.min(1, (document.querySelector('.canvas-area').clientWidth - 30) / width)); renderEditor(); },
   'back-design'() { state.mode = 'design'; state.selected = null; renderEditor(); },
-  async mode(el) { state.mode = el.dataset.mode; state.selected = null; if (state.mode === 'history') { await loadRunPage(); return; } renderEditor(); },
+  async mode(el) { state.mode = el.dataset.mode; state.selected = state.mode==='run' ? state.run?.focus?.node || null : null; if (state.mode === 'history') { await loadRunPage(); return; } renderEditor(); },
   async 'start-preview'() {
     rememberLaunchDraft();
     if (state.dirty) await save();
@@ -777,7 +828,7 @@ const actions = {
   },
   'start-conversation': launchConversation,
   async 'conversation-terminal'() { const { project } = await call('project.get', { project: state.conversation.project }); await terminal.open(project, state.conversation.definition, state.conversation.id); },
-  async 'conversation-item'(el) { if(state.compactHeight)state.compactRequestsOpen=false;await openRun(el.dataset.id); },
+  async 'conversation-item'(el) { state.compactRequestsOpen=false;await openRun(el.dataset.id); },
   'conversation-add'() { modal('Ajouter une demande', `<form id="conversation-add-form"><label>Demande<textarea name="request" required></textarea></label><label>Projet<select name="project">${options(state.conversation.projects.map(id => [id, state.projects.find(p => p.id === id)?.title || state.project.title]), state.project.id)}</select></label><label>Après la tâche<select name="depends"><option value="">Indépendante</option>${options(state.conversation.items.map(i => [i.id, i.request.slice(0, 80)]))}</select></label><button class="primary">Enregistrer la demande</button></form>`); },
   'start-simulation': () => launch(true),
   'start-real': () => launch(false),
@@ -815,6 +866,7 @@ function positionWorkflowOptions() {
   const left = Math.max(bounds.left + 8, Math.min(control.left, bounds.right - menu.offsetWidth - 8));
   menu.style.left = (left - control.left) + 'px';
 }
+document.addEventListener('keydown', event => { if(event.key==='Escape') { const menu=document.querySelector('.request-selector[open]');if(menu){menu.open=false;state.compactRequestsOpen=false;menu.querySelector('summary').focus();event.preventDefault();} } });
 document.addEventListener('toggle', event => {
   if (event.target.matches('.workflow-options')) positionWorkflowOptions();
 }, true);
@@ -939,7 +991,7 @@ async function pollConversation() {
     const changed = JSON.stringify(c) !== JSON.stringify(state.conversation);
     state.conversation = c;
     if (state.route === 'workflow' && !state.run && c.items.length) await openRun(c.items[0].run, () => epoch === viewEpoch && state.route === 'workflow' && state.graph?.id === graph && state.conversation?.id === id && !state.run);
-    else if (changed && state.route === 'workflow') renderConversation();
+    else if ((changed || state.conversationPaintPending) && state.route === 'workflow') renderConversation();
   } finally { conversationPolling = false; }
 }
 setInterval(() => safe(pollConversation), 1000);
@@ -951,10 +1003,18 @@ async function poll() {
     const id = state.run.id, epoch = viewEpoch; const data = await call('run.get', { run: id, after: state.events.at(-1)?.seq || 0 });
     if (state.run?.id !== id || state.route !== 'workflow' || epoch !== viewEpoch) return;
     const previous = state.run; state.run = data.run; mergeEvents(data);
+    // Follow a changing active step only while watching the graph. Reading a
+    // result or typing an answer must never be interrupted by polling.
+    if (state.mode === 'run' && !state.reviewFocus && state.selected === previous.focus?.node && previous.focus?.node !== state.run.focus?.node) {
+      state.selected=state.run.focus?.node || null;
+      document.querySelectorAll('.node').forEach(n=>n.classList.toggle('selected',n.dataset.id===state.selected));
+      renderInspector(); requestAnimationFrame(focusSelectedNode);
+    }
     if (state.mode === 'run') {
       for (const [nid, s] of Object.entries(state.run.nodes)) {
         const card = document.querySelector(`.node[data-id="${CSS.escape(nid)}"]`);
-        if (card && previous.nodes[nid]?.status !== s.status) { card.dataset.status = s.status; card.querySelector('.node-footer .pill').outerHTML = badge(s.status); card.setAttribute('aria-label', `${state.run.definition.nodes.find(n => n.id === nid).title} · ${states[s.status]}`); }
+        const definition=state.run.definition.nodes.find(n=>n.id===nid);
+        if (card && (previous.nodes[nid]?.status !== s.status || nodeFailed(previous.nodes[nid], definition) !== nodeFailed(s, definition))) { card.dataset.status = s.status; card.dataset.failed=String(Boolean(nodeFailed(s, definition))); card.querySelector('.node-footer .pill').outerHTML = nodeBadge(s, definition); card.setAttribute('aria-label', `${state.run.definition.nodes.find(n => n.id === nid).title} · ${nodeFailed(s, definition) ? 'Échec' : states[s.status]}`); }
       }
       for (const edge of state.run.definition.edges) {
         const source = state.run.nodes[edge.from];

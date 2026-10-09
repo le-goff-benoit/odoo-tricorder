@@ -1,0 +1,84 @@
+/* Execution has one reading surface: graph OR detail. The terminal stays mounted. */
+#studio-content {display:contents}
+.embedded-workspace:has(#studio-content.execution-view) {overflow:hidden}
+#studio-content.execution-view {display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+#studio-content.execution-view > .workflow-heading {padding:10px 16px 6px;flex-wrap:nowrap;flex-shrink:0;gap:12px}
+#studio-content.execution-view .workflow-heading > div:first-child {min-width:0}
+#studio-content.execution-view .workflow-heading h1 {font-size:16px;line-height:1.35;letter-spacing:0;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#studio-content.execution-view .workflow-heading .eyebrow {font-size:10px;line-height:1.2;letter-spacing:.3px;margin-bottom:4px}
+#studio-content.execution-view .workflow-heading p {display:none}
+#studio-content.execution-view > .tabs {padding:0 16px;gap:18px;flex-wrap:nowrap}
+#studio-content.execution-view > .tabs button {min-height:34px;padding:7px 0;font-size:12px}
+#studio-content.execution-view > #run-banner {display:none}
+#studio-content.execution-view > #run-banner.amber,#studio-content.execution-view > #run-banner[data-error=true] {display:block;padding:5px 16px;flex-shrink:0}
+#studio-content.execution-view > .toolbar {padding:5px 16px;gap:8px;flex-wrap:nowrap}
+#studio-content.execution-view .toolbar > .fill {order:1}
+#studio-content.execution-view .toolbar > .execution-switch {order:0;display:flex;gap:2px;background:var(--bg);padding:2px;border-radius:6px}
+.execution-switch button {border-color:transparent;background:transparent;min-height:28px!important;padding:4px 12px!important}
+.execution-switch button.active {background:var(--surface);color:var(--accent);box-shadow:0 1px 3px #0002}
+#studio-content.execution-view .toolbar > .compact-menu {order:2}
+#studio-content.execution-view .editor,#studio-content.execution-view .editor:has(.inspector:not(:empty)) {display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);flex:1 1 0;min-height:0;overflow:hidden}
+#studio-content.execution-view .editor > .canvas-area {grid-area:1 / 1;min-height:0;display:flex}
+#studio-content.execution-view .editor > .inspector {display:none;grid-area:1 / 1;min-height:0;overflow:auto;border:0;padding:16px 20px;max-width:none;width:100%}
+#studio-content.execution-view .editor.review-focus > .inspector {display:block}
+#studio-content.execution-view .editor.review-focus > .canvas-area {display:none}
+#studio-content.execution-view .canvas-footer {flex-shrink:0;padding:4px 12px;font-size:11px}
+#studio-content.execution-view .inspector pre {max-height:none;overflow:visible}
+#studio-content.execution-view .inspector .execution-value pre.prose {max-width:none}
+#studio-content.execution-view .inspector .inspector-close {display:none}
+#studio-content.execution-view .inspector .eyebrow {font-size:10px;margin-bottom:4px}
+#studio-content.execution-view .inspector h2 {font-size:17px;line-height:1.35;margin-bottom:12px}
+#studio-content.execution-view .inspector .result-context {margin-top:20px}
+#studio-content.execution-view .inspector .failure-summary {margin:0 0 14px;background:var(--danger-soft);color:var(--danger);border-left:3px solid var(--danger);padding:12px 14px;border-radius:4px}
+.failure-summary p {margin:5px 0 0;line-height:1.5;overflow-wrap:anywhere}
+.failure-actions {display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.decision-scope {font-size:12px;color:var(--muted);margin:0 0 12px}
+.dependency-list {display:grid;gap:8px;margin:16px 0}
+.dependency-list button {display:grid;grid-template-columns:minmax(0,1fr) auto;text-align:left;gap:4px 12px;white-space:normal;padding:12px}
+.dependency-list button strong {grid-column:1;font-size:13px;font-weight:600}
+.dependency-list button span:first-of-type {grid-column:1;font-size:12px;color:var(--muted)}
+.dependency-list button span:last-child {grid-column:2;grid-row:1 / 3;align-self:center}
+#execution-overview {padding:10px 16px;border-bottom:1px solid var(--line);background:var(--surface);flex-shrink:0}
+.execution-state {display:flex;gap:12px;align-items:center;justify-content:space-between}
+.execution-state > div {min-width:0;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.execution-label {font-size:13px;font-weight:650}
+.execution-label.has-issue {color:var(--danger)}
+.execution-progress {font-size:11px;color:var(--muted);white-space:nowrap}
+.execution-state button {font-size:12px;min-height:32px;padding:5px 10px;white-space:normal}
+.execution-next {font-size:12px;line-height:1.5;margin:5px 0 0;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+#studio-content .conversation-tray {display:flex;align-items:center;gap:10px;padding:6px 16px;position:relative;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--line)}
+#studio-content .conversation-tray > .conversation-summary {font-size:11px;line-height:1.4;margin:0;min-width:0;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#studio-content .conversation-tray > button {font-size:11px;min-height:30px;padding:4px 6px}
+#studio-content .request-selector {flex:0 0 auto;min-width:0}
+#studio-content .request-selector > summary {cursor:pointer;font-size:12px;font-weight:600;list-style:none;border:1px solid var(--line-strong);border-radius:6px;min-height:30px;padding:5px 9px;white-space:nowrap;display:flex;gap:10px;align-items:center}
+#studio-content .request-options {position:absolute;left:12px;right:12px;top:calc(100% - 2px);z-index:25;max-height:min(480px,60vh);overflow:auto;padding:12px;box-shadow:var(--shadow-pop);background:var(--surface);border:1px solid var(--line-strong);border-radius:8px}
+.request-list-heading {display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:8px}
+.request-list-heading span {color:var(--muted)}
+#studio-content .request-options .work-items {display:grid;grid-template-columns:1fr;gap:4px;margin-top:8px}
+#studio-content .request-options .work-items button {display:grid;gap:4px;padding:10px 12px;text-align:left;white-space:normal;border-color:transparent;border-left:3px solid transparent;background:transparent;min-width:0}
+#studio-content .request-options .work-items button.active {border-left-color:var(--accent);background:var(--accent-soft)}
+#studio-content .request-options .work-items button:hover {background:var(--hover)}
+#studio-content .request-options .work-items strong {font-size:13px;font-weight:600;line-height:1.4;-webkit-line-clamp:3}
+#studio-content .request-options .work-items small {font-size:11px;line-height:1.4}
+.request-list-actions {border-top:1px solid var(--line);margin-top:8px;padding-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.request-list-actions button {font-size:12px}
+@container workflow (max-width:480px) {
+  #studio-content .conversation-tray {flex-wrap:wrap;gap:4px 8px}
+  #studio-content .conversation-summary {flex-basis:calc(100% - 130px)}
+  .execution-state {gap:6px;align-items:flex-start}
+  .execution-state > div {display:grid;gap:2px}
+  .execution-state button {max-width:48%}
+}
+.compact-height #studio-content.execution-view .workflow-heading {padding:5px 12px 2px}
+.compact-height #studio-content.execution-view .workflow-heading h1 {-webkit-line-clamp:1;font-size:14px}
+.compact-height #studio-content.execution-view .workflow-heading .eyebrow {display:none}
+.compact-height #studio-content.execution-view > .tabs button {min-height:27px;padding:4px 0}
+.compact-height #studio-content .conversation-tray {padding:3px 12px}
+.compact-height #execution-overview {padding:5px 12px}
+.compact-height .execution-next {-webkit-line-clamp:1;margin-top:2px}
+.compact-height #studio-content.execution-view > .toolbar {padding:3px 12px}
+.compact-height #studio-content.execution-view .canvas-footer {display:none}
+.compact-height #studio-content.execution-view .inspector {padding:10px 12px}
+
+#studio-content.execution-view .node[data-failed=true] {border-color:var(--danger)}
+.pill.failed {color:var(--danger);background:var(--danger-soft)}

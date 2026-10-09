@@ -1,7 +1,12 @@
 # Tricorder
 
 **Dessinez vos workflows, pilotez le travail dans le terminal et suivez ses résultats.**
-Préversion : **0.6.0-rc.9**.
+Préversion : **0.6.0-rc.10**.
+
+[Suivre une exécution](release/2026-10-09_suivi-execution/README.md) :
+terminal conservé, demandes dans un sélecteur compact, état et prochaine action
+visibles, graphe ou détail en pleine hauteur. La copie isolée accepte les dépôts
+avec de grosses pièces jointes inchangées, selon l’espace disque disponible.
 
 [Lancer et dépanner un workflow](release/2026-10-09_demarrage-et-depannage/README.md) :
 conversation accessible avant la préparation de la recette, diagnostics par projet,
@@ -19,7 +24,7 @@ le même espace. Les modèles peuvent être réutilisés par projet ou alimenter
 conversation avec plusieurs tâches et plusieurs projets. Les anciens dossiers
 de release restent accessibles sans migration.
 
-![Terminal, demandes et bloc actif dans la même fenêtre](release/2026-10-09_fiabilite-workflows/captures/terminal-et-workflow.png)
+![Terminal, demandes et bloc actif dans la même fenêtre](release/2026-10-09_suivi-execution/captures/terminal-et-suivi.png)
 
 *Capture sur un espace fictif, sans données client.*
 
@@ -45,7 +50,10 @@ Le contrôle QA est une propriété du bloc, indépendante du profil et du
 fournisseur. Un document ou une transmission de données ne tient pas lieu de test.
 
 **Nouvelle demande** réutilise un workflow existant du projet. Pendant une revue,
-**Lire le résultat** donne la place au livrable ; le terminal reste accessible.
+**Détail** donne la place au livrable ; **Graphe** retrouve le dessin. Le terminal
+reste accessible. Le sélecteur des demandes indique questions, décisions et
+échecs ; une attente de dépendances nomme les demandes à terminer. Un terminal
+ouvert ne signifie pas qu’une étape travaille.
 Une tentative interrompue ne libère ses ressources qu’après vérification de ses
 processus. Les anciennes tentatives sans identité et les intégrations non
 qualifiées sont décrites explicitement dans le guide.

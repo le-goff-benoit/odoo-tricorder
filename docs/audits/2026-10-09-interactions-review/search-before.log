@@ -1,0 +1,80 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive (9.0s)
+  ✘  2 tests/execution-interactions.spec.cjs:151:1 › search draft survives polling and deferred request counts refresh after leaving the input (10.2s)
+
+
+  1) tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  locator('.conversation-search-details > summary')
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" locator('.conversation-search-details > summary') with timeout 5000ms
+      - waiting for locator('.conversation-search-details > summary')
+        14 × locator resolved to <summary>Rechercher</summary>
+           - unexpected value "inactive"
+
+
+      145 |   await call('conversation.add',{conversation:fixture.conversation,request:'R3 — Added during search navigation'});
+      146 |   await expect(page.locator('.request-selector > summary')).toContainText('3 demandes');
+    > 147 |   await expect(search).toBeFocused();
+          |                        ^
+      148 |   await expect(page.getByLabel('Rechercher une demande',{exact:true})).toBeVisible();
+      149 | });
+      150 |
+        at <repo>/tests/execution-interactions.spec.cjs:147:24
+
+    Error Context: ../../../tmp/tricorder-execution-search-review/execution-interactions-sea-4e4a1--focus-when-requests-arrive/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-execution-search-review/execution-interactions-sea-4e4a1--focus-when-requests-arrive/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-execution-search-review/execution-interactions-sea-4e4a1--focus-when-requests-arrive/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/execution-interactions.spec.cjs:151:1 › search draft survives polling and deferred request counts refresh after leaving the input
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.request-selector > summary')
+    Expected substring: "3 demandes"
+    Received string:    "2 demandes ⌄"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.request-selector > summary') with timeout 5000ms
+      - waiting for locator('.request-selector > summary')
+        14 × locator resolved to <summary>…</summary>
+           - unexpected value "2 demandes ⌄"
+
+
+      171 |   await expect(query).toBeFocused();
+      172 |   await summary.focus();
+    > 173 |   await expect(summary).toContainText('3 demandes');
+          |                         ^
+      174 |   await expect(query).toHaveValue('R3');
+      175 |   await expect(page.locator('.work-items button')).toHaveCount(3);
+      176 | });
+        at <repo>/tests/execution-interactions.spec.cjs:173:25
+
+    Error Context: ../../../tmp/tricorder-execution-search-review/execution-interactions-sea-b7f04-esh-after-leaving-the-input/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-execution-search-review/execution-interactions-sea-b7f04-esh-after-leaving-the-input/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-execution-search-review/execution-interactions-sea-b7f04-esh-after-leaving-the-input/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive
+    tests/execution-interactions.spec.cjs:151:1 › search draft survives polling and deferred request counts refresh after leaving the input

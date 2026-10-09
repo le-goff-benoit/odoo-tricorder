@@ -1,76 +1,82 @@
 """Isolated code proposals and explicit, conflict-checked local application."""
 import difflib
+import errno
 import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
-import subprocess
-import tempfile
+import uuid
 
-from workflow_engine.contracts import require
-from workflow_engine.projects import git_environment, repository
+from workflow_engine.contracts import ContractError, require
+from workflow_engine.projects import repository
+from .candidate_sources import DENIED, safe_path, snapshot, streamed_file, regular_file, parent_directory, signature, size_text
 
 MAX_BYTES = 2_000_000
-DENIED = {'.git', '.tricorder', '.odoo-agents', '.codex', '.claude', 'node_modules', '__pycache__', '.venv', 'venv'}
-
-
-def safe_path(root, relative):
-    path = Path(relative)
-    require(not path.is_absolute() and path.parts and '..' not in path.parts and not any(p in DENIED for p in path.parts), 'Chemin de candidat interdit')
-    require(not any(p.startswith('.env') or p.lower() in {'auth.json', 'credentials.json'} or p.endswith(('.pem', '.key')) for p in path.parts), 'Fichier sensible exclu du candidat')
-    result = root / path
-    require(result.resolve().is_relative_to(root.resolve()) and not result.is_symlink(), 'Lien ou chemin hors du candidat')
-    for parent in result.parents:
-        if parent == root:
-            break
-        require(not parent.is_symlink(), 'Dossier lié interdit dans un candidat')
-    return result
-
-
-def snapshot(project, target):
-    root = Path(repository(project['path']))
-    result = subprocess.run(['git', '-c', 'core.fsmonitor=false', '-C', str(root), 'ls-files', '-z', '--cached', '--others', '--exclude-standard'],
-                            env=git_environment(), capture_output=True, check=True, timeout=10)
-    require(len(result.stdout) <= MAX_BYTES, 'Inventaire du projet trop volumineux')
-    names = sorted(set(result.stdout.decode().split('\0')) - {''})
-    require(len(names) <= 10000, 'Projet trop volumineux pour une proposition isolée')
-    target.mkdir(parents=True)
-    files, total = {}, 0
-    for name in names:
-        if any(part in DENIED or part.startswith('.env') or part.lower() in {'auth.json','credentials.json'} or part.endswith(('.pem','.key')) for part in Path(name).parts):
-            continue
-        path = safe_path(root, name)
-        if not path.exists():
-            continue
-        require(path.is_file(), 'Source non régulière')
-        total += path.stat().st_size
-        require(total <= 20_000_000, 'Copie de travail limitée à 20 Mo')
-        content = path.read_bytes()
-        files[name] = {'sha256': hashlib.sha256(content).hexdigest(), 'mode': path.stat().st_mode & 0o777}
-        destination = safe_path(target, name)
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes(content)
-        destination.chmod(files[name]['mode'])
-    return files
 
 
 def prepare(engine, run, job):
     require(run['scope']['kind'] == 'project', 'L’édition de code nécessite un projet Git')
     base, workspace = Path(job)/'base', Path(job)/'workspace'
-    files = snapshot(engine.project(run['project']), base)
-    shutil.copytree(base, workspace)
+    require(not base.exists() and not base.is_symlink() and not workspace.exists() and not workspace.is_symlink(),
+            'Le dossier de cette tentative contient déjà une copie. Reprenez le bloc avec une nouvelle tentative ; aucune copie existante n’a été supprimée.')
+    files = snapshot(engine.project(run['project']), base, copies=2)
+    try:
+        # copytree may use the kernel's streaming copy, but never shares inodes
+        # with the original or baseline (no hard links).
+        shutil.copytree(base, workspace)
+    except BaseException as error:
+        if workspace.exists():
+            shutil.rmtree(workspace)
+        shutil.rmtree(base)
+        if isinstance(error, OSError) and error.errno == errno.ENOSPC:
+            raise ContractError('Le disque est plein pendant la copie de travail. Libérez de l’espace puis reprenez ce bloc ; le dépôt original reste intact.') from None
+        if isinstance(error, shutil.Error):
+            raise ContractError('La copie de travail n’a pas pu être terminée. Vérifiez l’espace disque et les droits du dossier de Tricorder, puis reprenez ce bloc ; les copies partielles ont été supprimées et le dépôt reste intact.') from None
+        raise
     # Native file tools only see this copy. Baseline and runtime state live outside.
-    excerpts, budget = {}, 70000
+    excerpts, listed, total, budget, listing_budget = {}, [], 0, 60_000, 12_000
     for name in files:
-        content = (base/name).read_bytes()
-        if len(content) <= min(budget, 16000):
+        size = (base/name).stat().st_size
+        total += size
+        encoded_name = len(json.dumps(name, ensure_ascii=False).encode()) + 2
+        if encoded_name <= listing_budget:
+            listed.append(name)
+            listing_budget -= encoded_name
+        if size <= min(budget, 16000):
+            content = (base/name).read_bytes()
             try:
-                excerpts[name] = content.decode()
-                budget -= len(content)
+                text = content.decode()
+                if '\0' in text:
+                    continue
+                cost = len(json.dumps({name: text}, ensure_ascii=False).encode()) + 2
+                if cost <= budget:
+                    excerpts[name] = text
+                    budget -= cost
             except UnicodeError:
                 pass
-    return {'base': base, 'workspace': workspace, 'files': files, 'context': {'files': list(files), 'contents': excerpts}}
+    context = {'files': listed, 'file_count': len(files), 'omitted_files': len(files)-len(listed), 'source_bytes': total, 'contents': excerpts,
+               'scope': 'Copie des fichiers Git suivis et des fichiers non ignorés, y compris historiques et pièces. Fichiers sensibles connus, dépendances et dossiers internes exclus. '
+                        'La liste et les extraits ci-dessus sont bornés ; utilisez Glob, Read ou Grep dans la copie pour consulter les autres fichiers. '
+                        'Seules les modifications de fichiers texte de 2 Mo maximum sont prises en charge ; les gros fichiers inchangés sont conservés.'}
+    return {'base': base, 'workspace': workspace, 'files': files, 'context': context}
+
+
+def changed_content(root, name, expected_hash):
+    try:
+        with regular_file(root, name) as stream:
+            before = os.fstat(stream.fileno())
+            require(before.st_size <= MAX_BYTES,
+                    f'Modification trop volumineuse : {name} ({size_text(before.st_size)}). '
+                    'Seuls les fichiers texte modifiés de 2 Mo maximum sont acceptés. Conservez cette pièce inchangée ou traitez sa modification séparément.')
+            content = stream.read(MAX_BYTES + 1)
+            require(len(content) <= MAX_BYTES and signature(before) == signature(os.fstat(stream.fileno())),
+                    'Le candidat a changé pendant sa lecture : ' + name)
+    except FileNotFoundError:
+        content = None
+    require((hashlib.sha256(content).hexdigest() if content is not None else None) == expected_hash,
+            'Copie de référence ou candidat modifié pendant la lecture : ' + name)
+    return content
 
 
 def capture(engine, run, prepared):
@@ -78,31 +84,49 @@ def capture(engine, run, prepared):
     paths = set(prepared['files'])
     for path in workspace.rglob('*'):
         require(not path.is_symlink(), 'Un candidat ne peut pas créer de lien symbolique')
+        safe_path(workspace, str(path.relative_to(workspace)))
+        require(path.is_file() or path.is_dir(), 'Un candidat ne peut pas créer de fichier spécial')
         if path.is_file():
             relative = str(path.relative_to(workspace))
-            safe_path(workspace, relative)
             paths.add(relative)
     require(len(paths) <= 10000, 'Trop de fichiers dans le candidat')
-    changes, diff = [], []
+    candidate = {'schema': 1, 'project': run['project'], 'source_run': run['id'], 'files': prepared['files'], 'changes': []}
+    candidate_bytes = len(json.dumps(candidate, ensure_ascii=False).encode())
+    changes, diff, diff_bytes = candidate['changes'], [], 0
     for name in sorted(paths):
-        before_path, after_path = safe_path(base, name), safe_path(workspace, name)
-        before = before_path.read_bytes() if before_path.exists() else None
+        after_path = safe_path(workspace, name)
+        original = prepared['files'].get(name)
+        after_hash = None
         if after_path.exists():
-            require(after_path.is_file() and after_path.stat().st_size <= MAX_BYTES, 'Fichier modifié trop volumineux ou non régulier')
-        after = after_path.read_bytes() if after_path.exists() else None
-        if before == after:
+            after_hash, info = streamed_file(workspace, name)
+            require(info.st_nlink == 1, 'Un candidat ne peut pas contenir de lien physique : ' + name)
+            require(not original or info.st_mode & 0o777 == original['mode'],
+                    f'Permissions modifiées : {name}. Rétablissez les permissions initiales ; ce candidat porte uniquement sur le contenu texte.')
+        if original and after_hash == original['sha256']:
             continue
+        before = changed_content(base, name, original['sha256'] if original else None)
+        after = changed_content(workspace, name, after_hash)
         try:
             text = after.decode() if after is not None else None
             old_text = before.decode() if before is not None else ''
+            require('\0' not in (text or '') and '\0' not in old_text,
+                    f'Fichier binaire modifié : {name}. Conservez cette pièce inchangée ou traitez sa modification séparément ; les candidats prennent en charge le code et les documents texte.')
         except UnicodeError:
-            raise ValueError('Les propositions de cette version sont limitées aux fichiers texte') from None
-        changes.append({'path': name, 'before': hashlib.sha256(before).hexdigest() if before is not None else None, 'content': text})
-        diff.extend(difflib.unified_diff(old_text.splitlines(keepends=True), (text or '').splitlines(keepends=True), fromfile='a/'+name, tofile='b/'+name))
+            raise ContractError(f'Fichier binaire modifié : {name}. Conservez cette pièce inchangée ou traitez sa modification séparément ; les candidats prennent en charge le code et les documents texte.') from None
+        change = {'path': name, 'before': hashlib.sha256(before).hexdigest() if before is not None else None, 'content': text}
+        candidate_bytes += len(json.dumps(change, ensure_ascii=False).encode()) + 2
+        require(candidate_bytes <= MAX_BYTES, 'Proposition et inventaire supérieurs à 2 Mo. Divisez les modifications en plusieurs candidats ; aucune preuve n’a été tronquée.')
+        changes.append(change)
+        require(len(changes) <= 100, '100 fichiers modifiés maximum. Divisez la modification en plusieurs candidats.')
+        for line in difflib.unified_diff(old_text.splitlines(keepends=True), (text or '').splitlines(keepends=True), fromfile='a/'+name, tofile='b/'+name):
+            diff_bytes += len(line.encode())
+            require(diff_bytes <= MAX_BYTES, 'Diff supérieur à 2 Mo. Divisez la modification en plusieurs candidats ; aucune preuve n’a été tronquée.')
+            diff.append(line)
     require(changes, 'Le modèle n’a produit aucune modification de fichier')
-    require(len(changes) <= 100, '100 fichiers modifiés maximum')
-    candidate = {'schema': 1, 'project': run['project'], 'source_run': run['id'], 'files': prepared['files'], 'changes': changes}
-    reference = engine.artifact(json.dumps(candidate, ensure_ascii=False).encode())
+    encoded = json.dumps(candidate, ensure_ascii=False).encode()
+    require(len(encoded) <= MAX_BYTES,
+            f'Proposition et inventaire : {size_text(len(encoded))}, limite de preuve 2 Mo. Divisez les modifications ou réduisez les fichiers générés du dépôt ; aucune preuve n’a été tronquée.')
+    reference = engine.artifact(encoded)
     patch = engine.artifact(''.join(diff).encode())
     return reference, patch
 
@@ -121,32 +145,49 @@ def load(engine, reference, project):
 def materialize(engine, reference, project, target):
     candidate = load(engine, reference, project)
     files = snapshot(engine.project(project), target)
-    require(files == candidate['files'], 'Les sources ont changé depuis la proposition : générer un nouveau candidat')
-    for change in candidate['changes']:
-        path = safe_path(target, change['path'])
-        if change['content'] is None:
-            path.unlink()
-        else:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(change['content'])
+    # snapshot only returns after creating a new target. Never clean a path
+    # that already existed when this attempt started.
+    try:
+        require(files == candidate['files'], 'Les sources ont changé depuis la proposition : générer un nouveau candidat')
+        for change in candidate['changes']:
+            path = safe_path(target, change['path'])
+            _write(path, change['content'].encode() if change['content'] is not None else None,
+                   candidate['files'].get(change['path'], {}).get('mode', 0o644), root=target)
+    except BaseException as error:
+        shutil.rmtree(target)
+        if isinstance(error, OSError) and error.errno == errno.ENOSPC:
+            raise ContractError('Le disque est plein pendant la préparation du candidat pour la QA. La copie partielle a été supprimée ; libérez de l’espace puis reprenez ce bloc. Le dépôt original reste intact.') from None
+        raise
     return target
 
 
-def _write(path, value, mode=0o644):
-    if value is None:
-        path.unlink(missing_ok=True)
+def _write(path, value, mode=0o644, *, root=None):
+    root = Path(root) if root is not None else path.parent
+    relative = path.relative_to(root)
+    safe_path(root, str(relative))
+    if value is None and not path.exists():
         return
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fd, name = tempfile.mkstemp(prefix='.tricorder-apply-', dir=path.parent)
-    try:
-        with os.fdopen(fd, 'wb') as stream:
-            stream.write(value)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.chmod(name, mode)
-        os.replace(name, path)
-    finally:
-        Path(name).unlink(missing_ok=True)
+    with parent_directory(root, relative.parts[:-1], create=value is not None) as directory:
+        if value is None:
+            try:
+                os.unlink(relative.name, dir_fd=directory)
+            except FileNotFoundError:
+                pass
+            return
+        name = '.tricorder-apply-' + uuid.uuid4().hex
+        fd = os.open(name, os.O_CREAT | os.O_EXCL | os.O_WRONLY | os.O_NOFOLLOW, mode, dir_fd=directory)
+        try:
+            with os.fdopen(fd, 'wb') as stream:
+                stream.write(value)
+                stream.flush()
+                os.fchmod(stream.fileno(), mode)
+                os.fsync(stream.fileno())
+            os.replace(name, relative.name, src_dir_fd=directory, dst_dir_fd=directory)
+        finally:
+            try:
+                os.unlink(name, dir_fd=directory)
+            except FileNotFoundError:
+                pass
 
 
 def _recover(engine, journal):
@@ -161,13 +202,18 @@ def _recover(engine, journal):
     # A crash can leave some files applied. Never overwrite a later user edit.
     for item in entry['files']:
         path = safe_path(root, item['path'])
-        value = path.read_bytes() if path.exists() else None
+        try:
+            with regular_file(root, item['path']) as source:
+                value = source.read(MAX_BYTES + 1)
+        except FileNotFoundError:
+            value = None
+        require(value is None or len(value) <= MAX_BYTES, 'Fichier modifié après interruption : examiner ' + str(journal))
         current = hashlib.sha256(value).hexdigest() if value is not None else None
         require(current in {item['before_hash'], item['after_hash']},
                 'Application interrompue et fichier modifié : examiner '+str(journal))
     for item in entry['files']:
         value = engine.evidence(item['original']) if item['original'] else None
-        _write(safe_path(root, item['path']), value, item['mode'])
+        _write(safe_path(root, item['path']), value, item['mode'], root=root)
     journal.unlink()
 
 
@@ -240,20 +286,22 @@ def apply(engine, run_id, node_id, expected, *, human=False):
                 require_checks(run, node_id, reference, engine)
                 project = engine.project(run['project'], db)
                 root = Path(repository(project['path']))
-                with tempfile.TemporaryDirectory(dir=engine.store.directory) as temp:
-                    current = snapshot(project, Path(temp)/'source')
+                current = snapshot(project)
                 require(current == candidate['files'], 'Conflit : les sources ont changé, aucun fichier appliqué')
                 entries = []
                 for change in candidate['changes']:
                     path = safe_path(root, change['path'])
-                    value = path.read_bytes() if path.exists() else None
+                    value = changed_content(root, change['path'], change['before'])
                     content = change['content'].encode() if change['content'] is not None else None
                     entries.append({'path': change['path'], 'original': engine.artifact(value) if value is not None else None,
                                     'mode': path.stat().st_mode & 0o777 if value is not None else 0o644,
                                     'before_hash': change['before'], 'after_hash': hashlib.sha256(content).hexdigest() if content is not None else None})
                 _write(journal, json.dumps({'run': run_id, 'node': node_id, 'candidate': expected, 'files': entries}).encode(), 0o600)
                 for change, entry in zip(candidate['changes'], entries):
-                    _write(safe_path(root, change['path']), change['content'].encode() if change['content'] is not None else None, entry['mode'])
+                    # Recheck this file immediately before the atomic write;
+                    # source edits since the global fingerprint remain conflicts.
+                    changed_content(root, change['path'], change['before'])
+                    _write(safe_path(root, change['path']), change['content'].encode() if change['content'] is not None else None, entry['mode'], root=root)
                 state['applied_candidate'] = expected
                 engine._event(db, run, 'candidate-applied', node_id, candidate=expected, paths=[c['path'] for c in candidate['changes']])
                 engine._save(db, run)

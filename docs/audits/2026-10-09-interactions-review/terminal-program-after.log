@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (16.5s)
+
+  1 passed (17.6s)

@@ -1,0 +1,7 @@
+{
+  "cancelled_after_first_file": true,
+  "provider_command_prepared": false,
+  "source_unchanged": true,
+  "error": "Exécution annulée pendant la préparation de la copie ; aucun modèle n’a été lancé",
+  "copy_finishes_before_cancellation_guard": true
+}

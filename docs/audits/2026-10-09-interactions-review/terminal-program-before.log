@@ -1,0 +1,45 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (17.8s)
+
+
+  1) tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: locator('.terminal-tab.active [data-session]')
+    Expected pattern: /^sleep \d+$/
+    Received string:  "Codex 1"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveText" locator('.terminal-tab.active [data-session]') with timeout 5000ms
+      - waiting for locator('.terminal-tab.active [data-session]')
+        3 × locator resolved to <button data-session="e034b8791dea41d99223b93384d9aaa6">…</button>
+          - unexpected value "Shell · Codex arrêté 1"
+        11 × locator resolved to <button data-session="e034b8791dea41d99223b93384d9aaa6">…</button>
+           - unexpected value "Codex 1"
+
+
+      209 |   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();
+      210 |   // A remembered AI provider is not evidence that this foreground program is AI.
+    > 211 |   await expect(page.locator('.terminal-tab.active [data-session]')).toHaveText(/^sleep \d+$/);
+          |                                                                     ^
+      212 |   await input.focus();await page.keyboard.press('Control+C');
+      213 |   await expect.poll(async () => (await terminals()).find(s=>s.id===first.id)?.idleShell).toBe(true);
+      214 | });
+        at <repo>/tests/execution-interactions.spec.cjs:211:69
+
+    Error Context: ../../../tmp/tricorder-terminal-program-review/execution-interactions-ter-e2b07-h-navigation-and-agent-exit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-terminal-program-review/execution-interactions-ter-e2b07-h-navigation-and-agent-exit/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-terminal-program-review/execution-interactions-ter-e2b07-h-navigation-and-agent-exit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit

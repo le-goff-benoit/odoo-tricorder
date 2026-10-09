@@ -121,6 +121,8 @@ def _execute_text(engine, run, node, token, job):
     if node.get("execution_mode") == "edit":
         from .candidates import prepare
         prepared = prepare(engine, run, job)
+        require(engine.run(run["id"])["status"] != "cancelled",
+                "Exécution annulée pendant la préparation de la copie ; aucun modèle n’a été lancé")
     workspace = prepared["workspace"] if prepared else None
     from workflow_engine.recovery import tracked_argv
     args = tracked_argv(engine, run["id"], node["id"], token, command(node, job, workspace))

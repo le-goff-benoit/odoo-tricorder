@@ -80,3 +80,12 @@
   .main-content.workflow-visible.terminal-docked .terminal-divider { grid-column: 1; grid-row: 2; cursor: row-resize; }
   [data-action=terminal-layout] { display: none; }
 }
+
+/* Keep conversation tools compact; the terminal is the main working surface. */
+.workflow-visible .terminal-heading {min-height:40px;padding:5px 14px;flex-shrink:0}
+.workflow-visible .terminal-heading > strong {font-size:12px}
+.workflow-visible .terminal-heading button {min-height:28px;font-size:11px;line-height:1.3}
+.workflow-visible .terminal-tabs {padding:5px 12px;min-height:38px}
+.workflow-visible #terminal-context:not(.production) {padding:3px 14px 5px;font-size:11px;line-height:1.4;color:var(--text-3)}
+.workflow-visible #execution-context[hidden] {display:none}
+.terminal-scope {display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

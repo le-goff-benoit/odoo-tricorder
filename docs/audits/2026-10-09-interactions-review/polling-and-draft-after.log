@@ -1,0 +1,4 @@
+Extrait des deux parcours verts du premier passage. Les deux autres parcours ont été repris après correction des fixtures et leurs journaux sont reception-and-effect-after.log.
+
+  ✓  3 tests/execution-interactions.spec.cjs:106:1 › live failure updates the graph badge and accessible name without reopening the run (7.1s)
+  ✓  4 tests/execution-interactions.spec.cjs:116:1 › request menu keeps keyboard focus and a question draft while activity changes (6.8s)

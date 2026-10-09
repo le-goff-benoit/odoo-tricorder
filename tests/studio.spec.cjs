@@ -135,11 +135,14 @@ test('large release history: startup and refresh preserve projects, workflows an
 async function simulate() { await page.getByRole('button', { name: 'Exécuter…' }).click(); await page.getByRole('button', { name: 'Simuler le parcours' }).click(); await expect(page.locator('#run-banner')).toContainText('Simulation'); }
 async function receive(id, hasCriteria = false) {
   const node = page.locator(`.node[data-id="${id}"]`);
-  await expect(node).toHaveAttribute('data-status', 'returned'); await node.click();
+  await expect(node).toHaveAttribute('data-status', 'returned');
+  if(!await node.isVisible()) await page.getByRole('button', { name: 'Graphe', exact: true }).click();
+  await node.click();
   if (hasCriteria) await page.locator('#receipt-form input[type=checkbox]').check();
   await page.getByLabel('Commentaire de validation').fill('Résultat examiné dans le contexte simulé.');
   await page.getByRole('button', { name: 'Valider le résultat' }).click();
   await expect(node).toHaveAttribute('data-status', 'accepted');
+  await page.getByRole('button', { name: 'Graphe', exact: true }).click();
 }
 
 test('first use: generic project, graph editing, undo, persisted workflow and keyboard list', async () => {
@@ -175,7 +178,8 @@ test('simulation: two branches, human decision, truthful results and single docu
   await page.getByRole('button', { name: 'Approuver la suite' }).click();
   await receive('bilan');
   await expect(page.locator('#run-banner')).toContainText('Terminée');
-  await page.getByRole('tab', { name: 'Rapport' }).click();
+  await page.getByRole('button', { name: 'Voir le rapport', exact: true }).click();
+  await expect(page.getByRole('tab', { name: 'Rapport' })).toHaveAttribute('aria-selected','true');
   for (const heading of ['Demande', 'Plan', 'Réalisation', 'Tests et limites', 'Livraison et documentation', 'Décisions et suite']) await expect(page.locator('#document-view').getByRole('heading', { name: heading, exact: true })).toBeVisible();
   await expect(page.locator('#document-view')).toContainText('aucun résultat métier réel');
 });
@@ -870,7 +874,8 @@ else:
   await expect(page.locator('#run-banner')).toContainText('Terminée');
   await page.getByRole('button',{name:'Revenir à l’exécution'}).click();
   await expect(page.locator('.node[data-id=clarify]')).toHaveAttribute('data-status','waiting_input');
-  await page.locator('.node[data-id=clarify]').click();
+  await expect(page.getByRole('button',{name:'Détail',exact:true})).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#inspector')).toContainText('Qui doit relire');
   await page.screenshot({path:test.info().outputPath('question-notification.png')});
   await page.getByLabel('Votre réponse',{exact:true}).fill('La responsable produit');
   await page.getByRole('button',{name:'Répondre',exact:true}).click();
@@ -975,10 +980,10 @@ test('audit reception: decision shows the delivered text, provenance and safe pr
   await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:seed.project.title}).click();await page.getByRole('button',{name:'Consulter',exact:true}).click();
   await expect(page.locator('#inspector')).toContainText('MINUTES_SENTINEL');
   await expect(page.locator('#inspector')).toContainText('Sources');
-  await page.getByRole('button',{name:'Lire le résultat',exact:true}).click();
+  await page.getByRole('button',{name:'Détail',exact:true}).click();
   await expect(page.locator('.editor.review-focus')).toBeVisible();
   await page.screenshot({path:path.join(test.info().outputDir,'audit-decision-readable.png'),fullPage:true});
-  await page.getByRole('button',{name:'Graphe et détail',exact:true}).click();
+  await page.getByRole('button',{name:'Graphe',exact:true}).click();
   await page.locator('.node[data-id="minutes"]').click();await page.getByRole('button',{name:'Consulter la preuve 1',exact:true}).click();
   await expect(page.getByRole('dialog')).toContainText('SIMULATION');
   await page.getByRole('button',{name:'Fermer la fenêtre',exact:true}).click();
@@ -1029,6 +1034,13 @@ test('audit reception: history pages and archives preserve the completed work',a
   await page.locator('tbody').getByRole('button',{name:'Restaurer',exact:true}).click();await page.getByRole('button',{name:'Confirmer',exact:true}).click();await page.getByRole('button',{name:'Consulter',exact:true}).click();await page.locator('.node[data-id="work"]').click();await expect(page.locator('#inspector')).toContainText('Résultat conservé');
 });
 
+async function selectRequest(index) {
+  const selector=page.locator('.request-selector');
+  if(!await selector.getAttribute('open').then(value=>value!==null)) await selector.locator(':scope > summary').click();
+  await page.locator('.work-items button').nth(index).click();
+  await expect(selector).not.toHaveAttribute('open','');
+}
+
 async function mailFixture(mode='ready') {
   const bin=path.join(directory,'bin');fs.mkdirSync(bin,{recursive:true});
   fs.copyFileSync(path.join(root,'tests/fixtures/mail-intake-agent.py'),path.join(bin,'codex'));fs.chmodSync(path.join(bin,'codex'),0o755);
@@ -1061,10 +1073,11 @@ test('mail intake: native terminal prepares four requests, source files and plan
   await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:project.title}).click();await page.locator('[data-action=open-conversation]').click();
   await expect(page.locator('.work-items button')).toHaveCount(4);
   await expect(page.locator('.work-items strong').first()).toHaveText('R1: Règle de distance contradictoire dans les devis.');
+  await page.locator('.request-selector > summary').click();
   await page.locator('.conversation-search-details > summary').click();
   const search=await page.locator('#conversation-query').boundingBox(),searchButton=await page.locator('#conversation-search button').boundingBox();expect(Math.abs(searchButton.y-search.y)).toBeLessThan(8);await page.locator('.conversation-search-details > summary').click();
   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();await expect(page.locator('.xterm-screen:visible')).toBeVisible();
-  await page.locator('.work-items button').first().click();await page.locator('.node[data-id=scope]').click();await expect(page.locator('#inspector')).toContainText('Règle de distance');
+  await selectRequest(0);await page.locator('.node[data-id=scope]').click();await expect(page.locator('#inspector')).toContainText('Règle de distance');
   await page.screenshot({path:test.info().outputPath('mail-release-plan.png'),fullPage:true});
   await expect.poll(async()=> (await page.evaluate(()=>window.tricorder.terminals.list())).find(s=>s.id===terminal.id)?.idleShell).toBe(true);
   await quitApplication();app=await electron.launch({executablePath:process.env.TRICORDER_EXECUTABLE,args:process.env.TRICORDER_EXECUTABLE?['--workflow-studio']:[root,'--workflow-studio'],env:{...process.env,PATH:path.join(directory,'bin')+':'+process.env.PATH,TRICORDER_STATE_DIR:directory,TRICORDER_HOME:directory,TRICORDER_TEST_MODE:'1'},timeout:20000});page=await studioPage();
@@ -1097,22 +1110,24 @@ test('mail illustration: four independent states, selected question and QA failu
   await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:initial.project_contexts[0].title}).click();await page.locator('[data-action=open-conversation]').click();
   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();await expect(page.locator('.xterm-screen:visible')).toBeVisible();
   const cards=page.locator('.work-items button');await expect(cards).toHaveCount(4);
-  await expect(cards.nth(0)).toContainText('Réponse attendue');await expect(cards.nth(1)).toContainText('En cours');await expect(cards.nth(2)).toContainText('Prête');await expect(cards.nth(3)).toContainText('Échec');
-  await cards.nth(0).click();await expect(page.locator('.workflow-heading h1')).toHaveText('R1: Règle de distance contradictoire dans les devis.');await expect(page.locator('.breadcrumb')).toContainText('Workflow de la demande sélectionnée');
+  await expect(cards.nth(0)).toContainText('Réponse attendue');await expect(cards.nth(1)).toContainText('En cours');await expect(cards.nth(2)).toContainText('Prête');await expect(cards.nth(3)).toContainText('Réponse attendue');await expect(cards.nth(3)).not.toContainText('Échec · reprise nécessaire');
+  await selectRequest(0);await expect(page.locator('.workflow-heading h1')).toHaveText('R1: Règle de distance contradictoire dans les devis.');await expect(page.locator('.breadcrumb')).toContainText('Workflow de la demande sélectionnée');
   await expect(page.locator('#inspector')).toContainText('Quelle règle de distance');await expect(page.locator('#inspector')).toContainText('original.eml');await expect(cards.nth(0)).toHaveAttribute('aria-pressed','true');
-  await page.getByRole('button',{name:'Lire le résultat',exact:true}).click();
+  await page.getByRole('button',{name:'Détail',exact:true}).click();
   await page.screenshot({path:test.info().outputPath('mail-mixed-states-wide.png'),fullPage:true});
   await page.setViewportSize({width:1024,height:768});await expect(page.locator('.xterm-screen:visible')).toBeVisible();
   await expect(page.locator('#inspector').getByText('Quelle règle de distance', {exact:false})).toBeInViewport();
   await expect(page.locator('.question-context > summary')).toBeInViewport();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+  await page.locator('.request-selector > summary').click();
   for(let i=0;i<4;i++)await expect.poll(async()=>{const box=await cards.nth(i).boundingBox();return !!box && box.x+box.width<=1024;}).toBe(true);
+  await page.locator('.request-selector > summary').press('Escape');
   await page.screenshot({path:test.info().outputPath('mail-mixed-states-1024.png'),fullPage:true});
-  await cards.nth(2).click();await expect(page.locator('#inspector')).toContainText('Résultat R3');await expect(page.locator('#inspector')).toContainText('Poursuivez dans le terminal');
+  await selectRequest(2);await expect(page.locator('#inspector')).toContainText('Résultat R3');await expect(page.locator('#inspector')).toContainText('Poursuivez dans le terminal');
   await expect(cards.nth(2)).toHaveAttribute('aria-pressed','true');
   await page.screenshot({path:test.info().outputPath('mail-r3-next-action-1024.png'),fullPage:true});
-  await cards.nth(3).click();await expect(page.locator('.editor.review-focus')).toBeVisible();
-  await page.getByRole('button',{name:'Graphe et détail',exact:true}).click();
+  await selectRequest(3);await expect(page.locator('.editor.review-focus')).toBeVisible();
+  await page.getByRole('button',{name:'Graphe',exact:true}).click();
   await expect(page.locator('.node[data-id=failure]')).toBeInViewport();
   const focusBounds=await page.locator('.node[data-id=failure]').boundingBox(),canvasBounds=await page.locator('.canvas-scroll').boundingBox();
   expect(focusBounds.x+focusBounds.width/2).toBeGreaterThanOrEqual(canvasBounds.x);
@@ -1120,8 +1135,8 @@ test('mail illustration: four independent states, selected question and QA failu
   expect(focusBounds.y+focusBounds.height/2).toBeGreaterThanOrEqual(canvasBounds.y);
   expect(focusBounds.y+focusBounds.height/2).toBeLessThanOrEqual(canvasBounds.y+canvasBounds.height);
   await page.screenshot({path:test.info().outputPath('mail-r4-graph-focus-1024.png'),fullPage:true});
-  await page.setViewportSize({width:1440,height:900});await cards.nth(0).click();
-  await page.getByRole('button',{name:'Lire le résultat',exact:true}).click();
+  await page.setViewportSize({width:1440,height:900});await selectRequest(0);
+  await page.getByRole('button',{name:'Détail',exact:true}).click();
   await page.locator('[data-action=terminal-layout]').click();
   await expect(page.locator('.request-selector')).toBeVisible();await expect(cards.nth(0)).toBeHidden();
   await expect(page.locator('.xterm-screen:visible')).toBeVisible();
@@ -1129,9 +1144,9 @@ test('mail illustration: four independent states, selected question and QA failu
   await expect(page.locator('#question-form button')).toBeInViewport();
   await page.screenshot({path:test.info().outputPath('mail-question-stacked-1440.png'),fullPage:true});
   await page.locator('.request-selector > summary').click();await expect(cards).toHaveCount(4);await expect(cards.nth(3)).toBeVisible();
-  await cards.nth(2).click();await expect(page.locator('.editor.review-focus')).toBeVisible();await expect(page.locator('.request-selector')).not.toHaveAttribute('open','');
+  await selectRequest(2);await expect(page.locator('.editor.review-focus')).toBeVisible();await expect(page.locator('.request-selector')).not.toHaveAttribute('open','');
   await page.locator('[data-workflow-route=overview]').click();
-  const failed=page.locator('tbody tr').filter({hasText:'R4: Montant manuel'});await expect(failed).toContainText('Échec · reprise nécessaire');await expect(failed).not.toContainText('Original :');
+  const failed=page.locator('tbody tr').filter({hasText:'R4: Montant manuel'});await expect(failed).toContainText('Réponse attendue');await expect(failed).not.toContainText('Échec · reprise nécessaire');await expect(failed).not.toContainText('Original :');
 
 });
 

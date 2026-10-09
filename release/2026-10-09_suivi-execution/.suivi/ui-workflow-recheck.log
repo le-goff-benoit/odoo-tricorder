@@ -1,0 +1,12 @@
+
+Running 5 tests using 1 worker
+
+(node:705328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/studio.spec.cjs:170:1 › simulation: two branches, human decision, truthful results and single documentation view (8.6s)
+  ✓  2 tests/studio.spec.cjs:187:1 › decisions persist after application restart and reject skips its branch (15.3s)
+  ✓  3 tests/studio.spec.cjs:317:1 › real isolated command produces evidence, then waits for human receipt (6.3s)
+  ✓  4 tests/studio.spec.cjs:455:1 › code proposal diff is reviewable and only explicit application changes the Git project (6.4s)
+  ✓  5 tests/studio.spec.cjs:838:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question (7.7s)
+
+  5 passed (45.0s)
