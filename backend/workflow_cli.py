@@ -2,6 +2,7 @@
 """Narrow bridge used by native agents. No human approval operation is exposed."""
 import argparse
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -10,11 +11,11 @@ from workflow_engine.contracts import require
 from workflow_engine.conversations import Conversations, ask, answer
 
 
-def request(engine, cid, action, payload):
+def _request(engine, cid, action, payload):
     conversations = Conversations(engine)
     conversation = conversations.get(cid)
     if action == "status":
-        return conversations.snapshot(cid)
+        return conversations.snapshot(cid, offset=payload.get("offset", 0), limit=25, query=payload.get("query", ""))
     if action == "add":
         return conversations.add(cid, payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"))
     if action == "artifact":
@@ -23,8 +24,19 @@ def request(engine, cid, action, payload):
         return engine.artifact(path.read_bytes())
     run = conversations.checked_run(cid, payload["run"])
     if action == "ready":
-        return [{"node": n, "state": run["nodes"][n["id"]], "parameters": run["parameters"],
-                 "project": engine.project(run["project"])} for n in run["definition"]["nodes"] if run["nodes"][n["id"]]["status"] == "ready"]
+        from workflow_engine.projections import run_detail, paging
+        offset, limit = paging(payload.get("offset", 0), payload.get("limit", 25))
+        projected = run_detail(engine, run)
+        nodes = [n for n in projected["definition"]["nodes"] if projected["nodes"][n["id"]]["status"] == "ready"]
+        items = [{"node": n, "state": projected["nodes"][n["id"]]} for n in nodes[offset:offset + limit]]
+        return {"items": items, "parameters": projected["parameters"], "project": engine.project(run["project"]),
+                "offset": offset, "total": len(nodes), "next": offset + len(items) if offset + len(items) < len(nodes) else None}
+    if action == "inspect":
+        from workflow_engine.projections import run_detail
+        return run_detail(engine, run)
+    if action == "read":
+        from workflow_engine.projections import proof_page
+        return proof_page(engine, run["id"], payload["sha256"], payload.get("offset", 0))
     nid = payload["node"]
     node = next((n for n in run["definition"]["nodes"] if n["id"] == nid), None)
     require(node is not None, "Bloc inconnu")
@@ -35,7 +47,7 @@ def request(engine, cid, action, payload):
         import tempfile
         from connectors.candidates import materialize
         state = run["nodes"][nid]
-        require(node["kind"] in {"agent", "command"} and state["status"] == "running" and state.get("token") == payload["token"], "Tentative périmée")
+        require(node["kind"] in {"agent", "command", "task"} and state["status"] == "running" and state.get("token") == payload["token"], "Tentative périmée")
         reference = state.get("inputs", {}).get("candidate")
         require(reference, "Aucun candidat transmis à ce bloc")
         parent = engine.store.directory / "jobs"
@@ -48,7 +60,19 @@ def request(engine, cid, action, payload):
         require(node.get("execution", {}).get("provider", conversation["provider"]) == conversation["provider"], "Ce bloc utilise un autre fournisseur : utiliser execute, sans substitution")
         selected_model = node.get("execution", {}).get("model")
         require(not selected_model or selected_model == conversation.get("model"), "Ce bloc utilise un autre modèle : utiliser execute, sans substitution")
-        return engine.claim(run["id"], nid)
+        pid = os.getppid()
+        owner = None
+        for _ in range(10):
+            try:
+                process = Path(f"/proc/{pid}")
+                name = (process / "comm").read_text().strip().lower()
+                if "codex" in name or "claude" in name:
+                    owner = pid; break
+                fields = (process / "stat").read_text().rsplit(")", 1)[1].split()
+                pid = int(fields[1])
+                if pid <= 1: break
+            except (OSError, ValueError, IndexError): break
+        return engine.claim(run["id"], nid, executor="native", owner_pid=owner)
     if action == "context":
         return engine.execution_context(run["id"], nid, payload["context"])
     if action == "execute":
@@ -67,14 +91,32 @@ def request(engine, cid, action, payload):
     raise ContractError("Commande non autorisée ; décisions et réceptions humaines se font dans Tricorder")
 
 
+def request(engine, cid, action, payload):
+    """Every native response uses the same bounded view and explicit readers."""
+    value = _request(engine, cid, action, payload)
+    from workflow_engine.projections import run_detail
+    if action == 'claim':
+        return {**value, 'run': run_detail(engine, value['run'])}
+    if action in {'context', 'execute', 'result', 'ask', 'answer'}:
+        return run_detail(engine, value)
+    return value
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", required=True)
     parser.add_argument("--conversation", required=True)
-    parser.add_argument("action", choices=["status", "add", "ready", "claim", "context", "execute", "result", "ask", "answer", "artifact", "heartbeat", "prepare-candidate"])
+    parser.add_argument("action", choices=["status", "add", "ready", "claim", "context", "execute", "result", "ask", "answer", "artifact", "heartbeat", "prepare-candidate", "inspect", "read"])
+    parser.add_argument("--offset", type=int, default=0)
+    parser.add_argument("--query", default="")
     args = parser.parse_args()
     try:
-        payload = {} if args.action == "status" else json.loads(sys.stdin.read(1_000_001))
+        if args.action == "status":
+            payload = {"offset": args.offset, "query": args.query}
+        else:
+            raw = sys.stdin.buffer.read(4 * 1024 * 1024 + 1)
+            require(len(raw) <= 4 * 1024 * 1024, "Requête trop volumineuse (maximum 4 Mio)")
+            payload = json.loads(raw)
         value = request(Engine(args.state), args.conversation, args.action, payload)
         print(json.dumps({"ok": True, "result": value}, ensure_ascii=False))
     except (ContractError, KeyError, ValueError, OSError) as error:

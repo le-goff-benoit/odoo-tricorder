@@ -157,8 +157,8 @@ terminalDivider.addEventListener('pointerup', event => { if (terminalDivider.has
 window.addEventListener('resize', applyTerminalLayout);
 const studioUI = mountStudio(workflowHost, {
   context(context) { if (workflowContext?.route === 'workflow' && context.route === 'workflow' && context.mode && context.mode !== workflowContext.mode) { terminalPreference = null; terminalMaximized = false; } workflowContext = context; if (workflowMode) render(); },
-  async openTerminal(project, graph, conversation) {
-    const result = await api.workflowTerminal({ project: project.id, conversation });
+  async openTerminal(project, graph, conversation, resume=false) {
+    const result = await api.workflowTerminal({ project: project.id, conversation, resume });
     workflowTerminalPath = result.project; terminalPreference = true; terminalMaximized = false;
     selectedSession.set(result.project, result.id);
     await refreshSessions(); render(); await mountTerminal(result.id);

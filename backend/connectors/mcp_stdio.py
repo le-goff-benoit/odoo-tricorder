@@ -60,7 +60,7 @@ class Session:
         self.buffer = bytearray(); self.total = 0; self.sequence = 0
 
     def __enter__(self):
-        self.process = subprocess.Popen(self.config['argv'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=self.env, cwd='/', start_new_session=True, close_fds=True)
+        self.process = subprocess.Popen(self.check.launch(self.config['argv']) if self.check and hasattr(self.check, 'launch') else self.config['argv'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=self.env, cwd='/', start_new_session=True, close_fds=True)
         self.selector = selectors.DefaultSelector()
         for stream in (self.process.stdin,self.process.stdout):os.set_blocking(stream.fileno(),False)
         self.selector.register(self.process.stdout,selectors.EVENT_READ)

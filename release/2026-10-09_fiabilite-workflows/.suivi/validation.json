@@ -1,0 +1,55 @@
+{
+  "version": "0.6.0-rc.8",
+  "validated_at_utc": "2026-10-09T09:14:50.249629+00:00",
+  "baseline": "6e8a286eba6f65d7f6aa7204b18df3acbdced88f",
+  "source_reception": {
+    "manifest": "docs/audits/2026-10-09-review-corrections/source-manifest-final.json",
+    "sha256": "0e0bd1c3154e5c8d111cd82c4b366cd0f15803c8dcbca0f7d0a7e9745cf592e0",
+    "matching_files": 77
+  },
+  "checks": [
+    {
+      "command": "npm test",
+      "python_passed": 226,
+      "javascript_passed": 83,
+      "failed": 0,
+      "log": "tests-unitaires.log"
+    },
+    {
+      "command": "npm run test:ui",
+      "passed": 65,
+      "skipped": 2,
+      "failed": 0,
+      "log": "tests-interface.log"
+    },
+    {
+      "command": "npm run dist",
+      "exit_code": 0,
+      "log": "construction.log"
+    },
+    {
+      "command": "npm run test:packaged",
+      "passed": 65,
+      "skipped": 2,
+      "failed": 0,
+      "log": "tests-paquet.log"
+    }
+  ],
+  "skip_reason": "Deux parcours optionnels sur projets réels non activés ; recette sur projets synthétiques uniquement.",
+  "artifact": {
+    "filename": "odoo-tricorder_0.6.0-rc.8_amd64.deb",
+    "bytes": 100855328,
+    "sha256": "e03df07b85eac162772bc49d0e7b5ed1f1be5d5fdd27dae50c7c7dfa20f00c33"
+  },
+  "reception": {
+    "functional_counterexamples_received": 8,
+    "visual_corrections_received": 10,
+    "audit_findings_received": 10,
+    "audit_findings_partial": [
+      "A09",
+      "A11"
+    ]
+  },
+  "scope": "Local, synthétique ; aucune qualification d’un modèle réel, d’un compte connecté ou d’une release Odoo client.",
+  "ci": "Le contrôle du commit et son URL sont consignés dans la publication GitHub ; ce fichier décrit la recette locale."
+}

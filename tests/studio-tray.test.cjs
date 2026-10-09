@@ -7,7 +7,7 @@ test('tray distinguishes human wait, result review and running; menu opens exact
   let destination;
   const items = menuItems([run], value => { destination = value; }, () => {}, () => {});
   const item = items.find(i => i.label?.includes('R2026')); assert.match(item.label, /Simulation/); item.click();
-  assert.deepEqual(destination, { route: 'run', run: 'r1', project: 'p1' });
+  assert.deepEqual(destination, { route: 'run', run: 'r1', project: 'p1', node:'a' });
   assert.match(menuItems([run], () => {}, () => {}, () => {}, false)[1].label, /inconnue/);
 });
 test('tray icon is visible and changes when attention is needed', () => {

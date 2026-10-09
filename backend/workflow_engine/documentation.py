@@ -24,18 +24,26 @@ def markdown(run):
     results = False
     for node in graph["nodes"]:
         state = run["nodes"][node["id"]]
-        if "summary" not in state.get("result", {}):
+        if not state.get("result") and not state.get("inputs"):
             continue
         results = True
-        lines += [f"### {node['title']}", "", state["result"]["summary"], "", f"État : **{LABELS[state['status']]}**. Tentative {state['attempt']}.", ""]
-        if state["result"].get("patch"):
+        lines += [f"### {node['title']}", "", state.get("result", {}).get("summary", "Données reçues pour cette étape."), "", f"État : **{LABELS[state['status']]}**. Tentative {state['attempt']}.", ""]
+        for label, values in (("Entrées reçues", state.get("inputs", {})), ("Résultat", state.get("result", {}).get("outputs", {}))):
+            if values:
+                lines += ["#### " + label, ""]
+                for key, value in values.items():
+                    lines += ["**" + key + "**", ""]
+                    text = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, indent=2)
+                    fence = "`" * max(3, max((len(m.group()) for m in re.finditer(r"`+", text)), default=0) + 1)
+                    lines += [fence + "text", text, fence, ""]
+        if state.get("result", {}).get("patch"):
             lines += [f"[Examiner les modifications de code](.suivi/preuves/{state['result']['patch']['sha256']})", "",
                       "Code appliqué au dépôt local après confirmation." if state.get("applied_candidate") else "Proposition isolée ; code non appliqué au dépôt.", ""]
         if state.get("reused_from"):
             lines += [f"Preuves réutilisées depuis `{state['reused_from']['run']}` ; aucun nouveau test exécuté pour ce bloc.", ""]
-        if state["result"].get("receipt"):
+        if state.get("result", {}).get("receipt"):
             lines += ["Accusé de réception externe : " + str(state["result"]["receipt"].get("id", "")), ""]
-        for proof in state["result"].get("evidence", []):
+        for proof in state.get("result", {}).get("evidence", []):
             lines += [f"[Consulter la preuve](.suivi/preuves/{proof['sha256']})", ""]
         if state.get("receipt"):
             lines += ["Validation : " + state["receipt"]["note"], ""]
@@ -78,12 +86,16 @@ def export_snapshot(engine, run_id, root, collection, release_id):
     require((root / collection).resolve().is_relative_to(root), "Destination hors projet")
     evidence = {}
     for state in run["nodes"].values():
-        for proof in state.get("result", {}).get("evidence", []):
-            evidence[proof["sha256"]] = engine.evidence(proof)
+        for attempt in [state, *state.get("history", [])]:
+            for proof in attempt.get("result", {}).get("evidence", []):
+                evidence[proof["sha256"]] = engine.evidence(proof)
     tracking = folder / ".suivi"
     tracking.mkdir(parents=True)
     (tracking / ("release.json" if collection == "release" else "execution.json")).write_text(json.dumps(run, indent=2, ensure_ascii=False) + "\n")
-    (tracking / "events.json").write_text(json.dumps(engine.events(run_id), indent=2, ensure_ascii=False) + "\n")
+    events = []
+    while batch := engine.events(run_id, events[-1]["seq"] if events else 0):
+        events.extend(batch)
+    (tracking / "events.json").write_text(json.dumps(events, indent=2, ensure_ascii=False) + "\n")
     (tracking / "workflow.json").write_text(json.dumps(run["original"], indent=2, ensure_ascii=False) + "\n")
     if evidence:
         (tracking / "preuves").mkdir()

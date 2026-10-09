@@ -16,6 +16,7 @@ import struct
 import sys
 import termios
 import time
+import tempfile
 import uuid
 
 MAX_BUFFER = 2 * 1024 * 1024
@@ -47,6 +48,22 @@ class Terminal:
         shell = os.environ.get('SHELL', '/bin/bash')
         if not os.path.isfile(shell) or not os.access(shell, os.X_OK):
             shell = '/bin/bash'
+        self.at_prompt = False
+        self.prompt_generation = 0
+        self.resuming = False
+        self.control_buffer = b''
+        self.prompt_prefix = ('\x1b]777;tricorder-' + uuid.uuid4().hex + ';').encode()
+        self.shell_init = None
+        if request.get('cleanShell') or Path(shell).name == 'bash':
+            # Bash PS0 runs before every command, including read and compound
+            # commands. PROMPT_COMMAND marks only the primary prompt, not PS2.
+            with tempfile.NamedTemporaryFile(mode='w', prefix='tricorder-shell-', delete=False) as startup:
+                self.shell_init = startup.name
+                if not request.get('cleanShell'):
+                    startup.write('[ ! -f ~/.bashrc ] || source ~/.bashrc\n')
+                marker = self.prompt_prefix.decode().replace('\x1b', '\\033')
+                startup.write("PS0=$'" + marker + "busy\\007'${PS0-}\n")
+                startup.write("PROMPT_COMMAND+=(\"printf '" + marker + "prompt\\007'\")\n")
         self.pid, self.fd = pty.fork()
         if self.pid == 0:
             try:
@@ -61,7 +78,8 @@ class Terminal:
                     env.pop(key, None)
                 if request.get('cleanShell'):
                     env['HISTFILE'] = '/dev/null'
-                    os.execve('/bin/bash', ['/bin/bash', '--noprofile', '--norc', '-i'], env)
+                if self.shell_init:
+                    os.execve('/bin/bash', ['/bin/bash', '--noprofile', '--rcfile', self.shell_init, '-i'], env)
                 os.execve(shell, [shell, '-i'], env)
             except Exception:
                 os._exit(127)
@@ -84,6 +102,7 @@ class Terminal:
                 self.finish()
                 return
             self.last_output = time.time()
+            data = self.prompt_output(data)
             self.buffer.extend(data)
             if len(self.buffer) > MAX_BUFFER:
                 del self.buffer[:-MAX_BUFFER]
@@ -94,10 +113,38 @@ class Terminal:
         except OSError:
             self.finish()
 
+    def prompt_output(self, data):
+        """Strip private shell markers, including markers split across PTY reads."""
+        pending = self.control_buffer + data
+        output = bytearray()
+        while pending:
+            start = pending.find(self.prompt_prefix)
+            if start < 0:
+                keep = next((n for n in range(min(len(pending), len(self.prompt_prefix)-1), 0, -1)
+                             if pending.endswith(self.prompt_prefix[:n])), 0)
+                output.extend(pending[:-keep] if keep else pending)
+                pending = pending[-keep:] if keep else b''
+                break
+            output.extend(pending[:start])
+            pending = pending[start:]
+            end = pending.find(b'\x07', len(self.prompt_prefix))
+            if end < 0:
+                break
+            marker = pending[len(self.prompt_prefix):end]
+            self.at_prompt = marker == b'prompt'
+            if self.at_prompt:
+                self.prompt_generation += 1
+            pending = pending[end+1:]
+        self.control_buffer = pending
+        return bytes(output)
+
     def finish(self):
         if self.closed:
             return
         self.closed = True
+        self.at_prompt = False
+        if self.shell_init:
+            Path(self.shell_init).unlink(missing_ok=True)
         loop = asyncio.get_running_loop()
         loop.remove_reader(self.fd)
         if self.writing:
@@ -122,7 +169,32 @@ class Terminal:
                 pass
         self.finish()
 
-    async def write(self, value):
+    async def resume_command(self, value):
+        if self.resuming or not self.metadata().get('idleShell') or self.pending:
+            raise ValueError('Prompt principal non vérifié ; terminez le programme ou la saisie multiligne dans le terminal avant de reprendre')
+        self.resuming = True
+        generation = self.prompt_generation
+        try:
+            # Cancel the entire Readline edit, including text right of the cursor.
+            # Never infer successful cancellation from the keystroke itself.
+            await self.write('\x03', internal=True)
+            async def fresh_prompt():
+                while not self.closed:
+                    if self.prompt_generation > generation and self.metadata().get('idleShell') and not self.pending:
+                        return
+                    await asyncio.sleep(.01)
+                raise ValueError('Le terminal s’est arrêté avant la reprise')
+            try:
+                await asyncio.wait_for(fresh_prompt(), 2)
+            except asyncio.TimeoutError:
+                raise ValueError('Nouveau prompt non confirmé après annulation de la saisie ; aucune commande de reprise envoyée') from None
+            await self.write(value, internal=True)
+        finally:
+            self.resuming = False
+
+    async def write(self, value, *, internal=False):
+        if self.resuming and not internal:
+            raise ValueError('Reprise en cours ; attendez le nouveau prompt avant de saisir')
         if self.closed:
             raise ValueError('Session terminée')
         data = value.encode('utf-8')
@@ -130,6 +202,8 @@ class Terminal:
             raise ValueError('Collage trop volumineux')
         if len(self.pending) + len(data) > MAX_PENDING_INPUT:
             raise ValueError('Le programme de ce terminal ne lit plus sa saisie : texte refusé')
+        if any(char in data for char in (b'\r', b'\n', b'\x03', b'\x04', b'\x0f')):
+            self.at_prompt = False
         self.pending.extend(data)
         self.flush()
 
@@ -166,7 +240,7 @@ class Terminal:
                 'workingDirectory': self.working_directory,
                 'release': self.release, 'task': self.task, 'createdAt': self.created,
                 'lastOutputAt': self.last_output, 'pid': self.pid, 'program': program,
-                'provider': provider, 'alive': not self.closed, 'exitCode': self.exit_code,
+                'provider': provider, 'foreground': foreground, 'promptVerified': bool(self.shell_init), 'idleShell': self.at_prompt and foreground == self.pid and program == 'bash', 'alive': not self.closed, 'exitCode': self.exit_code,
                 'activity': 'process' if not self.closed else 'exited'}
 
 
@@ -203,14 +277,16 @@ class Broker:
             self.emit({'event': 'sessions'})
             return terminal.metadata()
         if action == 'ping':
-            return {'protocol': 1, 'pid': os.getpid(), 'capabilities': ['working-directory']}
+            return {'protocol': 1, 'pid': os.getpid(), 'capabilities': ['working-directory', 'safe-launch', 'verified-prompt']}
         terminal = self.sessions.get(request.get('session'))
         if terminal is None:
             raise ValueError('Session inconnue')
         if action == 'attach':
             self.subscriptions[writer].add(terminal.id)
             return {'session': terminal.metadata(), 'data': base64.b64encode(terminal.buffer).decode('ascii')}
-        if action == 'write':
+        if action == 'write-if-idle':
+            await terminal.resume_command(request['data'])
+        elif action == 'write':
             await terminal.write(request['data'])
         elif action == 'resize':
             terminal.resize(request['cols'], request['rows'])

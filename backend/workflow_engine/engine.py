@@ -109,15 +109,18 @@ class Engine:
         require(graph.get("id") == workflow_id, "L'identifiant du fichier ne correspond pas au workflow ouvert")
         return self.save(project_id, graph, expected_revision, from_disk=True)
 
-    def save(self, project_id, graph, expected_revision=0, *, from_disk=False):
-        validate(graph)
+    def save(self, project_id, graph, expected_revision=0, *, from_disk=False, expected_disk=None):
         graph = copy.deepcopy(graph)
+        graph.pop("_project", None)
+        validate(graph)
         with self.store.transaction() as db:
             self.project(project_id, db)
             row = db.execute("SELECT MAX(revision) AS revision FROM workflows WHERE project=? AND id=?", (project_id, graph["id"])).fetchone()
             current = row["revision"] or 0
             require(current == expected_revision, "Conflit : une autre révision a été enregistrée. Rechargez avant d'appliquer vos changements.")
             target = self.workflow_path(project_id, graph["id"], db)
+            if expected_disk is not None:
+                require(target.is_file() and digest(target.read_text()) == expected_disk, "Le fichier a encore changé : comparer de nouveau")
             if target.exists() and not from_disk:
                 previous = self.store.body(db.execute("SELECT body FROM workflows WHERE project=? AND id=? AND revision=?", (project_id, graph["id"], current)).fetchone())
                 require(previous is not None and json.loads(target.read_text()) == previous, "Le fichier a été modifié depuis le terminal. Recharger et valider avant d'enregistrer.")
@@ -236,19 +239,17 @@ class Engine:
         with self.store.connect() as db:
             return [self.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.project')=? ORDER BY rowid DESC LIMIT 500", (project_id,))]
 
-    def activity(self):
+    def activity(self, offset=0):
+        from .projections import run_page, activity_counts
+        page = run_page(self, offset=offset, limit=25)
         with self.store.connect() as db:
-            projects = {p["id"]: p for row in db.execute("SELECT body FROM projects") if (p := self.store.body(row))}
-            runs = [self.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.status') IN ('active','paused') OR rowid IN (SELECT rowid FROM runs ORDER BY rowid DESC LIMIT 200) ORDER BY rowid DESC")]
+            titles = {p["id"]: p["title"] for row in db.execute("SELECT body FROM projects") if (p := self.store.body(row))}
             total = db.execute("SELECT COUNT(DISTINCT project || ':' || id) FROM workflows").fetchone()[0]
-        return {"runs": [{**{k: run[k] for k in ("id", "project", "status", "created", "updated", "simulation")}, "definition": {"title": run["definition"]["title"]},
-                          "request": str(run.get("parameters", {}).get("request", ""))[:240], "completion_outcome": run.get("completion_outcome"),
-                          "nodes": {nid: {"status": n["status"]} for nid, n in run["nodes"].items()},
-                          "project_title": projects.get(run["project"], {}).get("title", run["project"])} for run in runs], "workflow_count": total}
+        return {**page, "runs": [{**run, "project_title": titles.get(run["project"], run["project"])} for run in page["items"]], "counts": activity_counts(self), "workflow_count": total}
 
-    def events(self, run_id, after=0):
+    def events(self, run_id, after=0, limit=1000):
         with self.store.connect() as db:
-            return [{"seq": row["seq"], **self.store.body(row)} for row in db.execute("SELECT seq, body FROM events WHERE run=? AND seq>? ORDER BY seq LIMIT 1000", (run_id, after))]
+            return [{"seq": row["seq"], **self.store.body(row)} for row in db.execute("SELECT seq, body FROM events WHERE run=? AND seq>? ORDER BY seq LIMIT ?", (run_id, after, limit))]
 
     def _event(self, db, run, kind, node=None, **details):
         event = {"at": time.time(), "type": kind, "node": node, **details}
@@ -279,16 +280,27 @@ class Engine:
                     state.update(status="skipped")
                 else:
                     state["inputs"] = {}
+                    state["input_sources"] = {}
                     for edge in active:
                         outputs = run["nodes"][edge["from"]].get("result", {}).get("outputs", {})
                         for src, dst in edge.get("mapping", {}).items():
                             require(src in outputs, f"{node['id']} : résultat source {src} absent")
+                            require(dst not in state["inputs"] or state["inputs"][dst] == outputs[src], f"{node['id']} : plusieurs valeurs incompatibles pour {dst}")
                             state["inputs"][dst] = outputs[src]
+                            state["input_sources"][dst] = {"node": edge["from"], "port": src, "edge": edge["id"]}
                     state.update(status="ready")
                     if node["kind"] == "join":
                         outputs = {k: state["inputs"][k] for k in node.get("outputs", {}) if k in state["inputs"]}
-                        validate_outputs(node, {"outputs": outputs})
-                        state.update(status="accepted", outcome="done", result={"outputs": outputs})
+                        outcome = "done"
+                        if node.get("component_exit"):
+                            choices = {run["nodes"][e["from"]].get("outcome") for e in active}
+                            if "reject" in choices:
+                                outcome = "reject"
+                            elif len(choices) == 1 and next(iter(choices)) in node.get("options", []):
+                                outcome = next(iter(choices))
+                        if outcome != "reject":
+                            validate_outputs(node, {"outputs": outputs})
+                        state.update(status="accepted", outcome=outcome, result={"outputs": outputs})
                     elif node["kind"] == "condition":
                         outcome = state["inputs"].get(node["parameter"], node.get("parameters", run["parameters"]).get(node["parameter"]))
                         if outcome in node.get("options", []):
@@ -301,7 +313,9 @@ class Engine:
                         from .notifications import queue_question
                         queue_question(self, db, run, node["id"], question)
                     elif node["kind"] in {"decision", "review"}:
-                        state.update(status="waiting", attempt=state["attempt"] + 1, proposal=digest({"run": run["id"], "node": node, "attempt": state["attempt"] + 1, "contract": run["contract"]}), nonce=new_id("d"))
+                        from .operations import resolve
+                        state["operation"] = resolve(node, state["inputs"])
+                        state.update(status="waiting", attempt=state["attempt"] + 1, proposal=digest({"run": run["id"], "node": node, "inputs": state["inputs"], "operation": state["operation"], "attempt": state["attempt"] + 1, "contract": run["contract"]}), nonce=new_id("d"))
                 changed = True
                 self._event(db, run, state["status"], node["id"])
         if all(s["status"] in TERMINAL for s in run["nodes"].values()):
@@ -317,7 +331,7 @@ class Engine:
                             db.execute("INSERT OR IGNORE INTO consumed_messages VALUES (?, ?)", (key, time.time()))
             self._event(db, run, "completed")
 
-    def claim(self, run_id, node_id):
+    def claim(self, run_id, node_id, *, executor="managed", owner_pid=None):
         with self.store.transaction() as db:
             run = self.run(run_id, db)
             require(run["status"] == "active", "Exécution suspendue ou terminée")
@@ -332,8 +346,11 @@ class Engine:
             issues = [] if run["simulation"] else policy_issues(self.project(run["project"], db), {**run["definition"], "parameters": {**run["parameters"], **context}, "nodes": [node]})
             require(not issues, " · ".join(i["message"] for i in issues))
             if node["kind"] == "external":
+                from .operations import resolve
+                operation = resolve(node, state.get("inputs", {}))
+                state["operation"] = operation
                 approval = run["nodes"][node["approval"]].get("decision", {})
-                require(approval.get("outcome") == "approve" and approval.get("operation") == digest(node["operation"]), "Autorisation invalide pour cette opération")
+                require(approval.get("outcome") == "approve" and approval.get("operation") == digest(operation), "Autorisation invalide pour cette opération")
                 require(not approval.get("consumed"), "Autorisation déjà consommée")
                 approval["consumed"] = node_id
             token = new_id("t")
@@ -345,6 +362,13 @@ class Engine:
                 from .reuse import source_fingerprint
                 state["source_fingerprint"] = source_fingerprint(self.project(run["project"], db))
             resumed = state.pop("resume_question", False)
+            state["ownership"] = executor
+            state["processes"] = []
+            if owner_pid:
+                from .recovery import identity
+                owner = identity(owner_pid)
+                if owner:
+                    state["processes"].append(owner)
             state.update(status="running", attempt=state["attempt"] + (0 if resumed else 1), token=token, started=time.time(), heartbeat=time.time())
             self._event(db, run, "running", node_id, attempt=state["attempt"])
             self._save(db, run)
@@ -358,6 +382,10 @@ class Engine:
             state["heartbeat"] = time.time()
             if pid:
                 state["pid"] = pid
+                from .recovery import identity
+                process = identity(pid)
+                if process and process not in state.setdefault("processes", []):
+                    state["processes"].append(process)
             self._save(db, run)
 
     def execution_context(self, run_id, node_id, context):
@@ -463,7 +491,7 @@ class Engine:
             require(state["status"] == "waiting" and state["nonce"] == nonce and state["proposal"] == proposal, "Décision périmée ou déjà appliquée")
             node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
             require(outcome in node.get("options", ["approve", "reject"]), "Choix inconnu")
-            state.update(status="accepted", outcome=outcome, decision={"at": time.time(), "actor": "local-user", "outcome": outcome, "proposal": proposal, "operation": digest(node.get("operation")), "note": note})
+            state.update(status="accepted", outcome=outcome, decision={"at": time.time(), "actor": "local-user", "outcome": outcome, "proposal": proposal, "operation": digest(state.get("operation", node.get("operation"))), "note": note})
             if node.get("outputs"):
                 state["result"] = {"outputs": {key: state.get("inputs", {}).get(key) for key in node["outputs"]}}
                 validate_result(run["definition"], node, state["result"], outcome)
@@ -503,7 +531,7 @@ class Engine:
             state = run["nodes"][node_id]
             node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
             require(state["status"] == "returned", "Seul un résultat remis peut être repris ; réconcilier d'abord une opération incertaine")
-            require(node["kind"] != "external", "Opération externe : nouvelle proposition et nouvel accord requis")
+            require(node["kind"] != "external" and not state.get("effect_uncertain"), "Opération externe : nouvelle proposition et nouvel accord requis")
             require(state["attempt"] < node.get("max_attempts", 1), "Limite de reprises atteinte")
             history = state.get("history", []) + [{k: v for k, v in state.items() if k != "history"}]
             run["nodes"][node_id] = {"status": "ready", "attempt": state["attempt"], "history": history, "reason": note, "inputs": state.get("inputs", {})}

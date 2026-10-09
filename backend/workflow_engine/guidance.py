@@ -106,10 +106,21 @@ distante, l'effet reste incertain ; une absence seule n'autorise pas une reprise
 
 Pour modifier du code, un agent utilise `execution_mode:"edit"` et déclare
 `outputs:{candidate:"object"}`. Le moteur capture le diff dans une copie isolée.
-Relier cette sortie à `inputs:{candidate:"object"}` d'un bloc Commande avec
-`mapping:{candidate:"candidate"}` : /project désigne alors la copie modifiée.
-L'application du code au dépôt exige validation humaine, réception des tests
-liés et absence de conflit sur les sources. Aucun commit ou push implicite.
+Relier cette sortie à `inputs:{candidate:"object"}` d'un bloc de contrôle avec
+`mapping:{candidate:"candidate"}` et déclarer `candidate_check:true` (case
+« Contrôle QA du candidat » dans l'inspecteur). Un nom ou un profil QA ne suffit
+pas ; document et join ne valident jamais le code. Une Commande doit réussir
+avec code 0 et preuves ; /project désigne alors la copie modifiée. Un bloc
+agent/task déclare `outputs:{verdict:"string"}`, matérialise le candidat via
+prepare-candidate et remet `verdict:"pass"` ou `"fail"` avec preuves réelles.
+L'application du code au dépôt exige validation humaine, réception d'au moins
+un contrôle explicite du candidat exact, décisions pertinentes approuvées et
+absence de conflit sur les sources. Un verdict absent ne vaut pas pass. Les
+références `application_requires` ajoutent des contrôles obligatoires ; une
+branche écartée ne les annule pas. Un ancien run sans ce contrat doit rester
+intact : corriger le modèle puis lancer une nouvelle exécution. Une route
+Studio/Online sans candidat de code ne déclare pas ce contrat d'application.
+Aucun commit ou push implicite.
 
 Un bloc sélectionne une capacité. `read` peut alimenter les entrées `tool_data`
 d'une Tâche IA (avec ou sans profil) ; notify exige un bloc Communication avec
@@ -142,6 +153,18 @@ Les outils restent indépendants du fournisseur et du profil d'agent.
 
 ## Points humains et preuves
 
+Pour utiliser un workflow, le lancer dans le terminal depuis Tricorder : la
+conversation reçoit un pont vers son moteur (demandes, sorties, questions et
+preuves). On peut demander à cet agent « va chercher cet email et prépare une
+release ». Il utilise les outils réellement connectés à sa CLI ou lit le .eml
+local, conserve l’original et les pièces, prépare le dossier puis enregistre
+les besoins avec des clés stables et leurs références de sources. L’utilisateur
+n’a pas à recopier le mail dans des formulaires. Une connexion absente ou un
+message ambigu exige une question ; ne jamais inventer une recherche effectuée.
+Préparation locale et publication restent distinctes. Avec le pack Odoo,
+l’import source et l’initialisation du plan préparent les documents ; ne pas
+démarrer en plus un moteur de flows historique pour suivre le même travail.
+
 Ne jamais modifier SQLite, les états JSON d'exécution, une décision humaine ou
 une preuve pour faire avancer un workflow. Le moteur est leur seul écrivain.
 Une modification de modèle ne modifie pas les versions déjà exécutées.
@@ -153,7 +176,7 @@ release, conserver la convention existante du projet ; l'export `release/` reste
 disponible. Un meeting, un support ou une analyse n'exige pas de release.
 """
 
-VERSION = 5
+VERSION = 7
 
 
 def managed_text(body=GUIDANCE, version=VERSION):

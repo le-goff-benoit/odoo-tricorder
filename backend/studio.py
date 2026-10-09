@@ -34,6 +34,19 @@ def provider_defaults():
 
 
 def request(engine, payload, *, human=False):
+    from workflow_engine.projections import run_detail
+    result = _request(engine, payload, human=human)
+    if isinstance(result, dict) and "contract" in result and "nodes" in result:
+        return run_detail(engine, result)
+    return result
+
+
+def schedule_summaries(engine):
+    return [{k:v for k,v in s.items() if k not in {"definition", "library", "transports"}} for s in Schedules(engine).list()]
+
+
+def _request(engine, payload, *, human=False):
+    from workflow_engine.projections import run_page, run_detail, summary, workflow_page, proof_page, payload as project_payload
     action = payload.get("action")
     if action == "project.configure-catalog":
         from workflow_engine.setup import configure
@@ -48,9 +61,9 @@ def request(engine, payload, *, human=False):
             model = model or provider_defaults().get(payload["provider"])
             return conversations.open(payload["project"], payload["graph"], payload["provider"], payload.get("projects"), library, model, notifications_authorized=human and payload.get("authorize_notifications") is True, initial_request=payload.get("request"))
         if action == "conversation.list":
-            return conversations.list(payload.get("project"))
+            return conversations.list(payload.get("project"), compact=True)
         if action == "conversation.get":
-            return conversations.snapshot(payload["conversation"])
+            return conversations.snapshot(payload["conversation"], offset=payload.get("offset", 0), limit=payload.get("limit", 25), query=payload.get("query", ""))
         if action == "conversation.add":
             return conversations.add(payload["conversation"], payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"))
         if action == "conversation.answer":
@@ -65,7 +78,7 @@ def request(engine, payload, *, human=False):
             return {**preview, "digest": digest(preview)}
         return qualify(engine, project, payload["plugin"], payload["digest"], human=human)
     if action in {"candidate.preview", "candidate.apply"}:
-        from connectors.candidates import load, apply
+        from connectors.candidates import load, apply, require_checks
         run = engine.run(payload["run"])
         result = run["nodes"][payload["node"]].get("result", {})
         reference = result.get("outputs", {}).get("candidate")
@@ -73,7 +86,13 @@ def request(engine, payload, *, human=False):
             raise ContractError("Aucune proposition de code disponible")
         if action == "candidate.preview":
             candidate = load(engine, reference, run["project"])
-            return {"candidate": reference["sha256"], "changes": [c["path"] for c in candidate["changes"]], "diff": engine.evidence(result["patch"]).decode()}
+            reason = None
+            try:
+                if run["nodes"][payload["node"]]["status"] != "accepted": raise ContractError("Validez le résultat avant application.")
+                require_checks(run, payload["node"], reference, engine)
+            except ContractError as error:
+                reason = str(error)
+            return {"candidate": reference["sha256"], "changes": [c["path"] for c in candidate["changes"]], "diff": engine.evidence(result["patch"]).decode(), "can_apply": reason is None, "reason": reason}
         return apply(engine, payload["run"], payload["node"], payload["candidate"], human=human)
     if action == "run.reconcile-effect":
         from connectors.tool_runtime import reconcile_effect
@@ -99,25 +118,29 @@ def request(engine, payload, *, human=False):
             engine.library_project()
         return import_definition(engine, payload["project"], payload["bundle"])
     if action == "overview.get":
-        return {"activity": engine.activity(), "schedules": Schedules(engine).list()}
+        return {"activity": engine.activity(payload.get("offset", 0)), "schedules": schedule_summaries(engine)}
     if action == "runtime.tick":
         Schedules(engine).tick()
         projects = {p["id"]: p for p in engine.projects()}
         projects["library"] = {"title": "Bibliothèque de modèles"}
         projects["workspace"] = {"title": "Global"}
         result = []
+        offset = payload.get("offset", 0)
+        if type(offset) is not int or offset < 0: raise ContractError("Page d’activité invalide")
         with engine.store.connect() as db:
-            runs = [engine.store.body(row) for row in db.execute("SELECT body FROM runs ORDER BY rowid DESC")]
+            total = db.execute("SELECT COUNT(*) FROM runs WHERE json_extract(body, '$.status') IN ('active','paused')").fetchone()[0]
+            runs = [engine.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.status') IN ('active','paused') ORDER BY rowid DESC LIMIT 50 OFFSET ?", (offset,))]
         for run in runs:
             if run["status"] not in {"active", "paused"}:
                 continue
             run = dispatch(engine, run["id"])
-            result.append({**run, "project_title": projects[run["project"]]["title"]})
-        return {"runs": result, "schedules": Schedules(engine).list()}
+            result.append({**summary(run), "project_title": projects.get(run["project"], {}).get("title", run["project"])})
+        from workflow_engine.projections import activity_counts
+        return {"runs": result, "counts": activity_counts(engine), "total": total, "next": offset + len(runs) if offset + len(runs) < total else 0, "schedules": [{k:v for k,v in s.items() if k not in {"definition", "library", "transports"}} for s in Schedules(engine).list()]}
     if action == "bootstrap":
         from workflow_engine.guidance import sync
         setup = sync(engine)
-        return {"activity": engine.activity(), "setup": setup, "providerDefaults": provider_defaults(), "projects": engine.projects(), "templates": templates() + engine.workflows("library"), "capabilities": capabilities(engine.project(payload["project"]) if payload.get("project") else None, engine), "schedules": Schedules(engine).list()}
+        return {"activity": engine.activity(), "setup": setup, "providerDefaults": provider_defaults(), "projects": [{k:v for k,v in p.items() if k != "packs"} for p in engine.projects()], "templates": templates() + workflow_page(engine, "library")["items"], "template_page": workflow_page(engine, "library"), "capabilities": capabilities(engine.project(payload["project"]) if payload.get("project") else None, engine), "schedules": schedule_summaries(engine)}
     if action == "design.workspace":
         from workflow_engine.guidance import prepare
         return prepare(engine.project(payload["project"]))
@@ -126,7 +149,7 @@ def request(engine, payload, *, human=False):
     if action == "workspace.get":
         context = engine.workspace_context()
         from workflow_engine.conversations import Conversations
-        return {"project": context, "workflows": engine.workflows("workspace"), "runs": engine.runs("workspace"), "capabilities": capabilities(context, engine), "conversations": Conversations(engine).list("workspace")}
+        return {**_request(engine, {"action": "project.get", "project": "workspace"}), "conversations": Conversations(engine).list("workspace", compact=True)}
     if action == "run.answer":
         from workflow_engine.conversations import answer
         return answer(engine, payload["run"], payload["node"], payload["question"], payload["text"])
@@ -135,7 +158,7 @@ def request(engine, payload, *, human=False):
     if action == "pack.install":
         return install(engine, payload["project"], payload["path"], payload["digest"])
     if action == "schedule.list":
-        return Schedules(engine).list()
+        return schedule_summaries(engine)
     if action == "schedule.create":
         library = {g["id"]: g for g in templates() + engine.workflows("library")}
         graph = expand(payload["graph"], library)
@@ -160,7 +183,33 @@ def request(engine, payload, *, human=False):
     if action == "project.create":
         return engine.create_project(payload["title"], payload.get("path"))
     if action == "project.get":
-        return {"project": engine.project(payload["project"]), "workflows": engine.workflows(payload["project"]), "runs": engine.runs(payload["project"]), "capabilities": capabilities(engine.project(payload["project"]), engine)}
+        runs = run_page(engine, payload["project"])
+        workflows = workflow_page(engine, payload["project"])
+        return {"project": engine.project(payload["project"]), "workflows": workflows["items"], "workflow_page": workflows, "runs": runs["items"], "run_page": runs, "capabilities": capabilities(engine.project(payload["project"]), engine)}
+    if action == "run.list":
+        return run_page(engine, payload.get("project"), **{k: payload[k] for k in ("offset", "limit", "query", "status", "simulation", "archived", "workflow") if k in payload})
+    if action == "workflow.list":
+        return workflow_page(engine, payload["project"], payload.get("offset", 0), archived=payload.get("archived", False))
+    if action == "workflow.get":
+        return next(g for g in engine.workflows(payload["project"]) if g["id"] == payload["workflow"])
+    if action == "run.proof":
+        return proof_page(engine, payload["run"], payload["sha256"], payload.get("offset", 0))
+    if action == "run.recovery":
+        from workflow_engine.recovery import diagnostic
+        return diagnostic(engine, engine.run(payload["run"]), payload["node"])
+    if action == "run.finish-interrupted":
+        from workflow_engine.recovery import finish
+        return finish(engine, payload["run"], payload["node"], human=human)
+    if action == "entity.archive":
+        from workflow_engine.lifecycle import archive
+        return archive(engine, payload["kind"], payload["id"], payload["archived"], project=payload.get("project"), human=human)
+    if action in {"workflow.conflict", "workflow.resolve"}:
+        from workflow_engine.conflicts import inspect, resolve
+        if action == "workflow.conflict":
+            return inspect(engine, payload["project"], payload["graph"], payload["revision"])
+        require_human = human
+        if not require_human: raise ContractError("Résolution réservée à l’interface humaine")
+        return resolve(engine, payload["project"], payload["graph"], payload["revision"], payload["digest"], payload["strategy"], payload.get("choices"))
     if action == "workflow.repository":
         return engine.repository_workflows(payload["project"])
     if action == "workflow.import-repository":
@@ -172,10 +221,17 @@ def request(engine, payload, *, human=False):
     if action in {"workflow.validate", "run.start"}:
         library = {g["id"]: g for g in templates() + engine.workflows("library")}
         graph = expand(payload["graph"], library)
+        if payload.get("mode") == "native":
+            provider = payload.get("provider", "codex")
+            if graph.get("defaults", {}).get("provider") != provider:
+                graph.setdefault("defaults", {}).pop("model", None)
+            graph.setdefault("defaults", {})["provider"] = provider
+            if payload.get("model"):
+                graph["defaults"]["model"] = payload["model"]
         if payload.get("project") and not payload.get("simulation", False):
             graph = resolve_profiles(engine.project(payload["project"]), graph)
         defaults = engine.project(payload["project"])["defaults"] if payload.get("project") else {}
-        issues = preflight(graph, payload.get("simulation", False), defaults, engine.project(payload["project"]) if payload.get("project") else None, engine)
+        issues = preflight(graph, payload.get("simulation", False), defaults, engine.project(payload["project"]) if payload.get("project") else None, engine, mode=payload.get("mode", "automatic"), provider=payload.get("provider"), model=payload.get("model"))
         if payload.get("project") and not payload.get("simulation", False):
             issues += policy_issues(engine.project(payload["project"]), graph)
         if action == "workflow.validate":
@@ -187,7 +243,9 @@ def request(engine, payload, *, human=False):
         return dispatch(engine, run["id"])
     if action == "run.get":
         run = dispatch(engine, payload["run"])
-        return {"run": run, "events": engine.events(run["id"], payload.get("after", 0))}
+        events = engine.events(run["id"], payload.get("after", 0), limit=101)
+        return {"run": run_detail(engine, run), "events": [{**event, "answer": project_payload(engine, event["answer"])} if "answer" in event else event for event in events[:100]],
+                "events_next": events[99]["seq"] if len(events) > 100 else None}
     if action == "run.control":
         return engine.control(payload["run"], payload["control"])
     if action == "run.accept":
@@ -199,7 +257,11 @@ def request(engine, payload, *, human=False):
     if action == "run.reconcile":
         return reconcile(engine, payload["run"], payload["node"])
     if action == "run.document":
-        return markdown(engine.run(payload["run"]))
+        text = markdown(engine.run(payload["run"]))
+        if not payload.get("paginated"): return text
+        offset = payload.get("offset", 0)
+        if type(offset) is not int or offset < 0: raise ContractError("Page de rapport invalide")
+        return {"text": text[offset:offset+64000], "total": len(text), "next": offset+64000 if offset+64000 < len(text) else None}
     if action == "release.export":
         return export_release(engine, payload["run"], payload["path"], payload["release"])
     if action == "work.export":

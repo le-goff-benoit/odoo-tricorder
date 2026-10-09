@@ -106,6 +106,9 @@ class ConversationTests(unittest.TestCase):
     def test_native_bridge_cannot_answer_a_human_gate_or_change_provider(self):
         graph = copy.deepcopy(self.graph)
         graph["nodes"][0]["provider"] = "claude"
+        with self.assertRaisesRegex(ContractError, "Modèle IA à définir"):
+            self.service.open(self.a["id"], graph, "codex")
+        graph["nodes"][0]["model"] = "fixture-model"
         conversation = self.service.open(self.a["id"], graph, "codex")
         item = self.service.add(conversation["id"], "Une demande")
         with self.assertRaisesRegex(ContractError, "autre fournisseur"):
@@ -263,10 +266,10 @@ class ConversationTests(unittest.TestCase):
         studio_graph = next(g for g in self.engine.workflows(self.b["id"]) if g["id"] == "odoo-release-conversation")
         self.assertEqual(next(n for n in studio_graph["nodes"] if n["id"] == "work")["profile"], "odoo-studio")
         # Launch/intent is possible before a QA copy exists.
-        conversation = self.service.open(self.a["id"], graph, "codex")
+        conversation = self.service.open(self.a["id"], graph, "codex", model="fixture-model")
         item = self.service.add(conversation["id"], "Clarifier une demande")
         self.assertEqual(self.engine.run(item["run"])["nodes"]["intent"]["status"], "ready")
-        transverse = self.service.open(self.a["id"], graph, "codex", [self.b["id"]])
+        transverse = self.service.open(self.a["id"], graph, "codex", [self.b["id"]], model="fixture-model")
         other = self.service.add(transverse["id"], "Même modèle, autre série", project=self.b["id"])
         self.assertEqual(self.engine.run(other["run"])["parameters"]["series"], "17.0")
         # Policy checks must see effective parameters, even outside a conversation.

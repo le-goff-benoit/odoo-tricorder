@@ -1,0 +1,30 @@
+{
+  "decisionInspectorShowsPlan": false,
+  "decisionInputExists": true,
+  "producerInspectorShowsPlan": false,
+  "reportShowsPlan": false,
+  "reportProofLinksActionable": 0,
+  "saveConflict": "Le fichier a été modifié depuis le terminal. Recharger et valider avant d'enregistrer.",
+  "reloadConflict": "Le graphe contient des changements non enregistrés. Enregistrez-les avant de recharger le fichier.",
+  "closedAgentConversationReturnsSameShell": true,
+  "providerLaunchCountAfterReopen": 1,
+  "shellStillAlive": true,
+  "compactSplitGeometry": {
+    "terminal": {
+      "width": 431,
+      "height": 704
+    },
+    "workflow": {
+      "width": 391,
+      "height": 704
+    },
+    "canvas": {
+      "width": 391,
+      "height": 184
+    },
+    "inspector": {
+      "width": 391,
+      "height": 180
+    }
+  }
+}

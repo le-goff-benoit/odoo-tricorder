@@ -15,7 +15,7 @@ class CandidateTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name);self.engine=Engine(self.root/'state');self.project=self.engine.create_project('Code')
         self.source=Path(self.project['path'])/'calc.py';self.source.write_text('value = 1\n')
-        graph={'schema':1,'id':'code','title':'Code','nodes':[node('edit','Modifier','agent',model='fixture',execution_mode='edit',outputs={'candidate':'object'}),node('test','Tester','command',inputs={'candidate':'object'},argv=['python3','-c','exec(open("/project/calc.py").read()); assert value == 2'],validation='automatic')],'edges':[{**edge('edit','test'),'mapping':{'candidate':'candidate'}}]}
+        graph={'schema':1,'id':'code','title':'Code','nodes':[node('edit','Modifier','agent',model='fixture',execution_mode='edit',outputs={'candidate':'object'}),node('test','Tester','command',inputs={'candidate':'object'},candidate_check=True,argv=['python3','-c','exec(open("/project/calc.py").read()); assert value == 2'],validation='automatic')],'edges':[{**edge('edit','test'),'mapping':{'candidate':'candidate'}}]}
         self.run=self.engine.start(self.project['id'],graph);self.claim=self.engine.claim(self.run['id'],'edit')
         self.prepared=candidates.prepare(self.engine,self.run,self.root/'job')
         (self.prepared['workspace']/'calc.py').write_text('value = 2\n')

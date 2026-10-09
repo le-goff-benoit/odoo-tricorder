@@ -1,5 +1,9 @@
 # Trois parcours avec Odoo Tricorder
 
+> **Parcours historique Odoo.** Cette page décrit les commandes et écrans de compatibilité.
+> Pour l’éditeur générique, les conversations, résultats et reprises, consulter
+> [le guide actuel](WORKFLOW-RUNTIME.md) et le README.
+
 [Revenir au guide d’installation](../README.md)
 
 Ces exemples utilisent des demandes fictives. Saisissez-les dans **Claude Code**

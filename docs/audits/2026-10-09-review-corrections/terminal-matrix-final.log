@@ -1,0 +1,7 @@
+test_resume_requires_primary_prompt_not_read_heredoc_or_foreground (test_terminal_service.TerminalTests) ... ok
+test_reconnect_preserves_pid_and_output (test_terminal_service.TerminalTests) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.647s
+
+OK

@@ -1,11 +1,12 @@
 # Tricorder
 
 **Dessinez vos workflows, pilotez le travail dans le terminal et suivez ses résultats.**
-Préversion publiée : **0.6.0-rc.7**.
+Préversion : **0.6.0-rc.8**.
 
-[Correctif du chargement et du crash EPIPE](release/2026-10-09_chargement/README.md) :
-les historiques de projets volumineux ne sont plus renvoyés au moteur pour leur
-enregistrement. Une requête interrompue produit une erreur récupérable.
+[Fiabilité des workflows et ergonomie](release/2026-10-09_fiabilite-workflows/README.md) :
+résultats lisibles avant décision, demandes suivies séparément, contrôle QA
+explicite et reprise du terminal vérifiée. Deux reviews indépendantes et un
+scénario de préparation de release depuis un email accompagnent cette version.
 
 [Parcours de travail et limites](release/2026-10-08_parcours/README.md) · [Revue ergonomique et captures](release/2026-10-08_design/README.md) · [Revue fonctionnelle](release/2026-10-08_revue/README.md).
 
@@ -14,7 +15,7 @@ le même espace. Les modèles peuvent être réutilisés par projet ou alimenter
 conversation avec plusieurs tâches et plusieurs projets. Les anciens dossiers
 de release restent accessibles sans migration.
 
-![Modèles de workflows](release/2026-10-08_parcours/captures/library-dark.png)
+![Terminal, demandes et bloc actif dans la même fenêtre](release/2026-10-09_fiabilite-workflows/captures/terminal-et-workflow.png)
 
 *Capture sur un espace fictif, sans données client.*
 
@@ -27,6 +28,31 @@ Le séparateur permet de redimensionner terminal et graphe à la souris ou au cl
 Revenir à l’éditeur lui rend toute la largeur sans fermer la session.
 La barre latérale sépare navigation, raccourcis des projets et configuration ;
 les commandes des agents, quotas et mises à jour sont dans **Outils et aide**.
+
+## Fiabilité et reprise — corrections de l’audit
+
+Le [guide de fonctionnement et de reprise](docs/WORKFLOW-RUNTIME.md) détaille les
+corrections livrées : livrables et preuves consultables avant décision,
+historique paginé, fusion des modifications du terminal et de l’éditeur,
+annulation/archivage réversible et reprise explicite de l’agent. Les opérations
+externes reçoivent les données reliées avec un accord sur leur contenu exact ;
+la QA et les décisions du candidat sont vérifiées avant son application.
+Le contrôle QA est une propriété du bloc, indépendante du profil et du
+fournisseur. Un document ou une transmission de données ne tient pas lieu de test.
+
+**Nouvelle demande** réutilise un workflow existant du projet. Pendant une revue,
+**Lire le résultat** donne la place au livrable ; le terminal reste accessible.
+Une tentative interrompue ne libère ses ressources qu’après vérification de ses
+processus. Les anciennes tentatives sans identité et les intégrations non
+qualifiées sont décrites explicitement dans le guide.
+
+Depuis **Exécuter… → Lancer dans le terminal**, on peut demander à l’agent de
+chercher un email et de préparer une release : il utilise ses connexions
+disponibles, conserve les sources et enregistre les demandes dans ce workflow.
+Ce suivi concerne la conversation native liée au workflow ; un shell libre ou
+une ancienne session IA n’y est pas rattaché automatiquement. Le parcours mail
+est testé avec une CLI et une messagerie locales de substitution, sans envoi ni
+déploiement.
 
 ## Dessiner, lancer et converser
 

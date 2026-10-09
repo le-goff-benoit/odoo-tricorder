@@ -9,7 +9,9 @@
 .topbar.project-header { border-bottom: 1px solid var(--line); padding: 10px var(--page-gutter); gap: 12px; }
 .project-identity { flex: 1; }
 #project-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.top-actions { flex-wrap: wrap; gap: 10px; }
+.top-actions { flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+.top-actions .provider-choice select {font-size:var(--font-body);font-weight:400;min-height:36px;}
+.top-actions .theme-switch {min-height:36px;}
 .provider-choice { gap: 3px; font-size: 11px; }
 .terminal-toggle { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
 .terminal-toggle[aria-pressed=true] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }

@@ -1,0 +1,8 @@
+test_new_custom_release_has_applicable_explicit_qa_and_keeps_frozen_definitions (test_workflow_setup.SetupCandidateTests) ... ok
+test_studio_and_online_routes_do_not_invent_a_code_candidate (test_workflow_setup.SetupCandidateTests) ... ok
+test_scoped_guidance_preserves_all_user_instructions (test_workflow_workspace.WorkspaceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.207s
+
+OK

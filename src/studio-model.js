@@ -1,4 +1,5 @@
-export const states = Object.freeze({ waiting_input: 'Réponse attendue', pending: 'Prévu', ready: 'Prêt', running: 'En cours', waiting: 'Décision attendue', returned: 'À valider', accepted: 'Validé', skipped: 'Non applicable', blocked: 'Bloqué' });
+import statusCatalog from '../electron/workflow-states.json' with { type: 'json' };
+export const states = Object.freeze(statusCatalog.labels);
 export const kinds = Object.freeze({ question: 'Question', task: 'Tâche', agent: 'Tâche IA', command: 'Commande', decision: 'Décision humaine', condition: 'Condition', join: 'Jonction', review: 'Relecture', document: 'Document', external: 'Opération externe', subworkflow: 'Sous-workflow', watch: 'Surveillance', communication: 'Communication' });
 export const symbols = Object.freeze({ question: '?', task: '◇', agent: '✦', command: '›_', decision: '?', condition: '⑂', join: '⋈', review: '✓', document: '▤', external: '↗', subworkflow: '⊞', watch: '◷', communication: '↗' });
 
@@ -16,7 +17,7 @@ export function displayGraph(graph, collapsed, run = null) {
     group.members.push(original.id); map.set(original.id, group.id);
     if (run) group.statuses.push(run.nodes[original.id]?.status || 'pending');
   }
-  const priority = ['blocked', 'waiting', 'returned', 'running', 'ready', 'pending', 'accepted', 'skipped'];
+  const priority = statusCatalog.priority;
   for (const group of grouped.values()) group.status = priority.find(s => group.statuses.includes(s)) || 'pending';
   const edges = graph.edges.map(e => ({ ...e, from: map.get(e.from), to: map.get(e.to), originalFrom: e.from })).filter(e => e.from !== e.to);
   return { ...graph, nodes, edges };
@@ -31,13 +32,13 @@ export function effectiveExecution(project, graph, node) {
   return result;
 }
 
-export function withWorkflowAI(graph, { provider, model, effort = 'high' }) {
+export function withWorkflowAI(graph, { provider, model, effort }) {
   if (!['codex', 'claude'].includes(provider) || !model?.trim()) throw new Error('Choisissez un fournisseur et un modèle.');
   const next = structuredClone(graph);
-  next.defaults = { ...next.defaults, provider, model: model.trim(), effort, session: 'delegated' };
+  next.defaults = { ...next.defaults, provider, model: model.trim(), ...(effort === undefined ? {} : {effort}) };
   for (const node of next.nodes) {
     if (node.kind !== 'agent') continue;
-    for (const key of ['provider', 'model', 'effort', 'session']) delete node[key];
+    for (const key of ['provider', 'model', ...(effort === undefined ? [] : ['effort'])]) delete node[key];
   }
   return next;
 }

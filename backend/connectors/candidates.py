@@ -171,6 +171,52 @@ def _recover(engine, journal):
     journal.unlink()
 
 
+def require_checks(run, node_id, reference, engine=None):
+    definition = next(n for n in run['definition']['nodes'] if n['id'] == node_id)
+    require(run.get('completion_outcome') not in {'rejected', 'blocked'}, 'Exécution refusée ou non résolue : application interdite')
+    # Existing graphs acquire conservative downstream gates; an explicit
+    # application_requires contract can add controls outside that path.
+    descendants = set()
+    frontier = [node_id]
+    while frontier:
+        source = frontier.pop()
+        for edge in run['definition']['edges']:
+            if edge['from'] == source and edge['to'] not in descendants:
+                descendants.add(edge['to']); frontier.append(edge['to'])
+    required = set(definition.get('application_requires', []))
+    require(required <= set(run['nodes']), 'Contrôle préalable au candidat inconnu')
+    controls = []
+    qa = []
+    for other in run['definition']['nodes']:
+        tested = run['nodes'][other['id']]
+        explicit = other['id'] in required
+        if tested['status'] == 'skipped' and not explicit:
+            continue
+        decision = other['kind'] in {'decision', 'review'}
+        check = other.get('candidate_check') is True
+        relevant = other['id'] in descendants or tested.get('inputs', {}).get('candidate') == reference
+        if not (explicit or (relevant and (decision or check))):
+            continue
+        require(decision or check, 'Le contrôle obligatoire doit être une QA du candidat ou une décision : ' + other['title'])
+        controls.append(other)
+        require(tested['status'] == 'accepted', 'Les tests liés à ce candidat et décisions doivent être reçus avant application : ' + other['title'])
+        if decision:
+            require(tested.get('decision', {}).get('outcome') == 'approve', 'Décision d’application non approuvée : ' + other['title'])
+        else:
+            result = tested.get('result') or {}
+            verdict = result.get('outputs', {}).get('verdict') if isinstance(result.get('outputs'), dict) else None
+            passed = type(result.get('exit_code')) is int and result['exit_code'] == 0 if other['kind'] == 'command' else verdict == 'pass'
+            require(tested.get('inputs', {}).get('candidate') == reference and result.get('ok') is True
+                    and tested.get('outcome') in {'done', 'pass'} and passed and bool(result.get('evidence')),
+                    'La QA doit vérifier le candidat exact avec verdict pass (ou commande réussie) et preuves : ' + other['title'])
+            qa.append(other)
+    if engine:
+        for control in controls:
+            for proof in run['nodes'][control['id']].get('result', {}).get('evidence', []):
+                engine.evidence(proof)
+    require(qa, 'Aucun contrôle QA explicite du candidat : activer « Contrôle QA du candidat » sur un bloc de travail ou commande, puis lancer une nouvelle exécution. Les résultats historiques restent conservés.')
+
+
 def apply(engine, run_id, node_id, expected, *, human=False):
     require(human, 'Application du code réservée à la confirmation humaine')
     import fcntl
@@ -191,10 +237,7 @@ def apply(engine, run_id, node_id, expected, *, human=False):
                 require(not state.get('applied_candidate'), 'Candidat déjà appliqué')
                 candidate = load(engine, reference, run['project'])
                 require(candidate.get('source_run') == run_id, 'Candidat d’une autre exécution')
-                for other in run['definition']['nodes']:
-                    tested = run['nodes'][other['id']]
-                    if other['kind'] == 'command' and tested.get('inputs', {}).get('candidate') == reference:
-                        require(tested['status'] == 'accepted', 'Les tests liés à ce candidat doivent être reçus avant application')
+                require_checks(run, node_id, reference, engine)
                 project = engine.project(run['project'], db)
                 root = Path(repository(project['path']))
                 with tempfile.TemporaryDirectory(dir=engine.store.directory) as temp:

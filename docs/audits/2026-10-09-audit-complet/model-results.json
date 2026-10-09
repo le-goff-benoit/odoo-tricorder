@@ -1,0 +1,45 @@
+{
+  "waitingQuestionTraySummary": {
+    "running": 0,
+    "waiting": 0,
+    "returned": 0,
+    "blocked": 0,
+    "active": [
+      {
+        "id": "r-synthetic",
+        "project": "p-synthetic",
+        "project_title": "Projet synthétique",
+        "status": "active",
+        "definition": {
+          "schema": 1,
+          "id": "question-flow",
+          "title": "Demande en attente",
+          "nodes": [
+            {
+              "id": "ask",
+              "kind": "question",
+              "title": "Information requise",
+              "phase": "Analyse"
+            }
+          ],
+          "edges": []
+        },
+        "nodes": {
+          "ask": {
+            "status": "waiting_input"
+          }
+        }
+      }
+    ],
+    "detail": "0 décision(s) · 0 résultat(s) à valider · 0 étape(s) active(s)",
+    "severity": "idle"
+  },
+  "waitingQuestionTrayLabel": "Projet synthétique · Demande en attente — En cours",
+  "waitingQuestionCollapsedPhaseStatus": "pending",
+  "modelChangeWithoutEffortChoice": {
+    "provider": "claude",
+    "model": "new",
+    "effort": "high",
+    "session": "delegated"
+  }
+}

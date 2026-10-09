@@ -66,6 +66,44 @@ class TerminalTests(unittest.IsolatedAsyncioTestCase):
             await asyncio.sleep(.03)
         self.fail('Expected output not received: ' + expected)
 
+    async def test_resume_requires_primary_prompt_not_read_heredoc_or_foreground(self):
+        identifier=await self.create()
+        async def prompt():
+            for _ in range(100):
+                metadata=(await self.call('list'))[0]
+                if metadata.get('idleShell'):return metadata
+                await asyncio.sleep(.02)
+            self.fail('Verified primary prompt did not return')
+        before=await prompt();self.assertTrue(before['promptVerified'])
+        for command, finish in [
+            ("read -r answer; printf 'read-result:%s\\n' \"$answer\"\n",'ordinary answer\n'),
+            ("cat <<'END'\n",'ordinary body\nEND\n'),
+            ('sleep 20\n','\x03'),
+        ]:
+            await self.call('write',session=identifier,data=command)
+            await asyncio.sleep(.1)
+            self.assertFalse((await self.call('list'))[0]['idleShell'])
+            with self.assertRaises(ValueError):await self.call('write-if-idle',session=identifier,data='WRONG_COMMAND\n')
+            await self.call('write',session=identifier,data=finish)
+            await prompt()
+        await self.call('write',session=identifier,data='unfinished-command')
+        await self.call('write-if-idle',session=identifier,data="printf 'resumed-%s\\n' 'safely'\n")
+        text=await self.output(identifier,'resumed-safely')
+        self.assertNotIn('WRONG_COMMAND',text)
+        self.assertNotIn('unfinished-command: command not found',text)
+        self.assertNotIn(']777;tricorder-',text)
+        self.assertEqual((await prompt())['pid'],before['pid'])
+        for index,position in enumerate(('\x01','\x01'+'\x06'*12,'\x05'),1):
+            await self.call('write',session=identifier,data="printf 'DRAFT-%s\\n' 'DISCARDED'; printf 'UNEXPECTED-%s\\n' 'EXECUTION'"+position)
+            await self.call('write-if-idle',session=identifier,data="printf 'EXPECTED-%s\\n' 'RESUME'\n")
+            await prompt()
+            text=await self.output(identifier,'EXPECTED-RESUME')
+            self.assertEqual(text.count('EXPECTED-RESUME'),index)
+            self.assertNotIn('UNEXPECTED-EXECUTION',text)
+            self.assertNotIn('DRAFT-DISCARDED',text)
+            self.assertEqual((await self.call('list'))[0]['pid'],before['pid'])
+
+
     async def test_real_shell_resize_unicode_and_context(self):
         identifier = await self.create()
         await self.call('resize', session=identifier, cols=93, rows=27)

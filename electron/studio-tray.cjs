@@ -1,18 +1,21 @@
 'use strict';
+const statusCatalog = require('./workflow-states.json');
 
-function summarize(runs) {
-  const counts = { running: 0, waiting: 0, returned: 0, blocked: 0 };
-  for (const run of runs) for (const node of Object.values(run.nodes || {})) {
-    if (Object.hasOwn(counts, node.status)) counts[node.status] += 1;
+function summarize(runs, totals=null) {
+  const counts = { running: 0, waiting_input: 0, waiting: 0, returned: 0, blocked: 0 };
+  for (const run of runs) {
+    if (run.counts) {for (const key of Object.keys(counts)) counts[key] += run.counts[key] || 0;}
+    else for (const node of Object.values(run.nodes || {})) if (Object.hasOwn(counts, node.status)) counts[node.status] += 1;
   }
+  if (totals) for (const key of Object.keys(counts)) counts[key] = totals[key] || 0;
   const active = runs.filter(r => ['active', 'paused'].includes(r.status));
-  const detail = `${counts.waiting} décision(s) · ${counts.returned} résultat(s) à valider · ${counts.running} étape(s) active(s)`;
-  return { ...counts, active, detail, severity: counts.blocked ? 'blocked' : counts.waiting ? 'waiting' : counts.returned ? 'returned' : counts.running ? 'running' : 'idle' };
+  const detail = `${counts.waiting_input} question(s) · ${counts.waiting} décision(s) · ${counts.returned} résultat(s) à valider · ${counts.running} étape(s) active(s)`;
+  return { ...counts, active, detail, severity: counts.blocked ? 'blocked' : (counts.waiting_input || counts.waiting) ? 'waiting' : counts.returned ? 'returned' : counts.running ? 'running' : 'idle' };
 }
 
 function menuItems(runs, navigate, show, quit, fresh = true, schedules = []) {
   const summary = summarize(runs);
-  const pending = summary.active.slice().sort((a, b) => Object.values(b.nodes).filter(n => n.status === 'waiting').length - Object.values(a.nodes).filter(n => n.status === 'waiting').length);
+  const pending = summary.active.slice().sort((a, b) => Object.values(b.nodes).filter(n => statusCatalog.attention.includes(n.status)).length - Object.values(a.nodes).filter(n => statusCatalog.attention.includes(n.status)).length);
   return [
     { label: 'Ouvrir Tricorder', click: show },
     { label: fresh ? summary.detail : 'Suivi indisponible · activité inconnue', enabled: false },
@@ -20,9 +23,10 @@ function menuItems(runs, navigate, show, quit, fresh = true, schedules = []) {
     ...pending.slice(0, 8).map(run => {
       const nodes = Object.values(run.nodes);
       const waiting = nodes.filter(n => n.status === 'waiting').length;
+      const questions = nodes.filter(n => n.status === 'waiting_input').length;
       const returned = nodes.filter(n => n.status === 'returned').length;
-      const text = waiting ? `${waiting} décision(s)` : returned ? `${returned} à valider` : run.status === 'paused' ? 'Suspendue' : 'En cours';
-      return { label: `${run.simulation ? '[Simulation] ' : ''}${run.project_title || ''} · ${run.release || run.definition.title} — ${text}`, click: () => navigate({ route: 'run', run: run.id, project: run.project }) };
+      const text = questions ? `${questions} question(s)` : waiting ? `${waiting} décision(s)` : returned ? `${returned} à valider` : run.status === 'paused' ? 'Suspendue' : 'En cours';
+      return { label: `${run.simulation ? '[Simulation] ' : ''}${run.project_title || ''} · ${run.release || run.definition.title} — ${text}`, click: () => navigate({ route: 'run', run: run.id, project: run.project, node: Object.keys(run.nodes).find(id => statusCatalog.attention.includes(run.nodes[id].status)) }) };
     }),
     ...(!pending.length ? [{ label: 'Aucune exécution en cours', enabled: false }] : []),
     ...(pending.length > 8 ? [{ label: `Voir les ${pending.length} exécutions…`, click: () => navigate({ route: 'projects' }) }] : []),

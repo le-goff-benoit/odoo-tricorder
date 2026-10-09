@@ -48,7 +48,7 @@ def exchange(config, payload, *, check=None, timeout=None):
     # No inherited tokens/API keys. Adapter-managed OAuth/configuration remains
     # the adapter's responsibility; execution itself is explicitly trusted.
     env = {k: os.environ[k] for k in ("HOME", "PATH", "LANG", "XDG_CONFIG_HOME", "XDG_RUNTIME_DIR") if k in os.environ}
-    process = subprocess.Popen(config["argv"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+    process = subprocess.Popen(check.launch(config["argv"]) if check and hasattr(check, "launch") else config["argv"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
                                env=env, cwd="/", start_new_session=True, close_fds=True)
     selector = selectors.DefaultSelector()
     out = bytearray()

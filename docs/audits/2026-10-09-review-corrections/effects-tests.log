@@ -1,0 +1,9 @@
+test_confluence_conflict_and_readback (test_workflow_effects.EffectsTests) ... ok
+test_duplicate_and_lost_send_never_repeat_effect (test_workflow_effects.EffectsTests) ... ok
+test_github_publication_is_not_odoo_sh_delivery (test_workflow_effects.EffectsTests) ... ok
+test_mail_filter_uses_real_address_new_ids_and_never_display_name (test_workflow_effects.EffectsTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.024s
+
+OK

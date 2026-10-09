@@ -169,30 +169,53 @@ function wireAPI() {
     const all = [...await terminal({ action: 'list' }), ...await legacySessions()];
     settings.workflowTerminals ||= {};
     const bound = request.conversation && all.find(s => s.id === settings.workflowTerminals[request.conversation] && s.alive);
-    if (bound) return bound;
+    if (bound && !request.resume) return { ...bound, agentState: bound.idleShell ? 'stopped' : bound.provider ? 'active' : 'busy' };
+    if (bound && request.resume && !bound.promptVerified) throw new Error('Cette session ne vérifie pas le prompt (ancien service ou shell non pris en charge). Elle reste intacte. Quand son travail est terminé, fermez son onglet puis reprenez la conversation pour ouvrir un terminal compatible.');
+    if (bound && request.resume && !bound.idleShell) throw new Error('Le terminal n’est pas au prompt du shell. Retrouvez l’agent actif ; aucune commande de reprise envoyée.');
     if (!request.conversation) {
       const workspace = await studio.backend({ action: 'design.workspace', project: project.id });
       return all.find(s => s.project === project.path && s.alive) || terminal({ action: 'create', project: project.path, workingDirectory: workspace.cwd, cols: 100, rows: 30, cleanShell: process.env.TRICORDER_TEST_MODE === '1' });
     }
     const conversation = await studio.backend({ action: 'conversation.get', conversation: request.conversation });
     if (conversation.project !== project.id) throw new Error('Conversation d’un autre projet');
-    const session = await terminal({ action: 'create', project: project.path, workingDirectory: project.path, cols: 100, rows: 30, cleanShell: process.env.TRICORDER_TEST_MODE === '1' });
+    const session = bound || await terminal({ action: 'create', project: project.path, workingDirectory: project.path, cols: 100, rows: 30, cleanShell: process.env.TRICORDER_TEST_MODE === '1' });
     const quote = value => "'" + String(value).replace(/'/g, "'\\''") + "'";
     const command = ['python3', path.join(backend, 'workflow_cli.py'), '--state', stores.studio, '--conversation', conversation.id].map(quote).join(' ');
     const prompt = `Tu pilotes le workflow Tricorder « ${conversation.definition.title} » dans cette conversation native. Commence par status : reprends les tâches déjà enregistrées, sans les dupliquer ; si aucune demande n’est présente, attends ma demande. Enregistre les nouvelles tâches avec le pont ci-dessous. Le graphique suit les états réels du moteur. Ne crée pas un second flow historique. Les profils de blocs déterminent tes missions ; consulte-les avant le travail.
 Pont : ${command}
-Commandes : status (sans stdin), add, ready, claim, context, execute, result, ask, answer, artifact, heartbeat, prepare-candidate (objet JSON sur stdin).
-add: {request,project?,key?,depends_on?:[identifiants_de_tâches]}, ready: {run}, claim: {run,node}, result: {run,node,token,result:{ok,summary,outputs,evidence?}}, ask: {run,node,token,text}, answer: {run,node,question,text}, execute: {run,node}, artifact: {path}, context: {run,node,context:{environment:"local",neutralized_copy:"nom de la copie réellement préparée"}}. Avant une recette Odoo, préparer la copie puis enregistrer ce contexte local ; ne pas déclarer une copie fictive.
+Commandes : status (sans stdin, --offset N et --query texte pour paginer/rechercher), inspect, read, add, ready, claim, context, execute, result, ask, answer, artifact, heartbeat, prepare-candidate (objet JSON sur stdin).
+inspect: {run} ouvre le détail d’une exécution ; read: {run,sha256,offset?} lit une page d’artefact ($artifact). Consulter next pour charger la suite, ne jamais confondre un aperçu avec le contenu complet. add: {request,project?,key?,depends_on?:[identifiants_de_tâches]}, ready: {run,offset?,limit?} renvoie {items,parameters,project,total,next} ; paramètres communs une seule fois, continuer avec next pour tous les blocs. claim: {run,node}, result: {run,node,token,result:{ok,summary,outputs,evidence?}}, ask: {run,node,token,text}, answer: {run,node,question,text}, execute: {run,node}, artifact: {path}, context: {run,node,context:{environment:"local",neutralized_copy:"nom de la copie réellement préparée"}}. Avant une recette Odoo, préparer la copie puis enregistrer ce contexte local ; ne pas déclarer une copie fictive.
 Pendant un bloc long, heartbeat: {run,node,token} toutes les 60 secondes. Pour tester le candidat transmis par un bloc de développement, prepare-candidate: {run,node,token} crée une copie contenant ce candidat ; vérifier cette copie et joindre les preuves via artifact.
 Après chaque demande : add avec une clé stable, puis ready. claim fournit la mission, le profil, les critères, les entrées et le jeton. Applique le rôle dans le projet de la tâche et remets les sorties typées. Pour un autre fournisseur, une copie isolée ou une commande, utilise execute. Ne prétends jamais qu’une simulation prouve un résultat réel.
 Si une information manque : ask AVANT de me poser la question, puis answer après ma réponse et reprends le bloc via claim. Une réponse ordinaire ne vaut jamais autorisation de production. Pour une décision ou une réception humaine, indique le bloc dans le panneau et attends sa décision ; le pont ne peut pas l’approuver. Aucun JSON/SQLite d’état modifié directement.
 Plusieurs demandes peuvent avancer indépendamment, dans les projets autorisés : ${JSON.stringify(conversation.project_contexts)}. Utilise leur id dans add.project et leur path comme dossier de travail ; ne déduis pas le projet cible du seul terminal ouvert. Consulter status après chaque étape et reprendre les blocs prêts jusqu’au résultat ou à une question. Les fins de diagnostic, correction, livraison et réception métier restent distinctes.
+Demande depuis le terminal, par exemple « va chercher cet email et prépare une release » : tu effectues ce travail avec les outils de la CLI native, sans demander à l’utilisateur de recopier le mail dans des formulaires. Vérifie les outils et connexions réellement accessibles au fournisseur choisi. Utilise leur recherche puis lis l’original intégral et ses pièces ; pour un .eml local, lis ce fichier et ses pièces. Si plusieurs messages ou projets correspondent, pose la question dans le bloc de recueil avant de choisir. Si l’accès mail manque, annonce que la recherche n’a pas été effectuée et demande la connexion ou une source locale ; un accès absent n’est pas un résultat de recherche vide. N’invente ni outil, ni source, ni résultat.
+Prépare les fichiers locaux avec les outils du terminal : conserve une seule copie exacte de l’original et des pièces dans le dossier de travail du projet, ainsi qu’un manifeste de provenance (référence du message, empreintes, noms et chemins relatifs). Ne modifie pas l’original ; sur reprise, vérifie l’existant avant de le réutiliser. Ne mets ni images/base64 ni mail intégral dans les requêtes JSON du pont. Les demandes référencent ces fichiers et leurs observations ; les observations ne constituent pas une preuve de cause ou de QA.
+Pour une release, consulte les instructions du projet et du pack installé. Avec le pack Odoo, applique son import source, ses commandes de préparation et sa convention documentaire dans la série du projet. La préparation du plan (odoo_plan.py init) ne lance pas de flow ; ne déclenche pas son démarrage historique (start) en doublon. Garde le moteur Tricorder comme suivi de cette conversation, sans second flow d’exécution miroir. Hors Odoo, utilise la convention du dépôt ou un dossier release/<identifiant>. Prépare les documents et le plan dans le dépôt, sans commit, push, envoi ou déploiement implicite. Le dossier local est versionnable ; ne le déclare pas publié ou livré.
+Décompose le mail en besoins identifiables puis appelle add avec une clé stable par source et besoin (par exemple empreinte-original:R1), sans recopier le contenu des pièces. Reprends les mêmes clés après interruption. Le recueil initial est de la coordination ; il ne s’ajoute pas aux besoins client. Rends le plan visible dans les sorties des blocs et référence le dossier préparé. Une réponse à ask utilise answer, jamais add. Une demande en attente peut laisser les autres progresser. Toute consolidation technique obligatoire dépend explicitement des demandes concernées via depends_on ; elle se distingue des besoins client. Diagnostic, correction, QA et livraison restent distincts ; les calculs de devis ne relèvent pas d’Express.
 Annonce le workflow et son périmètre. Consulte status pour reprendre une demande déjà enregistrée depuis l’interface ; sinon demande ce que je souhaite traiter. N’invente aucune demande.`;
     const id = require('node:crypto').randomUUID();
-    const launch = require('./provider-launch.cjs').prepareLaunch({ provider: conversation.provider, model: conversation.model, effort: conversation.effort, id, folder: path.join(stateDir, 'agent-events'), backend, home, project: project.path, crew: '', prompt });
-    settings.workflowTerminals[conversation.id] = session.id; saveSettings();
-    await terminal({ action: 'write', session: session.id, data: launch.command + '\r' });
-    return session;
+    settings.workflowAgents ||= {};
+    const previous = settings.workflowAgents[conversation.id];
+    let resume;
+    if (request.resume && previous?.provider === conversation.provider && previous.source) {
+      try {
+        const sourceRoot = path.join(stateDir, 'agent-events');
+        if (path.dirname(previous.source) === sourceRoot) {
+          const file = fs.openSync(previous.source, 'r');
+          try {
+            const size = fs.fstatSync(file).size, bytes = Buffer.alloc(Math.min(size, 64000));
+            fs.readSync(file, bytes, 0, bytes.length, Math.max(0,size-bytes.length));
+            const ids=bytes.toString('utf8').split('\n').flatMap(line=>{try{return [JSON.parse(line).rootId];}catch{return [];}}).filter(id=>typeof id==='string' && /^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,199}$/.test(id));
+            resume=ids.at(-1);
+          } finally { fs.closeSync(file); }
+        }
+      } catch { /* A fresh invocation can recover the durable workflow state. */ }
+    }
+    const launch = require('./provider-launch.cjs').prepareLaunch({ resume, provider: conversation.provider, model: conversation.model, effort: conversation.effort, id, folder: path.join(stateDir, 'agent-events'), backend, home, project: project.path, crew: '', prompt });
+    settings.workflowTerminals[conversation.id] = session.id; settings.workflowAgents[conversation.id] = {provider:conversation.provider,source:launch.source}; saveSettings();
+    await terminal({ action: bound ? 'write-if-idle' : 'write', session: session.id, data: launch.command + '\r' });
+    return {...session,agentState:'starting',resumedSession:resume || null};
   });
   handle('workflow-workspace', async () => { await showWorkflows(); return true; });
   require('./cockpit.cjs').wireCockpit({ handle, dialog, shell, window: () => window, settings, save: saveSettings, checkedProject, catalog, terminal, stateDir, backend, home });

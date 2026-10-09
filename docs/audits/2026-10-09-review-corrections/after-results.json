@@ -1,0 +1,60 @@
+{
+  "agent-pass": {
+    "applied": true,
+    "reason": null
+  },
+  "command-pass": {
+    "applied": true,
+    "reason": null
+  },
+  "join-pass": {
+    "applied": true,
+    "reason": null
+  },
+  "nested-explicit-pass": {
+    "applied": true,
+    "reason": null
+  },
+  "doc-no-qa": {
+    "applied": false,
+    "reason": "Aucun contrôle QA explicite du candidat : activer « Contrôle QA du candidat » sur un bloc de travail ou commande, puis lancer une nouvelle exécution. Les résultats historiques restent conservés."
+  },
+  "missing-verdict": {
+    "applied": false,
+    "reason": "Les tests liés à ce candidat et décisions doivent être reçus avant application : Check"
+  },
+  "no-proof": {
+    "applied": false,
+    "reason": "La QA doit vérifier le candidat exact avec verdict pass (ou commande réussie) et preuves : Check"
+  },
+  "fail": {
+    "applied": false,
+    "reason": "La QA doit vérifier le candidat exact avec verdict pass (ou commande réussie) et preuves : Check"
+  },
+  "reject": {
+    "applied": false,
+    "reason": "Exécution refusée ou non résolue : application interdite"
+  },
+  "wrong-candidate": {
+    "applied": false,
+    "reason": "La QA doit vérifier le candidat exact avec verdict pass (ou commande réussie) et preuves : Check"
+  },
+  "altered-proof": {
+    "applied": false,
+    "reason": "Preuve altérée"
+  },
+  "question-focus": {
+    "node": "question",
+    "title": "question",
+    "status": "failed",
+    "action": "Répondre à la question · échec à reprendre"
+  },
+  "native-pagination": {
+    "pages": 4,
+    "blocks": 100,
+    "max_page_bytes": 5048,
+    "readback_exact": true,
+    "claim_bytes": 114389,
+    "result_bytes": 115272
+  }
+}

@@ -32,7 +32,7 @@ function existingStatusLine(home, project) {
   return statusLine;
 }
 
-function prepareLaunch({ provider, id, folder, backend, home, project, crew, prompt, model, effort }) {
+function prepareLaunch({ provider, id, folder, backend, home, project, crew, prompt, model, effort, resume }) {
   if (!['claude', 'codex'].includes(provider)) throw new Error('Fournisseur inconnu');
   if (prompt !== undefined && (typeof prompt !== 'string' || prompt.length > 16000 || /[\x00-\x08\x0b-\x1f\x7f]/.test(prompt))) throw new Error('Message initial invalide');
   fs.mkdirSync(folder, { recursive: true, mode: 0o700 });
@@ -66,6 +66,12 @@ function prepareLaunch({ provider, id, folder, backend, home, project, crew, pro
       if (provider === 'claude') argv.push('--effort', effort);
       else argv.push('-c', 'model_reasoning_effort=' + JSON.stringify(effort));
     }
+    command = argv.map(quote).join(' ');
+  }
+  if (resume) {
+    if (typeof resume !== 'string' || !/^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,199}$/.test(resume)) throw new Error('Session fournisseur invalide');
+    if (provider === 'codex') argv.splice(1, 0, 'resume', resume);
+    else argv.push('--resume', resume);
     command = argv.map(quote).join(' ');
   }
   if (prompt) {

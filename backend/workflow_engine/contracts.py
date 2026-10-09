@@ -69,6 +69,7 @@ def validate(graph, *, expanded=False):
     require(len(json.dumps(graph, ensure_ascii=False).encode()) <= 2_000_000, "Définition de workflow trop volumineuse")
     identifier(graph.get("id"), "Workflow")
     require(isinstance(graph.get("title"), str) and graph["title"].strip(), "Nom du workflow requis")
+    require(isinstance(graph.get("execution_modes", ["native", "automatic"]), list) and set(graph.get("execution_modes", ["native", "automatic"])) <= {"native", "automatic"} and graph.get("execution_modes", ["native", "automatic"]), "Modes compatibles : native et/ou automatic")
     if "on_question" in graph:
         from .notifications import notification_node
         validate({"schema": 1, "id": "notification", "title": "Notification", "nodes": [notification_node(graph)], "edges": []})
@@ -84,6 +85,7 @@ def validate(graph, *, expanded=False):
         require(nid not in ids, f"Bloc {nid} dupliqué")
         ids.add(nid)
         by_id[nid] = node
+        require(isinstance(node.get("required_capabilities", []), list) and all(c in {"text", "read", "edit", "shell", "native-tools"} for c in node.get("required_capabilities", [])), f"{nid} : capacités d’exécution invalides")
         bindings = node.get("capabilities", [])
         require(isinstance(bindings, list) and len(bindings) <= 100, f"{nid} : capacités invalides")
         for binding in bindings:
@@ -118,6 +120,13 @@ def validate(graph, *, expanded=False):
             for outcome in outcomes:
                 identifier(outcome, f"{nid} issue")
         require(node.get("completion_outcome", "succeeded") in {"succeeded", "blocked"}, f"{nid} : résultat final succeeded ou blocked attendu")
+        require(type(node.get("candidate_check", False)) is bool, f"{nid} : contrôle QA booléen attendu")
+        if node.get("candidate_check"):
+            require(node["kind"] in {"agent", "task", "command"}, f"{nid} : contrôle QA réservé aux blocs de travail ou commande")
+            require(node.get("inputs", {}).get("candidate") == "object", f"{nid} : entrée candidate objet requise pour la QA")
+            require(node["kind"] == "command" or node.get("outputs", {}).get("verdict") == "string", f"{nid} : sortie verdict texte requise pour la QA")
+        required = node.get("application_requires", [])
+        require(isinstance(required, list) and all(isinstance(key, str) and ID.fullmatch(key) for key in required), f"{nid} : liste de contrôles requise")
         if node["kind"] == "condition":
             require(isinstance(node.get("parameter"), str), f"{nid} : paramètre de condition requis")
         if node["kind"] == "question":
@@ -131,7 +140,7 @@ def validate(graph, *, expanded=False):
                 identifier(choice, f"{nid} issue")
         if node["kind"] == "external":
             op = node.get("operation", {})
-            require(all(isinstance(op.get(k), str) and op[k].strip() for k in ("action", "target", "candidate")), f"{nid} : action, cible et candidat requis")
+            require(isinstance(op, dict) and all((isinstance(op.get(k), str) and op[k].strip()) or (isinstance(op.get(k), dict) and set(op[k]) == {"input"} and isinstance(op[k]["input"], str) and op[k]["input"].split(".")[0] in node.get("inputs", {})) for k in ("action", "target", "candidate")), f"{nid} : action, cible et candidat requis")
         if node["kind"] == "command":
             argv = node.get("argv", [])
             require(isinstance(argv, list) and argv and all(isinstance(a, str) and "\x00" not in a for a in argv), f"{nid} : arguments de commande requis")
@@ -152,7 +161,7 @@ def validate(graph, *, expanded=False):
         source, target = edge.get("from"), edge.get("to")
         require(source in ids and target in ids, f"{edge['id']} : bloc introuvable")
         outcome = edge.get("outcome", "done")
-        allowed = by_id[source].get("options", ["approve", "reject"]) if by_id[source]["kind"] in {"decision", "condition", "review"} or by_id[source].get("route_output") else ["done"]
+        allowed = by_id[source].get("options", ["done", "reject"] if by_id[source]["kind"] == "subworkflow" else ["approve", "reject"]) if by_id[source]["kind"] in {"decision", "condition", "review", "subworkflow"} or by_id[source].get("route_output") or by_id[source].get("component_exit") else ["done"]
         require(outcome in allowed, f"{edge['id']} : issue {outcome} inconnue")
         for src, dst in edge.get("mapping", {}).items():
             st = by_id[source].get("outputs", {}).get(src)
@@ -195,8 +204,31 @@ def expand(graph, library, stack=()):
         prefix = node["id"] + "."
         roots = {n["id"] for n in sub["nodes"]} - {e["to"] for e in sub["edges"]}
         ends = {n["id"] for n in sub["nodes"]} - {e["from"] for e in sub["edges"]}
+        public_inputs = copy.deepcopy(node.get("inputs", {}))
+        public_outputs = copy.deepcopy(node.get("outputs", {}))
+        children = {n["id"]: n for n in sub["nodes"]}
+        input_links = {}
+        output_links = {}
+        for direction, ports, boundary, links in (("input", public_inputs, roots, input_links), ("output", public_outputs, ends, output_links)):
+            declared = node.get(direction + "_mapping", {})
+            require(isinstance(declared, dict), f"{node['id']} : mapping {direction} invalide")
+            for port, kind in ports.items():
+                endpoints = declared.get(port)
+                if endpoints is None:
+                    endpoints = [{"node": key, "port": port} for key in sorted(boundary) if port in children[key].get(direction + "s", {})]
+                elif isinstance(endpoints, dict):
+                    endpoints = [endpoints]
+                require(isinstance(endpoints, list) and endpoints, f"{node['id']}.{port} : mapping {direction} requis vers un port du composant")
+                for endpoint in endpoints:
+                    require(isinstance(endpoint, dict) and set(endpoint) == {"node", "port"}, f"{node['id']} : destination node/port attendue")
+                    target, name = endpoint["node"], endpoint["port"]
+                    require(target in boundary, f"{node['id']} : {target} n’est pas une frontière {direction} du composant")
+                    child_kind = children[target].get(direction + "s", {}).get(name)
+                    require(child_kind is not None and (kind == child_kind or "any" in (kind, child_kind)), f"{node['id']}.{port} : type incompatible avec {target}.{name}")
+                    links.setdefault(target, {})[port if direction == "input" else name] = name if direction == "input" else port
         node["kind"] = "join"
-        exit_node = {"id": prefix + "exit", "title": node["title"] + " · résultat", "kind": "join", "phase": node.get("phase", "")}
+        node["outputs"] = public_inputs
+        exit_node = {"id": prefix + "exit", "title": node["title"] + " · résultat", "kind": "join", "phase": node.get("phase", ""), "inputs": public_outputs, "outputs": public_outputs, "component_exit": True, "options": node.get("options", ["done", "reject"])}
         for edge in result["edges"]:
             if edge["from"] == node["id"]:
                 edge["from"] = exit_node["id"]
@@ -206,6 +238,8 @@ def expand(graph, library, stack=()):
             child["parameters"] = {**sub.get("parameters", {}), **child.get("parameters", {}), **node.get("parameters", {})}
             for key, value in sub.get("defaults", {}).items():
                 child.setdefault(key, value)
+            if "application_requires" in child:
+                child["application_requires"] = [prefix + required for required in child["application_requires"]]
             if "approval" in child:
                 child["approval"] = prefix + child["approval"]
             child.setdefault("phase", node.get("phase", node["title"]))
@@ -214,9 +248,12 @@ def expand(graph, library, stack=()):
             result["edges"].append({**edge, "id": prefix + edge["id"], "from": prefix + edge["from"], "to": prefix + edge["to"]})
         result["nodes"].append(exit_node)
         for root in roots:
-            result["edges"].append({"id": prefix + "enter-" + root, "from": node["id"], "to": prefix + root})
+            result["edges"].append({"id": prefix + "enter-" + root, "from": node["id"], "to": prefix + root, "mapping": input_links.get(root, {})})
         for end in ends:
-            result["edges"].append({"id": prefix + "leave-" + end, "from": prefix + end, "to": exit_node["id"]})
+            child = children[end]
+            outcomes = child.get("options", ["approve", "reject"]) if child["kind"] in {"decision", "review", "condition"} or child.get("route_output") or child.get("component_exit") else ["done"]
+            for outcome in outcomes:
+                result["edges"].append({"id": prefix + "leave-" + end + "-" + outcome, "from": prefix + end, "to": exit_node["id"], "outcome": outcome, "mapping": output_links.get(end, {})})
     return validate(result, expanded=True)
 
 

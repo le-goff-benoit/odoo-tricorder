@@ -396,7 +396,7 @@ from workflow_engine.library import node
 from connectors.candidates import prepare,capture
 engine=Engine(sys.argv[2]);project=engine.create_project('Projet candidat')
 source=Path(project['path'])/'calc.py';source.write_text('value = 1\\n')
-graph={'schema':1,'id':'proposal','title':'Proposition de code','nodes':[node('edit','Modifier le code','agent',model='synthetic',execution_mode='edit',outputs={'candidate':'object'})],'edges':[]}
+graph={'schema':1,'id':'proposal','title':'Proposition de code','nodes':[node('edit','Modifier le code','agent',model='synthetic',execution_mode='edit',outputs={'candidate':'object'}),node('qa','Tester le candidat','command',x=400,inputs={'candidate':'object'},candidate_check=True,argv=['python3','-c','exec(open("/project/calc.py").read()); assert value == 2'],validation='automatic')],'edges':[{'id':'qa-edge','from':'edit','to':'qa','mapping':{'candidate':'candidate'}}]}
 engine.save(project['id'],graph)
 run=engine.start(project['id'],graph);claim=engine.claim(run['id'],'edit')
 prepared=prepare(engine,run,engine.store.directory/'synthetic-candidate');(prepared['workspace']/'calc.py').write_text('value = 2\\n')
@@ -417,6 +417,7 @@ print(json.dumps({'path':str(source),'run':run['id']}))`;
   await page.getByRole('button', { name: 'Fermer', exact: true }).click();
   await page.getByRole('button', { name: 'Valider le résultat' }).click();
   expect(fs.readFileSync(seed.path, 'utf8')).toBe('value = 1\n');
+  await expect.poll(async()=> (await page.evaluate(run=>window.studio.request({action:'run.get',run}),seed.run)).run.nodes.qa.status).toBe('accepted');
   await page.getByRole('button', { name: 'Examiner les modifications' }).click();
   await page.getByRole('button', { name: 'Appliquer ces modifications au dépôt' }).click();
   await expect(page.getByRole('button', { name: 'Voir le code appliqué' })).toBeVisible();
@@ -545,7 +546,7 @@ for line in sys.stdin:
   await page.screenshot({path:test.info().outputPath('native-conversation.png')});
   await page.evaluate(async id => { await window.tricorder.terminals.write({session:id,data:'exit\nexit\n'}); }, after[0].id);
   const saved = await page.evaluate(project => window.studio.request({action:'conversation.list',project}), project.id);
-  expect(saved[0].provider).toBe('claude'); expect(saved[0].items).toHaveLength(1);
+  expect(saved[0].provider).toBe('claude'); expect(saved[0].item_count).toBe(1);
 });
 
 test('previous studio terminal is adopted in the main terminal without a new shell', async () => {
@@ -844,6 +845,7 @@ test('workspace layout: focused navigation, adjustable split and editor preserve
   await page.locator('[data-action="terminal-maximize"]').click();
   await expect(page.locator('#workflow-panel')).toBeVisible();
   await simulate();
+  await page.locator('.workflow-heading .compact-menu > summary').click();
   await page.getByRole('button',{name:'Revenir à l’éditeur',exact:true}).click();
   await expect(page.locator('#terminal-workspace')).toBeHidden();
   await page.locator('[data-action="terminal-toggle"]').click();
@@ -894,4 +896,199 @@ test('embedded theme: workflow controls use the shared surface colors', async ()
     expect(colors.background).not.toBe('rgba(0, 0, 0, 0)');
     await page.screenshot({path:test.info().outputPath(`editor-${theme}.png`)});
   }
+});
+
+test('audit reception: decision shows the delivered text, provenance and safe proof reader', async () => {
+  const seed = await page.evaluate(async () => {
+    const project=await window.studio.request({action:'project.create',title:'Revue des livrables'});
+    const graph={schema:1,id:'minutes-review',title:'Minutes et validation',nodes:[
+      {id:'minutes',title:'Rédiger les minutes',kind:'task',validation:'contract',outputs:{minutes:'string'},sample_outputs:{minutes:'MINUTES_SENTINEL — Action : vérifier la recherche. <script>window.unsafe=true</script>'}},
+      {id:'approve',title:'Valider les minutes',kind:'decision',inputs:{minutes:'string'},question:'Le contenu est-il fidèle ?'}
+    ],edges:[{id:'transfer',from:'minutes',to:'approve',mapping:{minutes:'minutes'}}]};
+    await window.studio.request({action:'workflow.save',project:project.id,graph});
+    const run=await window.studio.request({action:'run.start',project:project.id,graph,simulation:true});return {project,run};
+  });
+  await expect.poll(async()=> (await page.evaluate(run=>window.studio.request({action:'run.get',run}),seed.run.id)).run.nodes.approve.status).toBe('waiting');
+  await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:seed.project.title}).click();await page.getByRole('button',{name:'Consulter',exact:true}).click();
+  await expect(page.locator('#inspector')).toContainText('MINUTES_SENTINEL');
+  await expect(page.locator('#inspector')).toContainText('Sources');
+  await page.getByRole('button',{name:'Lire le résultat',exact:true}).click();
+  await expect(page.locator('.editor.review-focus')).toBeVisible();
+  await page.screenshot({path:path.join(test.info().outputDir,'audit-decision-readable.png'),fullPage:true});
+  await page.getByRole('button',{name:'Graphe et détail',exact:true}).click();
+  await page.locator('.node[data-id="minutes"]').click();await page.getByRole('button',{name:'Consulter la preuve 1',exact:true}).click();
+  await expect(page.getByRole('dialog')).toContainText('SIMULATION');
+  await page.getByRole('button',{name:'Fermer la fenêtre',exact:true}).click();
+  await page.getByRole('tab',{name:'Rapport',exact:true}).click();await expect(page.locator('#document-view')).toContainText('MINUTES_SENTINEL');
+  await expect(page.locator('#document-view a[href]')).toHaveCount(1);
+  expect(await page.evaluate(()=>window.unsafe)).toBeUndefined();
+});
+
+test('audit reception: concurrent terminal edit merges with the persisted editor draft', async()=>{
+  await example();await page.locator('.node[data-id="analyse"]').click();
+  await page.getByLabel('Nom du bloc',{exact:true}).fill('Titre conservé après fermeture');
+  const project=(await page.evaluate(()=>window.studio.request({action:'bootstrap'}))).projects[0];
+  const saved=(await page.evaluate(project=>window.studio.request({action:'project.get',project}),project.id)).workflows[0];
+  const file=path.join(project.path,'.tricorder/workflows',saved.id+'.json');
+  const disk=JSON.parse(fs.readFileSync(file));disk.description='Changement du terminal conservé';fs.writeFileSync(file,JSON.stringify(disk));
+  await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:project.title}).click();await page.getByRole('button',{name:'Ouvrir le workflow',exact:true}).click();
+  await expect(page.getByLabel('Nom du bloc',{exact:true})).toHaveValue('Titre conservé après fermeture');
+  await page.getByRole('button',{name:'Enregistrer',exact:true}).click();
+  await expect(page.getByRole('dialog')).toContainText('Comparer les modifications');
+  await page.screenshot({path:path.join(test.info().outputDir,'audit-editor-merge.png'),fullPage:true});
+  await page.getByRole('button',{name:'Enregistrer la fusion',exact:true}).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  const merged=JSON.parse(fs.readFileSync(file));expect(merged.nodes.find(n=>n.id==='analyse').title).toBe('Titre conservé après fermeture');expect(merged.description).toBe('Changement du terminal conservé');
+});
+
+test('audit reception: stopped native agent resumes explicitly in the same terminal',async()=>{
+  fs.mkdirSync(path.join(directory,'bin'),{recursive:true});const marker=path.join(directory,'native-launches');
+  fs.writeFileSync(path.join(directory,'bin/codex'),`#!/usr/bin/python3\nfrom pathlib import Path\np=Path(${JSON.stringify(marker)})\np.write_text((p.read_text() if p.exists() else '')+'launch\\n')\nprint('SYNTHETIC AGENT EXITED')\n`,{mode:0o755});
+  const c=await page.evaluate(async()=>{const p=await window.studio.request({action:'project.create',title:'Reprise locale'});return window.studio.human({action:'conversation.open',project:p.id,provider:'codex',graph:{schema:1,id:'resume',title:'Travail à reprendre',nodes:[{id:'work',title:'Travail',kind:'task'}],edges:[]}});});
+  const first=await page.evaluate(c=>window.tricorder.workflowTerminal({project:c.project,conversation:c.id}),c);
+  await expect.poll(async()=> (await page.evaluate(()=>window.tricorder.terminals.list())).find(s=>s.id===first.id)?.idleShell).toBe(true);
+  const reopened=await page.evaluate(c=>window.tricorder.workflowTerminal({project:c.project,conversation:c.id}),c);
+  expect(reopened.agentState).toBe('stopped');expect(reopened.id).toBe(first.id);expect(fs.readFileSync(marker,'utf8').trim().split('\n')).toHaveLength(1);
+  const resumed=await page.evaluate(c=>window.tricorder.workflowTerminal({project:c.project,conversation:c.id,resume:true}),c);
+  expect(resumed.id).toBe(first.id);await expect.poll(()=>fs.readFileSync(marker,'utf8').trim().split('\n').length).toBe(2);
+  const conversations=await page.evaluate(project=>window.studio.request({action:'conversation.list',project}),c.project);expect(conversations).toHaveLength(1);
+});
+
+test('audit reception: history pages and archives preserve the completed work',async()=>{
+  const resources=await app.evaluate(()=>process.resourcesPath);const backend=process.env.TRICORDER_EXECUTABLE ? path.join(resources,'backend') : path.join(root,'backend');
+  const script=`import sys,json\nsys.path.insert(0,sys.argv[1])\nfrom workflow_engine import Engine\ne=Engine(sys.argv[2]);p=e.create_project('Historique durable');g={'schema':1,'id':'history','title':'Historique','nodes':[{'id':'work','title':'Résultat','kind':'task','validation':'contract'}],'edges':[]};e.save(p['id'],g)\nfor i in range(30):\n r=e.start(p['id'],g,parameters={'request':f'Demande {i:02}'});c=e.claim(r['id'],'work');e.submit(r['id'],'work',c['token'],{'ok':True,'summary':'Résultat conservé','outputs':{}})\nprint(json.dumps(p))`;
+  const seed=require('node:child_process').spawnSync('python3',['-c',script,backend,directory],{encoding:'utf8'});expect(seed.status,seed.stderr).toBe(0);const project=JSON.parse(seed.stdout);
+  await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:project.title}).click();
+  await expect(page.locator('tbody tr')).toHaveCount(25);await page.getByRole('button',{name:'Suivantes',exact:true}).click();await expect(page.locator('tbody tr')).toHaveCount(5);
+  await page.getByLabel('Rechercher',{exact:true}).fill('Demande 00');await page.getByRole('button',{name:'Filtrer',exact:true}).click();await expect(page.locator('tbody tr')).toHaveCount(1);
+  await page.locator('tbody').getByRole('button',{name:'Archiver',exact:true}).click();await page.getByRole('button',{name:'Confirmer',exact:true}).click();await expect(page.locator('tbody tr')).toHaveCount(0);
+  await page.getByLabel('Avec archives').check();await page.getByRole('button',{name:'Filtrer',exact:true}).click();await expect(page.locator('tbody tr')).toHaveCount(1);
+  await page.locator('tbody').getByRole('button',{name:'Restaurer',exact:true}).click();await page.getByRole('button',{name:'Confirmer',exact:true}).click();await page.getByRole('button',{name:'Consulter',exact:true}).click();await page.locator('.node[data-id="work"]').click();await expect(page.locator('#inspector')).toContainText('Résultat conservé');
+});
+
+async function mailFixture(mode='ready') {
+  const bin=path.join(directory,'bin');fs.mkdirSync(bin,{recursive:true});
+  fs.copyFileSync(path.join(root,'tests/fixtures/mail-intake-agent.py'),path.join(bin,'codex'));fs.chmodSync(path.join(bin,'codex'),0o755);
+  fs.copyFileSync(path.join(root,'tests/fixtures/mail-adapter.py'),path.join(directory,'mail-adapter.py'));
+  const config={adapter:path.join(directory,mode==='missing'?'unavailable-adapter.py':'mail-adapter.py'),ambiguous:mode==='ambiguous',question_first:mode==='illustration',requests:['Règle de distance contradictoire dans les devis.','État et menu du projet créé depuis un devis.','Planning vide malgré les jalons.','Montant manuel sans recalcul du sous-total.']};
+  fs.writeFileSync(path.join(directory,'mail-fixture.json'),JSON.stringify(config));
+  require('node:child_process').execFileSync('python3',['-c',`from email.message import EmailMessage\nfrom pathlib import Path\nimport sys,json\nm=EmailMessage();m['From']='support@example.test';m['To']='team@example.test';m['Subject']='Four synthetic observations';m.set_content('Synthetic observations only; neither causes nor passed QA.\\n'+'\\n'.join(f'R{i}: {text}' for i,text in enumerate(json.loads(sys.argv[2]),1)))\nfor i in range(6): m.add_attachment(b'synthetic image observation '+str(i).encode(),maintype='image',subtype='png',filename=f'observation-{i+1}.png')\nPath(sys.argv[1]).write_bytes(m.as_bytes())`,path.join(directory,'source.eml'),JSON.stringify(config.requests)]);
+  const c=await page.evaluate(async()=>{const p=await window.studio.request({action:'project.create',title:'Email synthétique — préparation de release'});const data=await window.studio.request({action:'bootstrap'});return window.studio.human({action:'conversation.open',project:p.id,provider:'codex',graph:data.templates.find(g=>g.id==='release-conversation')});});
+  const terminal=await page.evaluate(c=>window.tricorder.workflowTerminal({project:c.project,conversation:c.id}),c);
+  await expect.poll(()=>fs.existsSync(path.join(directory,'mail-agent-ready'))).toBe(true);
+  await page.evaluate(id=>window.tricorder.terminals.write({session:id,data:'Va chercher cet email et prépare une release.\r'}),terminal.id);
+  return {c,terminal,config};
+}
+
+test('mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment',async()=>{
+  const {c,terminal}=await mailFixture();
+  const snapshot=()=>page.evaluate(id=>window.studio.request({action:'conversation.get',conversation:id}),c.id);
+  await expect.poll(async()=>{const s=await snapshot();return s.item_count===4 && s.items.every(i=>i.execution.counts.waiting===1);}).toBe(true);
+  const first=await snapshot();const project=first.project_contexts[0];const release=path.join(project.path,'release/synthetic-mail');
+  const sourceHash=require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(directory,'source.eml'))).digest('hex');
+  const sources=path.join(release,'sources',sourceHash);expect(fs.readdirSync(path.join(release,'sources'))).toEqual([sourceHash]);
+  expect(fs.readFileSync(path.join(sources,'original.eml'))).toEqual(fs.readFileSync(path.join(directory,'source.eml')));
+  const provenance=JSON.parse(fs.readFileSync(path.join(sources,'provenance.json')));expect(provenance.attachments).toHaveLength(6);
+  for(const part of provenance.attachments)expect(require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(sources,part.file))).digest('hex')).toBe(part.sha256);
+  const requests=await Promise.all(first.items.map(item=>page.evaluate(run=>window.studio.request({action:'run.get',run}),item.run)));
+  expect(requests.every(r=>r.run.parameters.request.includes(sourceHash) && r.run.nodes.scope.status==='waiting' && r.run.nodes.work.status==='pending')).toBe(true);
+  expect(fs.readFileSync(path.join(release,'README.md'),'utf8')).toContain('Préparation locale seulement');
+  expect(require('node:child_process').spawnSync('git',['-C',project.path,'rev-parse','--verify','HEAD'],{encoding:'utf8'}).status).not.toBe(0);
+  expect(require('node:child_process').execFileSync('git',['-C',project.path,'remote'],{encoding:'utf8'})).toBe('');
+  await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:project.title}).click();await page.locator('[data-action=open-conversation]').click();
+  await expect(page.locator('.work-items button')).toHaveCount(4);
+  await expect(page.locator('.work-items strong').first()).toHaveText('R1: Règle de distance contradictoire dans les devis.');
+  await page.locator('.conversation-search-details > summary').click();
+  const search=await page.locator('#conversation-query').boundingBox(),searchButton=await page.locator('#conversation-search button').boundingBox();expect(Math.abs(searchButton.y-search.y)).toBeLessThan(8);await page.locator('.conversation-search-details > summary').click();
+  await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+  await page.locator('.work-items button').first().click();await page.locator('.node[data-id=scope]').click();await expect(page.locator('#inspector')).toContainText('Règle de distance');
+  await page.screenshot({path:test.info().outputPath('mail-release-plan.png'),fullPage:true});
+  await expect.poll(async()=> (await page.evaluate(()=>window.tricorder.terminals.list())).find(s=>s.id===terminal.id)?.idleShell).toBe(true);
+  await quitApplication();app=await electron.launch({executablePath:process.env.TRICORDER_EXECUTABLE,args:process.env.TRICORDER_EXECUTABLE?['--workflow-studio']:[root,'--workflow-studio'],env:{...process.env,PATH:path.join(directory,'bin')+':'+process.env.PATH,TRICORDER_STATE_DIR:directory,TRICORDER_HOME:directory,TRICORDER_TEST_MODE:'1'},timeout:20000});page=await studioPage();
+  const resumed=await page.evaluate(c=>window.tricorder.workflowTerminal({project:c.project,conversation:c.id,resume:true}),c);expect(resumed.id).toBe(terminal.id);expect(resumed.pid).toBe(terminal.pid);
+  await expect.poll(()=>fs.readFileSync(path.join(directory,'mail-agent-ready'),'utf8').trim().split('\n').length).toBe(2);
+  await page.evaluate(id=>window.tricorder.terminals.write({session:id,data:'Reprends cet email et sa release.\r'}),terminal.id);
+  await expect.poll(async()=> (await page.evaluate(()=>window.tricorder.terminals.list())).find(s=>s.id===terminal.id)?.idleShell).toBe(true);
+  const second=await snapshot();expect(second.item_count).toBe(4);expect(second.items.map(i=>i.run)).toEqual(first.items.map(i=>i.run));expect(fs.readdirSync(path.join(release,'sources'))).toEqual([sourceHash]);
+  const calls=fs.readFileSync(path.join(directory,'mail-calls.jsonl'),'utf8').trim().split('\n').map(JSON.parse);expect(calls.map(c=>c.action)).toEqual(['search','read','search','read']);
+});
+
+for(const mode of ['missing','ambiguous'])test(`mail intake: ${mode} access becomes a visible question without inventing a source`,async()=>{
+  const {c}=await mailFixture(mode);
+  await expect.poll(async()=>{const s=await page.evaluate(id=>window.studio.request({action:'conversation.get',conversation:id}),c.id);return s.items[0]?.execution.counts.waiting_input;}).toBe(1);
+  const s=await page.evaluate(id=>window.studio.request({action:'conversation.get',conversation:id}),c.id);expect(s.item_count).toBe(1);expect(s.items[0].request).toContain('Coordination');
+  const detail=await page.evaluate(run=>window.studio.request({action:'run.get',run}),s.items[0].run);
+  expect(detail.run.nodes.intent.question.text).toContain(mode==='missing'?'recherche n’a pas été effectuée':'Plusieurs messages');
+  expect(fs.existsSync(path.join(s.project_contexts[0].path,'release/synthetic-mail'))).toBe(false);
+  const log=path.join(directory,'mail-calls.jsonl');expect(fs.existsSync(log)).toBe(mode==='ambiguous');if(mode==='ambiguous')expect(fs.readFileSync(log,'utf8')).not.toContain('"action": "read"');
+});
+
+test('mail illustration: four independent states, selected question and QA failure stay readable with terminal',async()=>{
+  const {c,terminal}=await mailFixture('illustration');
+  const snapshot=()=>page.evaluate(id=>window.studio.request({action:'conversation.get',conversation:id}),c.id);
+  await expect.poll(async()=>{const s=await snapshot();return s.item_count===4 && s.items.filter(i=>i.execution.counts.waiting===1).length===3;}).toBe(true);
+  const initial=await snapshot();
+  const resources=await app.evaluate(()=>process.resourcesPath);const backend=process.env.TRICORDER_EXECUTABLE?path.join(resources,'backend'):path.join(root,'backend');
+  const script=`import json,sys\nsys.path.insert(0,sys.argv[1])\nfrom workflow_engine import Engine\ne=Engine(sys.argv[2]);items=json.loads(sys.argv[3])\nfor index,item in enumerate(items[1:],2):\n r=e.run(item['run']);s=r['nodes']['scope'];e.decide(r['id'],'scope',s['nonce'],s['proposal'],'approve',human=True);claim=e.claim(r['id'],'work')\n if index==2:continue\n e.submit(r['id'],'work',claim['token'],{'ok':True,'summary':'Proposition synthétique, aucune application client modifiée.','outputs':{'result':f'Résultat R{index} : proposition prête pour contrôle, pas encore validée.'}})\n if index==4:\n  claim=e.claim(r['id'],'check');e.submit(r['id'],'check',claim['token'],{'ok':True,'summary':'QA synthétique en échec.','outputs':{'verdict':'fail','evidence_summary':'Le sous-total ne respecte pas le résultat attendu dans le scénario synthétique.'},'evidence':[e.artifact(b'Synthetic failed QA fixture, no client test performed.')]})\n`;
+  const seeded=require('node:child_process').spawnSync('python3',['-c',script,backend,directory,JSON.stringify(initial.items)],{encoding:'utf8'});expect(seeded.status,seeded.stderr).toBe(0);
+  await page.reload();await page.locator('[data-workflow-route="projects"]').click();await page.locator('.project-card').filter({hasText:initial.project_contexts[0].title}).click();await page.locator('[data-action=open-conversation]').click();
+  await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+  const cards=page.locator('.work-items button');await expect(cards).toHaveCount(4);
+  await expect(cards.nth(0)).toContainText('Réponse attendue');await expect(cards.nth(1)).toContainText('En cours');await expect(cards.nth(2)).toContainText('Prête');await expect(cards.nth(3)).toContainText('Échec');
+  await cards.nth(0).click();await expect(page.locator('.workflow-heading h1')).toHaveText('R1: Règle de distance contradictoire dans les devis.');await expect(page.locator('.breadcrumb')).toContainText('Workflow de la demande sélectionnée');
+  await expect(page.locator('#inspector')).toContainText('Quelle règle de distance');await expect(page.locator('#inspector')).toContainText('original.eml');await expect(cards.nth(0)).toHaveAttribute('aria-pressed','true');
+  await page.getByRole('button',{name:'Lire le résultat',exact:true}).click();
+  await page.screenshot({path:test.info().outputPath('mail-mixed-states-wide.png'),fullPage:true});
+  await page.setViewportSize({width:1024,height:768});await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+  await expect(page.locator('#inspector').getByText('Quelle règle de distance', {exact:false})).toBeInViewport();
+  await expect(page.locator('.question-context > summary')).toBeInViewport();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+  for(let i=0;i<4;i++)await expect.poll(async()=>{const box=await cards.nth(i).boundingBox();return !!box && box.x+box.width<=1024;}).toBe(true);
+  await page.screenshot({path:test.info().outputPath('mail-mixed-states-1024.png'),fullPage:true});
+  await cards.nth(2).click();await expect(page.locator('#inspector')).toContainText('Résultat R3');await expect(page.locator('#inspector')).toContainText('Poursuivez dans le terminal');
+  await expect(cards.nth(2)).toHaveAttribute('aria-pressed','true');
+  await page.screenshot({path:test.info().outputPath('mail-r3-next-action-1024.png'),fullPage:true});
+  await cards.nth(3).click();await expect(page.locator('.editor.review-focus')).toBeVisible();
+  await page.getByRole('button',{name:'Graphe et détail',exact:true}).click();
+  await expect(page.locator('.node[data-id=failure]')).toBeInViewport();
+  const focusBounds=await page.locator('.node[data-id=failure]').boundingBox(),canvasBounds=await page.locator('.canvas-scroll').boundingBox();
+  expect(focusBounds.x+focusBounds.width/2).toBeGreaterThanOrEqual(canvasBounds.x);
+  expect(focusBounds.x+focusBounds.width/2).toBeLessThanOrEqual(canvasBounds.x+canvasBounds.width);
+  expect(focusBounds.y+focusBounds.height/2).toBeGreaterThanOrEqual(canvasBounds.y);
+  expect(focusBounds.y+focusBounds.height/2).toBeLessThanOrEqual(canvasBounds.y+canvasBounds.height);
+  await page.screenshot({path:test.info().outputPath('mail-r4-graph-focus-1024.png'),fullPage:true});
+  await page.setViewportSize({width:1440,height:900});await cards.nth(0).click();
+  await page.getByRole('button',{name:'Lire le résultat',exact:true}).click();
+  await page.locator('[data-action=terminal-layout]').click();
+  await expect(page.locator('.request-selector')).toBeVisible();await expect(cards.nth(0)).toBeHidden();
+  await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+  await expect(page.locator('#inspector').getByText('Quelle règle de distance', {exact:false})).toBeInViewport();
+  await expect(page.locator('#question-form button')).toBeInViewport();
+  await page.screenshot({path:test.info().outputPath('mail-question-stacked-1440.png'),fullPage:true});
+  await page.locator('.request-selector > summary').click();await expect(cards).toHaveCount(4);await expect(cards.nth(3)).toBeVisible();
+  await cards.nth(2).click();await expect(page.locator('.editor.review-focus')).toBeVisible();await expect(page.locator('.request-selector')).not.toHaveAttribute('open','');
+  await page.locator('[data-workflow-route=overview]').click();
+  const failed=page.locator('tbody tr').filter({hasText:'R4: Montant manuel'});await expect(failed).toContainText('Échec · reprise nécessaire');await expect(failed).not.toContainText('Original :');
+
+});
+
+
+test('candidate QA: explicit editor control persists typed ports and remains visible after reload', async()=>{
+  await example();await page.locator('.node[data-id=analyse]').click();
+  await page.getByLabel('Nom du bloc',{exact:true}).fill('Vérifier le candidat sans agent imposé');
+  await page.getByLabel('Contrôle QA du candidat',{exact:true}).check();
+  await page.reload();await page.locator('[data-workflow-route=projects]').click();await page.locator('.project-card').first().click();await page.getByRole('button',{name:'Ouvrir le workflow',exact:true}).click();
+  await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();
+  await page.getByRole('button',{name:'Enregistrer',exact:true}).click();
+  await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();
+  await expect(page.locator('.ports')).toContainText('candidate');await expect(page.locator('.ports')).toContainText('verdict');
+  const mission=page.locator('.node[data-id=analyse] .mission');await expect(mission).toHaveAttribute('title','Vérifier le candidat sans agent imposé');
+  const titleBounds=await mission.boundingBox(),nodeBounds=await page.locator('.node[data-id=analyse]').boundingBox(),kindBounds=await page.locator('.node[data-id=analyse] .kind').boundingBox();
+  expect(titleBounds.x+titleBounds.width).toBeLessThanOrEqual(nodeBounds.x+nodeBounds.width);
+  expect(titleBounds.y+titleBounds.height).toBeLessThanOrEqual(kindBounds.y);
+  await page.screenshot({path:test.info().outputPath('qa-candidate-title-final.png'),fullPage:true});
+  await page.reload();await page.locator('[data-workflow-route=projects]').click();await page.locator('.project-card').first().click();await page.getByRole('button',{name:'Ouvrir le workflow',exact:true}).click();
+  await page.locator('.node[data-id=analyse]').click();await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();
+  await page.getByLabel('Contrôle QA du candidat',{exact:true}).uncheck();await page.getByRole('button',{name:'Enregistrer',exact:true}).click();
+  await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).not.toBeChecked();
 });

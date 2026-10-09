@@ -1,0 +1,21 @@
+test_visible_decision_output_and_safe_paginated_evidence (test_audit_fixes.AuditFixes) ... ok
+test_orphan_recovery_releases_locks_and_slots_without_respawn (test_audit_fixes.AuditFixes) ... ok
+test_live_worker_blocks_recovery_and_late_result_is_stale (test_audit_fixes.AuditFixes) ... ok
+test_native_claim_never_expires_into_permission_to_recover (test_audit_fixes.AuditFixes) ... ok
+test_legacy_unidentified_attempt_requires_verified_reboot (test_audit_fixes.AuditFixes) ... ok
+test_native_cli_exit_does_not_hide_a_surviving_terminal_child (test_audit_fixes.AuditFixes) ... ok
+test_dynamic_publication_freezes_exact_body_and_candidate (test_audit_fixes.AuditFixes) ... ok
+test_multi_megabyte_result_is_readable_without_growing_proof_store (test_audit_fixes.AuditFixes) ... ok
+test_execution_event_pages_reach_the_complete_history (test_audit_fixes.AuditFixes) ... ok
+test_four_support_requests_keep_sources_question_scope_and_release_dependencies (test_audit_fixes.AuditFixes) ... ok
+test_nested_component_rejection_does_not_release_success_path (test_audit_fixes.AuditFixes) ... ok
+test_candidate_qa_selected_branch_and_explicit_controls (test_audit_fixes.AuditFixes) ... ok
+test_three_way_conflict_keeps_both_changes_and_rechecks_file (test_audit_fixes.AuditFixes) ... ok
+test_archival_is_reversible_preserves_proofs_and_refuses_active_work (test_audit_fixes.AuditFixes) ... ok
+test_thousand_demands_search_and_last_page (test_audit_fixes.AuditFixes) ... ok
+test_automatic_text_mode_cannot_claim_editing_or_tests (test_audit_fixes.AuditFixes) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 11.395s
+
+OK

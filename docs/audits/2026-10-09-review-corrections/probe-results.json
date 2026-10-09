@@ -1,0 +1,29 @@
+{
+  "question_with_other_failed_qa": {
+    "focus": {
+      "node": "clarify",
+      "title": "clarify",
+      "status": "failed",
+      "action": "Préparer une reprise après l’échec"
+    },
+    "states": {
+      "clarify": "waiting_input",
+      "qa": "accepted"
+    }
+  },
+  "nested_explicit_qa": {
+    "result": "ContractError: Contrôle préalable au candidat inconnu",
+    "content": "before",
+    "application_requires": [
+      "qa"
+    ]
+  },
+  "non_qa_consumer": {
+    "result": "ContractError: La QA doit porter sur le candidat exact : Archive candidate reference",
+    "content": "before"
+  },
+  "native_ready_100_blocks": {
+    "bytes": 9057380,
+    "blocks": 100
+  }
+}

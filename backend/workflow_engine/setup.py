@@ -48,6 +48,7 @@ def configure(engine, catalog, pack_path=None):
                                 node["execution_mode"] = "edit"
                                 node["outputs"]["candidate"] = "object"
                         if node["id"] == "check" and not studio_route:
+                            node["candidate_check"] = True
                             node["inputs"]["candidate"] = "object"
                             node["prompt"] += " Matérialiser inputs.candidate avec prepare-candidate. Tester ce candidat sur la copie locale déclarée ; joindre les preuves réelles."
                     for connection in graph["edges"]:

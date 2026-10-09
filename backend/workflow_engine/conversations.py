@@ -19,10 +19,13 @@ class Conversations:
         require(value is not None, "Conversation introuvable")
         return value
 
-    def list(self, project=None):
+    def list(self, project=None, *, compact=False):
         with self.engine.store.connect() as db:
             values = [self.engine.store.body(row) for row in db.execute("SELECT body FROM conversations ORDER BY rowid DESC")]
-        return [v for v in values if project is None or project in v["projects"]]
+        values = [v for v in values if project is None or project in v["projects"]]
+        if compact:
+            return [{**{k: v[k] for k in ("id", "project", "projects", "status", "created", "provider", "model")}, "definition": {"title": v["definition"]["title"]}, "item_count": len(v["items"]), "archived": v.get("archived", False)} for v in values]
+        return values
 
     def open(self, project, graph, provider, projects=None, library=None, model=None, *, notifications_authorized=False, initial_request=None):
         require(provider in {"codex", "claude"}, "Fournisseur inconnu")
@@ -39,12 +42,15 @@ class Conversations:
         if model:
             definition["defaults"]["model"] = model
         from .integrations import issues
+        from .runtime import preflight
         from .notifications import execution_nodes
         from connectors.local_tools import approved
         transports = {}
         for pid in ids:
             target = self.engine.project(pid)
-            problems = issues(definition, target, self.engine)
+            from .packs import resolve_profiles
+            checked = resolve_profiles(target, definition)
+            problems = preflight(checked, defaults=target.get("defaults"), project=target, engine=self.engine, mode="native", provider=provider, model=definition.get("defaults", {}).get("model"))
             require(not problems, target["title"] + " : " + " · ".join(p["message"] for p in problems))
             records = transports[pid] = {}
             for node in execution_nodes(definition):
@@ -95,17 +101,28 @@ class Conversations:
             db.execute("UPDATE conversations SET body=? WHERE id=?", (self.engine.store.encode(conversation), cid))
             return item
 
-    def snapshot(self, cid):
+    def snapshot(self, cid, *, offset=0, limit=None, query=""):
+        from .projections import paging, summary
         conversation = self.get(cid)
-        for item in conversation["items"]:
-            run = self.engine.run(item["run"])
-            if run.get("coordination_wait") and not run.get("coordination_hold") and run["status"] == "paused":
+        with self.engine.store.connect() as db:
+            waiting = [self.engine.store.body(row) for row in db.execute("SELECT body FROM runs WHERE json_extract(body, '$.parameters.conversation')=? AND json_extract(body, '$.coordination_wait')=1 AND json_extract(body, '$.status')='paused'", (cid,))]
+        for run in waiting:
+            if not run.get("coordination_hold"):
                 if all(dependency_satisfied(self.engine.run(rid)) for rid in run["parameters"]["depends_on_runs"]):
                     self.engine.control(run["id"], "resume")
         result = copy.deepcopy(conversation)
         result["project_contexts"] = [{key: project[key] for key in ("id", "title", "path", "series", "platform") if key in project}
                                       for pid in conversation["projects"] for project in [self.engine.project(pid)]]
-        result["items"] = [{**i, "execution": self.engine.run(i["run"])} for i in conversation["items"]]
+        items = conversation["items"]
+        if limit is not None:
+            offset, limit = paging(offset, limit)
+            items = [i for i in items if query.lower() in i["request"].lower()]
+            result.update(item_count=len(conversation["items"]), total=len(items), offset=offset, limit=limit, next=offset + limit if offset + limit < len(items) else None)
+            items = items[offset:offset + limit]
+            result["items"] = [{**i, "request": i["request"][:240], "request_truncated": len(i["request"]) > 240, "execution": summary(self.engine.run(i["run"]))} for i in items]
+            result.pop("transports", None)
+        else:
+            result["items"] = [{**i, "execution": self.engine.run(i["run"])} for i in items]
         return result
 
     def checked_run(self, cid, rid):

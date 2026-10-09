@@ -24,6 +24,7 @@ function jsonRequest(script, args, payload, { timeout = 15000, maxBuffer = 8 * 1
       let response;
       try { response = JSON.parse(stdout); } catch { /* Report transport failure below. */ }
       if (response?.ok === false && typeof response.error === 'string') return reject(new Error(response.error));
+      if (error?.code === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER') return reject(new Error('Réponse trop volumineuse. Ouvrez une page de l’historique ou un résultat individuel ; les données enregistrées sont conservées.'));
       if (error || writeError || response?.ok !== true) return reject(new Error(UNAVAILABLE));
       resolve(response.result);
     });

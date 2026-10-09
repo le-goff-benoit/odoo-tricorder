@@ -18,10 +18,10 @@ function queuePortable(argv) {
   try { pendingPortable = file.startsWith('file://') ? fileURLToPath(file) : path.resolve(file); } catch { return; }
   if (window && !contents.isLoading()) contents.send('studio:navigate', { route: 'import-workflow' });
 }
-let tray, quitting = false, trayTimer, tickBusy = false, lastRuns = [], lastSchedules = [], trayFresh = false;
+let tray, quitting = false, trayTimer, tickBusy = false, lastRuns = [], lastSchedules = [], lastCounts = null, tickOffset = 0, trayFresh = false;
 let terminals;
-const allowed = new Set(['conversation.open', 'conversation.list', 'conversation.get', 'conversation.add', 'conversation.answer', 'run.answer', 'bootstrap', 'overview.get', 'candidate.preview', 'workflow.export-portable', 'workflow.preview-portable', 'workflow.import-portable', 'plugins.discover', 'plugins.preview', 'workspace.get', 'design.workspace', 'assistant.propose', 'pack.preview', 'pack.install', 'project.create', 'project.get', 'template.workspace', 'schedule.list', 'schedule.create', 'schedule.toggle', 'workflow.save', 'workflow.reload', 'workflow.validate', 'run.start', 'run.get', 'run.control', 'run.document', 'run.reconcile', 'release.export', 'work.export', 'workflow.repository', 'workflow.import-repository']);
-const human = new Set(['conversation.open', 'run.accept', 'run.decide', 'run.retry', 'plugins.qualify', 'run.handoff', 'run.reconcile-effect', 'candidate.apply', 'run.start', 'schedule.create']);
+const allowed = new Set(['workflow.conflict', 'run.list', 'workflow.list', 'workflow.get', 'run.proof', 'run.recovery', 'conversation.open', 'conversation.list', 'conversation.get', 'conversation.add', 'conversation.answer', 'run.answer', 'bootstrap', 'overview.get', 'candidate.preview', 'workflow.export-portable', 'workflow.preview-portable', 'workflow.import-portable', 'plugins.discover', 'plugins.preview', 'workspace.get', 'design.workspace', 'assistant.propose', 'pack.preview', 'pack.install', 'project.create', 'project.get', 'template.workspace', 'schedule.list', 'schedule.create', 'schedule.toggle', 'workflow.save', 'workflow.reload', 'workflow.validate', 'run.start', 'run.get', 'run.control', 'run.document', 'run.reconcile', 'release.export', 'work.export', 'workflow.repository', 'workflow.import-repository']);
+const human = new Set(['entity.archive', 'workflow.resolve', 'run.finish-interrupted', 'conversation.open', 'run.accept', 'run.decide', 'run.retry', 'plugins.qualify', 'run.handoff', 'run.reconcile-effect', 'candidate.apply', 'run.start', 'schedule.create']);
 
 function backend(payload, isHuman = false) {
   const script = app.isPackaged ? path.join(process.resourcesPath, 'backend/studio.py') : path.join(__dirname, '../backend/studio.py');
@@ -114,7 +114,7 @@ function trusted(event) {
   const quit = () => { quitting = true; app.quit(); };
   const updateTray = () => {
     if (!tray) return;
-    const summary = summarize(lastRuns);
+    const summary = summarize(lastRuns, lastCounts);
     const bitmap = trayBitmap(trayFresh ? summary.severity : 'blocked');
     tray.setImage(nativeImage.createFromBitmap(bitmap.buffer, { width: bitmap.size, height: bitmap.size, scaleFactor: 1 }));
     tray.setToolTip('Tricorder · ' + (trayFresh ? summary.detail : 'Suivi indisponible'));
@@ -132,7 +132,7 @@ function trusted(event) {
   const tick = async () => {
     if (tickBusy) return;
     tickBusy = true;
-    try { const data = await backend({ action: 'runtime.tick' }); lastRuns = data.runs; lastSchedules = data.schedules; trayFresh = true; }
+    try { const data = await backend({ action: 'runtime.tick', offset:tickOffset }); tickOffset=data.next || 0; lastCounts=data.counts; lastRuns = data.runs; lastSchedules = data.schedules; trayFresh = true; }
     catch { trayFresh = false; }
     finally { tickBusy = false; updateTray(); }
   };

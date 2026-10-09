@@ -1,0 +1,149 @@
+{
+  "build": "33cb8110c73d8f87a83d5a26faee60ba62d4fca84daf4473578b52bb1af39024",
+  "captured": "2026-10-09T08:54:44.816Z",
+  "views": {
+    "qa-title-wrapped-light-1440": {
+      "node": {
+        "x": 298,
+        "y": 379.9453125,
+        "width": 192,
+        "height": 93.11248779296875,
+        "right": 490,
+        "bottom": 473.05780029296875
+      },
+      "mission": {
+        "x": 338,
+        "y": 392.74530029296875,
+        "width": 139.20001220703125,
+        "height": 29.112518310546875,
+        "right": 477.20001220703125,
+        "bottom": 421.8578186035156
+      },
+      "main": {
+        "x": 298.79998779296875,
+        "y": 380.74530029296875,
+        "width": 190.4000244140625,
+        "height": 66.3125,
+        "right": 489.20001220703125,
+        "bottom": 447.05780029296875
+      },
+      "kind": {
+        "x": 338,
+        "y": 425.8578186035156,
+        "width": 139.20001220703125,
+        "height": 11.600006103515625,
+        "right": 477.20001220703125,
+        "bottom": 437.45782470703125
+      },
+      "footer": {
+        "x": 298.79998779296875,
+        "y": 447.05780029296875,
+        "width": 190.4000244140625,
+        "height": 25.20001220703125,
+        "right": 489.20001220703125,
+        "bottom": 472.2578125
+      },
+      "ports": [
+        {
+          "x": 294.79998779296875,
+          "y": 423.9453125,
+          "width": 7.20001220703125,
+          "height": 7.20001220703125,
+          "right": 302,
+          "bottom": 431.14532470703125
+        },
+        {
+          "x": 486,
+          "y": 423.9453125,
+          "width": 7.20001220703125,
+          "height": 7.20001220703125,
+          "right": 493.20001220703125,
+          "bottom": 431.14532470703125
+        }
+      ],
+      "title": "Vérifier le candidat sans agent imposé",
+      "aria": "Vérifier le candidat sans agent imposé · Tâche",
+      "text": "Vérifier le candidat sans agent imposé",
+      "whiteSpace": "normal",
+      "overflowWrap": "anywhere",
+      "lineClamp": "2",
+      "lineHeight": "18.2px",
+      "clientHeight": 36,
+      "scrollHeight": 36,
+      "edgeHits": 0,
+      "rootOverflow": false
+    },
+    "qa-title-wrapped-dark-1024": {
+      "node": {
+        "x": 236,
+        "y": 375.9453125,
+        "width": 192,
+        "height": 93.11248779296875,
+        "right": 428,
+        "bottom": 469.05780029296875
+      },
+      "mission": {
+        "x": 276,
+        "y": 388.74530029296875,
+        "width": 139.20001220703125,
+        "height": 29.112518310546875,
+        "right": 415.20001220703125,
+        "bottom": 417.8578186035156
+      },
+      "main": {
+        "x": 236.8000030517578,
+        "y": 376.74530029296875,
+        "width": 190.40000915527344,
+        "height": 66.3125,
+        "right": 427.20001220703125,
+        "bottom": 443.05780029296875
+      },
+      "kind": {
+        "x": 276,
+        "y": 421.8578186035156,
+        "width": 139.20001220703125,
+        "height": 11.600006103515625,
+        "right": 415.20001220703125,
+        "bottom": 433.45782470703125
+      },
+      "footer": {
+        "x": 236.8000030517578,
+        "y": 443.05780029296875,
+        "width": 190.40000915527344,
+        "height": 25.20001220703125,
+        "right": 427.20001220703125,
+        "bottom": 468.2578125
+      },
+      "ports": [
+        {
+          "x": 232.8000030517578,
+          "y": 419.9453125,
+          "width": 7.1999969482421875,
+          "height": 7.20001220703125,
+          "right": 240,
+          "bottom": 427.14532470703125
+        },
+        {
+          "x": 424,
+          "y": 419.9453125,
+          "width": 7.20001220703125,
+          "height": 7.20001220703125,
+          "right": 431.20001220703125,
+          "bottom": 427.14532470703125
+        }
+      ],
+      "title": "Vérifier le candidat sans agent imposé",
+      "aria": "Vérifier le candidat sans agent imposé · Tâche",
+      "text": "Vérifier le candidat sans agent imposé",
+      "whiteSpace": "normal",
+      "overflowWrap": "anywhere",
+      "lineClamp": "2",
+      "lineHeight": "18.2px",
+      "clientHeight": 36,
+      "scrollHeight": 36,
+      "edgeHits": 0,
+      "rootOverflow": false
+    }
+  },
+  "failures": []
+}

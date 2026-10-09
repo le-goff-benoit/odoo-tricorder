@@ -25,7 +25,7 @@ def templates():
     software = {"schema": 1, "id": "software-change", "title": "Évolution logicielle", "description": "Analyser, proposer du code dans une copie isolée, tester cette copie et décider de son application locale. Choisir les modèles et adapter la commande de test au projet.", "nodes": [
         node("analyse", "Analyser la demande", "agent", x=60, model="", prompt="Décrire le changement et les critères attendus.", outputs={"analysis":"string"}),
         node("build", "Proposer les modifications", "agent", x=370, model="", execution_mode="edit", prompt="Réaliser la demande dans la copie isolée. Ne pas prétendre avoir exécuté les tests.", inputs={"analysis":"string"}, outputs={"candidate":"object"}, criteria=["Le diff réalise la demande sans changement hors périmètre."]),
-        node("test", "Tester la copie modifiée", "command", x=680, inputs={"candidate":"object"}, argv=["python3", "-B", "-m", "unittest", "discover", "-s", "/project/tests"], criteria=["Les tests pertinents sont présents, exécutés et réussis."], evidence_required=True),
+        node("test", "Tester la copie modifiée", "command", x=680, inputs={"candidate":"object"}, candidate_check=True, argv=["python3", "-B", "-m", "unittest", "discover", "-s", "/project/tests"], criteria=["Les tests pertinents sont présents, exécutés et réussis."], evidence_required=True),
         node("decision", "Décider de l’application du code", "decision", x=990, question="Les tests sont reçus. Examiner le diff du bloc Développement et appliquer au dépôt local si le résultat convient.")
     ], "edges": [{**edge("analyse","build"), "mapping":{"analysis":"analysis"}}, {**edge("build","test"), "mapping":{"candidate":"candidate"}}, edge("test","decision")]}
     components = []

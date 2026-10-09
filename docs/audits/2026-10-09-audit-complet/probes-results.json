@@ -1,0 +1,42 @@
+{
+  "orphan_reconcile": "ContractError: Résultat encore inconnu : aucune relance automatique. Le processus peut toujours être actif ; vérifier avant une nouvelle exécution.",
+  "cancelled_orphan_keeps_lock": "ContractError: Ressource occupée : repo",
+  "four_cancelled_orphans_block_all_runs": "ContractError: Quatre étapes sont déjà en cours : attente d'une place d'exécution",
+  "valid_subworkflow_output_cannot_expand": "ContractError: link : port inconnu answer → answer",
+  "subworkflow_boundary_inputs": {
+    "request": "REQUEST_SENTINEL"
+  },
+  "subworkflow_child_inputs": {},
+  "report_contains_draft_output": false,
+  "external_node_received_inputs": {
+    "body": "DRAFT_SENTINEL"
+  },
+  "external_adapter_arguments": {
+    "action": "create-draft",
+    "candidate": "reviewed-draft",
+    "target": "mailbox-synthetic",
+    "plugin": "fake",
+    "tool": "create",
+    "connection": {
+      "context": "p9e2b553e389a4dab",
+      "identity": "synthetic-account",
+      "descriptor": "synthetic"
+    }
+  },
+  "external_adapter_received_draft": false,
+  "before-agent-qa_run_status": "active",
+  "before-agent-qa_qa_status": "ready",
+  "before-agent-qa_outcome": null,
+  "before-agent-qa_application_error": null,
+  "before-agent-qa_project_file": "changed",
+  "after-rejection_run_status": "completed",
+  "after-rejection_qa_status": "accepted",
+  "after-rejection_outcome": "rejected",
+  "after-rejection_application_error": null,
+  "after-rejection_project_file": "changed",
+  "conversation_request_count": 50,
+  "conversation.get_response_bytes": 13575355,
+  "conversation.get_electron_result": "Le moteur local ne répond pas. Les données enregistrées sont conservées.",
+  "project.get_response_bytes": 9068245,
+  "project.get_electron_result": "Le moteur local ne répond pas. Les données enregistrées sont conservées."
+}

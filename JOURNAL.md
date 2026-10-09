@@ -1,5 +1,22 @@
 # Journal
 
+## 2026-10-09 — Fiabilité des workflows et ergonomie (0.6.0-rc.8)
+
+- Données, provenance et preuves lisibles dans la décision et le rapport ; revue dans le même panneau.
+- Questions cohérentes dans phases repliées et icône système.
+- Listes paginées, filtres, recherche et lectures de gros contenus par références.
+- Tentatives suivies par identité de processus ; récupération explicite, sans relance d’effet incertain.
+- Fusion terminal/éditeur, brouillon persistant et conservation des deux versions.
+- Opération dynamique figée avant accord ; données transmises au connecteur avec idempotence.
+- QA du candidat explicite dans l’éditeur, distincte des documents/transferts ; branches, composants, décisions et preuves contrôlés.
+- Sous-workflows avec entrées/sorties, imbrication et propagation des refus.
+- Précontrôle natif/automatique ; changement IA conservant effort et session.
+- Annulation, archivage/restauration, nouvelle demande sans duplication ; reprise d’agent uniquement au prompt Bash vérifié.
+- Terminal : recherche mail, sources, préparation locale et quatre demandes testées avec outils synthétiques ; ambiguïté/connexion manquante posent une question.
+- Reviews indépendantes fonctionnelle et UI ; écarts corrigés et contre-épreuves conservées.
+- Typographie, alignements, I/O, titres et espace terminal/graphe recontrôlés ; détails et limites dans `release/2026-10-09_fiabilite-workflows/README.md`.
+- Recette finale : 226 tests Python, 83 JavaScript ; 65 parcours UI sur sources puis 65 sur paquet, 2 parcours optionnels réels ignorés par campagne.
+
 ## 2026-10-08 — Terminal et workflows dans une fenêtre (rc.3)
 
 - Un seul renderer : dessin, exécution et terminal natif restent ensemble.

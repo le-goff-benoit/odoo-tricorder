@@ -80,4 +80,8 @@ def templates():
                    node("reframe", "Recadrer le travail", "question", x=390, y=330, completion_outcome="blocked", question="Ce périmètre dépasse l’express ou reste incertain. Quelle demande faut-il préciser ou ouvrir avec un workflow adapté ?", outputs={"answer": "string"}),
                    node("failure", "Préciser la reprise nécessaire", "question", x=1050, y=330, completion_outcome="blocked", question="Le contrôle a échoué. Quel travail de correction faut-il ouvrir ? La réponse ne valide pas ce résultat.", outputs={"answer": "string"}),
                ], "edges": [{**edge("qualify", "fix", "eligible"), "mapping": {"scope": "scope"}}, edge("qualify", "reframe", "broader"), {**edge("qualify", "reframe", "unknown"), "id": "qualify-unknown"}, {**edge("fix", "check"), "mapping": {"result": "result"}}, {**edge("check", "receipt", "pass"), "mapping": {"evidence_summary": "evidence_summary"}}, edge("check", "failure", "fail")]}
+    for flow, mapping in ((release, {"work": ["edit"], "check": ["shell"]}), (express, {"fix": ["edit"], "check": ["shell"]}), (request, {"work": ["native-tools"]})):
+        for step in flow["nodes"]:
+            if step["id"] in mapping:
+                step["required_capabilities"] = mapping[step["id"]]
     return [release, support, meeting, request, express]

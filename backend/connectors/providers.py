@@ -122,7 +122,8 @@ def _execute_text(engine, run, node, token, job):
         from .candidates import prepare
         prepared = prepare(engine, run, job)
     workspace = prepared["workspace"] if prepared else None
-    args = command(node, job, workspace)
+    from workflow_engine.recovery import tracked_argv
+    args = tracked_argv(engine, run["id"], node["id"], token, command(node, job, workspace))
     state = run["nodes"][node["id"]]
     observer = Events(selection["provider"], run["id"], node["id"], state["attempt"], ("Read", "Edit", "Write", "Glob", "Grep") if prepared else ())
     prompt = {"mission": node.get("prompt", node["title"]), "criteria": node.get("criteria", []), "inputs": state.get("inputs", {}), "parameters": node.get("parameters", run["parameters"]),
@@ -135,6 +136,7 @@ def _execute_text(engine, run, node, token, job):
     require(len(input_text) <= 100_000, "Contexte trop volumineux pour cette session")
     with (Path(job) / "provider.ndjson").open("wb") as output, (Path(job) / "provider-error.txt").open("wb") as errors:
         process = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=output, stderr=errors, cwd=workspace or job, start_new_session=True)
+        engine.heartbeat(run["id"], node["id"], token, process.pid)
         process.stdin.write(input_text.encode())
         process.stdin.close()
         deadline = time.monotonic() + min(node.get("timeout", 180), 600)

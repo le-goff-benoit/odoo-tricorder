@@ -1,0 +1,27 @@
+(node:427188) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/blegoff/odoo-tricorder/src/studio-model.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/blegoff/odoo-tricorder/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ questions remain visible in every collapsed phase and tray projection (5.47614ms)
+✔ changing provider and model preserves effort, session and unrelated node settings (0.856816ms)
+✔ catalog registration keeps project identity without copying release history (1.072725ms)
+✔ bridge delivers the entire Unicode payload and returns backend result (31.421631ms)
+✔ oversize check counts UTF-8 bytes and runs before starting backend (4.845603ms)
+✔ early stdin closure preserves backend rejection without uncaught EPIPE (24.360235ms)
+✔ early backend exit without response becomes a recoverable transport error (17.742673ms)
+✔ timeout during input delivery rejects without crashing the process (111.982626ms)
+✔ malformed backend output is a transport error without leaking raw content (17.642795ms)
+✔ both provider launch buttons prepare isolated hooks and a separate Crew Stop guard (3.596116ms)
+✔ Claude wrapper preserves statusLine command and padding while retaining no other settings (2.545845ms)
+✔ Codex shell arguments preserve literal paths and one configuration per event (18.930444ms)
+✔ quota scans are global and deduplicate overlapping refreshes (1.326796ms)
+✔ contextual requests remain one literal CLI argument for both providers (63.618267ms)
+✔ work launch refuses a terminal from another release or task before writing settings (0.257985ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 253.48721

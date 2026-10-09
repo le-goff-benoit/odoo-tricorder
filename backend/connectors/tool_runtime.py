@@ -22,6 +22,9 @@ def execute_tool(engine, run, node, token):
         require(engine.run(run["id"])["status"] != "cancelled", "Exécution annulée")
         engine.heartbeat(run["id"], node["id"], token)
 
+    from workflow_engine.recovery import tracked_argv
+    check.launch = lambda argv: tracked_argv(engine, run["id"], node["id"], token, argv)
+
     def invoke(arguments, key=None):
         description = exchange(record["config"], {"protocol": "tricorder.tool/1", "action": "describe"}, check=check, timeout=8)
         require(description.get("connected") is True and description.get("identity") == record["identity"] and description.get("operations") == record["operations"] and description.get("tool_digest") == record.get("tool_digest"), "Compte ou capacités du transport modifiés : vérifier à nouveau la connexion")
@@ -65,8 +68,8 @@ def execute_tool(engine, run, node, token):
             event = digest({"account": message.get("account"), "message": message.get("id")}) if message.get("id") else run["id"] + ":" + node["id"]
         else:
             decision = run["nodes"][node["approval"]].get("decision", {})
-            require(decision.get("outcome") == "approve" and decision.get("operation") == digest(node["operation"]) and decision.get("consumed") == node["id"], "Accord externe absent ou périmé")
-            operation = {**node["operation"], "plugin": binding["plugin"], "tool": binding["operation"]}
+            require(decision.get("outcome") == "approve" and decision.get("operation") == digest(run["nodes"][node["id"]].get("operation", node["operation"])) and decision.get("consumed") == node["id"], "Accord externe absent ou périmé")
+            operation = {**run["nodes"][node["id"]].get("operation", node["operation"]), "plugin": binding["plugin"], "tool": binding["operation"]}
             event = run["id"] + ":" + node["id"]
         operation["connection"] = {"context": run["project"], "identity": record["identity"], "descriptor": record["descriptor"]}
         def send(op, key):

@@ -59,23 +59,35 @@ def capabilities(project=None, engine=None):
     return result
 
 
-def preflight(graph, simulation=False, defaults=None, project=None, engine=None):
+def preflight(graph, simulation=False, defaults=None, project=None, engine=None, mode="automatic", provider=None, model=None):
     if simulation:
         return []
     catalog = {c["id"]: c for c in capabilities()}
     from .integrations import issues as plugin_issues
     issues = plugin_issues(graph, project, engine)
+    if mode not in graph.get("execution_modes", ["native", "automatic"]):
+        issues.append({"node": graph["nodes"][0]["id"], "message": "Ce workflow n’est pas compatible avec ce mode d’exécution."})
     for node in graph["nodes"]:
         kind = node["kind"]
+        selection = {**(defaults or {}), **graph.get("defaults", {}), **node}
+        native = mode == "native" and kind in {"agent", "task", "document"} and node.get("execution_mode") != "edit" and selection.get("provider", provider) == provider and (not selection.get("model") or selection.get("model") == model)
+        available = {"text", "read", "edit", "shell", "native-tools"} if native else {"text", "read", "edit"} if node.get("execution_mode") == "edit" else {"shell", "read"} if kind == "command" else {"text"}
+        missing = set(node.get("required_capabilities", [])) - available
+        if missing:
+            issues.append({"node": node["id"], "message": "Capacités requises indisponibles dans ce mode : " + ", ".join(sorted(missing)) + ". Utiliser la conversation native ou configurer un exécutant adapté."})
+        if native:
+            if provider not in catalog or not catalog[provider]["installed"]:
+                issues.append({"node": node["id"], "message": "CLI de conversation non installé"})
+            continue
         if kind == "command" and not catalog["command"]["usable"]:
             issues.append({"node": node["id"], "message": catalog["command"]["reason"]})
         elif kind == "agent":
             if node.get("execution_mode") == "edit" and (not project or project.get("scope") == "workspace" or project.get("library")):
                 issues.append({"node": node["id"], "message": "L’édition de code nécessite un projet Git ; adapter le modèle dans un projet."})
             selection = {**(defaults or {}), **graph.get("defaults", {}), **node}
-            provider = selection.get("provider", "codex")
-            if not catalog[provider]["installed"]:
-                issues.append({"node": node["id"], "message": catalog[provider]["reason"]})
+            selected_provider = selection.get("provider", "codex")
+            if not catalog[selected_provider]["installed"]:
+                issues.append({"node": node["id"], "message": catalog[selected_provider]["reason"]})
             if not selection.get("model"):
                 issues.append({"node": node["id"], "message": "Modèle IA à définir explicitement ; aucun repli automatique."})
             if selection.get("session", "delegated") != "delegated":
@@ -126,8 +138,12 @@ def dispatch(engine, run_id):
         except ContractError:
             continue  # Another dispatcher/lock owner won the transaction.
         try:
-            subprocess.Popen([sys.executable, str(Path(__file__).parents[1] / "studio.py"), "--state", str(engine.store.directory), "--worker", run_id, nid, claim["token"]],
+            worker = subprocess.Popen([sys.executable, str(Path(__file__).parents[1] / "studio.py"), "--state", str(engine.store.directory), "--worker", run_id, nid, claim["token"]],
                              stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True, close_fds=True)
+            try:
+                engine.heartbeat(run_id, nid, claim["token"], worker.pid)
+            except ContractError:
+                pass  # Worker may already have returned.
         except OSError as exc:
             engine.submit(run_id, nid, claim["token"], {"ok": False, "summary": f"Lancement impossible : {exc.__class__.__name__}"})
     return engine.run(run_id)
@@ -168,9 +184,11 @@ def execute(engine, run_id, node_id, token):
             if candidate:
                 from connectors.candidates import materialize
                 source = materialize(engine, candidate, run["project"], job / "candidate")
-            args = sandbox_argv(node["argv"], source, work)
+            from .recovery import tracked_argv
+            args = tracked_argv(engine, run_id, node_id, token, sandbox_argv(node["argv"], source, work))
             with (job / "output").open("wb") as output:
                 process = subprocess.Popen(args, stdout=output, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True, preexec_fn=_limits)
+                engine.heartbeat(run_id, node_id, token, process.pid)
                 deadline = time.monotonic() + node.get("timeout", 60)
                 reason = None
                 while process.poll() is None:
