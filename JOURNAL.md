@@ -11,7 +11,8 @@
 - Profil absent conservé jusqu’au choix explicite ; réponses de suivi tardives sans effet sur la navigation ou les formulaires.
 - Mode de pilotage séparé des définitions portables ; anciens modèles réenregistrables, historiques conservés.
 - Reviews indépendantes fonctionnelle et UI, parcours incomplets et contre-épreuves ; détails dans `release/2026-10-09_demarrage-et-depannage/README.md`.
-- Validation : 243 tests Python, 84 JavaScript ; 73 parcours empaquetés reçus, dont un après synchronisation du test de dialogue IA, avec délai contrôlé. CI complète exigée avant livraison.
+- Validation finale locale : 249 tests Python, 84 JavaScript ; parcours concurrent reçu sur le paquet reconstruit. Tests et corrections de synchronisation documentés ; CI complète exigée avant livraison.
+- Première CI : concurrence d’initialisation détectée ; créations du catalogue rendues atomiques, avec conservation des modèles modifiés et maintien des conflits manuels. Six contre-épreuves supplémentaires.
 
 ## 2026-10-09 — Fiabilité des workflows et ergonomie (0.6.0-rc.8)
 

@@ -1,0 +1,42 @@
+test_concurrent_catalog_registration_returns_the_same_project (test_workflow_setup_concurrency.ConcurrentSetupTests) ... FAIL
+test_concurrent_odoo_setup_creates_each_template_once (test_workflow_setup_concurrency.ConcurrentSetupTests) ... FAIL
+test_concurrent_refresh_preserves_custom_definitions_guidance_and_runs (test_workflow_setup_concurrency.ConcurrentSetupTests) ... ok
+
+======================================================================
+FAIL: test_concurrent_catalog_registration_returns_the_same_project (test_workflow_setup_concurrency.ConcurrentSetupTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/blegoff/odoo-tricorder/tests/test_workflow_setup_concurrency.py", line 58, in test_concurrent_catalog_registration_returns_the_same_project
+    project = self.assert_configured_once(self.race("projects"))
+  File "/home/blegoff/odoo-tricorder/tests/test_workflow_setup_concurrency.py", line 50, in assert_configured_once
+    self.assertEqual([[result["status"] for result in reply] for reply in results],
+AssertionError: Lists differ: [['unavailable'], ['configured']] != [['configured'], ['configured']]
+
+First differing element 0:
+['unavailable']
+['configured']
+
+- [['unavailable'], ['configured']]
++ [['configured'], ['configured']] : [[{'path': '/tmp/tricorder-setup-race-eodwu7ol/synthetic-project', 'status': 'unavailable', 'reason': 'Ce dépôt Git est déjà enregistré comme projet'}], [{'path': '/tmp/tricorder-setup-race-eodwu7ol/synthetic-project', 'project': 'p7439f14303c841b5', 'status': 'configured'}]]
+
+======================================================================
+FAIL: test_concurrent_odoo_setup_creates_each_template_once (test_workflow_setup_concurrency.ConcurrentSetupTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/blegoff/odoo-tricorder/tests/test_workflow_setup_concurrency.py", line 67, in test_concurrent_odoo_setup_creates_each_template_once
+    project = self.assert_configured_once(self.race("workflows", str(self.pack)))
+  File "/home/blegoff/odoo-tricorder/tests/test_workflow_setup_concurrency.py", line 50, in assert_configured_once
+    self.assertEqual([[result["status"] for result in reply] for reply in results],
+AssertionError: Lists differ: [['configured'], ['unavailable']] != [['configured'], ['configured']]
+
+First differing element 1:
+['unavailable']
+['configured']
+
+- [['configured'], ['unavailable']]
++ [['configured'], ['configured']] : [[{'path': '/tmp/tricorder-setup-race-u4le2z82/synthetic-project', 'project': 'pbe89fd4883e24f8b', 'status': 'configured'}], [{'path': '/tmp/tricorder-setup-race-u4le2z82/synthetic-project', 'status': 'unavailable', 'reason': "Conflit : une autre révision a été enregistrée. Rechargez avant d'appliquer vos changements."}]]
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.167s
+
+FAILED (failures=2)

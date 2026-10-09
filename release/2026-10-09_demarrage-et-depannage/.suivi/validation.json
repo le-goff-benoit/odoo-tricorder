@@ -8,35 +8,62 @@
   },
   "ui_source": {
     "full_passed": 71,
-    "skipped_optional_real_provider": 2,
     "targeted_additional_passed": 2,
     "logs": [
       "ui-source.log",
       "ui-profile-source.log",
       "ui-pack-profile-source.log"
-    ]
+    ],
+    "skipped_optional_real_projects": 2
   },
   "ui_packaged": {
     "initial_full_passed": 72,
     "initial_full_failed": 1,
-    "skipped_optional_real_provider": 2,
     "log": "ui-packaged-initial.log",
     "failure": "Sélecteur Modèle non limité au dialogue de réparation ; le test ne synchronisait pas son ouverture.",
     "test_fix": "Attente du dialogue IA nommé, sélecteurs locaux, délai IPC réel de 1500 ms. Aucune modification applicative.",
     "targeted_passed": 1,
     "targeted_log": "ui-model-delayed.log",
     "targeted_proof": "model-delayed-proof.json",
-    "distinct_synthetic_paths_received": 73
+    "distinct_synthetic_paths_received": 73,
+    "skipped_optional_real_projects": 2
   },
   "independent_reviews": [
     "docs/audits/2026-10-09-parcours-blocages.md",
     "docs/audits/2026-10-09-depannage-ui.md"
   ],
-  "artifact": {
+  "publication_gate": "CI complète sur le commit publié requise avant release et installation.",
+  "ci_first_attempt": {
+    "run": "https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/37918436078",
+    "head": "badcdd30c345c00b8120f4fae2abe4e9074abad5",
+    "status": "failure",
+    "source_ui_passed": 73,
+    "packaged_ui_passed": 72,
+    "packaged_ui_failed": 1,
+    "finding": "Configuration concurrente du catalogue : inscription du même projet et installation des modèles en course. Correction applicative requise avant livraison."
+  },
+  "initial_artifact": {
     "filename": "odoo-tricorder_0.6.0-rc.9_amd64.deb",
     "sha256": "677ef6a8378e3c40f3a02275087535ec8ccc99f5b3bdb0da141f2fa82b06168d",
     "renderer_sha256": "cea93908e19b634db8d79a11f76763537770835189895a3bd3d1b8d594679da3",
     "backend_source_files_verified": 46
   },
-  "publication_gate": "CI complète sur le commit publié requise avant release et installation."
+  "artifact": {
+    "filename": "odoo-tricorder_0.6.0-rc.9_amd64.deb",
+    "sha256": "9df6c4b5f482546bb9aa6e6ac42dde94a1cf76e4e01cec8ce491b022cdcc0f0a",
+    "renderer_sha256": "cea93908e19b634db8d79a11f76763537770835189895a3bd3d1b8d594679da3",
+    "backend_source_files_verified_in_deb": 46,
+    "python_cache_entries": 0
+  },
+  "final_local_checks": {
+    "python_passed": 249,
+    "javascript_passed": 84,
+    "unit_log": "unit-final.log",
+    "concurrency_targeted_passed": 31,
+    "concurrency_log": "setup-concurrency-after.log",
+    "packaged_ui_concurrent_refresh_passed": 1,
+    "ui_log": "ui-catalog-concurrency-after.log",
+    "build_log": "dist-final.log",
+    "independent_review": "docs/audits/2026-10-09-parcours-blocages.md"
+  }
 }

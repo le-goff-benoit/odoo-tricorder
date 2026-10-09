@@ -102,13 +102,26 @@ test('Odoo launch journey: missing QA database does not block intake through the
 });
 
 test('large release history: startup and refresh preserve projects, workflows and terminal', async () => {
-  const initial = await page.evaluate(() => window.tricorder.bootstrap());
-  expect(JSON.stringify(initial.projects).length).toBeGreaterThan(4000000);
-  expect(initial.workflowWarning).toBeNull();
-  expect(initial.configured).toEqual([expect.objectContaining({ status: 'configured' })]);
+  // Startup can still be configuring the catalog when another refresh arrives.
+  // Every caller must get a usable, unique project, not a duplicate-registration error.
+  const snapshots = await page.evaluate(() => Promise.all(Array.from({ length: 3 }, () => window.tricorder.bootstrap())));
+  for (const initial of snapshots) {
+    expect(JSON.stringify(initial.projects).length).toBeGreaterThan(4000000);
+    expect(initial.workflowWarning).toBeNull();
+    expect(initial.configured).toEqual([expect.objectContaining({ status: 'configured' })]);
+  }
   await expect(page.locator('#catalog-warning')).toBeHidden();
   const workflows = await page.evaluate(() => window.studio.request({ action: 'bootstrap' }));
-  expect(workflows.projects.some(p => p.title === 'history-project')).toBe(true);
+  expect(workflows.projects.filter(p => p.title === 'history-project')).toHaveLength(1);
+  const projectId = workflows.projects.find(p => p.title === 'history-project').id;
+  const saved = await page.evaluate(project => window.studio.request({ action: 'workflow.save', project, graph: {
+    schema: 1, id: 'history-workflow', title: 'Analyser cet historique',
+    nodes: [{ id: 'analyse', kind: 'agent', title: 'Analyser les demandes' }], edges: [],
+  } }), projectId);
+  const refreshed = await page.evaluate(() => Promise.all(Array.from({ length: 3 }, () => window.tricorder.bootstrap())));
+  for (const snapshot of refreshed) expect(snapshot.configured).toEqual([expect.objectContaining({ status: 'configured' })]);
+  const catalog = await page.evaluate(project => window.studio.request({ action: 'workflow.list', project }), projectId);
+  expect(catalog.items).toEqual([expect.objectContaining({ id: saved.id, title: saved.title, revision: saved.revision })]);
   await page.locator('[data-action="refresh"]').click();
   await expect(page.locator('#sync-status')).toContainText('À jour');
   await expect(page.locator('#catalog-warning')).toBeHidden();

@@ -72,8 +72,12 @@ class Engine:
             prepare(project)
             return project
 
-    def create_project(self, title, path=None):
+    def create_project(self, title, path=None, *, if_absent=False):
+        # Catalog refreshes may race after reading the same project list. The
+        # lookup must share the insertion transaction; explicit creation keeps
+        # rejecting duplicates. Never reuse an internal workspace/library here.
         require(isinstance(title, str) and title.strip(), "Nom du projet requis")
+        require(not if_absent or path, "La configuration du catalogue exige un dépôt existant")
         project = {"id": new_id("p"), "title": title.strip(), "packs": [], "defaults": {"provider": "codex", "profile": "generalist", "model": "", "effort": "medium", "session": "delegated"}}
         if path:
             target = Path(path).expanduser().resolve()
@@ -85,7 +89,11 @@ class Engine:
             project.update(path=str(target), managed=True)
         with self.store.transaction() as db:
             for row in db.execute("SELECT body FROM projects"):
-                require(self.store.body(row).get("path") != project["path"], "Ce dépôt Git est déjà enregistré comme projet")
+                existing = self.store.body(row)
+                if existing.get("path") == project["path"]:
+                    require(if_absent and not existing.get("library") and existing.get("scope", "project") == "project",
+                            "Ce dépôt Git est déjà enregistré comme projet")
+                    return existing
             db.execute("INSERT INTO projects VALUES (?, ?)", (project["id"], self.store.encode(project)))
             from .guidance import prepare
             prepare(project)
@@ -114,7 +122,9 @@ class Engine:
         require(graph.get("id") == workflow_id, "L'identifiant du fichier ne correspond pas au workflow ouvert")
         return self.save(project_id, graph, expected_revision, from_disk=True)
 
-    def save(self, project_id, graph, expected_revision=0, *, from_disk=False, expected_disk=None):
+    def save(self, project_id, graph, expected_revision=0, *, from_disk=False, expected_disk=None, if_absent=False):
+        require(not if_absent or (expected_revision == 0 and not from_disk and expected_disk is None),
+                "La configuration initiale ne peut pas modifier un workflow existant")
         graph = copy.deepcopy(graph)
         graph.pop("_project", None)
         graph.pop("driver", None)
@@ -123,6 +133,11 @@ class Engine:
             self.project(project_id, db)
             row = db.execute("SELECT MAX(revision) AS revision FROM workflows WHERE project=? AND id=?", (project_id, graph["id"])).fetchone()
             current = row["revision"] or 0
+            if if_absent and current:
+                # Another setup or the user has already saved it. Preserve both
+                # their revision and any subsequent unimported terminal edit.
+                return self.store.body(db.execute("SELECT body FROM workflows WHERE project=? AND id=? AND revision=?",
+                                                  (project_id, graph["id"], current)).fetchone())
             require(current == expected_revision, "Conflit : une autre révision a été enregistrée. Rechargez avant d'appliquer vos changements.")
             target = self.workflow_path(project_id, graph["id"], db)
             if expected_disk is not None:

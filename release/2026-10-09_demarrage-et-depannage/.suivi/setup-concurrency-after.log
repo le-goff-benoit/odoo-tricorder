@@ -1,0 +1,37 @@
+test_catalog_registration_never_reuses_the_internal_library (test_workflow_setup_concurrency.ConcurrentSetupTests) ... ok
+test_catalog_still_reports_invalid_repository_and_unimported_template (test_workflow_setup_concurrency.ConcurrentSetupTests) ... ok
+test_concurrent_catalog_registration_returns_the_same_project (test_workflow_setup_concurrency.ConcurrentSetupTests) ... ok
+test_concurrent_odoo_setup_creates_each_template_once (test_workflow_setup_concurrency.ConcurrentSetupTests) ... ok
+test_concurrent_refresh_preserves_custom_definitions_guidance_and_runs (test_workflow_setup_concurrency.ConcurrentSetupTests) ... ok
+test_user_save_between_snapshot_and_setup_keeps_the_user_revision (test_workflow_setup_concurrency.ConcurrentSetupTests) ... ok
+test_automatic_and_scheduled_qa_still_require_the_copy_before_launch (test_workflow_setup.SetupCandidateTests) ... ok
+test_cross_project_dialog_checks_every_target_before_opening (test_workflow_setup.SetupCandidateTests) ... ok
+test_explicit_unsafe_or_invalid_qa_context_blocks_every_native_entry (test_workflow_setup.SetupCandidateTests) ... ok
+test_missing_profile_does_not_hide_available_profiles_or_duplicate_diagnostics (test_workflow_setup.SetupCandidateTests) ... ok
+test_native_dialog_launch_defers_only_missing_qa_copy_until_claim (test_workflow_setup.SetupCandidateTests) ... ok
+test_native_policy_does_not_defer_series_online_or_missing_profile (test_workflow_setup.SetupCandidateTests) ... ok
+test_new_custom_release_has_applicable_explicit_qa_and_keeps_frozen_definitions (test_workflow_setup.SetupCandidateTests) ... ok
+test_studio_and_online_routes_do_not_invent_a_code_candidate (test_workflow_setup.SetupCandidateTests) ... ok
+test_arbitrary_new_plugin_is_visible_but_cannot_self_authorize (test_workflow_workspace.WorkspaceTests) ... ok
+test_global_runs_and_schedules_need_no_git_project (test_workflow_workspace.WorkspaceTests) ... ok
+test_guidance_and_catalog_refuse_outside_links (test_workflow_workspace.WorkspaceTests) ... ok
+test_native_inventory_does_not_forward_secrets_or_infer_auth (test_workflow_workspace.WorkspaceTests) ... ok
+test_optional_pack_only_constrains_its_domain (test_workflow_workspace.WorkspaceTests) ... ok
+test_project_is_git_root_and_duplicate_or_subfolder_rejected (test_workflow_workspace.WorkspaceTests) ... ok
+test_scoped_guidance_preserves_all_user_instructions (test_workflow_workspace.WorkspaceTests) ... ok
+test_wrong_typed_result_never_advances_downstream (test_workflow_workspace.WorkspaceTests) ... ok
+test_branches_and_durable_human_decision (test_workflow_engine.WorkflowEngineTests) ... ok
+test_concurrent_claim_and_resource_lock (test_workflow_engine.WorkflowEngineTests) ... ok
+test_contract_errors_and_semantic_layout (test_workflow_engine.WorkflowEngineTests) ... ok
+test_external_approval_exact_target_candidate_and_consumption (test_workflow_engine.WorkflowEngineTests) ... ok
+test_failed_missing_and_altered_evidence_never_accepted (test_workflow_engine.WorkflowEngineTests) ... ok
+test_pause_late_result_and_bounded_retry (test_workflow_engine.WorkflowEngineTests) ... ok
+test_project_revision_conflict_and_run_immutable (test_workflow_engine.WorkflowEngineTests) ... ok
+test_shared_template_adaptations_and_results_remain_project_specific (test_workflow_engine.WorkflowEngineTests)
+U03/U04: reuse across projects is distinct from a coordinated run. ... ok
+test_subworkflows_are_namespaced_and_recursion_refused (test_workflow_engine.WorkflowEngineTests) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 2.080s
+
+OK

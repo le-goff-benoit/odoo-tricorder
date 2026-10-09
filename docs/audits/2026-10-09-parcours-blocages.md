@@ -271,8 +271,8 @@ service externe ou projet client n’a été exécuté pendant cette réception.
 
 ### Périmètre final de réception
 
-Les [empreintes des dix sources reçues](2026-10-09-parcours-blocages/source-receipt-final.json)
-couvrent les neuf fichiers backend modifiés et la génération des arguments
+Les [empreintes des onze sources reçues](2026-10-09-parcours-blocages/source-receipt-final.json)
+couvrent les dix fichiers backend modifiés et la génération des arguments
 fournisseur dans Electron. Les sondes de cette revue ont été exécutées par le
 reviewer ; les tests verts annoncés par le développeur ne sont pas utilisés comme
 substitut à ces contre-épreuves. `git diff --check` est également vert.
@@ -300,3 +300,57 @@ Complément B05 : après gel du prédicat partagé et contre-épreuve indépenda
 l’empreinte de `packs.py` a été actualisée. Les neuf autres sources du manifeste
 sont inchangées ; la trace du complément précédent est conservée. Aucun autre
 scénario reçu n’a été répété pour ce changement ciblé.
+
+## Complément CI rc.9 — Configuration concurrente du catalogue
+
+**Réception indépendante acceptée.** Ce complément porte uniquement sur les
+différences d’`engine.py` et `setup.py` depuis le commit
+`badcdd30c345c00b8120f4fae2abe4e9074abad5`. Il fait suite à l’échec de la
+[CI rc.9](https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/37918436078).
+Les scénarios UI et la suite complète restent exécutés par le parent.
+
+Deux appels de configuration pouvaient lire le même catalogue vide. Le second
+enregistrait alors une erreur de projet déjà présent, ou un conflit de révision
+après la création d’un modèle par le premier. Le nouveau mode interne
+`if_absent` relit l’existence et crée l’objet dans la même transaction SQLite
+`BEGIN IMMEDIATE`. Les appels manuels conservent leur comportement strict. Ce
+mode n’est pas exposé comme option des commandes publiques de création/sauvegarde.
+
+La [sonde indépendante](2026-10-09-parcours-blocages/probe_setup_concurrency.py)
+utilise **deux processus OS**, chacun avec son moteur et ses connexions SQLite.
+Les barrières synchronisent leurs lectures réelles ; aucun état n’est retouché
+pour forcer une transition. Une extraction temporaire des sources du commit de
+référence reproduit le refus concurrent avec la même sonde :
+[preuve rouge indépendante](2026-10-09-parcours-blocages/setup-concurrency-before.json).
+
+La [réception finale](2026-10-09-parcours-blocages/setup-concurrency-final.json)
+vérifie les résultats suivants :
+
+- Les deux inscriptions concurrentes retournent le même projet ; une inscription
+  via un alias de chemin converge aussi. Le titre existant est conservé.
+- Les deux configurations des modèles produisent exactement deux workflows,
+  chacun en révision 1, un seul pack enregistré et aucun run parasite.
+- Après les deux lectures de workflows encore vides, l’utilisateur enregistre
+  une première puis une deuxième révision, ouvre un run, personnalise ses
+  consignes et modifie le fichier depuis le terminal. Les deux configurations
+  reprises conservent la révision 2, les octets du fichier non encore importé,
+  les consignes et le run figé sur sa première révision. Aucune troisième
+  révision artificielle n’est créée.
+- Les doublons explicites et les sauvegardes périmées restent refusés, y compris
+  si une requête publique tente d’ajouter `if_absent`. Une sauvegarde avec la
+  bonne révision mais un fichier modifié depuis le terminal reste refusée aussi.
+- Graphe invalide, options internes incompatibles, titre vide, création interne
+  sans dépôt existant, dépôt non Git et réutilisation de la bibliothèque restent
+  refusés. Le mode interne ne permet pas de sauter ces validations.
+
+La relecture du diff confirme que la détection d’existence partage la transaction
+de l’insertion. Les garde-fous de sauvegarde explicite, les validations avant
+insertion et les commandes publiques sont conservés. Cette réception établit
+l’atomicité de ces créations concurrentes ; elle ne prétend pas transformer
+toute une configuration de catalogue en transaction globale avec le système de
+fichiers.
+
+`git diff --check` est vert sur les deux sources. Aucun modèle, service réel,
+build ou suite complète n’a été lancé par ce reviewer. Le manifeste est étendu à
+`setup.py` et l’empreinte d’`engine.py` est actualisée ; les neuf autres empreintes
+reçues restent identiques. Aucun autre défaut n’a été trouvé dans ce complément.

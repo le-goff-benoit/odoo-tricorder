@@ -1,0 +1,8 @@
+{
+  "two_process_project_registration_unique_and_manual_strict": "pass",
+  "two_process_template_setup_one_revision_each": "pass",
+  "two_stale_setup_processes_preserve_interleaved_user_revisions_disk_guidance_run": "pass",
+  "internal_options_cannot_weaken_public_save_or_validation": "pass",
+  "invalid_repository_and_internal_library_still_refused": "pass",
+  "model_or_service_calls": 0
+}

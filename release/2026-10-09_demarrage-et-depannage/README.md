@@ -38,6 +38,7 @@ ce contrôle. Une référence déclarée ne constitue pas une preuve de tests r�
 | Workflow générique utilisant un profil du pack Odoo | Reprendre version et hébergement du projet cible, quel que soit le nom du profil ; préserver les restrictions Online. |
 | Effort différent entre bloc et conversation | Signaler l’écart, sans exécuter silencieusement avec un autre réglage. |
 | Modèle repris d’une ancienne conversation | Séparer son mode d’exécution de la définition portable ; l’automatique et la planification exécutent réellement leurs étapes. |
+| Plusieurs chargements du catalogue se chevauchent | Enregistrer chaque dépôt et chaque modèle une seule fois, sans faux conflit ni écrasement des personnalisations. |
 
 Les brouillons conservent la demande et les projets pendant les détours de
 configuration. Les autorisations d’envoi restent des décisions distinctes.
@@ -68,13 +69,13 @@ adaptateurs locaux. Ils contrôlent l’interface, les transitions, les données
 conservées et les refus. Ils ne valident pas les identifiants d’un compte réel,
 le raisonnement d’un modèle ou une recette métier Odoo sur une base client.
 
-### Résultats locaux du candidat
+### Résultats locaux avant la première CI
 
 | Contrôle | Résultat et preuve |
 |---|---|
 | Tests moteur et Electron | 243 tests Python et 84 tests JavaScript réussis — [journal](.suivi/unit.log). |
-| Interface depuis les sources | 71 scénarios réussis, puis 2 cas supplémentaires ciblés réussis ; 2 tests de fournisseurs réels désactivés — [campagne](.suivi/ui-source.log), [profil absent](.suivi/ui-profile-source.log), [contexte du pack](.suivi/ui-pack-profile-source.log). |
-| Application empaquetée | 72 scénarios réussis dans la campagne initiale ; le dernier reçu après correction du test, soit 73 parcours distincts. Les 2 tests de fournisseurs réels restent désactivés — [campagne initiale](.suivi/ui-packaged-initial.log), [rejeu ciblé](.suivi/ui-model-delayed.log). |
+| Interface depuis les sources | 71 scénarios réussis, puis 2 cas supplémentaires ciblés réussis ; 2 tests optionnels sur des projets réels désactivés — [campagne](.suivi/ui-source.log), [profil absent](.suivi/ui-profile-source.log), [contexte du pack](.suivi/ui-pack-profile-source.log). |
+| Application empaquetée | 72 scénarios réussis dans la campagne initiale ; le dernier reçu après correction du test, soit 73 parcours distincts. Les 2 tests optionnels sur des projets réels restent désactivés — [campagne initiale](.suivi/ui-packaged-initial.log), [rejeu ciblé](.suivi/ui-model-delayed.log). |
 | Construction | Paquet Ubuntu amd64 construit ; bundle graphique et 46 fichiers Python/JSON identiques aux sources reçues — [construction](.suivi/dist.log), [manifeste](.suivi/validation.json). |
 
 Le seul échec de la campagne empaquetée concernait le test de changement de modèle :
@@ -88,3 +89,27 @@ n’a été démontré par cet échec.
 
 La publication et l’installation sont conditionnées à une nouvelle campagne CI
 complète sur le commit livré. Son lien est indiqué dans la release GitHub.
+
+### Concurrence détectée par la CI
+
+La première campagne GitHub a réussi les 73 parcours sur les sources, puis a
+révélé une course applicative sur le paquet : deux chargements du catalogue
+pouvaient lire le même état initial, tenter de créer le même projet et retourner
+un faux refus « déjà enregistré ». Le même entrelacement pouvait provoquer un
+conflit de révision pendant l’ajout des modèles Odoo.
+
+Le [journal CI](.suivi/ci-catalog-concurrency-before.log) et
+l’[état de l’interface](.suivi/ci-catalog-concurrency-before.md) sont conservés.
+Deux tests déterministes imposent les lectures concurrentes qui reproduisent ces
+défauts. La correction rend l’initialisation du catalogue atomique et répétable :
+les opérations manuelles continuent de refuser les doublons et conflits, et les
+modèles personnalisés restent conservés. Le test d’interface demande aussi trois
+chargements concurrents, puis vérifie l’unicité du projet et de ses workflows.
+
+Après correction : **249 tests Python et 84 tests JavaScript réussis**
+([journal final](.suivi/unit-final.log)), 31 contrôles ciblés de configuration
+([journal](.suivi/setup-concurrency-after.log)), et parcours de démarrage/actualisation
+concurrente reçu sur le paquet reconstruit ([journal UI](.suivi/ui-catalog-concurrency-after.log)).
+La revue indépendante confirme également le résultat avec deux processus OS,
+dont une sauvegarde utilisateur intercalée. Le manifeste final vérifie les 46
+fichiers backend directement dans le `.deb`, ainsi que le bundle et l’exécutable.

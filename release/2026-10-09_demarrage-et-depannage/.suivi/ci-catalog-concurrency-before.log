@@ -1,0 +1,139 @@
+check	Vérifier l’application empaquetée	﻿2026-10-09T10:40:41.2826203Z ##[group]Run xvfb-run -a npm run test:packaged
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.2826552Z [36;1mxvfb-run -a npm run test:packaged[0m
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.2887753Z shell: /usr/bin/bash -e {0}
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.2887971Z env:
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.2888275Z   TRICORDER_AGENTS_DIR: /home/runner/work/odoo-tricorder/odoo-tricorder/.test-tools/odoo-crew
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.2888627Z ##[endgroup]
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.4165443Z
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.4166113Z > odoo-tricorder@0.6.0-rc.9 test:packaged
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.4166651Z > node scripts/test-packaged.mjs
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.4166886Z
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.9873882Z
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.9874456Z Running 75 tests using 1 worker
+check	Vérifier l’application empaquetée	2026-10-09T10:40:41.9875472Z
+check	Vérifier l’application empaquetée	2026-10-09T10:40:47.6682082Z   ✓   1 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (5.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:40:48.8118016Z   ✓   2 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (1.1s)
+check	Vérifier l’application empaquetée	2026-10-09T10:40:51.3087091Z   ✓   3 tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (2.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:40:56.6114610Z   ✓   4 tests/desktop.spec.cjs:292:1 › design system: common gutters, cards and controls across every project view (5.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:40:57.9155232Z   ✓   5 tests/desktop.spec.cjs:355:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (1.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:40:59.1581299Z   ✓   6 tests/desktop.spec.cjs:408:1 › effort: partial recorded time survives missing roles, task filtering and refresh (1.2s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:00.3416979Z   ✓   7 tests/desktop.spec.cjs:450:1 › effort: open release updates task and agent percentages before closure (1.2s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:03.7386250Z   ✓   8 tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence (3.4s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:05.8580883Z   ✓   9 tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (2.1s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:08.1856428Z   ✓  10 tests/desktop.spec.cjs:666:1 › Markdown preview: readable safe content and recovery from a project read error (2.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:09.4729360Z   ✓  11 tests/desktop.spec.cjs:719:1 › email removed: no UI or API, old private records preserved, project still usable (1.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:12.8931279Z   ✓  12 tests/desktop.spec.cjs:770:1 › desktop: projects, proof status, sources, real terminal and persistence (3.4s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:16.7170089Z   ✓  13 tests/desktop.spec.cjs:869:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (3.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:16.7251936Z   -  14 tests/desktop.spec.cjs:989:1 › real project: read-only release/task/mission screens
+check	Vérifier l’application empaquetée	2026-10-09T10:41:27.5292737Z   ✓  15 tests/desktop.spec.cjs:1077:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (10.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:33.8471850Z   ✓  16 tests/desktop.spec.cjs:1213:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (6.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:41.2726952Z   ✓  17 tests/desktop.spec.cjs:1310:1 › live requests appear before planning and reconcile with tasks without manual refresh (7.4s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:50.3340893Z   ✓  18 tests/desktop.spec.cjs:1364:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (9.1s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:52.2949266Z
+check	Vérifier l’application empaquetée	2026-10-09T10:41:52.2962964Z   ✓  19 tests/desktop.spec.cjs:1500:1 › work page starts a contextual request and resumes a task without changing its state (2.0s)
+check	Vérifier l’application empaquetée	2026-10-09T10:41:57.2401623Z   ✓  20 tests/desktop.spec.cjs:1550:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (4.9s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:02.7213904Z   ✓  21 tests/desktop.spec.cjs:1652:1 › window integration preserves the native conversation while inspecting phases and the library (5.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:08.2198402Z   ✓  22 tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch (5.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:13.6867809Z   ✓  23 tests/launch-repair.spec.cjs:146:1 › repair secondary-project connection diagnoses before launch and returns without retyping (5.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:19.1522959Z   ✓  24 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain) (5.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:24.6389318Z   ✓  25 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile) (5.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:30.1388148Z   ✓  26 tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin (5.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:35.6024717Z   ✓  27 tests/launch-repair.spec.cjs:227:1 › late run response cannot navigate back after the user opens Projects (5.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:41.0775310Z   ✓  28 tests/launch-repair.spec.cjs:260:1 › repair missing profile preserves it until the user explicitly chooses generalist (5.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:41.0996461Z   -  29 tests/release-opening.spec.cjs:25:1 › large release opens with validated memory in read-only mode
+check	Vérifier l’application empaquetée	2026-10-09T10:42:43.7754646Z
+check	Vérifier l’application empaquetée	2026-10-09T10:42:43.7756203Z   ✓  30 tests/studio.spec.cjs:85:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog (2.6s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:44.6748203Z
+check	Vérifier l’application empaquetée	2026-10-09T10:42:44.6749315Z   ✘  31 tests/studio.spec.cjs:104:1 › large release history: startup and refresh preserve projects, workflows and terminal (870ms)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:46.7980001Z   ✓  32 tests/studio.spec.cjs:132:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (1.7s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:52.5633680Z   ✓  33 tests/studio.spec.cjs:154:1 › simulation: two branches, human decision, truthful results and single documentation view (5.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:58.4415176Z   ✓  34 tests/studio.spec.cjs:170:1 › decisions persist after application restart and reject skips its branch (5.9s)
+check	Vérifier l’application empaquetée	2026-10-09T10:42:59.8582332Z   ✓  35 tests/studio.spec.cjs:184:1 › connections never infer native authentication and real unconfigured launch is blocked (1.4s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:05.1425752Z   ✓  36 tests/studio.spec.cjs:197:1 › live events preserve text input and focus; layout fits 1024 and dark theme (5.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:06.1257457Z   ✓  37 tests/studio.spec.cjs:212:1 › structured proposal needs preview, rejects stale revision and never starts a run (970ms)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:07.9024753Z   ✓  38 tests/studio.spec.cjs:226:1 › template creation has a real terminal; file edits require validated reload (1.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:09.6861357Z   ✓  39 tests/studio.spec.cjs:247:1 › recurrence activation shows models and persists; communication needs exact recipients (1.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:10.3456112Z   ✓  40 tests/studio.spec.cjs:267:1 › window closes to Ubuntu tray and remains available (651ms)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:11.8829468Z   ✓  41 tests/studio.spec.cjs:275:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (1.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:14.6906707Z   ✓  42 tests/studio.spec.cjs:300:1 › real isolated command produces evidence, then waits for human receipt (2.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:18.0427371Z   ✓  43 tests/studio.spec.cjs:316:1 › global workflow runs independently of Git projects and draws right-angle links (3.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:19.9509105Z   ✓  44 tests/studio.spec.cjs:337:1 › exported clickable file opens on another local instance as a draft without execution (1.9s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:20.6027835Z   ✓  45 tests/studio.spec.cjs:359:1 › update dialog is explicit and test mode makes no automatic network request (644ms)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:21.8477672Z   ✓  46 tests/studio.spec.cjs:367:1 › repeated example clicks never create duplicate demo projects (1.2s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:24.4657947Z   ✓  47 tests/studio.spec.cjs:377:1 › trusted local adapter runs through the UI and automatic validation completes without a human receipt (2.6s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:26.1721994Z   ✓  48 tests/studio.spec.cjs:403:1 › large workflow remains editable in canvas and keyboard list (1.7s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:27.8739472Z   ✓  49 tests/studio.spec.cjs:415:1 › application navigation separates overview, workflow use and editor with compact responsive spacing (1.7s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:30.0441771Z   ✓  50 tests/studio.spec.cjs:438:1 › code proposal diff is reviewable and only explicit application changes the Git project (2.2s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:33.2478241Z   ✓  51 tests/studio.spec.cjs:477:1 › accessible navigation, editor, inspector and dialog in light and dark themes (3.2s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:34.8670130Z   ✓  52 tests/studio.spec.cjs:491:1 › human gate presents the full external content and candidate before approval (1.6s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:36.5524401Z   ✓  53 tests/studio.spec.cjs:508:1 › one provider choice applies to all AI steps and the project offers direct execution (1.7s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:42.8199264Z   ✓  54 tests/studio.spec.cjs:534:1 › native conversation: provider choice, durable questions, live graph and same terminal after restart (6.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:44.1835925Z   ✓  55 tests/studio.spec.cjs:602:1 › previous studio terminal is adopted in the main terminal without a new shell (1.4s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:46.7600916Z   ✓  56 tests/studio.spec.cjs:620:1 › review: Odoo profiles, editable unresolved outcome and synthetic release capture (2.6s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:57.6130463Z   ✓  57 tests/studio.spec.cjs:654:1 › design review: library and management views use the workspace, with readable actions in both themes (10.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:43:59.0946342Z   ✓  58 tests/studio.spec.cjs:690:1 › terminal visibility preserves a live session while browsing and editing (1.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:00.0456737Z   ✓  59 tests/studio.spec.cjs:721:1 › bootstrap failure is distinct from an empty catalog and Actualiser recovers (942ms)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:01.1083544Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:01.1085200Z   ✓  60 tests/studio.spec.cjs:739:1 › optional workflow setup failure keeps native projects and can be retried (1.1s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:03.8552953Z   ✓  61 tests/studio.spec.cjs:751:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (2.7s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:05.8390526Z   ✓  62 tests/studio.spec.cjs:794:1 › repository journey: resume a cloned workflow, simulate a question and export a generic work dossier (2.0s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:10.8427637Z   ✓  63 tests/studio.spec.cjs:821:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question (5.0s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:12.7221968Z   ✓  64 tests/studio.spec.cjs:868:1 › workspace layout: focused navigation, adjustable split and editor preserve the same terminal (1.9s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:14.5277449Z   ✓  65 tests/studio.spec.cjs:912:1 › configuration: pending fields survive I/O editing, block selection and keyboard save (1.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:15.6321563Z   ✓  66 tests/studio.spec.cjs:940:1 › embedded theme: workflow controls use the shared surface colors (1.1s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:17.8681298Z   ✓  67 tests/studio.spec.cjs:951:1 › audit reception: decision shows the delivered text, provenance and safe proof reader (2.2s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:19.6336593Z   ✓  68 tests/studio.spec.cjs:977:1 › audit reception: concurrent terminal edit merges with the persisted editor draft (1.8s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:20.7304066Z   ✓  69 tests/studio.spec.cjs:994:1 › audit reception: stopped native agent resumes explicitly in the same terminal (1.1s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:22.8863189Z   ✓  70 tests/studio.spec.cjs:1007:1 › audit reception: history pages and archives preserve the completed work (2.1s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:27.5580600Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:27.5582154Z   ✓  71 tests/studio.spec.cjs:1033:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (4.7s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:28.8409841Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:28.8411634Z   ✓  72 tests/studio.spec.cjs:1066:43 › mail intake: missing access becomes a visible question without inventing a source (1.3s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:30.2001466Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:30.2003328Z   ✓  73 tests/studio.spec.cjs:1066:43 › mail intake: ambiguous access becomes a visible question without inventing a source (1.4s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:35.0973970Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:35.0977069Z   ✓  74 tests/studio.spec.cjs:1076:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (4.9s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6235627Z   ✓  75 tests/studio.spec.cjs:1126:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload (2.5s)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6421517Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6425933Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6434269Z   1) tests/studio.spec.cjs:104:1 › large release history: startup and refresh preserve projects, workflows and terminal
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6434979Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6435257Z     Error: expect(received).toEqual(expected) // deep equality
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6435598Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6435729Z     - Expected  - 2
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6436027Z     + Received  + 4
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6436220Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6436320Z       Array [
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6436569Z     -   ObjectContaining {
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6436896Z     -     "status": "configured",
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6437219Z     +   Object {
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6437632Z     +     "path": "/tmp/tricorder-studio-ui-mubGlH/history-project",
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6438397Z     +     "reason": "Ce dépôt Git est déjà enregistré comme projet",
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6438869Z     +     "status": "unavailable",
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6439187Z         },
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6439424Z       ]
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6439995Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6440270Z       106 |   expect(JSON.stringify(initial.projects).length).toBeGreaterThan(4000000);
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6440686Z       107 |   expect(initial.workflowWarning).toBeNull();
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6441495Z     > 108 |   expect(initial.configured).toEqual([expect.objectContaining({ status: 'configured' })]);
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6441881Z           |                              ^
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6442213Z       109 |   await expect(page.locator('#catalog-warning')).toBeHidden();
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6442674Z       110 |   const workflows = await page.evaluate(() => window.studio.request({ action: 'bootstrap' }));
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6443188Z       111 |   expect(workflows.projects.some(p => p.title === 'history-project')).toBe(true);
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6443661Z         at /home/runner/work/odoo-tricorder/odoo-tricorder/tests/studio.spec.cjs:108:30
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6443916Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6444236Z     Error Context: test-results/studio-large-release-histo-43762-ects-workflows-and-terminal/error-context.md
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6444580Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6444928Z     attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6445452Z     test-results/studio-large-release-histo-43762-ects-workflows-and-terminal/trace.zip
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6445803Z     Usage:
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6445896Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6446223Z         npx playwright show-trace test-results/studio-large-release-histo-43762-ects-workflows-and-terminal/trace.zip
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6446586Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6446859Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6447072Z
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6447155Z   1 failed
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6447611Z     tests/studio.spec.cjs:104:1 › large release history: startup and refresh preserve projects, workflows and terminal
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6448005Z   2 skipped
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6448176Z   72 passed (3.9m)
+check	Vérifier l’application empaquetée	2026-10-09T10:44:37.6728775Z ##[error]Process completed with exit code 1.

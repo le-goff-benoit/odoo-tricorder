@@ -1,0 +1,6 @@
+{
+  "baseline": "badcdd30c345c00b8120f4fae2abe4e9074abad5",
+  "exit_code": 1,
+  "failure": "Traceback (most recent call last):\n  File \"/home/blegoff/odoo-tricorder/docs/audits/2026-10-09-parcours-blocages/probe_setup_concurrency.py\", line 123, in <module>\n    if __name__=='__main__':main()\n  File \"/home/blegoff/odoo-tricorder/docs/audits/2026-10-09-parcours-blocages/probe_setup_concurrency.py\", line 61, in main\n    registrations=race(state,entry,None,'projects')\n  File \"/home/blegoff/odoo-tricorder/docs/audits/2026-10-09-parcours-blocages/probe_setup_concurrency.py\", line 37, in race\n    assert all(r['status']=='configured' for r in results),results\nAssertionError: [{'path': '/tmp/tricorder-receipt-setup-race-vczph2yo/repo', 'project': 'p7c366c7f1be44524', 'status': 'configured'}, {'path': '/tmp/tricorder-receipt-setup-race-vczph2yo/repo', 'status': 'unavailable', 'reason': 'Ce dépôt Git est déjà enregistré comme projet'}]\n",
+  "source": "Same independent two-process probe on temporary Git baseline extraction"
+}

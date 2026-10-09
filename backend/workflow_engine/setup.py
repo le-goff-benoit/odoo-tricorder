@@ -14,7 +14,7 @@ def configure(engine, catalog, pack_path=None):
     for entry in catalog:
         try:
             path = str(Path(entry["path"]).resolve())
-            project = existing.get(path) or engine.create_project(entry.get("name") or Path(path).name, path)
+            project = existing.get(path) or engine.create_project(entry.get("name") or Path(path).name, path, if_absent=True)
             existing[path] = project
             if pack and entry.get("series"):
                 from catalog import environments
@@ -54,7 +54,7 @@ def configure(engine, catalog, pack_path=None):
                     for connection in graph["edges"]:
                         if connection["from"] == "work" and connection["to"] == "check" and not studio_route:
                             connection["mapping"]["candidate"] = "candidate"
-                    engine.save(project["id"], graph)
+                    engine.save(project["id"], graph, if_absent=True)
             results.append({"path": path, "project": project["id"], "status": "configured"})
         except (ContractError, OSError, ValueError) as exc:
             results.append({"path": entry.get("path"), "status": "unavailable", "reason": str(exc)})
