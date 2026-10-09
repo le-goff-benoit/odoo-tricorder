@@ -1,7 +1,11 @@
 # Tricorder
 
 **Dessinez vos workflows, pilotez le travail dans le terminal et suivez ses résultats.**
-Préversion : **0.6.0-rc.8**.
+Préversion : **0.6.0-rc.9**.
+
+[Lancer et dépanner un workflow](release/2026-10-09_demarrage-et-depannage/README.md) :
+conversation accessible avant la préparation de la recette, diagnostics par projet,
+actions de configuration et retour au lancement avec la demande conservée.
 
 [Fiabilité des workflows et ergonomie](release/2026-10-09_fiabilite-workflows/README.md) :
 résultats lisibles avant décision, demandes suivies séparément, contrôle QA
@@ -64,6 +68,10 @@ déploiement.
    données de même nom et type sont proposées automatiquement.
 3. Choisir OpenAI ou Anthropic, puis **Exécuter… → Lancer dans le terminal**.
    Cocher d’autres projets pour une conversation transversale.
+   Le dialogue distingue **À résoudre avant le lancement** et **À préparer pendant
+   le workflow**. Suivre l’action du diagnostic, effectuer le réglage puis
+   **Revenir au lancement** conserve la demande et les projets sélectionnés.
+   Pour Odoo, la copie locale peut être préparée dans la conversation avant la QA.
 4. La demande saisie est déjà enregistrée une seule fois. Le terminal permet
    d’ajouter d’autres demandes. L’agent enregistre les tâches et remet
    ses résultats au moteur ; le graphique montre leurs états réels. Une question

@@ -9,7 +9,7 @@ from .contracts import expand, require, validate
 
 def clean(graph):
     graph = copy.deepcopy(graph)
-    for key in ("revision", "release"):
+    for key in ("revision", "release", "driver"):
         graph.pop(key, None)
     for node in graph["nodes"]:
         for key in ("execution", "profile_text", "profile_sha256"):

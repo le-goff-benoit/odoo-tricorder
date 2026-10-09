@@ -1,0 +1,26 @@
+[
+  {
+    "provider": "codex",
+    "model": "provider default",
+    "requestedEffort": "high",
+    "passesEffort": true
+  },
+  {
+    "provider": "codex",
+    "model": "fixture",
+    "requestedEffort": "high",
+    "passesEffort": true
+  },
+  {
+    "provider": "claude",
+    "model": "provider default",
+    "requestedEffort": "high",
+    "passesEffort": true
+  },
+  {
+    "provider": "claude",
+    "model": "fixture",
+    "requestedEffort": "high",
+    "passesEffort": true
+  }
+]

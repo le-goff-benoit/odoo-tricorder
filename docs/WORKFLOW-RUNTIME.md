@@ -6,6 +6,31 @@ locaux. Ils ne qualifient ni un modèle payant, ni une messagerie réelle, ni un
 recette métier Odoo. La review indépendante et la publication suivent cette
 implémentation.
 
+## Lancer et résoudre une configuration incomplète
+
+**Exécuter…** vérifie le fournisseur, les connexions et tous les projets choisis.
+**À résoudre avant le lancement** présente le projet, l’étape et l’action utile.
+Après le réglage, **Revenir au lancement** retrouve la demande et le périmètre.
+Une planification retrouve aussi sa fréquence, son heure et son fuseau ; ses
+consentements d’activation doivent toujours être donnés explicitement.
+
+**À préparer pendant le workflow** désigne un prérequis nécessaire plus tard.
+Pour le pack Odoo, la copie locale neutralisée peut être préparée pendant la
+conversation. Elle reste obligatoire pour prendre en charge la recette ; un
+contexte de production ou distant reste refusé. Les paramètres Odoo disposent
+de champs lisibles, dont **Version d’Odoo** et **Référence de la copie de test**.
+La référence est une déclaration de contexte, pas une preuve de recette réussie.
+
+Le contrôle natif du dialogue et celui de l’ouverture partagent le même contrat.
+L’effort est transmis au fournisseur, même si son modèle par défaut est utilisé.
+Un bloc exigeant un effort différent de la conversation est signalé avant
+lancement ; l’utilisateur doit choisir explicitement le réglage adapté.
+
+Le mode de pilotage appartient à l’exécution, pas à la définition portable.
+Réenregistrer un ancien modèle portant un contexte de conversation le nettoie
+sans changer ses anciennes exécutions. Il peut ensuite être lancé ou planifié
+automatiquement avec les contrôles habituels et de nouvelles décisions.
+
 ## Lire avant de décider
 
 Sélectionner un bloc d’exécution affiche ses **Entrées reçues**, leurs sources,

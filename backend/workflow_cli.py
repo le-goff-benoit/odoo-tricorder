@@ -60,6 +60,8 @@ def _request(engine, cid, action, payload):
         require(node.get("execution", {}).get("provider", conversation["provider"]) == conversation["provider"], "Ce bloc utilise un autre fournisseur : utiliser execute, sans substitution")
         selected_model = node.get("execution", {}).get("model")
         require(not selected_model or selected_model == conversation.get("model"), "Ce bloc utilise un autre modèle : utiliser execute, sans substitution")
+        selected_effort = node.get("execution", {}).get("effort", node.get("effort", conversation.get("effort", "medium")))
+        require(selected_effort == conversation.get("effort", "medium"), "Ce bloc utilise un autre niveau d’effort : utiliser execute, sans substitution")
         pid = os.getppid()
         owner = None
         for _ in range(10):

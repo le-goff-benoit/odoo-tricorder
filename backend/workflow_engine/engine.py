@@ -31,6 +31,11 @@ def new_id(prefix):
     return prefix + uuid.uuid4().hex[:16]
 
 
+def run_driver(run):
+    # Old runs remain frozen; only their reader needs this compatibility path.
+    return run.get("driver", run["definition"].get("driver", "automatic"))
+
+
 class Engine:
     def __init__(self, directory):
         self.store = Store(directory)
@@ -112,6 +117,7 @@ class Engine:
     def save(self, project_id, graph, expected_revision=0, *, from_disk=False, expected_disk=None):
         graph = copy.deepcopy(graph)
         graph.pop("_project", None)
+        graph.pop("driver", None)
         validate(graph)
         with self.store.transaction() as db:
             self.project(project_id, db)
@@ -177,24 +183,25 @@ class Engine:
             db.execute("INSERT INTO workflows VALUES (?, ?, ?, ?)", (project_id, workflow_id, revision, self.store.encode(graph)))
         return graph
 
-    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None, notifications_authorized=False, reuse_from=None, deferred=False):
+    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None, notifications_authorized=False, reuse_from=None, deferred=False, driver="automatic"):
         from .integrations import catalog, issues as plugin_issues
+        require(driver in {"automatic", "conversation"}, "Mode de pilotage inconnu")
+        require("driver" not in graph, "Ce modèle contient le contexte d’une ancienne conversation. Enregistrez le workflow à nouveau avant de le lancer.")
+        require(not occurrence or driver == "automatic", "Une planification nécessite une exécution automatique")
         original = copy.deepcopy(graph)
         resolved = expand(graph, library or {})
         project = self.project(project_id, connection)
         resolved["parameters"] = {**resolved.get("parameters", {}), **(parameters or {})}
-        from .packs import resolve_profiles, policy_issues
+        from .packs import resolve_profiles, policy_readiness
         if not simulation:
-            policy_graph = resolved
-            if resolved.get("driver") == "conversation":
-                policy_graph = {**resolved, "nodes": [n for n in resolved["nodes"] if {**project.get("defaults", {}), **resolved.get("defaults", {}), **n}.get("profile") != "odoo-tester"]}
-            issues = policy_issues(project, policy_graph) + plugin_issues(resolved, project, self)
+            mode = "native" if driver == "conversation" else "automatic"
+            issues = policy_readiness(project, resolved, mode)["issues"] + plugin_issues(resolved, project, self)
             require(not issues, " · ".join(i["message"] for i in issues))
             resolved = resolve_profiles(project, resolved)
         for node in resolved["nodes"]:
             if node["kind"] == "agent":
                 node["execution"] = {**project["defaults"], **resolved.get("defaults", {}), **{k: node[k] for k in project["defaults"] if k in node}}
-        run = {"id": new_id("r"), "project": project_id, "status": "paused" if deferred else "active", "created": time.time(),
+        run = {"id": new_id("r"), "project": project_id, "driver": driver, "status": "paused" if deferred else "active", "created": time.time(),
                "scope": {"kind": project.get("scope", "library" if project.get("library") else "project"), "id": project_id},
                "release": resolved.get("release", ""),
                "plugins": catalog(project),

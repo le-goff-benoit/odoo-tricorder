@@ -1,0 +1,90 @@
+{
+  "build": "593712e7f56b992f5e968140836f9f433037d24d0a8d954e9d086803ad660236",
+  "captured": "2026-10-09T10:00:29.565Z",
+  "views": {
+    "after-navigation-projects-before-response": {
+      "width": 1440,
+      "height": 900,
+      "content": "Vos projets\nVoir les archives\n\nUn projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.\n\n+ Nouveau projet\nImporter un workflow\nProjet Alpha synthétique\n/tmp/tricorder-remediation-IWkkj8/projects/p6e4fb4675bdc45a2\n→\nProjet Bêta synthétique\n/tmp/tricorder-remediation-IWkkj8/projects/pf700c6256e5a48eb\n→\nEssayer un exemple",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Voir les archives",
+          "action": "toggle-archives",
+          "disabled": false
+        },
+        {
+          "text": "+ Nouveau projet",
+          "action": "new-project",
+          "disabled": false
+        },
+        {
+          "text": "Importer un workflow",
+          "action": "import-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Projet Alpha synthétique\n/tmp/tricorder-remediation-IWkkj8/projects/p6e4fb4675bdc45a2\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Projet Bêta synthétique\n/tmp/tricorder-remediation-IWkkj8/projects/pf700c6256e5a48eb\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Essayer un exemple",
+          "action": "try-example",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    },
+    "after-navigation-projects-response-ignored": {
+      "width": 1440,
+      "height": 900,
+      "content": "Vos projets\nVoir les archives\n\nUn projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.\n\n+ Nouveau projet\nImporter un workflow\nProjet Alpha synthétique\n/tmp/tricorder-remediation-IWkkj8/projects/p6e4fb4675bdc45a2\n→\nProjet Bêta synthétique\n/tmp/tricorder-remediation-IWkkj8/projects/pf700c6256e5a48eb\n→\nEssayer un exemple",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Voir les archives",
+          "action": "toggle-archives",
+          "disabled": false
+        },
+        {
+          "text": "+ Nouveau projet",
+          "action": "new-project",
+          "disabled": false
+        },
+        {
+          "text": "Importer un workflow",
+          "action": "import-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Projet Alpha synthétique\n/tmp/tricorder-remediation-IWkkj8/projects/p6e4fb4675bdc45a2\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Projet Bêta synthétique\n/tmp/tricorder-remediation-IWkkj8/projects/pf700c6256e5a48eb\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Essayer un exemple",
+          "action": "try-example",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    }
+  },
+  "outcomes": {
+    "projectsStillVisible": true,
+    "delayMs": 1500,
+    "method": "Only first run.get IPC response delayed after real backend result; no app source or state changed"
+  },
+  "failures": []
+}

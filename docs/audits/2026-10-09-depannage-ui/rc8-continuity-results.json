@@ -1,0 +1,784 @@
+{
+  "executable": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.8/odoo-tricorder",
+  "captured": "2026-10-09T09:45:39.028Z",
+  "views": {
+    "rc8-multiple-projects-before-launch": {
+      "dialog": "Lancer cette version du workflow\n×\nQuelle demande souhaitez-vous traiter ?\n\nParlez au workflow dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.\n\nCoordonner plusieurs projets\nProjet Bêta synthétique\n\nValidation automatique : Lire le compte rendu. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.\n\nLancer dans le terminal\nExécution automatique sans conversation\nSimuler le parcours",
+      "outerDialog": "",
+      "content": "PROJET ALPHA SYNTHÉTIQUE / WORKFLOW\nLire le compte rendu\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster",
+      "request": "Comparer les comptes rendus des deux projets.",
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "id": "read",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Lancer dans le terminal",
+          "action": "start-conversation",
+          "disabled": false
+        },
+        {
+          "text": "Simuler le parcours",
+          "action": "start-simulation",
+          "disabled": false
+        }
+      ]
+    },
+    "rc8-multiple-projects-error": {
+      "dialog": "Lancer cette version du workflow\n×\nQuelle demande souhaitez-vous traiter ?\n\nParlez au workflow dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.\n\nCoordonner plusieurs projets\nProjet Bêta synthétique\n\nValidation automatique : Lire le compte rendu. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.\n\nLancer dans le terminal\nExécution automatique sans conversation\nProjet Bêta synthétique : Capacité absente du catalogue du projet ; actualiser ou configurer le plugin.\nSimuler le parcours",
+      "outerDialog": "",
+      "content": "PROJET ALPHA SYNTHÉTIQUE / WORKFLOW\nLire le compte rendu\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster",
+      "request": "Comparer les comptes rendus des deux projets.",
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "id": "read",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Lancer dans le terminal",
+          "action": "start-conversation",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "start-real",
+          "disabled": false
+        },
+        {
+          "text": "Simuler le parcours",
+          "action": "start-simulation",
+          "disabled": false
+        }
+      ]
+    },
+    "rc8-preferences": {
+      "outerDialog": "Paramètres\nTerminal\nPolice\nDejaVu Sans Mono\nLiberation Mono\nMonospace système\nTaille du texte (px)\nAffichage\nThème\nSuivre le système\nClair\nSombre\nLargeur de la barre latérale (px)\nContraste renforcé\nAnnuler\nEnregistrer\nDossiers partagés\nDossier des projets\nSources Odoo\n\nPour un projet particulier : Statut → Outils du projet → Sources → Configurer le projet.\n\nRaccourcis clavier",
+      "content": "PROJET ALPHA SYNTHÉTIQUE / WORKFLOW\nLire le compte rendu\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster",
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "id": "read",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        }
+      ]
+    },
+    "rc8-import-preview": {
+      "dialog": "Importer un workflow portable\n×\n\nLire le compte rendu · 1 bloc · 0 lien\n\nModèles : aucun\nAgents dédiés : aucun\nCapacités : review / read\n\nLes connexions devront être vérifiées sur cet ordinateur. L’import crée un brouillon sans reprendre les exécutions, les accords ou les planifications du poste d’origine.\n\nExaminer les étapes et leur configuration\nDestination\nWorkflows globaux\nBibliothèque de modèles\nProjet Bêta synthétique\nProjet Alpha synthétique\nImporter le brouillon",
+      "outerDialog": "Paramètres\n      \n        Terminal\n          PoliceDejaVu Sans MonoLiberation MonoMonospace système\n          Taille du texte (px)\n        \n        AffichageThèmeSuivre le systèmeClairSombre\n          Largeur de la barre latérale (px)\n           Contraste renforcé\n        \n        AnnulerEnregistrer\n      \n      Dossiers partagésDossier des projetsSources OdooPour un projet particulier : Statut → Outils du projet → Sources → Configurer le projet.\n      Raccourcis clavier\n        Nouvel onglet terminalCtrl Shift TRechercher dans le terminalCtrl Shift F\n        Changer de projetCtrl Alt ↑ / ↓Changer de terminalCtrl PageUp / PageDown\n        Onglets, dans l’ordre affichéAlt 1…8\n        SkillsCtrl Shift PRechercher un fichierCtrl Alt F\n      ",
+      "content": "Vos projets\nVoir les archives\n\nUn projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.\n\n+ Nouveau projet\nImporter un workflow\nProjet Bêta synthétique\n/tmp/tricorder-continuity-rc8-I4JnaQ/projects/p497e2ed7e4764439\n→\nProjet Alpha synthétique\n/tmp/tricorder-continuity-rc8-I4JnaQ/projects/p7e66cc1184e64b3b\n→\nEssayer un exemple",
+      "buttons": [
+        {
+          "text": "Voir les archives",
+          "action": "toggle-archives",
+          "disabled": false
+        },
+        {
+          "text": "+ Nouveau projet",
+          "action": "new-project",
+          "disabled": false
+        },
+        {
+          "text": "Importer un workflow",
+          "action": "import-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Projet Bêta synthétique\n/tmp/tricorder-continuity-rc8-I4JnaQ/projects/p497e2ed7e4764439\n→",
+          "action": "open-project",
+          "id": "p497e2ed7e4764439",
+          "disabled": false
+        },
+        {
+          "text": "Projet Alpha synthétique\n/tmp/tricorder-continuity-rc8-I4JnaQ/projects/p7e66cc1184e64b3b\n→",
+          "action": "open-project",
+          "id": "p7e66cc1184e64b3b",
+          "disabled": false
+        },
+        {
+          "text": "Essayer un exemple",
+          "action": "try-example",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Importer le brouillon",
+          "disabled": false
+        }
+      ]
+    },
+    "rc8-import-missing-capability": {
+      "dialog": "Lancer cette version du workflow\n×\nQuelle demande souhaitez-vous traiter ?\n\nParlez au workflow dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.\n\nCoordonner plusieurs projets\n\nValidation automatique : Lire le compte rendu. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.\n\nÀ configurer pour le terminal\nCapacité absente du catalogue du projet ; actualiser ou configurer le plugin. Configurer cette étape\nLancer dans le terminal\nExécution automatique sans conversation\nSimuler le parcours",
+      "outerDialog": "Paramètres\n      \n        Terminal\n          PoliceDejaVu Sans MonoLiberation MonoMonospace système\n          Taille du texte (px)\n        \n        AffichageThèmeSuivre le systèmeClairSombre\n          Largeur de la barre latérale (px)\n           Contraste renforcé\n        \n        AnnulerEnregistrer\n      \n      Dossiers partagésDossier des projetsSources OdooPour un projet particulier : Statut → Outils du projet → Sources → Configurer le projet.\n      Raccourcis clavier\n        Nouvel onglet terminalCtrl Shift TRechercher dans le terminalCtrl Shift F\n        Changer de projetCtrl Alt ↑ / ↓Changer de terminalCtrl PageUp / PageDown\n        Onglets, dans l’ordre affichéAlt 1…8\n        SkillsCtrl Shift PRechercher un fichierCtrl Alt F\n      ",
+      "content": "PROJET BÊTA SYNTHÉTIQUE / WORKFLOW\nLire le compte rendu\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster",
+      "request": "",
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "id": "read",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Configurer cette étape",
+          "action": "fix-step",
+          "id": "read",
+          "disabled": false
+        },
+        {
+          "text": "Lancer dans le terminal",
+          "action": "start-conversation",
+          "disabled": true
+        },
+        {
+          "text": "",
+          "action": "fix-step",
+          "id": "read",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "start-real",
+          "disabled": true
+        },
+        {
+          "text": "Simuler le parcours",
+          "action": "start-simulation",
+          "disabled": false
+        }
+      ]
+    },
+    "rc8-import-remedy-destination": {
+      "outerDialog": "Paramètres\n      \n        Terminal\n          PoliceDejaVu Sans MonoLiberation MonoMonospace système\n          Taille du texte (px)\n        \n        AffichageThèmeSuivre le systèmeClairSombre\n          Largeur de la barre latérale (px)\n           Contraste renforcé\n        \n        AnnulerEnregistrer\n      \n      Dossiers partagésDossier des projetsSources OdooPour un projet particulier : Statut → Outils du projet → Sources → Configurer le projet.\n      Raccourcis clavier\n        Nouvel onglet terminalCtrl Shift TRechercher dans le terminalCtrl Shift F\n        Changer de projetCtrl Alt ↑ / ↓Changer de terminalCtrl PageUp / PageDown\n        Onglets, dans l’ordre affichéAlt 1…8\n        SkillsCtrl Shift PRechercher un fichierCtrl Alt F\n      ",
+      "content": "PROJET BÊTA SYNTHÉTIQUE / WORKFLOW\nLire le compte rendu\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster\n×\nDOCUMENT\nLire le compte rendu\nNom du bloc\nCritères d’acceptation (un par ligne)\nEntrées et sorties\nEntrées\nAucune donnée déclarée\nAjouter une entrée\nSorties\nvalue · number Retirer\nAjouter une sortie\nOrganisation de l’étape\nConnexions de cette étape\nContenu du brouillon\nPréparation locale. La publication demande une opération et un accord distincts.\nValidation du résultat\nManuelle\nAutomatique — contrôles techniques\n\nLa validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.\n\nAutoriser la réutilisation des preuves pendant 24 h\nUniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.\nEntrées et sorties\nReprises, ressources et position\nAppliquer au bloc\nConnexions\nSupprimer cette étape",
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "id": "read",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-inspector",
+          "disabled": false
+        },
+        {
+          "text": "Ajouter une entrée",
+          "action": "add-port",
+          "disabled": false
+        },
+        {
+          "text": "Retirer",
+          "action": "remove-port",
+          "disabled": false
+        },
+        {
+          "text": "Ajouter une sortie",
+          "action": "add-port",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "refresh-connections",
+          "disabled": false
+        },
+        {
+          "text": "Appliquer au bloc",
+          "disabled": false
+        },
+        {
+          "text": "Supprimer cette étape",
+          "action": "delete-node",
+          "disabled": false
+        }
+      ]
+    }
+  },
+  "outcomes": {
+    "multipleBefore": {
+      "disabled": false
+    },
+    "multipleAfter": {
+      "request": "Comparer les comptes rendus des deux projets.",
+      "remedies": 0
+    },
+    "preferencesReturn": {
+      "workflow": 1
+    }
+  },
+  "failures": []
+}

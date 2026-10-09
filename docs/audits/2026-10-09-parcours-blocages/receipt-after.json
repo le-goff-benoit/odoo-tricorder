@@ -1,0 +1,24 @@
+{
+  "secondary_project_diagnostic": [
+    {
+      "node": "work",
+      "title": "Analysis",
+      "code": "profile.unavailable",
+      "stage": "launch",
+      "message": "Profil specialist absent des packs du projet.",
+      "action": "choose-projects",
+      "remedy": "Installez le pack correspondant dans ce projet ou retirez ce projet du périmètre. Le profil du workflow restera inchangé.",
+      "project": "pb7fd4ed4694645f5",
+      "project_title": "Beta"
+    }
+  ],
+  "automatic_main_missing_profile": {
+    "issues": null,
+    "exception": "Profil specialist absent des packs du projet"
+  },
+  "cross_project_repair_and_relaunch": "pass",
+  "effort_and_model_codex": "pass",
+  "effort_and_model_claude": "pass",
+  "no_cli_native_refused_automatic_question_allowed": "pass",
+  "model_or_service_calls": 0
+}

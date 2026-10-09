@@ -1,0 +1,10 @@
+{
+  "run_original_driver": "conversation",
+  "portable_driver": "conversation",
+  "automatic_validation_issues": [],
+  "automatic_status": "ready",
+  "automatic_has_conversation": false,
+  "schedule_status": "ready",
+  "schedule_has_conversation": false,
+  "jobs_created": false
+}

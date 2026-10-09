@@ -74,6 +74,7 @@ def issues(graph, project=None, engine=None):
             result.append({"node": node["id"], "message": "Une capacité par bloc exécutable ; relier plusieurs blocs pour composer les opérations."})
         for binding in bindings:
             plugin = known.get(binding["plugin"])
+            action = "connections"
             try:
                 require(plugin and binding["operation"] in plugin["operations"], "Capacité absente du catalogue du projet ; actualiser ou configurer le plugin.")
                 require(engine and plugin.get("transport"), "Plugin déclaré, mais transport d’outils non qualifié : vérifier un adaptateur local.")
@@ -81,9 +82,15 @@ def issues(graph, project=None, engine=None):
                 record = approved(engine, project, plugin["id"])
                 effect = record["operations"].get(binding["operation"])
                 require(effect, "Capacité absente du transport vérifié")
+                action = "edit-node"
                 if node not in graph["nodes"]:
                     require(effect == "notify", "Une notification de question exige une capacité de notification")
                 require(effect == "read" or effect == "notify" and node["kind"] == "communication" or effect == "write" and node["kind"] == "external", "Effet de l’outil incompatible : les écritures exigent un bloc externe et un accord exact")
             except (ContractError, OSError) as exc:
-                result.append({"node": node["id"], "message": str(exc)})
+                title = plugin.get("title", binding["plugin"]) if plugin else binding["plugin"]
+                context = f"Connexion {title} ({binding['plugin']}), opération {binding['operation']}"
+                result.append({"node": node["id"], "message": context + " : " + str(exc), "stage": "launch", "action": action,
+                               "plugin": binding["plugin"], "operation": binding["operation"],
+                               "code": "plugin.connection-required" if action == "connections" else "plugin.effect-incompatible",
+                               "remedy": "Configurez et vérifiez cette connexion dans le projet avant de relancer la vérification." if action == "connections" else "Choisissez un type de bloc compatible avec l’effet de cette opération ; les écritures nécessitent une décision humaine."})
     return result

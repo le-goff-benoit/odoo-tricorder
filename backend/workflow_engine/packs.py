@@ -49,7 +49,7 @@ def install(engine, project_id, folder, expected_digest):
     return project
 
 
-def resolve_profiles(project, graph):
+def resolve_profiles(project, graph, *, strict=True):
     profiles = {p["id"]: p for pack in project.get("packs", []) for p in pack["profiles"]}
     for node in graph["nodes"]:
         if node["kind"] != "agent":
@@ -59,34 +59,109 @@ def resolve_profiles(project, graph):
         if pid == "generalist":
             node.pop("profile_text", None)
         else:
+            if not strict and pid not in profiles:
+                # Preview can report unavailable profiles while preparing the
+                # installed ones. Execution always uses strict resolution.
+                node.pop("profile_text", None)
+                node.pop("profile_sha256", None)
+                continue
             require(pid in profiles, f"Profil {pid} absent des packs du projet")
             node["profile_text"] = profiles[pid]["text"]
             node["profile_sha256"] = profiles[pid]["sha256"]
     return graph
 
 
+def profile_issues(project, graph, *, primary=True):
+    profiles = {p["id"] for pack in project.get("packs", []) for p in pack["profiles"]}
+    issues = []
+    for node in graph["nodes"]:
+        selected = {**project.get("defaults", {}), **graph.get("defaults", {}), **node}
+        profile = selected.get("profile", "generalist")
+        if node["kind"] == "agent" and profile != "generalist" and profile not in profiles:
+            issues.append({"node": node["id"], "title": node.get("title", node["id"]), "code": "profile.unavailable", "stage": "launch",
+                           "message": f"Profil {profile} absent des packs du projet.", "action": "edit-node" if primary else "choose-projects",
+                           "remedy": "Choisissez un profil installé dans les options IA de cette étape, ou installez le pack correspondant dans ce projet." if primary else "Installez le pack correspondant dans ce projet ou retirez ce projet du périmètre. Le profil du workflow restera inchangé."})
+    return issues
+
+
+def pack_applies(project, graph, pack):
+    """Domain or effective profile membership, never a profile-name prefix."""
+    domain = pack.get("policies", {}).get("domain")
+    if domain and graph.get("domain") == domain:
+        return True
+    profiles = {p["id"] for p in pack.get("profiles", [])}
+    return any({**project.get("defaults", {}), **graph.get("defaults", {}), **node}.get("profile") in profiles
+               for node in graph["nodes"])
+
+
+def conversation_parameters(project, graph):
+    """Use exactly the domain/profile predicate that activates Odoo policies."""
+    odoo = graph.get("domain") == "odoo" or any(
+        pack.get("policies", {}).get("domain") == "odoo" and pack_applies(project, graph, pack)
+        for pack in project.get("packs", []))
+    return {k: project[k] for k in ("series", "platform") if project.get(k)} if odoo else {}
+
+
+def policy_readiness(project, graph, mode="automatic"):
+    """Defer only an absent QA prerequisite that the conversation can prepare.
+
+    All other checks still block launch. Claims call policy_issues directly, so
+    a deferred requirement never grants permission to execute that step.
+    """
+    issues, requirements = [], []
+    for issue in policy_issues(project, graph):
+        target = requirements if mode == "native" and issue["code"] == "odoo.qa.local-copy-required" else issues
+        target.append(issue)
+    return {"issues": issues, "requirements": requirements}
+
+
 def policy_issues(project, graph):
     issues = []
+
+    def add(node, code, message, remedy, action, stage="launch"):
+        issues.append({"node": node["id"], "title": node.get("title", node["id"]), "code": code, "stage": stage,
+                       "message": message, "remedy": remedy, "action": action})
+
+    workflow = {"id": "workflow", "title": graph.get("title", "Workflow")}
     for pack in project.get("packs", []):
         policy = pack.get("policies", {})
         if policy.get("domain") != "odoo":
             continue
         # Installing a pack must not impose its domain on unrelated workflows.
-        profiles = {p["id"] for p in pack.get("profiles", [])}
-        used = any({**project.get("defaults", {}), **graph.get("defaults", {}), **n}.get("profile") in profiles for n in graph["nodes"])
-        if graph.get("domain") != "odoo" and not used:
+        if not pack_applies(project, graph, pack):
             continue
         params = graph.get("parameters", {})
         if policy.get("series_required") and not params.get("series"):
-            issues.append({"node": "workflow", "message": "Pack Odoo : série du projet requise."})
+            add(workflow, "odoo.series-required", "Pack Odoo : série du projet requise.",
+                "Renseignez la version d’Odoo du projet dans les paramètres du workflow.", "workflow-settings")
         if policy.get("online_requires_studio") and params.get("platform") == "online" and params.get("route") != "studio":
-            issues.append({"node": "workflow", "message": "Odoo Online impose la voie Studio."})
+            add(workflow, "odoo.online-studio-required", "Odoo Online impose la voie Studio.",
+                "Choisissez la voie Studio pour ce projet Odoo Online.", "workflow-settings")
         for node in graph["nodes"]:
             selection = {**project.get("defaults", {}), **graph.get("defaults", {}), **node}
             if policy.get("online_requires_studio") and params.get("platform") == "online" and selection.get("profile") == "odoo-developer":
-                issues.append({"node": node["id"], "message": "Odoo Online : remplacer le développement de module par un bloc Studio."})
-            if selection.get("profile") == "odoo-tester" and policy.get("qa_requires_local_copy") and (params.get("environment") != "local" or not params.get("neutralized_copy")):
-                issues.append({"node": node["id"], "message": "Pack Odoo : identifier environment=local et neutralized_copy pour la recette."})
-            if selection.get("profile") == "odoo-tester" and node.get("environment", params.get("environment")) == "production":
-                issues.append({"node": node["id"], "message": "Pack Odoo : recette sur copie locale, jamais en production."})
+                add(node, "odoo.online-module-forbidden", "Odoo Online : remplacer le développement de module par un bloc Studio.",
+                    "Configurez cette étape pour utiliser le profil Odoo Studio.", "edit-node")
+            if selection.get("profile") != "odoo-tester":
+                continue
+            environment = node.get("environment", params.get("environment"))
+            reference = params.get("neutralized_copy")
+            if environment == "production" or params.get("environment") == "production":
+                add(node, "odoo.qa.production-forbidden", "Pack Odoo : recette sur copie locale, jamais en production.",
+                    "Corrigez le contexte de recette dans le workflow : cette étape doit utiliser une copie locale neutralisée.",
+                    "edit-node" if node.get("environment") == "production" else "workflow-settings")
+            elif policy.get("qa_requires_local_copy"):
+                invalid_node = "environment" in node and node["environment"] is not None and node["environment"] != "local"
+                invalid_parameters = params.get("environment") is not None and params["environment"] != "local"
+                if invalid_node or invalid_parameters:
+                    add(node, "odoo.qa.environment-invalid", "L’environnement de recette doit être une copie locale neutralisée.",
+                        "Corrigez le contexte de recette avant le lancement ; un environnement distant ne remplace pas la copie locale.",
+                        "edit-node" if invalid_node else "workflow-settings")
+                elif reference is not None and (not isinstance(reference, str) or not reference.strip()):
+                    add(node, "odoo.qa.copy-invalid", "La référence de la copie de recette est invalide.",
+                        "Renseignez une référence explicite à la copie locale neutralisée préparée pour cette recette.", "workflow-settings")
+                elif params.get("environment") != "local" or reference is None:
+                    add(node, "odoo.qa.local-copy-required", "Une copie locale neutralisée doit être préparée et identifiée avant la recette.",
+                        "Demandez à l’agent dans le terminal de préparer et vérifier la copie locale neutralisée, puis d’enregistrer sa référence pour cette étape avant la recette.",
+                        "prepare-in-conversation", stage="step")
     return issues

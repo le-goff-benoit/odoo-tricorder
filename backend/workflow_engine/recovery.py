@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import time
 from .contracts import require
+from .engine import run_driver
 
 
 def identity(pid):
@@ -64,7 +65,7 @@ def diagnostic(engine, run, nid):
         boot_at = 0
     if not state.get("ownership") and not records and state["started"] >= boot_at:
         return {"recoverable": False, "reason": "Ancienne tentative sans identité vérifiable. Réconcilier son résultat ou terminer son agent ; après redémarrage de l’ordinateur, l’arrêt des processus locaux sera vérifiable."}
-    if (state.get("ownership") == "native" or (run["definition"].get("driver") == "conversation" and not state.get("ownership"))) and not records and state["started"] >= boot_at:
+    if (state.get("ownership") == "native" or (run_driver(run) == "conversation" and not state.get("ownership"))) and not records and state["started"] >= boot_at:
         return {"recoverable": False, "reason": "Agent natif sans identité vérifiable : un heartbeat ancien ne prouve pas son arrêt. Retrouver la conversation pour terminer le bloc."}
     if not records and time.time() - state.get("heartbeat", state["started"]) < 15:
         return {"recoverable": False, "reason": "Réservation récente : attendre la fin du délai de lancement (15 s)"}

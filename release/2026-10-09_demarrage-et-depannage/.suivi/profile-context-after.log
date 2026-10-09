@@ -1,0 +1,7 @@
+test_domain_profile_inherits_target_series_and_online_policy_without_domain_field (test_workflow_profile_context.ProfileContextTests) ... ok
+test_generic_workflow_does_not_inherit_or_activate_an_installed_odoo_pack (test_workflow_profile_context.ProfileContextTests) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.645s
+
+OK

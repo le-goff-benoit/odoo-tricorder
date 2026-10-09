@@ -7,6 +7,36 @@ from .contracts import require, validate, expand
 from .engine import new_id, dependency_satisfied
 
 
+def native_preflight(engine, project, graph, provider, projects=None, model=None):
+    """One launch contract for the dialog and the actual native conversation."""
+    from .packs import resolve_profiles, policy_readiness, conversation_parameters
+    from .runtime import preflight
+    require(provider in {"codex", "claude"}, "Fournisseur inconnu")
+    require(projects is None or isinstance(projects, list) and all(isinstance(p, str) for p in projects), "Liste de projets attendue")
+    ids = list(dict.fromkeys([project, *(projects or [])]))
+    require(0 < len(ids) <= 50, "Entre un et cinquante projets")
+    definition = copy.deepcopy(graph)
+    definition.pop("driver", None)
+    if definition.get("defaults", {}).get("provider") != provider:
+        definition.setdefault("defaults", {}).pop("model", None)
+    definition.setdefault("defaults", {})["provider"] = provider
+    if model:
+        definition["defaults"]["model"] = model
+    issues, requirements = [], []
+    for pid in ids:
+        target = engine.project(pid)
+        checked = copy.deepcopy(definition)
+        checked["parameters"] = {**checked.get("parameters", {}), **conversation_parameters(target, checked)}
+        checked = resolve_profiles(target, checked, strict=False)
+        problems = preflight(checked, defaults=target.get("defaults"), project=target, engine=engine,
+                             mode="native", provider=provider, model=definition.get("defaults", {}).get("model"), primary=pid == project)
+        readiness = policy_readiness(target, checked, "native")
+        context = {"project": pid, "project_title": target["title"]}
+        issues.extend({**problem, **context} for problem in problems + readiness["issues"])
+        requirements.extend({**item, **context} for item in readiness["requirements"])
+    return {"definition": definition, "projects": ids, "issues": issues, "requirements": requirements}
+
+
 class Conversations:
     def __init__(self, engine):
         self.engine = engine
@@ -28,30 +58,15 @@ class Conversations:
         return values
 
     def open(self, project, graph, provider, projects=None, library=None, model=None, *, notifications_authorized=False, initial_request=None):
-        require(provider in {"codex", "claude"}, "Fournisseur inconnu")
         validate(graph)
-        ids = list(dict.fromkeys([project, *(projects or [])]))
-        require(0 < len(ids) <= 50, "Entre un et cinquante projets")
-        for pid in ids:
-            self.engine.project(pid)
-        definition = expand(graph, library or {})
-        # The choice applies to new work items, never to past runs.
-        if definition.get("defaults", {}).get("provider") != provider:
-            definition.setdefault("defaults", {}).pop("model", None)
-        definition.setdefault("defaults", {})["provider"] = provider
-        if model:
-            definition["defaults"]["model"] = model
-        from .integrations import issues
-        from .runtime import preflight
+        checked = native_preflight(self.engine, project, expand(graph, library or {}), provider, projects, model)
+        require(not checked["issues"], " · ".join(p["project_title"] + " : " + p["message"] for p in checked["issues"]))
+        definition, ids = checked["definition"], checked["projects"]
         from .notifications import execution_nodes
         from connectors.local_tools import approved
         transports = {}
         for pid in ids:
             target = self.engine.project(pid)
-            from .packs import resolve_profiles
-            checked = resolve_profiles(target, definition)
-            problems = preflight(checked, defaults=target.get("defaults"), project=target, engine=self.engine, mode="native", provider=provider, model=definition.get("defaults", {}).get("model"))
-            require(not problems, target["title"] + " : " + " · ".join(p["message"] for p in problems))
             records = transports[pid] = {}
             for node in execution_nodes(definition):
                 for binding in node.get("capabilities", []):
@@ -89,13 +104,14 @@ class Conversations:
             require(all(i in previous for i in dependencies), "Dépendance hors de la conversation ou encore inexistante")
             parent_runs = [previous[i]["run"] for i in dependencies]
             graph = copy.deepcopy(conversation["definition"])
-            graph["driver"] = "conversation"
+            graph.pop("driver", None)  # Compatibility with already-open conversations.
             target = self.engine.project(pid, db)
             from connectors.local_tools import approved
             for plugin, record in conversation.get("transports", {}).get(pid, {}).items():
                 require(approved(self.engine, target, plugin) == record, "Connexion modifiée : relancer le workflow pour examiner les nouveaux accès")
-            context = {k: target[k] for k in ("series", "platform") if target.get(k)} if graph.get("domain") == "odoo" else {}
-            run = self.engine.start(pid, graph, parameters={**context, "request": request, "conversation": cid, "depends_on_runs": parent_runs}, connection=db, deferred=bool(parent_runs), notifications_authorized=conversation.get("notifications_authorized", False))
+            from .packs import conversation_parameters
+            context = conversation_parameters(target, graph)
+            run = self.engine.start(pid, graph, parameters={**context, "request": request, "conversation": cid, "depends_on_runs": parent_runs}, connection=db, deferred=bool(parent_runs), notifications_authorized=conversation.get("notifications_authorized", False), driver="conversation")
             item = {"id": new_id("w"), "project": pid, "request": request, "run": run["id"], "key": key, "depends_on": dependencies, "created": time.time()}
             conversation["items"].append(item)
             db.execute("UPDATE conversations SET body=? WHERE id=?", (self.engine.store.encode(conversation), cid))

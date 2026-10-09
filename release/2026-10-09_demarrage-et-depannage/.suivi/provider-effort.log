@@ -1,0 +1,15 @@
+✔ both provider launch buttons prepare isolated hooks and a separate Crew Stop guard (2.50638ms)
+✔ Claude wrapper preserves statusLine command and padding while retaining no other settings (0.68659ms)
+✔ Codex shell arguments preserve literal paths and one configuration per event (22.956007ms)
+✔ quota scans are global and deduplicate overlapping refreshes (0.950836ms)
+✔ contextual requests remain one literal CLI argument for both providers (89.726343ms)
+✔ work launch refuses a terminal from another release or task before writing settings (0.671906ms)
+✔ explicit effort reaches both provider CLIs even when using their default model (209.511799ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 389.525189

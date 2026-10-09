@@ -112,3 +112,21 @@ test('work launch refuses a terminal from another release or task before writing
     work: { action: 'resume', text: '' } }), /correspond plus/);
   assert.equal(settings.bindings.length, 0);
 });
+
+test('explicit effort reaches both provider CLIs even when using their default model', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-effort-'));
+  try {
+    const bin = path.join(root, 'bin'); fs.mkdirSync(bin);
+    for (const provider of ['codex', 'claude']) {
+      fs.writeFileSync(path.join(bin, provider), '#!/usr/bin/python3\nimport sys,json\nprint(json.dumps(sys.argv[1:]))\n', { mode: 0o755 });
+      for (const model of [undefined, 'fixture-model']) {
+        const launch = prepareLaunch({ provider, id: provider + (model ? '-explicit' : '-default'), folder: path.join(root, 'out'), backend: path.resolve(__dirname, '../backend'), home: root, project: root, crew: '', effort: 'high', model, prompt: 'Synthetic invocation only.' });
+        const args = JSON.parse(execFileSync('bash', ['-c', launch.command], { encoding: 'utf8', env: { ...process.env, PATH: bin + ':/usr/bin:/bin' } }));
+        assert.equal(args.includes('--model'), Boolean(model));
+        if (provider === 'claude') assert.equal(args[args.indexOf('--effort') + 1], 'high');
+        else assert.ok(args.includes('model_reasoning_effort="high"'));
+        assert.equal(args.at(-1), 'Synthetic invocation only.');
+      }
+    }
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});

@@ -23,9 +23,10 @@ const app = document.querySelector('#app');
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const clone = value => structuredClone(value);
 const options = (values, selected) => values.map(([value, label]) => `<option value="${esc(value)}" ${value === selected ? 'selected' : ''}>${esc(label)}</option>`).join('');
-const state = { projects: [], templates: [], capabilities: [], route: 'overview', project: null, workflows: [], runs: [], graph: null, savedRevision: 0, run: null, events: [], selected: null, mode: 'design', view: 'canvas', zoom: 0.8, history: new History(), dirty: false, polling: false, modal: null, collapsed: new Set() };
+const state = { projects: [], templates: [], capabilities: [], route: 'overview', project: null, workflows: [], runs: [], graph: null, savedRevision: 0, run: null, events: [], selected: null, mode: 'design', view: 'canvas', zoom: 0.8, history: new History(), dirty: false, polling: false, modal: null, collapsed: new Set(), launchDrafts: {}, scheduleDrafts: {}, launchReturn: null };
 let toastTimer;
 let actionQueue = Promise.resolve();
+let viewEpoch = 0;
 function enqueue(fn) { actionQueue = actionQueue.then(() => safe(fn)); }
 
 async function call(action, data = {}, human = false) { return (human ? api.human : api.request)({ action, ...data }); }
@@ -61,6 +62,57 @@ function activationDetails(check) {
   return `${check.automatic?.length ? `<p>Validation automatique : ${esc(check.automatic.join(', '))}. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.</p>` : ''}${check.notifications?.length ? `<div class="notice"><strong>Notifications prévues</strong>${check.notifications.map(n => `<p>${esc(n.title)} → ${esc(n.recipient || 'destinataire à configurer')}<br>${esc(n.template)}</p>`).join('')}<label><input type="checkbox" name="authorize_notifications" id="authorize-notifications">J’autorise ces notifications pour cette révision et ces destinataires.</label></div>` : ''}`;
 }
 function button(action, text, css = '', extra = '') { return `<button class="${css}" data-action="${action}" ${extra}>${text}</button>`; }
+
+function launchKey() { return `${state.project?.id}:${state.graph?.id}`; }
+function rememberLaunchDraft() {
+  const schedule = document.querySelector('#schedule-form');
+  if (schedule) state.scheduleDrafts[launchKey()] = Object.fromEntries(['kind','time','minutes','timezone','simulation'].map(name => {
+    const field = schedule.elements.namedItem(name); return [name, field.type === 'checkbox' ? field.checked : field.value];
+  }));
+  const input = document.querySelector('#initial-request');
+  if (!input) return;
+  state.launchDrafts[launchKey()] = { request: input.value, projects: [...document.querySelectorAll('[name="conversation-project"]:checked')].map(e => e.value) };
+  // A draft is not permission to send a notification: authorizations are rechecked.
+}
+function launchReturnNotice() {
+  const origin = state.launchReturn;
+  return origin ? `<div class="notice launch-return"><span>${origin.kind === 'schedule' ? 'Planification' : 'Lancement'} en attente : <strong>${esc(origin.title)}</strong> · ${esc(origin.projectTitle)}. Votre demande est conservée.</span>${button('return-to-launch', origin.kind === 'schedule' ? 'Revenir à la planification' : 'Revenir au lancement')}</div>` : '';
+}
+const remedyLabels = {
+  'workflow-settings': 'Ouvrir les paramètres', 'edit-node': 'Ouvrir l’étape',
+  connections: 'Ouvrir les connexions', 'choose-ai': 'Choisir l’IA',
+  'prepare-in-conversation': 'Préparer avec l’agent', 'choose-projects': 'Vérifier les projets',
+  'choose-project': 'Utiliser dans un projet', 'save-workflow': 'Enregistrer et revérifier',
+};
+function launchDiagnostics(items, title, deferred = false) {
+  if (!items?.length) return '';
+  return `<section class="notice launch-check ${deferred ? 'launch-later' : ''}" aria-label="${esc(title)}"><h3>${esc(title)}</h3>${deferred ? '<p>Vous pouvez démarrer la conversation. Ces éléments seront nécessaires avant les étapes indiquées.</p>' : ''}<ul>${items.map(i => {
+    const node = state.graph.nodes.find(n => n.id === i.node);
+    const action = i.action || (node ? 'edit-node' : 'workflow-settings');
+    const label = remedyLabels[action];
+    return `<li data-diagnostic="${esc(i.code || '')}"><strong>${esc(i.project_title ? i.project_title + ' · ' : '')}${esc(i.title || node?.title || 'Workflow')}</strong><p>${esc(i.message)}</p>${i.remedy ? `<p class="muted">${esc(i.remedy)}</p>` : ''}${!deferred && label ? button('repair-launch', label, '', `data-code="${esc(i.code || '')}" data-remedy="${esc(action)}" data-node="${esc(i.node)}" data-project="${esc(i.project || state.project.id)}"`) : ''}</li>`;
+  }).join('')}</ul></section>`;
+}
+function nativeLaunchPayload() {
+  return { project: state.project.id, graph: state.graph, mode: 'native', provider: integration.provider(),
+    model: state.graph.defaults?.provider === integration.provider() ? state.graph.defaults?.model : state.providerDefaults?.[integration.provider()],
+    projects: state.launchDrafts[launchKey()]?.projects || [] };
+}
+async function refreshNativeLaunch() {
+  rememberLaunchDraft();
+  const area = document.querySelector('#launch-native-check'), start = document.querySelector('[data-action="start-conversation"]');
+  if (!area || !start) return;
+  const sequence = state.launchCheckSequence = (state.launchCheckSequence || 0) + 1;
+  start.disabled = true; area.setAttribute('aria-busy', 'true');
+  try {
+    const check = await call('workflow.validate', nativeLaunchPayload());
+    if (!area.isConnected || sequence !== state.launchCheckSequence) return;
+    area.innerHTML = launchDiagnostics(check.issues, 'À résoudre avant le lancement') + launchDiagnostics(check.requirements, 'À préparer pendant le workflow', true);
+    start.disabled = check.issues.length > 0;
+  } catch (e) {
+    if (area.isConnected && sequence === state.launchCheckSequence) area.innerHTML = `<div class="error" role="alert">La vérification n’a pas abouti. Votre demande est conservée.<p>${esc(e.message)}</p>${button('check-launch', 'Vérifier à nouveau')}</div>`;
+  } finally { if (area.isConnected && sequence === state.launchCheckSequence) area.removeAttribute('aria-busy'); }
+}
 
 const navPaths = {
   overview: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
@@ -154,7 +206,7 @@ function renderSchedules() {
   content(`<section class="page"><div class="page-heading"><div><div class="eyebrow">Automatisations locales</div><h1>Planifications</h1><p>Retrouvez vos prochaines exécutions ici et dans l’icône Tricorder de la barre Ubuntu.</p></div><div class="row">${button('toggle-archives',state.showArchives ? 'Masquer les archives' : 'Voir les archives')}${button('refresh-schedules', 'Actualiser')}</div></div><div class="notice">Tricorder doit rester ouvert, éventuellement dans la zone de notification. Après une interruption, une seule occurrence en retard est rattrapée. Une exécution encore ouverte empêche le chevauchement.</div><div class="grid" style="margin-top:24px">${schedules.map(s => `<article class="card"><div class="row between"><h3>${esc(s.title)}</h3><span class="pill">${s.enabled ? 'Active' : 'Suspendue'}</span></div><p>${s.scope?.kind === 'workspace' ? 'Global' : esc(state.projects.find(p => p.id === s.project)?.title || 'Projet')} · ${s.simulation ? 'Simulation' : 'Exécution réelle'} · ${esc(s.rule.timezone)}<br>Prochaine : ${new Date(s.next * 1000).toLocaleString('fr-CH', { timeZone: s.rule.timezone })}</p><p class="muted">${s.last_status === 'blocked' ? esc(s.error) : s.last_status === 'skipped-overlap' ? 'Dernière occurrence non lancée : une exécution précédente attend encore.' : 'La révision activée reste figée.'}</p><div class="row">${!s.archived ? button('toggle-schedule', s.enabled ? 'Suspendre' : 'Réactiver', '', `data-id="${s.id}"`) : ''}${button('archive-item',s.archived ? 'Restaurer' : 'Archiver','flat',`data-kind="schedule" data-id="${s.id}" data-archived="${!!s.archived}"`)}${s.last_run ? button('schedule-run', 'Dernière exécution', '', `data-id="${s.id}"`) : ''}</div></article>`).join('') || '<div class="card"><h3>Aucune planification active</h3><p>Ouvrez un workflow puis choisissez « Planifier » pour vérifier ses moyens et sa fréquence avant activation.</p></div>'}</div></section>`);
 }
 function renderConnections() {
-  content(`<section class="page"><div class="page-heading"><div><div class="eyebrow">Outils et plugins</div><h1>Connexions</h1><p>La présence d'un outil ne prouve ni l'accès à un compte ni l'autorisation d'une opération. Les modèles peuvent analyser ou proposer du code dans une copie isolée. Les transports MCP stdio et les adaptateurs locaux vérifiés relient les outils aux blocs.</p></div><div class="row">${button('connection-terminal', 'Configurer dans le terminal')}${button('discover-plugins', 'Plugins OpenAI', '', 'data-provider="codex"') + button('discover-plugins', 'Plugins Anthropic', '', 'data-provider="claude"')}${button('refresh-connections', 'Actualiser')}</div></div><form id="connection-context-form" class="row"><label for="connection-context">Contexte</label><select id="connection-context" name="project" style="width:auto">${options([["workspace", "Workflows globaux"], ["library", "Modèles"], ...state.projects.map(p => [p.id, p.title])], state.project?.id || "workspace")}</select><button type="submit">Afficher les connexions</button></form><p class="muted">${state.project ? `Catalogue de ${esc(state.project.title)} : ${esc(state.project.path)}/.tricorder/plugins.json. Modifiez-le depuis le terminal, puis actualisez. Les déclarations restent distinctes des accès vérifiés.` : 'Choisissez le contexte global, la bibliothèque ou un projet pour consulter et configurer ses plugins.'}</p><div class="grid connection-grid">${[...state.capabilities, ...(state.detectedPlugins || [])].map(c => `<article class="card"><div class="row between"><h2>${esc(c.title)}</h2><span class="pill ${c.usable ? 'accepted' : ''}">${c.usable ? 'Utilisable' : 'À configurer'}</span></div><p>${esc(c.reason)}</p>${c.plugin_id && c.transport ? button('verify-plugin', 'Vérifier l’adaptateur…', '', `data-id="${esc(c.plugin_id)}"`) : ''}<div class="connection-states">${[['Disponible', c.available], ['Installé', c.installed], ['Connecté', c.connected], ['Vérifié', c.qualified]].map(([label, yes]) => `<span class="pill">${yes === null ? '?' : yes ? '✓' : '○'} ${label}</span>`).join('')}</div></article>`).join('')}</div>${(state.setup || []).filter(s => s.status === 'customized' || s.status === 'unavailable').map(s => `<div class="notice">${esc(s.instructions || s.project)} : ${s.status === 'customized' ? 'consignes personnalisées conservées. Mise à jour Tricorder à valider dans le modèle de consignes livré avec l’application.' : esc(s.reason)}</div>`).join('')}<p class="muted" style="margin-top:24px">Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.</p></section>`);
+  content(`<section class="page"><div class="page-heading"><div><div class="eyebrow">Outils et plugins</div><h1>Connexions</h1><p>La présence d'un outil ne prouve ni l'accès à un compte ni l'autorisation d'une opération. Les modèles peuvent analyser ou proposer du code dans une copie isolée. Les transports MCP stdio et les adaptateurs locaux vérifiés relient les outils aux blocs.</p></div><div class="row">${button('connection-terminal', 'Configurer dans le terminal')}${button('discover-plugins', 'Plugins OpenAI', '', 'data-provider="codex"') + button('discover-plugins', 'Plugins Anthropic', '', 'data-provider="claude"')}${button('refresh-connections', 'Actualiser')}</div></div>${launchReturnNotice()}<form id="connection-context-form" class="row"><label for="connection-context">Contexte</label><select id="connection-context" name="project" style="width:auto">${options([["workspace", "Workflows globaux"], ["library", "Modèles"], ...state.projects.map(p => [p.id, p.title])], state.project?.id || "workspace")}</select><button type="submit">Afficher les connexions</button></form><p class="muted">${state.project ? `Catalogue de ${esc(state.project.title)} : ${esc(state.project.path)}/.tricorder/plugins.json. Modifiez-le depuis le terminal, puis actualisez. Les déclarations restent distinctes des accès vérifiés.` : 'Choisissez le contexte global, la bibliothèque ou un projet pour consulter et configurer ses plugins.'}</p><div class="grid connection-grid">${[...state.capabilities, ...(state.detectedPlugins || [])].map(c => `<article class="card"><div class="row between"><h2>${esc(c.title)}</h2><span class="pill ${c.usable ? 'accepted' : ''}">${c.usable ? 'Utilisable' : 'À configurer'}</span></div><p>${esc(c.reason)}</p>${c.plugin_id && c.transport ? button('verify-plugin', 'Vérifier l’adaptateur…', '', `data-id="${esc(c.plugin_id)}"`) : ''}<div class="connection-states">${[['Disponible', c.available], ['Installé', c.installed], ['Connecté', c.connected], ['Vérifié', c.qualified]].map(([label, yes]) => `<span class="pill">${yes === null ? '?' : yes ? '✓' : '○'} ${label}</span>`).join('')}</div></article>`).join('')}</div>${(state.setup || []).filter(s => s.status === 'customized' || s.status === 'unavailable').map(s => `<div class="notice">${esc(s.instructions || s.project)} : ${s.status === 'customized' ? 'consignes personnalisées conservées. Mise à jour Tricorder à valider dans le modèle de consignes livré avec l’application.' : esc(s.reason)}</div>`).join('')}<p class="muted" style="margin-top:24px">Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.</p></section>`);
 }
 
 function aiForm(preview = false) {
@@ -175,7 +227,7 @@ function renderEditor() {
   const scroll = document.querySelector('.canvas-scroll');
   const position = scroll ? [scroll.scrollLeft, scroll.scrollTop] : [0, 0];
   content(`<div class="workflow-heading ${running ? 'execution-heading' : ''}"><div><div class="eyebrow breadcrumb">${selectedRequest ? 'Workflow de la demande sélectionnée' : esc(state.project.title)+' / Workflow'}</div><h1 title="${esc(heading)}">${esc(heading)}</h1><p title="${esc(graph.title)}">${selectedRequest ? esc(graph.title.split('—')[0].trim())+' · ' : ''}${running ? `Version figée · ${esc(runLabel(state.run))}${selectedRequest ? '' : ' · '+new Date(state.run.created * 1000).toLocaleString('fr-CH')}` : `Révision ${state.savedRevision || 'initiale'} · ${state.dirty ? 'Modifications non enregistrées' : 'Enregistré'}`}</p></div><div class="row">${!running ? button('workflow-ai', 'Choisir l’IA') + button('export-workflow', 'Exporter…') + button('save', 'Enregistrer', '', state.dirty ? '' : 'disabled') + button('start-preview', 'Exécuter…', 'primary') : button('back-design', 'Revenir à l’éditeur') + (['active', 'paused'].includes(state.run.status) ? button('pause', state.run.status === 'paused' ? 'Reprendre' : 'Suspendre') + button('cancel', 'Annuler', 'flat') : '')}</div></div>
-    <div class="tabs" role="tablist" aria-label="Vues du workflow">${[['design', 'Éditeur'], ['run', 'Exécution'], ['history', 'Historique'], ['document', 'Rapport']].map(([mode, label]) => `<button role="tab" aria-selected="${state.mode === mode}" class="${state.mode === mode ? 'active' : ''}" data-action="mode" data-mode="${mode}" ${['run', 'document'].includes(mode) && !state.run ? 'disabled' : ''}>${label}</button>`).join('')}</div>
+    ${launchReturnNotice()}<div class="tabs" role="tablist" aria-label="Vues du workflow">${[['design', 'Éditeur'], ['run', 'Exécution'], ['history', 'Historique'], ['document', 'Rapport']].map(([mode, label]) => `<button role="tab" aria-selected="${state.mode === mode}" class="${state.mode === mode ? 'active' : ''}" data-action="mode" data-mode="${mode}" ${['run', 'document'].includes(mode) && !state.run ? 'disabled' : ''}>${label}</button>`).join('')}</div>
     ${state.mode === 'history' ? `<section class="page"><h2>Exécutions du workflow</h2>${runTools()}${runTable(state.runs.filter(r => r.original.id === state.graph.id))}</section>` : state.mode === 'document' ? '<section class="page"><div class="row between"><h2>Rapport d’exécution</h2><div class="row"><button data-action="export-work">Exporter le rapport dans le projet</button><button data-action="export-release" class="flat">Export de release…</button></div></div><article class="document" id="document-view">Chargement…</article></section>' : `
     ${running && state.run.parameters?.source_run ? `<div class="notice">Notification liée à une question. ${button('notification-run', 'Revenir à l’exécution', '', `data-id="${esc(state.run.parameters.source_run)}"`)}</div>` : ''}${running ? `<div class="banner ${state.run.simulation ? 'amber' : ''}" id="run-banner">${state.run.simulation ? '<strong>Simulation.</strong> Aucun modèle ni service métier appelé. ' : '<strong>Exécution réelle.</strong> '}${Object.values(state.run.nodes).filter(n => n.status === 'waiting').length} décision(s) attendue(s) · un résultat remis reste à valider.</div>` : ''}
     <div class="toolbar">${!running ? button('add-node', '+ Ajouter un bloc') + button('connect', 'Relier') + button('workflow-settings', 'Paramètres du workflow') + '<span class="separator"></span>' + button('undo', '↶', '', `aria-label="Annuler la modification" ${state.history.past.length ? '' : 'disabled'}`) + button('redo', '↷', '', `aria-label="Rétablir la modification" ${state.history.future.length ? '' : 'disabled'}`) : ''}<span class="fill"></span>${!running ? button('assistant', '✦ Assistant IA') : button('review-layout', state.reviewFocus ? 'Graphe et détail' : 'Lire le résultat') + button('timeline', 'Journal d’exécution')}${button('view', state.view === 'canvas' ? '☷ Liste' : '⑂ Graphe', '', 'aria-label="Changer la vue graphe ou liste"')}</div>
@@ -211,11 +263,10 @@ function renderConversation() {
   document.querySelector('.tabs')?.after(tray);
 }
 async function launchConversation() {
-  const provider = integration.provider();
-  const projects = [...document.querySelectorAll('[name="conversation-project"]:checked')].map(e => e.value);
+  rememberLaunchDraft();
   const request = document.querySelector('#initial-request')?.value.trim();
-  state.conversation = await call('conversation.open', { project: state.project.id, graph: state.graph, provider, projects, request: request || null, authorize_notifications: document.querySelector('#authorize-notifications')?.checked === true }, true);
-  state.mode = 'design'; state.run = null; closeModal(); renderEditor();
+  state.conversation = await call('conversation.open', { ...nativeLaunchPayload(), request: request || null, authorize_notifications: document.querySelector('#authorize-notifications')?.checked === true }, true);
+  state.mode = 'design'; state.run = null; closeModal(); delete state.launchDrafts[launchKey()]; state.launchReturn = null; renderEditor();
   await terminal.open(state.project, state.graph, state.conversation.id);
 }
 
@@ -279,6 +330,7 @@ function applyNodeForm(form, render = true) {
     else if (['inputs', 'outputs', 'operation', 'input_mapping', 'output_mapping'].includes(key)) n[key] = JSON.parse(value);
     else if (['max_attempts', 'timeout'].includes(key)) n[key] = Number(value);
     else if (['capabilities', 'reuse', 'link_operation', 'candidate_check'].includes(key) || key.startsWith('op_')) continue;
+    else if (['environment', 'effort'].includes(key) && !value) delete n[key];
     else if (!['x', 'y'].includes(key)) n[key] = value;
   }
   if(form.elements.namedItem('candidate_check')) {
@@ -328,14 +380,34 @@ function refreshConnectionForm() {
 
 function operationField(value) {return value?.input ? "@"+value.input : value || "";}
 function operationValue(value) {return value.startsWith("@") ? {input:value.slice(1)} : value;}
+function contextOptions(values, current) {
+  return options(values.some(([v]) => v === current) ? values : [...values, [current, 'Valeur actuelle : ' + current]], current);
+}
+function workflowExtraParameters() {
+  const parameters = clone(state.graph.parameters || {});
+  if (odooWorkflowFields()) for (const key of ['series','platform','route','environment','neutralized_copy']) delete parameters[key];
+  return parameters;
+}
+function odooWorkflowFields() {
+  const g = state.graph, p = g.parameters || {};
+  const profiles = g.nodes.map(n => ({ ...state.project.defaults, ...g.defaults, ...n }).profile);
+  const usesOdooPack = (state.project.packs || []).some(pack => pack.policies?.domain === 'odoo' && pack.profiles.some(profile => profiles.includes(profile.id)));
+  if (g.domain !== 'odoo' && !usesOdooPack) return '';
+  const field = (name, label, placeholder) => `<label for="context-${name}">${label}</label><input id="context-${name}" name="context_${name}" value="${esc(typeof p[name] === 'string' ? p[name] : p[name] == null ? '' : JSON.stringify(p[name]))}" placeholder="${placeholder}">`;
+  return `<fieldset class="workflow-context"><legend>Contexte Odoo</legend>${field('series', 'Version d’Odoo', 'Exemple : 19.0')}${state.project.series ? `<small>Conversation : la version ${esc(state.project.series)} du projet est prioritaire. Ce réglage sert aussi au mode automatique.</small>` : ''}<label for="context-platform">Hébergement</label><select id="context-platform" name="context_platform">${contextOptions([['', 'À préciser'], ['custom', 'Odoo.sh ou serveur dédié'], ['odoo.sh', 'Odoo.sh'], ['online', 'Odoo Online'], ['on-premise', 'Serveur dédié']], p.platform || '')}</select>${state.project.platform ? `<small>Conversation : hébergement du projet ${esc(state.project.platform)}.</small>` : ''}<label for="context-route">Type de réalisation</label><select id="context-route" name="context_route">${contextOptions([['', 'À déterminer pendant l’analyse'], ['module', 'Module Odoo'], ['studio', 'Odoo Studio']], p.route || '')}</select><label for="context-environment">Environnement de recette</label><select id="context-environment" name="context_environment">${contextOptions([['', 'À préparer avec l’agent'], ['local', 'Copie locale neutralisée'], ['staging', 'Staging (non admis pour cette recette)'], ['production', 'Production (non admise pour les tests)']], p.environment || '')}</select>${field('neutralized_copy', 'Référence de la copie de test', 'Chemin ou identifiant de la copie préparée')}<small>Ces informations seront nécessaires avant la recette. La copie doit être réellement préparée et vérifiée ; remplir ces champs ne crée pas de base de test.</small></fieldset>`;
+}
 function designInspector(node) {
   const isAgent = node.kind === 'agent';
   const effective = isAgent ? effectiveExecution(state.project, state.graph, node) : null;
+  const profiles = [['generalist', 'Aucun agent dédié'], ...(state.project.packs || []).flatMap(pack => pack.profiles.map(profile => [profile.id, profile.title || profile.id]))];
+  if (effective && !profiles.some(([id]) => id === effective.profile.value)) profiles.push([effective.profile.value, effective.profile.value + ' (pack absent)']);
   return `<form id="node-form"><label for="node-title">Nom du bloc</label><input id="node-title" name="title" value="${esc(node.title)}" required>${isAgent ? `<label for="node-prompt">Consigne</label><textarea id="node-prompt" name="prompt">${esc(node.prompt || "")}</textarea>` : ""}<label for="node-criteria">Critères d’acceptation (un par ligne)</label><textarea id="node-criteria" name="criteria">${esc((node.criteria || []).join("\n"))}</textarea>${portEditor(node)}${['agent','task','command'].includes(node.kind) ? `<fieldset><legend>Validation du candidat</legend><label><input type="checkbox" name="candidate_check" ${node.candidate_check ? 'checked' : ''}>Contrôle QA du candidat</label><small>Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. ${node.kind==='command' ? 'La commande doit réussir (code 0) avec une preuve.' : 'La sortie verdict est ajoutée : pass ou fail, avec preuves réelles.'} Un document ou un simple transfert ne valide pas le code.</small></fieldset>` : ''}${isAgent ? `<label for="node-route-output">Sortie de branchement (facultatif)</label><select id="node-route-output" name="route_output">${options([['', 'Aucun branchement conditionnel'], ...Object.entries(node.outputs || {}).filter(([,t]) => t === 'string').map(([k]) => [k,k])], node.route_output || '')}</select>${node.route_output ? `<label>Valeurs de branchement (une par ligne)<textarea name="options">${esc(node.options.join('\n'))}</textarea></label>` : ''}<label>Validation du résultat<select name="validation">${options([['contract','Valider automatiquement les sorties'],['human','Attendre ma validation']], node.validation || 'human')}</select></label>` : ''}<details><summary>Organisation de l’étape</summary><label for="node-completion">Effet du résultat sur les tâches dépendantes</label><select id="node-completion" name="completion_outcome">${options([['succeeded', 'Permettre la suite'], ['blocked', 'Bloquer la suite : travail non résolu']], node.completion_outcome || 'succeeded')}</select><label for="node-phase">Phase</label><input id="node-phase" name="phase" value="${esc(node.phase || '')}" placeholder="Analyse, qualité…"></details>
+    ${(node.profile || state.graph.defaults?.profile || state.project.defaults?.profile) === 'odoo-tester' || Object.hasOwn(node, 'environment') ? `<label for="node-environment">Environnement de recette de cette étape</label><select id="node-environment" name="environment">${options([['', 'Utiliser le contexte du workflow'], ['local', 'Copie locale neutralisée'], ['staging', 'Staging (non admis pour cette recette)'], ['production', 'Production (non admise pour les tests)']], node.environment || '')}</select>` : ''}
+    ${['task','document'].includes(node.kind) ? `<label for="node-effort">Effort IA de cette étape</label><select id="node-effort" name="effort">${options([['', 'Utiliser le niveau de la conversation'], ...['low','medium','high','xhigh'].map(v => [v,v])], node.effort || '')}</select>` : ''}
     ${node.kind === 'watch' ? `<label for="watch-connection">Messagerie</label><select name="connection" id="watch-connection">${options([['gmail', 'Gmail'], ['outlook', 'Outlook']], node.connection || 'gmail')}</select><label for="watch-account">Compte à surveiller (référence, sans secret)</label><input name="account" id="watch-account" value="${esc(node.account || '')}"><label for="watch-sender">Adresse exacte de l'expéditeur</label><input name="sender" id="watch-sender" type="email" value="${esc(node.sender || '')}" placeholder="contact@exemple.test"><p class="muted">Nouveaux messages seulement. Le nom d'affichage ne suffit pas à identifier un expéditeur.</p>` : ''}
     ${node.kind === 'communication' ? `<label for="communication-channel">Canal de communication</label><select name="channel" id="communication-channel">${options([['slack', 'Slack'], ['telegram', 'Telegram'], ['signal', 'Signal'], ['email', 'Email'], ...state.capabilities.filter(c => c.plugin_id).map(c => [c.plugin_id, c.title])], node.channel || 'slack')}</select><label for="communication-recipient">Canal ou destinataire exact</label><input name="recipient" id="communication-recipient" value="${esc(node.recipient || '')}" placeholder="Identifiant du destinataire"><label for="communication-template">Message à envoyer</label><textarea name="template" id="communication-template">${esc(node.template || 'Nouveau message de {sender} : {subject}')}</textarea><p class="muted">Le modèle IA est facultatif. Une notification déterministe n'en utilise pas. Le connecteur doit être configuré et vérifié avant activation.</p>` : ''}
     ${['task', 'agent', 'communication', 'watch', 'external', 'document'].includes(node.kind) ? `<details><summary>Connexions de cette étape</summary><label for="node-capabilities">Capacités de plugins (facultatives)</label><select id="node-capabilities" name="capabilities"><option value="">Aucune</option>${[...new Map([...state.capabilities.filter(c => c.plugin_id).flatMap(c => c.operations.map(op => [JSON.stringify({ plugin: c.plugin_id, operation: op }), `${c.title} · ${op}`])), ...(node.capabilities || []).map(b => [JSON.stringify(b), `${b.plugin} · ${b.operation}`])]).entries()].map(([value, title]) => `<option value="${esc(value)}" ${(node.capabilities || []).some(b => JSON.stringify(b) === value) ? 'selected' : ''}>${esc(title)}</option>`).join('')}</select><small>Catalogue : .tricorder/plugins.json · aucune dépendance à un agent dédié.</small>${button('refresh-connections', 'Actualiser les outils', 'flat')}<p class="muted">${state.capabilities.filter(c => c.plugin_id).map(c => esc(c.title) + ' : ' + esc(c.operations.join(', '))).join(' · ') || 'Aucun plugin déclaré dans ce dépôt.'}</p></details>` : ''}
-    ${isAgent ? `<p class="notice">${esc(effective.provider.value === "claude" ? "Anthropic · Claude" : "OpenAI · Codex")} · ${esc(effective.model.value || "modèle à choisir")}</p>${button("workflow-ai", "Choisir l’IA pour tout le workflow", "flat")}<details><summary>Agent et modèle pour cette étape</summary><label for="node-required-capabilities">Capacités nécessaires (une par ligne : text, read, edit, shell, native-tools)</label><textarea id="node-required-capabilities" name="required_capabilities">${esc((node.required_capabilities || []).join('\n'))}</textarea><label for="node-execution-mode">Travail du modèle</label><select id="node-execution-mode" name="execution_mode">${options([["text", "Analyse ou rédaction"], ["edit", "Modification de code dans une copie isolée"]], node.execution_mode || "text")}</select><p class="muted">Les modifications sont présentées avant application au dépôt. Reliez la sortie candidate à un bloc Commande pour tester cette copie.</p><label for="node-profile">Agent dédié (facultatif)</label><select id="node-profile" name="profile">${options([['generalist', 'Aucun agent dédié'], ...(state.project.packs || []).flatMap(pack => pack.profiles.map(profile => [profile.id, profile.title]))], effective.profile.value)}</select><p class="muted">Sans agent dédié, le modèle suit directement la consigne du bloc. Un profil spécialisé ajoute les instructions du pack.</p><label for="node-provider">Fournisseur</label><select id="node-provider" name="provider">${options([['codex', 'OpenAI · Codex'], ['claude', 'Anthropic · Claude']], effective.provider.value)}</select><label for="node-model">Modèle IA</label><input id="node-model" name="model" value="${esc(effective.model.value)}" placeholder="Identifiant exact du modèle"><small>Valeur effective : ${esc(effective.model.value || 'non définie')} · ${effective.model.source}. Aucun repli automatique.</small><details><summary>Effort et mode d'exécution</summary><label for="node-effort">Effort</label><select name="effort" id="node-effort">${options(['low', 'medium', 'high', 'xhigh'].map(v => [v, v]), effective.effort.value)}</select><label for="node-session">Session</label><select id="node-session" name="session">${options([['delegated', 'Session déléguée'], ['main', 'Session principale (à qualifier)']], effective.session.value)}</select><p class="muted">Le choix est enregistré. Le connecteur vérifiera les capacités réelles avant tout lancement.</p></details></details>` : ''}
+    ${isAgent ? `<p class="notice">${esc(effective.provider.value === "claude" ? "Anthropic · Claude" : "OpenAI · Codex")} · ${esc(effective.model.value || "modèle à choisir")}</p>${button("workflow-ai", "Choisir l’IA pour tout le workflow", "flat")}<details><summary>Agent et modèle pour cette étape</summary><label for="node-required-capabilities">Capacités nécessaires (une par ligne : text, read, edit, shell, native-tools)</label><textarea id="node-required-capabilities" name="required_capabilities">${esc((node.required_capabilities || []).join('\n'))}</textarea><label for="node-execution-mode">Travail du modèle</label><select id="node-execution-mode" name="execution_mode">${options([["text", "Analyse ou rédaction"], ["edit", "Modification de code dans une copie isolée"]], node.execution_mode || "text")}</select><p class="muted">Les modifications sont présentées avant application au dépôt. Reliez la sortie candidate à un bloc Commande pour tester cette copie.</p><label for="node-profile">Agent dédié (facultatif)</label><select id="node-profile" name="profile">${options(profiles, effective.profile.value)}</select><p class="muted">Sans agent dédié, le modèle suit directement la consigne du bloc. Un profil spécialisé ajoute les instructions du pack.</p><label for="node-provider">Fournisseur</label><select id="node-provider" name="provider">${options([['codex', 'OpenAI · Codex'], ['claude', 'Anthropic · Claude']], effective.provider.value)}</select><label for="node-model">Modèle IA</label><input id="node-model" name="model" value="${esc(effective.model.value)}" placeholder="Identifiant exact du modèle"><small>Valeur effective : ${esc(effective.model.value || 'non définie')} · ${effective.model.source}. Aucun repli automatique.</small><details><summary>Effort et mode d'exécution</summary><label for="node-effort">Effort</label><select name="effort" id="node-effort">${options(['low', 'medium', 'high', 'xhigh'].map(v => [v, v]), effective.effort.value)}</select><small>Effort de la conversation : ${esc(state.graph.defaults?.effort || 'medium')}. Les étapes exécutées dans cette session doivent utiliser le même niveau.</small><label for="node-session">Session</label><select id="node-session" name="session">${options([['delegated', 'Session déléguée'], ['main', 'Session principale (à qualifier)']], effective.session.value)}</select><p class="muted">Le choix est enregistré. Le connecteur vérifiera les capacités réelles avant tout lancement.</p></details></details>` : ''}
     ${['decision', 'review', 'question'].includes(node.kind) ? `<label for="node-question">Question à poser</label><textarea id="node-question" name="question">${esc(node.question || '')}</textarea><label for="node-options">Issues (une par ligne)</label><textarea id="node-options" name="options">${esc((node.options || ['approve', 'reject']).join('\n'))}</textarea><p class="muted">Une attente humaine persiste après fermeture. Le silence n'autorise rien.</p>` : ''}
     ${node.kind === 'command' ? `<label for="node-argv">Commande et arguments (un par ligne)</label><textarea id="node-argv" name="argv" spellcheck="false">${esc((node.argv || []).join('\n'))}</textarea><label for="node-timeout">Délai maximal (secondes)</label><input type="number" min="1" max="3600" id="node-timeout" name="timeout" value="${node.timeout || 60}"><p class="muted">Sans shell ni réseau. Projet monté en lecture seule dans /project ; travail dans /work.</p>` : ''}
     ${node.kind === 'document' ? `<label for="node-content">Contenu du brouillon</label><textarea id="node-content" name="content">${esc(node.content || '')}</textarea><small>Préparation locale. La publication demande une opération et un accord distincts.</small>` : ''}
@@ -373,7 +445,7 @@ function runInspector(node) {
   if (data.reused_from) html += `<p class="notice">Preuves réutilisées depuis ${esc(data.reused_from.run)}. Aucun nouveau test exécuté pour ce bloc.</p>`;
   if (data.reason) html += `<p class="notice">${esc(data.reason)}</p>`;
   if (data.decision) html += `<p class="notice">Décision humaine : <strong>${esc(data.decision.outcome)}</strong>.</p>`;
-  if (['ready', 'pending', 'skipped'].includes(data.status)) html += `<p class="muted">${data.status === 'ready' ? state.run.definition.driver === 'conversation' && ['agent', 'task', 'document'].includes(node.kind) ? 'Cette étape est prête. Poursuivez dans le terminal de la conversation.' : 'Le moteur lancera cette étape dès que ses ressources seront disponibles.' : data.status === 'skipped' ? 'Cette branche n’a pas été sélectionnée.' : 'Cette étape attend ses dépendances.'}</p>`;
+  if (['ready', 'pending', 'skipped'].includes(data.status)) html += `<p class="muted">${data.status === 'ready' ? (state.run.driver ?? state.run.definition.driver) === 'conversation' && ['agent', 'task', 'document'].includes(node.kind) ? 'Cette étape est prête. Poursuivez dans le terminal de la conversation.' : 'Le moteur lancera cette étape dès que ses ressources seront disponibles.' : data.status === 'skipped' ? 'Cette branche n’a pas été sélectionnée.' : 'Cette étape attend ses dépendances.'}</p>`;
   return html;
 }
 
@@ -382,12 +454,13 @@ function modal(title, body, actions = '', wide = false) {
   const root = document.createElement('div'); root.className = 'modal'; root.innerHTML = `<section class="modal-card ${wide ? 'wide' : ''}" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="row between"><h2 id="modal-title">${esc(title)}</h2>${button('close-modal', '×', 'flat', 'aria-label="Fermer la fenêtre"')}</div>${body}<div class="status-line"></div>${actions ? `<div class="modal-actions">${actions}</div>` : ''}</section>`;
   document.body.append(root); root.querySelector('input, textarea, select, button')?.focus();
 }
-function closeModal() { document.querySelector('.modal')?.remove(); if (state.modal?.isConnected) state.modal.focus(); state.modal = null; }
+function closeModal() { rememberLaunchDraft(); document.querySelector('.modal')?.remove(); if (state.modal?.isConnected) state.modal.focus(); state.modal = null; }
 async function ensureProject() {
   if (state.project && !state.project.library) return;
   Object.assign(state, await call('workspace.get'));
 }
 async function openProject(id, render = true) {
+  viewEpoch++;
   const data = await call('project.get', { project: id }); Object.assign(state, data); state.repositoryFiles = await call('workflow.repository', { project: id }); state.repositoryProject = id; state.conversations = await call('conversation.list', { project: id }); state.route = 'project';
   if (render) shell();
 }
@@ -414,6 +487,7 @@ function prepareWork(templateId) {
   });
 }
 async function openWorkflow(graph) {
+  viewEpoch++;
   if (graph.summary) graph = await call('workflow.get', {project:graph._project || state.project.id, workflow:graph.id});
   graph = clone(graph); delete graph._project;
   state.conversation = null;
@@ -433,11 +507,16 @@ async function save() {
   if (state.project.library) state.templates = (await call('bootstrap')).templates;
   if (state.route === 'workflow') renderEditor(); toast('Workflow enregistré. Les exécutions précédentes gardent leur version.');
 }
-async function openRun(id) {
-  const data = await call('run.get', { run: id }); state.run = data.run; state.events = data.events; state.eventsNext = data.events_next;
-  if (state.project?.id !== data.run.project) Object.assign(state, await call('project.get', { project: data.run.project }));
+async function openRun(id, stillCurrent = null) {
+  if (!stillCurrent) viewEpoch++;
+  const data = await call('run.get', { run: id });
+  if (stillCurrent && !stillCurrent()) return;
+  const project = state.project?.id !== data.run.project ? await call('project.get', { project: data.run.project }) : null;
   const cid = data.run.parameters?.conversation;
-  if (!cid) state.conversation = null; else if (state.conversation?.id !== cid) state.conversation = await call('conversation.get', { conversation: cid });
+  const conversation = !cid ? null : state.conversation?.id === cid ? state.conversation : await call('conversation.get', { conversation: cid });
+  if (stillCurrent && !stillCurrent()) return;
+  if (project) Object.assign(state, project);
+  state.run = data.run; state.events = data.events; state.eventsNext = data.events_next; state.conversation = conversation;
   if (!state.graph || state.graph.id !== data.run.original.id) { state.graph = clone(data.run.original); state.savedRevision = state.graph.revision || 0; state.dirty = false; }
   state.mode = 'run'; state.route = 'workflow'; state.reviewFocus=!!(state.conversation && state.reviewFocus); state.selected = data.run.focus?.node || Object.keys(data.run.nodes).find(id => ['waiting_input','waiting','returned'].includes(data.run.nodes[id].status)) || null;
   const selected = data.run.definition.nodes.find(n=>n.id===state.selected);
@@ -547,7 +626,7 @@ const actions = {
   },
   async 'refresh-overview'() { Object.assign(state, await call('overview.get',{offset:state.activity?.offset || 0})); renderOverview(); },
   async 'activity-run'(el) { await openProject(el.dataset.project, false); await openRun(el.dataset.id); },
-  async navigate(el) { if (state.dirty) { await save(); } if (el.dataset.route === 'global') { Object.assign(state, await call('workspace.get')); state.route = 'project'; } else { state.route = el.dataset.route; if (state.route === 'overview') Object.assign(state, await call('overview.get',{offset:state.activity?.offset || 0})); if (state.route === 'schedules') state.schedules = await call('schedule.list'); } shell(); },
+  async navigate(el) { viewEpoch++; if (state.dirty) { await save(); } if (el.dataset.route === 'global') { Object.assign(state, await call('workspace.get')); state.route = 'project'; } else { state.route = el.dataset.route; if (state.route === 'overview') Object.assign(state, await call('overview.get',{offset:state.activity?.offset || 0})); if (state.route === 'schedules') state.schedules = await call('schedule.list'); } shell(); },
   theme() { const dark = document.documentElement.dataset.theme === 'dark'; document.documentElement.dataset.theme = dark ? 'light' : 'dark'; localStorage.setItem('tricorder-theme', dark ? 'light' : 'dark'); },
   'new-project'() { modal('Créer un projet', '<form id="project-form"><label for="project-title">Nom du projet</label><input id="project-title" name="title" required placeholder="Mon projet"><label>Racine du dépôt Git local</label><div class="row"><input id="project-path" name="path" readonly required placeholder="Choisir un dépôt Git existant"><button type="button" data-action="choose-folder">Choisir…</button></div><p class="muted">Le dossier doit être la racine d’un dépôt Git. Aucun commit ni envoi distant n’est effectué.</p><div class="modal-actions"><button class="primary" type="submit">Créer le projet</button></div></form>'); },
   async 'choose-folder'() { const path = await api.folder(); if (path) document.querySelector('#project-path').value = path; },
@@ -588,15 +667,17 @@ const actions = {
   async 'toggle-schedule'(el) { const schedule = state.schedules.find(s => s.id === el.dataset.id); await call('schedule.toggle', { schedule: schedule.id, enabled: !schedule.enabled }); await actions['refresh-schedules'](); },
   async 'schedule-run'(el) { const schedule = state.schedules.find(s => s.id === el.dataset.id); await openProject(schedule.project, false); await openRun(schedule.last_run); },
   async schedule() {
+    rememberLaunchDraft();
     if (state.dirty) await save();
     const check = await call('workflow.validate', { project: state.project.id, graph: state.graph });
     const models = state.graph.nodes.filter(n => n.kind === 'agent').map(n => `${n.title} : ${effectiveExecution(state.project, state.graph, n).provider.value} / ${effectiveExecution(state.project, state.graph, n).model.value || 'à définir'}`);
-    modal('Configurer une planification', `<form id="schedule-form"><p><strong>${esc(state.graph.title)}</strong> · révision ${state.savedRevision}</p><p>Modèles IA : ${models.length ? esc(models.join(' ; ')) : 'aucun'}. ${models.length ? 'Chaque occurrence réelle peut consommer votre abonnement.' : ''}</p>${activationDetails(check)}${check.issues.length ? `<div class="notice"><strong>Exécution réelle bloquée</strong><ul class="checklist">${check.issues.map(i => `<li>${esc(state.graph.nodes.find(n => n.id === i.node)?.title || 'Workflow')} : ${esc(i.message)} ${state.graph.nodes.some(n => n.id === i.node) ? button('fix-step', 'Configurer cette étape', 'flat', `data-id="${esc(i.node)}"`) : ''}</li>`).join('')}</ul></div>` : ''}<label for="schedule-kind">Fréquence</label><select name="kind" id="schedule-kind"><option value="daily">Chaque jour</option><option value="weekly">Du lundi au vendredi</option><option value="interval">À intervalle régulier</option></select><div class="row"><div class="fill"><label for="schedule-time">Heure locale</label><input name="time" id="schedule-time" type="time" value="09:00"></div><div class="fill"><label for="schedule-minutes">Intervalle (minutes)</label><input name="minutes" id="schedule-minutes" type="number" min="5" max="525600" value="30"></div></div><label for="schedule-timezone">Fuseau horaire</label><input name="timezone" id="schedule-timezone" value="${esc(Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Zurich')}"><label><input type="checkbox" name="simulation" checked>Simulation sans appel de modèle ni de service</label><label><input type="checkbox" required>J’active cette révision à cette fréquence. Les décisions humaines du workflow restent obligatoires.</label><p class="muted">Sans chevauchement. L’ordinateur et Tricorder doivent être ouverts. Une heure inexistante au changement d’heure est ignorée ; une heure répétée s’exécute une seule fois.</p><div class="modal-actions"><button type="submit" class="primary">Activer la planification</button></div></form>`, '', true);
+    modal('Configurer une planification', `<form id="schedule-form"><p><strong>${esc(state.graph.title)}</strong> · révision ${state.savedRevision}</p><p>Modèles IA : ${models.length ? esc(models.join(' ; ')) : 'aucun'}. ${models.length ? 'Chaque occurrence réelle peut consommer votre abonnement.' : ''}</p>${activationDetails(check)}${launchDiagnostics(check.issues, 'À configurer avant la planification')}<label for="schedule-kind">Fréquence</label><select name="kind" id="schedule-kind"><option value="daily">Chaque jour</option><option value="weekly">Du lundi au vendredi</option><option value="interval">À intervalle régulier</option></select><div class="row"><div class="fill"><label for="schedule-time">Heure locale</label><input name="time" id="schedule-time" type="time" value="09:00"></div><div class="fill"><label for="schedule-minutes">Intervalle (minutes)</label><input name="minutes" id="schedule-minutes" type="number" min="5" max="525600" value="30"></div></div><label for="schedule-timezone">Fuseau horaire</label><input name="timezone" id="schedule-timezone" value="${esc(Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Zurich')}"><label><input type="checkbox" name="simulation" checked>Simulation sans appel de modèle ni de service</label><label><input type="checkbox" required>J’active cette révision à cette fréquence. Les décisions humaines du workflow restent obligatoires.</label><p class="muted">Sans chevauchement. L’ordinateur et Tricorder doivent être ouverts. Une heure inexistante au changement d’heure est ignorée ; une heure répétée s’exécute une seule fois.</p><div class="modal-actions"><button type="submit" class="primary">Activer la planification</button></div></form>`, '', true);
+    const draft = state.scheduleDrafts[launchKey()]; if (draft) for (const [key,value] of Object.entries(draft)) { const field = document.querySelector('#schedule-form').elements.namedItem(key); if (field.type === 'checkbox') field.checked=value; else field.value=value; } state.launchReturn = null;
   },
   async terminal() { if (!state.project) await ensureProject(); if (state.dirty) await save(); await terminal.open(state.project, state.graph); },
   async 'reload-file'() { if (state.dirty) return showConflict(); const graph = await call('workflow.reload', { project: state.project.id, workflow: state.graph.id, revision: state.savedRevision }); state.graph = graph; state.savedRevision = graph.revision; state.history = new History(); renderEditor(); toast('Fichier validé et nouvelle révision chargée. Les exécutions existantes sont inchangées.'); },
   'select-node'(el) { state.selected = el.dataset.id; document.querySelectorAll('.node').forEach(n => n.classList.toggle('selected', n.dataset.id === state.selected)); renderInspector(); },
-  'workflow-settings'() { modal('Paramètres du workflow', `<form id="workflow-form"><label for="workflow-title">Nom</label><input id="workflow-title" name="title" value="${esc(state.graph.title)}" required><label for="workflow-description">Description</label><textarea id="workflow-description" name="description">${esc(state.graph.description || '')}</textarea>${questionNotificationForm()}<details><summary>Paramètres supplémentaires</summary><label for="workflow-parameters">Paramètres (objet JSON)</label><textarea id="workflow-parameters" name="parameters" spellcheck="false">${esc(JSON.stringify(state.graph.parameters || {}, null, 2))}</textarea></details><div class="modal-actions"><button class="primary" type="submit">Appliquer</button></div></form>`); },
+  'workflow-settings'() { modal('Paramètres du workflow', `<form id="workflow-form"><label for="workflow-title">Nom</label><input id="workflow-title" name="title" value="${esc(state.graph.title)}" required><label for="workflow-description">Description</label><textarea id="workflow-description" name="description">${esc(state.graph.description || '')}</textarea>${questionNotificationForm()}${odooWorkflowFields()}<details><summary>Paramètres supplémentaires</summary><label for="workflow-parameters">Paramètres (objet JSON)</label><textarea id="workflow-parameters" name="parameters" spellcheck="false">${esc(JSON.stringify(workflowExtraParameters(), null, 2))}</textarea></details><div class="modal-actions"><button class="primary" type="submit">Appliquer</button></div></form>`, state.launchReturn ? button('return-to-launch', state.launchReturn.kind === 'schedule' ? 'Revenir à la planification' : 'Revenir au lancement') : ''); },
   'add-node'() { modal('Ajouter une étape', `<form id="add-node-form"><label for="add-kind">Type d'étape</label><select id="add-kind" name="kind">${options([['agent', 'Travail · Agent'], ['task', 'Travail · Tâche dans la conversation'], ['command', 'Travail · Commande'], ['document', 'Travail · Document'], ['agent-route', 'Aiguillage · Évaluation par un agent'], ['condition', 'Aiguillage · Règle explicite'], ['decision', 'Décision · Accord humain'], ['question', 'Décision · Question ouverte'], ['join', 'Organisation · Réunir'], ['subworkflow', 'Organisation · Sous-workflow'], ['watch', 'Organisation · Surveillance'], ['external', 'Travail · Opération externe'], ['communication', 'Travail · Communication']], 'agent')}</select><label for="add-title">Nom du bloc</label><input id="add-title" name="title" required placeholder="Quel résultat attendre ?"><div class="modal-actions"><button class="primary" type="submit">Ajouter au workflow</button></div></form>`); },
   connect() { modal('Relier deux étapes', `<form id="connect-form"><label for="edge-from">Depuis</label><select id="edge-from" name="from">${options(state.graph.nodes.map(n => [n.id,n.title]), state.selected || state.graph.nodes[0].id)}</select><label for="edge-outcome">Après l’issue</label><select id="edge-outcome" name="outcome"></select><label for="edge-to">Vers</label><select id="edge-to" name="to">${options(state.graph.nodes.map(n => [n.id,n.title]), state.graph.nodes.find(n => n.id !== (state.selected || state.graph.nodes[0].id))?.id)}</select><p class="mapping-summary"></p><label>Sortie à transmettre<select name="output"></select></label><label>Entrée destinataire<select name="input"></select></label><details><summary>Configuration des échanges</summary><label for="edge-mapping">Données transmises (JSON : sortie → entrée)</label><textarea id="edge-mapping" name="mapping">{}</textarea></details><div class="modal-actions"><button class="primary">Créer la connexion</button></div></form>`); refreshConnectionForm(); },
   'add-port'(el) { modal('Décrire une donnée', `<form id="port-form"><input type="hidden" name="direction" value="${el.dataset.direction}"><label>Nom (sans espaces)<input name="port" required pattern="[a-zA-Z][a-zA-Z0-9_.-]{0,79}" placeholder="criticite"></label><label>Type<select name="type">${options([['string','Texte'],['object','Objet structuré'],['array','Liste'],['boolean','Oui / non'],['number','Nombre']])}</select></label><button class="primary">Ajouter la donnée</button></form>`); },
@@ -621,13 +702,72 @@ const actions = {
   'back-design'() { state.mode = 'design'; state.selected = null; renderEditor(); },
   async mode(el) { state.mode = el.dataset.mode; state.selected = null; if (state.mode === 'history') { await loadRunPage(); return; } renderEditor(); },
   async 'start-preview'() {
+    rememberLaunchDraft();
     if (state.dirty) await save();
+    const draft = state.launchDrafts[launchKey()] || { request: state.graph.parameters?.request || '', projects: [] };
     const validation = await call('workflow.validate', { project: state.project.id, graph: state.graph });
-    const native = await call('workflow.validate', { project: state.project.id, graph: state.graph, mode:'native',provider:integration.provider(),model:state.graph.defaults?.provider === integration.provider() ? state.graph.defaults?.model : state.providerDefaults?.[integration.provider()] });
+    const native = await call('workflow.validate', nativeLaunchPayload());
     state.reuseSource = state.runs.find(r => r.original.id === state.graph.id && !r.simulation)?.id;
-    modal('Lancer cette version du workflow', `<label for="initial-request">Quelle demande souhaitez-vous traiter ?</label><textarea id="initial-request" placeholder="Décrivez-la ici ou directement dans le terminal.">${esc(state.graph.parameters?.request || '')}</textarea><p>Parlez au workflow dans votre terminal ${integration.provider() === 'claude' ? 'Anthropic · Claude' : 'OpenAI · Codex'}. Vous pourrez soumettre une ou plusieurs tâches.</p><details><summary>Coordonner plusieurs projets</summary>${state.projects.filter(p => p.id !== state.project.id).map(p => `<label><input type="checkbox" name="conversation-project" value="${esc(p.id)}">${esc(p.title)}</label>`).join('')}</details>${activationDetails(validation)}${native.issues.length ? `<div class="notice"><strong>À configurer pour le terminal</strong><ul>${native.issues.map(i=>`<li>${esc(i.message)} ${button('fix-step','Configurer cette étape','flat',`data-id="${esc(i.node)}"`)}</li>`).join('')}</ul></div>` : ''}<div class="row">${button('start-conversation', 'Lancer dans le terminal', 'primary',native.issues.length ? 'disabled' : '')}</div><details><summary>Exécution automatique sans conversation</summary>${state.graph.nodes.some(n => n.kind === 'agent') ? aiForm(true) : ''}<p><strong>${esc(state.graph.title)}</strong> · révision ${state.savedRevision} · ${state.graph.nodes.length} étapes</p><p>Une exécution garde cette définition. Vous examinerez les résultats remis et répondrez aux décisions humaines.</p>${state.reuseSource ? '<label><input type="checkbox" id="reuse-evidence">Réutiliser les preuves encore valides des blocs qui l’autorisent (exécution réelle)</label>' : ''}${validation.issues.length ? `<div class="notice"><strong>Prérequis pour une exécution réelle</strong><ul class="checklist">${validation.issues.map(i => `<li>${esc(state.graph.nodes.find(n => n.id === i.node)?.title || 'Workflow')} : ${esc(i.message)} ${state.graph.nodes.some(n => n.id === i.node) ? button('fix-step', 'Configurer cette étape', 'flat', `data-id="${esc(i.node)}"`) : ''}</li>`).join('')}</ul></div>` : '<div class="notice">Les exécutants nécessaires sont disponibles sur ce poste.</div>'}${button('start-real', 'Lancer l’exécution réelle', 'primary', validation.issues.length ? 'disabled' : '')}</details>`, button('start-simulation', 'Simuler le parcours'));
+    modal('Lancer cette version du workflow', `<div class="launch-dialog"><label for="initial-request">Quelle demande souhaitez-vous traiter ?</label><textarea id="initial-request" placeholder="Décrivez-la ici ou directement dans le terminal.">${esc(draft.request)}</textarea><p>Parlez au workflow dans votre terminal ${integration.provider() === 'claude' ? 'Anthropic · Claude' : 'OpenAI · Codex'}. Vous pourrez soumettre une ou plusieurs tâches.</p><details class="launch-projects" ${draft.projects.length ? 'open' : ''}><summary>Coordonner plusieurs projets</summary>${state.projects.filter(p => p.id !== state.project.id).map(p => `<label><input type="checkbox" name="conversation-project" value="${esc(p.id)}" ${draft.projects.includes(p.id) ? 'checked' : ''}>${esc(p.title)}</label>`).join('')}</details>${activationDetails(native)}<div id="launch-native-check">${launchDiagnostics(native.issues, 'À résoudre avant le lancement')}${launchDiagnostics(native.requirements, 'À préparer pendant le workflow', true)}</div><div class="launch-primary">${button('start-conversation', 'Lancer dans le terminal', 'primary', native.issues.length ? 'disabled' : '')}${button('check-launch', 'Vérifier à nouveau', 'flat')}</div><details class="launch-automatic"><summary>Exécution automatique sans conversation</summary>${state.graph.nodes.some(n => n.kind === 'agent') ? aiForm(true) : ''}<p><strong>${esc(state.graph.title)}</strong> · révision ${state.savedRevision} · ${state.graph.nodes.length} étapes</p><p>Ce mode démarre les étapes sans conversation. Tous ses prérequis doivent être configurés.</p>${state.reuseSource ? '<label><input type="checkbox" id="reuse-evidence">Réutiliser les preuves encore valides des blocs qui l’autorisent</label>' : ''}${launchDiagnostics(validation.issues, 'À configurer pour le mode automatique')}${button('start-real', 'Lancer l’exécution réelle', 'primary', validation.issues.length ? 'disabled' : '')}</details></div>`, button('start-simulation', 'Simuler le parcours'));
+    state.launchReturn = null;
   },
-  'fix-step'(el) { closeModal(); state.selected = el.dataset.id; renderInspector(); },
+  'check-launch': refreshNativeLaunch,
+  async 'repair-launch'(el) {
+    rememberLaunchDraft();
+    const remedy = el.dataset.remedy;
+    if (remedy === 'choose-projects') {
+      const projects = document.querySelector('.launch-projects');
+      if (projects) { projects.open = true; (projects.querySelector(`input[value="${CSS.escape(el.dataset.project)}"]`) || projects.querySelector('summary')).focus(); }
+      return;
+    }
+    if (remedy === 'prepare-in-conversation') {
+      if (!document.querySelector('#initial-request')) await actions['start-preview']();
+      document.querySelector('.launch-automatic')?.removeAttribute('open');
+      document.querySelector('#initial-request')?.focus();
+      return;
+    }
+    state.launchReturn = { kind: document.querySelector('#schedule-form') ? 'schedule' : 'launch', project: state.project.id, workflow: state.graph.id, title: state.graph.title, projectTitle: state.project.title };
+    if (remedy === 'connections') {
+      closeModal();
+      if (el.dataset.project && el.dataset.project !== state.project.id) await openProject(el.dataset.project, false);
+      state.route = 'connections';
+      state.capabilities = (await call('bootstrap', { project: state.project.id })).capabilities;
+      shell();
+    } else if (remedy === 'choose-ai') {
+      modal('Choisir l’IA pour ce workflow', aiForm(true), button('return-to-launch', 'Revenir au lancement'));
+    } else if (remedy === 'workflow-settings') {
+      actions['workflow-settings']();
+      requestAnimationFrame(() => {
+        const code = el.dataset.code || '';
+        document.querySelector(code.includes('series') ? '#context-series' : code.includes('online') ? '#context-route' : code.includes('copy') ? '#context-neutralized_copy' : '#context-environment')?.focus();
+      });
+    } else if (remedy === 'save-workflow') {
+      await save(); await actions['start-preview']();
+    } else if (remedy === 'choose-project') {
+      const projects = state.projects.filter(p => !p.library && p.scope !== 'workspace');
+      modal('Utiliser ce workflow dans un projet', `<form id="adapt-launch-form"><p>Une copie du workflow sera enregistrée dans le projet choisi. Le workflow d’origine sera conservé.</p><label for="adapt-launch-project">Projet</label><select id="adapt-launch-project" name="project" required>${options(projects.map(p => [p.id, p.title]), '')}</select><label for="adapt-launch-title">Nom du workflow</label><input id="adapt-launch-title" name="title" value="${esc(state.graph.title)}" required>${projects.length ? '' : '<p>Ajoutez un dépôt depuis la page Projets, puis revenez à ce workflow. Votre demande est conservée.</p>'}<div class="modal-actions"><button type="submit" class="primary" ${projects.length ? '' : 'disabled'}>Créer la copie et continuer</button></div></form>`, button('return-to-launch', 'Revenir au lancement'));
+    } else if (remedy === 'edit-node') {
+      closeModal(); state.mode = 'design'; state.selected = el.dataset.node; renderEditor();
+      requestAnimationFrame(() => {
+        focusSelectedNode();
+        const code = el.dataset.code || '';
+        const selector = code.includes('effort') ? '#node-effort' : code.includes('environment') || code.includes('production') ? '#node-environment' : code.includes('profile') || code.includes('module') ? '#node-profile' : code.includes('cli') ? '#node-provider' : code.includes('model') ? '#node-model' : null;
+        const field = selector ? document.querySelector(selector) : document.querySelector('#node-title');
+        for (let parent = field?.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
+        field?.focus();
+      });
+    }
+  },
+  async 'return-to-launch'() {
+    const origin = state.launchReturn;
+    closeModal();
+    if (origin && (state.project?.id !== origin.project || state.graph?.id !== origin.workflow || state.route !== 'workflow')) {
+      await openProject(origin.project, false);
+      await openWorkflow(await call('workflow.get', { project: origin.project, workflow: origin.workflow }));
+    }
+    await actions[origin?.kind === 'schedule' ? 'schedule' : 'start-preview']();
+  },
+  'fix-step'(el) { closeModal(); state.mode = 'design'; state.selected = el.dataset.id; renderEditor(); },
   async 'open-conversation'(el) {
     const c = await call('conversation.get', { conversation: el.dataset.id });
     await openProject(c.project, false); state.conversation = c;
@@ -688,6 +828,10 @@ new ResizeObserver(() => {
 }).observe(host);
 
 document.addEventListener('change', event => {
+  if (event.target.name === 'conversation-project') {
+    document.querySelector('[data-action="start-conversation"]')?.setAttribute('disabled', '');
+    rememberLaunchDraft(); enqueue(refreshNativeLaunch);
+  }
   if (event.target.closest('#connect-form') && ['from','to'].includes(event.target.name)) refreshConnectionForm();
   if (event.target.id === 'workflow-provider') {
     document.querySelector('#workflow-model').value = state.providerDefaults?.[event.target.value] || '';
@@ -716,17 +860,25 @@ document.addEventListener('submit', event => {
       closeModal(); await openProject(data.project, false); openWorkflow(saved);
       toast('Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.'); return;
     }
+    if (form.id === 'adapt-launch-form') {
+      const draft = state.launchDrafts[launchKey()];
+      const graph = clone(state.graph); graph.id = 'work-' + crypto.randomUUID(); graph.title = data.title.trim(); delete graph.revision; delete graph.driver;
+      const saved = await call('workflow.save', { project: data.project, graph });
+      closeModal(); await openProject(data.project, false); await openWorkflow(saved);
+      if (draft) state.launchDrafts[launchKey()] = { ...draft, projects: draft.projects.filter(id => id !== data.project) };
+      state.launchReturn = null; await actions['start-preview'](); return;
+    }
     if (form.id === 'work-export-form') { const path = await call('work.export', { run: state.run.id, name: data.name }); closeModal(); toast('Rapport exporté : ' + path); return; }
     if (form.id === 'port-form') { edit(g => { const n = g.nodes.find(n => n.id === state.selected); n[data.direction] ||= {}; n[data.direction][data.port] = data.type; }); closeModal(); return; }
     if (form.id === 'conversation-add-form') { await call('conversation.add', { conversation: state.conversation.id, request: data.request, project: data.project, depends_on: data.depends ? [data.depends] : [] }); closeModal(); await pollConversation(); return; }
     if (form.id === 'question-form') { const q = state.run.nodes[state.selected].question; await call('run.answer', { run: state.run.id, node: state.selected, question: q.id, text: data.answer }); await poll(); renderInspector(); return; }
-    if (form.id === 'workflow-ai-form') { const next = withWorkflowAI(state.graph, data); edit(g => Object.assign(g, next)); await save(); await integration.setProvider(data.provider); closeModal(); if (data.preview === 'yes') await actions['start-preview'](); return; }
+    if (form.id === 'workflow-ai-form') { const next = withWorkflowAI(state.graph, data); edit(g => Object.assign(g, next)); await save(); await integration.setProvider(data.provider); closeModal(); if (data.preview === 'yes') await actions['return-to-launch'](); return; }
     if (form.id === 'connection-context-form') { if (data.project === 'workspace') await call('workspace.get'); if (data.project === 'library') await call('template.workspace'); Object.assign(state, await call('project.get', { project: data.project })); renderConnections(); terminal.host.hidden = true; }
     if (form.id === 'handoff-form') { const graph = await call('run.handoff', { run: state.run.id, project: data.project, graph: state.templates.find(t => t.id === data.template) }, true); closeModal(); await openProject(data.project, false); openWorkflow(graph); toast('Brouillon créé avec sa source globale.'); }
     if (form.id === 'import-workflow-form') { const graph = await call('workflow.import-portable', { project: data.context, bundle: state.importBundle }); state.importBundle = null; closeModal(); await openProject(data.context, false); openWorkflow(graph); toast('Brouillon importé. Aucun workflow ni planification activée.'); }
     if (form.id === 'project-form') { const project = await call('project.create', data); state.projects.push(project); closeModal(); await openProject(project.id); }
     if (form.id === 'node-form') { applyNodeForm(form); toast('Bloc modifié. Enregistrez le workflow pour créer une révision.'); }
-    if (form.id === 'workflow-form') { const parameters = JSON.parse(data.parameters); if (!parameters || Array.isArray(parameters) || typeof parameters !== 'object') throw new Error('Les paramètres doivent être un objet.'); if (data.question_notification && !data.question_recipient.trim()) throw new Error('Renseigner le destinataire de notification.'); edit(g => { Object.assign(g, { title: data.title, description: data.description, parameters }); if (data.question_notification) { g.on_question = { ...JSON.parse(data.question_notification), recipient: data.question_recipient.trim() }; } else delete g.on_question; }); closeModal(); }
+    if (form.id === 'workflow-form') { const parameters = JSON.parse(data.parameters); if (!parameters || Array.isArray(parameters) || typeof parameters !== 'object') throw new Error('Les paramètres doivent être un objet.'); for (const [key,value] of Object.entries(data)) if (key.startsWith('context_')) { const name=key.slice(8); if (value.trim()) parameters[name]=value.trim(); else delete parameters[name]; } if (data.question_notification && !data.question_recipient.trim()) throw new Error('Renseigner le destinataire de notification.'); edit(g => { Object.assign(g, { title: data.title, description: data.description, parameters }); if (data.question_notification) { g.on_question = { ...JSON.parse(data.question_notification), recipient: data.question_recipient.trim() }; } else delete g.on_question; }); closeModal(); }
     if (form.id === 'add-node-form') {
       const id = 'step-' + Date.now().toString(36); edit(g => { const count = g.nodes.length; const n = { id, title: data.title, kind: data.kind, position: { x: 60 + count % 4 * 300, y: 80 + Math.floor(count / 4) * 190 }, criteria: [] }; if (data.kind === 'agent-route') { n.kind = 'agent'; n.route_output = 'choice'; n.options = ['yes', 'no', 'unknown']; n.outputs = { choice: 'string', reason: 'string' }; n.validation = 'contract'; } if (data.kind === 'agent') n.validation = 'contract'; if (data.kind === 'question') { n.question = data.title; n.outputs = {answer: 'string'}; } if (data.kind === 'command') n.argv = ['python3', '-c', 'print("Hello")']; if (data.kind === 'condition') { n.parameter = 'choice'; n.options = ['yes', 'no']; } if (data.kind === 'subworkflow') n.workflow = 'analysis'; g.nodes.push(n); state.selected = id; }); closeModal();
     }
@@ -781,12 +933,12 @@ async function pollConversation() {
   if (!state.conversation || conversationPolling) return;
   conversationPolling = true;
   try {
-    const id = state.conversation.id;
+    const id = state.conversation.id, epoch = viewEpoch, graph = state.graph?.id;
     const c = await call('conversation.get', { conversation: id, offset:state.conversation.offset || 0, query:state.conversation.query || '' }); c.query = state.conversation.query || '';
-    if (state.conversation?.id !== id) return;
+    if (state.conversation?.id !== id || epoch !== viewEpoch) return;
     const changed = JSON.stringify(c) !== JSON.stringify(state.conversation);
     state.conversation = c;
-    if (state.route === 'workflow' && !state.run && c.items.length) await openRun(c.items[0].run);
+    if (state.route === 'workflow' && !state.run && c.items.length) await openRun(c.items[0].run, () => epoch === viewEpoch && state.route === 'workflow' && state.graph?.id === graph && state.conversation?.id === id && !state.run);
     else if (changed && state.route === 'workflow') renderConversation();
   } finally { conversationPolling = false; }
 }
@@ -796,8 +948,8 @@ async function poll() {
   if (!state.run || state.polling || state.route !== 'workflow') return;
   state.polling = true;
   try {
-    const id = state.run.id; const data = await call('run.get', { run: id, after: state.events.at(-1)?.seq || 0 });
-    if (state.run?.id !== id) return;
+    const id = state.run.id, epoch = viewEpoch; const data = await call('run.get', { run: id, after: state.events.at(-1)?.seq || 0 });
+    if (state.run?.id !== id || state.route !== 'workflow' || epoch !== viewEpoch) return;
     const previous = state.run; state.run = data.run; mergeEvents(data);
     if (state.mode === 'run') {
       for (const [nid, s] of Object.entries(state.run.nodes)) {
@@ -862,14 +1014,14 @@ setInterval(async () => {
   } catch (e) { error(e.message); }
   finally { assistantPolling = false; }
 }, 1000);
-api.onNavigate(destination => enqueue(async () => {
+api.onNavigate(destination => { viewEpoch++; enqueue(async () => {
   await ready;
   if (state.dirty) await save();
   if (destination.route === 'import-workflow') { const pending = await api.portable({ action: 'pending' }); if (pending) previewImport(pending); return; }
   if (destination.route === 'global') { Object.assign(state, await call('workspace.get')); state.route = 'project'; shell(); return; }
   if (destination.route === 'run') { await openProject(destination.project, false); await openRun(destination.run); if (destination.node) { state.selected=destination.node; renderInspector(); } }
   else { state.route = destination.route; shell(); }
-}));
+}); });
 
 function previewImport(preview) {
   state.importBundle = preview.bundle;

@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+(node:594966) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch (9.5s)
+
+  1 passed (10.4s)

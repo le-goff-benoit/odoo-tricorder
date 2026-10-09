@@ -1,0 +1,42 @@
+{
+  "version": "0.6.0-rc.9",
+  "scope": "Projets synthétiques, CLI inertes et adaptateurs locaux ; aucun compte fournisseur ou projet client.",
+  "unit": {
+    "python_passed": 243,
+    "javascript_passed": 84,
+    "log": "unit.log"
+  },
+  "ui_source": {
+    "full_passed": 71,
+    "skipped_optional_real_provider": 2,
+    "targeted_additional_passed": 2,
+    "logs": [
+      "ui-source.log",
+      "ui-profile-source.log",
+      "ui-pack-profile-source.log"
+    ]
+  },
+  "ui_packaged": {
+    "initial_full_passed": 72,
+    "initial_full_failed": 1,
+    "skipped_optional_real_provider": 2,
+    "log": "ui-packaged-initial.log",
+    "failure": "Sélecteur Modèle non limité au dialogue de réparation ; le test ne synchronisait pas son ouverture.",
+    "test_fix": "Attente du dialogue IA nommé, sélecteurs locaux, délai IPC réel de 1500 ms. Aucune modification applicative.",
+    "targeted_passed": 1,
+    "targeted_log": "ui-model-delayed.log",
+    "targeted_proof": "model-delayed-proof.json",
+    "distinct_synthetic_paths_received": 73
+  },
+  "independent_reviews": [
+    "docs/audits/2026-10-09-parcours-blocages.md",
+    "docs/audits/2026-10-09-depannage-ui.md"
+  ],
+  "artifact": {
+    "filename": "odoo-tricorder_0.6.0-rc.9_amd64.deb",
+    "sha256": "677ef6a8378e3c40f3a02275087535ec8ccc99f5b3bdb0da141f2fa82b06168d",
+    "renderer_sha256": "cea93908e19b634db8d79a11f76763537770835189895a3bd3d1b8d594679da3",
+    "backend_source_files_verified": 46
+  },
+  "publication_gate": "CI complète sur le commit publié requise avant release et installation."
+}

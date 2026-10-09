@@ -1,0 +1,11 @@
+{
+  "native_runtime_separate": true,
+  "legacy_portable_sanitized": true,
+  "automatic_document_received": true,
+  "scheduled_document_received": true,
+  "historical_run_unchanged": true,
+  "historical_native_not_dispatched": true,
+  "new_human_decision_required": true,
+  "workers_finished": 2,
+  "model_or_service_calls": 0
+}

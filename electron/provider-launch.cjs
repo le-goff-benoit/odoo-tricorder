@@ -62,10 +62,13 @@ function prepareLaunch({ provider, id, folder, backend, home, project, crew, pro
   if (model) {
     if (typeof model !== 'string' || model.length > 120 || /[\x00-\x20]/.test(model)) throw new Error('Modèle invalide');
     argv.push('--model', model);
-    if (effort && ['low', 'medium', 'high', 'xhigh'].includes(effort)) {
-      if (provider === 'claude') argv.push('--effort', effort);
-      else argv.push('-c', 'model_reasoning_effort=' + JSON.stringify(effort));
-    }
+    command = argv.map(quote).join(' ');
+  }
+  // A CLI may select its configured default model. The workflow's explicit
+  // effort still applies to that invocation and must not disappear with model.
+  if (effort && ['low', 'medium', 'high', 'xhigh'].includes(effort)) {
+    if (provider === 'claude') argv.push('--effort', effort);
+    else argv.push('-c', 'model_reasoning_effort=' + JSON.stringify(effort));
     command = argv.map(quote).join(' ');
   }
   if (resume) {

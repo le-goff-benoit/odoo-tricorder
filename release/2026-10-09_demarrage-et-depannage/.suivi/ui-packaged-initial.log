@@ -1,0 +1,135 @@
+
+> odoo-tricorder@0.6.0-rc.9 test:packaged
+> node scripts/test-packaged.mjs
+
+
+Running 75 tests using 1 worker
+
+(node:582929) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (7.4s)
+  ✓   2 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (3.4s)
+  ✓   3 tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (6.9s)
+  ✓   4 tests/desktop.spec.cjs:292:1 › design system: common gutters, cards and controls across every project view (11.0s)
+  ✓   5 tests/desktop.spec.cjs:355:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (2.3s)
+  ✓   6 tests/desktop.spec.cjs:408:1 › effort: partial recorded time survives missing roles, task filtering and refresh (2.7s)
+  ✓   7 tests/desktop.spec.cjs:450:1 › effort: open release updates task and agent percentages before closure (2.7s)
+  ✓   8 tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence (8.9s)
+  ✓   9 tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (6.2s)
+  ✓  10 tests/desktop.spec.cjs:666:1 › Markdown preview: readable safe content and recovery from a project read error (5.9s)
+  ✓  11 tests/desktop.spec.cjs:719:1 › email removed: no UI or API, old private records preserved, project still usable (3.9s)
+  ✓  12 tests/desktop.spec.cjs:770:1 › desktop: projects, proof status, sources, real terminal and persistence (8.6s)
+  ✓  13 tests/desktop.spec.cjs:869:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (10.2s)
+  -  14 tests/desktop.spec.cjs:989:1 › real project: read-only release/task/mission screens
+  ✓  15 tests/desktop.spec.cjs:1077:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (17.4s)
+  ✓  16 tests/desktop.spec.cjs:1213:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (8.1s)
+  ✓  17 tests/desktop.spec.cjs:1310:1 › live requests appear before planning and reconcile with tasks without manual refresh (8.7s)
+  ✓  18 tests/desktop.spec.cjs:1364:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (16.9s)
+
+  ✓  19 tests/desktop.spec.cjs:1500:1 › work page starts a contextual request and resumes a task without changing its state (5.3s)
+  ✓  20 tests/desktop.spec.cjs:1550:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (11.0s)
+  ✓  21 tests/desktop.spec.cjs:1652:1 › window integration preserves the native conversation while inspecting phases and the library (8.2s)
+  ✘  22 tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch (9.0s)
+(node:588615) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  23 tests/launch-repair.spec.cjs:116:1 › repair secondary-project connection diagnoses before launch and returns without retyping (10.4s)
+  ✓  24 tests/launch-repair.spec.cjs:147:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain) (6.5s)
+  ✓  25 tests/launch-repair.spec.cjs:147:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile) (7.5s)
+  ✓  26 tests/launch-repair.spec.cjs:171:1 › repair global code workflow adapts into a project without changing its origin (7.3s)
+  ✓  27 tests/launch-repair.spec.cjs:197:1 › late run response cannot navigate back after the user opens Projects (6.8s)
+  ✓  28 tests/launch-repair.spec.cjs:230:1 › repair missing profile preserves it until the user explicitly chooses generalist (6.2s)
+  -  29 tests/release-opening.spec.cjs:25:1 › large release opens with validated memory in read-only mode
+
+  ✓  30 tests/studio.spec.cjs:85:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog (5.8s)
+
+  ✓  31 tests/studio.spec.cjs:104:1 › large release history: startup and refresh preserve projects, workflows and terminal (5.7s)
+  ✓  32 tests/studio.spec.cjs:132:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (5.9s)
+  ✓  33 tests/studio.spec.cjs:154:1 › simulation: two branches, human decision, truthful results and single documentation view (16.3s)
+  ✓  34 tests/studio.spec.cjs:170:1 › decisions persist after application restart and reject skips its branch (15.6s)
+  ✓  35 tests/studio.spec.cjs:184:1 › connections never infer native authentication and real unconfigured launch is blocked (5.7s)
+  ✓  36 tests/studio.spec.cjs:197:1 › live events preserve text input and focus; layout fits 1024 and dark theme (6.7s)
+  ✓  37 tests/studio.spec.cjs:212:1 › structured proposal needs preview, rejects stale revision and never starts a run (5.8s)
+  ✓  38 tests/studio.spec.cjs:226:1 › template creation has a real terminal; file edits require validated reload (5.6s)
+  ✓  39 tests/studio.spec.cjs:247:1 › recurrence activation shows models and persists; communication needs exact recipients (6.7s)
+  ✓  40 tests/studio.spec.cjs:267:1 › window closes to Ubuntu tray and remains available (6.6s)
+  ✓  41 tests/studio.spec.cjs:275:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (5.7s)
+  ✓  42 tests/studio.spec.cjs:300:1 › real isolated command produces evidence, then waits for human receipt (6.4s)
+  ✓  43 tests/studio.spec.cjs:316:1 › global workflow runs independently of Git projects and draws right-angle links (6.5s)
+  ✓  44 tests/studio.spec.cjs:337:1 › exported clickable file opens on another local instance as a draft without execution (11.5s)
+  ✓  45 tests/studio.spec.cjs:359:1 › update dialog is explicit and test mode makes no automatic network request (5.6s)
+  ✓  46 tests/studio.spec.cjs:367:1 › repeated example clicks never create duplicate demo projects (5.7s)
+  ✓  47 tests/studio.spec.cjs:377:1 › trusted local adapter runs through the UI and automatic validation completes without a human receipt (5.8s)
+  ✓  48 tests/studio.spec.cjs:403:1 › large workflow remains editable in canvas and keyboard list (6.1s)
+  ✓  49 tests/studio.spec.cjs:415:1 › application navigation separates overview, workflow use and editor with compact responsive spacing (6.0s)
+  ✓  50 tests/studio.spec.cjs:438:1 › code proposal diff is reviewable and only explicit application changes the Git project (5.8s)
+  ✓  51 tests/studio.spec.cjs:477:1 › accessible navigation, editor, inspector and dialog in light and dark themes (5.6s)
+  ✓  52 tests/studio.spec.cjs:491:1 › human gate presents the full external content and candidate before approval (5.8s)
+  ✓  53 tests/studio.spec.cjs:508:1 › one provider choice applies to all AI steps and the project offers direct execution (5.7s)
+  ✓  54 tests/studio.spec.cjs:534:1 › native conversation: provider choice, durable questions, live graph and same terminal after restart (14.3s)
+  ✓  55 tests/studio.spec.cjs:602:1 › previous studio terminal is adopted in the main terminal without a new shell (5.7s)
+  ✓  56 tests/studio.spec.cjs:620:1 › review: Odoo profiles, editable unresolved outcome and synthetic release capture (5.7s)
+  ✓  57 tests/studio.spec.cjs:654:1 › design review: library and management views use the workspace, with readable actions in both themes (17.3s)
+  ✓  58 tests/studio.spec.cjs:690:1 › terminal visibility preserves a live session while browsing and editing (5.7s)
+  ✓  59 tests/studio.spec.cjs:721:1 › bootstrap failure is distinct from an empty catalog and Actualiser recovers (5.9s)
+
+  ✓  60 tests/studio.spec.cjs:739:1 › optional workflow setup failure keeps native projects and can be retried (5.8s)
+  ✓  61 tests/studio.spec.cjs:751:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (5.6s)
+  ✓  62 tests/studio.spec.cjs:794:1 › repository journey: resume a cloned workflow, simulate a question and export a generic work dossier (5.7s)
+  ✓  63 tests/studio.spec.cjs:821:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question (8.1s)
+  ✓  64 tests/studio.spec.cjs:868:1 › workspace layout: focused navigation, adjustable split and editor preserve the same terminal (5.7s)
+  ✓  65 tests/studio.spec.cjs:912:1 › configuration: pending fields survive I/O editing, block selection and keyboard save (5.7s)
+  ✓  66 tests/studio.spec.cjs:940:1 › embedded theme: workflow controls use the shared surface colors (5.6s)
+  ✓  67 tests/studio.spec.cjs:951:1 › audit reception: decision shows the delivered text, provenance and safe proof reader (5.7s)
+  ✓  68 tests/studio.spec.cjs:977:1 › audit reception: concurrent terminal edit merges with the persisted editor draft (5.7s)
+  ✓  69 tests/studio.spec.cjs:994:1 › audit reception: stopped native agent resumes explicitly in the same terminal (5.7s)
+  ✓  70 tests/studio.spec.cjs:1007:1 › audit reception: history pages and archives preserve the completed work (5.6s)
+
+  ✓  71 tests/studio.spec.cjs:1033:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (8.7s)
+
+  ✓  72 tests/studio.spec.cjs:1066:43 › mail intake: missing access becomes a visible question without inventing a source (5.9s)
+
+  ✓  73 tests/studio.spec.cjs:1066:43 › mail intake: ambiguous access becomes a visible question without inventing a source (5.6s)
+
+  ✓  74 tests/studio.spec.cjs:1076:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (8.6s)
+  ✓  75 tests/studio.spec.cjs:1126:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload (5.7s)
+
+
+  1) tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByLabel('Quelle demande souhaitez-vous traiter ?')
+    Expected: "Comparer les observations du client sur Alpha et Bêta."
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Quelle demande souhaitez-vous traiter ?') with timeout 5000ms
+      - waiting for getByLabel('Quelle demande souhaitez-vous traiter ?')
+
+
+      107 |   await page.getByLabel('Modèle', { exact: true }).fill('synthetic-model');
+      108 |   await page.getByRole('button', { name: 'Appliquer ce choix et vérifier', exact: true }).click();
+    > 109 |   await expect(requestField()).toHaveValue(text);
+          |                                ^
+      110 |   await expect(page.locator(`[name="conversation-project"][value="${beta.id}"]`)).toBeChecked();
+      111 |   const conversation = await launchInert(alpha, graph, text);
+      112 |   expect(conversation.projects).toEqual([alpha.id, beta.id]);
+        at /home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:109:32
+
+    Error Context: test-results/launch-repair-repair-missi-dc0e1-oject-through-native-launch/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/launch-repair-repair-missi-dc0e1-oject-through-native-launch/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/launch-repair-repair-missi-dc0e1-oject-through-native-launch/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Slow test file: tests/studio.spec.cjs (5.4m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 failed
+    tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch 
+  2 skipped
+  72 passed (8.9m)

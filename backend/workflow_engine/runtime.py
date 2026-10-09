@@ -11,7 +11,7 @@ import sys
 import time
 
 from .contracts import ContractError, require
-from .engine import Engine
+from .engine import Engine, run_driver
 from connectors.providers import execute_text, redact
 
 
@@ -59,57 +59,80 @@ def capabilities(project=None, engine=None):
     return result
 
 
-def preflight(graph, simulation=False, defaults=None, project=None, engine=None, mode="automatic", provider=None, model=None):
+def preflight(graph, simulation=False, defaults=None, project=None, engine=None, mode="automatic", provider=None, model=None, *, primary=True):
+    if "driver" in graph:
+        return [{"node": "workflow", "code": "workflow.runtime-context", "stage": "launch", "action": "save-workflow",
+                 "message": "Ce modèle contient le contexte d’une ancienne conversation.",
+                 "remedy": "Enregistrez le workflow à nouveau puis revérifiez le lancement. L’exécution historique restera inchangée."}]
     if simulation:
         return []
     catalog = {c["id"]: c for c in capabilities()}
     from .integrations import issues as plugin_issues
     issues = plugin_issues(graph, project, engine)
+    from .packs import profile_issues
+    missing_profiles = profile_issues(project, graph, primary=primary) if project else []
+    issues += missing_profiles
+    missing_profile_nodes = {i["node"] for i in missing_profiles}
+    if mode == "native":
+        provider = provider or graph.get("defaults", {}).get("provider", "codex")
+        if provider not in catalog or not catalog[provider]["installed"]:
+            issues.append({"node": "workflow", "code": "provider.cli-missing", "stage": "launch", "action": "choose-ai",
+                           "message": "CLI de conversation non installé", "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."})
     if mode not in graph.get("execution_modes", ["native", "automatic"]):
         issues.append({"node": graph["nodes"][0]["id"], "message": "Ce workflow n’est pas compatible avec ce mode d’exécution."})
     for node in graph["nodes"]:
         kind = node["kind"]
         selection = {**(defaults or {}), **graph.get("defaults", {}), **node}
         native = mode == "native" and kind in {"agent", "task", "document"} and node.get("execution_mode") != "edit" and selection.get("provider", provider) == provider and (not selection.get("model") or selection.get("model") == model)
+        if native and selection.get("effort", "medium") != graph.get("defaults", {}).get("effort", "medium"):
+            issues.append({"node": node["id"], "code": "provider.effort-mismatch", "stage": "launch", "action": "edit-node",
+                           "message": "Le niveau d’effort de cette étape diffère de celui de la conversation.",
+                           "remedy": "Alignez le niveau d’effort dans les options IA du bloc avec celui de la conversation avant de lancer le workflow."})
         available = {"text", "read", "edit", "shell", "native-tools"} if native else {"text", "read", "edit"} if node.get("execution_mode") == "edit" else {"shell", "read"} if kind == "command" else {"text"}
         missing = set(node.get("required_capabilities", [])) - available
         if missing:
-            issues.append({"node": node["id"], "message": "Capacités requises indisponibles dans ce mode : " + ", ".join(sorted(missing)) + ". Utiliser la conversation native ou configurer un exécutant adapté."})
+            issues.append({"node": node["id"], "code": "executor.capabilities-missing", "stage": "launch", "action": "edit-node",
+                           "message": "Capacités requises indisponibles dans ce mode : " + ", ".join(sorted(missing)) + ". Utiliser la conversation native ou configurer un exécutant adapté.",
+                           "remedy": "Configurez un exécutant disposant de ces capacités, ou lancez le workflow dans le terminal si ces capacités y sont disponibles."})
         if native:
-            if provider not in catalog or not catalog[provider]["installed"]:
-                issues.append({"node": node["id"], "message": "CLI de conversation non installé"})
             continue
         if kind == "command" and not catalog["command"]["usable"]:
             issues.append({"node": node["id"], "message": catalog["command"]["reason"]})
         elif kind == "agent":
             if node.get("execution_mode") == "edit" and (not project or project.get("scope") == "workspace" or project.get("library")):
-                issues.append({"node": node["id"], "message": "L’édition de code nécessite un projet Git ; adapter le modèle dans un projet."})
+                issues.append({"node": node["id"], "code": "workflow.git-project-required", "stage": "launch", "action": "choose-project",
+                               "message": "L’édition de code nécessite un projet Git ; adapter le modèle dans un projet.", "remedy": "Choisissez un projet Git pour y adapter ce workflow avant de le lancer."})
             selection = {**(defaults or {}), **graph.get("defaults", {}), **node}
             selected_provider = selection.get("provider", "codex")
             if not catalog[selected_provider]["installed"]:
-                issues.append({"node": node["id"], "message": catalog[selected_provider]["reason"]})
+                issues.append({"node": node["id"], "code": "provider.cli-missing", "stage": "launch", "action": "edit-node" if "provider" in node else "choose-ai",
+                               "message": catalog[selected_provider]["reason"], "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification."})
             if not selection.get("model"):
-                issues.append({"node": node["id"], "message": "Modèle IA à définir explicitement ; aucun repli automatique."})
+                issues.append({"node": node["id"], "code": "provider.model-required", "stage": "launch", "action": "edit-node" if "model" in node or "provider" in node else "choose-ai",
+                               "message": "Modèle IA à définir explicitement ; aucun repli automatique.", "remedy": "Choisissez le modèle à utiliser pour cette étape dans les paramètres IA."})
             if selection.get("session", "delegated") != "delegated":
                 issues.append({"node": node["id"], "message": "Session principale à qualifier ; seul le mode session déléguée neuve est disponible."})
-            if selection.get("profile", "generalist") != "generalist" and not node.get("profile_text"):
+            if selection.get("profile", "generalist") != "generalist" and not node.get("profile_text") and node["id"] not in missing_profile_nodes:
                 issues.append({"node": node["id"], "message": "Profil spécialisé à charger depuis un pack vérifié."})
         elif kind == "external":
             if not node.get("capabilities"):
-                issues.append({"node": node["id"], "message": "Opération externe non connectée : aucune publication ni livraison réelle disponible."})
+                issues.append({"node": node["id"], "code": "plugin.connection-required", "stage": "launch", "action": "connections",
+                               "message": "Opération externe non connectée : aucune publication ni livraison réelle disponible.", "remedy": "Configurez et vérifiez une connexion, puis associez sa capacité à cette étape."})
             if any("A_CONFIRMER" in str(v) for v in node.get("operation", {}).values()):
                 issues.append({"node": node["id"], "message": "Renseigner la cible et le candidat exacts du modèle avant exécution."})
         elif kind == "document" and not node.get("capabilities") and not node.get("content", "").strip():
             issues.append({"node": node["id"], "message": "Contenu du document ou capacité de lecture à configurer."})
         elif kind == "watch":
             if not node.get("capabilities"):
-                issues.append({"node": node["id"], "message": "Connecteur de messagerie non connecté dans Tricorder."})
+                issues.append({"node": node["id"], "code": "plugin.connection-required", "stage": "launch", "action": "connections",
+                               "message": "Connecteur de messagerie non connecté dans Tricorder.", "remedy": "Configurez et vérifiez une connexion de messagerie, puis associez sa capacité de lecture à cette étape."})
             if not node.get("sender") or not node.get("account"):
                 issues.append({"node": node["id"], "message": "Compte et adresse d'expéditeur exacts à confirmer ; un nom de client seul ne suffit pas."})
         elif kind == "communication":
             channel = node.get("channel", "slack")
             if not node.get("capabilities"):
-                issues.append({"node": node["id"], "message": f"Connecteur {channel} non connecté dans Tricorder."})
+                issues.append({"node": node["id"], "code": "plugin.connection-required", "stage": "launch", "action": "connections",
+                               "message": f"Connecteur {channel} non connecté dans Tricorder.", "remedy": "Configurez et vérifiez une connexion, puis associez sa capacité de notification à cette étape."})
             if not node.get("recipient"):
                 issues.append({"node": node["id"], "message": "Canal ou destinataire exact à configurer avant activation."})
         elif kind == "task" and not node.get("capabilities"):
@@ -131,7 +154,7 @@ def dispatch(engine, run_id):
         if state["status"] != "ready":
             continue
         node = next(n for n in run["definition"]["nodes"] if n["id"] == nid)
-        if run["definition"].get("driver") == "conversation" and node["kind"] in {"agent", "task", "document"}:
+        if run_driver(run) == "conversation" and node["kind"] in {"agent", "task", "document"}:
             continue  # The native conversation claims work; the graph remains authoritative.
         try:
             claim = engine.claim(run_id, nid)

@@ -291,7 +291,7 @@ class ConversationTests(unittest.TestCase):
         qa = {"schema": 1, "id": "qa", "title": "Recette", "domain": "odoo", "parameters": {"series": "19.0"}, "nodes": [{"id": "qa", "kind": "agent", "title": "QA", "profile": "odoo-tester"}], "edges": []}
         conversation = self.service.open(self.a["id"], qa, "codex")
         item = self.service.add(conversation["id"], "Recette")
-        with self.assertRaisesRegex(ContractError, "neutralized_copy"):
+        with self.assertRaisesRegex(ContractError, "copie locale"):
             self.engine.claim(item["run"], "qa")
         with self.assertRaises(ContractError):
             self.engine.execution_context(item["run"], "qa", {"environment": "production", "neutralized_copy": "fake"})

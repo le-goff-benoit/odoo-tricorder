@@ -1,0 +1,8 @@
+{
+  "deferred_only_until_QA_claim": "pass",
+  "per_target_series_and_missing_copy_requirement": "pass",
+  "explicit_unsafe_context_blocks_launch": "pass",
+  "automatic_and_schedule_guard_preserved": "pass",
+  "secondary_online_context_blocks_launch": "pass",
+  "model_or_service_calls": 0
+}

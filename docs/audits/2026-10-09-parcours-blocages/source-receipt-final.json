@@ -1,0 +1,32 @@
+{
+  "baseline_commit": "2e5ea6933326dc6f8ac4ddd1a632a240724d1354",
+  "scope": "Independent launch-path backend receipt plus provider invocation, uncommitted changes included",
+  "sha256": {
+    "backend/studio.py": "fb19c61c801d76348b5efd1de7b41795a07c8f46b9ef96ff670874cb9e306dfb",
+    "backend/workflow_cli.py": "b98262ede5841ab964df52633d7390cc63218c46658a6d2874b41cab41ca0cb5",
+    "backend/workflow_engine/conversations.py": "e31c0477dd0e029c15bc2de8f3b9a1462a00ac6bf8177bd0af0197ae9b3c7aba",
+    "backend/workflow_engine/engine.py": "131d5e4461c4f7f83f5766ad06823c34ef1923bb4179020d3578a17327a110a7",
+    "backend/workflow_engine/integrations.py": "cf37c49752da207ac1ccb918e82b75c8e3631c95f14867aeb8c3eab786270a27",
+    "backend/workflow_engine/packs.py": "31dc557c6749b66ee6996fc02343e24be464dca117459ebc9da2ec70c792e5af",
+    "backend/workflow_engine/portable.py": "0ef0bbd309b14214245c1ae6d6a48adf704ed79fc6ed14c8d94d5322cd368f9e",
+    "backend/workflow_engine/recovery.py": "cfd8b32b227038ae7b051411047f0e60cf93fbba14bd964a12fb721229cd9cb7",
+    "backend/workflow_engine/runtime.py": "cf8632655053159a536249e4c42bc9bf888a0027264032a642506bf94a93a1d3",
+    "electron/provider-launch.cjs": "6e533c518968ef1155d081c7139c4d218191f62532939281b0f56fa3b8bb12ab"
+  },
+  "last_review": {
+    "scope": "Plugin diagnostic label and plugin/operation fields only; guards and remedy actions unchanged",
+    "file": "backend/workflow_engine/integrations.py",
+    "previous_sha256": "dc1cc8053f6ca5f962842aee153691dd99235d856d7fdfd1be0d2fd8aa0a1fe0",
+    "other_sources_unchanged": 9,
+    "method": "Source diff and targeted developer test reviewed; prior functional probes retained"
+  },
+  "context_review": {
+    "finding": "B05",
+    "scope": "Shared domain/effective-profile predicate for native target context and pack policies",
+    "file": "backend/workflow_engine/packs.py",
+    "previous_sha256": "74bd60077146cec34fa18692cf1b21e4915cad53f3506ecc1a9585b946197331",
+    "other_sources_unchanged": 9,
+    "proof": "profile-context-after.json",
+    "method": "Source read and independent synthetic API probe, including Online alias and generic override counterexamples"
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "build": "593712e7f56b992f5e968140836f9f433037d24d0a8d954e9d086803ad660236",
+  "captured": "2026-10-09T10:00:53.154Z",
+  "views": {
+    "after-navigation-form-before-response": {
+      "width": 1440,
+      "height": 900,
+      "dialog": "Créer un projet\n×\nNom du projet\nRacine du dépôt Git local\nChoisir…\n\nLe dossier doit être la racine d’un dépôt Git. Aucun commit ni envoi distant n’est effectué.\n\nCréer le projet",
+      "content": "Vos projets\nVoir les archives\n\nUn projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.\n\n+ Nouveau projet\nImporter un workflow\nProjet Alpha synthétique\n/tmp/tricorder-remediation-0q85Ko/projects/p28647552826a4de2\n→\nProjet Bêta synthétique\n/tmp/tricorder-remediation-0q85Ko/projects/pa0c58b401d70480a\n→\nEssayer un exemple",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Voir les archives",
+          "action": "toggle-archives",
+          "disabled": false
+        },
+        {
+          "text": "+ Nouveau projet",
+          "action": "new-project",
+          "disabled": false
+        },
+        {
+          "text": "Importer un workflow",
+          "action": "import-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Projet Alpha synthétique\n/tmp/tricorder-remediation-0q85Ko/projects/p28647552826a4de2\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Projet Bêta synthétique\n/tmp/tricorder-remediation-0q85Ko/projects/pa0c58b401d70480a\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Essayer un exemple",
+          "action": "try-example",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Choisir…",
+          "action": "choose-folder",
+          "disabled": false
+        },
+        {
+          "text": "Créer le projet",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    },
+    "after-navigation-form-response-ignored": {
+      "width": 1440,
+      "height": 900,
+      "dialog": "Créer un projet\n×\nNom du projet\nRacine du dépôt Git local\nChoisir…\n\nLe dossier doit être la racine d’un dépôt Git. Aucun commit ni envoi distant n’est effectué.\n\nCréer le projet",
+      "content": "Vos projets\nVoir les archives\n\nUn projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.\n\n+ Nouveau projet\nImporter un workflow\nProjet Alpha synthétique\n/tmp/tricorder-remediation-0q85Ko/projects/p28647552826a4de2\n→\nProjet Bêta synthétique\n/tmp/tricorder-remediation-0q85Ko/projects/pa0c58b401d70480a\n→\nEssayer un exemple",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Voir les archives",
+          "action": "toggle-archives",
+          "disabled": false
+        },
+        {
+          "text": "+ Nouveau projet",
+          "action": "new-project",
+          "disabled": false
+        },
+        {
+          "text": "Importer un workflow",
+          "action": "import-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Projet Alpha synthétique\n/tmp/tricorder-remediation-0q85Ko/projects/p28647552826a4de2\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Projet Bêta synthétique\n/tmp/tricorder-remediation-0q85Ko/projects/pa0c58b401d70480a\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Essayer un exemple",
+          "action": "try-example",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Choisir…",
+          "action": "choose-folder",
+          "disabled": false
+        },
+        {
+          "text": "Créer le projet",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    }
+  },
+  "outcomes": {
+    "projectsStillVisible": true,
+    "delayMs": 1500,
+    "method": "Only first run.get IPC response delayed after real backend result; no app source or state changed",
+    "formPreserved": true
+  },
+  "failures": []
+}

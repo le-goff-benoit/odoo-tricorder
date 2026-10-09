@@ -1,0 +1,22 @@
+test_automatic_and_scheduled_qa_still_require_the_copy_before_launch (test_workflow_setup.SetupCandidateTests) ... ok
+test_cross_project_dialog_checks_every_target_before_opening (test_workflow_setup.SetupCandidateTests) ... ok
+test_explicit_unsafe_or_invalid_qa_context_blocks_every_native_entry (test_workflow_setup.SetupCandidateTests) ... ok
+test_missing_profile_does_not_hide_available_profiles_or_duplicate_diagnostics (test_workflow_setup.SetupCandidateTests) ... ok
+test_native_dialog_launch_defers_only_missing_qa_copy_until_claim (test_workflow_setup.SetupCandidateTests) ... ok
+test_native_policy_does_not_defer_series_online_or_missing_profile (test_workflow_setup.SetupCandidateTests) ... ok
+test_new_custom_release_has_applicable_explicit_qa_and_keeps_frozen_definitions (test_workflow_setup.SetupCandidateTests) ... ok
+test_studio_and_online_routes_do_not_invent_a_code_candidate (test_workflow_setup.SetupCandidateTests) ... ok
+test_conversation_requires_cli_even_without_ai_blocks_but_automatic_does_not (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+test_detected_fixture_is_not_authenticated_and_cannot_call_a_model (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+test_effort_mismatch_blocks_preview_and_claim_without_changing_preferences (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+test_imported_profile_missing_is_actionable_in_both_preview_modes (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+test_missing_provider_blocks_conversation_even_if_other_provider_exists (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+test_provider_and_model_remedies_target_explicit_overrides (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+test_remedies_distinguish_model_project_and_plugin (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+test_direct_legacy_marker_is_actionable_and_cannot_stall_automatic_run (test_workflow_driver.WorkflowDriverTests) ... ok
+test_native_history_export_import_runs_automatically_and_on_schedule (test_workflow_driver.WorkflowDriverTests) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 1.331s
+
+OK

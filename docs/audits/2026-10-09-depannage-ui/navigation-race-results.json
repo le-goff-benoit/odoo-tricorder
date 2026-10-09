@@ -1,0 +1,179 @@
+{
+  "build": "e944b70108cc24b563fedc2581684f9403cc5de1114d05be0622189a3c42ef87",
+  "captured": "2026-10-09T09:59:29.250Z",
+  "views": {
+    "navigation-projects-before-late-response": {
+      "width": 1440,
+      "height": 900,
+      "content": "Vos projets\nVoir les archives\n\nUn projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.\n\n+ Nouveau projet\nImporter un workflow\nProjet Bêta synthétique\n/tmp/tricorder-remediation-goz7xb/projects/p06750b446e33485e\n→\nProjet Alpha synthétique\n/tmp/tricorder-remediation-goz7xb/projects/p164e3dd0c9e14359\n→\nEssayer un exemple",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Voir les archives",
+          "action": "toggle-archives",
+          "disabled": false
+        },
+        {
+          "text": "+ Nouveau projet",
+          "action": "new-project",
+          "disabled": false
+        },
+        {
+          "text": "Importer un workflow",
+          "action": "import-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Projet Bêta synthétique\n/tmp/tricorder-remediation-goz7xb/projects/p06750b446e33485e\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Projet Alpha synthétique\n/tmp/tricorder-remediation-goz7xb/projects/p164e3dd0c9e14359\n→",
+          "action": "open-project",
+          "disabled": false
+        },
+        {
+          "text": "Essayer un exemple",
+          "action": "try-example",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    },
+    "navigation-projects-after-late-response": {
+      "width": 1440,
+      "height": 900,
+      "content": "WORKFLOW DE LA DEMANDE SÉLECTIONNÉE\nDiagnostic synthétique pour vérifier le retour aux projets.\n\nVersion figée · Prête\n\nWorkflow\nÉditeur\nExécution\nHistorique\nRapport\n1 demande(s)\nRetrouver la conversation\nActions\n\n1 prête\n\nRechercher\nDiagnostic synthétique pour vérifier le retour aux projets.\nPrête\nAnalyser les observations\nLire le résultat\nOutils\n✦\nAnalyser les observations\nTâche IA\nPrêt\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster\n×\nTÂCHE IA\nAnalyser les observations\n\nPrêt\n\nCette étape est prête. Poursuivez dans le terminal de la conversation.",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "",
+          "action": "back-design",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "pause",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "cancel",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Retrouver la conversation",
+          "action": "conversation-terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "conversation-terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "resume-agent",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "conversation-add",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "archive-conversation",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "disabled": false
+        },
+        {
+          "text": "Diagnostic synthétique pour vérifier le retour aux projets.\nPrête\nAnalyser les observations",
+          "action": "conversation-item",
+          "disabled": false
+        },
+        {
+          "text": "Lire le résultat",
+          "action": "review-layout",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "timeline",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "✦\nAnalyser les observations\nTâche IA\nPrêt\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-inspector",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    }
+  },
+  "outcomes": {
+    "projectsStillVisible": false,
+    "delayMs": 1500,
+    "method": "Only first run.get IPC response delayed after real backend result; no app source or state changed"
+  },
+  "failures": []
+}

@@ -1,0 +1,36 @@
+[
+  {
+    "provider": "codex",
+    "preflight_issues": [
+      {
+        "node": "workflow",
+        "code": "provider.cli-missing",
+        "stage": "launch",
+        "action": "choose-ai",
+        "message": "CLI de conversation non installé",
+        "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification.",
+        "project": "pf520ce3f82cf4f83",
+        "project_title": "Synthetic manual workflow"
+      }
+    ],
+    "conversation_created": false,
+    "error": "Synthetic manual workflow : CLI de conversation non installé"
+  },
+  {
+    "provider": "claude",
+    "preflight_issues": [
+      {
+        "node": "workflow",
+        "code": "provider.cli-missing",
+        "stage": "launch",
+        "action": "choose-ai",
+        "message": "CLI de conversation non installé",
+        "remedy": "Choisissez un fournisseur installé, ou installez son CLI puis relancez la vérification.",
+        "project": "pf520ce3f82cf4f83",
+        "project_title": "Synthetic manual workflow"
+      }
+    ],
+    "conversation_created": false,
+    "error": "Synthetic manual workflow : CLI de conversation non installé"
+  }
+]

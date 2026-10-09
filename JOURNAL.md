@@ -1,5 +1,18 @@
 # Journal
 
+## 2026-10-09 — Lancement et dépannage (0.6.0-rc.9)
+
+- Retour utilisateur reproduit sur le dialogue réel de rc.8 : la copie QA empêchait même de commencer l’analyse.
+- Précontrôle natif partagé par le dialogue et l’ouverture ; seule la préparation absente de QA est différée, avec contrôle complet à l’étape.
+- Diagnostics contextualisés, destinations de réparation, champs Odoo lisibles et conservation de la demande/périmètre.
+- Projets secondaires vérifiés avant lancement ; profils, fournisseurs et efforts contrôlés sans substitution silencieuse.
+- Adaptation d’un workflow global vers un projet depuis le diagnostic, avec conservation de l’original.
+- Contexte Odoo dérivé du pack utilisé, même dans un workflow générique ; série et hébergement propres à chaque cible.
+- Profil absent conservé jusqu’au choix explicite ; réponses de suivi tardives sans effet sur la navigation ou les formulaires.
+- Mode de pilotage séparé des définitions portables ; anciens modèles réenregistrables, historiques conservés.
+- Reviews indépendantes fonctionnelle et UI, parcours incomplets et contre-épreuves ; détails dans `release/2026-10-09_demarrage-et-depannage/README.md`.
+- Validation : 243 tests Python, 84 JavaScript ; 73 parcours empaquetés reçus, dont un après synchronisation du test de dialogue IA, avec délai contrôlé. CI complète exigée avant livraison.
+
 ## 2026-10-09 — Fiabilité des workflows et ergonomie (0.6.0-rc.8)
 
 - Données, provenance et preuves lisibles dans la décision et le rapport ; revue dans le même panneau.

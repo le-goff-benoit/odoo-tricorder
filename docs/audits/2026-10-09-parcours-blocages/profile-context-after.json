@@ -1,0 +1,136 @@
+{
+  "cases": [
+    {
+      "graph_has_domain": false,
+      "target_series": "17.0",
+      "target_platform": "custom",
+      "preview_issues": [],
+      "conversation_opened": true,
+      "effective_series": "17.0",
+      "effective_platform": "custom",
+      "odoo_developer_claimed": true
+    },
+    {
+      "graph_has_domain": false,
+      "target_series": "17.0",
+      "target_platform": "online",
+      "preview_issues": [
+        {
+          "node": "workflow",
+          "title": "Generic workflow with Odoo profile",
+          "code": "odoo.online-studio-required",
+          "stage": "launch",
+          "message": "Odoo Online impose la voie Studio.",
+          "remedy": "Choisissez la voie Studio pour ce projet Odoo Online.",
+          "action": "workflow-settings",
+          "project": "pe15494f0989a4736",
+          "project_title": "Beta 17"
+        },
+        {
+          "node": "work",
+          "title": "Analyze implementation",
+          "code": "odoo.online-module-forbidden",
+          "stage": "launch",
+          "message": "Odoo Online : remplacer le développement de module par un bloc Studio.",
+          "remedy": "Configurez cette étape pour utiliser le profil Odoo Studio.",
+          "action": "edit-node",
+          "project": "pe15494f0989a4736",
+          "project_title": "Beta 17"
+        }
+      ],
+      "conversation_opened": false,
+      "launch_error": "Beta 17 : Odoo Online impose la voie Studio. · Beta 17 : Odoo Online : remplacer le développement de module par un bloc Studio."
+    },
+    {
+      "control": "Same graph with explicit domain=odoo",
+      "preview_issues": [
+        {
+          "node": "workflow",
+          "title": "Generic workflow with Odoo profile",
+          "code": "odoo.online-studio-required",
+          "stage": "launch",
+          "message": "Odoo Online impose la voie Studio.",
+          "remedy": "Choisissez la voie Studio pour ce projet Odoo Online.",
+          "action": "workflow-settings",
+          "project": "pe15494f0989a4736",
+          "project_title": "Beta 17"
+        },
+        {
+          "node": "work",
+          "title": "Analyze implementation",
+          "code": "odoo.online-module-forbidden",
+          "stage": "launch",
+          "message": "Odoo Online : remplacer le développement de module par un bloc Studio.",
+          "remedy": "Configurez cette étape pour utiliser le profil Odoo Studio.",
+          "action": "edit-node",
+          "project": "pe15494f0989a4736",
+          "project_title": "Beta 17"
+        }
+      ]
+    },
+    {
+      "case": "Odoo pack profile without an odoo- prefix",
+      "profile": "specialist",
+      "target_series": "17.0",
+      "target_platform": "online",
+      "preview_issues": [
+        {
+          "node": "workflow",
+          "title": "Generic workflow with Odoo profile",
+          "code": "odoo.online-studio-required",
+          "stage": "launch",
+          "message": "Odoo Online impose la voie Studio.",
+          "remedy": "Choisissez la voie Studio pour ce projet Odoo Online.",
+          "action": "workflow-settings",
+          "project": "pe15494f0989a4736",
+          "project_title": "Beta 17"
+        }
+      ],
+      "conversation_opened": false,
+      "launch_error": "Beta 17 : Odoo Online impose la voie Studio.",
+      "explicit_domain_control_issues": [
+        {
+          "node": "workflow",
+          "title": "Generic workflow with Odoo profile",
+          "code": "odoo.online-studio-required",
+          "stage": "launch",
+          "message": "Odoo Online impose la voie Studio.",
+          "remedy": "Choisissez la voie Studio pour ce projet Odoo Online.",
+          "action": "workflow-settings",
+          "project": "pe15494f0989a4736",
+          "project_title": "Beta 17"
+        }
+      ]
+    },
+    {
+      "case": "Odoo profile inherited from workflow defaults",
+      "preview_issues": [
+        {
+          "node": "workflow",
+          "title": "Generic workflow with Odoo profile",
+          "code": "odoo.online-studio-required",
+          "stage": "launch",
+          "message": "Odoo Online impose la voie Studio.",
+          "remedy": "Choisissez la voie Studio pour ce projet Odoo Online.",
+          "action": "workflow-settings",
+          "project": "pe15494f0989a4736",
+          "project_title": "Beta 17"
+        }
+      ]
+    },
+    {
+      "case": "Generic node overrides inherited profile; Odoo pack merely installed",
+      "preview_issues": [],
+      "effective_series": null,
+      "effective_platform": null,
+      "purpose": "Meeting minutes"
+    },
+    {
+      "case": "Alias profile with Studio route",
+      "preview_issues": [],
+      "effective_series": "17.0",
+      "effective_platform": "online"
+    }
+  ],
+  "model_or_service_calls": 0
+}

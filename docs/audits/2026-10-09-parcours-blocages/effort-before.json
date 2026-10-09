@@ -1,0 +1,18 @@
+[
+  {
+    "provider": "codex",
+    "preflight_issues": [],
+    "conversation_effort": "medium",
+    "block_execution_effort": "high",
+    "native_claim_accepted": true,
+    "error": null
+  },
+  {
+    "provider": "claude",
+    "preflight_issues": [],
+    "conversation_effort": "medium",
+    "block_execution_effort": "high",
+    "native_claim_accepted": true,
+    "error": null
+  }
+]

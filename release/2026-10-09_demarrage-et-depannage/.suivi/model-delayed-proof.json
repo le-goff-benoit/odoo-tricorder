@@ -1,0 +1,19 @@
+{
+  "delayMs": 1500,
+  "delay": {
+    "replies": 1,
+    "pending": false,
+    "completed": true
+  },
+  "model": "synthetic-model",
+  "request": "Comparer les observations du client sur Alpha et Bêta.",
+  "selectedProjects": [
+    "p4f26a6feecbf4a46",
+    "pea75e5c11a0b49c2"
+  ],
+  "expectedProjects": [
+    "p4f26a6feecbf4a46",
+    "pea75e5c11a0b49c2"
+  ],
+  "provider": "inert fixture; no external model call"
+}

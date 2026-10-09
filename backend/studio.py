@@ -12,7 +12,7 @@ from workflow_engine.documentation import export_release, markdown
 from workflow_engine.library import templates
 from workflow_engine.runtime import capabilities, dispatch, execute, preflight, reconcile
 from workflow_engine.schedules import Schedules
-from workflow_engine.packs import inspect_pack, install, resolve_profiles, policy_issues
+from workflow_engine.packs import inspect_pack, install, resolve_profiles, policy_readiness
 
 # Match electron/backend-request.cjs. Check the complete byte-boundary before
 # decoding, including callers other than Electron; never parse a truncated JSON.
@@ -31,6 +31,13 @@ def provider_defaults():
         principal = {}
     return {key: value for key, value in principal.items()
             if key in ('codex', 'claude') and isinstance(value, str) and len(value) <= 100}
+
+
+def native_model(payload):
+    provider = payload.get("provider", "codex")
+    defaults = payload["graph"].get("defaults", {})
+    return (payload.get("model") or (defaults.get("model") if defaults.get("provider") == provider else None)
+            or provider_defaults().get(provider))
 
 
 def request(engine, payload, *, human=False):
@@ -56,10 +63,8 @@ def _request(engine, payload, *, human=False):
         conversations = Conversations(engine)
         if action == "conversation.open":
             library = {g["id"]: g for g in templates() + engine.workflows("library")}
-            defaults = payload["graph"].get("defaults", {})
-            model = defaults.get("model") if defaults.get("provider") == payload["provider"] else None
-            model = model or provider_defaults().get(payload["provider"])
-            return conversations.open(payload["project"], payload["graph"], payload["provider"], payload.get("projects"), library, model, notifications_authorized=human and payload.get("authorize_notifications") is True, initial_request=payload.get("request"))
+            graph = {**payload["graph"], "parameters": {**payload["graph"].get("parameters", {}), **payload.get("parameters", {})}}
+            return conversations.open(payload["project"], graph, payload["provider"], payload.get("projects"), library, native_model(payload), notifications_authorized=human and payload.get("authorize_notifications") is True, initial_request=payload.get("request"))
         if action == "conversation.list":
             return conversations.list(payload.get("project"), compact=True)
         if action == "conversation.get":
@@ -221,22 +226,27 @@ def _request(engine, payload, *, human=False):
     if action in {"workflow.validate", "run.start"}:
         library = {g["id"]: g for g in templates() + engine.workflows("library")}
         graph = expand(payload["graph"], library)
-        if payload.get("mode") == "native":
-            provider = payload.get("provider", "codex")
-            if graph.get("defaults", {}).get("provider") != provider:
-                graph.setdefault("defaults", {}).pop("model", None)
-            graph.setdefault("defaults", {})["provider"] = provider
-            if payload.get("model"):
-                graph["defaults"]["model"] = payload["model"]
-        if payload.get("project") and not payload.get("simulation", False):
-            graph = resolve_profiles(engine.project(payload["project"]), graph)
-        defaults = engine.project(payload["project"])["defaults"] if payload.get("project") else {}
-        issues = preflight(graph, payload.get("simulation", False), defaults, engine.project(payload["project"]) if payload.get("project") else None, engine, mode=payload.get("mode", "automatic"), provider=payload.get("provider"), model=payload.get("model"))
-        if payload.get("project") and not payload.get("simulation", False):
-            issues += policy_issues(engine.project(payload["project"]), graph)
+        graph["parameters"] = {**graph.get("parameters", {}), **payload.get("parameters", {})}
+        mode = payload.get("mode", "automatic") if action == "workflow.validate" else "automatic"
+        requirements = []
+        if mode == "native" and payload.get("project") and not payload.get("simulation", False):
+            from workflow_engine.conversations import native_preflight
+            checked = native_preflight(engine, payload["project"], graph, payload.get("provider", "codex"),
+                                       payload.get("projects"), native_model(payload))
+            graph, issues, requirements = checked["definition"], checked["issues"], checked["requirements"]
+        else:
+            target = engine.project(payload["project"]) if payload.get("project") else None
+            if target and not payload.get("simulation", False):
+                graph = resolve_profiles(target, graph, strict=False)
+            issues = preflight(graph, payload.get("simulation", False), target["defaults"] if target else {}, target, engine,
+                               mode=mode, provider=payload.get("provider"), model=payload.get("model"))
+            if target and not payload.get("simulation", False):
+                readiness = policy_readiness(target, graph, mode)
+                issues += readiness["issues"]
+                requirements = readiness["requirements"]
         if action == "workflow.validate":
             from workflow_engine.notifications import execution_nodes
-            return {"valid": True, "issues": issues, "notifications": [{"title": n["title"], "recipient": n.get("recipient", ""), "template": n.get("template", ""), "capabilities": n.get("capabilities", [])} for n in execution_nodes(graph) if n["kind"] == "communication"], "automatic": [n["title"] for n in graph["nodes"] if n.get("validation") == "automatic"]}
+            return {"valid": True, "issues": issues, "requirements": requirements, "notifications": [{"title": n["title"], "recipient": n.get("recipient", ""), "template": n.get("template", ""), "capabilities": n.get("capabilities", [])} for n in execution_nodes(graph) if n["kind"] == "communication"], "automatic": [n["title"] for n in graph["nodes"] if n.get("validation") == "automatic"]}
         if issues:
             raise ContractError(" · ".join(i["node"] + " : " + i["message"] for i in issues))
         run = engine.start(payload["project"], payload["graph"], simulation=payload.get("simulation", False), parameters=payload.get("parameters"), library=library, notifications_authorized=human and payload.get("authorize_notifications") is True, reuse_from=payload.get("reuse_from") if human else None)

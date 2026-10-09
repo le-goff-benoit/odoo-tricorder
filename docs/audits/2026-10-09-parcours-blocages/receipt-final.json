@@ -1,0 +1,54 @@
+{
+  "secondary_project_diagnostic": [
+    {
+      "node": "work",
+      "title": "Analysis",
+      "code": "profile.unavailable",
+      "stage": "launch",
+      "message": "Profil specialist absent des packs du projet.",
+      "action": "choose-projects",
+      "remedy": "Installez le pack correspondant dans ce projet ou retirez ce projet du périmètre. Le profil du workflow restera inchangé.",
+      "project": "pb7bf5b02be1e4bbc",
+      "project_title": "Beta"
+    }
+  ],
+  "automatic_main_missing_profile": {
+    "issues": [
+      {
+        "node": "work",
+        "title": "Analysis",
+        "code": "profile.unavailable",
+        "stage": "launch",
+        "message": "Profil specialist absent des packs du projet.",
+        "action": "edit-node",
+        "remedy": "Choisissez un profil installé dans les options IA de cette étape, ou installez le pack correspondant dans ce projet."
+      }
+    ],
+    "exception": null
+  },
+  "one_missing_profile_other_installed_profile": [
+    {
+      "node": "missing",
+      "title": "Missing specialist",
+      "code": "profile.unavailable",
+      "stage": "launch",
+      "message": "Profil not-installed absent des packs du projet.",
+      "action": "edit-node",
+      "remedy": "Choisissez un profil installé dans les options IA de cette étape, ou installez le pack correspondant dans ce projet."
+    }
+  ],
+  "partial_profiles_automatic_native_delegated_strict_start": "pass",
+  "cross_project_repair_and_relaunch": "pass",
+  "effort_and_model_codex": "pass",
+  "native_provider_default_codex": {
+    "model": "",
+    "effort": "high"
+  },
+  "effort_and_model_claude": "pass",
+  "native_provider_default_claude": {
+    "model": "",
+    "effort": "high"
+  },
+  "no_cli_native_refused_automatic_question_allowed": "pass",
+  "model_or_service_calls": 0
+}

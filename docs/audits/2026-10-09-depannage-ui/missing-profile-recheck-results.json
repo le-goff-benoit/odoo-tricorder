@@ -1,0 +1,337 @@
+{
+  "build": "e3c07080428da712486b1dbc955fb5c0d924852a2c331e4d5b968de4c06ae584",
+  "captured": "2026-10-09T10:09:06.518Z",
+  "views": {
+    "after-missing-profile-explicit": {
+      "width": 1440,
+      "height": 900,
+      "content": "PROJET ALPHA SYNTHÉTIQUE / WORKFLOW\nPréserver le choix de l’agent\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n⋮⋮ Déplacer\n✦\nAnalyser avec mon agent\nTâche IA\nTâche IA\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster\n×\nTÂCHE IA\nAnalyser avec mon agent\nNom du bloc\nConsigne\nCritères d’acceptation (un par ligne)\nEntrées et sorties\nEntrées\nAucune donnée déclarée\nAjouter une entrée\nSorties\nfinding · string Retirer\nAjouter une sortie\nValidation du candidat\nContrôle QA du candidat\nCe bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.\nSortie de branchement (facultatif)\nAucun branchement conditionnel\nfinding\nValidation du résultat\nValider automatiquement les sorties\nAttendre ma validation\nOrganisation de l’étape\nConnexions de cette étape\n\nOpenAI · Codex · modèle à choisir\n\nChoisir l’IA pour tout le workflow\nAgent et modèle pour cette étape\nCapacités nécessaires (une par ligne : text, read, edit, shell, native-tools)\nTravail du modèle\nAnalyse ou rédaction\nModification de code dans une copie isolée\n\nLes modifications sont présentées avant application au dépôt. Reliez la sortie candidate à un bloc Commande pour tester cette copie.\n\nAgent dédié (facultatif)\nAucun agent dédié\nspecialist-missing (pack absent)\n\nSans agent dédié, le modèle suit directement la consigne du bloc. Un profil spécialisé ajoute les instructions du pack.\n\nFournisseur\nOpenAI · Codex\nAnthropic · Claude\nModèle IA\nValeur effective : non définie · Projet. Aucun repli automatique.\nEffort et mode d'exécution\nEntrées et sorties\nReprises, ressources et position\nAppliquer au bloc\nConnexions\nSupprimer cette étape",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "⋮⋮ Déplacer\n✦\nAnalyser avec mon agent\nTâche IA\nTâche IA\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-inspector",
+          "disabled": false
+        },
+        {
+          "text": "Ajouter une entrée",
+          "action": "add-port",
+          "disabled": false
+        },
+        {
+          "text": "Retirer",
+          "action": "remove-port",
+          "disabled": false
+        },
+        {
+          "text": "Ajouter une sortie",
+          "action": "add-port",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "refresh-connections",
+          "disabled": false
+        },
+        {
+          "text": "Choisir l’IA pour tout le workflow",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Appliquer au bloc",
+          "disabled": false
+        },
+        {
+          "text": "Supprimer cette étape",
+          "action": "delete-node",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    },
+    "after-profile-explicit-generalist": {
+      "width": 1440,
+      "height": 900,
+      "content": "PROJET ALPHA SYNTHÉTIQUE / WORKFLOW\nPréserver le choix de l’agent\n\nRévision 3 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n⋮⋮ Déplacer\n✦\nRenommer sans changer mon agent\nTâche IA\nTâche IA\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster\n×\nTÂCHE IA\nRenommer sans changer mon agent\nNom du bloc\nConsigne\nCritères d’acceptation (un par ligne)\nEntrées et sorties\nEntrées\nAucune donnée déclarée\nAjouter une entrée\nSorties\nfinding · string Retirer\nAjouter une sortie\nValidation du candidat\nContrôle QA du candidat\nCe bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.\nSortie de branchement (facultatif)\nAucun branchement conditionnel\nfinding\nValidation du résultat\nValider automatiquement les sorties\nAttendre ma validation\nOrganisation de l’étape\nConnexions de cette étape\n\nOpenAI · Codex · modèle à choisir\n\nChoisir l’IA pour tout le workflow\nAgent et modèle pour cette étape\nCapacités nécessaires (une par ligne : text, read, edit, shell, native-tools)\nTravail du modèle\nAnalyse ou rédaction\nModification de code dans une copie isolée\n\nLes modifications sont présentées avant application au dépôt. Reliez la sortie candidate à un bloc Commande pour tester cette copie.\n\nAgent dédié (facultatif)\nAucun agent dédié\n\nSans agent dédié, le modèle suit directement la consigne du bloc. Un profil spécialisé ajoute les instructions du pack.\n\nFournisseur\nOpenAI · Codex\nAnthropic · Claude\nModèle IA\nValeur effective : non définie · Bloc. Aucun repli automatique.\nEffort et mode d'exécution\nEntrées et sorties\nReprises, ressources et position\nAppliquer au bloc\nConnexions\nSupprimer cette étape",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": false
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "⋮⋮ Déplacer\n✦\nRenommer sans changer mon agent\nTâche IA\nTâche IA\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-inspector",
+          "disabled": false
+        },
+        {
+          "text": "Ajouter une entrée",
+          "action": "add-port",
+          "disabled": false
+        },
+        {
+          "text": "Retirer",
+          "action": "remove-port",
+          "disabled": false
+        },
+        {
+          "text": "Ajouter une sortie",
+          "action": "add-port",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "refresh-connections",
+          "disabled": false
+        },
+        {
+          "text": "Choisir l’IA pour tout le workflow",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Appliquer au bloc",
+          "disabled": false
+        },
+        {
+          "text": "Supprimer cette étape",
+          "action": "delete-node",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    }
+  },
+  "outcomes": {
+    "preservedAfterRename": "specialist-missing",
+    "changedOnlyExplicitly": "generalist"
+  },
+  "failures": []
+}

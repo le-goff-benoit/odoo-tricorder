@@ -1,0 +1,10 @@
+{
+  "all_five_templates_native_preflight": "pass",
+  "support_unknown_then_normal": "pass",
+  "express_reframe_and_dependency_guard": "pass",
+  "release_rejected_plan_stops_work": "pass",
+  "meeting_rejected_minutes_stop_draft": "pass",
+  "generic_cancel_refuses_stale_answer_and_preserves_independent_request": "pass",
+  "native_tools_schedule_blocked": "pass",
+  "model_or_service_calls": 0
+}

@@ -51,6 +51,56 @@ test.afterEach(async () => {
 
 async function example() { await page.getByRole('button', { name: 'Essayer un exemple' }).click(); await expect(page.getByRole('heading', { name: "De la demande au résultat" })).toBeVisible(); }
 
+async function odooLaunchProject({ model = 'fixture-model' } = {}) {
+  const bin = path.join(directory, 'bin'); fs.mkdirSync(bin, { recursive: true });
+  for (const provider of ['codex', 'claude']) {
+    fs.copyFileSync(path.join(root, 'tests/fixtures/odoo-intake-agent.py'), path.join(bin, provider));
+    fs.chmodSync(path.join(bin, provider), 0o755);
+  }
+  const pack = path.join(directory, 'synthetic-odoo-pack'); fs.mkdirSync(pack);
+  fs.writeFileSync(path.join(pack, 'roles.md'), 'Synthetic orchestration profiles; no model or Odoo connection.');
+  fs.writeFileSync(path.join(pack, 'tricorder-pack.json'), JSON.stringify({ schema: 1, engine_schema: 1, id: 'synthetic-odoo', version: '1',
+    profiles: ['odoo-analyst', 'odoo-developer', 'odoo-tester', 'odoo-deployer', 'odoo-support', 'odoo-studio'].map(id => ({ id, source: 'roles.md' })),
+    policies: { domain: 'odoo', series_required: true, online_requires_studio: true, qa_requires_local_copy: true } }));
+  const project = await page.evaluate(() => window.studio.request({ action: 'project.create', title: 'Release Odoo synthétique' }));
+  const module = path.join(project.path, 'synthetic_module'); fs.mkdirSync(module);
+  fs.writeFileSync(path.join(module, '__manifest__.py'), "{'name':'Synthetic','version':'19.0.1.0.0'}");
+  // Fixture setup uses the same engine command as desktop catalog setup.
+  // It is intentionally not an arbitrary command exposed to the renderer.
+  const backend = process.env.TRICORDER_EXECUTABLE ? path.join(path.dirname(process.env.TRICORDER_EXECUTABLE), 'resources/backend') : path.join(root, 'backend');
+  require('node:child_process').execFileSync('/usr/bin/python3', ['-c',
+    'import json,sys;sys.path.insert(0,sys.argv[1]);from workflow_engine import Engine;from workflow_engine.setup import configure;r=configure(Engine(sys.argv[2]),json.loads(sys.argv[3]),sys.argv[4]);assert r[0]["status"]=="configured",r',
+    backend, directory, JSON.stringify([{ path: project.path, name: project.title, series: '19.0' }]), pack]);
+  await page.evaluate(async ({ project, model }) => {
+    const graph = await window.studio.request({ action: 'workflow.get', project: project.id, workflow: 'odoo-release-conversation' });
+    graph.defaults = { ...graph.defaults, provider: 'codex', model };
+    await window.studio.request({ action: 'workflow.save', project: project.id, graph, revision: graph.revision });
+  }, { project, model });
+  await page.getByRole('button', { name: 'Projets', exact: true }).click();
+  await page.locator('.project-card').filter({ hasText: project.title }).click();
+  await page.locator('[data-action="open-workflow"][data-id="odoo-release-conversation"]').click();
+  return project;
+}
+
+test('Odoo launch journey: missing QA database does not block intake through the actual launch dialog', async () => {
+  const project = await odooLaunchProject();
+  await page.getByRole('button', { name: 'Exécuter…', exact: true }).click();
+  const dialog = page.getByRole('dialog');
+  await page.getByLabel('Quelle demande souhaitez-vous traiter ?').fill('Analyser la demande client avant de préparer les tests.');
+  await page.screenshot({ path: test.info().outputPath('odoo-launch-without-database.png') });
+  await expect(page.getByRole('button', { name: 'Lancer dans le terminal', exact: true })).toBeEnabled();
+  await expect(dialog).toContainText('avant la recette');
+  await expect(dialog).not.toContainText('neutralized_copy');
+  await expect(dialog).not.toContainText('environment=');
+  await page.getByRole('button', { name: 'Lancer dans le terminal', exact: true }).click();
+  await expect(page.locator('.xterm-screen:visible')).toContainText('ODOO INTAKE RECEIVED');
+  await expect(page.locator('.node[data-id="intent"]')).toHaveAttribute('data-status', 'accepted');
+  const conversations = await page.evaluate(project => window.studio.request({ action: 'conversation.list', project }), project.id);
+  expect(conversations).toHaveLength(1);
+  expect(conversations[0].item_count).toBe(1);
+  expect(app.context().pages()).toHaveLength(1);
+});
+
 test('large release history: startup and refresh preserve projects, workflows and terminal', async () => {
   const initial = await page.evaluate(() => window.tricorder.bootstrap());
   expect(JSON.stringify(initial.projects).length).toBeGreaterThan(4000000);

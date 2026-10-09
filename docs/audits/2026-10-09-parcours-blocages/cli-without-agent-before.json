@@ -1,0 +1,14 @@
+[
+  {
+    "provider": "codex",
+    "preflight_issues": [],
+    "conversation_created": true,
+    "error": null
+  },
+  {
+    "provider": "claude",
+    "preflight_issues": [],
+    "conversation_created": true,
+    "error": null
+  }
+]

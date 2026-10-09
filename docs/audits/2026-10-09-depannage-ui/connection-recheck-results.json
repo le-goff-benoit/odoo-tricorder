@@ -1,0 +1,533 @@
+{
+  "build": "e944b70108cc24b563fedc2581684f9403cc5de1114d05be0622189a3c42ef87",
+  "captured": "2026-10-09T09:59:06.291Z",
+  "views": {
+    "after-plugin-verified-return-offered": {
+      "width": 1440,
+      "height": 900,
+      "content": "OUTILS ET PLUGINS\nConnexions\n\nLa présence d'un outil ne prouve ni l'accès à un compte ni l'autorisation d'une opération. Les modèles peuvent analyser ou proposer du code dans une copie isolée. Les transports MCP stdio et les adaptateurs locaux vérifiés relient les outils aux blocs.\n\nConfigurer dans le terminal\nPlugins OpenAI\nPlugins Anthropic\nActualiser\nLancement en attente : Lire le compte rendu · Projet Alpha synthétique. Votre demande est conservée.\nRevenir au lancement\nContexte\nWorkflows globaux\nModèles\nProjet Alpha synthétique\nProjet Bêta synthétique\nAfficher les connexions\n\nCatalogue de Projet Alpha synthétique : /tmp/tricorder-remediation-9dqo2Q/projects/p1b82278333264ef8/.tricorder/plugins.json. Modifiez-le depuis le terminal, puis actualisez. Les déclarations restent distinctes des accès vérifiés.\n\nCodex\nUtilisable\n\nCLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.\n\n✓ Disponible\n✓ Installé\n? Connecté\n○ Vérifié\nClaude Code\nÀ configurer\n\nCLI non installé.\n\n✓ Disponible\n○ Installé\n? Connecté\n○ Vérifié\nCommandes locales isolées\nUtilisable\n\nSans réseau ; projet en lecture seule ; résultats dans un dossier de travail isolé.\n\n✓ Disponible\n✓ Installé\n✓ Connecté\n✓ Vérifié\nConfluence\nÀ configurer\n\nUn plugin Atlassian peut être connecté séparément. Aucun transport authentifié configuré dans Tricorder.\n\n✓ Disponible\n○ Installé\n○ Connecté\n○ Vérifié\nGitHub → Odoo.sh\nÀ configurer\n\nRenseigner dépôt, branche et projet Odoo.sh. Publication GitHub, build et déploiement seront suivis séparément.\n\n✓ Disponible\n○ Installé\n○ Connecté\n○ Vérifié\nGmail\nÀ configurer\n\nAucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.\n\n✓ Disponible\n○ Installé\n○ Connecté\n○ Vérifié\nOutlook\nÀ configurer\n\nAucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.\n\n✓ Disponible\n○ Installé\n○ Connecté\n○ Vérifié\nSlack\nÀ configurer\n\nAucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.\n\n✓ Disponible\n○ Installé\n○ Connecté\n○ Vérifié\nTelegram\nÀ configurer\n\nAucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.\n\n○ Disponible\n○ Installé\n○ Connecté\n○ Vérifié\nSignal\nÀ configurer\n\nAucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.\n\n○ Disponible\n○ Installé\n○ Connecté\n○ Vérifié\nLecture locale synthétique\nUtilisable\n\nAdaptateur local vérifié. Son authentification reste sous sa responsabilité.\n\nVérifier l’adaptateur…\n✓ Disponible\n✓ Installé\n✓ Connecté\n✓ Vérifié\n\nAucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Configurer dans le terminal",
+          "action": "connection-terminal",
+          "disabled": false
+        },
+        {
+          "text": "Plugins OpenAI",
+          "action": "discover-plugins",
+          "disabled": false
+        },
+        {
+          "text": "Plugins Anthropic",
+          "action": "discover-plugins",
+          "disabled": false
+        },
+        {
+          "text": "Actualiser",
+          "action": "refresh-connections",
+          "disabled": false
+        },
+        {
+          "text": "Revenir au lancement",
+          "action": "return-to-launch",
+          "disabled": false
+        },
+        {
+          "text": "Afficher les connexions",
+          "disabled": false
+        },
+        {
+          "text": "Vérifier l’adaptateur…",
+          "action": "verify-plugin",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    },
+    "after-plugin-return-preserved": {
+      "width": 1440,
+      "height": 900,
+      "dialog": "Lancer cette version du workflow\n×\nQuelle demande souhaitez-vous traiter ?\n\nParlez au workflow dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.\n\nCoordonner plusieurs projets\n\nValidation automatique : Lire le compte rendu. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.\n\nLancer dans le terminal\nVérifier à nouveau\nExécution automatique sans conversation\nSimuler le parcours",
+      "content": "PROJET ALPHA SYNTHÉTIQUE / WORKFLOW\nLire le compte rendu\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nLancement en attente : Lire le compte rendu · Projet Alpha synthétique. Votre demande est conservée.\nRevenir au lancement\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster",
+      "request": "Lire le compte rendu du projet Alpha.",
+      "checkedProjects": [],
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Revenir au lancement",
+          "action": "return-to-launch",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Lancer dans le terminal",
+          "action": "start-conversation",
+          "disabled": false
+        },
+        {
+          "text": "Vérifier à nouveau",
+          "action": "check-launch",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "start-real",
+          "disabled": false
+        },
+        {
+          "text": "Simuler le parcours",
+          "action": "start-simulation",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    },
+    "after-multiple-projects-diagnostic": {
+      "width": 1440,
+      "height": 900,
+      "dialog": "Lancer cette version du workflow\n×\nQuelle demande souhaitez-vous traiter ?\n\nParlez au workflow dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.\n\nCoordonner plusieurs projets\nProjet Bêta synthétique\n\nValidation automatique : Lire le compte rendu. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.\n\nÀ résoudre avant le lancement\nProjet Bêta synthétique · Lire le compte rendu\n\nCapacité absente du catalogue du projet ; actualiser ou configurer le plugin.\n\nConfigurez et vérifiez cette connexion dans le projet avant de relancer la vérification.\n\nOuvrir les connexions\nLancer dans le terminal\nVérifier à nouveau\nExécution automatique sans conversation\nSimuler le parcours",
+      "content": "PROJET ALPHA SYNTHÉTIQUE / WORKFLOW\nLire le compte rendu\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster",
+      "request": "Comparer les comptes rendus des deux projets.",
+      "checkedProjects": [
+        "p1eaae7743c8544aa"
+      ],
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Ouvrir les connexions",
+          "action": "repair-launch",
+          "remedy": "connections",
+          "project": "p1eaae7743c8544aa",
+          "disabled": false
+        },
+        {
+          "text": "Lancer dans le terminal",
+          "action": "start-conversation",
+          "disabled": true
+        },
+        {
+          "text": "Vérifier à nouveau",
+          "action": "check-launch",
+          "disabled": false
+        },
+        {
+          "text": "Simuler le parcours",
+          "action": "start-simulation",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    },
+    "after-multiple-projects-return-preserved": {
+      "width": 1440,
+      "height": 900,
+      "dialog": "Lancer cette version du workflow\n×\nQuelle demande souhaitez-vous traiter ?\n\nParlez au workflow dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.\n\nCoordonner plusieurs projets\nProjet Bêta synthétique\n\nValidation automatique : Lire le compte rendu. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.\n\nLancer dans le terminal\nVérifier à nouveau\nExécution automatique sans conversation\nSimuler le parcours",
+      "content": "PROJET ALPHA SYNTHÉTIQUE / WORKFLOW\nLire le compte rendu\n\nRévision 1 · Enregistré\n\nChoisir l’IA\nExporter…\nEnregistrer\nExécuter…\nLancement en attente : Lire le compte rendu · Projet Alpha synthétique. Votre demande est conservée.\nRevenir au lancement\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\nParamètres du workflow\n↶\n↷\n›_ Terminal\nOptions\n✦ Assistant IA\n☷ Liste\n▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie\n1 bloc · 0 lien\n−\n80 %\n+\nAjuster",
+      "request": "Comparer les comptes rendus des deux projets.",
+      "checkedProjects": [
+        "p1eaae7743c8544aa"
+      ],
+      "buttons": [
+        {
+          "text": "Choisir l’IA",
+          "action": "workflow-ai",
+          "disabled": false
+        },
+        {
+          "text": "Exporter…",
+          "action": "export-workflow",
+          "disabled": false
+        },
+        {
+          "text": "Enregistrer",
+          "action": "save",
+          "disabled": true
+        },
+        {
+          "text": "Exécuter…",
+          "action": "start-preview",
+          "disabled": false
+        },
+        {
+          "text": "Revenir au lancement",
+          "action": "return-to-launch",
+          "disabled": false
+        },
+        {
+          "text": "Éditeur",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Exécution",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "Historique",
+          "action": "mode",
+          "disabled": false
+        },
+        {
+          "text": "Rapport",
+          "action": "mode",
+          "disabled": true
+        },
+        {
+          "text": "+ Ajouter un bloc",
+          "action": "add-node",
+          "disabled": false
+        },
+        {
+          "text": "Relier",
+          "action": "connect",
+          "disabled": false
+        },
+        {
+          "text": "Paramètres du workflow",
+          "action": "workflow-settings",
+          "disabled": false
+        },
+        {
+          "text": "↶",
+          "action": "undo",
+          "disabled": true
+        },
+        {
+          "text": "↷",
+          "action": "redo",
+          "disabled": true
+        },
+        {
+          "text": "›_ Terminal",
+          "action": "terminal",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "phases",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "reload-file",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "schedule",
+          "disabled": false
+        },
+        {
+          "text": "✦ Assistant IA",
+          "action": "assistant",
+          "disabled": false
+        },
+        {
+          "text": "☷ Liste",
+          "action": "view",
+          "disabled": false
+        },
+        {
+          "text": "▤\nLire le compte rendu\nDocument\nDocument\n0 entrée → 1 sortie",
+          "action": "select-node",
+          "disabled": false
+        },
+        {
+          "text": "−",
+          "action": "zoom-out",
+          "disabled": false
+        },
+        {
+          "text": "+",
+          "action": "zoom-in",
+          "disabled": false
+        },
+        {
+          "text": "Ajuster",
+          "action": "fit",
+          "disabled": false
+        },
+        {
+          "text": "×",
+          "action": "close-modal",
+          "disabled": false
+        },
+        {
+          "text": "Lancer dans le terminal",
+          "action": "start-conversation",
+          "disabled": false
+        },
+        {
+          "text": "Vérifier à nouveau",
+          "action": "check-launch",
+          "disabled": false
+        },
+        {
+          "text": "",
+          "action": "start-real",
+          "disabled": false
+        },
+        {
+          "text": "Simuler le parcours",
+          "action": "start-simulation",
+          "disabled": false
+        }
+      ],
+      "rootOverflow": false
+    }
+  },
+  "outcomes": {
+    "connection-roundtrip": {
+      "accepted": true,
+      "result": "Local adapter read completed, no external call"
+    },
+    "multi-project-roundtrip": {
+      "accepted": true,
+      "projects": [
+        "p1b82278333264ef8",
+        "p1eaae7743c8544aa"
+      ],
+      "request": "Comparer les comptes rendus des deux projets."
+    }
+  },
+  "failures": []
+}
