@@ -1,0 +1,76 @@
+{
+  "at": "2026-10-09T15:10:53.418Z",
+  "checks": {
+    "first-project-ui-add": "passed",
+    "provider-scope-visible": "passed",
+    "design-role-provider-and-return-without-duplication": "passed"
+  },
+  "failures": [
+    {
+      "name": "compact125-readable-question-and-answer",
+      "error": "expect(locator).toBeInViewport() failed\n\nLocator:  getByLabel('Votre réponse', { exact: true })\nExpected: in viewport\nReceived: viewport ratio 0.7693287134170532\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toBeInViewport\" getByLabel('Votre réponse', { exact: true }) with timeout 5000ms\n  - waiting for getByLabel('Votre réponse', { exact: true })\n    14 × locator resolved to <textarea required=\"\" name=\"answer\"></textarea>\n       - unexpected value \"viewport ratio 0.7693287134170532\"\n"
+    },
+    {
+      "name": "legacy-release-preserves-live-context",
+      "error": "expect(locator).toHaveValue(expected) failed\n\nLocator:  locator('#release-select')\nExpected: \"2026-10-01_historique\"\nReceived: \"\"\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveValue\" locator('#release-select') with timeout 5000ms\n  - waiting for locator('#release-select')\n    14 × locator resolved to <select id=\"release-select\" aria-label=\"Release\">…</select>\n       - unexpected value \"\"\n"
+    },
+    {
+      "name": "fatal",
+      "error": "locator.click: Timeout 6000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Examiner la décision', exact: true })\u001b[22m\n\n    at /home/blegoff/odoo-tricorder/docs/audits/2026-10-09-reception-simplicite-independante/corrections-review.cjs:37:198"
+    }
+  ],
+  "screens": {
+    "corrected-first-project": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nPremier projet de revue\nPlanifications\nConnexions\nParamètres\nOutils et aide\nPremier projet de revue\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "Premier projet de revue/tmp/tricorder-independent-reception-UBrxGs/first-repositoryNouvelle demandeCréer un workflowOptionsWorkflows du dépôtImporter un workflowAjouter un packArchiver le projet\n    \n    Reprendre le travailAucune demande en cours. « Nouvelle demande » ouvre votre workflow et son terminal.Rechercher dans les exécutionsRechercherÉtatTousEn coursSuspenduesTerminéesAnnuléesExécutionRéel et simulationRéelSimulationAvec archivesFiltrer0 exécution(s)\n    Workflows disponiblesVoir les archivesAucun workflow enregistré ici.Choisir un modèleCréer un workflow vide\n    ",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "corrected-provider-scope": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nPremier projet de revue\nPlanifications\nConnexions\nParamètres\nOutils et aide\nPremier projet de revue\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nShell occupé 1\nConversation du workflow affiché · Premier projet de revue\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-UBrxGs/cockpit/agent-events/b2682e09-9e3b\n-4adf-a09f-8413de38adb1.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/first-repository$ 'python3' '/home/blegoff/odoo-tricord\ner/backend/agent_launch.py' '/tmp/tricorder-independent-reception-UBrxGs\n/cockpit/agent-events/b2682e09-9e3b-4adf-a09f-8413de38adb1.launch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nDemande conservée pendant la lecture de la release historique.\nDEMANDE REÇUE : Demande conservée pendant la lecture de la release histo\nrique.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteDemande conservée pendant la lecture de la release historique.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherDemande conservée pendant la lecture de la release historique.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat voulu→TerminéPréparer une conclusion×QuestionPréciser le résultat vouluQuel résultat voulez-vous obtenir pour cette demande de support ?Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.Votre réponseRépondre",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "failure-compact125-readable-question-and-answer": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nPremier projet de revue\nPlanifications\nConnexions\nParamètres\nOutils et aide\nPremier projet de revue\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nTerminal\nContexte\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Premier projet de revue\n.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteDemande conservée pendant la lecture de la release historique.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherDemande conservée pendant la lecture de la release historique.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat voulu→TerminéPréparer une conclusion×QuestionPréciser le résultat vouluQuel résultat voulez-vous obtenir pour cette demande de support ?Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.Votre réponseRépondre",
+      "viewport": [
+        819,
+        614
+      ]
+    },
+    "failure-legacy-release-preserves-live-context": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nPremier projet de revue\nPlanifications\nConnexions\nParamètres\nOutils et aide\nlegacy-review\n19.0\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nProjet\nPréparer la prochaine release\nAucune release\n2026-10-01 · Release historique de revue · Close\nStatut\nTerminal\nDemandes\nPlan\nMémoire\nExpress\nTemps\nWorkflows du projet\nVue d’ensemble\n\nLe travail de votre projet, en un regard.\n\nNouvelle demande\nVotre workflow de release\n\nDémarrez le workflow au-dessus du terminal, puis échangez avec l’agent. Cliquez sur une étape pour consulter les éléments enregistrés.\n\n1 · Ouverture\nRelease et contexte\n2 · Demandes\nBesoins et objectifs\n3 · Plan\nPlan et critères\n4 · Exécution\nTâches et progression\n5 · Recette\nDécisions et preuves\n\nDémarrez le workflow pour recueillir vos intentions et ouvrir la release dans la conversation.\n\nProchaines tâches\nVoir le plan\n\nAucune tâche en cours. Consultez le plan pour les travaux à déployer ou déjà livrés.\n\nOutils du projet\nWorkflow\nRelease Odoo\nDemande Odoo\nDiagnostic Odoo\nDémarrer le workflow\nTerminal\nAgrandir le terminal\nmaster\nEnvironnement\nShell local\nPour les nouveaux terminaux\nAucun terminal ouvert\n\nUn shell dans le dossier du projet. Lancez Claude ou Codex avec suivi, ou vos commandes habituelles.\n\nOuvrir un terminal\nAnthropic · Claude\nOpenAI · Codex",
+      "studio": "legacy-review/tmp/tricorder-independent-reception-UBrxGs/legacy-reviewNouvelle demandeCréer un workflowOptionsWorkflows du dépôtImporter un workflowAjouter un packArchiver le projetReleases et suivi Odoo\n    \n    Reprendre le travailAucune demande en cours. « Nouvelle demande » ouvre votre workflow et son terminal.Rechercher dans les exécutionsRechercherÉtatTousEn coursSuspenduesTerminéesAnnuléesExécutionRéel et simulationRéelSimulationAvec archivesFiltrer0 exécution(s)\n    Workflows disponiblesVoir les archivesAucun workflow enregistré ici.Choisir un modèleCréer un workflow vide\n    ",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "generic-role-provider-configured": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nPremier projet de revue\nPlanifications\nConnexions\nParamètres\nOutils et aide\nPremier projet de revue\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "Cannot read properties of null (reading 'query')Premier projet de revue / WorkflowConception générique avec rôlesRévision 2 · EnregistréChoisir l’IAExporter…EnregistrerExécuter…\n    ÉditeurExécutionHistoriqueRapport\n    \n    \n    + Ajouter un blocRelierParamètres du workflow↶↷›_ TerminalOptionsPhasesRecharger et validerPlanifier✦ Assistant IA☷ Liste\n    ⋮⋮ Déplacer✦Rédiger la propositionTâche IATâche IA0 entrée → 0 sortie1 bloc · 0 lien−80 %+Ajuster×Tâche IARédiger la propositionNom du blocConsigneCritères d’acceptation (un par ligne)Entrées et sortiesEntréesAucune donnée déclaréeAjouter une entréeSortiesAucune donnée déclaréeAjouter une sortieValidation du candidatContrôle QA du candidatCe bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. La sortie verdict est ajoutée : pass ou fail, avec preuves réelles. Un document ou un simple transfert ne valide pas le code.Sortie de branchement (facultatif)Aucun branchement conditionnelValidation du résultatValider automatiquement les sortiesAttendre ma validationOrganisation de l’étapeEffet du résultat sur les tâches dépendantesPermettre la suiteBloquer la suite : travail non résoluPhase\n    \n    \n    \n    \n    Connexions de cette étapeCapacités de plugins (facultatives)AucuneCatalogue : .tricorder/plugins.json · aucune dépendance à un agent dédié.Actualiser les outilsAucun plugin déclaré dans ce dépôt.\n    Anthropic · Claude · inertChoisir l’IA pour tout le workflowAgent et modèle pour cette étapeCapacités nécessaires (une par ligne : text, read, edit, shell, native-tools)Travail du modèleAnalyse ou rédactionModification de code dans une copie isoléeLes modifications sont présentées avant application au dépôt. Reliez la sortie candidate à un bloc Commande pour tester cette copie.Agent dédié (facultatif)Aucun agent dédiéRédacteurRelecteurSans agent dédié, le modèle suit directement la consigne du bloc. Un profil spécialisé ajoute les instructions du pack.FournisseurOpenAI · CodexAnthropic · ClaudeModèle IAValeur effective : inert · Bloc. Aucun repli automatique.Effort et mode d'exécutionEffortlowmediumhighxhighEffort de la conversation : medium. Les étapes exécutées dans cette session doivent utiliser le même niveau.SessionSession déléguéeSession principale (à qualifier)Le choix est enregistré. Le connecteur vérifiera les capacités réelles avant tout lancement.\n    \n    \n    \n    \n    \n    \n    \n    \n    Entrées et sortiesEntrées (nom : type, JSON){}Sorties (nom : type, JSON){}Reprises, ressources et positionTentatives maximalesRessources exclusives (une par ligne)Position XPosition YAppliquer au bloc\n    ConnexionsAucune connexion.Supprimer cette étapeWorkflow enregistré. Les exécutions précédentes gardent leur version.",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "correction-fatal": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nPremier projet de revue\nPlanifications\nConnexions\nParamètres\nOutils et aide\nPremier projet de revue\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nAutre conversation · Premier projet de revue\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-UBrxGs/cockpit/agent-events/b2682e09-9e3b\n-4adf-a09f-8413de38adb1.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/first-repository$ 'python3' '/home/blegoff/odoo-tricord\ner/backend/agent_launch.py' '/tmp/tricorder-independent-reception-UBrxGs\n/cockpit/agent-events/b2682e09-9e3b-4adf-a09f-8413de38adb1.launch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nDemande conservée pendant la lecture de la release historique.\nDEMANDE REÇUE : Demande conservée pendant la lecture de la release histo\nrique.\n ",
+      "studio": "Suivi · Embranchement à deux sorties alternativesEmbranchement à deux sorties alternativesVersion figée · Décision attendue · 09.10.2026 17:11:12OptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suiviDécision attendue0 / 3 étapesChoisir la suite\n    \n    Simulation. Aucun modèle ni service métier appelé. Décision attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    approvereject?Choisir la suiteDécision humaineDécision attendueVous◇Envoyer la proposition retenueTâchePrévu0 entrée → 0 sortie◇Demander des précisionsTâchePrévu0 entrée → 0 sortie3 blocs · 2 liens−100 %+AjusterÉtape sélectionnéeChoisir la suite→AutoriséEnvoyer la proposition retenueRefuséDemander des précisions×Décision humaineChoisir la suiteDécision attendueDécision pour cette demande : Embranchement à deux sorties alternatives.Votre décision est attendueValider la réponse proposée ou demander des précisions ?Commentaire (facultatif)Approuver la suiteRefuser la suiteLa réponse s'applique à cette proposition et à cette tentative uniquement.",
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  },
+  "build": {
+    "dist/app.js": "e42f9acf3160e7755cca7bcab94e61ac6163d23f5b3806c689133180333f9ff2",
+    "dist/studio.css": "3c435d2ae940b4d7452fab7e31395df3b474d44c515b22279a0c35a8ea3df079"
+  }
+}

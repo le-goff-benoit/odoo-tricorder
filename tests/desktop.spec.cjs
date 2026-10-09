@@ -952,7 +952,13 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await page.locator('[data-project]').filter({ hasText: 'nova-services' }).click();
     await page.locator('[data-project]').filter({ hasText: 'orbital-industries' }).click();
     await expect(page.locator('[data-action="add"]')).toHaveCount(0);
-    await expect(page.locator('#project-search')).toHaveCount(0);
+    const projectSearch = page.getByLabel('Rechercher un projet', { exact: true });
+    await expect(projectSearch).toBeVisible();
+    await projectSearch.fill('nova');
+    await expect(page.locator('.project-item[data-project]')).toHaveCount(1);
+    await expect(page.locator('.project-item[data-project]')).toContainText('nova-services');
+    await expect(projectSearch).toBeFocused();
+    await projectSearch.fill('');
     await expect(page.locator('.project-item[data-project]')).toHaveCount(3);
     // Two navigation events in the same turn: only the latest response may win.
     await page.evaluate(([first, last]) => {

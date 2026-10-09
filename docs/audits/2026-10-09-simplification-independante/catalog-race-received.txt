@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+(node:785289) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/simplicity.spec.cjs:70:1 › catalog pagination: a workflow beyond the first project page opens and launches without a copy (5.6s)
+
+  1 passed (6.1s)

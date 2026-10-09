@@ -82,3 +82,94 @@
 
 #studio-content.execution-view .node[data-failed=true] {border-color:var(--danger)}
 .pill.failed {color:var(--danger);background:var(--danger-soft)}
+
+/* Doing work and designing workflows have separate, predictable entry points. */
+.catalog-tabs {display:flex;gap:6px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:24px}
+.catalog-tabs button {background:transparent;border-color:transparent}
+.catalog-tabs button.active {background:var(--accent-soft);color:var(--accent);font-weight:600}
+.project-activity,.project-workflows {margin:24px 0}
+.project-activity h2,.project-workflows h2 {margin:0 0 12px}
+.history-filters {margin-top:12px}
+.history-filters > summary {font-size:12px;color:var(--muted);cursor:pointer}
+.workflow-list {display:grid;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.workflow-row {display:flex;align-items:center;gap:16px;padding:16px}
+.workflow-row + .workflow-row {border-top:1px solid var(--line)}
+.workflow-row > div:first-child {flex:1;min-width:180px}
+.workflow-row h3 {margin:0;font-size:14px}
+.workflow-row p {margin:6px 0 0;font-size:12px;color:var(--muted)}
+.workflow-row > .row {justify-content:flex-end}
+.empty-workflows {padding:20px}
+.conversation-list {display:grid;gap:8px;margin-bottom:16px}
+.conversation-list button {display:flex;justify-content:space-between;gap:16px;padding:12px 16px;text-align:left;white-space:normal}
+.conversation-list button strong {font-size:13px}
+.conversation-list button span {color:var(--muted);font-size:12px}
+.project-menu {align-self:center}
+.conversation-ready .notice {margin-bottom:28px}
+.ready-steps {list-style:none;padding:0;display:grid;gap:0}
+.ready-steps li {display:flex;gap:12px;position:relative;padding:12px 0}
+.ready-steps li > span {display:grid;place-items:center;align-self:start;background:var(--surface);border:1px solid var(--line);border-radius:6px;width:30px;height:30px;flex-shrink:0}
+.ready-steps li:not(:last-child):before {content:'';position:absolute;left:15px;top:42px;bottom:-12px;border-left:1px solid var(--line)}
+.ready-steps small {display:block;margin-top:4px}
+.execution-tabs-empty {height:0!important;min-height:0!important;padding:0!important;border:0!important}
+#studio-content.execution-view .execution-menu {z-index:28}
+#studio-content.execution-view .execution-menu [role=tab] {display:block;border:0;border-radius:5px;padding:8px 12px;text-align:left}
+#studio-content.execution-view .toolbar {border-bottom:0}
+#studio-content.execution-view .step-trail {border-bottom:1px solid var(--line);margin:-8px 0 18px;padding-bottom:12px}
+.step-trail > button {margin-bottom:10px;padding-left:0}
+.step-trail > div {display:flex;align-items:center;gap:6px;overflow:auto;padding:3px}
+.step-trail-group > button {display:grid;gap:4px;text-align:left;min-width:145px;max-width:210px;flex:1;white-space:normal;font-size:11px;padding:8px}
+.step-trail strong {font-size:12px;line-height:1.4}
+.step-trail small {font-size:10px}
+.step-trail [aria-current=step] {border-color:var(--accent);background:var(--accent-soft)}
+.step-trail .pill {font-size:10px;justify-self:start}
+@container workflow (max-width:650px) {.workflow-row {flex-wrap:wrap}.workflow-row > .row {justify-content:flex-start}.conversation-list button {display:grid;gap:4px}.project-work-page .page-heading {gap:10px}}
+.execution-map .node {width:var(--run-node-width);height:114px;min-height:114px;border-radius:8px}
+.execution-map .node .node-main {padding:12px;flex:1}
+.execution-map .node .node-footer {padding:6px 10px;flex-shrink:0}
+.execution-map .node .port.in {top:-5px;left:calc(50% - 4px)}
+.execution-map .node .port.out {top:auto;bottom:-5px;left:calc(50% - 4px)}
+.execution-map .node .kind {font-size:11px;margin-top:3px}
+.execution-map .node .mission {font-size:13px}
+.execution-map .node .icon {font-size:16px;min-width:16px}
+.catalog-workflows {margin-top:16px}
+#workflow-search {max-width:480px}
+.activity-section {margin:28px 0}
+.activity-section h2 {font-size:15px;margin:0 0 12px}
+.activity-list {display:grid;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.activity-row {display:flex;gap:20px;align-items:center;text-align:left;padding:16px;border:0;border-radius:0;white-space:normal}
+.activity-row + .activity-row {border-top:1px solid var(--line)}
+.activity-identity {display:grid;gap:6px;flex:1;min-width:0}
+.activity-identity strong {font-weight:600;font-size:14px}
+.activity-state {display:grid;gap:6px;width:230px;font-size:12px}
+.activity-state strong {font-weight:500}
+.activity-empty {padding:24px;border:1px dashed var(--line);border-radius:8px}
+@container workflow (max-width:650px) {.activity-row {gap:8px;flex-wrap:wrap}.activity-state {width:auto;flex-basis:100%}.activity-row > span:last-child {display:none}}
+#studio-content.execution-view .workflow-heading .eyebrow {white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#studio-content.execution-view .step-trail {margin:0 0 16px;padding-bottom:12px}
+#studio-content.execution-view .step-trail .pill {display:none}
+.compact-height #studio-content.execution-view .step-trail {margin-bottom:10px;padding-bottom:8px}
+.compact-height .step-trail-group > button {padding:5px;min-width:125px}
+
+/* In a short stacked workspace, reserve the reading space for the question. */
+.compact-height #studio-content.execution-view .inspector > .eyebrow,
+.compact-height #studio-content.execution-view .inspector > h2 {display:none}
+.compact-height #studio-content.execution-view .step-trail-group > button {display:flex;gap:5px;align-items:center;min-width:0;white-space:nowrap;max-width:none}
+.compact-height .step-trail small {display:none}
+.compact-height .step-trail strong {font-size:11px;overflow:hidden;text-overflow:ellipsis}
+.compact-height #studio-content.execution-view .step-trail {margin-bottom:8px;padding-bottom:5px}
+.compact-height #studio-content.execution-view .question-help {font-size:11px;margin:5px 0}
+.compact-height #studio-content.execution-view #question-form textarea {min-height:54px}
+
+.step-trail-group {display:grid;gap:5px;flex:1;min-width:0;max-width:230px}
+.step-trail-group > button {width:100%;max-width:none;min-width:0}
+.compact-height .step-trail-group small {display:block;font-size:10px}
+.compact-height .step-trail-group > button {display:grid!important;gap:2px!important;text-align:left}
+
+.compact-height .step-trail [aria-current=step] small,
+.compact-height .step-trail .edge-default small {display:none}
+
+.step-trail small:empty {display:none}
+
+/* The selected step is already named in the trail; keep the detail for its content. */
+#studio-content.execution-view .inspector > .eyebrow,
+#studio-content.execution-view .inspector > h2 {display:none}

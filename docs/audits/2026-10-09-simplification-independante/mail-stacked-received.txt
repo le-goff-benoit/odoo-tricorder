@@ -1,0 +1,9 @@
+
+Running 1 test using 1 worker
+
+(node:780332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+  ✓  1 tests/studio.spec.cjs:1104:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (7.4s)
+
+  1 passed (8.0s)

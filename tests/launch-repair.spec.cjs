@@ -204,7 +204,7 @@ test('repair global code workflow adapts into a project without changing its ori
   const graph = { schema: 1, id: 'global-code', title: 'Préparer une modification de code', defaults: { provider: 'codex', model: 'synthetic-model' }, nodes: [
     { id: 'edit', title: 'Modifier le code', kind: 'agent', execution_mode: 'edit', outputs: { candidate: 'object' } }], edges: [] };
   const original = await call('workflow.save', { project: 'workspace', graph });
-  await page.getByRole('button', { name: 'Workflows globaux', exact: true }).click();
+  await page.getByRole('button', { name: 'Workflows', exact: true }).click();
   await page.locator('article').filter({ has: page.getByRole('heading', { name: graph.title, exact: true }) }).getByRole('button', { name: 'Ouvrir le workflow', exact: true }).click();
   const text = 'Préparer la correction dans Alpha, sans lancer le travail.';
   await launchDialog(text);

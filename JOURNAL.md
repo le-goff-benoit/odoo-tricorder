@@ -1,5 +1,18 @@
 # Journal
 
+## 2026-10-09 — Parcours simplifiés (0.6.0-rc.11)
+
+- Analyse indépendante des sources et des parcours, puis réception par un second agent.
+- Navigation Activité / Workflows / Projets ; catalogue commun avec recherche et modèles.
+- Nouvelle demande réutilisant la définition ; adaptation explicite et coordination de projets.
+- Conversation prête visible avant sa première tâche, reprise sans session supplémentaire.
+- Suivi vertical, détail lisible et branches conditionnelles ; terminal et brouillons conservés.
+- Premier dépôt accessible ; fournisseur global annoncé pour les prochains lancements.
+- Questions prioritaires avant pagination ; workflows au-delà de la première page accessibles.
+- Navigation et lancement sérialisés pour conserver le contexte lors de clics rapprochés.
+- Parcours support, réunion, création I/O, release historique et travail transversal reçus.
+- Preuves et détails : `release/2026-10-09_simplification-parcours/README.md`.
+
 ## 2026-10-09 — Suivi d’exécution (0.6.0-rc.10)
 
 - Cas utilisateur reproduit : six demandes, neuf blocs, validations multiples et copie de dépôt bloquée.

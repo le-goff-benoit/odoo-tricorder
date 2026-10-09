@@ -1,0 +1,17 @@
+test_accepted_negative_qa_uses_corrective_branch_not_an_execution_error (test_execution_projections.ExecutionProjectionTests) ... ok
+test_activity_counts_pending_work_beyond_its_first_page (test_execution_projections.ExecutionProjectionTests) ... ok
+test_activity_keeps_old_questions_before_completed_history (test_execution_projections.ExecutionProjectionTests) ... ok
+test_dependencies_are_bounded_and_expose_unsatisfied_items_first (test_execution_projections.ExecutionProjectionTests) ... ok
+test_dependencies_cannot_come_from_another_conversation (test_execution_projections.ExecutionProjectionTests) ... ok
+test_dependency_outside_filtered_page_is_named_and_rejected_is_not_satisfied (test_execution_projections.ExecutionProjectionTests) ... ok
+test_executor_failure_cannot_be_relabelled_as_a_valid_negative_outcome (test_execution_projections.ExecutionProjectionTests) ... ok
+test_invalid_success_preserves_the_validation_cause (test_execution_projections.ExecutionProjectionTests) ... ok
+test_issues_are_bounded_and_do_not_publish_payloads_or_accepted_history (test_execution_projections.ExecutionProjectionTests) ... ok
+test_question_failure_and_parallel_work_keep_distinct_meanings (test_execution_projections.ExecutionProjectionTests) ... ok
+test_satisfied_dependency_does_not_hide_a_manual_hold (test_execution_projections.ExecutionProjectionTests) ... ok
+test_valid_negative_qa_can_be_manually_received_then_routed (test_execution_projections.ExecutionProjectionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.035s
+
+OK

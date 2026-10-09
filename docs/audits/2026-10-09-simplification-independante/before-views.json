@@ -1,0 +1,237 @@
+[
+  {
+    "name": "first-use",
+    "buttons": [
+      "+ Créer un workflow",
+      "Essayer un exemple",
+      "Créer un projet",
+      "Importer un workflow",
+      "Voir les archives"
+    ],
+    "regions": []
+  },
+  {
+    "name": "editor",
+    "buttons": [
+      "Choisir l’IA",
+      "Exporter…",
+      "Enregistrer",
+      "Exécuter…",
+      "Éditeur",
+      "Exécution",
+      "Historique",
+      "Rapport",
+      "+ Ajouter un bloc",
+      "Relier",
+      "Paramètres du workflow",
+      "↶",
+      "↷",
+      "›_ Terminal",
+      "Options",
+      "",
+      "",
+      "",
+      "✦ Assistant IA",
+      "☷ Liste",
+      "◇\nComprendre la demande\nAnalyse\nTâche\n0 entrée → 0 sortie",
+      "◇\nPréparer la réalisation\nRéalisation\nTâche\n0 entrée → 0 sortie",
+      "◇\nPréparer les tests\nQualité\nTâche\n0 entrée → 0 sortie",
+      "⋈\nRéunir les résultats\nValidation\nJonction\n0 entrée → 0 sortie",
+      "?\nValider la suite\nValidation\nDécision humaine\nVous",
+      "▤\nPréparer le bilan\nDocumentation\nDocument\n0 entrée → 0 sortie",
+      "−",
+      "+",
+      "Ajuster"
+    ],
+    "regions": []
+  },
+  {
+    "name": "launch",
+    "buttons": [
+      "Choisir l’IA",
+      "Exporter…",
+      "Enregistrer",
+      "Exécuter…",
+      "Éditeur",
+      "Exécution",
+      "Historique",
+      "Rapport",
+      "+ Ajouter un bloc",
+      "Relier",
+      "Paramètres du workflow",
+      "↶",
+      "↷",
+      "›_ Terminal",
+      "Options",
+      "",
+      "",
+      "",
+      "✦ Assistant IA",
+      "☷ Liste",
+      "◇\nComprendre la demande\nAnalyse\nTâche\n0 entrée → 0 sortie",
+      "◇\nPréparer la réalisation\nRéalisation\nTâche\n0 entrée → 0 sortie",
+      "◇\nPréparer les tests\nQualité\nTâche\n0 entrée → 0 sortie",
+      "⋈\nRéunir les résultats\nValidation\nJonction\n0 entrée → 0 sortie",
+      "?\nValider la suite\nValidation\nDécision humaine\nVous",
+      "▤\nPréparer le bilan\nDocumentation\nDocument\n0 entrée → 0 sortie",
+      "−",
+      "+",
+      "Ajuster"
+    ],
+    "regions": []
+  },
+  {
+    "name": "execution",
+    "buttons": [
+      "Actions",
+      "",
+      "",
+      "",
+      "Éditeur",
+      "Exécution",
+      "Historique",
+      "Rapport",
+      "Voir l’activité",
+      "Graphe",
+      "Détail",
+      "Outils",
+      "",
+      "",
+      "",
+      "",
+      "◇\nComprendre la demande\nAnalyse\nEn cours\n0 entrée → 0 sortie",
+      "◇\nPréparer la réalisation\nRéalisation\nPrévu\n0 entrée → 0 sortie",
+      "◇\nPréparer les tests\nQualité\nPrévu\n0 entrée → 0 sortie",
+      "⋈\nRéunir les résultats\nValidation\nPrévu\n0 entrée → 0 sortie",
+      "?\nValider la suite\nValidation\nPrévu\nVous",
+      "▤\nPréparer le bilan\nDocumentation\nPrévu\n0 entrée → 0 sortie",
+      "−",
+      "+",
+      "Ajuster"
+    ],
+    "regions": []
+  },
+  {
+    "name": "overview",
+    "buttons": [
+      "Nouvelle demande",
+      "+ Créer un workflow",
+      "Actualiser",
+      "Consulter",
+      "Ouvrir les workflows globaux",
+      "Ouvrir les projets",
+      "Choisir un modèle"
+    ],
+    "regions": []
+  },
+  {
+    "name": "library",
+    "buttons": [
+      "Importer un workflow",
+      "+ Créer un modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle",
+      "Utiliser",
+      "Modifier le modèle"
+    ],
+    "regions": [
+      {
+        "class": "page library-page",
+        "height": 826,
+        "scroll": 1623
+      }
+    ]
+  },
+  {
+    "name": "global",
+    "buttons": [
+      "+ Créer un workflow",
+      "Choisir un modèle",
+      "+ Workflow vide",
+      "Workflows du dépôt",
+      "Ajouter un pack",
+      "Voir les archives",
+      "Filtrer"
+    ],
+    "regions": []
+  },
+  {
+    "name": "projects",
+    "buttons": [
+      "Voir les archives",
+      "+ Nouveau projet",
+      "Importer un workflow",
+      "Mon premier projet\n/tmp/tricorder-simplicity-before-Ym81iV/projects/p345cf98be3914c8e\n→",
+      "Essayer un exemple"
+    ],
+    "regions": []
+  },
+  {
+    "name": "schedules",
+    "buttons": [
+      "Voir les archives",
+      "Actualiser"
+    ],
+    "regions": []
+  },
+  {
+    "name": "connections",
+    "buttons": [
+      "Configurer dans le terminal",
+      "Plugins OpenAI",
+      "Plugins Anthropic",
+      "Actualiser",
+      "Afficher les connexions"
+    ],
+    "regions": [
+      {
+        "class": "page",
+        "height": 826,
+        "scroll": 1134
+      }
+    ]
+  },
+  {
+    "name": "project",
+    "buttons": [
+      "Voir les archives",
+      "+ Nouveau projet",
+      "Importer un workflow",
+      "Mon premier projet\n/tmp/tricorder-simplicity-before-Ym81iV/projects/p345cf98be3914c8e\n→",
+      "Essayer un exemple"
+    ],
+    "regions": []
+  }
+]

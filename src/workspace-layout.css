@@ -71,11 +71,11 @@
 .main-content.workflow-visible.terminal-docked #workflow-panel { grid-column: 3; grid-row: 1; }
 .main-content.workflow-visible.terminal-docked .terminal-divider { display: block; grid-column: 2; grid-row: 1; background: var(--line); cursor: col-resize; touch-action: none; }
 .terminal-divider:hover,.terminal-divider:focus-visible { background: var(--accent) !important; outline: none; }
-.main-content.workflow-visible.terminal-docked[data-terminal-layout=stacked] { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(160px,var(--terminal-split,52%)) 6px minmax(220px,1fr); }
+.main-content.workflow-visible.terminal-docked[data-terminal-layout=stacked] { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(140px,var(--terminal-split,32%)) 6px minmax(0,1fr); }
 .main-content.workflow-visible.terminal-docked[data-terminal-layout=stacked] #workflow-panel { grid-column: 1; grid-row: 3; }
 .main-content.workflow-visible.terminal-docked[data-terminal-layout=stacked] .terminal-divider { grid-column: 1; grid-row: 2; cursor: row-resize; }
 @media(max-width:850px) {
-  .main-content.workflow-visible.terminal-docked { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(160px,var(--terminal-split,52%)) 6px minmax(220px,1fr); }
+  .main-content.workflow-visible.terminal-docked { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(140px,var(--terminal-split,32%)) 6px minmax(0,1fr); }
   .main-content.workflow-visible.terminal-docked #workflow-panel { grid-column: 1; grid-row: 3; }
   .main-content.workflow-visible.terminal-docked .terminal-divider { grid-column: 1; grid-row: 2; cursor: row-resize; }
   [data-action=terminal-layout] { display: none; }
@@ -89,3 +89,13 @@
 .workflow-visible #terminal-context:not(.production) {padding:3px 14px 5px;font-size:11px;line-height:1.4;color:var(--text-3)}
 .workflow-visible #execution-context[hidden] {display:none}
 .terminal-scope {display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar .project-search {display:block;padding:0 8px;margin:0 0 8px}
+.sidebar .project-search input {width:100%;min-height:30px;font-size:12px;padding:5px 8px;font-weight:400;background:var(--surface-1)}
+
+/* High zoom keeps the global controls on one row when they still fit. */
+@media (min-width:700px) and (max-width:850px) {
+  .topbar.project-header {flex-wrap:nowrap;align-items:center;gap:8px}
+  .topbar .top-actions {width:auto;flex-wrap:nowrap}
+  .topbar .project-identity {min-width:60px}
+  .topbar #project-title {font-size:13px}
+}

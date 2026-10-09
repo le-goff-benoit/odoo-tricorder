@@ -1,0 +1,35 @@
+{
+  "version": "0.6.0-rc.11",
+  "source_reference": "89103de7f6519437a261a3a0e3b35a68728f582c",
+  "source_renderer_sha256": "17ab8e944e2ea0c753ce9329a6c6dea6b17eca33040a64306f45bbba91e03eed",
+  "source_ui": {
+    "first_campaign": {
+      "passed": 89,
+      "failed": 4,
+      "skipped_optional_real_project": 2
+    },
+    "targeted_reception_after_navigation_test_adaptation": {
+      "passed": 4,
+      "failed": 0
+    },
+    "unique_received": 93
+  },
+  "unit": {
+    "python": 279,
+    "javascript": 91
+  },
+  "packaged_visual": {
+    "release_journey_checks": 15,
+    "release_journey_views": 18,
+    "compact_and_branches_checks": 2,
+    "failures": [],
+    "terminal_preserved": true
+  },
+  "package": {
+    "filename": "odoo-tricorder_0.6.0-rc.11_amd64.deb",
+    "sha256": "89de0c2bbe0d98f6663e7af389087baf62f7f0e2bb0b54c3f9d04ec888d0d7e5"
+  },
+  "final_complete_packaged_suite_and_ci": "Required before release; exact-commit receipt attached to GitHub release.",
+  "proof_logs": "Trailing line whitespace normalized; raw logs retained in /tmp during delivery.",
+  "scope": "Synthetic projects and deterministic agents. No customer workflows changed or external provider qualification."
+}

@@ -1,0 +1,160 @@
+{
+  "at": "2026-10-09T15:07:32.415Z",
+  "checks": {},
+  "failures": [
+    {
+      "name": "old-waiting-visible-from-activity",
+      "error": "expect(locator).toBeVisible() failed\n\nLocator: locator('.activity-row').filter({ hasText: 'ATTENTE ANCIENNE À NE PAS OUBLIER' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" locator('.activity-row').filter({ hasText: 'ATTENTE ANCIENNE À NE PAS OUBLIER' }) with timeout 5000ms\n  - waiting for locator('.activity-row').filter({ hasText: 'ATTENTE ANCIENNE À NE PAS OUBLIER' })\n"
+    }
+  ],
+  "screens": {
+    "activity-old-waiting-page-one": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Activité\nPlanifications\nConnexions\nParamètres\nOutils et aide\nActivité\nTerminal\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "ActivitéVotre travail en cours et ce qui attend votre intervention.Nouvelle demandeActualiserDemandes récentes28 demandes enregistréesTravail terminé récent 26Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 25Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 24Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 23Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 22Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 21Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 20Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 19Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 18Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 17Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 16Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 15Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 14Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 13Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 12Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 11Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 10Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 9Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 8Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 7Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 6Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 5Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 4Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 3Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 2Review Activité · Travail récent terminé · SimulationTerminée→Suivantes",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "failure-old-waiting-visible-from-activity": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Activité\nPlanifications\nConnexions\nParamètres\nOutils et aide\nActivité\nTerminal\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "ActivitéVotre travail en cours et ce qui attend votre intervention.Nouvelle demandeActualiserDemandes récentes28 demandes enregistréesTravail terminé récent 26Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 25Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 24Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 23Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 22Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 21Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 20Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 19Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 18Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 17Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 16Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 15Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 14Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 13Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 12Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 11Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 10Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 9Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 8Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 7Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 6Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 5Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 4Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 3Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 2Review Activité · Travail récent terminé · SimulationTerminée→Suivantes",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "activity-old-waiting-page-two": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Activité\nPlanifications\nConnexions\nParamètres\nOutils et aide\nActivité\nTerminal\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "ActivitéVotre travail en cours et ce qui attend votre intervention.Nouvelle demandeActualiserÀ traiterATTENTE ANCIENNE À NE PAS OUBLIERReview Activité · Réponse ancienne encore nécessaire · SimulationRéponse attendueQuestion ancienne→Autres demandes28 demandes enregistréesTravail terminé récent 1Review Activité · Travail récent terminé · SimulationTerminée→Travail terminé récent 0Review Activité · Travail récent terminé · SimulationTerminée→Précédentes",
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  },
+  "build": {
+    "dist/app.js": "c300a0d87540157023b759c83abe38111dc1a0b008e400d03632ab348612cae3",
+    "dist/studio.css": "0415c9d45fa1a72246ed1606aeb833b853fed8bc69428f7cc3bf76c1f55361c7"
+  },
+  "fixture": {
+    "waiting": {
+      "id": "re8924cb7026647fd",
+      "project": "p326479fc26aa49bb",
+      "driver": "automatic",
+      "status": "active",
+      "created": 1791558452.4749446,
+      "scope": {
+        "kind": "project",
+        "id": "p326479fc26aa49bb"
+      },
+      "release": "",
+      "plugins": {
+        "path": "/tmp/tricorder-independent-reception-R89rfC/projects/p326479fc26aa49bb/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "packs": [],
+      "simulation": true,
+      "definition": {
+        "schema": 1,
+        "id": "older-waiting",
+        "title": "Réponse ancienne encore nécessaire",
+        "nodes": [
+          {
+            "id": "question",
+            "title": "Question ancienne",
+            "kind": "question",
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "question": "Cette réponse reste indispensable ?"
+          }
+        ],
+        "edges": [],
+        "parameters": {
+          "request": "ATTENTE ANCIENNE À NE PAS OUBLIER"
+        }
+      },
+      "original": {
+        "schema": 1,
+        "id": "older-waiting",
+        "title": "Réponse ancienne encore nécessaire",
+        "nodes": [
+          {
+            "id": "question",
+            "title": "Question ancienne",
+            "kind": "question",
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "question": "Cette réponse reste indispensable ?"
+          }
+        ],
+        "edges": []
+      },
+      "contract": "58e1ba04c0ad2163cb36d13f8d72397f8e66b7e7f13092b13e8a6304a3b5589e",
+      "parameters": {
+        "request": "ATTENTE ANCIENNE À NE PAS OUBLIER"
+      },
+      "nodes": {
+        "question": {
+          "status": "waiting_input",
+          "attempt": 0,
+          "inputs": {},
+          "input_sources": {},
+          "question": {
+            "id": "q642b1003cf724bad",
+            "text": "Cette réponse reste indispensable ?",
+            "created": 1791558452.4755545,
+            "status": "waiting"
+          },
+          "questions": [
+            {
+              "id": "q642b1003cf724bad",
+              "text": "Cette réponse reste indispensable ?",
+              "created": 1791558452.4755545,
+              "status": "waiting"
+            }
+          ]
+        }
+      },
+      "transports": {},
+      "notifications_authorized": false,
+      "updated": 1791558452.4757226
+    },
+    "completed": [
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed",
+      "completed"
+    ]
+  },
+  "firstPage": "Activité\n\nVotre travail en cours et ce qui attend votre intervention.\n\nNouvelle demande\nActualiser\nDemandes récentes\n28 demandes enregistrées\nTravail terminé récent 26\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 25\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 24\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 23\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 22\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 21\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 20\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 19\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 18\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 17\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 16\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 15\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 14\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 13\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 12\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 11\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 10\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 9\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 8\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 7\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 6\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 5\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 4\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 3\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 2\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nSuivantes",
+  "secondPage": "Activité\n\nVotre travail en cours et ce qui attend votre intervention.\n\nNouvelle demande\nActualiser\nÀ traiter\nATTENTE ANCIENNE À NE PAS OUBLIER\nReview Activité · Réponse ancienne encore nécessaire · Simulation\nRéponse attendue\nQuestion ancienne\n→\nAutres demandes\n28 demandes enregistrées\nTravail terminé récent 1\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nTravail terminé récent 0\nReview Activité · Travail récent terminé · Simulation\nTerminée\n→\nPrécédentes"
+}

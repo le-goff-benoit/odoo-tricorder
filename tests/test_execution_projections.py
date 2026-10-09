@@ -56,6 +56,36 @@ class ExecutionProjectionTests(unittest.TestCase):
         self.assertEqual(run, original)
         self.assertEqual(self.engine.run(run['id']), original)
 
+    def test_activity_keeps_old_questions_before_completed_history(self):
+        pending = self.engine.start(self.project['id'], graph([
+            {'id': 'question', 'kind': 'question', 'title': 'Old pending question',
+             'question': 'Still waiting?', 'outputs': {'answer': 'string'}}]))
+        for _ in range(27):
+            done = self.engine.start(self.project['id'], graph([task('done')]))
+            self.submit(done['id'], 'done')
+        first = self.engine.activity()
+        second = self.engine.activity(first['next'])
+        self.assertEqual(first['runs'][0]['id'], pending['id'])
+        self.assertEqual(first['attention_total'], 1)
+        self.assertEqual(first['total'], 28)
+        self.assertEqual(len(first['runs']), 25)
+        ids = [r['id'] for page in (first, second) for r in page['runs']]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(len(ids), 28)
+        self.assertEqual(self.engine.run(pending['id'])['nodes']['question']['status'], 'waiting_input')
+
+    def test_activity_counts_pending_work_beyond_its_first_page(self):
+        for _ in range(28):
+            self.engine.start(self.project['id'], graph([
+                {'id': 'question', 'kind': 'question', 'title': 'Pending question',
+                 'question': 'Still waiting?', 'outputs': {'answer': 'string'}}]))
+        first = self.engine.activity()
+        second = self.engine.activity(first['next'])
+        self.assertEqual(first['attention_total'], 28)
+        self.assertEqual(second['attention_total'], 28)
+        self.assertEqual(len(first['runs']), 25)
+        self.assertEqual(len(second['runs']), 3)
+
     def routed_graph(self, validation):
         return graph([
             task('qa', kind='agent', validation=validation, outputs={'verdict': 'string'}, route_output='verdict', options=['pass', 'fail']),

@@ -1,0 +1,90 @@
+{
+  "at": "2026-10-09T15:12:59.939Z",
+  "checks": {
+    "compact125-readable-question-and-answer": "passed",
+    "legacy-release-preserves-live-context": "passed"
+  },
+  "failures": [
+    {
+      "name": "branch-details-show-alternatives",
+      "error": "expect(locator).toContainText(expected) failed\n\nLocator: locator('.step-trail-group').last()\nExpected substring: \"Autorisé\"\nReceived string:    \"Si autoriséEnvoyer la proposition retenueSi refuséDemander des précisions\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" locator('.step-trail-group').last() with timeout 5000ms\n  - waiting for locator('.step-trail-group').last()\n    14 × locator resolved to <div class=\"step-trail-group\" aria-label=\"Suites du bloc\">…</div>\n       - unexpected value \"Si autoriséEnvoyer la proposition retenueSi refuséDemander des précisions\"\n"
+    }
+  ],
+  "screens": {
+    "final-question-1024-zoom125": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nProjet de revue finale\nPlanifications\nConnexions\nParamètres\nOutils et aide\nProjet de revue finale\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nTerminal\nContexte\nAgrandir le terminal\nShell occupé 1\nConversation du workflow affiché · Projet de revue finale\nDEMANDE REÇUE : Demande conservée pendant la lecture de la release historique\n.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteDemande conservée pendant la lecture de la release historique.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherDemande conservée pendant la lecture de la release historique.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat voulu→Si : donePréparer une conclusion×QuestionPréciser le résultat vouluQuel résultat voulez-vous obtenir pour cette demande de support ?Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.Votre réponseRépondre",
+      "viewport": [
+        819,
+        614
+      ]
+    },
+    "legacy-release-with-conversation-alive": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nProjet de revue finale\nPlanifications\nConnexions\nParamètres\nOutils et aide\nlegacy-review\n19.0\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nRelease\nClose\n1 octobre 2026\nRelease historique de revue\nAucune release\n2026-10-01 · Release historique de revue · Close\nStatut\nTerminal\nDemandes\nPlan\nMémoire\nExpress\nTemps\nWorkflows du projet\nVue d’ensemble\n\nLe travail de votre projet, en un regard.\n\nNouvelle demande\nVotre workflow de release\n\nDémarrez le workflow au-dessus du terminal, puis échangez avec l’agent. Cliquez sur une étape pour consulter les éléments enregistrés.\n\n1 · Ouverture\nRelease et contexte\n2 · Demandes\nBesoins et objectifs\n3 · Plan\nPlan et critères\n4 · Exécution\nTâches et progression\n5 · Recette\nDécisions et preuves\n\nDiscutez de vos intentions et du plan dans le terminal. Les tâches apparaîtront ici lorsque le plan sera enregistré.\n\nProchaines tâches\nVoir le plan\n\nAucune tâche en cours. Consultez le plan pour les travaux à déployer ou déjà livrés.\n\nOutils du projet\nInformations de lecture\nWorkflow\nRelease Odoo\nDemande Odoo\nDiagnostic Odoo\nDémarrer le workflow\nTerminal\nAgrandir le terminal\nmaster\nEnvironnement\nShell local\nPour les nouveaux terminaux\nAucun terminal ouvert\n\nUn shell dans le dossier du projet. Lancez Claude ou Codex avec suivi, ou vos commandes habituelles.\n\nOuvrir un terminal\nAnthropic · Claude\nOpenAI · Codex",
+      "studio": "legacy-review/tmp/tricorder-independent-reception-cwjCwQ/legacy-reviewNouvelle demandeCréer un workflowOptionsWorkflows du dépôtImporter un workflowAjouter un packArchiver le projetReleases et suivi Odoo\n    \n    Reprendre le travailAucune demande en cours. « Nouvelle demande » ouvre votre workflow et son terminal.Rechercher dans les exécutionsRechercherÉtatTousEn coursSuspenduesTerminéesAnnuléesExécutionRéel et simulationRéelSimulationAvec archivesFiltrer0 exécution(s)\n    Workflows disponiblesVoir les archivesAucun workflow enregistré ici.Choisir un modèleCréer un workflow vide\n    ",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "legacy-return-to-same-conversation": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nProjet de revue finale\nPlanifications\nConnexions\nParamètres\nOutils et aide\nProjet de revue finale\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Projet de revue finale\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-cwjCwQ/cockpit/agent-events/5fa4bc8d-7819\n-4e26-8fa6-12a72f63d85e.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/pa5afc3a13e444d76$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-cwjCwQ/cockpit/agent-events/5fa4bc8d-7819-4e26-8fa6-12a72f63d85e.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nDemande conservée pendant la lecture de la release historique.\nDEMANDE REÇUE : Demande conservée pendant la lecture de la release histo\nrique.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteDemande conservée pendant la lecture de la release historique.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherDemande conservée pendant la lecture de la release historique.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat voulu→Si : donePréparer une conclusion×QuestionPréciser le résultat vouluQuel résultat voulez-vous obtenir pour cette demande de support ?Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.Votre réponseRépondre",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "failure-branch-details-show-alternatives": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nProjet de revue finale\nPlanifications\nConnexions\nParamètres\nOutils et aide\nProjet de revue finale\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nAutre conversation · Projet de revue finale\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-cwjCwQ/cockpit/agent-events/5fa4bc8d-7819\n-4e26-8fa6-12a72f63d85e.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/pa5afc3a13e444d76$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-cwjCwQ/cockpit/agent-events/5fa4bc8d-7819-4e26-8fa6-12a72f63d85e.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nDemande conservée pendant la lecture de la release historique.\nDEMANDE REÇUE : Demande conservée pendant la lecture de la release histo\nrique.\n ",
+      "studio": "Suivi · Embranchement à deux sorties alternativesEmbranchement à deux sorties alternativesVersion figée · Décision attendue · 09.10.2026 17:13:06OptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suiviDécision attendue0 / 3 étapesChoisir la suite\n    \n    Simulation. Aucun modèle ni service métier appelé. Décision attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    approvereject?Choisir la suiteDécision humaineDécision attendueVous◇Envoyer la proposition retenueTâchePrévu0 entrée → 0 sortie◇Demander des précisionsTâchePrévu0 entrée → 0 sortie3 blocs · 2 liens−100 %+AjusterÉtape sélectionnéeChoisir la suite→Si autoriséEnvoyer la proposition retenueSi refuséDemander des précisions×Décision humaineChoisir la suiteDécision attendueDécision pour cette demande : Embranchement à deux sorties alternatives.Votre décision est attendueValider la réponse proposée ou demander des précisions ?Commentaire (facultatif)Approuver la suiteRefuser la suiteLa réponse s'applique à cette proposition et à cette tentative uniquement.",
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  },
+  "build": {
+    "dist/app.js": "bd2f742a1f0efcebd2b0177fdc881c0f0f12bf62076bbb0f43517a0e973aa1e2",
+    "dist/studio.css": "a9709c79074e868128fa88d702010899c3939cea9892d92423582ef48725b89c"
+  },
+  "terminalBefore": [
+    {
+      "id": "11e09ec664c84a9ca87549493f9adc4f",
+      "pid": 780050,
+      "project": "/tmp/tricorder-independent-reception-cwjCwQ/projects/pa5afc3a13e444d76",
+      "release": null
+    }
+  ],
+  "compactBoxes": {
+    "height": 202.4562530517578,
+    "width": 643.2000122070312,
+    "scrollHeight": 202,
+    "clientHeight": 202
+  },
+  "branch": {
+    "edges": [
+      {
+        "id": "decision-reply",
+        "from": "decision",
+        "to": "reply",
+        "outcome": "approve"
+      },
+      {
+        "id": "decision-clarify",
+        "from": "decision",
+        "to": "clarify",
+        "outcome": "reject"
+      }
+    ],
+    "trail": "Étape sélectionnée\nChoisir la suite\n→\nSi autorisé\nEnvoyer la proposition retenue\nSi refusé\nDemander des précisions"
+  },
+  "finalTerminal": [
+    {
+      "id": "11e09ec664c84a9ca87549493f9adc4f",
+      "pid": 780050,
+      "project": "/tmp/tricorder-independent-reception-cwjCwQ/projects/pa5afc3a13e444d76",
+      "release": null
+    }
+  ]
+}

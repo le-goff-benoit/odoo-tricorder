@@ -1,0 +1,28 @@
+
+Running 19 tests using 1 worker
+
+(node:774385) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/execution-interactions.spec.cjs:87:1 › negative result remains receivable and routes to the corrective branch (6.5s)
+  ✓   2 tests/execution-interactions.spec.cjs:100:1 › uncertain local notification retains receipt lookup without sending twice (6.5s)
+  ✓   3 tests/execution-interactions.spec.cjs:108:1 › live failure updates the graph badge and accessible name without reopening the run (6.0s)
+  ✓   4 tests/execution-interactions.spec.cjs:118:1 › request menu keeps keyboard focus and a question draft while activity changes (6.4s)
+  ✓   5 tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive (6.0s)
+  ✓   6 tests/execution-interactions.spec.cjs:151:1 › search draft survives polling and deferred request counts refresh after leaving the input (6.1s)
+  ✓   7 tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (7.1s)
+  ✓   8 tests/simplicity.spec.cjs:18:1 › support: intent stays in terminal, empty conversation has a next action, question leads to result (5.6s)
+  ✓   9 tests/simplicity.spec.cjs:21:1 › reuse: two launches reuse one workflow and reopening keeps the same terminal (7.4s)
+  ✓  10 tests/simplicity.spec.cjs:25:1 › scope: adaptation is explicit and reusable on another project (4.4s)
+  ✓  11 tests/simplicity.spec.cjs:30:1 › cross project: one terminal coordinates two projects without copying the workflow (6.0s)
+  ✓  12 tests/simplicity.spec.cjs:34:1 › meeting: work without a project produces a draft and requires the intended decision (7.8s)
+  ✓  13 tests/simplicity.spec.cjs:38:1 › home terminal: shell and workflow entry remain usable before selecting a project (2.6s)
+  ✓  14 tests/simplicity.spec.cjs:42:1 › terminal answer: input in the same PTY answers the pending workflow question (5.9s)
+  ✓  15 tests/simplicity.spec.cjs:46:1 › reading context: graph, other request and compact layout preserve the answer draft (4.0s)
+  ✓  16 tests/simplicity.spec.cjs:50:1 › design: create a blank generic workflow, connect typed I/O, save and launch in the same app (3.9s)
+  ✓  17 tests/simplicity.spec.cjs:54:1 › empty conversation: Activity resumes the open terminal before any task exists (4.7s)
+
+  ✓  18 tests/simplicity.spec.cjs:58:1 › legacy: historical Odoo release remains accessible in the same app without changing it (2.5s)
+
+  ✓  19 tests/simplicity.spec.cjs:63:1 › first project: an empty installation can add an existing Git repository (2.4s)
+
+  19 passed (1.7m)

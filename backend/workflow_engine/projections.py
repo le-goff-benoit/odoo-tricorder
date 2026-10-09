@@ -68,7 +68,7 @@ def summary(run):
             "nodes": {nid: {"status": state["status"]} for nid, state in sorted(run["nodes"].items(), key=lambda pair: pair[1]["status"] not in {"waiting_input", "waiting", "returned", "blocked"})[:100]}}
 
 
-def run_page(engine, project=None, *, offset=0, limit=PAGE, query="", status="", simulation=None, archived=False, workflow=None):
+def run_page(engine, project=None, *, offset=0, limit=PAGE, query="", status="", simulation=None, archived=False, workflow=None, attention_first=False):
     offset, limit = paging(offset, limit)
     where, args = [], []
     for key, value in (("project", project), ("status", status or None), ("original.id", workflow)):
@@ -84,11 +84,15 @@ def run_page(engine, project=None, *, offset=0, limit=PAGE, query="", status="",
         where.append("(instr(lower(coalesce(json_extract(body, '$.parameters.request'),'')), lower(?))>0 OR instr(lower(json_extract(body, '$.definition.title')), lower(?))>0)")
         args.extend([query, query])
     clause = " WHERE " + " AND ".join(where) if where else ""
+    # Pending human work precedes history. Filtering after pagination hides old questions.
+    attention = "(json_extract(runs.body, '$.status')='paused' OR (json_extract(runs.body, '$.status')='active' AND EXISTS (SELECT 1 FROM json_each(runs.body, '$.nodes') n WHERE json_extract(n.value, '$.status') IN ('waiting_input','waiting','returned','blocked'))))"
+    order = attention + " DESC, " if attention_first else ""
     with engine.store.connect() as db:
+        attention_total = db.execute("SELECT COUNT(*) FROM runs" + clause + (" AND " if where else " WHERE ") + attention, args).fetchone()[0] if attention_first else None
         total = db.execute("SELECT COUNT(*) FROM runs" + clause, args).fetchone()[0]
-        rows = db.execute("SELECT body FROM runs" + clause + " ORDER BY rowid DESC LIMIT ? OFFSET ?", [*args, limit, offset])
+        rows = db.execute("SELECT body FROM runs" + clause + " ORDER BY " + order + "rowid DESC LIMIT ? OFFSET ?", [*args, limit, offset])
         items = [summary(engine.store.body(row)) for row in rows]
-    return {"items": items, "total": total, "offset": offset, "limit": limit, "next": offset + len(items) if offset + len(items) < total else None}
+    return {**({"attention_total": attention_total} if attention_first else {}), "items": items, "total": total, "offset": offset, "limit": limit, "next": offset + len(items) if offset + len(items) < total else None}
 
 
 def bounded(engine, value, *, threshold=16000, references=None):

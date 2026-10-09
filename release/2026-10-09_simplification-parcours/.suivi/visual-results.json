@@ -1,0 +1,77 @@
+{
+  "at": "2026-10-09T15:32:28.684Z",
+  "checks": {
+    "compact125-readable-question-and-answer": "passed",
+    "branch-details-show-alternatives": "passed"
+  },
+  "failures": [],
+  "screens": {
+    "final-question-1024-zoom125": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nProjet de revue finale\nPlanifications\nConnexions\nParamètres\nOutils et aide\nProjet de revue finale\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nTerminal\nContexte\nAgrandir le terminal\nShell occupé 1\nConversation du workflow affiché · Projet de revue finale\nDEMANDE REÇUE : Demande conservée pendant la lecture de la release historique\n.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteDemande conservée pendant la lecture de la release historique.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherDemande conservée pendant la lecture de la release historique.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat voulu→Préparer une conclusion×QuestionPréciser le résultat vouluQuel résultat voulez-vous obtenir pour cette demande de support ?Répondez dans le terminal ou ici.Votre réponseRépondre",
+      "viewport": [
+        819,
+        614
+      ]
+    },
+    "branch-detail-alternatives": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nProjet de revue finale\nPlanifications\nConnexions\nParamètres\nOutils et aide\nProjet de revue finale\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nShell occupé 1\nAutre conversation · Projet de revue finale\n'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r\nesources/backend/agent_launch.py' '/tmp/tricorder-independent-reception-\ngNCHT8/cockpit/agent-events/19f645b7-6333-416a-9266-9d1c14969b49.launch.\njson'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p251667b16f3740f4$ 'python3' '/home/blegoff/od\noo-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_laun\nch.py' '/tmp/tricorder-independent-reception-gNCHT8/cockpit/agent-events\n/19f645b7-6333-416a-9266-9d1c14969b49.launch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nDemande conservée pendant la lecture de la release historique.\nDEMANDE REÇUE : Demande conservée pendant la lecture de la release histo\nrique.\n ",
+      "studio": "Suivi · Embranchement à deux sorties alternativesEmbranchement à deux sorties alternativesVersion figée · Décision attendue · 09.10.2026 17:32:33OptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suiviDécision attendue0 / 3 étapesChoisir la suite\n    \n    Simulation. Aucun modèle ni service métier appelé. Décision attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    approvereject?Choisir la suiteDécision humaineDécision attendueVous◇Envoyer la proposition retenueTâchePrévu0 entrée → 0 sortie◇Demander des précisionsTâchePrévu0 entrée → 0 sortie3 blocs · 2 liens−100 %+AjusterÉtape sélectionnéeChoisir la suite→Si autoriséEnvoyer la proposition retenueSi refuséDemander des précisions×Décision humaineChoisir la suiteDécision attendueDécision pour cette demande : Embranchement à deux sorties alternatives.Votre décision est attendueValider la réponse proposée ou demander des précisions ?Commentaire (facultatif)Approuver la suiteRefuser la suiteLa réponse s'applique à cette proposition et à cette tentative uniquement.",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "branch-graph-alternatives": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nlegacy-review\nProjet de revue finale\nPlanifications\nConnexions\nParamètres\nOutils et aide\nProjet de revue finale\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nShell occupé 1\nAutre conversation · Projet de revue finale\n'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r\nesources/backend/agent_launch.py' '/tmp/tricorder-independent-reception-\ngNCHT8/cockpit/agent-events/19f645b7-6333-416a-9266-9d1c14969b49.launch.\njson'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p251667b16f3740f4$ 'python3' '/home/blegoff/od\noo-tricorder/build-artifacts/linux-unpacked/resources/backend/agent_laun\nch.py' '/tmp/tricorder-independent-reception-gNCHT8/cockpit/agent-events\n/19f645b7-6333-416a-9266-9d1c14969b49.launch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nDemande conservée pendant la lecture de la release historique.\nDEMANDE REÇUE : Demande conservée pendant la lecture de la release histo\nrique.\n ",
+      "studio": "Suivi · Embranchement à deux sorties alternativesEmbranchement à deux sorties alternativesVersion figée · Décision attendue · 09.10.2026 17:32:33OptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suiviDécision attendue0 / 3 étapesExaminer la décisionChoisir la suite\n    \n    Simulation. Aucun modèle ni service métier appelé. Décision attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    approvereject?Choisir la suiteDécision humaineDécision attendueVous◇Envoyer la proposition retenueTâchePrévu0 entrée → 0 sortie◇Demander des précisionsTâchePrévu0 entrée → 0 sortie3 blocs · 2 liens−100 %+AjusterÉtape sélectionnéeChoisir la suite→Si autoriséEnvoyer la proposition retenueSi refuséDemander des précisions×Décision humaineChoisir la suiteDécision attendueDécision pour cette demande : Embranchement à deux sorties alternatives.Votre décision est attendueValider la réponse proposée ou demander des précisions ?Commentaire (facultatif)Approuver la suiteRefuser la suiteLa réponse s'applique à cette proposition et à cette tentative uniquement.",
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  },
+  "build": {
+    "build-artifacts/linux-unpacked/resources/app.asar": "daedfb5bb89e4bb25ec67774a6e7758a0a00b9e29cf51305d137446c20322043",
+    "dist/studio.css": "9337bf6a2ebf50c0acecb7ae15872a131f455d1c69fc2d44024b8a68d23e89cd"
+  },
+  "terminalBefore": [
+    {
+      "id": "6f582d261be94451894d95df00d485f6",
+      "pid": 804549,
+      "project": "/tmp/tricorder-independent-reception-gNCHT8/projects/p251667b16f3740f4",
+      "release": null
+    }
+  ],
+  "compactBoxes": {
+    "height": 202.4562530517578,
+    "width": 643.2000122070312,
+    "scrollHeight": 202,
+    "clientHeight": 202
+  },
+  "branch": {
+    "edges": [
+      {
+        "id": "decision-reply",
+        "from": "decision",
+        "to": "reply",
+        "outcome": "approve"
+      },
+      {
+        "id": "decision-clarify",
+        "from": "decision",
+        "to": "clarify",
+        "outcome": "reject"
+      }
+    ],
+    "trail": "Étape sélectionnée\nChoisir la suite\n→\nSi autorisé\nEnvoyer la proposition retenue\nSi refusé\nDemander des précisions"
+  },
+  "finalTerminal": [
+    {
+      "id": "6f582d261be94451894d95df00d485f6",
+      "pid": 804549,
+      "project": "/tmp/tricorder-independent-reception-gNCHT8/projects/p251667b16f3740f4",
+      "release": null
+    }
+  ]
+}

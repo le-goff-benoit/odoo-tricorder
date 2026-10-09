@@ -67,6 +67,9 @@ let terminalMaximized = false;
 let terminalPreference = null;
 let terminalLayout = localStorage.getItem('tricorder.terminalLayout') === 'stacked' ? 'stacked' : 'side';
 let terminalSplit = Math.max(30, Math.min(70, Number(localStorage.getItem('tricorder.terminalSplit')) || 52));
+let terminalStackedSplit = Math.max(30, Math.min(70, Number(localStorage.getItem('tricorder.terminalStackedSplit')) || 32));
+const stackedTerminal = () => terminalLayout === 'stacked' || window.innerWidth <= 850;
+const currentTerminalSplit = () => stackedTerminal() ? terminalStackedSplit : terminalSplit;
 let catalogError = null, bootstrapped = false, starting = false;
 let workflowMode = false, workflowContext = null, workflowTerminalPath = null;
 let terminalContextOpen = false;
@@ -92,13 +95,12 @@ $('#app').innerHTML = `
   <aside class="sidebar" aria-label="Tricorder">
     <div class="brand"><div class="brand-mark">${icon('terminal')}</div><span class="brand-name">Tricorder</span></div>
     <nav class="side-nav" aria-label="Navigation principale">
-      <button class="side-item" data-workflow-route="overview">${icon('grid')}<span>Tableau de bord</span></button>
-      <button class="side-item" data-workflow-route="library">${icon('file')}<span>Modèles</span></button>
-      <button class="side-item" data-workflow-route="global">${icon('branch')}<span>Workflows globaux</span></button>
+      <button class="side-item" data-workflow-route="overview">${icon('grid')}<span>Activité</span></button>
+      <button class="side-item" data-workflow-route="global">${icon('branch')}<span>Workflows</span></button>
       <button class="side-item" data-workflow-route="projects">${icon('folder')}<span>Projets</span></button>
     </nav>
     <div class="side-heading">Accès rapide aux projets</div>
-    <div id="project-list" class="project-list"></div>
+    <label class="project-search"><span class="sr-only">Rechercher un projet</span><input id="project-search" type="search" placeholder="Rechercher un projet…"></label><div id="project-list" class="project-list"></div>
     <div class="sidebar-bottom">
       <nav aria-label="Configuration"><button class="side-item" data-workflow-route="schedules">${icon('chart')}<span>Planifications</span></button><button class="side-item" data-workflow-route="connections">${icon('server')}<span>Connexions</span></button></nav>
       <div class="sidebar-settings"></div>
@@ -113,11 +115,12 @@ $('#app').innerHTML = `
     </div>
   </aside>
   <main class="workspace">
-    <header class="topbar project-header"><div class="project-identity"><div id="project-title" role="heading" aria-level="1"></div><div id="project-meta" class="project-meta"></div></div><div class="top-actions"><button class="secondary terminal-toggle" data-action="terminal-toggle" aria-pressed="false" title="Afficher ou masquer le terminal sans fermer les sessions">${icon('terminal')}<span>Terminal</span><span id="terminal-count"></span></button><label class="provider-choice">Fournisseur IA<select id="preferred-provider" aria-label="Fournisseur IA"><option value="codex">OpenAI · Codex</option><option value="claude">Anthropic · Claude</option></select></label><div class="theme-switch" role="group" aria-label="Thème de l’interface">${[['light', 'Clair', 'sun'], ['dark', 'Sombre', 'moon'], ['system', 'Système', 'monitor']].map(([value, label, glyph]) => `<button class="icon-button" data-theme-choice="${value}" title="Thème ${label.toLowerCase()}" aria-label="Thème ${label.toLowerCase()}" aria-pressed="false">${icon(glyph)}</button>`).join('')}</div><span id="sync-status" class="sync-status" role="status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header><div id="catalog-warning" class="catalog-warning" role="alert" hidden></div><section id="context-bar" class="context-bar" aria-label="Release sélectionnée"></section>
+    <header class="topbar project-header"><div class="project-identity"><div id="project-title" role="heading" aria-level="1"></div><div id="project-meta" class="project-meta"></div></div><div class="top-actions"><button class="secondary terminal-toggle" data-action="terminal-toggle" aria-pressed="false" title="Afficher ou masquer le terminal sans fermer les sessions">${icon('terminal')}<span>Terminal</span><span id="terminal-count"></span></button><label class="provider-choice">IA des prochains lancements<select id="preferred-provider" aria-label="Fournisseur IA"><option value="codex">OpenAI · Codex</option><option value="claude">Anthropic · Claude</option></select></label><div class="theme-switch" role="group" aria-label="Thème de l’interface">${[['light', 'Clair', 'sun'], ['dark', 'Sombre', 'moon'], ['system', 'Système', 'monitor']].map(([value, label, glyph]) => `<button class="icon-button" data-theme-choice="${value}" title="Thème ${label.toLowerCase()}" aria-label="Thème ${label.toLowerCase()}" aria-pressed="false">${icon(glyph)}</button>`).join('')}</div><span id="sync-status" class="sync-status" role="status">Lecture des projets…</span><button class="icon-button" data-action="refresh" title="Actualiser">${icon('refresh')}</button></div></header><div id="catalog-warning" class="catalog-warning" role="alert" hidden></div><section id="context-bar" class="context-bar" aria-label="Release sélectionnée"></section>
     <div id="activity-strip" class="activity-strip" hidden></div><nav id="tabs" class="tabs" aria-label="Vues du projet"></nav>
     <div class="main-body"><section class="main-content"><div id="content"></div><div id="terminal-workspace"><div class="workflow-launcher"><label>Workflow<select id="workflow-choice" aria-label="Workflow">${Object.entries(WORKFLOWS).map(([id, w]) => `<option value="${id}">${w.title}</option>`).join('')}</select></label><button class="primary" data-action="workflow-start">Démarrer le workflow</button></div><div class="terminal-heading"><strong>Terminal</strong><div class="terminal-layout-controls"><button class="secondary" data-action="terminal-options" aria-expanded="false">Contexte</button><button class="secondary" data-action="terminal-layout" title="Changer la disposition du terminal et du workflow">Disposition verticale</button><button class="secondary" data-action="terminal-maximize">Agrandir le terminal</button></div></div><div id="execution-context" class="execution-context"></div><div id="terminal-tabs" class="terminal-tabs"></div><div id="terminal-context" class="terminal-context"></div><div id="terminal-search" class="terminal-search" hidden><input placeholder="Rechercher dans le terminal" aria-label="Rechercher dans le terminal"><button class="secondary" data-action="find-next">Suivant</button><button class="secondary" data-action="find-close">Fermer</button></div><div id="terminal-hosts"></div><div id="terminal-empty"></div></div></section></div>
   </main><div id="toast" role="status" hidden></div><dialog id="modal"><div id="modal-content"></div></dialog>`;
 
+$('#project-search').addEventListener('input',sidebar);
 const workflowHost = document.createElement('section'); workflowHost.id = 'workflow-panel'; workflowHost.hidden = true;
 $('.main-content').append(workflowHost);
 const terminalDivider = document.createElement('div');
@@ -128,8 +131,8 @@ $('.main-content').insertBefore(terminalDivider, workflowHost);
 function applyTerminalLayout() {
   const body = $('.main-content');
   body.dataset.terminalLayout = terminalLayout;
-  body.style.setProperty('--terminal-split', terminalSplit + '%');
-  terminalDivider.setAttribute('aria-valuenow', String(Math.round(terminalSplit)));
+  body.style.setProperty('--terminal-split', currentTerminalSplit() + '%');
+  terminalDivider.setAttribute('aria-valuenow', String(Math.round(currentTerminalSplit())));
   terminalDivider.setAttribute('aria-orientation', terminalLayout === 'stacked' || window.innerWidth <= 850 ? 'horizontal' : 'vertical');
   terminalDivider.hidden = !workflowMode || $('#terminal-workspace').hidden || terminalMaximized;
   const control = $('[data-action=terminal-layout]');
@@ -137,13 +140,15 @@ function applyTerminalLayout() {
   control.textContent = terminalLayout === 'stacked' ? 'Côte à côte' : 'Disposition verticale';
 }
 function resizeTerminal(value) {
-  terminalSplit = Math.max(30, Math.min(70, value));
-  localStorage.setItem('tricorder.terminalSplit', String(terminalSplit)); applyTerminalLayout();
+  const split = Math.max(30, Math.min(70, value));
+  if(stackedTerminal()) {terminalStackedSplit=split;localStorage.setItem('tricorder.terminalStackedSplit',String(split));}
+  else {terminalSplit=split;localStorage.setItem('tricorder.terminalSplit',String(split));}
+  applyTerminalLayout();
 }
 terminalDivider.addEventListener('keydown', event => {
   const steps = {ArrowLeft:-5, ArrowUp:-5, ArrowRight:5, ArrowDown:5};
   if (event.key in steps || ['Home', 'End'].includes(event.key)) {
-    event.preventDefault(); resizeTerminal(event.key === 'Home' ? 30 : event.key === 'End' ? 70 : terminalSplit + steps[event.key]);
+    event.preventDefault(); resizeTerminal(event.key === 'Home' ? 30 : event.key === 'End' ? 70 : currentTerminalSplit() + steps[event.key]);
   }
 });
 terminalDivider.addEventListener('pointerdown', event => {
@@ -158,7 +163,7 @@ terminalDivider.addEventListener('pointermove', event => {
 terminalDivider.addEventListener('pointerup', event => { if (terminalDivider.hasPointerCapture(event.pointerId)) terminalDivider.releasePointerCapture(event.pointerId); });
 window.addEventListener('resize', applyTerminalLayout);
 const studioUI = mountStudio(workflowHost, {
-  context(context) { if (workflowContext?.route === 'workflow' && context.route === 'workflow' && context.mode && context.mode !== workflowContext.mode) { terminalPreference = null; terminalMaximized = false; } workflowContext = context; if (workflowMode) render(); },
+  context(context) { if(context.conversation?.id && context.conversation.id!==workflowContext?.conversation?.id){const existing=sessions.find(s=>s.alive && terminalIdentity(s).conversation===context.conversation.id);if(existing){workflowTerminalPath=existing.project;selectedSession.set(existing.project,existing.id);}} if (workflowContext?.route === 'workflow' && context.route === 'workflow' && context.mode && context.mode !== workflowContext.mode) { terminalPreference = null; terminalMaximized = false; } workflowContext = context; if (workflowMode) render(); },
   async openTerminal(project, graph, conversation, resume=false) {
     const result = await api.workflowTerminal({ project: project.id, conversation, resume });
     if (conversation) sessionConversations.set(result.id, {id: conversation, provider: workflowContext?.conversation?.provider});
@@ -201,8 +206,9 @@ function sidebar() {
   const generic = workflowContext?.projects || [];
   const merged = [...projects.map(p => ({ ...p, workflowId: generic.find(g => g.path === p.path)?.id })), ...generic.filter(p => !projects.some(n => n.path === p.path)).map(p => ({ path:p.path, name:p.title, workflowId:p.id, generic:true }))];
   const listed = merged.sort((a, b) => Number(favorites.includes(b.path)) - Number(favorites.includes(a.path)) || a.name.localeCompare(b.name));
-  $('#project-list').innerHTML = listed.map(p => `
-    <button class="project-item side-item ${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'selected' : ''}" ${p.workflowId && (workflowMode || p.generic) ? `data-workflow-project="${esc(p.workflowId)}"` : `data-project="${esc(p.path)}"`} aria-current="${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'page' : 'false'}" title="${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || `<p class="muted pad">${catalogError ? 'Projets indisponibles. Réessayez avec Actualiser.' : !bootstrapped ? 'Lecture des projets…' : 'Ajoutez un dépôt depuis Projets, ou commencez un workflow global.'}</p>`;
+  const projectQuery=$('#project-search').value.trim().toLocaleLowerCase('fr');
+  $('#project-list').innerHTML = listed.filter(p=>p.name.toLocaleLowerCase('fr').includes(projectQuery)).map(p => `
+    <button class="project-item side-item ${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'selected' : ''}" ${p.workflowId && (workflowMode || p.generic) ? `data-workflow-project="${esc(p.workflowId)}"` : `data-project="${esc(p.path)}"`} aria-current="${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'page' : 'false'}" title="${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || `<p class="muted pad">${projectQuery ? 'Aucun projet ne correspond.' : catalogError ? 'Projets indisponibles. Réessayez avec Actualiser.' : !bootstrapped ? 'Lecture des projets…' : 'Ajoutez un dépôt depuis Projets, ou commencez un workflow global.'}</p>`;
   $('.install-agents').hidden = crewInstalled;
   $('[data-action="workflow-workspace"]').hidden = workflowMode;
   cockpitUI.alertSidebar();
@@ -393,7 +399,7 @@ function renderTerminals() {
   if (env?.kind === 'production') $('#terminal-context').prepend('PRODUCTION · aucune permission accordée ');
   $('#terminal-empty').hidden = own.length > 0;
   $('#terminal-hosts').hidden = own.length === 0;
-  $('#terminal-empty').innerHTML = workflowMode ? empty('Votre terminal', 'Ouvrez un workflow, puis lancez sa conversation. Vous pouvez aussi ouvrir un shell.', `<button class="primary" data-action="new-terminal">Ouvrir un terminal</button>`) : busy || !detail
+  $('#terminal-empty').innerHTML = workflowMode ? empty('Votre terminal', 'Choisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.', `<button class="primary" data-action="terminal-new-request">Choisir un workflow</button><button class="secondary" data-action="new-terminal">Ouvrir un terminal</button>`) : busy || !detail
     ? empty('Chargement du projet…', 'Les commandes seront disponibles dès que son contexte sera prêt.')
     : empty('Aucun terminal ouvert', 'Un shell dans le dossier du projet. Lancez Claude ou Codex avec suivi, ou vos commandes habituelles.', `<button class="primary" data-action="new-terminal">${icon('terminal')} Ouvrir un terminal</button><div class="launch-hints"><button class="secondary" data-launch-agent="claude">${providerIcon('claude')} Anthropic · Claude</button><button class="secondary" data-launch-agent="codex">${providerIcon('codex')} OpenAI · Codex</button></div>`);
   const visible = new Set(id ? [id] : []);
@@ -682,6 +688,7 @@ document.addEventListener('click', async event => {
         await openWorkflows(); await studioUI.navigate('project', project.id); break;
       }
       case 'workflow-start': await startWorkflow(); break;
+      case 'terminal-new-request': studioUI.newRequest(); break;
       case 'new-terminal': await newTerminal(); break;
       case 'task-terminal': {
         const session = sessions.find(s => s.id === selectedSession.get(current) && s.alive) || sessions.find(s => s.project === current && s.alive);

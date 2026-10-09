@@ -188,7 +188,8 @@ test('terminal identifies another conversation and preserves the same PTY throug
   await expect.poll(async () => (await terminals()).length).toBe(2);
   await expect(page.locator('.terminal-scope')).toContainText('Conversation du workflow affiché');
   await openRun();
-  await expect(page.locator('.terminal-scope')).toContainText('Autre conversation');
+  // A known conversation now selects its existing terminal automatically.
+  await expect(page.locator('.terminal-scope')).toContainText('Conversation du workflow affiché');
   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();
   await expect(page.locator('.terminal-tab.active [data-session]')).toHaveAttribute('data-session',first.id);
   await page.getByRole('button',{name:'Détail',exact:true}).click();

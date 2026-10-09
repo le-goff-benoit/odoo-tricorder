@@ -1,0 +1,150 @@
+{
+  "at": "2026-10-09T15:06:29.361Z",
+  "checks": {
+    "unavailable-project-catalog": "passed",
+    "restart-empty-conversation": "passed",
+    "restart-pending-draft": "passed",
+    "switch-conversations-preserves-terminal-and-draft": "passed",
+    "compact125-question-terminal": "passed",
+    "terminal-answer-after-restart": "passed"
+  },
+  "failures": [
+    {
+      "name": "first-project-entry",
+      "error": "expect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: 'Nouveau projet' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('button', { name: 'Nouveau projet' }) with timeout 5000ms\n  - waiting for getByRole('button', { name: 'Nouveau projet' })\n"
+    },
+    {
+      "name": "old-waiting-visible-from-activity",
+      "error": "expect(locator).toBeVisible() failed\n\nLocator: locator('.activity-row').filter({ hasText: 'ATTENTE ANCIENNE À NE PAS OUBLIER' })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" locator('.activity-row').filter({ hasText: 'ATTENTE ANCIENNE À NE PAS OUBLIER' }) with timeout 5000ms\n  - waiting for locator('.activity-row').filter({ hasText: 'ATTENTE ANCIENNE À NE PAS OUBLIER' })\n"
+    }
+  ],
+  "screens": {
+    "zero-projects": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nProjets\nTerminal\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "De l'intention à la réalisationUn workflow clair.Un travail que vous pouvez suivre.Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.Nouvelle demande+ Créer un workflowEssayer un exempleL'exemple est simulé : aucun modèle payant, aucune publication.✦ Analyser→? Décider→✓ Valider\n    Vos projetsVoir les archivesUn projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.\n    Votre premier projet commence iciEssayez le parcours guidé ou créez un projet pour adapter un modèle de la bibliothèque.",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "failure-first-project-entry": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nProjets\nTerminal\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "De l'intention à la réalisationUn workflow clair.Un travail que vous pouvez suivre.Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.Nouvelle demande+ Créer un workflowEssayer un exempleL'exemple est simulé : aucun modèle payant, aucune publication.✦ Analyser→? Décider→✓ Valider\n    Vos projetsVoir les archivesUn projet est la racine d’un dépôt Git local. Il réunit ses workflows, ses exécutions et leurs résultats.\n    Votre premier projet commence iciEssayez le parcours guidé ou créez un projet pour adapter un modèle de la bibliothèque.",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "unavailable-project-healthy-catalog": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nWorkflows\nTerminal\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "Mes workflowsModèlesMes workflowsChoisissez un workflow pour démarrer une demande, ou ouvrez-le pour modifier ses étapes.Nouvelle demandeCréer un workflowImporter un workflowVoir les archivesRechercher un workflowQualifier une demande indépendanteReview Alpha · 2 étapesExécuter…Ouvrir le workflow⋯ArchiverQualifier une demande indépendanteReview Beta · 2 étapesExécuter…Ouvrir le workflow⋯ArchiverAucun workflow ne correspond à cette recherche.Nouvelle demande×Choisissez comment travailler. Vous donnerez votre demande à l’agent dans le terminal.WorkflowQualifier une demande indépendante · Review AlphaQualifier une demande indépendante · Review BetaDe la demande au résultatCommande locale avec validationÉvolution logicielleRelease — demandes, plan, réalisation et validationSupport — diagnostic et suiteClôture de meetingDemande ponctuelleCorrection expressNouveau message → notificationGitHub → Odoo.sh : staging puis productionLivraison directe en productionDocumentation → ConfluenceOrchestrationAnalyseDéveloppementTestsGestion documentaireCommunicationProjet principalSans projetReview AlphaReview BetaLe workflow « Qualifier une demande indépendante » sera réutilisé dans Review Alpha. Une nouvelle exécution conservera ses propres résultats.Pour coordonner plusieurs projets avec ce même workflow, ajoutez-les à l’étape suivante.Continuer",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "restart-empty-conversation": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nReview Alpha\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Review Alpha\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-PIV9MV/cockpit/agent-events/6b455d66-3e42\n-47af-8c70-ad18f5138dc2.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p4245e5b451754442$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-PIV9MV/cockpit/agent-events/6b455d66-3e42-47af-8c70-ad18f5138dc2.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\n ",
+      "studio": "Suivi du workflowQualifier une demande indépendanteConversation ouverte · OpenAI · CodexPrêt pour votre demandeDécrivez le travail à l’agent dans le terminal. Il créera les tâches et leur progression apparaîtra ici.Retrouver le terminalÉtapes du workflow?Préciser le résultat vouluQuestion · 0 entrée → 1 sortie▤Préparer une conclusionDocument · 1 entrée → 1 sortieAucune étape n’est en cours tant que l’agent n’a pas créé de demande.",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "restart-pending-draft": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nReview Alpha\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Review Alpha\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-PIV9MV/cockpit/agent-events/6b455d66-3e42\n-47af-8c70-ad18f5138dc2.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p4245e5b451754442$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-PIV9MV/cockpit/agent-events/6b455d66-3e42-47af-8c70-ad18f5138dc2.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nALPHA : demande gardée après fermeture complète.\nDEMANDE REÇUE : ALPHA : demande gardée après fermeture complète.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteALPHA : demande gardée après fermeture complète.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherALPHA : demande gardée après fermeture complète.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat vouluRéponse attendue→AprèsPréparer une conclusionPrévu×QuestionPréciser le résultat vouluQuel résultat voulez-vous ?Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.Votre réponseRépondre",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "provider-setting-during-codex": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nReview Alpha\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Review Alpha\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-PIV9MV/cockpit/agent-events/6b455d66-3e42\n-47af-8c70-ad18f5138dc2.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p4245e5b451754442$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-PIV9MV/cockpit/agent-events/6b455d66-3e42-47af-8c70-ad18f5138dc2.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nALPHA : demande gardée après fermeture complète.\nDEMANDE REÇUE : ALPHA : demande gardée après fermeture complète.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteALPHA : demande gardée après fermeture complète.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherALPHA : demande gardée après fermeture complète.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat vouluRéponse attendue→AprèsPréparer une conclusionPrévu×QuestionPréciser le résultat vouluQuel résultat voulez-vous ?Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.Votre réponseRépondre",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "switch-back-alpha": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nReview Alpha\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Review Alpha\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-PIV9MV/cockpit/agent-events/6b455d66-3e42\n-47af-8c70-ad18f5138dc2.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p4245e5b451754442$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-PIV9MV/cockpit/agent-events/6b455d66-3e42-47af-8c70-ad18f5138dc2.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nALPHA : demande gardée après fermeture complète.\nDEMANDE REÇUE : ALPHA : demande gardée après fermeture complète.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteALPHA : demande gardée après fermeture complète.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherALPHA : demande gardée après fermeture complète.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat vouluRéponse attendue→AprèsPréparer une conclusionPrévu×QuestionPréciser le résultat vouluQuel résultat voulez-vous ?Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.Votre réponseRépondre",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "question-1024-zoom125": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nReview Alpha\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nTerminal\nContexte\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Review Alpha\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p4245e5b451754442$ 'python3' '/home/blegoff/odoo-tr\nicorder/backend/agent_launch.py' '/tmp/tricorder-independent-reception-PIV9MV\n/cockpit/agent-events/6b455d66-3e42-47af-8c70-ad18f5138dc2.launch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nALPHA : demande gardée après fermeture complète.\nDEMANDE REÇUE : ALPHA : demande gardée après fermeture complète.\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteALPHA : demande gardée après fermeture complète.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherALPHA : demande gardée après fermeture complète.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 2 étapesPréciser le résultat voulu\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionRéponse attendue0 entrée → 1 sortie▤Préparer une conclusionDocumentPrévu1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat vouluRéponse attendue→AprèsPréparer une conclusionPrévu×QuestionPréciser le résultat vouluQuel résultat voulez-vous ?Répondez dans le terminal ou ici. Cette réponse n’autorise aucune opération externe.Votre réponseRépondre",
+      "viewport": [
+        819,
+        614
+      ]
+    },
+    "terminal-answer-after-restart": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nReview Alpha\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Review Alpha\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-PIV9MV/cockpit/agent-events/6b455d66-3e42\n-47af-8c70-ad18f5138dc2.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p4245e5b451754442$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-PIV9MV/cockpit/agent-events/6b455d66-3e42-47af-8c70-ad18f5138dc2.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nALPHA : demande gardée après fermeture complète.\nDEMANDE REÇUE : ALPHA : demande gardée après fermeture complète.\nRéponse: La conclusion attendue est reçue après redémarrage.\nRÉPONSE TRANSMISE AU WORKFLOW\nTRAVAIL : Préparer une conclusion\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteALPHA : demande gardée après fermeture complète.Version figée · TerminéeOptionsRevenir à l’éditeurAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherALPHA : demande gardée après fermeture complète.PrêteAjouter une demande…Archiver la conversationAucune étape en coursTerminalTerminée2 / 2 étapesVoir le rapportExécution terminée.\n    \n    Exécution réelle. Terminée. 0 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionValidé0 entrée → 1 sortie▤Préparer une conclusionDocumentValidé1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat vouluValidé→AprèsPréparer une conclusionPrêt×QuestionPréciser le résultat vouluValidéInformation fournieEntrées, sorties et preuvesEntrées reçuesclarifications[\n  {\n    \"answer\": \"La conclusion attendue est reçue après redémarrage.\",\n    \"question\": \"Quel résultat voulez-vous ?\"\n  }\n]Sélectionner le texteRésultatanswerLa conclusion attendue est reçue après redémarrage.Sélectionner le texte",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "activity-old-waiting-page-one": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nReview Alpha\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nCodex 1\nConversation du workflow affiché · Review Alpha\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-PIV9MV/cockpit/agent-events/6b455d66-3e42\n-47af-8c70-ad18f5138dc2.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/p4245e5b451754442$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-PIV9MV/cockpit/agent-events/6b455d66-3e42-47af-8c70-ad18f5138dc2.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nALPHA : demande gardée après fermeture complète.\nDEMANDE REÇUE : ALPHA : demande gardée après fermeture complète.\nRéponse: La conclusion attendue est reçue après redémarrage.\nRÉPONSE TRANSMISE AU WORKFLOW\nTRAVAIL : Préparer une conclusion\n ",
+      "studio": "Suivi · Qualifier une demande indépendanteALPHA : demande gardée après fermeture complète.Version figée · TerminéeOptionsRevenir à l’éditeurAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherALPHA : demande gardée après fermeture complète.PrêteAjouter une demande…Archiver la conversationAucune étape en coursTerminalTerminée2 / 2 étapesVoir le rapportExécution terminée.\n    \n    Exécution réelle. Terminée. 0 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Préciser le résultat vouluQuestionValidé0 entrée → 1 sortie▤Préparer une conclusionDocumentValidé1 entrée → 1 sortie2 blocs · 1 lien−100 %+AjusterÉtape sélectionnéePréciser le résultat vouluValidé→AprèsPréparer une conclusionPrêt×QuestionPréciser le résultat vouluValidéInformation fournieEntrées, sorties et preuvesEntrées reçuesclarifications[\n  {\n    \"answer\": \"La conclusion attendue est reçue après redémarrage.\",\n    \"question\": \"Quel résultat voulez-vous ?\"\n  }\n]Sélectionner le texteRésultatanswerLa conclusion attendue est reçue après redémarrage.Sélectionner le texte",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "failure-old-waiting-visible-from-activity": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nActivité\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "ActivitéVotre travail en cours et ce qui attend votre intervention.Nouvelle demandeActualiserÀ traiterTravail terminé récent 26Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 25Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 24Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 23Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 22Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 21Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 20Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 19Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 18Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 17Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 16Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 15Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 14Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 13Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 12Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 11Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 10Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 9Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 8Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 7Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 6Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 5Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 4Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 3Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 2Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Autres demandes30 demandes enregistréesAucune demande à afficher. « Nouvelle demande » vous permet de choisir un workflow et de démarrer dans le terminal.Suivantes",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "activity-old-waiting-page-two": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nReview Alpha\nReview Beta\nPlanifications\nConnexions\nParamètres\nOutils et aide\nActivité\nTerminal\n1\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "ActivitéVotre travail en cours et ce qui attend votre intervention.Nouvelle demandeActualiserÀ traiterTravail terminé récent 1Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→Travail terminé récent 0Review Alpha · Travail récent terminé · SimulationÉchec · reprise nécessaireFaire le travail→ATTENTE ANCIENNE À NE PAS OUBLIERReview Alpha · Réponse ancienne encore nécessaire · SimulationRéponse attendueQuestion ancienne→BETA : demande distincte sur le second projet.Review Beta · Qualifier une demande indépendanteRéponse attenduePréciser le résultat voulu→Autres demandes30 demandes enregistréesALPHA : demande gardée après fermeture complète.Review Alpha · Qualifier une demande indépendanteTerminée→Précédentes",
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  },
+  "build": {
+    "dist/app.js": "c300a0d87540157023b759c83abe38111dc1a0b008e400d03632ab348612cae3",
+    "dist/studio.css": "0415c9d45fa1a72246ed1606aeb833b853fed8bc69428f7cc3bf76c1f55361c7"
+  },
+  "initialTerminal": {
+    "id": "d3168a92e91b4fa485532232c120a9e2",
+    "pid": 766844
+  },
+  "providerScope": {
+    "selected": "claude",
+    "conversation": "codex",
+    "visibleContext": "Conversation du workflow affiché · Review Alpha"
+  },
+  "oldWaiting": {
+    "id": "r1088f36b0d33409e",
+    "status": "waiting_input"
+  },
+  "finalCounts": {
+    "conversations": 2,
+    "workflowsA": 1,
+    "terminals": [
+      {
+        "id": "d3168a92e91b4fa485532232c120a9e2",
+        "pid": 766844
+      },
+      {
+        "id": "ebb7d203b7f44994b73c4f0c36a485ec",
+        "pid": 767383
+      }
+    ]
+  }
+}

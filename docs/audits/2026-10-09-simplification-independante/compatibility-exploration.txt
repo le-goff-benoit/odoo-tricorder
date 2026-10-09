@@ -1,0 +1,307 @@
+
+Running 60 tests using 1 worker
+
+(node:760068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/execution-interactions.spec.cjs:87:1 › negative result remains receivable and routes to the corrective branch (6.0s)
+  ✓   2 tests/execution-interactions.spec.cjs:100:1 › uncertain local notification retains receipt lookup without sending twice (6.3s)
+  ✓   3 tests/execution-interactions.spec.cjs:108:1 › live failure updates the graph badge and accessible name without reopening the run (6.1s)
+  ✓   4 tests/execution-interactions.spec.cjs:118:1 › request menu keeps keyboard focus and a question draft while activity changes (6.0s)
+  ✘   5 tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive (32.2s)
+(node:760958) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 tests/execution-interactions.spec.cjs:151:1 › search draft survives polling and deferred request counts refresh after leaving the input (6.1s)
+  ✘   7 tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (9.1s)
+(node:761327) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch (6.0s)
+  ✓   9 tests/launch-repair.spec.cjs:146:1 › repair secondary-project connection diagnoses before launch and returns without retyping (7.1s)
+  ✓  10 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain) (5.9s)
+  ✓  11 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile) (5.9s)
+  ✓  12 tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin (6.0s)
+  ✓  13 tests/launch-repair.spec.cjs:227:1 › late run response cannot navigate back after the user opens Projects (5.9s)
+  ✓  14 tests/launch-repair.spec.cjs:260:1 › repair missing profile preserves it until the user explicitly chooses generalist (6.0s)
+
+  ✓  15 tests/studio.spec.cjs:87:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog (5.6s)
+
+  ✓  16 tests/studio.spec.cjs:106:1 › large release history: startup and refresh preserve projects, workflows and terminal (5.6s)
+  ✓  17 tests/studio.spec.cjs:150:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (5.6s)
+  ✓  18 tests/studio.spec.cjs:172:1 › simulation: two branches, human decision, truthful results and single documentation view (8.4s)
+  ✓  19 tests/studio.spec.cjs:189:1 › decisions persist after application restart and reject skips its branch (11.4s)
+  ✓  20 tests/studio.spec.cjs:203:1 › connections never infer native authentication and real unconfigured launch is blocked (5.6s)
+  ✓  21 tests/studio.spec.cjs:216:1 › live events preserve text input and focus; layout fits 1024 and dark theme (5.6s)
+  ✓  22 tests/studio.spec.cjs:231:1 › structured proposal needs preview, rejects stale revision and never starts a run (5.6s)
+  ✓  23 tests/studio.spec.cjs:245:1 › template creation has a real terminal; file edits require validated reload (5.7s)
+  ✓  24 tests/studio.spec.cjs:266:1 › recurrence activation shows models and persists; communication needs exact recipients (5.6s)
+  ✓  25 tests/studio.spec.cjs:286:1 › window closes to Ubuntu tray and remains available (5.6s)
+  ✓  26 tests/studio.spec.cjs:294:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (5.5s)
+  ✓  27 tests/studio.spec.cjs:319:1 › real isolated command produces evidence, then waits for human receipt (5.6s)
+  ✘  28 tests/studio.spec.cjs:335:1 › global workflow runs independently of Git projects and draws right-angle links (6.4s)
+(node:767009) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  29 tests/studio.spec.cjs:356:1 › exported clickable file opens on another local instance as a draft without execution (11.9s)
+(node:767670) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  30 tests/studio.spec.cjs:378:1 › update dialog is explicit and test mode makes no automatic network request (5.6s)
+  ✓  31 tests/studio.spec.cjs:386:1 › repeated example clicks never create duplicate demo projects (5.6s)
+  ✓  32 tests/studio.spec.cjs:396:1 › trusted local adapter runs through the UI and automatic validation completes without a human receipt (5.5s)
+  ✓  33 tests/studio.spec.cjs:422:1 › large workflow remains editable in canvas and keyboard list (5.6s)
+  ✓  34 tests/studio.spec.cjs:434:1 › application navigation separates overview, workflow use and editor with compact responsive spacing (5.6s)
+  ✓  35 tests/studio.spec.cjs:457:1 › code proposal diff is reviewable and only explicit application changes the Git project (5.6s)
+  ✓  36 tests/studio.spec.cjs:496:1 › accessible navigation, editor, inspector and dialog in light and dark themes (5.6s)
+  ✓  37 tests/studio.spec.cjs:510:1 › human gate presents the full external content and candidate before approval (5.6s)
+  ✓  38 tests/studio.spec.cjs:527:1 › one provider choice applies to all AI steps and the project offers direct execution (5.5s)
+  ✓  39 tests/studio.spec.cjs:553:1 › native conversation: provider choice, durable questions, live graph and same terminal after restart (12.1s)
+  ✓  40 tests/studio.spec.cjs:621:1 › previous studio terminal is adopted in the main terminal without a new shell (5.7s)
+  ✓  41 tests/studio.spec.cjs:639:1 › review: Odoo profiles, editable unresolved outcome and synthetic release capture (5.6s)
+  ✓  42 tests/studio.spec.cjs:673:1 › design review: library and management views use the workspace, with readable actions in both themes (16.2s)
+  ✓  43 tests/studio.spec.cjs:709:1 › terminal visibility preserves a live session while browsing and editing (5.7s)
+  ✓  44 tests/studio.spec.cjs:740:1 › bootstrap failure is distinct from an empty catalog and Actualiser recovers (5.5s)
+
+  ✓  45 tests/studio.spec.cjs:758:1 › optional workflow setup failure keeps native projects and can be retried (5.5s)
+  ✘  46 tests/studio.spec.cjs:770:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (8.2s)
+(node:771463) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  47 tests/studio.spec.cjs:812:1 › repository journey: resume a cloned workflow, simulate a question and export a generic work dossier (5.6s)
+  ✓  48 tests/studio.spec.cjs:839:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question (6.4s)
+  ✓  49 tests/studio.spec.cjs:887:1 › workspace layout: focused navigation, adjustable split and editor preserve the same terminal (5.6s)
+  ✓  50 tests/studio.spec.cjs:931:1 › configuration: pending fields survive I/O editing, block selection and keyboard save (5.6s)
+  ✓  51 tests/studio.spec.cjs:959:1 › embedded theme: workflow controls use the shared surface colors (5.6s)
+  ✓  52 tests/studio.spec.cjs:970:1 › audit reception: decision shows the delivered text, provenance and safe proof reader (5.6s)
+  ✓  53 tests/studio.spec.cjs:996:1 › audit reception: concurrent terminal edit merges with the persisted editor draft (5.6s)
+  ✓  54 tests/studio.spec.cjs:1013:1 › audit reception: stopped native agent resumes explicitly in the same terminal (5.6s)
+  ✓  55 tests/studio.spec.cjs:1026:1 › audit reception: history pages and archives preserve the completed work (5.6s)
+
+  ✓  56 tests/studio.spec.cjs:1059:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (7.3s)
+
+  ✓  57 tests/studio.spec.cjs:1093:43 › mail intake: missing access becomes a visible question without inventing a source (5.6s)
+
+  ✓  58 tests/studio.spec.cjs:1093:43 › mail intake: ambiguous access becomes a visible question without inventing a source (5.6s)
+
+  ✘  59 tests/studio.spec.cjs:1103:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (10.0s)
+(node:773999) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  60 tests/studio.spec.cjs:1155:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload (5.6s)
+
+
+  1) tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('.conversation-search-details > summary')
+        - locator resolved to <summary>Rechercher</summary>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is not visible
+        - retrying click action
+          - waiting 100ms
+        58 × waiting for element to be visible, enabled and stable
+           - element is not visible
+         - retrying click action
+           - waiting 500ms
+
+
+      141 |   await page.locator('.request-selector > summary').click();
+      142 |   const search = page.locator('.conversation-search-details > summary');
+    > 143 |   await search.click();
+          |                ^
+      144 |   await expect(search).toBeFocused();
+      145 |   await call('conversation.add',{conversation:fixture.conversation,request:'R3 — Added during search navigation'});
+      146 |   await expect(page.locator('.request-selector > summary')).toContainText('3 demandes');
+        at /home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs:143:16
+
+    Error Context: test-results/execution-interactions-sea-4e4a1--focus-when-requests-arrive/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/execution-interactions-sea-4e4a1--focus-when-requests-arrive/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/execution-interactions-sea-4e4a1--focus-when-requests-arrive/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.terminal-scope')
+    Expected substring: "Autre conversation"
+    Received string:    "Conversation du workflow affiché · Interaction review"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.terminal-scope') with timeout 5000ms
+      - waiting for locator('.terminal-scope')
+        14 × locator resolved to <span class="terminal-scope" title="Conversation c40403de81d9f4f84">Conversation du workflow affiché · Interaction re…</span>
+           - unexpected value "Conversation du workflow affiché · Interaction review"
+
+
+      189 |   await expect(page.locator('.terminal-scope')).toContainText('Conversation du workflow affiché');
+      190 |   await openRun();
+    > 191 |   await expect(page.locator('.terminal-scope')).toContainText('Autre conversation');
+          |                                                 ^
+      192 |   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();
+      193 |   await expect(page.locator('.terminal-tab.active [data-session]')).toHaveAttribute('data-session',first.id);
+      194 |   await page.getByRole('button',{name:'Détail',exact:true}).click();
+        at /home/blegoff/odoo-tricorder/tests/execution-interactions.spec.cjs:191:49
+
+    Error Context: test-results/execution-interactions-ter-e2b07-h-navigation-and-agent-exit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/execution-interactions-ter-e2b07-h-navigation-and-agent-exit/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/execution-interactions-ter-e2b07-h-navigation-and-agent-exit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/studio.spec.cjs:335:1 › global workflow runs independently of Git projects and draws right-angle links
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.breadcrumb')
+    Expected substring: "Sans projet"
+    Received string:    "Workflows globaux / Workflow"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.breadcrumb') with timeout 5000ms
+      - waiting for locator('.breadcrumb')
+        10 × locator resolved to <div class="eyebrow breadcrumb">Workflows globaux / Workflow</div>
+           - unexpected value "Workflows globaux / Workflow"
+
+
+      340 |   await card.getByRole('button', { name: 'Utiliser', exact: true }).click();
+      341 |   await page.getByRole('button', { name: 'Créer et ouvrir le workflow' }).click();
+    > 342 |   await expect(page.locator('.breadcrumb')).toContainText('Sans projet');
+          |                                             ^
+      343 |   const paths = await page.locator('svg path.edge').evaluateAll(elements => elements.map(e => e.getAttribute('d')));
+      344 |   expect(paths.length).toBeGreaterThan(0);
+      345 |   for (const d of paths) { expect(d).toContain('H'); expect(d).toContain('V'); expect(d).not.toMatch(/[CQ]/); }
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:342:45
+
+    Error Context: test-results/studio-global-workflow-run-32b12-and-draws-right-angle-links/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-global-workflow-run-32b12-and-draws-right-angle-links/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-global-workflow-run-32b12-and-draws-right-angle-links/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/studio.spec.cjs:356:1 › exported clickable file opens on another local instance as a draft without execution
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.breadcrumb')
+    Expected substring: "Sans projet"
+    Received string:    "Workflows globaux / Workflow"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.breadcrumb') with timeout 5000ms
+      - waiting for locator('.breadcrumb')
+        10 × locator resolved to <div class="eyebrow breadcrumb">Workflows globaux / Workflow</div>
+           - unexpected value "Workflows globaux / Workflow"
+
+
+      369 |   await page.getByLabel('Destination', { exact: true }).selectOption('workspace');
+      370 |   await page.getByRole('button', { name: 'Importer le brouillon' }).click();
+    > 371 |   await expect(page.locator('.breadcrumb')).toContainText('Sans projet');
+          |                                             ^
+      372 |   await expect(page.locator('.node')).toHaveCount(6);
+      373 |   const data = await page.evaluate(() => window.studio.request({ action: 'project.get', project: 'workspace' }));
+      374 |   expect(data.runs).toHaveLength(0);
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:371:45
+
+    Error Context: test-results/studio-exported-clickable--872fb-s-a-draft-without-execution/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-exported-clickable--872fb-s-a-draft-without-execution/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-exported-clickable--872fb-s-a-draft-without-execution/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/studio.spec.cjs:770:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.xterm-screen:visible')
+    Expected substring: "INTENTION:Préparer"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('.xterm-screen:visible') with timeout 5000ms
+      - waiting for locator('.xterm-screen:visible')
+
+
+      804 |   const before = await page.evaluate(() => window.tricorder.terminals.list());
+      805 |   await library();
+    > 806 |   await expect(page.locator('.xterm-screen:visible')).toContainText('INTENTION:Préparer');
+          |                                                       ^
+      807 |   const after = await page.evaluate(() => window.tricorder.terminals.list());
+      808 |   expect(after[0].pid).toBe(before[0].pid); expect(app.context().pages()).toHaveLength(1);
+      809 |   await page.evaluate(id => window.tricorder.terminals.write({session:id,data:'exit\nexit\n'}),before[0].id);
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:806:55
+
+    Error Context: test-results/studio-work-journey-name-a-70210-e-and-preserve-the-terminal/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-work-journey-name-a-70210-e-and-preserve-the-terminal/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-work-journey-name-a-70210-e-and-preserve-the-terminal/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/studio.spec.cjs:1103:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.breadcrumb')
+    Expected substring: "Workflow de la demande sélectionnée"
+    Received string:    "Suivi · Release — demandes, plan, réalisation et validation"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.breadcrumb') with timeout 5000ms
+      - waiting for locator('.breadcrumb')
+        14 × locator resolved to <div class="eyebrow breadcrumb">Suivi · Release — demandes, plan, réalisation et …</div>
+           - unexpected value "Suivi · Release — demandes, plan, réalisation et validation"
+
+
+      1113 |   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+      1114 |   const cards=page.locator('.work-items button');await expect(cards).toHaveCount(4);
+    > 1115 |   await expect(cards.nth(0)).toContainText('Réponse attendue');await expect(cards.nth(1)).toContainText('En cours');await expect(cards.nth(2)).toContainText('Prête');await expect(cards.nth(3)).toContainText('Réponse attendue');await expect(cards.nth(3)).not.toContainText('Échec · reprise nécessaire');
+           |                                                                                                                                                                                          ^
+      1116 |   await selectRequest(0);await expect(page.locator('.workflow-heading h1')).toHaveText('R1: Règle de distance contradictoire dans les devis.');await expect(page.locator('.breadcrumb')).toContainText('Workflow de la demande sélectionnée');
+      1117 |   await expect(page.locator('#inspector')).toContainText('Quelle règle de distance');await expect(page.locator('#inspector')).toContainText('original.eml');await expect(cards.nth(0)).toHaveAttribute('aria-pressed','true');
+      1118 |   await page.getByRole('button',{name:'Détail',exact:true}).click();
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:1115:186
+
+    Error Context: test-results/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    tests/execution-interactions.spec.cjs:140:1 › search menu keeps its expanded state and keyboard focus when requests arrive
+    tests/execution-interactions.spec.cjs:178:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit
+    tests/studio.spec.cjs:335:1 › global workflow runs independently of Git projects and draws right-angle links
+    tests/studio.spec.cjs:356:1 › exported clickable file opens on another local instance as a draft without execution
+    tests/studio.spec.cjs:770:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal
+    tests/studio.spec.cjs:1103:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal
+  54 passed (7.0m)

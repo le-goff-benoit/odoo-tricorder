@@ -263,7 +263,7 @@ class Engine:
 
     def activity(self, offset=0):
         from .projections import run_page, activity_counts
-        page = run_page(self, offset=offset, limit=25)
+        page = run_page(self, offset=offset, limit=25, attention_first=True)
         with self.store.connect() as db:
             titles = {p["id"]: p["title"] for row in db.execute("SELECT body FROM projects") if (p := self.store.body(row))}
             total = db.execute("SELECT COUNT(DISTINCT project || ':' || id) FROM workflows").fetchone()[0]

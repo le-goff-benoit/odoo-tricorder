@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-09T15:16:25.953Z",
+  "checks": {
+    "open-workflow-beyond-first-page": "passed",
+    "run-workflow-beyond-first-page": "passed"
+  },
+  "failures": [],
+  "screens": {
+    "catalog-page-two-editor": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nCatalogue indépendant\nPlanifications\nConnexions\nParamètres\nOutils et aide\nCatalogue indépendant\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour",
+      "studio": "Catalogue indépendant / WorkflowWorkflow catalogue 27Révision 1 · EnregistréChoisir l’IAExporter…EnregistrerExécuter…\n    ÉditeurExécutionHistoriqueRapport\n    \n    \n    + Ajouter un blocRelierParamètres du workflow↶↷›_ TerminalOptionsPhasesRecharger et validerPlanifier✦ Assistant IA☷ Liste\n    ⋮⋮ Déplacer?Question du workflow 27QuestionQuestion0 entrée → 0 sortie1 bloc · 0 lien−80 %+Ajuster",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    "catalog-page-two-execution": {
+      "outer": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\nCatalogue indépendant\nPlanifications\nConnexions\nParamètres\nOutils et aide\nCatalogue indépendant\nTerminal\n1\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour\nTerminal\nContexte\nDisposition verticale\nAgrandir le terminal\nShell occupé 1\nConversation du workflow affiché · Catalogue indépendant\n'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/t\nricorder-independent-reception-70nekc/cockpit/agent-events/da401767-62dd\n-483a-a994-5396e22d246f.launch.json'\nTo run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/projects/pe4da02c6c16b4a48$ 'python3' '/home/blegoff/od\noo-tricorder/backend/agent_launch.py' '/tmp/tricorder-independent-recept\nion-70nekc/cockpit/agent-events/da401767-62dd-483a-a994-5396e22d246f.lau\nnch.json'\nAGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.\nDonner cette demande au workflow situé après les vingt-cinq premiers.\nDEMANDE REÇUE : Donner cette demande au workflow situé après les vingt-c\ninq premiers.\n ",
+      "studio": "Suivi · Workflow catalogue 27Donner cette demande au workflow situé après les vingt-cinq premiers.Version figée · Réponse attendueOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste\n    Revenir au suivi1 demandes ⌄Demandes du workflow1 demandesRechercherRechercher une demandeRechercherDonner cette demande au workflow situé après les vingt-cinq premiers.Réponse attendueAjouter une demande…Archiver la conversationAucune étape en cours · 1 questionTerminalRéponse attendue0 / 1 étapesQuestion du workflow 27\n    \n    Exécution réelle. Réponse attendue. 1 bloc(s) attendent votre intervention.\n    GrapheDétail\n    ?Question du workflow 27QuestionRéponse attendue0 entrée → 0 sortie1 bloc · 0 lien−100 %+AjusterÉtape sélectionnéeQuestion du workflow 27×QuestionQuestion du workflow 27Confirmez le workflow 27 ?Répondez dans le terminal ou ici.Votre réponseRépondre",
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  },
+  "build": {
+    "dist/app.js": "71de902fe81e3fc47f37e2923725fdf7c9ab6f51bfbade9e2237590697e87a04",
+    "dist/studio.css": "9337bf6a2ebf50c0acecb7ae15872a131f455d1c69fc2d44024b8a68d23e89cd"
+  }
+}

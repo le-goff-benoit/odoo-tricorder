@@ -1,0 +1,186 @@
+{
+  "description": "Final packaged evidence, separate from frozen independent source reviews.",
+  "asar_sha256": "daedfb5bb89e4bb25ec67774a6e7758a0a00b9e29cf51305d137446c20322043",
+  "files": [
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-dependency-destination-r3-1440.png",
+      "sha256": "1aad413a7e7c3a5b626e77bcc3425212df69c2b6b5a1df287a5380aca094c2d9",
+      "bytes": 192564
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-dependent-detail-1440.png",
+      "sha256": "18490f5985d0769a5ce2c339147f6c8caf9325a0002d76b3aeff9b2ff6a28344",
+      "bytes": 185549
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-dependent-detail-stacked-1440.png",
+      "sha256": "d78c9affe99a8460828f70196d0edc2580a3ec7b37f6a57300a0f88e8ae26b29",
+      "bytes": 153287
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-detail-1024.png",
+      "sha256": "dba0b30cb19b2544d538c8010301ab487189e19b3db568e42674df3f79eb3af5",
+      "bytes": 180060
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-detail-1440.png",
+      "sha256": "cf23ebd407a56ce8fc955e29ca5dbdf41ccec89a5d0721afdba1e535b75f26af",
+      "bytes": 180730
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-detail-1998.png",
+      "sha256": "81547cb7359c5fb40be023ece3acfcc9ac5f0162a3a75bffbc9c3f7465147a5a",
+      "bytes": 178146
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-detail-stacked-1440.png",
+      "sha256": "0ed917479fd8599b2386dc3c9376f875d1c99b4468276843fa4466f664c3c9b5",
+      "bytes": 145254
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-detail-zoom125-1440.png",
+      "sha256": "9c7229bbaf0e036b801b10d6c96e5fbffe6d2ecac91aa0a20de8bd47fd2211e2",
+      "bytes": 241603
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-graph-1024.png",
+      "sha256": "57c74b9df7ee7984bf76dbcc877a43b7665058db70ac66a45d81174c1946f020",
+      "bytes": 162215
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-graph-1440.png",
+      "sha256": "61e4e3d81a7c7ee4c5cf3bc4c76f0c4884239f55d375bb0ace08631ad4f53ecd",
+      "bytes": 171706
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-graph-1998.png",
+      "sha256": "83c728506cb8c10672d5e1f52730096d05fa5c2ede10fd5f2974ebd58159b10b",
+      "bytes": 184730
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-failed-graph-zoom125-1440.png",
+      "sha256": "a12176c97f7da6a98fc6ff83150cafa469f6a09adebe624519f279e78129b1c4",
+      "bytes": 222020
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-plan-decision-action-1440.png",
+      "sha256": "9122d7fcef19af82fb88fc7dbc6947decf61697835fb26fe92b6e24dbb6758dc",
+      "bytes": 175545
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-plan-detail-1440.png",
+      "sha256": "9cb0b697f60d6bd25d422bc3460f0ccb340cb1ab34c62bd58676213154d5d4a8",
+      "bytes": 191578
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-plan-graph-1440.png",
+      "sha256": "d4e7eb18aaa9f0d4862ed648ef0f64992bdaa3d057b2051738bf715b5a2d131f",
+      "bytes": 165299
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-results.json",
+      "sha256": "d02f9f2f3f3f90806f60d85c2406853525bab20b013fe389cfe7b6e47f65f96f",
+      "bytes": 622738
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-retry-dialog-1024.png",
+      "sha256": "c2f78999fc20f1ec01e67d89b69f425ff53577ab1c0dee62526265882958bf8e",
+      "bytes": 129998
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-six-requests-open-1440.png",
+      "sha256": "0a99afeaa039404523e4e8833a711167ec0a6da2cbbe5d19dcab66260bef7be2",
+      "bytes": 195283
+    },
+    {
+      "file": "docs/audits/2026-10-09-simplification-independante/packaged-rc11-terminal-input-preserved-stacked-1440.png",
+      "sha256": "868c58f2ce5f52a16ac7781568c9ff611d37f1407d465f83280fa8f0fce4509d",
+      "bytes": 141009
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/README.md",
+      "sha256": "896f7246c7a106555512a91e8956f25daa6d23454b616ac06a7d6b43031e53e0",
+      "bytes": 1227
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/branch-detail-alternatives.png",
+      "sha256": "24a5259af8230222fed766c006cf706a1df6cfefcb316da9e51fbc94b6aabe1f",
+      "bytes": 164853
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/branch-graph-alternatives.png",
+      "sha256": "28f8d06bf88955587d3173ce6cec0e74f56cf1fbc0bc210466a32e3dc0a572e3",
+      "bytes": 155872
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/build-validation.json",
+      "sha256": "46ee91370982ea255ef84da4b23c4e059887b4a9779f2ea0791adba353c0ff0f",
+      "bytes": 8154
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/dist.txt",
+      "sha256": "06340c9786433d5366c2f0ba4f604c7a9b12c5ef4e41f063ae372ec8c1d3035c",
+      "bytes": 1088
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/final-question-1024-zoom125.png",
+      "sha256": "9a0d6a87ee873c778f0a1a408ac8a4c3361a20249c3b2d75abd81603efeab6f1",
+      "bytes": 107931
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/local-validation.json",
+      "sha256": "da66a19c9c3cfe591ed23eb3aea1c63730bf44b8020631e074d9330025354a1c",
+      "bytes": 1198
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/release-packaged.txt",
+      "sha256": "5f917163080b7d39eba6182e9780683fb444e277ecf69b08296d0c509202befd",
+      "bytes": 702
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/ui-source-first.txt",
+      "sha256": "0f02fb742707535a9a3dfca71e9abe82da84f5a15bfd4bf90b343fab3800c94f",
+      "bytes": 22957
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/ui-source-received.txt",
+      "sha256": "3636910f1377a03359fbc1752588ad8f775ec771faf5c3b5122292282a8ff590",
+      "bytes": 754
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/unit-tests.txt",
+      "sha256": "e15191c66cffc0637b8a5d172b65cb223f72fd6d13cae94e28993d50bc2a4035",
+      "bytes": 39911
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/visual-packaged.cjs",
+      "sha256": "4d240484eeb7ddf71027eed2e19f0e5ca2dd367d220432bde1bedf86b70e259d",
+      "bytes": 9138
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/visual-packaged.txt",
+      "sha256": "8146f61b0a7f84298fcc1bc238dea2d16be977f3ce0a9f182cb788b13588e388",
+      "bytes": 205
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/.suivi/visual-results.json",
+      "sha256": "6a5506beeb30f93a7dba75ab57888cdf040c307afdac4bb8c5420dd40dfa45b4",
+      "bytes": 8354
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/README.md",
+      "sha256": "b835080e5c38e06abef44cf2501c113c49feca446aa1b9d7cb37c67b1c5028c3",
+      "bytes": 6254
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/captures/question-et-terminal.png",
+      "sha256": "9a0d6a87ee873c778f0a1a408ac8a4c3361a20249c3b2d75abd81603efeab6f1",
+      "bytes": 107931
+    },
+    {
+      "file": "release/2026-10-09_simplification-parcours/captures/terminal-et-suivi.png",
+      "sha256": "61e4e3d81a7c7ee4c5cf3bc4c76f0c4884239f55d375bb0ace08631ad4f53ecd",
+      "bytes": 171706
+    }
+  ]
+}

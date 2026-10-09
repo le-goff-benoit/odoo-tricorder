@@ -1,130 +1,107 @@
 # Tricorder
 
 **Dessinez vos workflows, pilotez le travail dans le terminal et suivez ses résultats.**
-Préversion : **0.6.0-rc.10**.
+Préversion : **0.6.0-rc.11**.
 
-[Suivre une exécution](release/2026-10-09_suivi-execution/README.md) :
-terminal conservé, demandes dans un sélecteur compact, état et prochaine action
-visibles, graphe ou détail en pleine hauteur. La copie isolée accepte les dépôts
-avec de grosses pièces jointes inchangées, selon l’espace disque disponible.
+[Parcours simplifiés et captures](release/2026-10-09_simplification-parcours/README.md) :
+une navigation commune, réutilisation des workflows, terminal conservé et suivi
+centré sur l’étape actuelle. Une analyse indépendante et une seconde réception
+ont confronté les écrans aux usages : support, réunion, release, création de
+workflow et coordination de plusieurs projets.
 
-[Lancer et dépanner un workflow](release/2026-10-09_demarrage-et-depannage/README.md) :
-conversation accessible avant la préparation de la recette, diagnostics par projet,
-actions de configuration et retour au lancement avec la demande conservée.
+![Terminal et suivi d’une demande](release/2026-10-09_simplification-parcours/captures/terminal-et-suivi.png)
 
-[Fiabilité des workflows et ergonomie](release/2026-10-09_fiabilite-workflows/README.md) :
-résultats lisibles avant décision, demandes suivies séparément, contrôle QA
-explicite et reprise du terminal vérifiée. Deux reviews indépendantes et un
-scénario de préparation de release depuis un email accompagnent cette version.
+*Application réelle, projet et agent de test. Aucun contenu client publié.*
 
-[Parcours de travail et limites](release/2026-10-08_parcours/README.md) · [Revue ergonomique et captures](release/2026-10-08_design/README.md) · [Revue fonctionnelle](release/2026-10-08_revue/README.md).
+## Commencer et reprendre le travail
 
-Une application et une fenêtre : le terminal natif et le graphique partagent
-le même espace. Les modèles peuvent être réutilisés par projet ou alimenter une
-conversation avec plusieurs tâches et plusieurs projets. Les anciens dossiers
-de release restent accessibles sans migration.
+La barre latérale contient trois destinations principales :
 
-![Terminal, demandes et bloc actif dans la même fenêtre](release/2026-10-09_suivi-execution/captures/terminal-et-suivi.png)
+| Destination | Utilisation |
+|---|---|
+| **Activité** | Reprendre une conversation et traiter les questions, décisions ou échecs. Les attentes passent avant l’historique. |
+| **Workflows** | Retrouver ses workflows de tous les projets, les lancer, les modifier ou partir d’un modèle. |
+| **Projets** | Retrouver le travail d’un dépôt et y enregistrer ses workflows. |
 
-*Capture sur un espace fictif, sans données client.*
+1. Cliquer **Nouvelle demande**, choisir un workflow existant ou un modèle, puis
+   son projet principal — ou **Sans projet**. Une adaptation vers un autre projet
+   est annoncée avant d’être enregistrée ; réutiliser un workflow ne le copie pas.
+2. Examiner le lancement et, au besoin, ajouter d’autres projets à coordonner.
+   **Lancer dans le terminal** ouvre la conversation et son suivi dans la même fenêtre.
+3. Donner l’intention dans le terminal : analyser une demande client, préparer
+   une release depuis un email, rédiger un compte rendu, ou tout autre travail
+   prévu par le workflow. Le champ de demande initiale reste facultatif.
+4. Suivre la demande, l’étape actuelle et la prochaine action. **Graphe** montre
+   le parcours ; **Détail** laisse la place à la question, au plan ou au résultat.
+   Répondre dans le terminal ou dans le panneau. Les décisions restent explicites.
+5. Reprendre depuis **Activité** ou le projet. Une conversation sans tâche reste
+   accessible ; changer de vue conserve la session et les brouillons de réponse.
 
-Les modèles, les projets et les réglages disposent de toute la largeur.
-**Terminal**, en haut de la fenêtre, affiche ou masque la session sans la fermer.
-Lancer une conversation ouvre le terminal avec son suivi graphique à côté.
-La recherche de modèles et les propriétés des blocs facilitent la conception.
-Le séparateur permet de redimensionner terminal et graphe à la souris ou au clavier.
-**Disposition verticale** les superpose ; **Côte à côte** les remet en colonnes.
-Revenir à l’éditeur lui rend toute la largeur sans fermer la session.
-La barre latérale sépare navigation, raccourcis des projets et configuration ;
-les commandes des agents, quotas et mises à jour sont dans **Outils et aide**.
+Le terminal peut aussi être ouvert avant de choisir un projet. **Terminal**, en
+haut de la fenêtre, l’affiche ou le masque sans fermer ses sessions. Le séparateur
+redimensionne terminal et suivi ; **Disposition verticale** les superpose.
+**Agrandir le terminal** lui donne toute la surface de travail.
 
-## Fiabilité et reprise — corrections de l’audit
+Le sélecteur **IA des prochains lancements** choisit OpenAI · Codex ou Anthropic ·
+Claude pour les nouvelles conversations. Une conversation déjà ouverte conserve
+son fournisseur. Le choix d’un fournisseur ne prouve pas sa connexion.
 
-Le [guide de fonctionnement et de reprise](docs/WORKFLOW-RUNTIME.md) détaille les
-corrections livrées : livrables et preuves consultables avant décision,
-historique paginé, fusion des modifications du terminal et de l’éditeur,
-annulation/archivage réversible et reprise explicite de l’agent. Les opérations
-externes reçoivent les données reliées avec un accord sur leur contenu exact ;
-la QA et les décisions du candidat sont vérifiées avant son application.
-Le contrôle QA est une propriété du bloc, indépendante du profil et du
-fournisseur. Un document ou une transmission de données ne tient pas lieu de test.
+## Dessiner et configurer un workflow
 
-**Nouvelle demande** réutilise un workflow existant du projet. Pendant une revue,
-**Détail** donne la place au livrable ; **Graphe** retrouve le dessin. Le terminal
-reste accessible. Le sélecteur des demandes indique questions, décisions et
-échecs ; une attente de dépendances nomme les demandes à terminer. Un terminal
-ouvert ne signifie pas qu’une étape travaille.
-Une tentative interrompue ne libère ses ressources qu’après vérification de ses
-processus. Les anciennes tentatives sans identité et les intégrations non
-qualifiées sont décrites explicitement dans le guide.
+Dans **Workflows**, choisir **Créer un workflow**, partir d’un workflow vide ou
+d’un modèle, puis nommer le workflow et choisir où l’enregistrer. L’éditeur prend
+toute la largeur ; les terminaux déjà ouverts restent disponibles.
 
-Depuis **Exécuter… → Lancer dans le terminal**, on peut demander à l’agent de
-chercher un email et de préparer une release : il utilise ses connexions
-disponibles, conserve les sources et enregistre les demandes dans ce workflow.
-Ce suivi concerne la conversation native liée au workflow ; un shell libre ou
-une ancienne session IA n’y est pas rattaché automatiquement. Le parcours mail
-est testé avec une CLI et une messagerie locales de substitution, sans envoi ni
-déploiement.
+Ajouter les blocs, renseigner leurs consignes et critères, définir les entrées et
+sorties, puis les **Relier**. Les données de même nom et type sont proposées.
+**Choisir l’IA** applique un fournisseur et un modèle communs aux étapes IA ; les
+options de chaque bloc permettent de choisir un agent spécialisé et ses réglages.
+Les profils précisent la méthode ; les entrées, sorties et branches appartiennent
+au workflow. Aucun pack Odoo n’est requis pour un workflow générique.
 
-## Dessiner, lancer et converser
+**Exécuter…** retrouve le lancement. Les réglages manquants désignent le bloc
+concerné et donnent accès à sa configuration. **Revenir au lancement** conserve
+la demande et les projets choisis. Une copie locale de recette Odoo peut être
+préparée pendant la conversation, avant l’étape de QA.
 
-1. **Créer un workflow** : choisir un modèle, nommer le workflow et choisir son projet
-   ou l’espace global. Saisir la demande ici ou plus tard dans le terminal.
-   **Créer et ouvrir** enregistre le dessin ; ouvrir les blocs pour adapter consigne,
-   entrées/sorties, agent et branches. Un workflow vide reste disponible dans le projet.
-2. **Relier** choisit les sorties du bloc amont et les entrées du suivant. Les
-   données de même nom et type sont proposées automatiquement.
-3. Choisir OpenAI ou Anthropic, puis **Exécuter… → Lancer dans le terminal**.
-   Cocher d’autres projets pour une conversation transversale.
-   Le dialogue distingue **À résoudre avant le lancement** et **À préparer pendant
-   le workflow**. Suivre l’action du diagnostic, effectuer le réglage puis
-   **Revenir au lancement** conserve la demande et les projets sélectionnés.
-   Pour Odoo, la copie locale peut être préparée dans la conversation avant la QA.
-4. La demande saisie est déjà enregistrée une seule fois. Le terminal permet
-   d’ajouter d’autres demandes. L’agent enregistre les tâches et remet
-   ses résultats au moteur ; le graphique montre leurs états réels. Une question
-   attend sa réponse sans suspendre les autres tâches.
-5. Retrouver la conversation depuis le projet, même après redémarrage. Les
-   décisions et autorisations exactes se prennent sur les blocs correspondants.
+Les définitions sont enregistrées dans `.tricorder/workflows/` du dépôt choisi,
+prêtes à être versionnées. **Options → Workflows du dépôt** permet de les retrouver
+après un clone. Les commits restent sous votre contrôle. Les exécutions actives,
+leurs décisions et leurs autorisations restent locales. Le dessin enregistré
+conserve ses positions ; le suivi utilise une disposition verticale adaptée au
+panneau voisin du terminal.
 
-Pour un bloc de modification de code isolée, renseigner aussi un modèle explicite
-avec **Choisir l’IA** avant de lancer la conversation.
+## Support, meeting, release et travail transversal
 
-Les profils précisent la méthode ; les ports, critères et branches appartiennent
-au workflow. Le bloc **Support critique ?** réunit qualification et aiguillage.
-Un parcours de livraison directe en production est disponible sans staging imposé,
-avec candidat, cible, contrôles et décision humaine exacts à configurer.
+Les modèles **Demande ponctuelle**, **Support**, **Clôture de meeting**,
+**Correction express** et release utilisent le même éditeur et le même suivi.
+Un workflow peut être réutilisé séparément dans plusieurs projets, ou une seule
+conversation peut coordonner plusieurs projets avec leurs demandes et dépendances.
 
 Le pack Odoo 0.3.1 installe deux modèles éditables par projet Odoo découvert : release
 et support. La release relie intention, plan, décision, candidat isolé, QA sur copie
-locale et proposition de livraison. Le modèle de meeting prépare compte rendu,
-actions et email ; publication et envoi demandent un connecteur et une autorisation.
-La validation technique d’un résultat ne remplace pas sa recette métier.
-Une tâche terminée avec un travail non résolu ou un refus ne libère pas ses
-successeurs. Après un échec de recette, ouvrir une tâche de correction : les
-modèles graphiques n’ont pas encore de boucle automatique de correction/recette.
-Les workflows déjà enregistrés conservent leur version ; importer une nouvelle
-copie du modèle pour bénéficier de ses nouvelles branches, puis comparer vos adaptations.
+locale et proposition de livraison. L’express qualifie le périmètre avant de
+travailler. Le modèle de meeting prépare compte rendu, actions et email.
 
-## Support, meeting, demande ponctuelle ou flux personnalisé
+Depuis le terminal lié au workflow, l’agent peut rechercher un email avec ses
+connexions disponibles, conserver les sources et enregistrer les demandes.
+Dans **Paramètres du workflow**, une opération de notification vérifiée peut
+prévenir lorsqu’une question apparaît. **Connexions** détecte les plugins OpenAI
+et Anthropic ; les opérations réellement utilisables doivent être vérifiées.
+Le parcours de brouillon local ne prouve pas la création d’un brouillon dans
+une messagerie : celle-ci nécessite une opération de connecteur adaptée.
 
-Les modèles **Demande ponctuelle**, **Support**, **Clôture de meeting** et
-**Correction express** utilisent le même éditeur et le même suivi. Les profils
-spécialisés sont facultatifs. L’express commence par une qualification et réoriente
-les périmètres sensibles ; une fin bloquée ne devient pas un succès.
+Les résultats et preuves restent consultables avant une décision. Une tâche
+refusée ou non résolue ne libère pas ses successeurs. Après un échec de recette,
+une tâche de correction reste nécessaire : les modèles n’intègrent pas encore
+une boucle automatique de correction/recette. Un parcours de déploiement direct
+peut être configuré avec candidat, cible, contrôles et autorisation précise.
 
-Les définitions sont dans `.tricorder/workflows/` du dépôt choisi. **Workflows du
-dépôt** permet de les reprendre après un clone, sans reprendre des autorisations.
-Depuis une exécution, **Exporter le rapport dans le projet** produit un dossier
-`work/<nom>/` avec README, définition exécutée, journal et preuves. Les commits
-restent sous votre contrôle ; les exécutions actives restent locales.
-
-Dans **Paramètres du workflow**, une opération de notification vérifiée peut prévenir lorsqu’une
-question apparaît, même si elle n’était pas prévue dans le dessin. Son activation
-est explicite et son envoi a un suivi séparé. **Connexions** détecte les plugins
-OpenAI et Anthropic ; leur installation seule ne prouve pas un accès exécutable.
-La [revue des parcours](release/2026-10-08_parcours/README.md) précise les transports
-pris en charge et la différence entre brouillon de texte et brouillon de messagerie.
+Le [guide de fonctionnement et de reprise](docs/WORKFLOW-RUNTIME.md) décrit les
+contrôles du moteur et les intégrations. Les [preuves de cette version](release/2026-10-09_simplification-parcours/README.md)
+portent sur des projets synthétiques, un vrai terminal et des agents déterministes.
+Elles ne qualifient ni les réponses d’un modèle commercial, ni un service externe,
+ni une recette métier Odoo.
 
 ## Travailler sur une release
 
@@ -152,11 +129,11 @@ ne lit pas vos secrets. Le choix d’un fournisseur ne prouve pas sa connexion.
 ## Personnaliser ou exécuter un autre workflow
 
 Depuis les vues de release, **Outils et aide → Reprendre le workflow** retrouve la dernière vue ouverte
-(bibliothèque, projet ou éditeur) dans la même fenêtre. La bibliothèque,
-les workflows globaux, les planifications et les connexions utilisent cette navigation.
+(catalogue, projet ou éditeur) dans la même fenêtre. **Workflows** réunit les
+définitions enregistrées et les modèles ; les planifications et connexions restent accessibles dans la barre latérale.
 Le terminal reste disponible pendant ces changements de vue.
 
-Depuis la fiche d’un projet ou les workflows globaux, **Exécuter…** ouvre directement
+Depuis la fiche d’un projet ou **Workflows → Mes workflows**, **Exécuter…** ouvre directement
 le récapitulatif et les prérequis, sans passer par la modification des blocs.
 **Choisir l’IA** applique OpenAI ou Anthropic et un modèle commun aux étapes IA.
 Les profils d’agents sont conservés. Les paramètres particuliers d’un bloc restent
@@ -200,8 +177,8 @@ npm start
 ```
 
 « Essayer un exemple » crée un dépôt Git de démonstration et propose un parcours
-simulé : aucun modèle payant ni service métier n’est appelé. Depuis « Globaux »,
-les modèles peuvent aussi s’exécuter sans créer de projet.
+simulé : aucun modèle payant ni service métier n’est appelé. Dans **Nouvelle demande**, choisir **Sans projet** permet aussi de lancer
+un workflow sans créer de dépôt.
 
 ```bash
 npm test

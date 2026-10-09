@@ -1,0 +1,3 @@
+PASS compact125-readable-question-and-answer
+PASS branch-details-show-alternatives
+{"checks":{"compact125-readable-question-and-answer":"passed","branch-details-show-alternatives":"passed"},"failures":[]}

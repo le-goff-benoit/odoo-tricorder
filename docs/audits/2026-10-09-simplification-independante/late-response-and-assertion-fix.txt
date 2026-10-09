@@ -1,0 +1,44 @@
+
+Running 2 tests using 1 worker
+
+(node:784802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/launch-repair.spec.cjs:227:1 › late run response cannot navigate back after the user opens Projects (6.0s)
+SYNTHETIC FAILURE  To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/projects/pc026b1743ee14c01$ 'python3' '/home/blegoff/od
+oo-tricorder/backend/agent_launch.py' '/tmp/tricorder-simplicity-nqYLUT/
+cockpit/agent-events/e2fd5094-cab5-470c-8ef3-e84c649086cd.launch.json'
+AGENT SYNTHÉTIQUE PRÊT — saisissez votre demande.
+
+  ✘  2 tests/simplicity.spec.cjs:70:1 › catalog pagination: a workflow beyond the first project page opens and launches without a copy (6.1s)
+
+
+  1) tests/simplicity.spec.cjs:70:1 › catalog pagination: a workflow beyond the first project page opens and launches without a copy
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "catalog-25"
+    Received: undefined
+
+      70 | test('catalog pagination: a workflow beyond the first project page opens and launches without a copy',async()=>{
+      71 | for(let i=0;i<26;i++)await call('workflow.save',{project:fixture.project.id,graph:{schema:1,id:'catalog-'+String(i).padStart(2,'0'),title:'Workflow du catalogue '+i,defaults:{provider:'codex',model:'inert'},nodes:[{id:'question',title:'Préciser la demande',kind:'question',question:'Quel résultat ?',outputs:{answer:'string'}}],edges:[]}});
+    > 72 | await page.locator('[data-workflow-route=global]').click();await page.getByLabel('Rechercher un workflow').fill('catalogue 25');const row=page.locator('.workflow-row:visible');await expect(row).toHaveCount(1);await row.getByRole('button',{name:'Ouvrir le workflow',exact:true}).click();await expect(page.getByRole('heading',{name:'Workflow du catalogue 25',exact:true})).toBeVisible();await page.locator('[data-workflow-route=global]').click();await page.getByLabel('Rechercher un workflow').fill('catalogue 25');await page.locator('.workflow-row:visible').getByRole('button',{name:'Exécuter…',exact:true}).click();await page.getByRole('button',{name:'Lancer dans le terminal',exact:true}).click();await expect(page.getByRole('heading',{name:'Prêt pour votre demande'})).toBeVisible();expect((await call('workflow.list',{project:fixture.project.id})).total).toBe(27);expect((await call('conversation.list',{project:fixture.project.id}))[0].definition.id).toBe('catalog-25');
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^
+      73 | });
+      74 |
+        at /home/blegoff/odoo-tricorder/tests/simplicity.spec.cjs:72:956
+
+    Error Context: ../../../tmp/tricorder-simplicity-navigation-final-results/simplicity-catalog-paginat-5240d-and-launches-without-a-copy/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-simplicity-navigation-final-results/simplicity-catalog-paginat-5240d-and-launches-without-a-copy/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-simplicity-navigation-final-results/simplicity-catalog-paginat-5240d-and-launches-without-a-copy/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/simplicity.spec.cjs:70:1 › catalog pagination: a workflow beyond the first project page opens and launches without a copy
+  1 passed (12.5s)

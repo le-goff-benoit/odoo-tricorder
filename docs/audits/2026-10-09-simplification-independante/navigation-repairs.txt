@@ -1,0 +1,50 @@
+
+Running 4 tests using 1 worker
+
+(node:776691) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/studio.spec.cjs:335:1 › global workflow runs independently of Git projects and draws right-angle links (5.6s)
+  ✓  2 tests/studio.spec.cjs:356:1 › exported clickable file opens on another local instance as a draft without execution (11.4s)
+  ✓  3 tests/studio.spec.cjs:770:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (5.6s)
+
+  ✘  4 tests/studio.spec.cjs:1104:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (12.1s)
+
+
+  1) tests/studio.spec.cjs:1104:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal
+
+    Error: expect(locator).toBeInViewport() failed
+
+    Locator:  locator('#question-form button')
+    Expected: in viewport
+    Received: viewport ratio 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeInViewport" locator('#question-form button') with timeout 5000ms
+      - waiting for locator('#question-form button')
+        14 × locator resolved to <button class="primary">Répondre</button>
+           - unexpected value "viewport ratio 0"
+
+
+      1144 |   await expect(page.locator('.xterm-screen:visible')).toBeVisible();
+      1145 |   await expect(page.locator('#inspector').getByText('Quelle règle de distance', {exact:false})).toBeInViewport();
+    > 1146 |   await expect(page.locator('#question-form button')).toBeInViewport();
+           |                                                       ^
+      1147 |   await page.screenshot({path:test.info().outputPath('mail-question-stacked-1440.png'),fullPage:true});
+      1148 |   await page.locator('.request-selector > summary').click();await expect(cards).toHaveCount(4);await expect(cards.nth(3)).toBeVisible();
+      1149 |   await selectRequest(2);await expect(page.locator('.editor.review-focus')).toBeVisible();await expect(page.locator('.request-selector')).not.toHaveAttribute('open','');
+        at /home/blegoff/odoo-tricorder/tests/studio.spec.cjs:1146:55
+
+    Error Context: ../../../tmp/tricorder-simplicity-regression-targeted-results/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-simplicity-regression-targeted-results/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-simplicity-regression-targeted-results/studio-mail-illustration-f-a2d3c-stay-readable-with-terminal/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/studio.spec.cjs:1104:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal
+  3 passed (35.4s)
