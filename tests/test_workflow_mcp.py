@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from native_cli_fixture import use_native_cli_fixtures
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'backend'))
 from workflow_engine import Engine, ContractError
 from workflow_engine.contracts import digest
@@ -33,6 +34,7 @@ for line in sys.stdin:
 class MCPTests(unittest.TestCase):
  def setUp(self):
   self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
+  use_native_cli_fixtures(self,self.root)
   self.engine=Engine(self.root/'state');self.project=self.engine.workspace_context()
   script=self.root/'server.py';script.write_text(SERVER);(self.root/'account').write_text('synthetic-account')
   self.config={'type':'mcp-stdio','argv':[sys.executable,str(script)],'timeout':3,'identity':{'tool':'whoami','arguments':{},'path':'/account'},'operations':{

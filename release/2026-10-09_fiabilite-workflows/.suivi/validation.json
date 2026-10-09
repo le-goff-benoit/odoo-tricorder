@@ -10,10 +10,11 @@
   "checks": [
     {
       "command": "npm test",
-      "python_passed": 226,
+      "python_passed": 228,
       "javascript_passed": 83,
       "failed": 0,
-      "log": "tests-unitaires.log"
+      "log": "tests-unitaires-sans-cli.log",
+      "environment": "PATH isolé sans Codex/Claude ; pack de référence 75612ee195f08b5a764e5aac303d453741666457"
     },
     {
       "command": "npm run test:ui",
@@ -33,6 +34,13 @@
       "skipped": 2,
       "failed": 0,
       "log": "tests-paquet.log"
+    },
+    {
+      "command": "Playwright : native conversation, work journey, stopped native, mail intake, mail illustration",
+      "environment": "PATH=/usr/bin:/bin, Node 24 appelé par chemin absolu",
+      "passed": 7,
+      "failed": 0,
+      "log": "tests-interface-sans-cli.log"
     }
   ],
   "skip_reason": "Deux parcours optionnels sur projets réels non activés ; recette sur projets synthétiques uniquement.",
@@ -51,5 +59,11 @@
     ]
   },
   "scope": "Local, synthétique ; aucune qualification d’un modèle réel, d’un compte connecté ou d’une release Odoo client.",
-  "ci": "Le contrôle du commit et son URL sont consignés dans la publication GitHub ; ce fichier décrit la recette locale."
+  "ci": "Le contrôle du commit et son URL sont consignés dans la publication GitHub ; ce fichier décrit la recette locale.",
+  "initial_ci_followup": {
+    "run": 37910058522,
+    "url": "https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/37910058522",
+    "cause": "Fixtures CLI implicites et horloge/uptime incohérentes sur runner récent",
+    "correction_scope": "Tests uniquement ; fichiers applicatifs et paquet inchangés"
+  }
 }

@@ -160,3 +160,46 @@ réceptionnée](2026-10-09-review-corrections/source-manifest-final.json) identi
 les sources présentes ; elle ne prétend pas à une lecture exhaustive de chaque
 ligne. La réception des huit contre-épreuves et les limites A09/A11 ci-dessus
 restent inchangées.
+
+## Complément CI — isolation des fournisseurs et de l'horloge
+
+Référence : commit applicatif `a522d8e55be85f0d7b78f9270c1151eebc3c12d4`.
+La CI initiale a révélé des dépendances des tests au poste : CLI Codex/Claude
+présents implicitement, et avance de l'horloge murale sans avance de l'uptime.
+Le complément de six fichiers de tests a été relu indépendamment. **Réception
+acceptée ; aucun affaiblissement des gardes applicatives identifié.**
+
+Les fixtures sont de vrais exécutables temporaires découverts par le précontrôle
+inchangé. Elles quittent avec le code 78 si invoquées, sans appel de modèle.
+Aucun mock ne remplace `capabilities`, `preflight`, le refus d'absence de CLI ou
+les règles de récupération. Les suites concernées disposent maintenant de leurs
+prérequis explicites ; leur nettoyage restaure le PATH du processus de test.
+
+La [contre-épreuve indépendante CI](2026-10-09-review-corrections/ci-isolation-probe.py)
+a confirmé les résultats suivants ([preuve](2026-10-09-review-corrections/ci-isolation-results.json)) :
+
+- Codex **et** Claude absents : les deux ouvertures sont refusées et aucune
+  conversation n'est créée.
+- Présence des fixtures : chaque fournisseur reste celui demandé ; exécution
+  explicite de chacun = code 78, aucun repli vers une installation réelle ;
+  PATH restauré après nettoyage.
+- Heartbeat ancien sur le même boot, hôte jeune et hôte ancien : récupération
+  refusée pour l'identité native inconnue. Un reboot postérieur au claim reste
+  distingué et rend l'arrêt local vérifiable. L'horloge corrigée ne masque donc
+  pas cette contre-épreuve.
+- Les **77 empreintes applicatives** du manifeste final restent identiques. Le
+  manifeste n'a pas été réécrit pour accepter des modifications.
+
+Les deux nouveaux tests de précontrôle ont également été exécutés
+indépendamment avec `PATH=/usr/bin:/bin` : **2 réussites**, dont absence de chaque
+fournisseur quand seul l'autre existe, sans authentification ou qualification
+inférée de sa présence. [Journal](2026-10-09-review-corrections/ci-native-preflight.log).
+
+Le journal de suite complète remis par le développeur a été vérifié :
+**228 tests Python et 83 JavaScript réussis, aucun ignoré**. Cette suite locale
+utilise le SHA Crew épinglé dans la CI et un PATH sans CLI fournisseur. Elle
+n'a pas été répétée par le reviewer ; seuls les contrôles ciblés ci-dessus ont
+été rejoués. La preuve locale utilise Node 24, tandis que le workflow GitHub
+spécifie Node 22 : elle ne remplace pas le statut de la nouvelle exécution CI.
+Aucun modèle, compte distant, paquet applicatif ou poste utilisateur n'a été
+modifié pendant cette relecture.

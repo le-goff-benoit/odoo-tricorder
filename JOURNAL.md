@@ -15,7 +15,8 @@
 - Terminal : recherche mail, sources, préparation locale et quatre demandes testées avec outils synthétiques ; ambiguïté/connexion manquante posent une question.
 - Reviews indépendantes fonctionnelle et UI ; écarts corrigés et contre-épreuves conservées.
 - Typographie, alignements, I/O, titres et espace terminal/graphe recontrôlés ; détails et limites dans `release/2026-10-09_fiabilite-workflows/README.md`.
-- Recette finale : 226 tests Python, 83 JavaScript ; 65 parcours UI sur sources puis 65 sur paquet, 2 parcours optionnels réels ignorés par campagne.
+- Recette finale : 228 tests Python, 83 JavaScript ; 65 parcours UI sur sources puis 65 sur paquet, 2 parcours optionnels réels ignorés par campagne.
+- Tests de conversation isolés des CLI du poste ; présence/absence des deux fournisseurs et horloge/uptime cohérentes sur runner récent. Sept parcours UI supplémentaires passent sans CLI IA installée.
 
 ## 2026-10-08 — Terminal et workflows dans une fenêtre (rc.3)
 

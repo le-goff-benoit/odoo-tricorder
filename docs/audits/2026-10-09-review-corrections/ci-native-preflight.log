@@ -1,0 +1,7 @@
+test_detected_fixture_is_not_authenticated_and_cannot_call_a_model (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+test_missing_provider_blocks_conversation_even_if_other_provider_exists (test_native_cli_preflight.NativeCLIPreflightTests) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.091s
+
+OK

@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from native_cli_fixture import use_native_cli_fixtures
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 from workflow_engine import Engine, ContractError
@@ -19,6 +20,7 @@ class WorkJourneys(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        use_native_cli_fixtures(self, self.root)
         self.engine = Engine(self.root / 'state')
         self.project = self.engine.create_project('Projet documentaire')
         self.graph = next(g for g in templates() if g['id'] == 'meeting-conversation')

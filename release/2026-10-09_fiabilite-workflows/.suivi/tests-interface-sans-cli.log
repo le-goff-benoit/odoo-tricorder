@@ -1,0 +1,18 @@
+
+Running 7 tests using 1 worker
+
+(node:485725) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/studio.spec.cjs:484:1 › native conversation: provider choice, durable questions, live graph and same terminal after restart (8.0s)
+  ✓  2 tests/studio.spec.cjs:701:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (2.9s)
+  ✓  3 tests/studio.spec.cjs:944:1 › audit reception: stopped native agent resumes explicitly in the same terminal (1.6s)
+
+  ✓  4 tests/studio.spec.cjs:983:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (7.1s)
+
+  ✓  5 tests/studio.spec.cjs:1016:43 › mail intake: missing access becomes a visible question without inventing a source (1.6s)
+
+  ✓  6 tests/studio.spec.cjs:1016:43 › mail intake: ambiguous access becomes a visible question without inventing a source (1.6s)
+
+  ✓  7 tests/studio.spec.cjs:1026:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (7.0s)
+
+  7 passed (30.6s)

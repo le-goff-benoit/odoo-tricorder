@@ -3,6 +3,7 @@ import os
 import sys
 import tempfile
 import unittest
+from native_cli_fixture import use_native_cli_fixtures
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
@@ -16,6 +17,7 @@ class ConversationTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         self.root = temporary.name
+        use_native_cli_fixtures(self, self.root)
         self.engine = Engine(self.root)
         self.a = self.engine.create_project("Projet A")
         self.b = self.engine.create_project("Projet B")

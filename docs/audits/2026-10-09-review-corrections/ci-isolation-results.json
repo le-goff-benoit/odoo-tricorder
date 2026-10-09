@@ -1,0 +1,34 @@
+{
+  "both_missing": {
+    "denied": {
+      "codex": "Synthetic CI review : CLI de conversation non installé",
+      "claude": "Synthetic CI review : CLI de conversation non installé"
+    },
+    "conversations_created": 0
+  },
+  "fixture_execution": {
+    "exit_codes": {
+      "codex": 78,
+      "claude": 78
+    },
+    "path_restored": true
+  },
+  "boot_distinction": {
+    "same_boot_young": {
+      "recoverable": false,
+      "reason": "Agent natif sans identité vérifiable : un heartbeat ancien ne prouve pas son arrêt. Retrouver la conversation pour terminer le bloc."
+    },
+    "same_boot_old": {
+      "recoverable": false,
+      "reason": "Agent natif sans identité vérifiable : un heartbeat ancien ne prouve pas son arrêt. Retrouver la conversation pour terminer le bloc."
+    },
+    "reboot_after_claim": {
+      "recoverable": true,
+      "reason": "Aucun processus de cette tentative n’est actif ; aucune relance automatique"
+    }
+  },
+  "application_manifest": {
+    "checked": 77,
+    "changed": []
+  }
+}

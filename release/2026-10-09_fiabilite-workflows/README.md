@@ -131,7 +131,7 @@ séparés de sauvegarde, rétention, disque plein et coût du polling.
 
 ## Validation du paquet
 
-- `npm test` : **226 tests Python et 83 tests JavaScript réussis**.
+- `npm test` : **228 tests Python et 83 tests JavaScript réussis**.
 - `npm run test:ui` : **65 réussis, 2 ignorés**.
 - `npm run dist` : installateur Ubuntu amd64 construit.
 - `npm run test:packaged` : **65 réussis, 2 ignorés**, sur l’application empaquetée.
@@ -142,3 +142,14 @@ sources qualifiées. Les journaux et l’empreinte de l’installateur sont cons
 dans [la preuve de validation](.suivi/validation.json). Le contrôle CI du commit,
 les fichiers à télécharger et leurs sommes SHA-256 accompagnent la
 [publication GitHub](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.8).
+
+
+Le premier passage GitHub a révélé une dépendance involontaire des tests aux CLI
+du poste, ainsi qu’une horloge de test incohérente avec l’uptime d’un runner récent.
+Le complément touche uniquement les tests : exécutables de substitution explicites,
+présence/absence des deux fournisseurs vérifiée et simulation d’horloge cohérente.
+Les **228 tests Python et 83 JavaScript** passent avec les dépendances exactes de
+la CI et sans CLI IA installée ; **7 parcours UI natifs** passent aussi avec un
+PATH isolé. Le programme, son manifeste de réception et le paquet restent inchangés.
+Les [journaux supplémentaires](.suivi/validation.json) distinguent cette vérification
+de la recette initiale sur le poste.

@@ -7,6 +7,7 @@ import sys
 import tempfile
 import time
 import unittest
+from native_cli_fixture import use_native_cli_fixtures
 from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 from workflow_engine import Engine, ContractError
@@ -29,6 +30,7 @@ class AuditFixes(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='tricorder-audit-dev-')
         self.addCleanup(self.temp.cleanup)
+        use_native_cli_fixtures(self, self.temp.name)
         self.engine = Engine(self.temp.name)
         self.project = self.engine.create_project('Parcours synthétique')
 
@@ -129,12 +131,21 @@ class AuditFixes(unittest.TestCase):
     def test_native_claim_never_expires_into_permission_to_recover(self):
         run=self.engine.start(self.project['id'],graph([task()]))
         self.engine.claim(run['id'],'work',executor='native',owner_pid=os.getpid())
-        with patch('workflow_engine.recovery.time.time',return_value=time.time()+3600):
-            self.assertFalse(diagnostic(self.engine,self.engine.run(run['id']),'work')['recoverable'])
         other=self.engine.start(self.project['id'],graph([task()]))
         self.engine.claim(other['id'],'work',executor='native')
-        with patch('workflow_engine.recovery.time.time',return_value=time.time()+3600):
-            self.assertIn('sans identité',diagnostic(self.engine,self.engine.run(other['id']),'work')['reason'])
+        # A stale heartbeat on the SAME boot: wall time and uptime advance
+        # together. Advancing only time falsely simulates a reboot on young CI VMs.
+        now=time.time()
+        read_text=Path.read_text
+        for initial_uptime in (30, 86400):
+            with self.subTest(initial_uptime=initial_uptime):
+                def elapsed_uptime(path,*args,**kwargs):
+                    return str(initial_uptime+3600)+' 0' if str(path)=='/proc/uptime' else read_text(path,*args,**kwargs)
+                with patch('workflow_engine.recovery.time.time',return_value=now+3600), patch('workflow_engine.recovery.Path.read_text',new=elapsed_uptime):
+                    self.assertFalse(diagnostic(self.engine,self.engine.run(run['id']),'work')['recoverable'])
+                    unknown=diagnostic(self.engine,self.engine.run(other['id']),'work')
+                    self.assertFalse(unknown['recoverable'])
+                    self.assertIn('sans identité',unknown['reason'])
 
     def test_legacy_unidentified_attempt_requires_verified_reboot(self):
         run=self.engine.start(self.project['id'],graph([task()]))
