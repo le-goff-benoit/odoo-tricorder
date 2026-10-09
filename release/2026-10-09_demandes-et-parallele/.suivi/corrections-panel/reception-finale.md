@@ -27,3 +27,9 @@ Bancs synthétiques, fournisseurs inertes et adaptateurs locaux. Les tests véri
 Le contrat parent/demandes, l’approbation commune, l’intégration des candidats et la QA commune restent à construire. Le lancement parallèle est une vague explicite. Le libellé Ajuster et la surface de lecture sur petit écran restent des réserves décrites par la review.
 
 La publication exige également une CI réussie sur le commit exact ; son lien et le manifeste du paquet livré sont joints à la release GitHub. L’installation locale réutilise le même lanceur, sans redémarrer l’application ni terminer les PTY.
+
+## Complément après la première CI GitHub
+
+La [première CI du candidat](https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/38001557778) a reçu les unitaires puis 145 parcours GUI sur 146 ; les deux scénarios réels optionnels sont restés désactivés. Un positionnement de capture après redimensionnement/changement de thème a utilisé une carte détachée du DOM pendant un nouveau rendu. La demande et ses quatre dépendances étaient toujours présentes. Le callback exact ayant déclenché le remplacement n’est pas identifié par la trace.
+
+Le test résout désormais de nouveau la même carte pendant cette seule attente, puis exige sa présence dans le viewport avant la capture. Les assertions de dépendances, de largeur et de conservation des sessions restent actives. Cinq répétitions complètes du cas corrigé réussissent. Aucun code produit, backend ou paquet n’a changé ; les suites locales complètes ci-dessus restent les preuves du même produit. La prochaine CI doit vérifier la révision finale du banc et le paquet. [Diagnostic indépendant et contre-épreuve](../review-panel/ci-followup/DIAGNOSTIC.md).

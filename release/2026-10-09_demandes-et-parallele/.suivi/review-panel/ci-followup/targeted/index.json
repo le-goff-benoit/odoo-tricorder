@@ -1,0 +1,24 @@
+{
+  "results": {
+    "passed": 5,
+    "failed": 0,
+    "duration_s": 32,
+    "exit_code_reported_by_parent": 0
+  },
+  "files": {
+    "five-repetitions.log": {
+      "source": "/tmp/tricorder-rc12-ci-scroll.log",
+      "sha256": "406c040e68dd2b250097c12c050ed20beeb863cd895a78091b18026c47848080"
+    },
+    "overview-dependencies-dark-1024-125.png": {
+      "source": "/tmp/tricorder-rc12-ci-scroll-proof/conversation-overview-gate-c7304-links-remain-understandable/overview-dependencies-dark-1024-125.png",
+      "sha256": "3721704cb2f18c84a5f9d10c1912ae08b8ec4c72edd41508a07ac05e75380290"
+    }
+  },
+  "sources": {
+    "tests/conversation-overview.spec.cjs": "03fd0f5003b4ed37791619969c4f682ba98b31f26dc639f0c902aa14960f1420",
+    "src/studio.js": "00f98d3b3889c3f5dacb2f4578d68386210d756281e3a5d448477b67eabc87dc",
+    "dist/app.js": "4e8b38d2314aa6020cab9b8679c48092ce78792f575404d48d6c90f9f95e4342",
+    "build-artifacts/linux-unpacked/resources/app.asar": "aa118d030f1f6cbe500462921b873e2d84fef283d1218acc4064a9367356d944"
+  }
+}

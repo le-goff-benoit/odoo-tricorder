@@ -72,7 +72,14 @@ test('gates: six demands, cross-project context and true dependency links remain
   await row(5).locator('.dependency-link').filter({hasText:'R3 —'}).click();await expect(page.locator('.workflow-heading h1')).toContainText('R3 —');
   await page.getByRole('button',{name:'Examiner la décision',exact:true}).click();await expect(page.locator('#inspector')).toContainText('Le périmètre et les critères proposés conviennent-ils');
   await page.getByRole('button',{name:'Vue d’ensemble',exact:true}).click();await row(5).locator('.conversation-demand-action').click();await expect(page.locator('#inspector .dependency-list button')).toHaveCount(4);
-  await page.getByRole('button',{name:'Vue d’ensemble',exact:true}).click();await dimensions(1024,768,1.25);await page.locator('[data-theme-choice=dark]').click();await row(5).scrollIntoViewIfNeeded();await screenshot(info,'overview-dependencies-dark-1024-125');
+  await page.getByRole('button',{name:'Vue d’ensemble',exact:true}).click();await dimensions(1024,768,1.25);await page.locator('[data-theme-choice=dark]').click();
+  // The responsive render or activity poll can replace a card while scrolling it.
+  // Resolve it again until the intended card is actually in the viewport.
+  await expect(async()=>{
+    await row(5).scrollIntoViewIfNeeded();
+    await expect(row(5)).toBeInViewport();
+  }).toPass({timeout:5000});
+  await screenshot(info,'overview-dependencies-dark-1024-125');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   expect(await page.locator('#conversation-overview').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
   expect((await page.evaluate(()=>window.tricorder.terminals.list())).filter(s=>s.alive).map(s=>s.id)).toEqual(sessions);

@@ -1,0 +1,16 @@
+{
+  "source": "/tmp/tricorder-rc12-ci-first-proof/conversation-overview-gate-c7304-links-remain-understandable",
+  "files": {
+    "trace.zip": "455b2b254483371c4657412726f50ecd1eebce19c7ee610eb601986f0a7d02dc",
+    "ci-first.log": "3db38ae20e13d22bf5aa98199033348319b6d5d01990d724a3a8197b3261202f",
+    "error-context.md": "3f0c962fab824bc4c949cbb2b14a09e75358f99670f618224610a623eae38716",
+    "overview-six-demands-light-1500.png": "fb12936ac310226edf4c1df022f6ee8dfdf33e073fa0acaaef1d9d5bc5742f47",
+    "trace-last-events.json": "700268f659143c8966270a9cce15629ea1d6860266d539519921a4d167ae520f"
+  },
+  "current_sources": {
+    "src/studio.js": "00f98d3b3889c3f5dacb2f4578d68386210d756281e3a5d448477b67eabc87dc",
+    "src/app.js": "12f447f5165305a73d6042d7bc4824889ddcc1528c7c5b61313541001b31844d",
+    "dist/app.js": "4e8b38d2314aa6020cab9b8679c48092ce78792f575404d48d6c90f9f95e4342",
+    "build-artifacts/linux-unpacked/resources/app.asar": "aa118d030f1f6cbe500462921b873e2d84fef283d1218acc4064a9367356d944"
+  }
+}

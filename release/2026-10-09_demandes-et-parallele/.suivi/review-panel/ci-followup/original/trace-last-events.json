@@ -1,0 +1,336 @@
+[
+  {
+    "type": "before",
+    "callId": "pw:api@61",
+    "stepId": "pw:api@61",
+    "startTime": 12372.509,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Click",
+    "subtitle": "getByRole('button', { name: 'Vue d’ensemble', exact: true })",
+    "params": {
+      "locator": "getByRole('button', { name: 'Vue d’ensemble', exact: true })"
+    },
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/conversation-overview.spec.cjs",
+        "line": 75,
+        "column": 69
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@61",
+    "endTime": 12424.89,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "pw:api@62",
+    "stepId": "pw:api@62",
+    "startTime": 12425.37,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Evaluate",
+    "params": {},
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/conversation-overview.spec.cjs",
+        "line": 45,
+        "column": 58,
+        "function": "dimensions"
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@62",
+    "endTime": 12426.63,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "pw:api@63",
+    "stepId": "pw:api@63",
+    "startTime": 12426.913,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Set viewport size",
+    "params": {
+      "width": "1024",
+      "height": "768"
+    },
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/conversation-overview.spec.cjs",
+        "line": 45,
+        "column": 177,
+        "function": "dimensions"
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@63",
+    "endTime": 12475.983,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "pw:api@64",
+    "stepId": "pw:api@64",
+    "startTime": 12476.772,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Click",
+    "subtitle": "locator('[data-theme-choice=dark]')",
+    "params": {
+      "locator": "locator('[data-theme-choice=dark]')"
+    },
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/conversation-overview.spec.cjs",
+        "line": 75,
+        "column": 156
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@64",
+    "endTime": 12539.935,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "pw:api@65",
+    "stepId": "pw:api@65",
+    "startTime": 12540.996,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Scroll into view",
+    "subtitle": "locator('#conversation-overview .conversation-demand[data-run=\"rd2847539c16041f1\"]')",
+    "params": {
+      "locator": "locator('#conversation-overview .conversation-demand[data-run=\"rd2847539c16041f1\"]')",
+      "state": "attached"
+    },
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/conversation-overview.spec.cjs",
+        "line": 75,
+        "column": 177
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@65",
+    "endTime": 12618.049,
+    "annotations": [],
+    "error": {
+      "name": "",
+      "message": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n",
+      "stack": "Error: locator.scrollIntoViewIfNeeded: Element is not attached to the DOM\nCall log:\n\u001b[2m  - attempting scroll into view action\u001b[22m\n\u001b[2m    - waiting for element to be stable\u001b[22m\n\n    at /home/runner/work/odoo-tricorder/odoo-tricorder/tests/conversation-overview.spec.cjs:75:177"
+    }
+  },
+  {
+    "type": "before",
+    "callId": "hook@66",
+    "stepId": "hook@66",
+    "startTime": 12618.561,
+    "class": "Test",
+    "method": "hook",
+    "title": "After Hooks",
+    "params": {},
+    "stack": []
+  },
+  {
+    "type": "before",
+    "callId": "hook@67",
+    "stepId": "hook@67",
+    "parentId": "hook@66",
+    "startTime": 12618.728,
+    "class": "Test",
+    "method": "hook",
+    "title": "afterEach hook",
+    "params": {},
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/conversation-overview.spec.cjs",
+        "line": 60,
+        "column": 6
+      }
+    ]
+  },
+  {
+    "type": "before",
+    "callId": "pw:api@68",
+    "stepId": "pw:api@68",
+    "parentId": "hook@67",
+    "startTime": 12653.784,
+    "class": "Test",
+    "method": "pw:api",
+    "title": "Close context",
+    "params": {},
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/conversation-overview.spec.cjs",
+        "line": 61,
+        "column": 10
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "pw:api@68",
+    "endTime": 15528.41,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "expect@69",
+    "stepId": "expect@69",
+    "parentId": "hook@67",
+    "startTime": 15531.188,
+    "class": "Test",
+    "method": "expect",
+    "title": "Synthetic shells must exit before deleting their home",
+    "params": {
+      "expected": "[]"
+    },
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/terminal-fixture.cjs",
+        "line": 35,
+        "column": 73,
+        "function": "cleanupBroker"
+      }
+    ]
+  },
+  {
+    "type": "before",
+    "callId": "expect@70",
+    "stepId": "expect@70",
+    "parentId": "expect@69",
+    "startTime": 15531.644,
+    "class": "Test",
+    "method": "expect",
+    "title": "Synthetic shells must exit before deleting their home",
+    "params": {
+      "expected": "[]"
+    },
+    "stack": []
+  },
+  {
+    "type": "after",
+    "callId": "expect@70",
+    "endTime": 15531.734,
+    "annotations": []
+  },
+  {
+    "type": "after",
+    "callId": "expect@69",
+    "endTime": 15531.775,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "expect@71",
+    "stepId": "expect@71",
+    "parentId": "hook@67",
+    "startTime": 15532.441,
+    "class": "Test",
+    "method": "expect",
+    "title": "Synthetic shells must exit before deleting their home",
+    "params": {
+      "expected": "[]"
+    },
+    "stack": [
+      {
+        "file": "/home/runner/work/odoo-tricorder/odoo-tricorder/tests/terminal-fixture.cjs",
+        "line": 35,
+        "column": 73,
+        "function": "cleanupBroker"
+      }
+    ]
+  },
+  {
+    "type": "before",
+    "callId": "expect@72",
+    "stepId": "expect@72",
+    "parentId": "expect@71",
+    "startTime": 15532.649,
+    "class": "Test",
+    "method": "expect",
+    "title": "Synthetic shells must exit before deleting their home",
+    "params": {
+      "expected": "[]"
+    },
+    "stack": []
+  },
+  {
+    "type": "after",
+    "callId": "expect@72",
+    "endTime": 15532.692,
+    "annotations": []
+  },
+  {
+    "type": "after",
+    "callId": "expect@71",
+    "endTime": 15532.717,
+    "annotations": []
+  },
+  {
+    "type": "after",
+    "callId": "hook@67",
+    "endTime": 15542.292,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "attach@f3d3cf50ae29b2cbe24c6180f24e5f98",
+    "stepId": "attach@f3d3cf50ae29b2cbe24c6180f24e5f98",
+    "startTime": 15544.484,
+    "class": "Test",
+    "method": "test.attach",
+    "title": "Attach \"error-context\"",
+    "params": {},
+    "stack": []
+  },
+  {
+    "type": "after",
+    "callId": "attach@f3d3cf50ae29b2cbe24c6180f24e5f98",
+    "endTime": 15544.491,
+    "attachments": [
+      {
+        "name": "error-context",
+        "contentType": "text/markdown",
+        "file": "attachments/f2f5f0003acce9fcb886bb9f895bfb2e12232911"
+      }
+    ]
+  },
+  {
+    "type": "after",
+    "callId": "hook@66",
+    "endTime": 15547.971,
+    "annotations": []
+  },
+  {
+    "type": "before",
+    "callId": "hook@105",
+    "stepId": "hook@105",
+    "startTime": 15548.126,
+    "class": "Test",
+    "method": "hook",
+    "title": "Worker Cleanup",
+    "params": {},
+    "stack": []
+  },
+  {
+    "type": "after",
+    "callId": "hook@105",
+    "endTime": 15549.351,
+    "annotations": []
+  }
+]

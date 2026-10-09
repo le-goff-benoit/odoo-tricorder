@@ -1,0 +1,16 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test tests/conversation-overview.spec.cjs --grep gates: six demands --repeat-each=5 --output=/tmp/tricorder-rc12-ci-scroll-proof
+PATH: /tmp/tricorder-ci-tools-5xbopo50:/usr/bin:/bin
+codex None
+claude None
+
+Running 5 tests using 1 worker
+
+  ✓  1 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.1s)
+  ✓  2 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.0s)
+  ✓  3 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.0s)
+  ✓  4 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.0s)
+  ✓  5 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.0s)
+
+  5 passed (32.0s)
