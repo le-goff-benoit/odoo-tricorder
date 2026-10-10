@@ -82,3 +82,14 @@ La capture initiale montrait déjà les sources au-dessus. Cet erratum figure da
 `reception/09-expert/contrepreuve-final.md` ; ce point n’est pas compté comme défaut
 produit corrigé. Les trois défauts moteur ont des reproductions distinctes et
 leur refus avant effet est confirmé par cette même contre-épreuve.
+
+## Préparation avec choix du modèle IA
+
+La relecture de cohérence finale a identifié une sauvegarde implicite restante :
+« Appliquer ce choix et vérifier » conservait une copie lors d’une préparation
+temporaire. La régression GUI était rouge (un workflow enregistré après abandon).
+Le choix IA reste désormais dans la préparation sans sauvegarde ; l’interface
+l’annonce. Le changement de vue ne conserve pas non plus cette préparation comme
+workflow. Un enregistrement explicite rend la méthode durable. La contre-épreuve
+conserve le test d’absence de copie et vérifie le choix commun sur un modèle déjà
+enregistré. Le moteur et ses contrats restent identiques.

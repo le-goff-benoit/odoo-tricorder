@@ -1,31 +1,36 @@
 {
   "version": "0.6.0-rc.18",
-  "at": "2026-10-10T19:59:21.296030+00:00",
+  "at": "2026-10-10T20:10:25.755167+00:00",
   "unit": {
     "python": 498,
     "javascript": 209,
     "failed": 0
   },
   "ui": {
-    "cases": 210,
+    "cases": 211,
     "passed_first_full_run": 206,
     "failed_first_full_run": 2,
     "corrected_targeted_cases": 2,
-    "received": 208,
+    "received": 209,
     "opt_in_real_project_cases_not_run": 2,
-    "product_changed_after_full_run": false
+    "product_changed_after_full_run": true,
+    "new_regression_received": 1,
+    "final_frontend_targeted_pass": 3,
+    "final_full_frozen_ci": "pending"
   },
   "packaged": {
     "first_targeted_pass": 18,
     "final_targeted_pass": 2,
     "responsive_layout_pass": 1,
-    "received": 21,
-    "failed": 0
+    "received": 23,
+    "failed": 0,
+    "final_rebuilt_targeted_pass": 10,
+    "new_unique_cases": 2
   },
   "artifact": {
     "file": "odoo-tricorder_0.6.0-rc.18_amd64.deb",
-    "sha256": "1c4b091636e231e2bbf1363990bf5ced59ed980f6a1b76c8d71a1173105af170",
-    "bytes": 101159040,
+    "sha256": "6351d72782d6daec2b12965da596415c43fa9b5bc14fcae0ae459225b7f6b0a4",
+    "bytes": 101158552,
     "debian_version": "0.6.0~rc.18"
   },
   "providers": {

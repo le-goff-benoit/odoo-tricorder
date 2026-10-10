@@ -12,7 +12,8 @@ courant. L’éditeur détaillé reste accessible dans les options.
 - **Voir le workflow** montre l’objectif, les sources, les étapes, les agents et
   les livrables. Cette consultation n’enregistre aucune copie et ne lance rien.
 - **Utiliser** prépare une demande. **Personnaliser une copie** enregistre votre
-  variante. Abandonner une préparation ne multiplie plus les workflows enregistrés.
+  variante. Le choix IA d’une préparation reste temporaire ; l’abandon ne multiplie plus
+  les workflows enregistrés.
 - **Support : comprendre et répondre** part d’un texte, d’un fichier, d’un email
   ou d’un ticket, distingue faits, impact et urgence, puis prépare une réponse
   dans le format choisi et vérifie ses affirmations contre la source.

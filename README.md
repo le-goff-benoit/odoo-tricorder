@@ -24,7 +24,8 @@ livrables sans créer de copie ni d’exécution.
 
 1. **Choisir.** Consultez **Support : comprendre et répondre** ou **Réunion : compte
    rendu et email**. **Utiliser** prépare une demande ; **Personnaliser une copie**
-   enregistre votre propre méthode. Abandonner un lancement ne crée pas d’adaptation.
+   enregistre votre propre méthode. Choisir l’IA pendant une préparation ne crée
+   aucune copie ; abandonner le lancement ne crée pas d’adaptation.
 2. **Créer.** **Créer un modèle** demande le résultat souhaité, les informations de
    départ et les travaux. Choisissez pour chaque étape son agent, son résultat,
    ses prérequis et le moment où votre décision est nécessaire. Deux analyses

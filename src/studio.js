@@ -369,7 +369,7 @@ function aiForm(preview = false) {
   const current = effectiveExecution(state.project, state.graph, node);
   const provider = current.provider.value || 'codex';
   const model = current.model.value || state.providerDefaults?.[provider] || '';
-  return `<form id="workflow-ai-form" class="ai-choice"><strong>IA pour les étapes de travail</strong><p>Un choix commun à toutes les étapes IA. Les profils d’agents sont conservés.</p><input type="hidden" name="preview" value="${preview ? 'yes' : 'no'}"><label for="workflow-provider">Fournisseur IA</label><select id="workflow-provider" name="provider">${options([['codex','OpenAI · Codex'],['claude','Anthropic · Claude']], provider)}</select>${modelPicker({id:'workflow-model',provider,value:model,catalog:state.providerModels,defaults:state.providerDefaults})}<div class="modal-actions"><button type="submit">${preview ? 'Appliquer ce choix et vérifier' : 'Appliquer à toutes les étapes IA'}</button></div></form>`;
+  return `<form id="workflow-ai-form" class="ai-choice"><strong>IA pour les étapes de travail</strong><p>Un choix commun à toutes les étapes IA. Les profils d’agents sont conservés.</p>${state.temporaryModel?'<p>Ce choix prépare cette demande sans enregistrer de copie. Enregistrez le workflow pour le conserver comme méthode.</p>':''}<input type="hidden" name="preview" value="${preview ? 'yes' : 'no'}"><label for="workflow-provider">Fournisseur IA</label><select id="workflow-provider" name="provider">${options([['codex','OpenAI · Codex'],['claude','Anthropic · Claude']], provider)}</select>${modelPicker({id:'workflow-model',provider,value:model,catalog:state.providerModels,defaults:state.providerDefaults})}<div class="modal-actions"><button type="submit">${preview ? 'Appliquer ce choix et vérifier' : 'Appliquer à toutes les étapes IA'}</button></div></form>`;
 }
 
 function simpleMode() {return localStorage.getItem('tricorder-editor-detail')!=='yes';}
@@ -1343,7 +1343,7 @@ async function save() {
   catch (error) { if (/Conflit|modifié depuis le terminal/.test(error.message)) { await showConflict(); throw new Error('Conflit détecté : choisissez comment conserver les deux versions.'); } throw error; }
   localStorage.removeItem(draftKey());
   state.workflows = await call('project.get', { project: state.project.id }).then(d => d.workflows);
-  state.graph = saved; state.savedRevision = saved.revision; state.dirty = false;
+  state.graph = saved; state.savedRevision = saved.revision; state.dirty = false; state.temporaryModel = false;
   if (state.project.library) state.templates = (await call('bootstrap')).templates;
   if (state.route === 'workflow') renderEditor(); toast('Workflow enregistré. Les exécutions précédentes gardent leur version.');
 }
@@ -1750,7 +1750,7 @@ const actions = {
   'expand-phase'(el) { state.collapsed.delete(el.dataset.phase); renderGraph(); },
   fit() { fitCurrentGraph(); },
   'back-design'() { state.mode = 'design'; state.selected = null; renderEditor(); },
-  async mode(el) { if (state.mode === 'design' && state.dirty) await save(); state.mode = el.dataset.mode; state.selected = state.mode==='run' ? state.run?.focus?.node || null : null; if (state.mode === 'history') { await loadRunPage(); return; } renderEditor(); },
+  async mode(el) { if (state.mode === 'design' && state.dirty && !state.temporaryModel) await save(); state.mode = el.dataset.mode; state.selected = state.mode==='run' ? state.run?.focus?.node || null : null; if (state.mode === 'history') { await loadRunPage(); return; } renderEditor(); },
   async 'start-preview'() {
     rememberLaunchDraft();
     if (state.dirty && !state.temporaryModel) await save();
@@ -2112,7 +2112,7 @@ document.addEventListener('submit', event => {
       if(draft.replacement)await openRun(item.run);else await pollConversation();
       toast(draft.replacement ? 'La demande de remplacement est ouverte. La demande précédente reste conservée.' : 'Demande ajoutée à la conversation.'); return;
     }
-    if (form.id === 'workflow-ai-form') { flushNodeForm(); const next = withWorkflowAI(state.graph, data); edit(g => Object.assign(g, next)); await save(); await integration.setProvider(data.provider); closeModal(); if (data.preview === 'yes') await actions['return-to-launch'](); return; }
+    if (form.id === 'workflow-ai-form') { flushNodeForm(); const next = withWorkflowAI(state.graph, data); edit(g => Object.assign(g, next)); if(!state.temporaryModel)await save(); await integration.setProvider(data.provider); closeModal(); if (data.preview === 'yes') await actions['return-to-launch'](); return; }
     if (form.id === 'connection-context-form') { if (data.project === 'workspace') await call('workspace.get'); if (data.project === 'library') await call('template.workspace'); Object.assign(state, await call('project.get', { project: data.project })); renderConnections(); terminal.host.hidden = true; }
     if (form.id === 'handoff-form') { const graph = await call('run.handoff', { run: state.run.id, project: data.project, graph: state.templates.find(t => t.id === data.template) }, true); closeModal(); await openProject(data.project, false); openWorkflow(graph); toast('Brouillon créé avec sa source globale.'); }
     if (form.id === 'import-workflow-form') { const graph = await call('workflow.import-portable', { project: data.context, bundle: state.importBundle }); state.importBundle = null; closeModal(); await openProject(data.context, false); openWorkflow(graph); toast('Brouillon importé. Aucun workflow ni planification activée.'); }

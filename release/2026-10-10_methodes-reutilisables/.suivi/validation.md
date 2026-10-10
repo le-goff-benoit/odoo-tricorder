@@ -3,10 +3,10 @@
 | Contrôle | Résultat |
 |---|---|
 | `npm test` | 498 tests Python et 209 tests JavaScript verts : 707 au total |
-| `npm run test:ui` | 210 cas : 206 verts lors du passage complet, 2 corrigés puis reçus séparément, 2 essais opt-in sur projets réels non exécutés |
+| `npm run test:ui` | 211 cas : 206 verts au premier passage complet, 2 corrigés puis reçus séparément, 1 nouvelle régression reçue, 2 essais opt-in sur projets réels non exécutés ; recette complète du dernier candidat attendue en CI |
 | `npm run dist` | Paquet Ubuntu amd64 fabriqué, version Debian `0.6.0~rc.18` |
-| Parcours du paquet | 21 parcours ciblés verts sur le binaire empaqueté |
-| Contre-épreuve novice | Conservation du brouillon annoncée ; départ vierge efface texte/fichier/sélection ; aucune copie visible après annulation |
+| Parcours du paquet | 23 parcours distincts reçus ; 10 parcours pertinents revérifiés sur le dernier paquet après correction du choix IA temporaire |
+| Contre-épreuve novice | Conservation du brouillon annoncée ; départ vierge efface texte/fichier/sélection ; aucune copie visible après annulation, y compris après sélection et application de l’IA |
 | Revue indépendante | 31 contrôles ciblés et 10 contre-exemples directs verts, refus avant effet ; aucun appel de service réel |
 | IA réelle | Quatre travaux Codex terminés sur deux notes synthétiques : compte rendu, trois actions et email ; aucune récupération externe ni envoi |
 | Installation locale | rc.18 démarrée ; terminal vivant et paramètres byte pour byte préservés, accès complet conservé ; rc.17 disponible |
@@ -30,7 +30,7 @@ parcours et le panel utilisent la vue simple par défaut.
 ## Identité et preuve
 
 Paquet : `odoo-tricorder_0.6.0-rc.18_amd64.deb`.
-SHA-256 : `1c4b091636e231e2bbf1363990bf5ced59ed980f6a1b76c8d71a1173105af170`.
+SHA-256 : `6351d72782d6daec2b12965da596415c43fa9b5bc14fcae0ae459225b7f6b0a4`.
 
 L’archive `resources/app.asar` installée correspond à celle du paquet fabriqué.
 [Installation](installation.json), [résultats techniques](validation.json),
@@ -48,3 +48,15 @@ du redimensionnement dans le renderer. Le test attend désormais la disposition
 finale avec les mêmes contraintes de position et de conservation du terminal.
 Contre-épreuves ciblées source et paquet réussies ; aucune modification de CSS ni de résultat
 métier pour ce contrôle.
+
+## Dernière correction avant publication
+
+Le choix de l’IA dans une demande temporaire enregistrait une copie avant le
+lancement. La nouvelle régression l’a reproduit, puis a reçu la correction.
+Trois parcours pertinents passent depuis le code source et dix sur le paquet
+reconstruit. Une contre-épreuve indépendante confirme la bibliothèque inchangée
+après application du choix puis fermeture. Les modèles explicitement enregistrés
+conservent leur choix IA durable.
+
+[Contre-épreuve IA sans copie](contrepreuves/01-03/note-correction-ia-sans-copie.md).
+La recette complète distante porte sur ce dernier candidat figé avant publication.
