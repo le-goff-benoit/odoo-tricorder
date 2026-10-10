@@ -5,6 +5,52 @@ de réception sont conservées dans les dossiers de release ; leurs simulations
 et fournisseurs de substitution ne qualifient pas une messagerie, un modèle
 commercial ou une recette métier Odoo.
 
+## Parcours par défaut
+
+Dans **Workflows → Modèles**, consultez une méthode avec **Voir le workflow**.
+**Utiliser** prépare une demande sans enregistrer une copie. **Personnaliser une
+copie** crée votre méthode réutilisable. La vue simple présente objectif, sources,
+étapes métier, agents et livrables. Une étape groupée donne accès à chacun de ses
+travaux pour modifier la consigne ou le responsable.
+
+**Créer un modèle** ouvre la création guidée : résultat souhaité, informations de
+ départ, étapes, agents, résultats, prérequis et décision humaine. **En parallèle**
+reprend les mêmes prérequis qu’une étape ; **Après tous les résultats sélectionnés**
+crée une dépendance obligatoire sur chacun des travaux choisis. Le refus ou l’échec
+d’un prérequis ne libère pas la synthèse avec les autres résultats seulement.
+**Seulement en cas d’anomalie** évite une approbation systématique.
+
+Le rôle d’un agent décrit sa mission. **Qui exécute cette étape ?** choisit entre
+la conversation principale et un agent distinct pour les textes fournis. Le suivi
+indique le processus réellement pris en charge, sans compter un rôle comme agent
+actif. Les agents distincts reçoivent les sources lues et les résultats précédents ;
+ils n’héritent pas des outils natifs du terminal. **Options → Éditeur détaillé**
+reste nécessaire pour une commande ou une opération externe spécifique.
+
+Le lancement réunit texte, fichiers conservés et références à retrouver. Une
+référence n’est pas une source lue. Pour plusieurs réunions, précisez leur sélection
+et le lien entre chaque fichier et sa réunion. L’agent doit demander une précision
+avant d’analyser une sélection ambiguë. Un email, ticket ou réunion inaccessible
+ne devient jamais une recherche réussie ou vide.
+
+**Résultats** donne d’abord les livrables utiles avec copie du texte. Les limites
+et vérifications restent accessibles. **Rapport détaillé** conserve le journal
+complet et ses preuves ; les tableaux disposent d’un défilement horizontal.
+Les exécutions terminées gardent leur définition et leurs résultats quand une
+méthode est personnalisée pour les demandes suivantes.
+
+## Sources d’une planification
+
+La fréquence hebdomadaire choisit ses jours. **Reprendre le même texte** conserve
+un contenu fixe : cela ne récupère pas les réunions suivantes. **Lire les nouvelles
+sources d’une connexion** exige une connexion qualifiée pour la lecture, une
+recherche et un compte, une équipe ou un dossier. L’adaptateur fournit les éléments,
+leur identifiant et leur date de réception. La planification traite un élément par
+occurrence, évite les doublons déjà réussis et conserve les sources après échec.
+Une lecture vide n’exécute pas les travaux dépendants et n’invente pas de résultat.
+Ces contrôles ne qualifient pas à eux seuls Gmail ou Meeting Minutes : chaque
+adaptateur et compte doit être vérifié dans **Connexions**.
+
 ## Lancer et résoudre une configuration incomplète
 
 **Exécuter…** vérifie le fournisseur, les connexions et tous les projets choisis.

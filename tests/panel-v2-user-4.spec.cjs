@@ -31,7 +31,7 @@ test.beforeEach(async()=>{
  backend=process.env.TRICORDER_EXECUTABLE?path.join(path.dirname(process.env.TRICORDER_EXECUTABLE),'resources/backend'):path.join(root,'backend');
  fixture=engine("a=e.create_project('Programme Atlas');b=e.create_project('Programme Boréal');g={'schema':1,'id':'programme','title':'Préparer une revue de programme','defaults':{'provider':'codex','model':'synthetic'},'parameters':{'request':'Demande historique à exclure','language':'fr'},'nodes':[{'id':'confirmation','kind':'question','title':'Confirmer le périmètre','question':'Le périmètre du projet est-il complet ?','outputs':{'answer':'string'}}],'edges':[]};e.save(a['id'],g);print(json.dumps({'a':a,'b':b}))");
  app=await electron.launch({executablePath:process.env.TRICORDER_EXECUTABLE,args:process.env.TRICORDER_EXECUTABLE?['--workflow-studio']:[root,'--workflow-studio'],env:environment});
- page=await app.firstWindow();await page.setViewportSize({width:1500,height:1000});
+ page=await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));await page.setViewportSize({width:1500,height:1000});
  await expect(page.getByRole('heading',{name:'Activité',exact:true})).toBeVisible();
 });
 test.afterEach(async({},info)=>{

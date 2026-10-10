@@ -12,7 +12,9 @@ export function scheduleFrequency(rule) {
 // Preserve the recurrence, never the old permission or an earlier activation.
 // Simulation is a safe starting mode even when replacing a real schedule.
 export function replacementScheduleDraft(schedule) {
-  const rule = schedule.rule;
-  return { kind: rule.kind, time: rule.time || '09:00', minutes: rule.minutes || 30,
+  const rule = schedule.rule, configuration=schedule.definition?.schedule_source;
+  const source=schedule.definition?.nodes?.find(node=>node.id===configuration?.node);
+  const selected=configuration?.mode==='fixed'?{source_mode:'fixed',source_fixed_text:schedule.parameters?.schedule_fixed_source || ''}:configuration?.mode==='connection' && source?{source_mode:'connection',source_binding:JSON.stringify(source.capabilities?.[0] || {}),source_query:source.source_polling?.query || '',source_scope:source.source_polling?.scope || ''}:{};
+  return { ...selected, kind: rule.kind, time: rule.time || '09:00', minutes: rule.minutes || 30,
     timezone: rule.timezone || 'Europe/Zurich', weekdays: JSON.stringify(rule.weekdays || workdays), simulation: true, ...(schedule.parameters ? {values:structuredClone(schedule.parameters)} : {}) };
 }

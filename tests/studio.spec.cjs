@@ -32,7 +32,7 @@ test.beforeEach(async ({}, testInfo) => {
     require('node:child_process').execFileSync('git', ['init', '-q', project]);
   }
   app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? ['--workflow-studio'] : [root, '--workflow-studio'], env: { ...process.env, PATH: path.join(directory, 'bin') + ':' + process.env.PATH, TRICORDER_STATE_DIR: directory, TRICORDER_HOME: directory, TRICORDER_TEST_MODE: '1', ...extraEnv }, timeout: 20000 });
-  page = await studioPage();
+  page = await studioPage(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
 });
 test.afterEach(async () => {
@@ -183,8 +183,9 @@ test('simulation: two branches, human decision, truthful results and single docu
   await expect(page.locator('#execution-overview')).toContainText('Terminée');
   await page.getByRole('button', { name: 'Voir le rapport', exact: true }).click();
   await expect(page.getByRole('heading',{name:'Rapport d’exécution'})).toBeVisible();
+  await page.locator('#document-view').getByText('Plan, vérifications et journal détaillé',{exact:true}).click();
   for (const heading of ['Demande', 'Plan', 'Réalisation', 'Vérifications et limites', 'Décisions et suite']) await expect(page.locator('#document-view').getByRole('heading', { name: heading, exact: true })).toBeVisible();
-  await expect(page.locator('#document-view')).toContainText('aucun résultat métier réel');
+  await expect(page.locator('#document-view')).toContainText('résultats métier réels');
 });
 
 test('decisions persist after application restart and reject skips its branch', async () => {
@@ -192,7 +193,7 @@ test('decisions persist after application restart and reject skips its branch', 
   await expect(page.locator('.node[data-id="decision"]')).toHaveAttribute('data-status', 'waiting');
   await quitApplication();
   app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? ['--workflow-studio'] : [root, '--workflow-studio'], env: { ...process.env, PATH: path.join(directory, 'bin') + ':' + process.env.PATH, TRICORDER_STATE_DIR: directory, TRICORDER_HOME: directory, TRICORDER_TEST_MODE: '1' } });
-  page = await studioPage();
+  page = await studioPage(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await page.getByRole('button', { name: 'Projets', exact: true }).click();
   await page.locator('.project-card').filter({hasText:/Mon premier projet/}).click();
   await page.getByRole('button', { name: 'Consulter', exact: true }).click();
@@ -391,7 +392,7 @@ test('exported clickable file opens on another local instance as a draft without
   await quitApplication();
   const destination = path.join(directory, 'other-computer');
   app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? [file] : [root, file], env: { ...process.env, TRICORDER_STATE_DIR: destination, TRICORDER_HOME: destination, TRICORDER_TEST_MODE: '1' } });
-  page = await studioPage();
+  page = await studioPage(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await expect(page.getByRole('dialog')).toContainText('Importer un workflow portable');
   await page.getByLabel('Destination', { exact: true }).selectOption('workspace');
   await page.getByRole('button', { name: 'Importer le brouillon' }).click();
@@ -614,7 +615,7 @@ for line in sys.stdin:
   const launch = () => electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE,
     args: process.env.TRICORDER_EXECUTABLE ? ['--workflow-studio'] : [root, '--workflow-studio'],
     env: { ...process.env, PATH: bin + ':' + process.env.PATH, TRICORDER_STATE_DIR: directory, TRICORDER_HOME: directory, TRICORDER_TEST_MODE: '1' }, timeout: 20000 });
-  app = await launch(); page = await studioPage();
+  app = await launch(); page = await studioPage(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
   const project = await page.evaluate(async () => {
     const p = await window.studio.request({action:'project.create', title:'Support synthétique'});
@@ -634,7 +635,7 @@ for line in sys.stdin:
   await page.locator('.node[data-id=analyse]').click();
   await expect(page.locator('#inspector')).toContainText('Quel utilisateur est concerné ?');
   const before = await page.evaluate(() => window.tricorder.terminals.list());
-  await quitApplication(); app = await launch(); page = await studioPage();
+  await quitApplication(); app = await launch(); page = await studioPage(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await page.getByRole('button', {name:'Projets',exact:true}).click();
   await page.locator('.project-card').filter({hasText:/Support synthétique/}).click();
   await page.locator('[data-action=open-conversation]').click();
@@ -755,6 +756,13 @@ test('opening the library frees the content area and preserves the live terminal
   for (const width of [1024, 800]) {
     await page.setViewportSize({width,height:900});
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    // Resizing updates the workspace on the renderer's next layout frame.
+    // Receive the final geometry before comparing the two panels (CI rc.17).
+    await expect.poll(async () => {
+      const term = await page.locator('#terminal-workspace').boundingBox();
+      const graph = await page.locator('#workflow-panel').boundingBox();
+      return width === 800 ? graph.y >= term.y + term.height - 1 : graph.x >= term.x + term.width - 1;
+    }).toBe(true);
     const term = await page.locator('#terminal-workspace').boundingBox();
     const graph = await page.locator('#workflow-panel').boundingBox();
     if (width === 800) expect(graph.y).toBeGreaterThanOrEqual(term.y + term.height - 1);

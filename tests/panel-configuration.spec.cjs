@@ -30,7 +30,7 @@ test.beforeEach(async () => {
     TRICORDER_AGENTS_DIR: path.join(directory, 'no-pack'), TRICORDER_TEST_MODE: '1', PYTHONDONTWRITEBYTECODE: '1' };
   fs.mkdirSync(env.XDG_RUNTIME_DIR, { mode: 0o700 });
   app = await electron.launch({ args: [root], env });
-  page = await app.firstWindow(); await page.setViewportSize({ width: 1440, height: 1000 });
+  page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); await page.setViewportSize({ width: 1440, height: 1000 });
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
   await page.locator('[data-action=terminal-toggle]').click();
   await page.getByRole('button', { name: 'Ouvrir un terminal', exact: true }).click();
@@ -75,7 +75,13 @@ test('schedule recurrence remains readable and replacement retains it with fresh
   await expect(form.locator('[name=minutes]')).toHaveValue('60');
   await expect(form.locator('[name=time]')).toHaveValue('17:20');
   await expect(form.locator('[name=timezone]')).toHaveValue('Pacific/Auckland');
-  await expect(form.locator('[name=weekdays]')).toHaveValue('[0,4]');
+  await expect(form.locator('[name=schedule-weekday][value="0"]')).toBeChecked();
+  await expect(form.locator('[name=schedule-weekday][value="4"]')).toBeChecked();
+  await expect(form.locator('[name=schedule-weekday][value="1"]')).not.toBeChecked();
+  await expect(form.locator('[name=schedule-weekday][value="2"]')).not.toBeChecked();
+  await expect(form.locator('[name=schedule-weekday][value="3"]')).not.toBeChecked();
+  await expect(form.locator('[name=schedule-weekday][value="5"]')).not.toBeChecked();
+  await expect(form.locator('[name=schedule-weekday][value="6"]')).not.toBeChecked();
   await expect(form.locator('[name=simulation]')).toBeChecked();
   await expect(form.locator('[name=authorize_notifications]')).not.toBeChecked();
   await expect(form.locator('[type=checkbox][required]')).not.toBeChecked();

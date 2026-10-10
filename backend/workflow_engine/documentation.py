@@ -58,7 +58,7 @@ def attempt_lines(state, node, historical=False, retry_reason=None):
     return lines
 
 
-def markdown(run):
+def detailed_markdown(run):
     graph = run["definition"]
     lines = [f"# {graph['title']}", "", "## Demande", "", run.get("parameters", {}).get("request") or graph.get("description", "Demande à préciser dans le workflow."), "",
              "**Exécution simulée : aucun résultat métier réel n'est attesté.**" if run["simulation"] else "Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.", "", "## Plan", "", "| Travail | État | Critères |", "|---|---|---|"]
@@ -109,6 +109,51 @@ def markdown(run):
             outcome = state['decision']['outcome']
             lines += [f"- {node['title']} : **{text(node.get('option_labels', {}).get(outcome, DECISIONS.get(outcome, outcome)))}** — décision humaine conservée."]
     lines += ["", "<details><summary>Références techniques de l’exécution</summary>", "", f"Exécution `{run['id']}` · contrat `{run['contract']}`.", "", "</details>", ""]
+    return "\n".join(lines)
+
+
+def markdown(run, timing=None):
+    """Deliverables first; immutable evidence and previous attempts stay in details."""
+    graph = run["definition"]
+    status = {"active":"En cours", "paused":"Suspendu", "completed":"Terminé", "cancelled":"Annulé"}.get(run["status"], run["status"])
+    lines = [f"# {graph['title']}", "", f"**{status}**", ""]
+    if run["simulation"]:
+        lines += ["**Simulation : les données ci-dessous ne sont pas des résultats métier réels.**", ""]
+    if timing and timing.get("duration") is not None:
+        seconds = max(0, int(timing["duration"]))
+        lines += [f"Durée totale : {seconds // 60} min {seconds % 60} s, attentes comprises.", ""]
+    lines += ["## Résultats", ""]
+    accepted = [node for node in graph["nodes"] if node["kind"] not in {"question", "decision", "review", "condition", "join"} and run["nodes"][node["id"]]["status"] == "accepted" and run["nodes"][node["id"]].get("result")]
+    final = []
+    for node in accepted:
+        reachable = {node["id"]}
+        for _ in graph["nodes"]:
+            for edge in graph["edges"]:
+                if edge["from"] in reachable and run["nodes"][edge["to"]]["status"] == "accepted":
+                    reachable.add(edge["to"])
+        if not any(other["id"] != node["id"] and other["id"] in reachable for other in accepted):
+            final.append(node)
+    if run["status"] != "completed":
+        lines += ["Travail encore ouvert ou arrêté : les éléments remis sont partiels.", ""]
+    if run.get("completion_outcome") in {"blocked", "rejected"}:
+        lines += ["**Résultat non résolu ou refusé ; la suite reste bloquée.**", ""]
+    if not final:
+        lines += ["Aucun livrable final remis pour le moment.", ""]
+    for node in final:
+        result = run["nodes"][node["id"]]["result"]
+        lines += [f"### {node['title']}", ""]
+        if result.get("outputs"):
+            lines += value_lines(result["outputs"], labels=node.get("port_labels", {}).get("outputs"))
+        else:
+            lines += value_lines(result.get("summary") or "Résultat enregistré.")
+    lines += ["## Suite", ""]
+    waiting = [node for node in graph["nodes"] if run["nodes"][node["id"]]["status"] in {"waiting", "waiting_input", "blocked", "interrupted"}]
+    for node in waiting:
+        state = run["nodes"][node["id"]]
+        lines += ["- " + text(node["title"]) + " : " + state_label(state,node)]
+    if not waiting:
+        lines += ["Consultez les résultats ou relancez la méthode avec une nouvelle demande. Un brouillon ne prouve pas son envoi."]
+    lines += ["", "<details><summary>Plan, vérifications et journal détaillé</summary>", "", detailed_markdown(run), "", "</details>", ""]
     return "\n".join(lines)
 
 
@@ -165,5 +210,6 @@ def export_snapshot(engine, run_id, root, collection, release_id):
         (tracking / "preuves").mkdir()
         for sha, content in evidence.items():
             (tracking / "preuves" / sha).write_bytes(content)
-    (folder / "README.md").write_text(markdown(run))
+    from .projections import timing
+    (folder / "README.md").write_text(markdown(run, timing=timing(engine, run)))
     return str(folder / "README.md")

@@ -58,6 +58,9 @@ def schedule_summaries(engine):
 def _request(engine, payload, *, human=False):
     from workflow_engine.projections import run_page, run_detail, summary, workflow_page, proof_page, payload as project_payload
     action = payload.get("action")
+    if action == "source.import":
+        from workflow_engine.sources import import_selected
+        return import_selected(engine.store.directory, payload.get("paths"))
     if action == "action.activate":
         from workflow_engine.associated_actions import activate
         return activate(engine, payload["run"], payload["id"], human=human)
@@ -174,8 +177,9 @@ def _request(engine, payload, *, human=False):
         return {"runs": result, "counts": activity_counts(engine), "total": total, "next": offset + len(runs) if offset + len(runs) < total else 0, "schedules": [{k:v for k,v in s.items() if k not in {"definition", "library", "transports"}} for s in Schedules(engine).list()]}
     if action == "bootstrap":
         from workflow_engine.guidance import sync
+        from workflow_engine.packs import builtin_profiles
         setup = sync(engine)
-        return {"activity": engine.activity(), "setup": setup, "providerDefaults": provider_defaults(), "providerModels": provider_models(), "projects": [{k:v for k,v in p.items() if k != "packs"} for p in engine.projects()], "templates": templates() + workflow_page(engine, "library")["items"], "template_page": workflow_page(engine, "library"), "capabilities": capabilities(engine.project(payload["project"]) if payload.get("project") else None, engine), "schedules": schedule_summaries(engine)}
+        return {"activity": engine.activity(), "setup": setup, "providerDefaults": provider_defaults(), "providerModels": provider_models(), "profiles": builtin_profiles(), "projects": [{k:v for k,v in p.items() if k != "packs"} for p in engine.projects()], "templates": templates() + workflow_page(engine, "library")["items"], "template_page": workflow_page(engine, "library"), "capabilities": capabilities(engine.project(payload["project"]) if payload.get("project") else None, engine), "schedules": schedule_summaries(engine)}
     if action == "design.workspace":
         from workflow_engine.guidance import prepare
         return prepare(engine.project(payload["project"]))
@@ -313,7 +317,9 @@ def _request(engine, payload, *, human=False):
     if action == "run.reconcile":
         return reconcile(engine, payload["run"], payload["node"])
     if action == "run.document":
-        text = markdown(engine.run(payload["run"]))
+        from workflow_engine.projections import timing
+        run = engine.run(payload["run"])
+        text = markdown(run, timing=timing(engine, run))
         if not payload.get("paginated"): return text
         offset = payload.get("offset", 0)
         if type(offset) is not int or offset < 0: raise ContractError("Page de rapport invalide")

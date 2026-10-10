@@ -200,7 +200,7 @@ def _execute_text(engine, run, node, token, job):
         for line in (Path(job) / "provider.ndjson").read_text().splitlines():
             if line.strip():
                 observer.consume(json.loads(line))
-        require(process.returncode == 0, observer.error or "Le CLI a échoué : vérifier la connexion, le modèle et les options de la version installée")
+        require(process.returncode == 0, observer.error or "L’agent IA n’a pas pu terminer : vérifiez la connexion au fournisseur et le modèle choisi, puis reprenez cette étape")
         result = observer.finish(selection["model"])
         decode_outputs(node, result, schema=schema)
         result["evidence"] = [engine.artifact(json.dumps(result, ensure_ascii=False).encode())]

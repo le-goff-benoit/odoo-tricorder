@@ -34,7 +34,7 @@ assert '$artifact' in run_detail(e,r)['nodes']['work']['history']
 print(json.dumps({'project':p['id'],'run':rid}))
 `,backend,directory,info.title.startsWith('paged')?'paged':'inline'],{env:environment,encoding:'utf8'}));
   app=await electron.launch({executablePath:process.env.TRICORDER_EXECUTABLE,args:process.env.TRICORDER_EXECUTABLE?['--workflow-studio']:[root,'--workflow-studio'],env:environment,timeout:20000});
-  page=await app.firstWindow();
+  page=await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await page.locator('[data-workflow-route=projects]').click();
   await page.locator('.project-card').filter({hasText:'Synthetic attempts'}).click();
   await page.locator(`[data-action=open-run][data-id="${fixture.run}"]`).click();
@@ -80,7 +80,7 @@ test('large archived inputs keep failure history readable and attached proofs ac
   await page.getByRole('button',{name:'Fermer la fenêtre',exact:true}).click();
   await page.locator('.execution-menu > summary').click();
   await page.locator('[data-action=mode][data-mode=document]').click();
-  const report=page.locator('#document-view');
+  const report=page.locator('#document-view');await report.getByText('Plan, vérifications et journal détaillé',{exact:true}).click();
   await expect(report).toContainText('Synthetic retry history');
   for(let count=0;count<10 && await report.locator('[data-action=document-more]').count();count++) {
     const length=(await report.innerText()).length;

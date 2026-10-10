@@ -1,0 +1,11 @@
+{
+  "version": "0.6.0-rc.18",
+  "launcher": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.18/odoo-tricorder",
+  "main_pid": 764083,
+  "renderer_present": true,
+  "live_terminal_preserved": true,
+  "agentPermissions": "full",
+  "settings_bytes_preserved": true,
+  "app_asar_sha256": "9831c274038ff5c11bfce3660cd1b9a67fa708102a72662fcbd4e08e20fea502",
+  "previous_version_retained": true
+}

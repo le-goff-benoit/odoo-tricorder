@@ -37,7 +37,7 @@ g={'schema':1,'id':'parallel-ui','title':'Independent tasks and consolidation','
 e.save(p['id'],g);c=Conversations(e);conversation=c.open(p['id'],g,'codex');items=[c.add(conversation['id'],f'R{i} — Synthetic independent analysis') for i in range(1,4)];join=c.add(conversation['id'],'C1 — Synthetic consolidation',depends_on=[i['id'] for i in items]);print(json.dumps({'project':p['id'],'conversation':conversation['id'],'items':items,'join':join}))
 `,backend,directory],{env:environment,encoding:'utf8'}));
   app=await electron.launch({executablePath:process.env.TRICORDER_EXECUTABLE,args:process.env.TRICORDER_EXECUTABLE?['--workflow-studio']:[root,'--workflow-studio'],env:environment,timeout:20000});
-  page=await app.firstWindow();
+  page=await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await page.locator('[data-workflow-route=projects]').click();
   await page.locator('.project-card').filter({hasText:'Synthetic parallel dispatch'}).click();
   await page.locator(`[data-action=open-conversation][data-id="${fixture.conversation}"]`).click();

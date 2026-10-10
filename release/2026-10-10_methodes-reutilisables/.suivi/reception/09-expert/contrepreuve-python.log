@@ -1,0 +1,15 @@
+test_adapter_which_ignores_query_or_scope_cannot_process_or_advance_sources (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_approved_read_adapter_fulfils_actual_read_capability_and_forwards_raw_tool_data (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_backlog_equal_timestamps_and_new_sources_are_processed_once_per_success (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_changed_transport_blocks_next_occurrence_before_reading_any_source (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_empty_connection_read_skips_business_work_without_invoking_any_provider (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_fixed_source_cannot_invoke_an_adapter_or_an_independent_branch (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_fresh_read_cannot_release_an_independent_or_empty_source_branch (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_incomplete_or_undated_source_lists_fail_without_watermark_or_consumption (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_local_step_source_cannot_override_the_versioned_fixed_source (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+test_rejection_and_failed_execution_do_not_consume_or_advance_the_source (test_schedule_fresh_sources.FreshScheduleSourcesTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 3.486s
+
+OK

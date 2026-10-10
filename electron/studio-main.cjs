@@ -103,6 +103,14 @@ function trusted(event) {
     }
     throw new Error('Action de fichier inconnue');
   });
+  ipcMain.handle('studio:sources', async event => {
+    trusted(event);
+    const selected = await dialog.showOpenDialog(window, { title: 'Ajouter les fichiers de cette demande', properties: ['openFile', 'multiSelections'] });
+    if (selected.canceled || !selected.filePaths.length) return { files: [], canceled: true };
+    // Only paths returned by the native dialog reach this private backend action.
+    // source.import is deliberately absent from the renderer request allowlist.
+    return backend({ action: 'source.import', paths: selected.filePaths });
+  });
   ipcMain.handle('studio:folder', async event => {
     trusted(event);
     const result = await dialog.showOpenDialog(window, { title: 'Choisir le dossier du projet', properties: ['openDirectory'] });

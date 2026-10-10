@@ -75,7 +75,7 @@ test.beforeEach(async ({}, info) => {
   fixture = JSON.parse(python(seedCode, info.title.startsWith('negative') ? 'negative' : info.title.startsWith('uncertain') ? 'effect' : info.title.startsWith('live') ? 'poll' : 'interaction'));
   app = await electron.launch({ executablePath:process.env.TRICORDER_EXECUTABLE,
     args:process.env.TRICORDER_EXECUTABLE ? ['--workflow-studio'] : [root,'--workflow-studio'], env:environment, timeout:20000 });
-  page = await app.firstWindow();
+  page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await expect(page.locator('[data-workflow-route=projects]')).toBeVisible();
   await openRun();
 });

@@ -47,4 +47,10 @@ def provider_models(home=None):
         for provider, candidate in candidates.items() if isinstance(candidates, dict) else []:
             if isinstance(candidate, dict):
                 add(provider, candidate.get("model"))
+    reference = _read(Path(__file__).with_name("model-catalogue.json"), 100_000).get("models", {})
+    for provider in result:
+        if not result[provider]:
+            for model in reference.get(provider, []) if isinstance(reference, dict) else []:
+                if isinstance(model, dict):
+                    add(provider, model.get("id"), model.get("label"), "bundled-catalogue")
     return result

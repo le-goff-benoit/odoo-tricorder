@@ -1,0 +1,368 @@
+{
+  "scope": "Deux réunions synthétiques collées, vrai fournisseur Codex, aucune source externe ni envoi",
+  "model": "gpt-6-astra",
+  "run": "r95b2ba5303f74676",
+  "status": "completed",
+  "timing": {
+    "started": 1791659831.5575185,
+    "finished": 1791659913.2017305,
+    "duration": 81.64421200752258
+  },
+  "nodes": {
+    "analysis": {
+      "status": "accepted",
+      "ownership": "managed",
+      "result": {
+        "attempt": 1,
+        "cost_usd": null,
+        "evidence": [
+          {
+            "sha256": "fd5335e8a9a596e6ee9c62c9b369dea9d298682352d662d75c11677d0fdb4a6e",
+            "size": 5626
+          }
+        ],
+        "model_observed": null,
+        "model_requested": "gpt-6-astra",
+        "node": "analysis",
+        "ok": true,
+        "outputs": {
+          "actions": [
+            {
+              "action": "Préparer les slides",
+              "echeance": "avant le 12 octobre",
+              "extrait": "Alice prépare les slides avant le 12 octobre.",
+              "responsable": "Alice",
+              "reunion": "Réunion équipe Atlas, 8 octobre 2026",
+              "source": "source_context.text — passage concernant le 8 octobre 2026"
+            },
+            {
+              "action": "Vérifier les chiffres",
+              "echeance": "avant le 13 octobre",
+              "extrait": "Bob vérifie les chiffres avant le 13 octobre.",
+              "responsable": "Bob",
+              "reunion": "Réunion équipe Atlas, 8 octobre 2026",
+              "source": "source_context.text — passage concernant le 8 octobre 2026"
+            },
+            {
+              "action": "Confirmer la salle",
+              "echeance": "avant le 14 octobre",
+              "extrait": "Chloé confirme la salle avant le 14 octobre.",
+              "responsable": "Chloé",
+              "reunion": "Réunion équipe Atlas, 9 octobre 2026",
+              "source": "source_context.text — passage concernant le 9 octobre 2026"
+            }
+          ],
+          "analysis": "Compte rendu et éléments pour la rédaction\n\n8 octobre 2026 — La décision explicite est de reporter la présentation au 15 octobre. Deux actions sont attribuées : Alice prépare les slides avant le 12 octobre ; Bob vérifie les chiffres avant le 13 octobre. Source : passage du 8 octobre, reproduit intégralement dans selected_meetings. Aucune proposition ni hypothèse n’est mentionnée ; aucune contradiction interne n’est relevée.\n\n9 octobre 2026 — La décision explicite est de conserver le budget de 1 200 euros. Chloé confirme la salle avant le 14 octobre. Le texte précise qu’aucune autre action n’a été décidée. Source : passage du 9 octobre, reproduit intégralement dans selected_meetings. Aucune proposition ni hypothèse n’est mentionnée ; aucune contradiction interne n’est relevée.\n\nLecture croisée — Aucune contradiction n’est apparente entre les deux passages. Le lien précis entre le budget, la salle et la présentation n’est pas explicité. Les échéances conservent la formulation « avant le » des sources. Aucun état d’avancement n’est fourni. Ces limites n’empêchent pas un compte rendu utile et ne nécessitent pas de question. Les sources originales et les actions sont réunies ici pour la rédaction ; aucune transmission externe n’a été effectuée.\n\nBrouillon d’email — sans envoi\nDestinataire : équipe Atlas\nObjet : Comptes rendus et actions — réunions Atlas des 8 et 9 octobre 2026\n\nBonjour à toutes et à tous,\n\nLors de la réunion du 8 octobre, il a été décidé de reporter la présentation au 15 octobre. Alice prépare les slides avant le 12 octobre et Bob vérifie les chiffres avant le 13 octobre.\n\nLors de la réunion du 9 octobre, il a été décidé de conserver le budget de 1 200 euros. Chloé confirme la salle avant le 14 octobre. Aucune autre action n’a été décidée lors de cette réunion.\n\nBonne journée.",
+          "selected_meetings": [
+            {
+              "content_read": "Réunion équipe Atlas, 8 octobre 2026 : décision reporter la présentation au 15 octobre. Alice prépare les slides avant le 12 octobre. Bob vérifie les chiffres avant le 13 octobre.",
+              "contradictions": [],
+              "date": "2026-10-08",
+              "decisions": [
+                "Reporter la présentation au 15 octobre."
+              ],
+              "faits": [
+                "La source rapporte une réunion de l’équipe Atlas le 8 octobre 2026."
+              ],
+              "hypotheses": [],
+              "inconnues": [
+                "Date initiale de la présentation et motif du report non précisés.",
+                "Liste complète des participants non fournie."
+              ],
+              "limits": "Texte collé fourni par l’utilisateur. Aucun document complémentaire ni service externe consulté ; aucun échange détaillé ni liste complète des participants fournis.",
+              "propositions": [],
+              "provenance": "Tous les éléments ci-dessus proviennent du passage du 8 octobre ; les inconnues correspondent aux informations absentes de ce passage.",
+              "reference": "source_context.text — passage concernant le 8 octobre 2026",
+              "title": "Réunion équipe Atlas, 8 octobre 2026"
+            },
+            {
+              "content_read": "Réunion équipe Atlas, 9 octobre 2026 : décision conserver le budget 1200 euros. Chloé confirme la salle avant le 14 octobre. Aucune autre action décidée.",
+              "contradictions": [],
+              "date": "2026-10-09",
+              "decisions": [
+                "Conserver le budget de 1 200 euros."
+              ],
+              "faits": [
+                "La source rapporte une réunion de l’équipe Atlas le 9 octobre 2026.",
+                "La source précise qu’aucune autre action n’a été décidée."
+              ],
+              "hypotheses": [],
+              "inconnues": [
+                "Périmètre du budget et salle concernée non précisés.",
+                "Liste complète des participants non fournie."
+              ],
+              "limits": "Texte collé fourni par l’utilisateur. Aucun document complémentaire ni service externe consulté ; aucun échange détaillé ni liste complète des participants fournis.",
+              "propositions": [],
+              "provenance": "Tous les éléments ci-dessus proviennent du passage du 9 octobre ; les inconnues correspondent aux informations absentes de ce passage.",
+              "reference": "source_context.text — passage concernant le 9 octobre 2026",
+              "title": "Réunion équipe Atlas, 9 octobre 2026"
+            }
+          ]
+        },
+        "parent_run": "r95b2ba5303f74676",
+        "provider": "codex",
+        "question": "",
+        "scope": "Session neuve limitée au texte ; aucune modification de projet ni opération externe autorisée.",
+        "summary": "Les deux réunions sont analysées séparément : deux décisions et trois actions explicites. Sources intégrales et brouillon d’email inclus, sans envoi.",
+        "thread": "01a1273f-a960-7df1-b42e-820183f6af30",
+        "usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 16456,
+          "output_tokens": 1230,
+          "reasoning_output_tokens": 0
+        }
+      },
+      "question": null,
+      "processes": [
+        {
+          "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+          "pid": 641199,
+          "session": 641199,
+          "start": "1678747"
+        },
+        {
+          "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+          "pid": 641205,
+          "session": 641205,
+          "start": "1678751"
+        }
+      ]
+    },
+    "check": {
+      "status": "accepted",
+      "ownership": "managed",
+      "result": {
+        "attempt": 1,
+        "cost_usd": null,
+        "evidence": [
+          {
+            "sha256": "ca9b2c37ed95a844d185bdb08dc349f1c90317451421714416f7328866949870",
+            "size": 4836
+          }
+        ],
+        "model_observed": null,
+        "model_requested": "gpt-6-astra",
+        "node": "check",
+        "ok": true,
+        "outputs": {
+          "actions": [
+            {
+              "action": "Préparer les slides",
+              "echeance": "avant le 12 octobre",
+              "extrait": "Alice prépare les slides avant le 12 octobre.",
+              "responsable": "Alice",
+              "reunion": "Réunion équipe Atlas, 8 octobre 2026",
+              "source": "source_context.text — passage du 8 octobre 2026"
+            },
+            {
+              "action": "Vérifier les chiffres",
+              "echeance": "avant le 13 octobre",
+              "extrait": "Bob vérifie les chiffres avant le 13 octobre.",
+              "responsable": "Bob",
+              "reunion": "Réunion équipe Atlas, 8 octobre 2026",
+              "source": "source_context.text — passage du 8 octobre 2026"
+            },
+            {
+              "action": "Confirmer la salle",
+              "echeance": "avant le 14 octobre",
+              "extrait": "Chloé confirme la salle avant le 14 octobre.",
+              "responsable": "Chloé",
+              "reunion": "Réunion équipe Atlas, 9 octobre 2026",
+              "source": "source_context.text — passage du 9 octobre 2026"
+            }
+          ],
+          "check_summary": "Comparaison du compte rendu, de chacune des trois actions et de l’intégralité du brouillon d’email avec les deux passages originaux de parameters.source_context.text, ainsi qu’avec leur reproduction dans selected_meetings. Le destinataire collectif a été vérifié dans parameters.request. Les deux réunions sélectionnées sont couvertes ; les deux décisions sont explicitement qualifiées de décisions dans les sources, sans proposition transformée en décision. Les trois responsables et leurs échéances correspondent exactement aux textes. Aucune omission, contradiction ou décision inventée détectée. Ajustements : portée de l’absence d’autre action explicitement limitée à la réunion du 9 octobre ; adresses des destinataires indiquées à préciser. Incertitudes conservées : date initiale et motif du report, périmètre du budget, salle, lien entre les sujets, participants complets et avancement des actions. Aucun document complémentaire consulté. Il s’agit d’une vérification IA sur les textes fournis, pas d’une recette indépendante. L’email reste un brouillon et n’a pas été envoyé.",
+          "draft": "BROUILLON — sans envoi\nDestinataire : équipe Atlas — adresses à préciser\nObjet : Comptes rendus et actions — réunions Atlas des 8 et 9 octobre 2026\n\nBonjour à toutes et à tous,\n\nVoici les décisions et actions rapportées dans les textes fournis.\n\nRéunion du 8 octobre 2026\nDécision : reporter la présentation au 15 octobre.\nActions : Alice prépare les slides avant le 12 octobre ; Bob vérifie les chiffres avant le 13 octobre.\n\nRéunion du 9 octobre 2026\nDécision : conserver le budget de 1 200 euros.\nAction : Chloé confirme la salle avant le 14 octobre. Le texte de cette réunion indique qu’aucune autre action n’a été décidée.\n\nLes sources ne précisent pas la date initiale ni le motif du report, le périmètre du budget ou la salle concernée. Le lien entre le budget, la salle et la présentation n’est pas explicité. Les listes complètes des participants et l’avancement des actions ne sont pas renseignés.\n\nSources : passages originaux fournis pour les réunions Atlas des 8 et 9 octobre 2026.\n\nBonne journée.",
+          "minutes": "## Réunion équipe Atlas — 8 octobre 2026\nSource : source_context.text — passage du 8 octobre 2026.\nDécision : reporter la présentation au 15 octobre.\nActions : Alice prépare les slides avant le 12 octobre ; Bob vérifie les chiffres avant le 13 octobre.\nInformations non précisées : date initiale et motif du report, liste complète des participants, avancement des actions.\n\n## Réunion équipe Atlas — 9 octobre 2026\nSource : source_context.text — passage du 9 octobre 2026.\nDécision : conserver le budget de 1 200 euros.\nAction : Chloé confirme la salle avant le 14 octobre. La source indique qu’aucune autre action n’a été décidée lors de cette réunion.\nInformations non précisées : périmètre du budget, salle concernée, liste complète des participants, avancement de l’action.\n\nLe lien entre le budget, la salle et la présentation n’est pas explicité. Ces comptes rendus reposent uniquement sur les textes fournis."
+        },
+        "parent_run": "r95b2ba5303f74676",
+        "provider": "codex",
+        "question": "",
+        "scope": "Session neuve limitée au texte ; aucune modification de projet ni opération externe autorisée.",
+        "summary": "Les deux comptes rendus, les trois actions et le brouillon d’email ont été comparés aux textes originaux fournis. Aucune décision, attribution ou échéance inventée détectée. Les limites des sources ont été explicitées dans les livrables.",
+        "thread": "01a12740-5e22-7f52-8aa8-ba4d5eb6b091",
+        "usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 17383,
+          "output_tokens": 1048,
+          "reasoning_output_tokens": 0
+        }
+      },
+      "question": null,
+      "processes": [
+        {
+          "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+          "pid": 644533,
+          "session": 644533,
+          "start": "1683375"
+        },
+        {
+          "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+          "pid": 644549,
+          "session": 644549,
+          "start": "1683379"
+        }
+      ]
+    },
+    "source": {
+      "status": "accepted",
+      "ownership": "managed",
+      "result": {
+        "attempt": 1,
+        "cost_usd": null,
+        "evidence": [
+          {
+            "sha256": "d9a5a7a8384295cfabb3fbd02a96e4892dfa1cd462d2b40fec64651dcef2c14c",
+            "size": 1772
+          }
+        ],
+        "model_observed": null,
+        "model_requested": "gpt-6-astra",
+        "node": "source",
+        "ok": true,
+        "outputs": {
+          "selected_meetings": [
+            {
+              "content_read": "Réunion équipe Atlas, 8 octobre 2026 : décision reporter la présentation au 15 octobre. Alice prépare les slides avant le 12 octobre. Bob vérifie les chiffres avant le 13 octobre.",
+              "date": "2026-10-08",
+              "limits": "Source : texte collé fourni par l’utilisateur. Aucun document complémentaire ni service externe consulté ; aucun échange détaillé ni liste complète des participants fournis.",
+              "reference": "source_context.text — passage concernant le 8 octobre 2026",
+              "title": "Réunion équipe Atlas, 8 octobre 2026"
+            },
+            {
+              "content_read": "Réunion équipe Atlas, 9 octobre 2026 : décision conserver le budget 1200 euros. Chloé confirme la salle avant le 14 octobre. Aucune autre action décidée.",
+              "date": "2026-10-09",
+              "limits": "Source : texte collé fourni par l’utilisateur. Aucun document complémentaire ni service externe consulté ; aucun échange détaillé ni liste complète des participants fournis.",
+              "reference": "source_context.text — passage concernant le 9 octobre 2026",
+              "title": "Réunion équipe Atlas, 9 octobre 2026"
+            }
+          ]
+        },
+        "parent_run": "r95b2ba5303f74676",
+        "provider": "codex",
+        "question": "",
+        "scope": "Session neuve limitée au texte ; aucune modification de projet ni opération externe autorisée.",
+        "summary": "Les deux réunions Atlas des 8 et 9 octobre 2026 sont identifiées et leurs sources textuelles ont été lues. Aucune ambiguïté de sélection.",
+        "thread": "01a1273f-7256-7c33-9f77-89ea228910ec",
+        "usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 16266,
+          "output_tokens": 434,
+          "reasoning_output_tokens": 128
+        }
+      },
+      "question": null,
+      "processes": [
+        {
+          "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+          "pid": 640649,
+          "session": 640649,
+          "start": "1677338"
+        },
+        {
+          "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+          "pid": 640650,
+          "session": 640650,
+          "start": "1677341"
+        }
+      ]
+    },
+    "write": {
+      "status": "accepted",
+      "ownership": "managed",
+      "result": {
+        "attempt": 1,
+        "cost_usd": null,
+        "evidence": [
+          {
+            "sha256": "01ed46e99bd8fcaf914673556078cab52d433cb4f8dd53e740687cd2f30744b3",
+            "size": 5256
+          }
+        ],
+        "model_observed": null,
+        "model_requested": "gpt-6-astra",
+        "node": "write",
+        "ok": true,
+        "outputs": {
+          "actions": [
+            {
+              "action": "Préparer les slides",
+              "echeance": "avant le 12 octobre",
+              "extrait": "Alice prépare les slides avant le 12 octobre.",
+              "responsable": "Alice",
+              "reunion": "Réunion équipe Atlas, 8 octobre 2026",
+              "source": "source_context.text — passage concernant le 8 octobre 2026"
+            },
+            {
+              "action": "Vérifier les chiffres",
+              "echeance": "avant le 13 octobre",
+              "extrait": "Bob vérifie les chiffres avant le 13 octobre.",
+              "responsable": "Bob",
+              "reunion": "Réunion équipe Atlas, 8 octobre 2026",
+              "source": "source_context.text — passage concernant le 8 octobre 2026"
+            },
+            {
+              "action": "Confirmer la salle",
+              "echeance": "avant le 14 octobre",
+              "extrait": "Chloé confirme la salle avant le 14 octobre.",
+              "responsable": "Chloé",
+              "reunion": "Réunion équipe Atlas, 9 octobre 2026",
+              "source": "source_context.text — passage concernant le 9 octobre 2026"
+            }
+          ],
+          "draft": "BROUILLON — sans envoi\nDestinataire : équipe Atlas\nObjet : Comptes rendus et actions — réunions Atlas des 8 et 9 octobre 2026\n\nBonjour à toutes et à tous,\n\nVoici les décisions et actions des deux réunions.\n\nRéunion équipe Atlas — 8 octobre 2026\nLa présentation est reportée au 15 octobre. Alice prépare les slides avant le 12 octobre et Bob vérifie les chiffres avant le 13 octobre. La date initiale et le motif du report ne sont pas précisés dans la source.\nSource : source_context.text, passage du 8 octobre 2026.\n\nRéunion équipe Atlas — 9 octobre 2026\nLe budget de 1 200 euros est conservé. Chloé confirme la salle avant le 14 octobre. Aucune autre action n’a été décidée. Le périmètre du budget et la salle concernée restent à préciser.\nSource : source_context.text, passage du 9 octobre 2026.\n\nLe lien entre ce budget, cette salle et la présentation n’est pas explicité. Les listes complètes des participants et l’avancement des actions ne sont pas renseignés.\n\nPour vérification, voici les passages originaux :\n\n« Réunion équipe Atlas, 8 octobre 2026 : décision reporter la présentation au 15 octobre. Alice prépare les slides avant le 12 octobre. Bob vérifie les chiffres avant le 13 octobre. »\n\n« Réunion équipe Atlas, 9 octobre 2026 : décision conserver le budget 1200 euros. Chloé confirme la salle avant le 14 octobre. Aucune autre action décidée. »\n\nBonne journée.",
+          "minutes": "## Réunion équipe Atlas — 8 octobre 2026\nProvenance : source_context.text — passage concernant le 8 octobre 2026, reproduit dans selected_meetings.\n\nDécision : reporter la présentation au 15 octobre.\nActions : Alice prépare les slides avant le 12 octobre ; Bob vérifie les chiffres avant le 13 octobre.\nPoints à préciser : date initiale de la présentation et motif du report. Liste complète des participants non fournie.\n\n## Réunion équipe Atlas — 9 octobre 2026\nProvenance : source_context.text — passage concernant le 9 octobre 2026, reproduit dans selected_meetings.\n\nDécision : conserver le budget de 1 200 euros.\nAction : Chloé confirme la salle avant le 14 octobre. Aucune autre action n’a été décidée.\nPoints à préciser : périmètre du budget et salle concernée. Liste complète des participants non fournie.\n\nLe lien entre le budget, la salle et la présentation n’est pas explicité. Aucun état d’avancement n’est fourni. Aucune contradiction apparente entre les deux passages. Ces comptes rendus reposent uniquement sur le texte fourni.",
+          "selected_meetings": [
+            {
+              "content_read": "Réunion équipe Atlas, 8 octobre 2026 : décision reporter la présentation au 15 octobre. Alice prépare les slides avant le 12 octobre. Bob vérifie les chiffres avant le 13 octobre.",
+              "date": "2026-10-08",
+              "limits": "Aucun document complémentaire consulté ; liste complète des participants non fournie.",
+              "provenance": "Texte original fourni par l’utilisateur, reproduit intégralement pour cette réunion.",
+              "reference": "source_context.text — passage concernant le 8 octobre 2026",
+              "title": "Réunion équipe Atlas, 8 octobre 2026"
+            },
+            {
+              "content_read": "Réunion équipe Atlas, 9 octobre 2026 : décision conserver le budget 1200 euros. Chloé confirme la salle avant le 14 octobre. Aucune autre action décidée.",
+              "date": "2026-10-09",
+              "limits": "Aucun document complémentaire consulté ; liste complète des participants non fournie.",
+              "provenance": "Texte original fourni par l’utilisateur, reproduit intégralement pour cette réunion.",
+              "reference": "source_context.text — passage concernant le 9 octobre 2026",
+              "title": "Réunion équipe Atlas, 9 octobre 2026"
+            }
+          ]
+        },
+        "parent_run": "r95b2ba5303f74676",
+        "provider": "codex",
+        "question": "",
+        "scope": "Session neuve limitée au texte ; aucune modification de projet ni opération externe autorisée.",
+        "summary": "Compte rendu, actions et brouillon d’email produits pour les deux réunions, avec leurs sources originales. Aucun email envoyé ni brouillon Gmail créé.",
+        "thread": "01a1273f-ffa0-7d63-8548-66261ed89ae8",
+        "usage": {
+          "cache_write_input_tokens": 0,
+          "cached_input_tokens": 0,
+          "input_tokens": 17400,
+          "output_tokens": 1194,
+          "reasoning_output_tokens": 0
+        }
+      },
+      "question": null,
+      "processes": [
+        {
+          "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+          "pid": 642551,
+          "session": 642551,
+          "start": "1680960"
+        },
+        {
+          "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+          "pid": 642554,
+          "session": 642554,
+          "start": "1680965"
+        }
+      ]
+    }
+  }
+}

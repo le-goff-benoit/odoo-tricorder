@@ -1,0 +1,13 @@
+const fs=require('node:fs'); const os=require('node:os'); const path=require('node:path'); const readline=require('node:readline');
+const {_electron, chromium}=require('/home/blegoff/odoo-tricorder/node_modules/@playwright/test');
+(async()=>{
+ const out=__dirname, isolation=fs.mkdtempSync(path.join(os.tmpdir(),'tricorder-persona-produit-'));
+ const bins=path.join(isolation,'bin'); fs.mkdirSync(bins); for(const p of ['codex','claude'])fs.writeFileSync(path.join(bins,p),'#!/bin/sh\nexit 78\n',{mode:0o755});
+ const env={...process.env,PATH:bins+':'+process.env.PATH};
+ for(const k of ['HOME','XDG_CONFIG_HOME','XDG_DATA_HOME','XDG_CACHE_HOME','TRICORDER_HOME','TRICORDER_STATE_DIR','TRICORDER_WORKFLOW_STATE_DIR','TRICORDER_RUNTIME_DIR','TRICORDER_AGENTS_DIR','CODEX_HOME','CLAUDE_CONFIG_DIR']){env[k]=path.join(isolation,k.toLowerCase());fs.mkdirSync(env[k],{recursive:true});}
+ const app=await _electron.launch({executablePath:'/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.17/odoo-tricorder',args:['--no-sandbox'],env});const page=await app.firstWindow();await page.waitForTimeout(1500);
+ let count=0;const log=[];
+ async function capture(label){await page.waitForTimeout(300);const file=`${String(++count).padStart(2,'0')}-${label}.png`;await page.screenshot({path:path.join(out,file)});const body=await page.locator('body').innerText();log.push({file,body});fs.writeFileSync(path.join(out,'observations.json'),JSON.stringify(log,null,2));console.log(JSON.stringify({file,body}));}
+ await capture('accueil');
+ const rl=readline.createInterface({input:process.stdin});for await(const line of rl){try{const c=JSON.parse(line);if(c.action==='close'){await app.close();break;}if(c.action==='click')await page.getByRole(c.role||'button',{name:c.name,exact:c.exact??true}).nth(c.nth||0).click();if(c.action==='text')await page.getByText(c.name,{exact:c.exact??true}).nth(c.nth||0).click();if(c.action==='fill')await page.getByRole('textbox',{name:c.name,exact:true}).fill(c.value);if(c.action==='select')await page.getByRole('combobox',{name:c.name,exact:true}).selectOption({label:c.value});if(c.action==='escape')await page.keyboard.press('Escape');if(c.action==='inspect')console.log(JSON.stringify(await page.locator('button,input,select,textarea,a').evaluateAll(xs=>xs.filter(e=>e.offsetWidth||e.offsetHeight).map(e=>({tag:e.tagName,role:e.getAttribute('role'),text:e.innerText,placeholder:e.getAttribute('placeholder'),aria:e.getAttribute('aria-label')})))));if(c.action==='prototype')await page.goto('file:///home/blegoff/odoo-tricorder/release/2026-10-10_methodes-reutilisables/.suivi/conception.html');await capture(c.label||c.action);}catch(e){console.log('ACTION_ERROR '+e.message);}}
+})().catch(e=>{console.error(e);process.exit(1)});

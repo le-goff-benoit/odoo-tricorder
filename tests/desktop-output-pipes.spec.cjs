@@ -14,7 +14,7 @@ test('a recoverable backend rejection stays in the app after its launcher closes
   let app;
   try {
     app = await electron.launch({executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env});
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await page.locator('[data-workflow-route=global]').click();
     await app.evaluate(({dialog}) => {
       globalThis.__outputFailures = [];

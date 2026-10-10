@@ -34,7 +34,7 @@ test('model selection remains scoped to its provider and preserves an unknown sa
   assert.match(html,/<select[^>]+id="node-model-choice"/);
   assert.match(html,/<option value="private-model" selected>/);
   assert.match(html,/name="model" value="private-model"/);
-  assert.match(html,/L’accès au modèle sera vérifié au lancement/);
+  assert.match(html,/sa disponibilité sera vérifiée au lancement/);
   assert.doesNotMatch(html,/sonnet/);
   assert.equal((html.match(/name="model"/g)||[]).length,1);
 });

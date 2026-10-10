@@ -82,7 +82,7 @@ test('simplified workspace: task dialogs, agent identity, preferences and launch
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   const errors = [];
   try {
-    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await page.setViewportSize({ width: 1280, height: 900 });
     await expect(page.locator('#task-select, .terminal-footer, .statusbar')).toHaveCount(0);
@@ -174,7 +174,7 @@ test('global Kanban: all projects, closed-release filter and exact task navigati
       TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   try {
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     if (!(await page.locator('.sidebar-tools').evaluate(el => el.open))) await page.locator('.sidebar-tools > summary').click();
     await page.locator('[data-view="kanban"]').click();
     await expect(page.locator('#project-title')).toHaveText('Kanban global');
@@ -230,7 +230,7 @@ test('release Kanban: receipts, criteria, filters, live refresh and existing ter
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   const errors = [];
   try {
-    const page = await app.firstWindow(); page.on('pageerror', error => errors.push(error.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', error => errors.push(error.message));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await page.keyboard.press('Control+Shift+T');
     await expect(page.locator('.terminal-tab')).toHaveCount(1);
@@ -306,7 +306,7 @@ test('design system: common gutters, cards and controls across every project vie
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   const errors = [];
   try {
-    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).not.toHaveValue('');
     for (const [width, height, zoom, gutter] of [[1440, 900, 1, 24], [1000, 900, 1, 16], [1000, 700, 1.25, 16]]) {
       await app.evaluate(({ BrowserWindow }, width) => { const w = BrowserWindow.getAllWindows()[0]; w.setMinimumSize(800, 600); w.setSize(width, 900); }, width);
@@ -374,7 +374,7 @@ test('preparation: project scope becomes release scope without a duplicate or a 
       TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   try {
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await app.evaluate(({ BrowserWindow }) => { const win = BrowserWindow.getAllWindows()[0]; win.setMinimumSize(800, 600); win.setSize(1000, 800); });
     await expect(page.locator('#release-select')).toHaveValue('');
     await projectTab(page, 'effort');
@@ -429,7 +429,7 @@ test('effort: partial recorded time survives missing roles, task filtering and r
       TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   try {
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await projectTab(page, 'effort');
     const first = page.locator('[data-time-task="T01"]');
@@ -474,7 +474,7 @@ test('effort: open release updates task and agent percentages before closure', a
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   const errors = [];
   try {
-    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await projectTab(page, 'effort');
     const first = page.locator('[data-time-task="T01"]');
@@ -507,7 +507,7 @@ test('release context: none, automatic new release, same terminal and persistenc
   let app = await electron.launch(options);
   const errors = [];
   try {
-    let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    let page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1000, 700));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await page.locator('#release-select').selectOption('');
@@ -549,7 +549,7 @@ test('release context: none, automatic new release, same terminal and persistenc
     }, { project: path.join(home, 'nova-services'), session: original.id });
     expect(foreign).toBe(true);
     await closeWindow(app); app = await electron.launch(options);
-    page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).toHaveValue(newId);
     expect((await page.evaluate(() => window.tricorder.terminals.list()))[0].pid).toBe(original.pid);
     await page.locator('#release-select').selectOption('');
@@ -560,7 +560,7 @@ test('release context: none, automatic new release, same terminal and persistenc
     await expect(page.locator('#release-select')).toHaveValue('');
     await expect(page.locator('#terminal-mismatch')).toHaveCount(0);
     await closeWindow(app); app = await electron.launch(options);
-    page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).toHaveValue('');
     expect((await page.evaluate(() => window.tricorder.terminals.list()))[0].pid).toBe(original.pid);
     await page.screenshot({ path: 'test-results/no-release-terminal.png' });
@@ -582,7 +582,7 @@ test('flow starts: delayed terminal cannot hijack navigation, ambiguous adoption
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   const errors = [];
   try {
-    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0].setSize(1000, 700));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await page.locator('#release-select').selectOption('');
@@ -696,7 +696,7 @@ test('Markdown preview: readable safe content and recovery from a project read e
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   const errors = [], external = [];
   try {
-    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     page.on('request', r => { if (/^https?:/.test(r.url())) external.push(r.url()); });
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await projectTab(page, 'plan');
@@ -755,7 +755,7 @@ test('email removed: no UI or API, old private records preserved, project still 
     ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}) });
   const errors = [];
   try {
-    const page = await app.firstWindow(); page.on('pageerror', error => errors.push(error.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', error => errors.push(error.message));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await projectTab(page, 'plan');
     await expect(page.locator('.delivery-panel')).toHaveCount(0);
@@ -805,7 +805,7 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
       const collect = menu => menu.items.flatMap(item => [item.role, ...(item.submenu ? collect(item.submenu) : [])]);
       if (collect(Menu.getApplicationMenu()).includes('pasteandmatchstyle')) throw new Error('Conflicting native paste accelerator');
     });
-    let page = await app.firstWindow();
+    let page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     page.on('pageerror', error => errors.push(error.message));
     await expect(page.locator('#project-title')).toHaveText('orbital-industries');
     await expect(page.locator('#release-select')).toHaveValue('2026-09-11_01_facturation-et-maintenance');
@@ -865,7 +865,7 @@ test('desktop: projects, proof status, sources, real terminal and persistence', 
     await closeWindow(app);
     app = null;
     app = await electron.launch(launchOptions);
-    page = await app.firstWindow();
+    page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     page.on('pageerror', error => errors.push(error.message));
     await projectTab(page, 'terminal');
     await expect(page.locator('.xterm-screen')).toContainText('TRICORDER-READY');
@@ -909,7 +909,7 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
   const errors = [];
   try {
     app = await electron.launch(launch);
-    let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    let page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await expect(page.locator('.brand-name')).toHaveText('Tricorder');
     await expect(page.locator('.topbar')).not.toContainText(/poste local/i);
@@ -1000,7 +1000,7 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await expect(page.locator('#release-select')).toHaveValue(historical);
     await page.screenshot({ path: 'test-results/lifecycle-plan.png' });
     await closeWindow(app); app = null;
-    app = await electron.launch(launch); page = await app.firstWindow();
+    app = await electron.launch(launch); page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await expect(page.locator('#release-select')).toHaveValue(historical);
     await projectTab(page, 'terminal');
     await expect(page.locator('#terminal-mismatch')).toBeVisible();
@@ -1058,7 +1058,7 @@ test('real project: read-only release/task/mission screens', async () => {
       env: { ...process.env, HOME: home, HISTFILE: path.join(temp, 'history'),
         TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
         TRICORDER_HOME: home, TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
-    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await projectTab(page, 'plan');
     await expect(page.locator('.release-state')).toContainText('Close');
@@ -1138,7 +1138,7 @@ test('roadmap: observations, human alert, measures, files, graph, preparation an
   const errors = [];
   try {
     app = await electron.launch(launchOptions);
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     page.on('pageerror', error => errors.push(error.message));
     await expect(page.locator('#project-title')).toHaveText('orbital-industries');
     await app.evaluate(({ dialog, clipboard, Notification, BrowserWindow }, source) => {
@@ -1274,7 +1274,7 @@ test('intentions, dependency graph and concurrent activities remain usable at co
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   const errors = [];
   try {
-    const page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await page.setViewportSize({ width: 1440, height: 900 });
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await app.evaluate(({ ipcMain }, { project, releaseId, now }) => {
@@ -1362,7 +1362,7 @@ test('live requests appear before planning and reconcile with tasks without manu
       TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   try {
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     const newRelease = '2026-09-15_01_demandes-en-direct';
     const folder = path.join(project, 'changelog', newRelease);
@@ -1426,7 +1426,7 @@ test('UI review: bundled typography, expanded views and dialogs stay readable at
       TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents'),
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
   try {
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     const fonts = await page.evaluate(async () => {
       const results = [];
@@ -1557,7 +1557,7 @@ test('work page starts a contextual request and resumes a task without changing 
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run'),
       TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents') } });
   try {
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await expect(page.locator('.work-page')).toBeVisible();
     await expect(page.locator('#tabs [data-view="plan"]')).toBeVisible();
     await expect(page.locator('.work-page')).not.toContainText('retours à qualifier');
@@ -1606,7 +1606,7 @@ test('appearance: light, dark and system persist with live terminals and a reada
   let app = await electron.launch(options);
   const errors = [];
   try {
-    let page = await app.firstWindow(); page.on('pageerror', e => errors.push(e.message));
+    let page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); page.on('pageerror', e => errors.push(e.message));
     await page.setViewportSize({ width: 1440, height: 900 });
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await projectTab(page, 'work');
@@ -1680,7 +1680,7 @@ test('appearance: light, dark and system persist with live terminals and a reada
     await page.locator('[data-theme-choice="light"]').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme','light');
     await closeWindow(app);
-    app = await electron.launch(options); page = await app.firstWindow();
+    app = await electron.launch(options); page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await expect(page.locator('html')).toHaveAttribute('data-theme','light');
     await expect(page.locator('[data-theme-choice="light"]')).toHaveAttribute('aria-pressed','true');
@@ -1709,7 +1709,7 @@ test('window integration preserves the native conversation while inspecting phas
       TRICORDER_STATE_DIR: path.join(temp, 'state'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run'), TRICORDER_TEST_MODE: '1',
       TRICORDER_AGENTS_DIR: process.env.TRICORDER_AGENTS_DIR || path.join(os.homedir(), '.odoo19-agents') } });
   try {
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await expect(page.getByRole('region', { name: 'Workflow de release' })).toBeVisible();
     await expect(page.locator('#terminal-workspace')).toBeVisible();
     await page.getByLabel('Fournisseur IA', { exact: true }).selectOption('claude');

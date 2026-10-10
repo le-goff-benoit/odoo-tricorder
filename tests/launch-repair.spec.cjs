@@ -26,7 +26,7 @@ test.beforeEach(async () => {
       TRICORDER_AGENTS_DIR: path.join(directory, 'no-installed-pack'), TRICORDER_HOME: directory,
       TRICORDER_STATE_DIR: directory, TRICORDER_TEST_MODE: '1' }, timeout: 20000,
   });
-  page = await app.firstWindow();
+  page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
 });
 

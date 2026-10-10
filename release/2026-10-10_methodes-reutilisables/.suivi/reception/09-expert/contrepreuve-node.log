@@ -1,0 +1,29 @@
+✔ reusing a method removes previous trial outputs by default and retains business settings (3.685254ms)
+✔ root input guidance explains request context without treating it as an input binding (0.89853ms)
+✔ schedule cards describe intervals, local times and actual selected weekdays (0.970925ms)
+✔ replacing a schedule prepopulates recurrence, with no inherited permission or real execution mode (0.53126ms)
+✔ replacing a schedule preserves its fixed or renewed source without carrying its activation (0.477266ms)
+✔ two analyses run in parallel and synthesis receives both results before independent verification (87.74373ms)
+✔ conditional human review continues without interruption for normal work and pauses only on a real decision (92.981702ms)
+✔ a rejected prerequisite cannot be bypassed by another successful parallel branch (69.486736ms)
+✔ a failed parallel analysis does not release synthesis using the other analysis alone (55.096383ms)
+✔ guided editing keeps configured providers, layout, identity and untouched graph without destroying advanced changes (1.958265ms)
+✔ removing conditional review clears obsolete routing while keeping configured agent models (53.938257ms)
+✔ a missing source can request clarification through the real engine before producing its result (61.060713ms)
+✔ invalid dependencies and metadata are rejected before any method is saved (0.817536ms)
+✔ authoring forms escape user content and keep technical contracts out of everyday fields (1.167268ms)
+✔ distinct executors are an explicit choice and do not retroactively change ordinary native stages (48.415677ms)
+✔ only currently qualified read operations are offered and user text is escaped (1.681201ms)
+✔ recurring connection snapshot inserts a real read and empty-source branch without weakening result contracts (43.825805ms)
+✔ fixed source is an explicit text-only variant and clears stale request context (31.812289ms)
+✔ unqualified or writable connections cannot be selected through manipulated form values (0.863107ms)
+✔ an independent initial branch cannot be announced as waiting for fresh sources (0.346984ms)
+✔ converting a source clears old source values even in local agent parameters (26.699859ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 535.483791

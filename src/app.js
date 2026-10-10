@@ -153,7 +153,7 @@ $('#app').innerHTML = `
     <div class="side-heading">Accès rapide aux projets</div>
     <label class="project-search"><span class="sr-only">Rechercher un projet</span><input id="project-search" type="search" placeholder="Rechercher un projet…"></label><div id="project-list" class="project-list"></div>
     <div class="sidebar-bottom">
-      <nav aria-label="Configuration"><button class="side-item" data-workflow-route="schedules">${icon('chart')}<span>Planifications</span></button><button class="side-item" data-workflow-route="connections">${icon('server')}<span>Connexions</span></button></nav>
+      <nav aria-label="Configuration"><button class="side-item" data-workflow-route="agents">${icon('agents')}<span>Agents</span></button><button class="side-item" data-workflow-route="schedules">${icon('chart')}<span>Planifications</span></button><button class="side-item" data-workflow-route="connections">${icon('server')}<span>Connexions</span></button></nav>
       <div class="sidebar-settings"></div>
       <details class="sidebar-tools"><summary>Outils et aide</summary>
         <button class="side-item kanban-nav" data-view="kanban">${icon('grid')}<span>Kanban des releases</span></button>

@@ -1,0 +1,38 @@
+[
+  {
+    "variation": "independent",
+    "entry": "Schedules.create",
+    "rejected": true,
+    "reason": "Tous les travaux doivent attendre la lecture et la présence d’une nouvelle source"
+  },
+  {
+    "variation": "independent",
+    "entry": "Engine.start",
+    "rejected": true,
+    "reason": "Tous les travaux doivent attendre la lecture et la présence d’une nouvelle source"
+  },
+  {
+    "variation": "direct",
+    "entry": "Schedules.create",
+    "rejected": true,
+    "reason": "Tous les travaux doivent attendre la lecture et la présence d’une nouvelle source"
+  },
+  {
+    "variation": "direct",
+    "entry": "Engine.start",
+    "rejected": true,
+    "reason": "Tous les travaux doivent attendre la lecture et la présence d’une nouvelle source"
+  },
+  {
+    "variation": "no-branch",
+    "entry": "Schedules.create",
+    "rejected": true,
+    "reason": "La méthode ne doit effectuer aucun travail quand la recherche ne trouve aucune source"
+  },
+  {
+    "variation": "no-branch",
+    "entry": "Engine.start",
+    "rejected": true,
+    "reason": "La méthode ne doit effectuer aucun travail quand la recherche ne trouve aucune source"
+  }
+]

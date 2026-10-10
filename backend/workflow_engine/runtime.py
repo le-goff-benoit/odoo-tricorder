@@ -92,12 +92,23 @@ def preflight(graph, simulation=False, defaults=None, project=None, engine=None,
             issues += [{**issue, "node": node["id"], "child_node": issue.get("node"),
                         "message": f"{node['title']} · {issue['message']}"} for issue in child_issues]
         selection = {**(defaults or {}), **graph.get("defaults", {}), **node}
-        native = mode == "native" and kind in {"agent", "task", "document"} and node.get("execution_mode") != "edit" and selection.get("provider", provider) == provider and (not selection.get("model") or selection.get("model") == model)
+        native = mode == "native" and node.get("execution_driver") != "delegated" and kind in {"agent", "task", "document"} and node.get("execution_mode") != "edit" and selection.get("provider", provider) == provider and (not selection.get("model") or selection.get("model") == model)
         if native and selection.get("effort", "medium") != graph.get("defaults", {}).get("effort", "medium"):
             issues.append({"node": node["id"], "code": "provider.effort-mismatch", "stage": "launch", "action": "edit-node",
                            "message": "Le niveau d’effort de cette étape diffère de celui de la conversation.",
                            "remedy": "Alignez le niveau d’effort dans les options IA du bloc avec celui de la conversation avant de lancer le workflow."})
         available = {"text", "read", "edit", "shell", "native-tools"} if native else {"text", "read", "edit"} if node.get("execution_mode") == "edit" else {"shell", "read"} if kind == "command" else {"text"}
+        if engine and project and kind in {"agent", "task", "document", "watch"} and len(node.get("capabilities", [])) == 1:
+            # A descriptor is not enough: only a currently approved adapter
+            # with an actual read effect can supply materialized source data.
+            from connectors.local_tools import approved
+            binding = node["capabilities"][0]
+            try:
+                record = approved(engine, project, binding["plugin"])
+                if record["operations"].get(binding["operation"]) == "read":
+                    available.add("read")
+            except (ContractError, OSError):
+                pass  # Plugin diagnostics above explain the failed qualification.
         missing = set(node.get("required_capabilities", [])) - available
         if missing:
             issues.append({"node": node["id"], "code": "executor.capabilities-missing", "stage": "launch", "action": "edit-node",
@@ -162,6 +173,7 @@ def dispatch(engine, run_id):
         pending = source["nodes"].get(run["parameters"]["source_node"], {})
         if source["status"] not in {"active", "paused"} or pending.get("status") != "waiting_input" or pending.get("question", {}).get("id") != run["parameters"]["source_question"]:
             return engine.control(run_id, "cancel")
+    catalog = None
     for nid, state in run["nodes"].items():
         if state["status"] != "ready":
             continue
@@ -180,8 +192,16 @@ def dispatch(engine, run_id):
                             engine._event(db, current, "iteration-blocked", nid, reason=str(error)[:1200])
                             engine._save(db, current)
             continue
-        if run_driver(run) == "conversation" and node["kind"] in {"agent", "task", "document"}:
+        if run_driver(run) == "conversation" and node["kind"] in {"agent", "task", "document"} and node.get("execution_driver") != "delegated":
             continue  # The native conversation claims work; the graph remains authoritative.
+        if run_driver(run) == "conversation" and node.get("execution_driver") == "delegated":
+            # The saved method explicitly enrols these stages. Historical
+            # conversation nodes keep their manual/native dispatch behaviour.
+            if catalog is None:
+                catalog = {item["id"]: item for item in capabilities()}
+            issues = worker_preflight(engine, run, node, engine.project(run["project"]), catalog=catalog)
+            if issues:
+                continue  # Never fall back to the coordinator's broader tools.
         try:
             _spawn_worker(engine, run_id, nid)
         except ContractError:

@@ -51,7 +51,7 @@ test('large release opens with validated memory in read-only mode', async () => 
       ...(process.env.TRICORDER_EXECUTABLE ? { executablePath: process.env.TRICORDER_EXECUTABLE } : {}),
       env: { ...process.env, HOME: home, TRICORDER_HOME: home, TRICORDER_STATE_DIR: state,
         TRICORDER_AGENTS_DIR: path.join(os.homedir(), '.odoo19-agents'), TRICORDER_RUNTIME_DIR: path.join(temp, 'run') } });
-    const page = await app.firstWindow();
+    const page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
     await expect(page.locator('#release-select')).toHaveValue(release, { timeout: 30000 });
     await page.locator('#tabs [data-view="knowledge"]').click();
     await expect(page.locator('.knowledge-page')).toBeVisible();

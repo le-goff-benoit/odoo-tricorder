@@ -23,7 +23,7 @@ test.beforeEach(async () => {
     CODEX_HOME: path.join(directory, 'codex'), CLAUDE_CONFIG_DIR: path.join(directory, 'claude'), TRICORDER_HOME: directory,
     TRICORDER_STATE_DIR: directory, TRICORDER_RUNTIME_DIR: path.join(directory, 'runtime'), TRICORDER_AGENTS_DIR: path.join(directory, 'no-pack'), TRICORDER_TEST_MODE: '1', PYTHONDONTWRITEBYTECODE: '1' };
   app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env });
-  page = await app.firstWindow(); await page.setViewportSize({ width: 1600, height: 1000 });
+  page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); await page.setViewportSize({ width: 1600, height: 1000 });
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
   await page.locator('[data-action=terminal-toggle]').click();
   await page.getByRole('button', { name: 'Ouvrir un terminal', exact: true }).click();

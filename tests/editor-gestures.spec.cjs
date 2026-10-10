@@ -42,7 +42,7 @@ test.beforeEach(async () => {
     XDG_CONFIG_HOME: path.join(directory, 'config'), XDG_CACHE_HOME: path.join(directory, 'cache'), XDG_DATA_HOME: path.join(directory, 'data'),
     CODEX_HOME: path.join(directory, 'codex'), CLAUDE_CONFIG_DIR: path.join(directory, 'claude'), TRICORDER_HOME: directory, TRICORDER_STATE_DIR: directory,
     TRICORDER_RUNTIME_DIR: path.join(directory, 'runtime'), TRICORDER_AGENTS_DIR: path.join(directory, 'no-pack'), TRICORDER_TEST_MODE: '1', PYTHONDONTWRITEBYTECODE: '1',
-  } }); page = await app.firstWindow(); await size(1600, 1100);
+  } }); page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); await size(1600, 1100);
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
   await page.locator('[data-action=terminal-toggle]').click(); await page.getByRole('button', { name: 'Ouvrir un terminal', exact: true }).click();
   await page.locator('.xterm-helper-textarea:visible').focus(); await page.keyboard.type('command -v codex; codex --version; command -v claude; claude --version'); await page.keyboard.press('Enter');

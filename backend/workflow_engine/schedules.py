@@ -5,12 +5,74 @@ at most one overdue occurrence is started; overlapping unfinished runs are skipp
 """
 
 from datetime import datetime, timedelta, timezone
+import math
 import time
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from .contracts import ContractError, require, validate, expand, digest
 from .engine import new_id
 from .runtime import preflight
+
+
+def fresh_source_since(schedule, previous):
+    """Advance only successful coverage, keeping a one-item backlog and ties.
+
+    A failed/cancelled occurrence leaves the watermark unchanged. Selected
+    items advance to just before their timestamp, so other items with the same
+    date are still read; durable consumption excludes only successful items.
+    An empty successful read covers its due time, never its later finish time.
+    Historical schedules retain their original polling window.
+    """
+    configured = schedule["definition"].get("schedule_source", {})
+    since = schedule.get("source_since", schedule["created"])
+    if configured.get("version") != 1 or configured.get("mode") != "connection":
+        return schedule["created"]
+    if not previous or previous["status"] != "completed" or previous.get("completion_outcome") != "succeeded":
+        return since
+    message = previous["nodes"].get(configured["node"], {}).get("result", {}).get("outputs", {}).get("message", {})
+    timestamp = message.get("received")
+    if message.get("id") and type(timestamp) in (int, float) and math.isfinite(timestamp):
+        return max(since, timestamp - 0.000001)
+    return max(since, previous.get("occurrence", {}).get("due", since))
+
+
+def validate_schedule_source(graph):
+    configuration = graph.get("schedule_source")
+    if configuration is None:
+        return
+    require(isinstance(configuration, dict) and set(configuration) == {"version", "mode", "node"}
+            and configuration["version"] == 1 and configuration["mode"] in {"fixed", "connection"},
+            "Source de planification invalide")
+    source = next((node for node in graph["nodes"] if node["id"] == configuration["node"]), None)
+    require(source is not None, "Étape de source absente de la planification")
+    source_keys = {"schedule_fixed_source", "schedule_source_query", "schedule_source_scope"}
+    require(all(not source_keys.intersection(node.get("parameters", {})) for node in graph["nodes"]),
+            "Les paramètres d’une étape ne peuvent pas remplacer la source conservée pour cette planification")
+    if configuration["mode"] == "connection":
+        roots = [node["id"] for node in graph["nodes"] if not any(edge["to"] == node["id"] for edge in graph["edges"])]
+        outgoing = [edge for edge in graph["edges"] if edge["from"] == source["id"]]
+        require(roots == [source["id"]] and len(outgoing) == 1,
+                "Tous les travaux doivent attendre la lecture et la présence d’une nouvelle source")
+        gate = next(node for node in graph["nodes"] if node["id"] == outgoing[0]["to"])
+        branches = [edge for edge in graph["edges"] if edge["from"] == gate["id"]]
+        require(gate["kind"] == "condition" and gate.get("parameter") == "match"
+                and set(gate.get("options", [])) == {"yes", "no"}
+                and outgoing[0].get("mapping") == {"match": "match", "message": "message"}
+                and branches and all(edge.get("outcome") == "yes" for edge in branches),
+                "La méthode ne doit effectuer aucun travail quand la recherche ne trouve aucune source")
+        polling = source.get("source_polling", {})
+        require(source["kind"] == "watch" and isinstance(polling, dict)
+                and set(polling) == {"version", "query", "scope"} and polling.get("version") == 1
+                and isinstance(polling.get("query"), str) and 0 < len(polling["query"].strip()) <= 2000
+                and isinstance(polling.get("scope"), str) and 0 < len(polling["scope"].strip()) <= 200,
+                "La planification doit conserver sa recherche et son périmètre de lecture")
+    else:
+        roots = [node["id"] for node in graph["nodes"] if not any(edge["to"] == node["id"] for edge in graph["edges"])]
+        require(roots == [source["id"]], "Tous les travaux doivent attendre le texte fixe fourni")
+        require(source["kind"] == "agent" and set(source.get("required_capabilities", [])) == {"text"}
+                and not source.get("capabilities") and source.get("execution_mode", "text") == "text"
+                and source.get("execution_driver", "delegated") == "delegated",
+                "Une source fixe doit être explicitement limitée au texte fourni")
 
 
 def next_due(rule, after):
@@ -56,11 +118,16 @@ class Schedules:
 
     def create(self, project_id, graph, rule, simulation=False, now=None, library=None, notifications_authorized=False, parameters=None):
         validate(graph)
+        validate_schedule_source(graph)
         now = time.time() if now is None else now
         project = self.engine.project(project_id)
         graph = expand(graph, library or {})
         from .launch_fields import resolve_parameters
         parameters = resolve_parameters(graph, parameters)
+        if graph.get("schedule_source", {}).get("mode") == "fixed":
+            content = parameters.get("schedule_fixed_source")
+            require(isinstance(content, str) and 0 < len(content.strip()) <= 48000,
+                    "Fournir le texte fixe effectivement conservé dans cette planification")
         from .packs import resolve_profiles, policy_issues
         if not simulation:
             graph = resolve_profiles(project, graph)
@@ -113,6 +180,7 @@ class Schedules:
                 if previous and previous["status"] in {"active", "paused"}:
                     schedule["last_status"] = "skipped-overlap"
                 else:
+                    schedule["source_since"] = fresh_source_since(schedule, previous)
                     db.execute("SAVEPOINT occurrence")
                     try:
                         project = self.engine.project(schedule["project"], db)
@@ -127,7 +195,7 @@ class Schedules:
                             require(not issues, " · ".join(i["message"] for i in issues))
                         run = self.engine.start(schedule["project"], schedule["definition"], simulation=schedule["simulation"], library=schedule["library"], connection=db,
                                                 notifications_authorized=schedule.get("notifications_authorized", False), parameters=schedule.get("parameters"),
-                                                occurrence={"schedule": schedule["id"], "due": schedule["last_due"], "since": schedule["created"]})
+                                                occurrence={"schedule": schedule["id"], "due": schedule["last_due"], "since": schedule["source_since"]})
                         schedule.update(last_run=run["id"], last_status="started")
                         started.append(run)
                     except (ContractError, OSError, ValueError) as exc:

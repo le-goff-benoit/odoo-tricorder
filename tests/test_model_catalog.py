@@ -29,15 +29,17 @@ class ModelCatalogueTests(unittest.TestCase):
             self.assertEqual(result["codex"][0]["label"], "Model A")
             self.assertNotIn("do not export", json.dumps(result))
 
-    def test_missing_malformed_or_oversized_metadata_leaves_an_empty_catalogue(self):
+    def test_missing_malformed_or_oversized_metadata_uses_only_bundled_public_ids(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            self.assertEqual(provider_models(root), {"codex": [], "claude": []})
+            reference = provider_models(root)
+            self.assertTrue(reference["codex"])
+            self.assertTrue(all(item["source"] == "bundled-catalogue" for items in reference.values() for item in items))
             cache = root / ".codex/models_cache.json"
             cache.parent.mkdir()
             for content in ['not json', '[1,2]', '{"models": {}}', ' ' * 4_000_001]:
                 cache.write_text(content)
-                self.assertEqual(provider_models(root), {"codex": [], "claude": []})
+                self.assertEqual(provider_models(root), reference)
 
 
 if __name__ == "__main__":

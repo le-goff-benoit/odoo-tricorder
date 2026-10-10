@@ -1,0 +1,11 @@
+{
+  "status": "active",
+  "watch_match": "no",
+  "source_status": "skipped",
+  "independent_status": "ready",
+  "schedule_source": {
+    "mode": "connection",
+    "node": "fresh",
+    "version": 1
+  }
+}

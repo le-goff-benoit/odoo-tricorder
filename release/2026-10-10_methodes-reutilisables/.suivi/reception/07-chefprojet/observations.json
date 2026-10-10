@@ -1,0 +1,34 @@
+{
+  "persona": "07-chefprojet",
+  "snapshot": "/tmp/tricorder-method-review-v3",
+  "verdicts": {
+    "creation": "reussite_configuration_gui",
+    "comprehension": "partiel",
+    "suivi": "reussite_gui"
+  },
+  "issues": [
+    {
+      "id": "CP7-01",
+      "severity": "moyenne",
+      "title": "Exécutants distincts absents du résumé"
+    },
+    {
+      "id": "CP7-02",
+      "severity": "faible",
+      "title": "Participation humaine sans condition dans le résumé"
+    },
+    {
+      "id": "CP7-03",
+      "severity": "moyenne",
+      "title": "Consigne générée longue et technique en modification"
+    },
+    {
+      "id": "CP7-04",
+      "severity": "faible",
+      "title": "Explication d’échec CLI peu accessible"
+    }
+  ],
+  "businessQualification": false,
+  "providerQualification": false,
+  "externalServiceQualification": false
+}

@@ -1,0 +1,17 @@
+# Réception froide — persona 9 spécialiste workflows
+
+Constat figé le 10 octobre 2026 avant toute lecture du code, README, tests ou rapports d'autres personas. Snapshot /tmp/tricorder-method-review-v4, Electron et Xvfb isolés, HOME/XDG/TRICORDER/CODEX/CLAUDE temporaires. CLI codex/claude inertes exit 78 ; catalogue et policy de modèle factice. Aucun fournisseur ni service externe appelé. Préparation corrigée : dossier TRICORDER_HOME créé, catalogue public modèle factice chargé puis actualisé dans l'interface.
+
+## Intention 1 : source → deux analyses distinctes parallèles → consolidation → contrôle et décision
+
+Attendu : composer et enregistrer cette méthode sans éditeur de JSON, comprendre la provenance et les dépendances. Observé : Workflows → Gestion des workflows → Workflows enregistrés → Créer un workflow. Le formulaire distingue « Informations à fournir au lancement », « Qui exécute cette étape ? », « En parallèle d’une étape », « Après tous les résultats sélectionnés » et « Toujours avant de poursuivre ». Méthode « Revue technique et risques » enregistrée ; deux agents distincts au départ, consolidation après les deux résultats cochés, contrôle après consolidation et décision humaine. Vue finale : « À partir de la demande et de ses sources. » sur chaque analyse ; « Après : Analyse technique ; Analyse des risques » sur consolidation ; « Après : Consolidation » sur contrôle. Résultat : réussi pour conception/enregistrement ; aucune exécution métier ni fournisseur qualifiés.
+
+Verbatim de limite correctement exposée : « L’agent distinct reçoit les informations fournies et les résultats précédents. Il ne peut pas aller chercher un email ou un fichier avec les outils du terminal. » La description de source est donc une consigne de lancement, pas une acquisition externe configurée.
+
+## Intention 2 : planification, sources fixes et renouvelées
+
+Attendu : comprendre le comportement récurrent et atteindre un réglage de renouvellement de source. Observé : Planifications donne les contraintes ordinateur/application ouverts, une seule occurrence rattrapée, sans chevauchement ; chemin indiqué « Options → Planifier ». Sur ma création guidée, après définition du modèle : « Cette méthode ne possède pas d’étape initiale de lecture configurable. Ses paramètres de planification restent fixes. » Le dialogue explique révision figée, consommation éventuelle et conservation des décisions humaines ; simulation explicitement « sans appel de modèle ni de service ».
+
+Pour une source renouvelée, le modèle « Réunion : compte rendu et email » a été copié via « Personnaliser une copie », puis Planifier. Blocage affiché : « Capacités requises indisponibles dans ce mode : read. Utiliser la conversation native ou configurer un exécutant adapté. » Après choix du modèle factice, ce blocage subsiste et le seul bouton est « Ouvrir l’étape ». Parcours abandonné honnêtement sans contournement API : le renouvellement n'est pas atteint ni qualifié dans cette réception. Gravité S2 pour découvrabilité/configuration : l'entrée Planifier d'un modèle de lecture conduit d'abord à la capacité read manquante, sans accès visible au choix des sources, qui pourrait précisément remplacer cette lecture. À confirmer par relecture séparée ; pas un bug moteur établi à froid.
+
+Captures : 01-workflows.png ; 02-creation.png ; 03-methode-enregistree.png ; 04-planification-fixe.png ; 05-limite-sources.png. Aucun défaut bloquant de conception constaté. Le résultat a été obtenu par l'interface uniquement ; aucune modification d'état SQLite/JSON.

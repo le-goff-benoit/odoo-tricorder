@@ -1,43 +1,60 @@
 # Tricorder
 
-**Dessinez votre méthode de travail. Donnez vos demandes dans le terminal. Suivez ce qui se passe.**
+**Préparez une méthode réutilisable. Fournissez vos sources. Retrouvez le résultat.**
 
 Tricorder réunit un éditeur de workflows, vos conversations avec Codex ou Claude
 et le suivi des demandes dans une application de bureau. Il sert à préparer une
 release, analyser un ticket, clôturer une réunion ou organiser votre propre processus.
 Les projets Odoo sont un usage possible ; le pack Odoo reste facultatif.
 
-**Préversion publiée 0.6.0-rc.17 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.17)
-· [Nouveautés](release/2026-10-10_autorisations-agents/README.md)
+**Préversion publiée 0.6.0-rc.18 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.18)
+· [Nouveautés](release/2026-10-10_methodes-reutilisables/README.md)
 · [Guide d’utilisation](docs/WORKFLOW-RUNTIME.md)
 
-![Renseigner les informations propres à chaque demande](release/2026-10-10_retours-complementaires/captures/formulaire-lancement.png)
+![Créer deux analyses parallèles puis une synthèse qui attend leurs résultats](release/2026-10-10_methodes-reutilisables/.suivi/reception/07-chefprojet/06-synthese-attend-deux.png)
 
 *Captures de l’application avec des projets et exécutants fictifs.*
 
-## Une création et un suivi plus compréhensibles
+## Des méthodes réutilisables, du modèle au résultat
 
-Cette version complète les [retours de la revue spécialisée et des six personas](release/2026-10-10_retours-complementaires/README.md), avec formulaires de lancement configurables et libellés métier conservés.
-**Workflows** ouvre **En cours**, **Modèles** et **Historique**. Les adaptations
-propres aux projets sont accessibles dans **Workflows enregistrés**. **Nouvelle demande**
-propose la même bibliothèque ; la réutilisation d’une adaptation est un choix explicite.
-Un retour visible ramène à la liste depuis une exécution ou une release. Le catalogue distingue les workflows complets des blocs à composer. Le livrable final apparaît avant les résultats intermédiaires, avec un bouton pour copier son texte.
-Les six agents personas suivent un [mandat de retours à l’usage](docs/RECETTE-USAGE.md).
+**Workflows** distingue **En cours**, **Modèles** et **Historique**. La bibliothèque
+présente des méthodes complètes ; exemples et composants restent dans les options
+avancées. **Voir le workflow** montre ses sources, étapes, agents, décisions et
+livrables sans créer de copie ni d’exécution.
 
-## Du workflow au résultat
+1. **Choisir.** Consultez **Support : comprendre et répondre** ou **Réunion : compte
+   rendu et email**. **Utiliser** prépare une demande ; **Personnaliser une copie**
+   enregistre votre propre méthode. Abandonner un lancement ne crée pas d’adaptation.
+2. **Créer.** **Créer un modèle** demande le résultat souhaité, les informations de
+   départ et les travaux. Choisissez pour chaque étape son agent, son résultat,
+   ses prérequis et le moment où votre décision est nécessaire. Deux analyses
+   peuvent démarrer ensemble ; une synthèse peut attendre tous leurs résultats.
+3. **Fournir les sources.** Collez du texte, ajoutez un ou plusieurs fichiers,
+   indiquez un email ou un document à retrouver. Pour une réunion, choisissez les
+   réunions et leur période. Les fichiers sont copiés et conservés ; une référence
+   externe reste à lire avec un outil réellement accessible.
+   Fermer une préparation conserve son brouillon et l’annonce à la réouverture ;
+   **Commencer une demande vierge** efface les sources de cette préparation.
+4. **Suivre.** **Démarrer le travail** ouvre le suivi. Les étapes métier regroupent
+   leurs travaux sans changer les contrôles du moteur. Les questions, décisions
+   et interruptions disposent d’actions visibles. Le terminal reste accessible.
+5. **Reprendre le résultat.** **Résultats** présente le diagnostic, les actions,
+   le compte rendu ou l’email prêt à copier. Le rapport conserve le plan et les
+   preuves dans un journal détaillé replié. Un email préparé n’est pas envoyé.
 
-1. **Choisir ou dessiner.** Ouvrez **Workflows → Modèles**, utilisez un modèle
-   ou personnalisez une copie ; **Créer un modèle** permet de partir de zéro. Décrivez les blocs, leurs consignes, les données échangées et les décisions.
-2. **Lancer.** Depuis **Nouvelle demande** ou **Exécuter…**, choisissez le workflow
-   et son périmètre : sans projet, dans un projet, ou dans plusieurs projets. Renseignez le formulaire prévu par le modèle ; ces réponses restent propres à cette demande.
-3. **Dialoguer.** **Lancer dans le terminal** ouvre la conversation liée au suivi.
-   Donnez votre intention, par exemple « Lis cet email et prépare les demandes
-   de support ». L’agent peut demander une précision pendant le travail.
-4. **Suivre et décider.** Le panneau montre l’étape actuelle, les questions,
-   les validations et les résultats. **Vue d’ensemble** permet de passer d’une
-   demande à l’autre. Le terminal conserve sa session.
-5. **Reprendre.** **Activité** retrouve le travail en cours. Une interruption
-   conserve les demandes et les tentatives ; une reprise indique ce qui va se passer.
+**Agents** présente les rôles disponibles et permet d’ajouter un pack. Un rôle
+précise les consignes ; il ne désigne pas automatiquement un processus distinct.
+Les méthodes Support et Réunion utilisent la conversation pour lire les sources,
+puis des agents distincts pour analyser, rédiger et vérifier les textes transmis.
+La création guidée permet de choisir explicitement ces agents distincts.
+**Choisir l’IA** fournit une liste de modèles issue des métadonnées publiques
+locales, avec un catalogue embarqué si elles manquent. L’accès au modèle choisi
+reste vérifié au lancement. Aucun nom technique à mémoriser.
+
+**Options → Éditeur détaillé** conserve les commandes, contrats, branches et
+opérations particulières. Les définitions et exécutions client existantes restent
+inchangées. Les [neuf personas](docs/RECETTE-USAGE.md) testent la découverte sans
+onboarding ; leurs abandons restent consignés à côté des contre-épreuves.
 
 Dans **Paramètres → Agents dans le terminal**, **Autorisations des agents** permet de conserver la configuration du fournisseur ou de choisir **Accès complet — sans confirmations de commandes**. Le choix est enregistré pour les nouveaux lancements et les reprises de Codex et Claude. Le dossier d’état du workflow est transmis au fournisseur pour que le pont local puisse ouvrir sa base SQLite. Les décisions du workflow restent dans le suivi.
 
@@ -65,7 +82,7 @@ contrôle local ne constitue pas à lui seul une attestation du commit Git test�
 
 ## Votre méthode, vos blocs
 
-Choisissez le premier bloc lors de la création. Dans **Options → Paramètres du workflow**,
+La création guidée suffit pour une méthode de travaux textuels. Dans l’éditeur détaillé, choisissez les blocs nécessaires. Dans **Options → Paramètres du workflow**,
 le **Formulaire de lancement** définit les informations demandées à chaque exécution :
 texte, nombre, Oui/Non ou liste de choix, avec aide et réponse obligatoire.
 Les réponses figurent dans le suivi et le rapport. Une planification les conserve
@@ -100,7 +117,7 @@ Les déplacements et modifications peuvent être annulés. Les notes permettent
 de commenter votre dessin et restent sans effet sur son exécution.
 
 La méthode appartient au workflow. **Choisir l’IA** règle le fournisseur et le
-modèle dans une liste issue de la configuration locale (avec saisie avancée si nécessaire) ; les profils d’agents précisent les compétences et les consignes de chaque
+modèle dans une liste issue des métadonnées locales ou du catalogue embarqué (avec saisie avancée si nécessaire) ; les profils d’agents précisent les compétences et les consignes de chaque
 bloc. Vous pouvez adapter ces choix sans redessiner votre méthode, sous réserve
 des outils et capacités réellement disponibles chez l’exécutant choisi.
 
@@ -160,8 +177,9 @@ propose une reprise explicite avant de créer un nouveau terminal.
 **Lancer les demandes prêtes** démarre une vague de travail, avec jusqu’à quatre
 exécutants et les verrous nécessaires. Le terminal peut faire la même chose.
 Les demandes qui attendent une réponse ou une validation restent visibles.
-Ce lancement n’installe pas une file autonome : les étapes suivantes demandent
-une nouvelle vague après leurs prérequis.
+Les demandes ordinaires restent lancées par vagues explicites. Les étapes
+configurées comme agents distincts dans une méthode démarrent automatiquement
+quand leurs prérequis sont satisfaits, dans cette même limite de quatre exécutants.
 
 Les intentions en cours de saisie sont conservées pendant un ajout. Un conflit
 ou un accusé perdu laisse le texte dans **Ajouts à récupérer** : vous pouvez
@@ -212,7 +230,13 @@ après l’opération.
 
 ## Planifier et partager
 
-**Planifier** règle la fréquence, le fuseau et le mode d’exécution. La planification
+**Planifier** règle la fréquence, les jours, le fuseau et le mode d’exécution.
+Pour une méthode avec une étape initiale de lecture, choisissez de reprendre le
+même texte ou de lire de nouvelles sources par une connexion de lecture vérifiée.
+La seconde option demande une recherche et un périmètre ; elle conserve les
+identifiants déjà traités et ne produit aucun livrable si aucune source ne correspond.
+Sans connexion vérifiée, aucune recherche automatique n’est annoncée.
+La planification traite un nouvel élément par occurrence, sans chevauchement. La planification
 conserve une version du workflow, consultable dans **Version planifiée**.
 Modifier le dessin ne change pas une planification active ; son remplacement
 est explicite. La fréquence reste visible et les réglages horaires sont repris lors du remplacement ; vous vérifiez à nouveau le mode et les autorisations.
@@ -223,7 +247,7 @@ import. Les comptes, autorisations et anciennes exécutions ne sont pas transfé
 
 ## Installer et mettre à jour
 
-Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.17),
+Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.18),
 installez-le avec le gestionnaire de paquets Ubuntu, puis ouvrez **Tricorder**.
 **Essayer un exemple** permet de découvrir un parcours simulé sans modèle payant.
 
@@ -242,7 +266,7 @@ Un recueil ou un traitement accepte jusqu’à 100 éléments, avec quatre exéc
 maximum dans l’application. Les traitements par élément imbriqués ne sont pas
 encore proposés. L’intégration de code et ses tests restent propres à chaque dépôt.
 
-Les [notes et preuves de réception](release/2026-10-10_retours-personas/README.md)
+Les [notes et preuves de réception](release/2026-10-10_methodes-reutilisables/README.md)
 distinguent essais GUI, simulations et limites. Elles ne qualifient ni un modèle
 commercial, ni un service externe, ni une release cliente réelle.
 

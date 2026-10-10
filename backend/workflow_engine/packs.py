@@ -7,6 +7,30 @@ from pathlib import Path
 from .contracts import digest, identifier, require
 
 
+def builtin_profiles():
+    """Application roles, resolved into every new execution like pack profiles.
+
+    A role describes work, not a provider, permission or independent process.
+    Existing run snapshots retain their original instructions.
+    """
+    roles = [
+        ("recherche", "Recherche", "Trouver et lire les sources utiles dans le périmètre autorisé. Distinguer une référence fournie d’une source effectivement lue. Citer la provenance, la date si connue et les limites. Ne pas inventer un accès à un service ; demander la source manquante. Ne pas écrire, publier ou envoyer."),
+        ("analyse", "Analyse", "Analyser les sources effectivement reçues. Séparer faits, hypothèses, propositions, décisions, contradictions et inconnues. Expliquer les conclusions et leur provenance. Demander uniquement les précisions indispensables ; ne pas transformer un constat probable en fait confirmé."),
+        ("redaction", "Rédaction", "Produire un texte clair et utilisable pour son destinataire à partir des sources et analyses reçues. Conserver les incertitudes, responsables et échéances manquants. Respecter le format demandé. Un texte de réponse ou d’email reste un brouillon : ne pas prétendre qu’il a été envoyé ou créé dans un service distant."),
+        ("verification", "Vérification", "Comparer le résultat aux sources originales et aux critères de la demande. Rechercher omissions, contradictions et affirmations non étayées, y compris celles d’un autre rôle. Corriger les erreurs documentaires détectées avant de rendre les livrables ; conserver les inconnues. Une vérification IA n’est pas une certification indépendante ni une preuve d’action externe. Si les sources sont insuffisantes, demander la précision indispensable plutôt que déclarer la qualité acquise."),
+        ("coordination", "Coordination", "Organiser le travail selon les dépendances du workflow et les résultats effectivement disponibles. Affecter un objectif clair à chaque rôle, consolider leurs contributions et faire apparaître les questions bloquantes. Respecter les transitions du moteur. Ne pas présenter un rôle, une étape prête ou une simulation comme un agent actif ou un travail accompli."),
+        ("livraison", "Livraison", "Préparer le résultat final, sa destination, ses preuves et ses limites. Distinguer une proposition, un brouillon et une opération effectivement accomplie. Vérifier cible et version avant une opération externe ; une sélection de contexte ne vaut pas autorisation d’écriture. Ne jamais déduire une livraison d’un simple texte de bilan."),
+    ]
+    return [{"id": pid, "title": title, "pack": "Tricorder", "builtin": True,
+             "text": text, "sha256": digest(text)} for pid, title, text in roles]
+
+
+def _available_profiles(project):
+    # A domain pack can explicitly refine a built-in role within its project.
+    return {**{p["id"]: p for p in builtin_profiles()},
+            **{p["id"]: p for pack in project.get("packs", []) for p in pack["profiles"]}}
+
+
 def inspect_pack(folder):
     root = Path(folder).resolve()
     source = root / "tricorder-pack.json"
@@ -50,14 +74,15 @@ def install(engine, project_id, folder, expected_digest):
 
 
 def resolve_profiles(project, graph, *, strict=True):
-    profiles = {p["id"]: p for pack in project.get("packs", []) for p in pack["profiles"]}
+    profiles = _available_profiles(project)
     for node in graph["nodes"]:
-        if node["kind"] != "agent":
+        if node["kind"] not in {"agent", "task", "document"}:
             continue
         selection = {**project["defaults"], **graph.get("defaults", {}), **node}
         pid = selection.get("profile", "generalist")
         if pid == "generalist":
             node.pop("profile_text", None)
+            node.pop("profile_sha256", None)
         else:
             if not strict and pid not in profiles:
                 # Preview can report unavailable profiles while preparing the
@@ -72,12 +97,12 @@ def resolve_profiles(project, graph, *, strict=True):
 
 
 def profile_issues(project, graph, *, primary=True):
-    profiles = {p["id"] for pack in project.get("packs", []) for p in pack["profiles"]}
+    profiles = set(_available_profiles(project))
     issues = []
     for node in graph["nodes"]:
         selected = {**project.get("defaults", {}), **graph.get("defaults", {}), **node}
         profile = selected.get("profile", "generalist")
-        if node["kind"] == "agent" and profile != "generalist" and profile not in profiles:
+        if node["kind"] in {"agent", "task", "document"} and profile != "generalist" and profile not in profiles:
             issues.append({"node": node["id"], "title": node.get("title", node["id"]), "code": "profile.unavailable", "stage": "launch",
                            "message": f"Profil {profile} absent des packs du projet.", "action": "edit-node" if primary else "choose-projects",
                            "remedy": "Choisissez un profil installé dans les options IA de cette étape, ou installez le pack correspondant dans ce projet." if primary else "Installez le pack correspondant dans ce projet ou retirez ce projet du périmètre. Le profil du workflow restera inchangé."})

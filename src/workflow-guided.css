@@ -1,0 +1,12 @@
+.guided-workflow { max-width: 850px; margin: 0 auto; }
+.guided-workflow > label,.guided-step > label,.guided-row > label { display: block; margin: 12px 0; font-weight: 600; }
+.guided-workflow input:not([type=checkbox]),.guided-workflow select,.guided-workflow textarea { display: block; width: 100%; margin-top: 5px; font-weight: 400; }
+.guided-workflow textarea { min-height: 76px; resize: vertical; }
+.guided-step { margin: 18px 0; padding: 16px; border: 1px solid var(--line); border-radius: 10px; min-width: 0; }
+.guided-step legend { padding: 0 8px; font-weight: 700; }
+.guided-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 16px; }
+.guided-workflow .guided-check { display: flex; align-items: center; gap: 8px; padding: 5px 0; }
+.guided-workflow .guided-check input { width: auto; margin: 0; }
+.guided-workflow [hidden] { display: none !important; }
+.guided-workflow details { margin: 14px 0; }
+@media (max-width: 620px) { .guided-row { grid-template-columns: minmax(0,1fr); gap: 0; } .guided-step { padding: 12px; } }

@@ -54,3 +54,11 @@ test('replacing a schedule prepopulates recurrence, with no inherited permission
   const draft=replacementScheduleDraft(withAnswers);assert.deepEqual(draft.values,withAnswers.parameters);draft.values.choice='ticket';assert.equal(withAnswers.parameters.choice,'email');
   assert.equal(replacementScheduleDraft({ rule: { kind: 'interval', minutes: 60, timezone: 'Europe/Zurich' } }).minutes, 60);
 });
+
+test('replacing a schedule preserves its fixed or renewed source without carrying its activation',async()=>{
+ const {replacementScheduleDraft}=await import('../src/schedule-configuration.mjs');
+ const base={rule:{kind:'weekly',weekdays:[3]},parameters:{schedule_fixed_source:'Contenu conservé'},definition:{schedule_source:{mode:'fixed',node:'source'},nodes:[{id:'source'}]}};
+ const fixed=replacementScheduleDraft(base);assert.equal(fixed.source_fixed_text,'Contenu conservé');assert.equal(fixed.source_mode,'fixed');assert.equal(fixed.simulation,true);
+ base.definition={schedule_source:{mode:'connection',node:'fresh'},nodes:[{id:'fresh',capabilities:[{plugin:'notes',operation:'read'}],source_polling:{query:'Nouvelles notes',scope:'Atlas'}}]};
+ const fresh=replacementScheduleDraft(base);assert.equal(fresh.source_mode,'connection');assert.equal(fresh.source_query,'Nouvelles notes');assert.equal(fresh.source_scope,'Atlas');assert.equal(fresh.source_binding,JSON.stringify({plugin:'notes',operation:'read'}));assert.equal(fresh.simulation,true);
+});

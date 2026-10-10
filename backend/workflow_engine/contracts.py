@@ -163,12 +163,16 @@ def validate(graph, *, expanded=False):
             argv = node.get("argv", [])
             require(isinstance(argv, list) and argv and all(isinstance(a, str) and "\x00" not in a for a in argv), f"{nid} : arguments de commande requis")
             require(isinstance(node.get("timeout", 60), (int, float)) and 1 <= node.get("timeout", 60) <= 3600, f"{nid} : timeout entre 1 et 3 600 secondes")
+        if "execution_driver" in node:
+            require(node["kind"] == "agent" and node["execution_driver"] == "delegated", f"{nid} : agent distinct uniquement pour une tâche IA")
         if node["kind"] == "agent":
             require(node.get("execution_mode", "text") in {"text", "edit"}, f"{nid} : mode IA text ou edit attendu")
             if node.get("execution_mode") == "edit":
                 require(port_type(node.get("outputs", {}).get("candidate")) == "object" and port_required(node["outputs"]["candidate"]), f"{nid} : sortie candidate obligatoire de type object requise")
             require(node.get("provider", "codex") in {"codex", "claude"}, f"{nid} : fournisseur inconnu")
             require(node.get("session", "delegated") in {"main", "delegated"}, f"{nid} : mode de session inconnu")
+            if "execution_driver" in node:
+                require(node["execution_driver"] == "delegated" and node.get("session", "delegated") == "delegated" and node.get("execution_mode", "text") == "text", f"{nid} : agent distinct en mode texte délégué attendu")
     edge_ids = set()
     adjacency = {nid: [] for nid in ids}
     incoming = {nid: [] for nid in ids}

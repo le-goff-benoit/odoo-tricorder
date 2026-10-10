@@ -1,0 +1,1 @@
+const {app,BrowserWindow}=require('electron');app.whenReady().then(()=>{const w=new BrowserWindow({width:1280,height:960,webPreferences:{nodeIntegration:false,contextIsolation:true}});w.loadFile('/home/blegoff/odoo-tricorder/release/2026-10-10_methodes-reutilisables/.suivi/conception.html');});app.on('window-all-closed',()=>app.quit());

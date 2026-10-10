@@ -22,7 +22,7 @@ print(json.dumps({'project':project,'conversations':values}))
 async function launch() {
   app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE,
     args: process.env.TRICORDER_EXECUTABLE ? [] : [root], env: environment });
-  page = await app.firstWindow();
+  page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));
   await page.setViewportSize({ width: 1440, height: 900 });
   await expect(page.locator('#sync-status')).toContainText(/À jour|Workflows à vérifier/);
 }

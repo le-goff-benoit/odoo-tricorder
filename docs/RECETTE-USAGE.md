@@ -1,18 +1,21 @@
-# Recette d’usage par les six personas
+# Recette de découverte par neuf personas
 
 Le retour attendu décrit une difficulté vécue en accomplissant une tâche : ce que
 l’utilisateur voulait faire, ce qu’il pensait obtenir, ce qu’il a compris à l’écran,
 où il a hésité et les conséquences. Une assertion verte ne suffit pas à recevoir
 l’ergonomie. Ce mandat provient du retour utilisateur du 10 octobre 2026.
 
-| Persona | Préoccupation principale |
+| Persona | Intentions principales |
 |---|---|
-| Fondateur SaaS/services | Retrouver le travail de plusieurs clients, déléguer une routine et comprendre quand intervenir. |
-| Chef d’équipe services | Qualifier un ticket sans confondre bug et urgence, répondre dans le bon canal, retrouver la réponse. |
-| Développeur senior sceptique | Comprendre ce qui s’exécute réellement, distinguer configuration et exécution, diagnostiquer et reprendre un échec. |
-| Responsable opérations PME | Créer une petite procédure depuis son besoin sans connaître les identifiants techniques ni les contrats de données. |
-| Responsable produit B2B | Décider, retrouver une synthèse et faire évoluer un modèle réutilisable avec des critères métier. |
-| Consultant multi-client | Distinguer modèle partagé, adaptation client et demande ; préserver le contexte lors des allers-retours. |
+| Assistante administrative | Plusieurs réunions et fichiers → compte rendu, actions et email. |
+| Dirigeant non technique | Comprendre avant de lancer, retrouver un résultat et savoir quand intervenir. |
+| Responsable opérations | Construire une routine, demander une décision seulement sur anomalie, renouveler les sources. |
+| Chargé de support | Choisir la source, distinguer nature/urgence/impact, personnaliser la réponse. |
+| Consultant multi-client | Partager une méthode, personnaliser sans perdre le projet ou le terminal concerné. |
+| Responsable produit | Créer une méthode et ses informations de lancement sans confondre questions et données internes. |
+| Chef de projet | Deux analyses parallèles, consolidation sur les deux résultats, responsabilités et décisions. |
+| Développeur senior sceptique | Lire les contrôles de livraison exacts, vérifier les versions, comprendre une reprise. |
+| Spécialiste workflows | Critiquer orchestration, sources, répétition et limites, puis contre-analyser les contrats. |
 
 Chaque agent reçoit deux intentions, un candidat figé et un environnement
 synthétique isolé. Il choisit ses premiers clics et note ses surprises avant de
@@ -39,3 +42,11 @@ Première application de ce mandat :
 Deuxième application : [revue spécialisée, corrections puis nouveau panel](../release/2026-10-10_retours-personas/README.md). La revue spécialisée précède les six parcours indépendants. Chaque correction issue de ce panel fait ensuite l’objet d’une contre-épreuve ciblée sur un candidat figé ; les rapports initiaux restent conservés.
 
 Troisième passage ciblé : [configuration des demandes et points restants](../release/2026-10-10_retours-complementaires/README.md), avec formulaires propres à chaque exécution, création de modèles et réponses planifiées.
+
+Nouvelle campagne : [méthodes réutilisables et découvertes froides](../release/2026-10-10_methodes-reutilisables/README.md).
+La référence rc.17 et la réception des candidats sont séparées. Aucun agent ne
+reçoit une liste de clics attendus. Il doit s’arrêter s’il ne comprend plus comment
+accomplir sa tâche, conserver ses hésitations et son temps, puis qualifier la
+conséquence métier. Les tests du moteur, essais avec fournisseur inerte et véritables
+appels IA sont des preuves distinctes. Un abandon initial ne disparaît pas après
+correction ; une contre-épreuve identifiée vérifie cette correction.

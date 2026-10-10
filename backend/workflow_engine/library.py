@@ -1,4 +1,4 @@
-"""Small reusable examples. Simulated runs are explicitly identified by the engine."""
+"""Production methods and separately identified learning examples/components."""
 
 
 def node(nid, title, kind="task", x=70, y=100, **extra):
@@ -74,4 +74,46 @@ def templates():
     kept = {n["id"] for n in direct["nodes"]}
     direct["edges"] = [e for e in direct["edges"] if e["from"] in kept and e["to"] in kept]
     from .work_templates import templates as work_templates
-    return [demo, local, software, *work_templates(), mail, deployment, direct, confluence, *components]
+    graphs = [demo, local, software, *work_templates(), mail, deployment, direct, confluence, *components]
+    roles = {"analyse": "analyse", "build": "redaction", "test": "verification", "bilan": "livraison",
+             "intent": "analyse", "plan": "coordination", "work": "coordination", "check": "verification",
+             "delivery": "livraison", "clarify": "recherche", "qualify": "analyse", "fix": "redaction",
+             "diagnosis": "analyse", "reassess": "analyse", "destination": "coordination",
+             "select": "recherche", "review": "analyse", "mail": "redaction"}
+    phases = {
+        "release-conversation": {"intent": "Demande et plan", "plan": "Demande et plan", "scope": "Demande et plan",
+                                 "work": "Réalisation et contrôles", "check": "Réalisation et contrôles", "quality": "Réalisation et contrôles", "failure": "Réalisation et contrôles",
+                                 "delivery": "Résultats et livraison", "receipt": "Résultats et livraison"},
+        "express-conversation": {"qualify": "Vérifier le périmètre", "reframe": "Vérifier le périmètre", "fix": "Corriger et vérifier",
+                                 "check": "Corriger et vérifier", "failure": "Corriger et vérifier", "receipt": "Résultats"},
+        "intentions-plan-work": {"intentions": "Demandes et plan", "plan": "Demandes et plan", "scope": "Demandes et plan", "work": "Travaux du plan", "receipt": "Résultats"},
+        "confluence-publication": {"draft": "Préparer le contenu", "approve": "Publier la page", "publish": "Publier la page", "verify": "Vérifier le résultat"},
+    }
+    component_ids = {item["id"] for item in components}
+    for graph in graphs:
+        graph.setdefault("catalog_kind", "demo" if graph["id"] in {"first-workflow", "local-check"}
+                         else "component" if graph["id"] in component_ids else "workflow")
+        # The Python code examples require project-specific test commands;
+        # keep them available under the detailed library rather than implying
+        # they are a universally configured production method.
+        if graph["id"] in {"software-change", "code-plan-integrate"}:
+            graph["library_visibility"] = "advanced"
+        for item in graph["nodes"]:
+            if item["id"] in phases.get(graph["id"], {}):
+                item["phase"] = phases[graph["id"]][item["id"]]
+            if item["kind"] in {"agent", "task", "document"} and item.get("profile", "generalist") == "generalist":
+                item["profile"] = roles.get(item["id"], "verification" if "verify" in item["id"] else "redaction")
+            if graph["id"] in {"github-odoo-deployment", "direct-production"}:
+                item["phase"] = ("Vérifier la livraison en test" if item["id"].startswith("staging-")
+                                 else "Livrer et vérifier en production" if item["id"].startswith("production-")
+                                 else "Notes de release")
+    deployment.update(title="Livraison Odoo : test puis production",
+                      description="Vérifier le candidat en test, autoriser sa livraison en production puis vérifier la version livrée. Les cibles et le service de publication doivent être configurés avant lancement.",
+                      result_names=["Version déployée et vérifiée", "Notes de release si demandées"],
+                      source_description="Le candidat testé, la cible de test et la cible de production.")
+    direct.update(title="Livraison Odoo en production",
+                  description="À partir d’un candidat déjà testé : autoriser la livraison en production et vérifier la version livrée. Configurer la cible et le service de publication avant lancement.",
+                  result_names=["Version déployée et vérifiée", "Notes de release si demandées"])
+    confluence.update(result_names=["Page publiée et vérifiée"],
+                      source_description="Le contenu à publier et la page à mettre à jour.")
+    return graphs

@@ -1,5 +1,20 @@
 # Journal
 
+## 2026-10-10 — Méthodes réutilisables (0.6.0-rc.18)
+
+- Bibliothèque de workflows complets, aperçu sans copie, lancement temporaire et personnalisation explicite.
+- Sources texte/fichiers/références et plusieurs réunions ; brouillon conservé annoncé ou effacé volontairement.
+- Création guidée : rôles, agents distincts, questions obligatoires, parallélisme et synthèse sur tous les résultats.
+- Méthodes Support et Réunion avec lecture des sources, analyse, rédaction et vérification ; aucun envoi implicite.
+- Résultats copiables, rapport lisible et détails techniques repliés ; opérations exactes conservées.
+- Planification avec jours choisis, texte fixe ou lecture renouvelée vérifiée ; absence de source sans travail inventé.
+- Sources locales obsolètes, lectures cachées et branches indépendantes rejetées avant effet par le moteur.
+- Neuf découvertes de référence puis neuf réceptions froides ; abandons, corrections et contre-épreuves indépendantes conservés.
+- 707 tests unitaires, 208 parcours UI reçus et 21 parcours du paquet verts ; recette complète consignée dans la release.
+- Chaîne Codex réelle sur deux notes synthétiques terminée ; services externes et automatisation de fin de réunion non qualifiés.
+- rc.18 installée et démarrée ; terminal et paramètres d’accès complet préservés, rc.17 conservée.
+- README, recette et preuves : release/2026-10-10_methodes-reutilisables/.
+
 ## 2026-10-10 — Autorisations des agents (0.6.0-rc.17)
 
 - Réglage persistant de l’accès complet des agents Codex et Claude, appliqué aux lancements et aux reprises.

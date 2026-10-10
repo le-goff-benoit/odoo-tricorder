@@ -150,7 +150,123 @@ def templates():
         for step in flow["nodes"]:
             if step["id"] in examples[flow["id"]]:
                 step["sample_outputs"] = examples[flow["id"]][step["id"]]
-    return [release, support, meeting, request, express, *_collection_templates(work)]
+    # Preserve the earlier definitions for saved references and teaching tests.
+    # New users see the production methods rather than duplicate legacy paths.
+    for flow in (support, meeting):
+        flow["library_visibility"] = "advanced"
+    return [release, support, meeting, request, express, *_collection_templates(work),
+            *_production_templates(work)]
+
+
+def _production_templates(work):
+    """Usable document workflows; their sample results remain simulation-only."""
+    import copy
+
+    sources = {"type": "array", "items": "object", "required": True, "minItems": 1, "maxItems": 100}
+    actions = {"type": "array", "items": "object", "required": True, "maxItems": 200}
+    source_prompt = (
+        "Lire la demande initiale et les sources fournies dans source_context. Le texte collé est une source ; "
+        "un fichier ou un lien doit être effectivement lu avant de le résumer. Une référence d’email ou de "
+        "Meeting Minutes est une demande de recherche, pas la preuve d’un accès connecté. Utiliser uniquement "
+        "les outils réellement disponibles, dans le périmètre autorisé. Si la source manque, est inaccessible "
+        "ou si plusieurs résultats rendent le choix ambigu, demander avec ask la source ou la sélection "
+        "nécessaire. Ne pas démarrer l’analyse sur une réunion ou une demande supposée. Pour chaque source, "
+        "transmettre titre, référence, contenu effectivement lu, date si connue et limites. "
+        "Ne pas remplir cette liste avec des exemples ou de simples chemins de fichiers non lus.")
+
+    def link(source, target, keys):
+        return {**edge(source, target), "mapping": {key: key for key in keys}}
+
+    def step(nid, title, profile, phase, **extra):
+        instruction={"source":"Lire les sources choisies et demander les précisions indispensables avant l’analyse.","diagnosis":"Distinguer le problème, son impact et son urgence ; séparer faits, hypothèses et travaux à effectuer.","response":"Préparer la réponse dans le format demandé, avec le constat, les limites et la suite.","analysis":"Identifier les décisions et actions de chaque réunion, sans ajouter d’informations absentes.","write":"Rédiger le compte rendu, les actions et l’email à partir des réunions choisies.","check":"Comparer les livrables aux sources originales, corriger les erreurs et signaler les limites."}[nid]
+        return work(nid, title, profile=profile, phase=phase, user_instruction=instruction, **extra)
+
+    support = {"schema": 2, "id": "support-method", "title": "Support : comprendre et répondre",
+        "catalog_kind": "workflow", "source_kind": "support",
+        "description": "À partir d’un email, d’un texte, d’un fichier ou d’un lien : comprendre le problème, distinguer faits et hypothèses, puis préparer une réponse vérifiée. Aucun envoi.",
+        "source_description": "L’email, le texte, les pièces jointes ou le ticket à examiner.",
+        "result_names": ["Diagnostic et limites", "Réponse prête à reprendre", "Prochaines actions"],
+        "launch_fields": [
+            {"key": "support_impact", "label": "Impact et urgence connus", "type": "text", "required": False,
+             "help": "Personnes touchées, travail bloqué, échéance et contournement. Les inconnues peuvent rester à préciser."},
+            {"key": "support_destination", "label": "Format de la réponse", "type": "choice", "required": False,
+             "options": ["Texte pour un ticket", "Brouillon d’email"],
+             "help": "Le résultat reste un texte prêt à reprendre. Aucun message envoyé ni brouillon distant créé."}],
+        "nodes": [
+            step("source", "Choisir et lire la demande", "recherche", "Sources",
+                 outputs={"sources": copy.deepcopy(sources)}, prompt=source_prompt,
+                 criteria=["Les sources correspondent à la demande choisie et ont été effectivement lues."],
+                 sample_outputs={"sources": [{"title": "Demande fictive", "reference": "Texte synthétique", "content": "Un affichage ne montre pas la date attendue ; l’impact reste à préciser."}]}),
+            step("diagnosis", "Comprendre le problème et l’impact", "analyse", "Diagnostic et réponse",
+                 inputs={"sources": copy.deepcopy(sources)}, outputs={"sources": copy.deepcopy(sources), "diagnostic": "string", "next_actions": "string"},
+                 prompt="Analyser les sources reçues et l’impact connu au lancement. Distinguer la nature (bug suspecté, question d’utilisation, évolution ou indéterminée), l’urgence et l’impact. Séparer faits confirmés, hypothèses, reproduction réellement effectuée et inconnues. Un impact normal ne signifie pas absence de bug. Proposer la prochaine investigation concrète et son responsable à préciser. Ne demander une précision que si elle est indispensable ; sinon conserver l’incertitude. Transmettre les sources originales sans les remplacer par le diagnostic. Aucun correctif, déploiement ou contact externe implicite.",
+                 criteria=["La nature, l’urgence et l’impact sont distingués.", "Les hypothèses et investigations proposées ne sont pas présentées comme accomplies."],
+                 sample_outputs={"sources": [{"reference": "Texte synthétique", "content": "Affichage sans date attendue."}], "diagnostic": "Exemple : défaut d’affichage suspecté, impact à préciser.", "next_actions": "Exemple : obtenir le contexte et tenter une reproduction ; rien n’a été testé."}),
+            step("response", "Préparer la réponse et la suite", "redaction", "Diagnostic et réponse",
+                 inputs={"sources": copy.deepcopy(sources), "diagnostic": "string", "next_actions": "string"},
+                 outputs={"sources": copy.deepcopy(sources), "diagnostic": "string", "draft": "string", "next_actions": "string"},
+                 prompt="Préparer une réponse compréhensible à partir du diagnostic et des sources originales reçus. Reprendre le format choisi au lancement : objet et corps d’email, ou texte pour un ticket. S’il n’est pas précisé, fournir un texte neutre réutilisable ; demander la destination seulement si elle change une décision indispensable. Expliquer constat, limites et prochaines actions sans inventer correctif ou engagement. Transmettre les sources et le diagnostic pour la vérification. Aucun envoi, brouillon Gmail créé ou ticket mis à jour.",
+                 criteria=["Le destinataire comprend le constat, les inconnues et la suite.", "Le résultat respecte le format demandé et reste un brouillon."],
+                 sample_outputs={"sources": [{"reference": "Texte synthétique", "content": "Affichage sans date attendue."}], "diagnostic": "Exemple : défaut suspecté ; contexte manquant.", "draft": "Exemple de réponse : nous proposons de préciser le contexte avant de reproduire le problème.", "next_actions": "Exemple : demander le contexte ; aucune investigation effectuée."}),
+            step("check", "Vérifier et remettre les résultats", "verification", "Résultats",
+                 inputs={"sources": copy.deepcopy(sources), "diagnostic": "string", "draft": "string", "next_actions": "string"},
+                 outputs={"diagnostic": "string", "draft": "string", "next_actions": "string", "check_summary": "string"},
+                 prompt="Comparer diagnostic, réponse et prochaines actions aux sources originales reçues et à la demande. Rechercher affirmations non prouvées, urgence déduite à tort, promesses de correction et omissions. Corriger les textes avant de rendre les trois résultats. Conserver faits, hypothèses et points à préciser. La synthèse de vérification décrit précisément ce qui a été comparé et les limites ; elle ne prétend ni contrôle indépendant ni reproduction réellement effectuée si aucun test ne l’étaye. Si la source ne permet pas un résultat utile, demander la précision indispensable avec ask. Aucun envoi.",
+                 criteria=["Chaque affirmation du diagnostic et de la réponse est étayée ou explicitement incertaine.", "Les trois livrables attendus sont disponibles, sans action externe inventée."],
+                 sample_outputs={"diagnostic": "Exemple : défaut suspecté, sans reproduction effectuée.", "draft": "Exemple de réponse vérifiée contre la source synthétique : préciser le contexte puis reproduire.", "next_actions": "Exemple : demander le contexte.", "check_summary": "Simulation : comparaison de données synthétiques, aucune qualification métier."}),
+        ], "edges": [link("source", "diagnosis", ["sources"]), link("diagnosis", "response", ["sources", "diagnostic", "next_actions"]),
+                     link("response", "check", ["sources", "diagnostic", "draft", "next_actions"])]}
+    meeting = {"schema": 2, "id": "meeting-method", "title": "Réunion : compte rendu et email",
+        "catalog_kind": "workflow", "source_kind": "meeting",
+        "description": "Choisir une ou plusieurs réunions, analyser leurs décisions, puis remettre un compte rendu, les actions et un email vérifiés contre les sources. Aucun envoi.",
+        "source_description": "Les notes ou transcriptions des réunions choisies, un fichier ou une référence à rechercher.",
+        "result_names": ["Compte rendu", "Liste des actions", "Email prêt à reprendre"],
+        "nodes": [
+            step("source", "Choisir et lire les réunions", "recherche", "Sources",
+                 outputs={"selected_meetings": copy.deepcopy(sources)},
+                 prompt=source_prompt + " Reprendre les titres, dates ou période choisis au lancement. En présence de plusieurs réunions, garder une source distincte par réunion et faire préciser la sélection ambiguë avant toute analyse.",
+                 criteria=["Toutes les réunions sélectionnées ont une source effectivement lue ; une ambiguïté de sélection est clarifiée avant l’analyse."],
+                 sample_outputs={"selected_meetings": [{"title": "Atelier fictif", "reference": "Notes synthétiques", "content": "Décision : tester jeudi ; responsable non précisé."}]}),
+            step("analysis", "Analyser les décisions et les actions", "analyse", "Compte rendu et email",
+                 inputs={"selected_meetings": copy.deepcopy(sources)},
+                 outputs={"selected_meetings": copy.deepcopy(sources), "analysis": "string", "actions": copy.deepcopy(actions)},
+                 prompt="Analyser séparément chaque réunion reçue. Distinguer faits, décisions, propositions, contradictions et inconnues, en indiquant leur source. Extraire les actions avec responsable et échéance uniquement s’ils sont explicites ; sinon indiquer à préciser. Ne pas créer d’action à partir d’une simple proposition non acceptée. Transmettre toutes les sources originales, l’analyse et les actions à la rédaction. Poser une question seulement si une information est indispensable à un résultat utile.",
+                 criteria=["Décisions et propositions sont distinguées pour chaque réunion.", "Les actions, responsables et échéances n’inventent aucune donnée absente des sources."],
+                 sample_outputs={"selected_meetings": [{"title": "Atelier fictif", "content": "Décision : tester jeudi ; responsable non précisé."}], "analysis": "Exemple : test décidé pour jeudi, responsable à préciser.", "actions": [{"action": "Tester jeudi", "owner": "À préciser"}]}),
+            step("write", "Préparer les trois livrables", "redaction", "Compte rendu et email",
+                 inputs={"selected_meetings": copy.deepcopy(sources), "analysis": "string", "actions": copy.deepcopy(actions)},
+                 outputs={"selected_meetings": copy.deepcopy(sources), "minutes": "string", "actions": copy.deepcopy(actions), "draft": "string"},
+                 prompt="Produire le compte rendu, la liste d’actions et un email avec objet et corps. Garder les réunions distinctes avec titres, dates connues et provenance. Reprendre décisions et points à préciser ; ne pas inventer de participants, responsables, échéances ou destinataires. Transmettre les sources originales avec les trois livrables pour leur vérification. Aucun email envoyé ni brouillon Gmail créé.",
+                 criteria=["Les trois livrables couvrent chaque réunion sélectionnée.", "L’email reprend fidèlement les décisions et actions et reste un brouillon."],
+                 sample_outputs={"selected_meetings": [{"title": "Atelier fictif", "content": "Décision : tester jeudi ; responsable non précisé."}], "minutes": "Exemple : test décidé jeudi ; responsable à préciser.", "actions": [{"action": "Tester jeudi", "owner": "À préciser"}], "draft": "Objet : suivi de l’atelier fictif\n\nExemple : le test est prévu jeudi ; merci de préciser le responsable."}),
+            step("check", "Vérifier et remettre les résultats", "verification", "Résultats",
+                 inputs={"selected_meetings": copy.deepcopy(sources), "minutes": "string", "actions": copy.deepcopy(actions), "draft": "string"},
+                 outputs={"minutes": "string", "actions": copy.deepcopy(actions), "draft": "string", "check_summary": "string"},
+                 prompt="Comparer chaque compte rendu, action et email aux sources originales de toutes les réunions sélectionnées. Rechercher décisions inventées, propositions transformées en décisions, réunions omises, responsables ou dates ajoutés. Corriger les trois livrables avant de les rendre. Indiquer les incertitudes restantes dans les résultats et ce qui a été comparé dans la synthèse de vérification. Si une source indispensable est absente, demander une précision avec ask. Ne pas prétendre qu’une vérification IA est une recette indépendante ou qu’un email a été envoyé.",
+                 criteria=["Aucune réunion sélectionnée n’est omise et chaque décision reste fidèle à sa source.", "Responsables, échéances et destinataires inconnus restent à préciser.", "Compte rendu, actions et email sont tous remis."],
+                 sample_outputs={"minutes": "Exemple : atelier fictif, test décidé jeudi ; responsable à préciser.", "actions": [{"action": "Tester jeudi", "owner": "À préciser"}], "draft": "Objet : suivi de l’atelier fictif\n\nExemple : test jeudi ; responsable à préciser.", "check_summary": "Simulation : trois livrables comparés aux notes synthétiques ; aucune réunion réelle consultée."}),
+        ], "edges": [link("source", "analysis", ["selected_meetings"]), link("analysis", "write", ["selected_meetings", "analysis", "actions"]),
+                     link("write", "check", ["selected_meetings", "minutes", "actions", "draft"])]}
+    labels = {"sources": "Sources lues", "selected_meetings": "Réunions et sources lues", "diagnostic": "Diagnostic et limites",
+              "next_actions": "Prochaines actions", "draft": "Texte prêt à reprendre", "analysis": "Analyse des réunions",
+              "minutes": "Compte rendu", "actions": "Liste des actions", "check_summary": "Vérification et limites"}
+    for graph in (support, meeting):
+        for index, step in enumerate(graph["nodes"]):
+            step["position"] = {"x": 60 + index * 420, "y": 80}
+            if step["id"] == "source":
+                # The generic source selector also accepts file/service
+                # references, so its executor must be able to read them.
+                # A text-only automatic variant needs materialized content.
+                step["required_capabilities"] = ["read"]
+            else:
+                # Original sources have been transmitted through typed ports;
+                # these text-only roles can use a distinct engine-managed CLI.
+                step["execution_driver"] = "delegated"
+            step["port_labels"] = {direction: {key: labels[key] for key in step.get(direction, {})}
+                                   for direction in ("inputs", "outputs")}
+    for flow in (support, meeting):
+        flow["nodes"][-1]["prompt"] += " Les livrables destinés à l’utilisateur utilisent un langage courant : aucun nom technique de paramètre, de port ou de champ interne. Dans l’email, conserver uniquement les décisions, actions et réserves utiles au destinataire ; les références détaillées et extraits des sources restent dans la synthèse de vérification, sans alourdir le message prêt à envoyer."
+    return [support, meeting]
 
 
 def _collection_templates(work):

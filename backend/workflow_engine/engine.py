@@ -208,6 +208,9 @@ class Engine:
         resolved = expand(graph, library or {})
         from .annotations import without_annotations
         resolved = without_annotations(resolved)
+        if resolved.get("schedule_source") is not None:
+            from .schedules import validate_schedule_source
+            validate_schedule_source(resolved)
         project = self.project(project_id, connection)
         from .launch_fields import resolve_parameters
         resolved["parameters"] = resolve_parameters(resolved, parameters)
@@ -218,7 +221,7 @@ class Engine:
             require(not issues, " · ".join(i["message"] for i in issues))
             resolved = resolve_profiles(project, resolved)
         for node in resolved["nodes"]:
-            if node["kind"] == "agent":
+            if node["kind"] in {"agent", "task", "document"}:
                 node["execution"] = {**project["defaults"], **resolved.get("defaults", {}), **{k: node[k] for k in project["defaults"] if k in node}}
         run = {"id": new_id("r"), "project": project_id, "driver": driver, "status": "paused" if deferred else "active", "created": time.time(),
                "scope": {"kind": project.get("scope", "library" if project.get("library") else "project"), "id": project_id},
@@ -380,7 +383,7 @@ class Engine:
         if all(s["status"] in TERMINAL for s in run["nodes"].values()):
             run["status"] = "completed"
             run["completion_outcome"] = completion_outcome(run)
-            if not run["simulation"]:
+            if not run["simulation"] and run["completion_outcome"] == "succeeded":
                 for node in run["definition"]["nodes"]:
                     if node["kind"] == "watch":
                         message = run["nodes"][node["id"]].get("result", {}).get("outputs", {}).get("message", {})
@@ -404,6 +407,7 @@ class Engine:
             require(running < 4, "Quatre étapes sont déjà en cours : attente d'une place d'exécution")
             node = next((n for n in run["definition"]["nodes"] if n["id"] == node_id), None)
             require(node is not None, "Bloc inconnu")
+            require(executor != "native" or node.get("execution_driver") != "delegated", "Cette étape utilise un agent distinct ; lancez les étapes prêtes avec dispatch.")
             require(node["kind"] not in {"input", "foreach"}, "Ce bloc est piloté par les commandes de recueil ou de coordination")
             state = run["nodes"][node_id]
             require(state["status"] == "ready", "Ce bloc n'est pas prêt")

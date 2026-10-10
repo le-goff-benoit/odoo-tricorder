@@ -29,7 +29,7 @@ class LaunchReadiness:
         # Match the native bridge claim contract, not just the broader tools
         # that happen to be installed on the user's machine.
         context = self.current_context
-        if not context.get('provider') or node['kind'] not in {'agent', 'task', 'document'} or node.get('execution_mode') == 'edit':
+        if node.get('execution_driver') == 'delegated' or not context.get('provider') or node['kind'] not in {'agent', 'task', 'document'} or node.get('execution_mode') == 'edit':
             return False
         selection = {**node, **node.get('execution', {})}
         provider = context['provider']

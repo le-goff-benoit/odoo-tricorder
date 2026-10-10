@@ -1,0 +1,26 @@
+[
+  {
+    "variation": "binding-read",
+    "entry": "Schedules.create",
+    "rejected": true,
+    "reason": "Une source fixe doit être explicitement limitée au texte fourni"
+  },
+  {
+    "variation": "binding-read",
+    "entry": "Engine.start",
+    "rejected": true,
+    "reason": "Une source fixe doit être explicitement limitée au texte fourni"
+  },
+  {
+    "variation": "local-source-override",
+    "entry": "Schedules.create",
+    "rejected": true,
+    "reason": "Les paramètres d’une étape ne peuvent pas remplacer la source conservée pour cette planification"
+  },
+  {
+    "variation": "local-source-override",
+    "entry": "Engine.start",
+    "rejected": true,
+    "reason": "Les paramètres d’une étape ne peuvent pas remplacer la source conservée pour cette planification"
+  }
+]

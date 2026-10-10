@@ -1,0 +1,11 @@
+{
+  "scheduleMode": "fixed",
+  "sourceCapabilities": [
+    {
+      "plugin": "source",
+      "operation": "find"
+    }
+  ],
+  "adapterCalled": true,
+  "completionOutcome": "succeeded"
+}

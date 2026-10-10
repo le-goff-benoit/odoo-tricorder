@@ -20,7 +20,7 @@ test.beforeEach(async () => {
     CODEX_HOME: path.join(directory, 'codex'), CLAUDE_CONFIG_DIR: path.join(directory, 'claude'), TRICORDER_HOME: directory,
     TRICORDER_STATE_DIR: directory, TRICORDER_RUNTIME_DIR: path.join(directory, 'runtime'), TRICORDER_AGENTS_DIR: path.join(directory, 'no-pack'), TRICORDER_TEST_MODE: '1', PYTHONDONTWRITEBYTECODE: '1' };
   app = await electron.launch({ executablePath: process.env.TRICORDER_EXECUTABLE, args: process.env.TRICORDER_EXECUTABLE ? ['--workflow-studio'] : [root, '--workflow-studio'], env });
-  page = await app.firstWindow(); await page.setViewportSize({ width: 1440, height: 1000 });
+  page = await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes')); await page.setViewportSize({ width: 1440, height: 1000 });
   await expect(page.getByRole('heading', { name: 'Un workflow clair.' })).toBeVisible();
   project = await call('project.create', { title: 'Contrôles récurrents synthétiques' });
   original = await call('workflow.save', { project: project.id, graph: { schema: 1, id: 'daily-review', title: 'Compte rendu périodique', nodes: [

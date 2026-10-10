@@ -19,7 +19,7 @@ r=e.start(p['id'],d);c=e.claim(r['id'],'work');e.submit(r['id'],'work',c['token'
 for i in range(30):
  q={**g,'id':'adaptation-'+str(i),'title':'Adaptation réunion '+str(i)};e.save(p['id'],q)
 print(json.dumps({'project':p,'pending':pending['id'],'done':r['id']}))`,path.join(root,'backend'),directory],{env,encoding:'utf8'}));
- app=await electron.launch({executablePath:process.env.TRICORDER_EXECUTABLE,args:process.env.TRICORDER_EXECUTABLE?[]:[root],env});expect(await app.evaluate(({app})=>app.getVersion())).toBe(require('../package.json').version);page=await app.firstWindow();await page.setViewportSize({width:1440,height:1000});await expect(page.getByRole('heading',{name:'Activité',exact:true})).toBeVisible();
+ app=await electron.launch({executablePath:process.env.TRICORDER_EXECUTABLE,args:process.env.TRICORDER_EXECUTABLE?[]:[root],env});expect(await app.evaluate(({app})=>app.getVersion())).toBe(require('../package.json').version);page=await app.firstWindow(); await page.evaluate(() => localStorage.setItem('tricorder-editor-detail','yes'));await page.setViewportSize({width:1440,height:1000});await expect(page.getByRole('heading',{name:'Activité',exact:true})).toBeVisible();
 });
 test.afterEach(async({},info)=>{if(page&&!page.isClosed()&&info.status!==info.expectedStatus)await page.screenshot({path:info.outputPath('echec.png')});if(app)await app.close();for(const socket of ['runtime/pty.sock','cockpit/odoo-tricorder/pty.sock','studio-pty.sock'])await cleanupBroker(path.join(directory,socket));fs.rmSync(directory,{recursive:true,force:true,maxRetries:5,retryDelay:100});});
 test('usage — workflows show current work, history with duration and a visible return',async()=>{
@@ -51,7 +51,7 @@ test('usage — question editor asks for free text and models have readable choi
  await expect(page.locator('#workflow-model')).toHaveValue('fixture-fast');await page.getByRole('button',{name:'Appliquer à toutes les étapes IA',exact:true}).click();
  await page.getByRole('button',{name:'Choisir l’IA',exact:true}).click();await expect(page.getByLabel('Modèle IA',{exact:true})).toHaveValue('fixture-fast');
 });
-test('usage — using a meeting model asks for sources and reuses the unchanged project copy',async()=>{
+test('usage — using a meeting model asks for sources and keeps fresh sources without saving implicit copies',async()=>{
  const open=async()=>{
   await page.locator('[data-workflow-route=global]').click();await page.getByRole('button',{name:'Modèles',exact:true}).click();
   await page.locator('.template-card').filter({has:page.getByRole('heading',{name:'Clôture de réunion',exact:true})}).getByRole('button',{name:'Utiliser',exact:true}).click();
@@ -61,23 +61,18 @@ test('usage — using a meeting model asks for sources and reuses the unchanged 
  };
  await open();
  const copies=async()=>{const all=[];let offset=0;do{const p=await call('workflow.list',{project:fixture.project.id,offset});all.push(...p.items);offset=p.next;}while(offset!=null);return all.filter(g=>g.id.startsWith('meeting-conversation-use-'));};
- const first=await copies();expect(first).toHaveLength(1);
+ const first=await copies();expect(first).toHaveLength(0);
  await page.getByLabel('Réunions ou période à analyser',{exact:true}).fill('Comités du lundi et du jeudi');
  await page.getByLabel('Notes, transcriptions ou liens des réunions',{exact:true}).fill('Lundi : bilan partagé. Jeudi : action de test décidée.');
  await page.getByRole('button',{name:'Simuler le parcours',exact:true}).click();await expect(page.locator('#run-banner')).toContainText('Simulation');
- const runs=await call('run.list',{project:fixture.project.id});const run=runs.items.find(r=>r.original.id===first[0].id);expect(run).toBeTruthy();
+ const runs=await call('run.list',{project:fixture.project.id});const run=runs.items.find(r=>r.original.id==='meeting-conversation');expect(run).toBeTruthy();
  const {run:details}=await call('run.get',{run:run.id});expect(details.parameters.request).toContain('Comités du lundi et du jeudi');expect(details.parameters.request).toContain('Jeudi : action de test décidée.');
  await open();expect((await copies()).map(g=>g.id)).toEqual(first.map(g=>g.id));
  // A new request reuses the definition, never the previous meeting's sources.
  await expect(page.getByLabel('Notes, transcriptions ou liens des réunions',{exact:true})).toHaveValue('');
  await expect(page.getByLabel('Réunions ou période à analyser',{exact:true})).toHaveValue('');
  await page.screenshot({path:test.info().outputPath('meeting-launch.png')});
- await page.locator('[data-action=close-modal]').click();await page.locator('.node[data-id=review]').click();
- await page.getByRole('button',{name:'Ajouter un résultat attendu',exact:true}).click();await page.getByLabel('Nom de l’information').fill('Synthèse personnelle');await page.getByRole('button',{name:'Ajouter la donnée',exact:true}).click();
- await page.getByRole('button',{name:'Enregistrer',exact:true}).click();
- await expect.poll(async()=> (await call('workflow.get',{project:fixture.project.id,workflow:first[0].id})).nodes.find(n=>n.id==='review').outputs).toHaveProperty('Synthese_personnelle');
- await open();expect(await copies()).toHaveLength(2);
- expect((await call('workflow.get',{project:fixture.project.id,workflow:first[0].id})).nodes.find(n=>n.id==='review').outputs).toHaveProperty('Synthese_personnelle');
+
 });
 
 test('personas — receive an existing result in one action, preserve notification draft and distinguish templates',async()=>{

@@ -2,6 +2,7 @@
 
 import copy
 import json
+import math
 import time
 
 from .effects import Effects, matching_messages
@@ -44,21 +45,50 @@ def execute_tool(engine, run, node, token):
     if node["kind"] == "watch":
         since = run.get("occurrence", {}).get("since", run["created"])
         arguments.update(account=node["account"], sender=node["sender"], since=since)
+        polling = node.get("source_polling")
+        if polling:
+            require(isinstance(polling, dict) and set(polling) == {"version", "query", "scope"}
+                    and polling["version"] == 1
+                    and isinstance(polling["query"], str) and 0 < len(polling["query"].strip()) <= 2000
+                    and isinstance(polling["scope"], str) and 0 < len(polling["scope"].strip()) <= 200,
+                    "Préciser une recherche et un périmètre bornés pour la source récurrente")
+            require(effect == "read", "La source récurrente exige une connexion de lecture vérifiée")
+            arguments.update(query=polling["query"], scope=polling["scope"])
         response = invoke(arguments)
-        messages = response["outputs"].get("messages")
+        messages = response["outputs"].get("messages", response["outputs"].get("items") if polling else None)
         require(isinstance(messages, list) and len(messages) <= 1000 and all(isinstance(m, dict) for m in messages), "Liste de messages bornée requise (1 000 maximum)")
+        if polling:
+            coverage = response["outputs"].get("source_coverage", {})
+            require(isinstance(coverage, dict) and coverage.get("query") == polling["query"]
+                    and coverage.get("scope") == polling["scope"] and coverage.get("since") == since
+                    and coverage.get("complete") is True,
+                    "La connexion ne confirme pas la recherche et son périmètre : configurer une lecture récurrente compatible avant de poursuivre")
+            require(not response["outputs"].get("has_more") and not response["outputs"].get("next"),
+                    "La recherche dépasse une page : affiner le périmètre avant de traiter et avancer la période")
+            require(all(isinstance(message.get("id"), str) and 0 < len(message["id"]) <= 200
+                        and type(message.get("received")) in (int, float) and math.isfinite(message["received"])
+                        and message["received"] >= 0 for message in messages),
+                    "Chaque source doit fournir un identifiant et une date de réception numérique vérifiables")
         def consumed(message):
             key = digest({"project": run["project"], "workflow": run.get("occurrence", {}).get("schedule", run["original"]["id"]),
                           "node": node["id"], "account": node.get("account"), "message": message["id"]})
             with engine.store.connect() as db:
                 return bool(db.execute("SELECT 1 FROM consumed_messages WHERE id=?", (key,)).fetchone())
-        matches = [m for m in matching_messages(messages, node["sender"], since) if not consumed(m)]
+        if polling:
+            seen = set()
+            matches = []
+            for message in messages:
+                if message["id"] not in seen and message["received"] > since and not consumed(message):
+                    matches.append(message)
+                seen.add(message["id"])
+        else:
+            matches = [m for m in matching_messages(messages, node["sender"], since) if not consumed(m)]
         matches.sort(key=lambda m: (m["received"], m["id"]))
         message = copy.deepcopy(matches[0]) if matches else {}
         if message:
             message["account"] = node["account"]
         outputs = {"match": "yes" if message else "no", "message": message}
-        summary = "Nouveau message correspondant détecté." if message else "Aucun nouveau message correspondant."
+        summary = ("Nouvelle source correspondant à la recherche détectée." if message else "Aucune nouvelle source à traiter.") if polling else ("Nouveau message correspondant détecté." if message else "Aucun nouveau message correspondant.")
     elif effect in {"notify", "write"}:
         if effect == "notify":
             require(run.get("notifications_authorized"), "Notification non autorisée pour cette révision")
@@ -95,6 +125,7 @@ def execute_tool(engine, run, node, token):
         outputs = response["outputs"]
         summary = "Lecture effectuée par l’adaptateur local."
     proof = redact(json.dumps({"plugin": binding["plugin"], "operation": binding["operation"], "outputs": outputs,
+                              "source_coverage": response.get("outputs", {}).get("source_coverage"),
                               "receipt": response.get("receipt"), "at": time.time()}, ensure_ascii=False))
     return {"ok": True, "summary": summary, "outputs": outputs, "evidence": [engine.artifact(proof.encode())],
             "receipt": response.get("receipt"), "tool": binding}

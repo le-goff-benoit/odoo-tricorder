@@ -1,0 +1,54 @@
+Informations à traiter à chaque occurrence
+Source du travail
+Reprendre le même texte à chaque fois
+Lire les nouvelles sources d’une connexion
+Connexion de lecture vérifiée
+Choisir une connexion…
+
+Aucune connexion de lecture vérifiée dans ce projet. Configurez et vérifiez une connexion avant d’activer cette source.
+
+Quels nouveaux éléments rechercher ?
+Compte, équipe ou dossier concerné
+
+Chaque occurrence lit des sources arrivées depuis l’activation et non encore traitées. Un élément est traité par occurrence ; s’il n’y en a aucun, aucun livrable n’est inventé. Une connexion qui ne confirme pas la recherche ou renvoie une liste incomplète arrête le travail.
+
+Format requis pour la connexion
+Informations de cette demande
+Réunions ou période à examiner · facultatif
+Titres, dates ou période exacte. Plusieurs réunions peuvent être traitées ensemble.
+
+Ces réponses seront réutilisées à chaque occurrence de cette planification. Modifier le modèle ne les changera pas.
+
+Réunion : compte rendu et email — copie · révision 2
+
+Modèles IA : Choisir et lire les réunions : codex / fixture-model ; Analyser les décisions et les actions : codex / fixture-model ; Préparer les trois livrables : codex / fixture-model ; Vérifier et remettre les résultats : codex / fixture-model. Chaque occurrence réelle peut consommer votre abonnement.
+
+À configurer avant la planification
+Choisir et lire les réunions
+
+Capacités requises indisponibles dans ce mode : read. Utiliser la conversation native ou configurer un exécutant adapté.
+
+Configurez un exécutant disposant de ces capacités, ou lancez le workflow dans le terminal si ces capacités y sont disponibles.
+
+Ouvrir l’étape
+Fréquence
+Chaque jour
+Du lundi au vendredi
+À intervalle régulier
+Jours de la semaine (fréquence hebdomadaire)
+Lundi
+Mardi
+Mercredi
+Jeudi
+Vendredi
+Samedi
+Dimanche
+Heure locale
+Intervalle (minutes)
+Fuseau horaire
+Simulation sans appel de modèle ni de service
+J’active cette révision à cette fréquence. Les décisions humaines du workflow restent obligatoires.
+
+Sans chevauchement. L’ordinateur et Tricorder doivent être ouverts. Une heure inexistante au changement d’heure est ignorée ; une heure répétée s’exécute une seule fois.
+
+Activer la planification

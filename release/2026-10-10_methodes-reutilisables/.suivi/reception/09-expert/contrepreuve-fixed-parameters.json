@@ -1,0 +1,41 @@
+{
+  "graph": {
+    "schema": 2,
+    "id": "source-override-counterexample",
+    "title": "Vérifier source fixe",
+    "parameters": {},
+    "nodes": [
+      {
+        "id": "source",
+        "title": "Source",
+        "kind": "agent",
+        "required_capabilities": [
+          "text"
+        ],
+        "parameters": {
+          "language": "fr"
+        },
+        "outputs": {
+          "result": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "session": "delegated",
+        "execution_driver": "delegated",
+        "execution_mode": "text",
+        "prompt": "Pour cette planification, lire uniquement le texte fourni dans parameters.schedule_fixed_source. Ce contenu est la source complète ; ne pas récupérer de lien, fichier ou message distant et ne pas prétendre l’avoir fait.\n\nSource"
+      }
+    ],
+    "edges": [],
+    "schedule_source": {
+      "version": 1,
+      "mode": "fixed",
+      "node": "source"
+    }
+  },
+  "parameters": {
+    "schedule_fixed_source": "NOUVEAU contenu vérifié",
+    "request": "Traiter le texte fixe conservé dans cette planification."
+  }
+}
