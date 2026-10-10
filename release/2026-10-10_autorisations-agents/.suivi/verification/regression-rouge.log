@@ -1,0 +1,63 @@
+✔ both provider launch buttons prepare isolated hooks and a separate Crew Stop guard (2.076473ms)
+✔ Claude wrapper preserves statusLine command and padding while retaining no other settings (0.490484ms)
+✔ Codex shell arguments preserve literal paths and one configuration per event (16.395614ms)
+✔ quota scans are global and deduplicate overlapping refreshes (1.232241ms)
+✔ contextual requests remain one literal CLI argument for both providers (87.248115ms)
+✔ work launch refuses a terminal from another release or task before writing settings (0.877646ms)
+✔ explicit effort reaches both provider CLIs even when using their default model (130.0869ms)
+✖ full permissions apply to fresh and resumed native agents without changing provider configuration (44.03721ms)
+✖ native workflow bridge directories are granted literally while inherited permissions stay inherited (0.570316ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 7
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 329.505993
+
+✖ failing tests:
+
+test at tests/provider-launch.test.cjs:134:1
+✖ full permissions apply to fresh and resumed native agents without changing provider configuration (44.03721ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + '-c'
+  - '/tmp/tricorder-permissions-OR4vPS'
+
+      at TestContext.<anonymous> (/home/blegoff/odoo-tricorder/tests/provider-launch.test.cjs:145:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '-c',
+    expected: '/tmp/tricorder-permissions-OR4vPS',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/provider-launch.test.cjs:163:1
+✖ native workflow bridge directories are granted literally while inherited permissions stay inherited (0.570316ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 1
+
+      at TestContext.<anonymous> (/home/blegoff/odoo-tricorder/tests/provider-launch.test.cjs:169:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

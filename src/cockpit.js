@@ -238,7 +238,10 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
     modal(`<h2>Profil local du projet</h2><p>Ces préférences complètent les métadonnées du projet sans les modifier. La série reste celle de .odoo-agents/config ou du manifest.</p><div class="cockpit-form"><label>Nature du projet<select id="profile-kind">${[['auto', 'Déduire automatiquement'], ['module', 'Modules custom'], ['studio', 'Studio'], ['online', 'Odoo Online']].map(([v, l]) => `<option value="${v}" ${(p.kind || 'auto') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label><label>Dernière restauration déclarée<input type="datetime-local" id="profile-restored" value="${p.restoredAt ? localDate(p.restoredAt) : ''}"></label><label>Commit Community attendu (optionnel)<input id="profile-community" value="${esc(p.communityCommit || '')}" maxlength="40" placeholder="SHA complet"></label><label>Commit Enterprise attendu (optionnel)<input id="profile-enterprise" value="${esc(p.enterpriseCommit || '')}" maxlength="40" placeholder="SHA complet"></label></div><div class="cockpit-actions"><button class="primary" data-cockpit="save-profile">Enregistrer</button>${action('stack-root', 'Choisir la stack')}${action('oca-root', 'Ajouter une bibliothèque OCA')}${action('reset-profile', 'Revenir au profil déduit')}</div><p class="muted">Aucune restauration ni commande Docker/PostgreSQL n’est lancée.</p>`);
   }
   function localDate(value) { const d = new Date(value); return new Date(d - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); }
-  function preferences() {
+  async function preferences() {
+    // Settings can be opened before the initial project scan finishes.
+    // Read the persisted main-process preferences before showing their values.
+    setSettings(await api.settings({}));
     const ui = get().settings.ui || {};
     modal(`<div class="preferences"><h2>Paramètres</h2>
       <form id="preferences-form">
@@ -246,6 +249,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
           <label>Police<select id="pref-font">${[['mono', 'DejaVu Sans Mono'], ['liberation', 'Liberation Mono'], ['system', 'Monospace système']].map(([v, l]) => `<option value="${v}" ${(ui.font || 'mono') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
           <label>Taille du texte (px)<input type="number" min="11" max="22" step="1" id="pref-size" value="${ui.fontSize || 13}" required></label>
         </div></fieldset>
+        <fieldset><legend>Agents dans le terminal</legend><label for="pref-agent-permissions">Autorisations des agents</label><select id="pref-agent-permissions">${[['inherit', 'Configuration du fournisseur'], ['full', 'Accès complet — sans confirmations de commandes']].map(([value,label]) => `<option value="${value}" ${(get().settings.agentPermissions || 'inherit') === value ? 'selected' : ''}>${label}</option>`).join('')}</select><p class="muted">Appliqué aux nouveaux lancements et aux reprises de Codex ou Claude. Les décisions et validations du workflow restent dans le suivi.</p></fieldset>
         <fieldset><legend>Affichage</legend><div class="cockpit-form"><label>Thème<select id="pref-theme">${[['system', 'Suivre le système'], ['light', 'Clair'], ['dark', 'Sombre']].map(([v,l]) => `<option value="${v}" ${(ui.theme || 'system') === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
           <label>Largeur de la barre latérale (px)<input type="number" min="210" max="360" step="1" id="pref-sidebar" value="${ui.sidebarWidth || 258}" required></label>
           <label class="checkbox-label"><input type="checkbox" id="pref-contrast" ${ui.highContrast ? 'checked' : ''}> Contraste renforcé</label>
@@ -263,7 +267,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
       event.preventDefault();
       if (!event.target.reportValidity()) return;
       try {
-        setSettings(await api.settings({ ui: { theme: $('#pref-theme').value, font: $('#pref-font').value, fontSize: Number($('#pref-size').value), sidebarWidth: Number($('#pref-sidebar').value), highContrast: $('#pref-contrast').checked } }));
+        setSettings(await api.settings({ agentPermissions: $('#pref-agent-permissions').value, ui: { theme: $('#pref-theme').value, font: $('#pref-font').value, fontSize: Number($('#pref-size').value), sidebarWidth: Number($('#pref-sidebar').value), highContrast: $('#pref-contrast').checked } }));
         $('#modal').close(); render();
       } catch (error) { toast(error.message); }
     });
@@ -328,7 +332,7 @@ export function cockpit({ api, get, setSettings, setProjects, render, sidebar, c
         case 'stack-root': if (await api.cockpit.profileFolder(get().current, 'stackRoot')) { await reloadProject(); $('#modal').close(); } break;
         case 'oca-root': if (await api.cockpit.profileFolder(get().current, 'ocaRoots')) { await reloadProject(); $('#modal').close(); } break;
         case 'reset-profile': await api.cockpit.resetProfile(get().current); await reloadProject(); $('#modal').close(); break;
-        case 'preferences': preferences(); break;
+        case 'preferences': await preferences(); break;
         case 'workspace-root': { const value = await api.workspaceRoot(); if (value) { setProjects(value.projects); setSettings((await api.bootstrap()).settings); $('#modal').close(); if (value.projects.length) await chooseProject(value.projects[0].path); else render(); } break; }
         case 'shared-sources': if (await api.sourceRoot()) { $('#modal').close(); if (get().current) await reloadProject(); } break;
         case 'palette': await palette(); break;

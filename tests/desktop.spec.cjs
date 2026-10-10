@@ -968,7 +968,7 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     expect(rejection).toContain('non associé à cette tâche');
     // One conversation/terminal may span several tasks; its opening scope is not a lock.
     const prepared = await page.evaluate(({ project, releaseId, terminal }) => window.tricorder.cockpit.prepareClaude({ project, release: releaseId, task: 'T03', terminal: terminal.id }), { project, releaseId, terminal });
-    expect(prepared.command).toContain('claude --settings');
+    expect(prepared.command).toMatch(/^claude (?:'--settings'|--settings) /);
     const before = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
     expect(before.pid).toBe(terminal.pid); expect(before.task).toBeNull();
     await page.locator('#release-select').selectOption(emptyRelease);

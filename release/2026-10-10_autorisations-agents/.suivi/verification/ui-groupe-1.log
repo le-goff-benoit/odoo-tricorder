@@ -1,0 +1,96 @@
+
+Running 56 tests using 1 worker, shard 1 of 4
+
+(node:528114) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/attempt-history.spec.cjs:51:1 › large archived inputs keep failure history readable and attached proofs accessible (9.5s)
+  ✓   2 tests/attempt-history.spec.cjs:97:1 › paged large histories remain formatted with accessible proof links (4.5s)
+  ✓   3 tests/collection-input-ux.spec.cjs:84:1 › a second intention submitted during acknowledgement is recorded once without losing text (3.7s)
+  ✓   4 tests/collection-input-ux.spec.cjs:92:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (5.9s)
+  ✓   5 tests/collection-input-ux.spec.cjs:105:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (3.2s)
+  ✓   6 tests/collection-input-ux.spec.cjs:112:1 › an addition rejected after a concurrent edit survives the next success, reload and targeted retry (5.0s)
+  ✓   7 tests/collection-input-ux.spec.cjs:124:1 › a lost acknowledgement is retried with the same command after reload without duplicating the intention (4.6s)
+  ✓   8 tests/collection-input-ux.spec.cjs:131:45 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (stale revision) (5.1s)
+  ✓   9 tests/collection-input-ux.spec.cjs:131:45 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (fresh revision) (5.3s)
+  ✓  10 tests/collection-input-ux.spec.cjs:182:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (10.5s)
+  ✓  11 tests/collection-input-ux.spec.cjs:204:1 › two project shells remain discoverable after changing project and reloading the window (9.4s)
+  ✓  12 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (7.3s)
+  ✓  13 tests/conversation-overview.spec.cjs:88:1 › running: actual agents, failure history and explicit dispatch are distinct (10.3s)
+  ✓  14 tests/conversation-overview.spec.cjs:103:1 › pages: global activity survives paging and off-page dependencies open the named request (9.5s)
+  ✓  15 tests/conversation-overview.spec.cjs:115:1 › compact: terminal working lines and the question answer remain visible together (11.8s)
+  ✓  16 tests/desktop-output-pipes.spec.cjs:6:1 › a recoverable backend rejection stays in the app after its launcher closes log pipes (3.6s)
+  ✓  17 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (10.3s)
+  ✓  18 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (4.4s)
+  ✓  19 tests/desktop.spec.cjs:212:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (7.3s)
+  ✓  20 tests/desktop.spec.cjs:297:1 › design system: common gutters, cards and controls across every project view (12.6s)
+  ✓  21 tests/desktop.spec.cjs:360:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (4.5s)
+  ✓  22 tests/desktop.spec.cjs:413:1 › effort: partial recorded time survives missing roles, task filtering and refresh (4.6s)
+  ✓  23 tests/desktop.spec.cjs:455:1 › effort: open release updates task and agent percentages before closure (3.2s)
+  ✓  24 tests/desktop.spec.cjs:498:1 › release context: none, automatic new release, same terminal and persistence (8.4s)
+  ✓  25 tests/desktop.spec.cjs:574:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (5.1s)
+  ✓  26 tests/desktop.spec.cjs:686:1 › Markdown preview: readable safe content and recovery from a project read error (5.2s)
+  ✓  27 tests/desktop.spec.cjs:739:1 › email removed: no UI or API, old private records preserved, project still usable (3.6s)
+  ✓  28 tests/desktop.spec.cjs:790:1 › desktop: projects, proof status, sources, real terminal and persistence (8.8s)
+  ✘  29 tests/desktop.spec.cjs:889:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (11.8s)
+(node:554101) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  -  30 tests/desktop.spec.cjs:1026:1 › real project: read-only release/task/mission screens
+  ✓  31 tests/desktop.spec.cjs:1114:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (18.5s)
+  ✓  32 tests/desktop.spec.cjs:1258:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (9.7s)
+  ✓  33 tests/desktop.spec.cjs:1355:1 › live requests appear before planning and reconcile with tasks without manual refresh (8.4s)
+  ✓  34 tests/desktop.spec.cjs:1409:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (21.6s)
+
+  ✓  35 tests/desktop.spec.cjs:1545:1 › work page starts a contextual request and resumes a task without changing its state (7.4s)
+  ✓  36 tests/desktop.spec.cjs:1595:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (12.4s)
+  ✓  37 tests/desktop.spec.cjs:1697:1 › window integration preserves the native conversation while inspecting phases and the library (8.3s)
+  ✓  38 tests/editor-gestures.spec.cjs:57:1 › whole-card dragging updates links at each zoom and each gesture has one undo; cancellations restore the graph (7.9s)
+  ✓  39 tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session (5.0s)
+  ✓  40 tests/editor-gestures.spec.cjs:95:1 › terminal reveal follows current output, preserves deliberate history and keeps useful compact rows (3.7s)
+  ✓  41 tests/editor-gestures.spec.cjs:121:1 › connections support click, drag and keyboard with confirmation, direct editing and cancellation (4.5s)
+  ✓  42 tests/editor-gestures.spec.cjs:137:1 › notes are editable, movable and undoable presentation metadata preserved by save and portable export (4.7s)
+  ✓  43 tests/editor-gestures.spec.cjs:150:1 › new blocks and notes appear in the visible part of a large graph and zoom keeps its center (3.4s)
+  ✓  44 tests/editor-gestures.spec.cjs:166:1 › a frozen execution exposes neither notes nor editor handles and pointer or keyboard gestures cannot change its definition (4.3s)
+  ✓  45 tests/editor-gestures.spec.cjs:179:1 › a note below adjacent blocks stays draggable while its detour avoids all cards and ports (6.3s)
+  ✓  46 tests/editor-layout-ux.spec.cjs:59:1 › design opens at readable scale and compact properties use the panel without losing edits on resize (9.9s)
+  ✓  47 tests/editor-layout-ux.spec.cjs:98:1 › compact editing retains the live terminal and shows full sidebar project names on pointer and keyboard focus (3.3s)
+  ✓  48 tests/execution-interactions.spec.cjs:90:1 › negative result remains receivable and routes to the corrective branch (5.8s)
+  ✓  49 tests/execution-interactions.spec.cjs:103:1 › uncertain local notification retains receipt lookup without sending twice (6.5s)
+  ✓  50 tests/execution-interactions.spec.cjs:111:1 › live failure updates the graph badge and accessible name without reopening the run (6.0s)
+  ✓  51 tests/execution-interactions.spec.cjs:121:1 › request menu keeps keyboard focus and a question draft while activity changes (5.8s)
+  ✓  52 tests/execution-interactions.spec.cjs:143:1 › search menu keeps its expanded state and keyboard focus when requests arrive (6.0s)
+  ✓  53 tests/execution-interactions.spec.cjs:154:1 › search draft survives polling and deferred request counts refresh after leaving the input (6.2s)
+  ✓  54 tests/execution-interactions.spec.cjs:181:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (6.2s)
+  ✓  55 tests/execution-interactions.spec.cjs:224:1 › a stopped conversation with a pending question resumes explicitly without losing requests or its terminal (5.9s)
+  ✓  56 tests/execution-interactions.spec.cjs:258:1 › a closed historical terminal stays stopped until explicit resume and preserves other sessions (5.8s)
+
+
+  1) tests/desktop.spec.cjs:889:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "claude --settings"
+    Received string:    "claude '--settings' '/tmp/tri-lifecycle-q4fZLG/state/observations/d90f4e52-5855-4665-930c-60fc3e255d69.settings.json' '--add-dir' '/tmp/tri-lifecycle-q4fZLG/state'"
+
+      969 |     // One conversation/terminal may span several tasks; its opening scope is not a lock.
+      970 |     const prepared = await page.evaluate(({ project, releaseId, terminal }) => window.tricorder.cockpit.prepareClaude({ project, release: releaseId, task: 'T03', terminal: terminal.id }), { project, releaseId, terminal });
+    > 971 |     expect(prepared.command).toContain('claude --settings');
+          |                              ^
+      972 |     const before = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+      973 |     expect(before.pid).toBe(terminal.pid); expect(before.task).toBeNull();
+      974 |     await page.locator('#release-select').selectOption(emptyRelease);
+        at /tmp/tricorder-rc17-qa/tests/desktop.spec.cjs:971:30
+
+    Error Context: ../tricorder-rc17-ui-1/desktop-lifecycle-releases-425af-ention-and-rapid-navigation/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../tricorder-rc17-ui-1/desktop-lifecycle-releases-425af-ention-and-rapid-navigation/trace.zip
+    Usage:
+
+        npx playwright show-trace ../tricorder-rc17-ui-1/desktop-lifecycle-releases-425af-ention-and-rapid-navigation/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/desktop.spec.cjs:889:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation
+  1 skipped
+  54 passed (6.6m)

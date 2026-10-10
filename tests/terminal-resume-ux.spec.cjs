@@ -28,7 +28,7 @@ test.beforeEach(async()=>{
   directory=fs.mkdtempSync(path.join(os.tmpdir(),'tricorder-terminal-resume-ux-'));
   const bin=path.join(directory,'bin'),home=path.join(directory,'home');fs.mkdirSync(bin);fs.mkdirSync(home);
   marker=path.join(directory,'launches');state=path.join(directory,'state');
-  for(const provider of ['codex','claude'])fs.writeFileSync(path.join(bin,provider),`#!/usr/bin/python3\nimport sys\nfrom pathlib import Path\nif '--version' in sys.argv:\n print('UX INERT VERSION');sys.exit(0)\nif len(sys.argv)>1 and sys.argv[1] in ['app-server','plugin']:\n sys.exit(78)\np=Path(${JSON.stringify(marker)})\np.write_text((p.read_text() if p.exists() else '')+'launch\\n')\nprint('UX INERT AGENT EXITED')\nsys.exit(78)\n`,{mode:0o755});
+  for(const provider of ['codex','claude'])fs.writeFileSync(path.join(bin,provider),`#!/usr/bin/python3\nimport sys,json\nfrom pathlib import Path\nif '--version' in sys.argv:\n print('UX INERT VERSION');sys.exit(0)\nif len(sys.argv)>1 and sys.argv[1] in ['app-server','plugin']:\n sys.exit(78)\np=Path(${JSON.stringify(marker)})\np.write_text((p.read_text() if p.exists() else '')+json.dumps(sys.argv[1:])+'\\n')\nprint('UX INERT AGENT EXITED')\nsys.exit(78)\n`,{mode:0o755});
   environment={...process.env,PATH:bin+':/usr/bin:/bin',HOME:home,SHELL:'/bin/bash',XDG_CONFIG_HOME:path.join(directory,'config'),XDG_CACHE_HOME:path.join(directory,'cache'),XDG_DATA_HOME:path.join(directory,'data'),CODEX_HOME:path.join(directory,'codex'),CLAUDE_CONFIG_DIR:path.join(directory,'claude'),TRICORDER_HOME:home,TRICORDER_STATE_DIR:state,TRICORDER_RUNTIME_DIR:path.join(directory,'runtime'),TRICORDER_AGENTS_DIR:path.join(directory,'absent-pack'),TRICORDER_TEST_MODE:'1',PYTHONDONTWRITEBYTECODE:'1'};
   for(const key of Object.keys(environment))if(/^(OPENAI|ANTHROPIC|CLAUDE|CODEX).*(KEY|TOKEN|SECRET)$/.test(key))delete environment[key];
   backend=process.env.TRICORDER_EXECUTABLE?path.join(path.dirname(process.env.TRICORDER_EXECUTABLE),'resources/backend'):path.join(root,'backend');
@@ -128,4 +128,35 @@ test('completed request offers its result without instructing the user to resume
   await expect(page.locator('#conversation-tray')).toContainText('Voir le terminal');
   expect(launches()).toBe(1);
   await snapshot(info,'completed-without-agent-restart');
+});
+
+
+test('full agent permissions persist through settings and reach fresh launches and resumptions while workflow decisions remain human',async()=>{
+  const invocations=()=>fs.readFileSync(marker,'utf8').trim().split('\n').map(line=>JSON.parse(line));
+  const initial=invocations()[0];
+  expect(initial).toContain('--add-dir');expect(initial).toContain(path.join(state,'workflows'));
+  expect(initial).not.toContain('--ask-for-approval');
+  await page.locator('[data-cockpit="preferences"]').click();
+  await page.getByLabel('Autorisations des agents',{exact:true}).selectOption('full');
+  await page.locator('#preferences-form').getByRole('button',{name:'Enregistrer',exact:true}).click();
+  expect((await page.evaluate(()=>window.tricorder.settings({}))).agentPermissions).toBe('full');
+  await page.reload();
+  await page.locator('[data-cockpit="preferences"]').click();
+  await expect(page.getByLabel('Autorisations des agents',{exact:true})).toHaveValue('full');
+  await page.getByRole('button',{name:'Annuler',exact:true}).click();
+  await page.evaluate(value=>window.tricorder.workflowTerminal({...value,resume:true}),{project:fixture.project.id,conversation:fixture.conversation});
+  await expect.poll(launches).toBe(2);await expect.poll(async()=>(await sessions())[0]?.idleShell).toBe(true);
+  const graph={schema:1,id:'permission-proof',title:'Décision explicite',nodes:[{id:'gate',kind:'decision',title:'Autoriser la suite',question:'Continuer ?',options:['approve','reject']}],edges:[]};
+  await call('workflow.save',{project:fixture.project.id,graph});
+  const opened=await call('conversation.open',{project:fixture.project.id,graph,provider:'codex'});
+  await page.evaluate(value=>window.tricorder.workflowTerminal(value),{project:fixture.project.id,conversation:opened.id});
+  await expect.poll(launches).toBe(3);
+  for(const args of invocations().slice(1)){
+    expect(args[args.indexOf('--sandbox')+1]).toBe('danger-full-access');
+    expect(args[args.indexOf('--ask-for-approval')+1]).toBe('never');
+    expect(args).toContain(path.join(state,'workflows'));
+  }
+  const added=await call('conversation.add',{conversation:opened.id,request:'Vérifier la décision humaine.'});
+  expect((await call('run.get',{run:added.run})).run.nodes.gate.status).toBe('waiting');
+  await expect(page.evaluate(()=>window.tricorder.settings({agentPermissions:'invalid'}))).rejects.toThrow('autorisations');
 });

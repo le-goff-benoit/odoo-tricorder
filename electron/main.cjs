@@ -218,7 +218,8 @@ Annonce le workflow et son périmètre. Consulte status pour reprendre une deman
         }
       } catch { /* A fresh invocation can recover the durable workflow state. */ }
     }
-    const launch = require('./provider-launch.cjs').prepareLaunch({ resume, provider: conversation.provider, model: conversation.model, effort: conversation.effort, id, folder: path.join(stateDir, 'agent-events'), backend, home, project: project.path, crew: '', prompt });
+    const launch = require('./provider-launch.cjs').prepareLaunch({ resume, provider: conversation.provider, model: conversation.model, effort: conversation.effort, id, folder: path.join(stateDir, 'agent-events'), backend, home, project: project.path, crew: '', prompt,
+      permissionMode: settings.agentPermissions, writableDirectories: [stores.studio, stateDir] });
     settings.workflowTerminals[conversation.id] = session.id; settings.workflowAgents[conversation.id] = {provider:conversation.provider,source:launch.source}; saveSettings();
     await terminal({ action: bound ? 'write-if-idle' : 'write', session: session.id, data: launch.command + '\r' });
     return {...session,agentState:'starting',resumedSession:resume || null};
@@ -260,7 +261,8 @@ Annonce le workflow et son périmètre. Consulte status pour reprendre une deman
   handle('clipboard:read', () => clipboard.readText());
   handle('clipboard:write', text => { if (typeof text !== 'string' || text.length > 1024 * 1024) throw new Error('Texte invalide'); clipboard.writeText(text); });
   handle('settings', patch => {
-    // Only UI preferences. No command, shell or URL can be configured by renderer.
+    // Typed application preferences only. No command, shell or URL from renderer.
+    if (Object.hasOwn(patch, 'agentPermissions')) settings.agentPermissions = require('./provider-launch.cjs').permissionMode(patch.agentPermissions);
     if (typeof patch.activeProject === 'string') settings.activeProject = checkedProject(patch.activeProject);
     if (Array.isArray(patch.favorites)) settings.favorites = patch.favorites.filter(p => projects.has(p));
     if (['codex', 'claude'].includes(patch.provider)) settings.provider = patch.provider;

@@ -1,5 +1,15 @@
 # Journal
 
+## 2026-10-10 — Autorisations des agents (0.6.0-rc.17)
+
+- Réglage persistant de l’accès complet des agents Codex et Claude, appliqué aux lancements et aux reprises.
+- Dossiers d’état Tricorder transmis au fournisseur : le pont SQLite/WAL est accessible hors du projet.
+- Paramètres relus avant ouverture du formulaire, même pendant le chargement initial de l’application.
+- Configuration globale des fournisseurs conservée ; décisions et réceptions du moteur toujours explicites.
+- Régression initialement rouge et parcours UI du réglage, de sa persistance et des décisions humaines.
+- 649 tests unitaires verts, 201 scénarios UI reçus après deux contre-épreuves, 8 parcours du paquet réussis.
+- rc.17 installée et démarrée localement ; accès complet enregistré, terminal existant conservé.
+
 ## 2026-10-10 — Configuration des demandes (0.6.0-rc.16)
 
 - Formulaires configurables par exécution, demandes suivantes et planifications ; réponses typées et obligatoires.

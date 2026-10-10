@@ -133,7 +133,8 @@ function wireCockpit({ handle, dialog, shell, window, settings, save, checkedPro
     const prompt = request.work === undefined ? undefined : workPrompt(request.work, association);
     const id = randomUUID();
     const prepared = prepareLaunch({ provider: request.provider, id, folder: path.join(stateDir, 'observations'), backend, home,
-      project: association.project, prompt, crew: process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents') });
+      project: association.project, prompt, crew: process.env.TRICORDER_AGENTS_DIR || path.join(home, '.odoo19-agents'),
+      permissionMode: settings.agentPermissions, writableDirectories: [stateDir] });
     settings.bindings.push({ ...association, id, provider: request.provider + '-hooks', source: prepared.source,
       quotaSource: prepared.quotaSource, nativeId: null, pending: true,
       workflow: ({ workflow: 'release', develop: 'request', diagnose: 'support' })[request.work?.action] || null }); save();

@@ -130,3 +130,45 @@ test('explicit effort reaches both provider CLIs even when using their default m
     }
   } finally { fs.rmSync(root, { recursive: true, force: true }); }
 });
+
+test('full permissions apply to fresh and resumed native agents without changing provider configuration', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-permissions-'));
+  try {
+    const bin = path.join(root, 'bin'); fs.mkdirSync(bin);
+    for (const provider of ['codex', 'claude']) {
+      fs.writeFileSync(path.join(bin, provider), '#!/usr/bin/python3\nimport sys,json\nprint(json.dumps(sys.argv[1:]))\n', { mode: 0o755 });
+      for (const resume of [undefined, 'synthetic-session']) {
+        const launch = prepareLaunch({ provider, resume, permissionMode: 'full', writableDirectories: [root],
+          id: provider + (resume ? '-resume' : '-new'), folder: path.join(root, 'out'), backend: path.resolve(__dirname, '../backend'),
+          home: root, project: root, crew: '', prompt: 'Check the workflow bridge.' });
+        const args = JSON.parse(execFileSync('bash', ['-c', launch.command], { encoding: 'utf8', env: { ...process.env, PATH: bin + ':/usr/bin:/bin' } }));
+        assert.equal(args[args.indexOf('--add-dir') + 1], root);
+        if (provider === 'codex') {
+          assert.equal(args[args.indexOf('--sandbox') + 1], 'danger-full-access');
+          assert.equal(args[args.indexOf('--ask-for-approval') + 1], 'never');
+          if (resume) assert.deepEqual(args.slice(0, 2), ['resume', resume]);
+        } else {
+          assert.ok(args.includes('--dangerously-skip-permissions'));
+          if (resume) assert.equal(args[args.indexOf('--resume') + 1], resume);
+        }
+        assert.equal(args.at(-1), 'Check the workflow bridge.');
+      }
+    }
+    assert.ok(!fs.existsSync(path.join(root, '.codex/config.toml')));
+    assert.ok(!fs.existsSync(path.join(root, '.claude/settings.json')));
+    assert.throws(() => prepareLaunch({provider:'codex',permissionMode:'arbitrary',folder:path.join(root,'invalid')}), /autorisations/i);
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
+
+test('native workflow bridge directories are granted literally while inherited permissions stay inherited', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "tricorder-state-$`'"));
+  try {
+    const launch = prepareLaunch({provider:'codex',id:'bridge',folder:path.join(root,'out'),backend:'/backend',home:root,project:root,crew:'',
+      writableDirectories:[root,root],prompt:'Read workflow status.'});
+    const args=JSON.parse(fs.readFileSync(path.join(root,'out/bridge.launch.json'))).argv;
+    assert.equal(args.filter(arg=>arg==='--add-dir').length,1);
+    assert.equal(args[args.indexOf('--add-dir')+1],root);
+    assert.ok(!args.includes('--ask-for-approval'));
+    assert.ok(!args.includes('--sandbox'));
+  } finally {fs.rmSync(root,{recursive:true,force:true});}
+});

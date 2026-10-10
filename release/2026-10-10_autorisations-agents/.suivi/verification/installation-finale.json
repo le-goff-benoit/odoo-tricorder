@@ -1,0 +1,12 @@
+{
+  "version": "0.6.0-rc.17",
+  "launcher": "/home/blegoff/.local/bin/odoo-tricorder",
+  "target": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.17/odoo-tricorder",
+  "previous": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.16/odoo-tricorder",
+  "previous_preserved": true,
+  "permission_setting_before": "inherit",
+  "permission_setting_after": "full",
+  "application_pid": 580157,
+  "started_at": "2026-10-10T18:26:24.474566+00:00",
+  "app_asar_sha256": "7e5c021d1fe2162eae2b76c17afa9acf0c28685845738b91ffbaadd085857658"
+}

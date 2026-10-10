@@ -1,0 +1,25 @@
+{
+  "version": "0.6.0-rc.17",
+  "unit": {
+    "python_passed": 466,
+    "javascript_passed": 183
+  },
+  "ui": {
+    "defined": 203,
+    "initial_passed": 199,
+    "opt_in_skipped": 2,
+    "initial_failed": 2,
+    "targeted_passed": 2,
+    "unique_scenarios_received": 201,
+    "incidents": [
+      "Attente obsolète sur la présentation shell de --settings, pilote corrigé sans changer l’application.",
+      "Scénario réunion ayant dépassé son attente de statut de 5 s ; contre-épreuve ciblée réussie sans modification de temporisation ni application. Cause du dépassement non attribuée."
+    ]
+  },
+  "packaged_targeted_passed": 8,
+  "dist": "passed",
+  "installed_startup": "passed",
+  "permission_setting": "full",
+  "qa_manifest": "candidat-controle-final.json",
+  "application_manifest": "candidat.json"
+}

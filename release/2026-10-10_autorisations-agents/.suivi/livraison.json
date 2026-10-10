@@ -1,0 +1,11 @@
+{
+  "version": "0.6.0-rc.17",
+  "tag": "v0.6.0-rc.17",
+  "release_url": "https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.17",
+  "package": "odoo-tricorder_0.6.0-rc.17_amd64.deb",
+  "sha256": "387146b6927b0c15537282fb93a2fc6d19c26b35bf2f11f8c2c60df979c1f6d5",
+  "application_manifest": "candidat.json",
+  "qa_manifest": "candidat-controle-final.json",
+  "validation": "verification/validation.json",
+  "installation": "verification/installation-finale.json"
+}

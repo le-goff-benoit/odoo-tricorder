@@ -1,0 +1,16 @@
+
+Running 8 tests using 1 worker
+
+(node:553006) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/startup-navigation.spec.cjs:60:1 › normal first launch offers a new request without configuring a project (9.9s)
+  ✓  2 tests/startup-navigation.spec.cjs:71:1 › normal restart discovers generic work and names preserved terminals by intention (19.5s)
+  ✓  3 tests/startup-navigation.spec.cjs:95:1 › existing project remains selectable and explicit workspace choice survives restart (17.9s)
+  ✓  4 tests/terminal-resume-ux.spec.cjs:47:1 › stopped agent is resumed explicitly from overview and activity without duplicate conversation or lost shell draft (15.1s)
+  ✓  5 tests/terminal-resume-ux.spec.cjs:75:1 › cross-project context names both shell project and displayed request project (7.9s)
+  ✓  6 tests/terminal-resume-ux.spec.cjs:94:1 › resuming an agent keeps manual suspension and dependency waits until explicit request resume (13.5s)
+
+  ✓  7 tests/terminal-resume-ux.spec.cjs:119:1 › completed request offers its result without instructing the user to resume the stopped agent (8.5s)
+  ✓  8 tests/terminal-resume-ux.spec.cjs:134:1 › full agent permissions persist through settings and reach fresh launches and resumptions while workflow decisions remain human (9.7s)
+
+  8 passed (1.7m)

@@ -7,8 +7,8 @@ et le suivi des demandes dans une application de bureau. Il sert à préparer un
 release, analyser un ticket, clôturer une réunion ou organiser votre propre processus.
 Les projets Odoo sont un usage possible ; le pack Odoo reste facultatif.
 
-**Préversion publiée 0.6.0-rc.16 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.16)
-· [Nouveautés](release/2026-10-10_retours-complementaires/README.md)
+**Préversion publiée 0.6.0-rc.17 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.17)
+· [Nouveautés](release/2026-10-10_autorisations-agents/README.md)
 · [Guide d’utilisation](docs/WORKFLOW-RUNTIME.md)
 
 ![Renseigner les informations propres à chaque demande](release/2026-10-10_retours-complementaires/captures/formulaire-lancement.png)
@@ -38,6 +38,8 @@ Les six agents personas suivent un [mandat de retours à l’usage](docs/RECETTE
    demande à l’autre. Le terminal conserve sa session.
 5. **Reprendre.** **Activité** retrouve le travail en cours. Une interruption
    conserve les demandes et les tentatives ; une reprise indique ce qui va se passer.
+
+Dans **Paramètres → Agents dans le terminal**, **Autorisations des agents** permet de conserver la configuration du fournisseur ou de choisir **Accès complet — sans confirmations de commandes**. Le choix est enregistré pour les nouveaux lancements et les reprises de Codex et Claude. Le dossier d’état du workflow est transmis au fournisseur pour que le pont local puisse ouvrir sa base SQLite. Les décisions du workflow restent dans le suivi.
 
 Vous pouvez commencer par le terminal. Le bouton **Terminal** l’affiche à tout
 moment ; sa session reste ouverte pendant la navigation. Revenir à une liste ou aux modèles masque le terminal pour libérer la lecture ; le bouton Terminal le retrouve. **Autres terminaux** retrouve les sessions ouvertes dans les autres projets sans
@@ -221,7 +223,7 @@ import. Les comptes, autorisations et anciennes exécutions ne sont pas transfé
 
 ## Installer et mettre à jour
 
-Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.16),
+Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.17),
 installez-le avec le gestionnaire de paquets Ubuntu, puis ouvrez **Tricorder**.
 **Essayer un exemple** permet de découvrir un parcours simulé sans modèle payant.
 

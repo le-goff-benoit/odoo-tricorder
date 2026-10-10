@@ -32,8 +32,15 @@ function existingStatusLine(home, project) {
   return statusLine;
 }
 
-function prepareLaunch({ provider, id, folder, backend, home, project, crew, prompt, model, effort, resume }) {
+function permissionMode(value = 'inherit') {
+  if (!['inherit', 'full'].includes(value)) throw new Error('Mode d’autorisations invalide');
+  return value;
+}
+
+function prepareLaunch({ provider, id, folder, backend, home, project, crew, prompt, model, effort, resume, permissionMode: permissions, writableDirectories = [] }) {
   if (!['claude', 'codex'].includes(provider)) throw new Error('Fournisseur inconnu');
+  const mode = permissionMode(permissions);
+  if (!Array.isArray(writableDirectories) || writableDirectories.length > 8 || writableDirectories.some(dir => typeof dir !== 'string' || dir.length > 4096 || dir.includes('\0') || !path.isAbsolute(dir))) throw new Error('Dossier d’état invalide');
   if (prompt !== undefined && (typeof prompt !== 'string' || prompt.length > 16000 || /[\x00-\x08\x0b-\x1f\x7f]/.test(prompt))) throw new Error('Message initial invalide');
   fs.mkdirSync(folder, { recursive: true, mode: 0o700 });
   const source = path.join(folder, id + '.jsonl');
@@ -59,6 +66,14 @@ function prepareLaunch({ provider, id, folder, backend, home, project, crew, pro
     argv = ['codex', ...Object.entries(hooks).flatMap(([name, value]) => ['-c', `hooks.${name}=${toml(value)}`])];
     command = 'codex ' + argv.slice(1).map(quote).join(' ');
   }
+  // The bridge opens SQLite/WAL outside the project. Grant only the application
+  // directories supplied by the main process, never a path from a model prompt.
+  for (const directory of new Set(writableDirectories.map(dir => path.resolve(dir)))) argv.push('--add-dir', directory);
+  if (mode === 'full') {
+    if (provider === 'codex') argv.push('--sandbox', 'danger-full-access', '--ask-for-approval', 'never');
+    else argv.push('--dangerously-skip-permissions');
+  }
+  command = [provider, ...argv.slice(1).map(quote)].join(' ');
   if (model) {
     if (typeof model !== 'string' || model.length > 120 || /[\x00-\x20]/.test(model)) throw new Error('Modèle invalide');
     argv.push('--model', model);
@@ -82,7 +97,7 @@ function prepareLaunch({ provider, id, folder, backend, home, project, crew, pro
     fs.writeFileSync(launchPath, JSON.stringify({ argv: [...argv, '--', prompt] }), { mode: 0o600, flag: 'wx' });
     command = ['python3', path.join(backend, 'agent_launch.py'), launchPath].map(quote).join(' ');
   }
-  return { command, source, quotaSource, note: 'Suivi de cette invocation ; configuration existante conservée. Les politiques et la validation native des hooks restent applicables.', hooks };
+  return { command, source, quotaSource, note: `${mode === 'full' ? 'Accès complet pour cette invocation, sans confirmations de commandes.' : 'Autorisations de la configuration du fournisseur.'} Suivi de cette invocation ; configuration existante conservée. Les politiques et la validation native des hooks restent applicables.`, hooks };
 }
 
-module.exports = { prepareLaunch, existingStatusLine };
+module.exports = { prepareLaunch, existingStatusLine, permissionMode };
