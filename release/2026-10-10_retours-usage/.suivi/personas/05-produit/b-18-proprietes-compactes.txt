@@ -1,0 +1,100 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Portail clients B2B"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Modèles
+  - button "Terminal" [pressed]
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - button "Actualiser · À jour"
+  - strong: Terminal
+  - button "Contexte"
+  - button "Disposition verticale"
+  - button "Agrandir le terminal"
+  - button "Nouveau terminal"
+  - button "Rechercher dans le terminal"
+  - heading "Votre terminal" [level=2]
+  - paragraph: Choisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.
+  - button "Choisir un workflow"
+  - button "Ouvrir un terminal"
+  - separator "Taille du terminal"
+  - main:
+    - complementary "Inspecteur du bloc":
+      - button "Retour au graphe": ← Retour au graphe
+      - strong: Analyser les réunions sélectionnées
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Analyser les réunions sélectionnées
+      - text: Consigne
+      - textbox "Consigne": Analyser les entretiens de discovery B2B de la semaine. Distinguer faits clients, hypothèses et décisions. Regrouper les besoins par segment, citer les sources et proposer trois priorités produit. Ne pas inventer de validation client.
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)": Chaque priorité cite au moins un entretien source. Les hypothèses restent distinguées des demandes exprimées.
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - strong: Utilise
+        - list:
+          - listitem:
+            - strong: Réunions sélectionnées
+            - text: "Liste · données regroupées · 1 à autant que nécessaire éléments · obligatoire Vient de : Choisir les réunions et leurs sources"
+            - button "Modifier"
+            - button "Retirer"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem:
+            - strong: Analyse des réunions
+            - text: "Texte · obligatoire Transmis à : Préparer le compte rendu et l’email"
+            - button "Modifier"
+            - button "Retirer"
+          - listitem:
+            - strong: Liste d’actions
+            - text: "Liste · obligatoire Transmis à : Préparer le compte rendu et l’email"
+            - button "Modifier"
+            - button "Retirer"
+          - listitem:
+            - strong: Priorites produit
+            - text: Texte · obligatoire Conservé dans le résultat de cette étape
+            - button "Modifier"
+            - button "Retirer"
+        - button "Ajouter un résultat attendu"
+      - button "Données de simulation…"
+      - text: Sortie de branchement (facultatif)
+      - combobox "Sortie de branchement (facultatif)":
+        - option "Aucun branchement conditionnel" [selected]
+        - option "Analyse des réunions"
+        - option "Priorites produit"
+      - text: Validation du résultat
+      - combobox "Validation du résultat":
+        - option "Valider automatiquement les sorties" [selected]
+        - option "Attendre ma validation"
+      - group: Organisation de l’étape
+      - group: Outils et plugins de cette étape
+      - paragraph: OpenAI · Codex · modèle à choisir
+      - button "Choisir l’IA pour tout le workflow"
+      - group: Agent et modèle pour cette étape
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+      - button "Appliquer au bloc"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.

@@ -1,0 +1,129 @@
+{
+  "atlas": {
+    "items": [
+      {
+        "defaults": {
+          "model": "expert-fixture",
+          "provider": "codex"
+        },
+        "description": "Description métier Atlas",
+        "edges": [
+          {
+            "from": "check",
+            "id": "check-decision",
+            "outcome": "done",
+            "to": "decision"
+          }
+        ],
+        "id": "work-a56b0322-0dfb-4516-9496-430525f7b908",
+        "nodes": [
+          {
+            "argv": [
+              "python3",
+              "-c",
+              "import sys,pathlib; ok=pathlib.Path(\"/project/repaired.txt\").exists(); print(\"REPARATION LOCALE PRESENTE\" if ok else \"ERREUR AUDIT SYNTHETIQUE\"); sys.exit(0 if ok else 7)"
+            ],
+            "candidate_check": false,
+            "completion_outcome": "succeeded",
+            "criteria": [],
+            "evidence_required": true,
+            "id": "check",
+            "inputs": {},
+            "kind": "command",
+            "max_attempts": 2,
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "resources": [],
+            "reuse": false,
+            "timeout": 60,
+            "title": "Vérifier le runtime Python",
+            "validation": "automatic"
+          },
+          {
+            "id": "decision",
+            "kind": "decision",
+            "options": [
+              "approve",
+              "reject"
+            ],
+            "position": {
+              "x": 400,
+              "y": 100
+            },
+            "question": "Examinez la sortie et la preuve de la commande : le runtime répond-il et sa version est-elle visible ?",
+            "title": "Décider de la suite"
+          }
+        ],
+        "parameters": {},
+        "revision": 3,
+        "schema": 1,
+        "title": "Vérifier une livraison Atlas",
+        "_project": "p05697213da294b7d"
+      }
+    ],
+    "total": 1,
+    "offset": 0,
+    "next": null
+  },
+  "boreal": {
+    "items": [
+      {
+        "description": "Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.",
+        "edges": [
+          {
+            "from": "check",
+            "id": "check-decision",
+            "outcome": "done",
+            "to": "decision"
+          }
+        ],
+        "id": "work-d59faa28-af54-4574-a538-1274c7800c0e",
+        "nodes": [
+          {
+            "argv": [
+              "python3",
+              "-c",
+              "import sys; print('Python opérationnel'); print(sys.version.split()[0])"
+            ],
+            "evidence_required": true,
+            "id": "check",
+            "kind": "command",
+            "max_attempts": 2,
+            "position": {
+              "x": 70,
+              "y": 100
+            },
+            "title": "Vérifier le runtime Python",
+            "validation": "automatic"
+          },
+          {
+            "id": "decision",
+            "kind": "decision",
+            "options": [
+              "approve",
+              "reject"
+            ],
+            "position": {
+              "x": 400,
+              "y": 100
+            },
+            "question": "Examinez la sortie et la preuve de la commande : le runtime répond-il et sa version est-elle visible ?",
+            "title": "Décider de la suite"
+          }
+        ],
+        "parameters": {},
+        "revision": 1,
+        "schema": 1,
+        "title": "Vérifier une livraison Boréal",
+        "_project": "p49ab3d017c654508"
+      }
+    ],
+    "total": 1,
+    "offset": 0,
+    "next": null
+  }
+}

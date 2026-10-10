@@ -1,12 +1,12 @@
 // Mirror the public data-contract rules for immediate editor feedback. The
 // engine remains authoritative when saving, linking or validating a result.
-export const typeNames = { string: 'Texte', number: 'Nombre', boolean: 'Oui / non', object: 'Objet structuré', array: 'Liste', any: 'Toute donnée' };
+export const typeNames = { string: 'Texte', number: 'Nombre', boolean: 'Oui / non', object: 'Données regroupées', array: 'Liste', any: 'Information' };
 export const portType = port => typeof port === 'string' ? port : port?.type;
 export const portRequired = (port, direction = 'outputs') => typeof port === 'string' ? direction === 'outputs' : port?.required !== false;
 export function normalizedPort(port, direction = 'outputs') { return typeof port === 'string' ? { type: port, required: direction === 'outputs' } : { required: true, ...port }; }
 export function portDescription(port, direction = 'outputs') {
-  const value = normalizedPort(port, direction), count = value.type === 'array' ? `liste de ${typeNames[value.items || 'any'].toLocaleLowerCase('fr')}${value.minItems || value.maxItems != null ? ` · ${value.minItems || 0}…${value.maxItems ?? 'N'} éléments` : ''}` : `${typeNames[value.type] || 'Donnée'} · un élément`;
-  return count + (value.required ? ' · requis' : ' · facultatif');
+  const value = normalizedPort(port, direction), count = value.type === 'array' ? `Liste${value.items && value.items !== 'any' ? ' · ' + (typeNames[value.items] || 'Informations').toLocaleLowerCase('fr') : ''}${value.minItems || value.maxItems != null ? ` · ${value.minItems || 0} à ${value.maxItems ?? 'autant que nécessaire'} éléments` : ''}` : `${typeNames[value.type] || 'Information'}`;
+  return count + (value.required ? ' · obligatoire' : ' · facultatif');
 }
 export function incompatibleReason(source, target, schema = 2) {
   const s = normalizedPort(source), t = normalizedPort(target, 'inputs');

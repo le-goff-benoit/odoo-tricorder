@@ -1,0 +1,60 @@
+{
+  "description": "Modèle réutilisable de revue produit B2B",
+  "edges": [
+    {
+      "from": "analyse",
+      "id": "suite",
+      "mapping": {
+        "constats": "retours",
+        "segments": "Segments_concernes"
+      },
+      "outcome": "done",
+      "to": "synthese"
+    }
+  ],
+  "id": "bilan-produit",
+  "nodes": [
+    {
+      "id": "analyse",
+      "kind": "task",
+      "outputs": {
+        "constats": "string",
+        "segments": "string"
+      },
+      "title": "Regrouper les retours",
+      "validation": "contract"
+    },
+    {
+      "capabilities": [],
+      "completion_outcome": "succeeded",
+      "criteria": [
+        "Les décisions distinguent maintenant et plus tard",
+        "Chaque action possède un responsable",
+        "Chaque priorité cite le segment client concerné"
+      ],
+      "id": "synthese",
+      "inputs": {
+        "Segments_concernes": "string",
+        "retours": "string"
+      },
+      "kind": "task",
+      "max_attempts": 1,
+      "outputs": {
+        "actions": "array",
+        "synthese": "string"
+      },
+      "phase": "",
+      "position": {
+        "x": 350,
+        "y": 60
+      },
+      "prompt": "",
+      "resources": [],
+      "title": "Conclure la revue produit",
+      "validation": "human"
+    }
+  ],
+  "revision": 2,
+  "schema": 1,
+  "title": "Synthèse des retours produit"
+}

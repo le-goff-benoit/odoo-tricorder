@@ -1,0 +1,19 @@
+await shot('01-accueil');
+await page.getByRole('button',{name:'+ Créer un workflow',exact:true}).click();await shot('02-creation');
+await page.getByLabel('Nom du workflow',{exact:true}).fill('Qualifier une demande avec accord');await page.getByRole('button',{name:'Créer et ouvrir le workflow',exact:true}).click();await page.getByRole('heading',{name:'Qualifier une demande avec accord',exact:true}).waitFor();await shot('03-premiere-etape');
+await page.locator('.node[data-id=start]').click();await shot('04-proprietes-initiales');
+await page.getByRole('button',{name:'+ Ajouter un bloc',exact:true}).click();await shot('05-types-blocs');
+await page.getByLabel("Type d'étape").selectOption('question');await page.getByRole('dialog').getByLabel('Nom du bloc').fill('Décrire la demande');await page.getByRole('button',{name:'Ajouter au workflow',exact:true}).click();await shot('06-question-ajoutee');
+await page.getByLabel('Information à demander',{exact:true}).fill('Que souhaitez-vous obtenir ?');await page.getByRole('button',{name:'Appliquer au bloc',exact:true}).click();
+await page.locator('.node[data-id=start]').click();await page.getByLabel('Nom du bloc',{exact:true}).fill('Analyser la demande');await page.getByLabel('Consigne',{exact:true}).fill('Analyser le besoin et proposer une réponse.');await page.getByRole('button',{name:'Appliquer au bloc',exact:true}).click();
+await page.getByRole('button',{name:'Recevoir un résultat existant…',exact:true}).click();await shot('07-liaison-assistee');await page.getByLabel('Résultat à recevoir').selectOption({index:1});await page.getByLabel('Nom dans cette étape').fill('Besoin du client');await page.getByRole('button',{name:'Ajouter et relier',exact:true}).click();await shot('08-liaison-creee');
+await page.getByRole('button',{name:'Ajouter un résultat attendu',exact:true}).click();await page.getByLabel('Nom de l’information').fill('Réponse proposée');await page.getByRole('button',{name:'Ajouter la donnée',exact:true}).click();
+await page.getByRole('button',{name:'+ Ajouter un bloc',exact:true}).click();await page.getByLabel("Type d'étape").selectOption({label:'Décision · Accord humain'});await page.getByRole('dialog').getByLabel('Nom du bloc').fill('Décider de la réponse');await page.getByRole('button',{name:'Ajouter au workflow',exact:true}).click();await shot('09-decision');
+await page.getByRole('button',{name:'Recevoir un résultat existant…',exact:true}).click();await shot('10-decision-recevoir');
+
+await page.getByLabel('Résultat à recevoir').selectOption({index:1});await page.getByRole('button',{name:'Ajouter et relier',exact:true}).click();await page.getByRole('button',{name:'Enregistrer',exact:true}).click();await shot('11-workflow-enregistre');
+await page.getByRole('button',{name:'Exécuter…',exact:true}).click();await shot('12-lancement');
+
+await page.getByRole('button',{name:'Simuler le parcours',exact:true}).click();await page.getByRole('button',{name:'Répondre à la question',exact:true}).click();await page.getByLabel('Votre réponse',{exact:true}).waitFor();await shot('13-question-runtime');await page.getByLabel('Votre réponse',{exact:true}).fill('Une réponse concernant le délai client');await page.getByRole('button',{name:'Répondre',exact:true}).click();await page.waitForTimeout(1200);await shot('14-apres-reponse');
+
+await page.getByRole('button',{name:'Examiner le résultat',exact:true}).click();await shot('14b-revue-intermediaire');await page.getByRole('button',{name:'Valider le résultat',exact:true}).click();await page.getByRole('button',{name:'Graphe',exact:true}).click();const approve=page.getByRole('button',{name:'Approuver la suite',exact:true});if(!await approve.isVisible())await page.locator('.node').filter({hasText:'Décider de la réponse'}).click();await shot('15-accord-runtime');await approve.click();await shot('16-termine');await page.getByRole('button',{name:'Voir les résultats',exact:true}).click();await shot('17-resultat');

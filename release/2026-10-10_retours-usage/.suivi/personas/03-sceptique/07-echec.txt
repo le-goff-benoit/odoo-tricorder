@@ -1,0 +1,24 @@
+Activité
+Workflows
+Projets
+Essai développeur sceptique
+Planifications
+Connexions
+Paramètres
+Terminal
+
+
+
+
+← Retour à la liste
+Examiner l’échec
+Graphe
+Détail
+›_Vérifier le script localCommandeÉchecSans donnée provenant d’un autre bloc
+?Décider de la suiteDécision humainePrévuVous
+−
+100 %
++
+Ajuster
+Étape sélectionnéeVérifier le script local→Décider de la suite×CommandeVérifier le script localCette étape a échouéTentative 1 sur 2 · 1 reprise restanteCommande terminée avec le code 7. Résultat à examiner.Sortie de la commandeCAUSE_EXPLICITE: valeur incorrecte
+PreuvesPreuve 1 · 09eb1a4aRelancer cette étape…Précisez la correction avant de relancer. Le résultat précédent reste dans l’historique.Entrées, résultat technique et historiquePreuvesPreuve 1 · 09eb1a4a

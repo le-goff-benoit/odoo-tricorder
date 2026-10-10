@@ -204,3 +204,15 @@
 /* A recorded refusal is a processed decision, never an approval. */
 .pill.decision-rejected {color:var(--warn);background:var(--warn-soft)}
 .pill.decision-recorded {color:var(--muted);background:var(--soft)}
+
+/* Questions remain prominent on the graph; review reserves room for answering. */
+.human-intervention {margin:0 0 8px;padding:8px 10px}
+.human-intervention p {margin:4px 0;max-height:4.5em;overflow:auto}
+.execution-timing {font-size:11px;margin-top:4px}
+.execution-timing summary {cursor:pointer}
+.workflow-heading [data-action=return-list] {font-size:12px;min-height:28px;padding:4px 7px;white-space:nowrap}
+.compact-height .human-intervention {padding:4px 8px;margin-bottom:4px}
+.compact-height .human-intervention p {max-height:2.8em}
+.compact-height .execution-timing {margin-top:2px;font-size:10px}
+
+.compact-height #studio-content.execution-view:has(.editor.review-focus) .execution-timing {display:none}

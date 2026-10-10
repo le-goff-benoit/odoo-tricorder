@@ -1,0 +1,112 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Atlas audit"
+  - button "Boreal audit"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Atlas audit
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Atlas audit / Workflow
+    - heading "Vérifier une livraison Atlas" [level=1]
+    - paragraph: Révision 2 · Modifications en attente
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer"
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Données structurées…"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img:
+      - 'button "Corriger le lien : Vérifier le runtime Python → Décider de la suite"'
+    - button "Vérifier le runtime Python · Commande": Vérifier le runtime Python Commande Sans donnée provenant d’un autre bloc
+    - button "Décider de la suite · Décision humaine": Décider de la suite Décision humaine Vous
+    - button "Relier vers Vérifier le runtime Python"
+    - button "Relier depuis Vérifier le runtime Python"
+    - button "Relier vers Décider de la suite"
+    - button "Relier depuis Décider de la suite"
+    - text: 2 blocs · 1 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Commande
+      - heading "Vérifier le runtime Python" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Vérifier le runtime Python
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - paragraph: Ces critères demandent une réception humaine. Choisissez « Manuelle » dans Validation du résultat, ou placez-les dans la Décision humaine qui réceptionne ce travail.
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Aucune donnée reçue d’un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem: Aucun résultat déclaré.
+        - button "Ajouter un résultat attendu"
+      - button "Données de simulation…"
+      - group: Contrôle de code (QA)
+      - group: Organisation de l’étape
+      - text: Commande et arguments (un par ligne)
+      - textbox "Commande et arguments (un par ligne)": python3 -c import sys; print('Python opérationnel'); print(sys.version.split()[0])
+      - text: Délai maximal (secondes)
+      - spinbutton "Délai maximal (secondes)": "60"
+      - paragraph: Sans shell ni réseau. Projet monté en lecture seule dans /project ; travail dans /work.
+      - text: Validation du résultat
+      - combobox "Validation du résultat":
+        - option "Manuelle"
+        - option "Automatique — contrôles techniques" [selected]
+      - paragraph: La validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+      - checkbox "Autoriser la réutilisation des preuves pendant 24 h"
+      - text: Autoriser la réutilisation des preuves pendant 24 h Uniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - button "Supprimer cette étape"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.

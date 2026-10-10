@@ -1,0 +1,17 @@
+Lancer cette version du workflow
+×
+Quelle demande souhaitez-vous traiter ?
+
+Vous pouvez aussi expliquer votre demande dans le terminal. Les questions de l’agent apparaîtront dans le suivi.
+
+Inclure d’autres projets
+Lancer dans le terminal
+Vérifier à nouveau
+Exécution automatique sans conversation
+
+Vérifier un script local · révision 1 · 2 étapes
+
+Ce mode démarre les étapes sans conversation. Tous ses prérequis doivent être configurés.
+
+Lancer l’exécution réelle
+Simuler le parcours

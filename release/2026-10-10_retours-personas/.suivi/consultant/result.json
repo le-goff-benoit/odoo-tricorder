@@ -1,0 +1,15 @@
+{
+  "candidate": "/tmp/tricorder-personas-rc15",
+  "completed": true,
+  "checks": [
+    "filters 6 blocks / 14 full workflows",
+    "short visible title",
+    "full request and sources kept in run detail",
+    "same live terminal id and pid across return",
+    "terminal layout hidden then recovered",
+    "notification setup opens from parameters",
+    "name and description draft preserved then applied"
+  ],
+  "realProvider": false,
+  "externalService": false
+}

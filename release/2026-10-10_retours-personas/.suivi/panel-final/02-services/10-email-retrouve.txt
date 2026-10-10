@@ -1,0 +1,59 @@
+
+
+    Tricorder
+
+      Activité
+      Workflows
+      Projets
+
+    Accès rapide aux projets
+    Rechercher un projetAjoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+      PlanificationsConnexions
+      Paramètres
+      Outils et aide
+        Kanban des releases
+        Reprendre le workflow
+        QuotasCommandes des agents
+        Installer le pack OdooAgents pour Claude et Codex
+        Mises à jour
+        À propos v0.6.0-rc.15
+
+
+
+
+    Sans projetTerminalIA des prochains lancementsOpenAI · CodexAnthropic · ClaudeÀ jour
+    StatutTerminalDemandesPlanMémoireExpressTemps
+    Aucun projet sélectionnéChoisissez un projet dans la colonne de gauche.WorkflowRelease OdooDemande OdooDiagnostic OdooDémarrer le workflowTerminalContexteDisposition verticaleAgrandir le terminalSuivantFermerVotre terminalChoisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.Choisir un workflowOuvrir un terminal
+
+
+
+    Sans projetTerminalIA des prochains lancementsOpenAI · CodexAnthropic · ClaudeÀ jour
+    StatutTerminalDemandesPlanMémoireExpressTemps
+    Aucun projet sélectionnéChoisissez un projet dans la colonne de gauche.WorkflowRelease OdooDemande OdooDiagnostic OdooDémarrer le workflowTerminalContexteDisposition verticaleAgrandir le terminalSuivantFermerVotre terminalChoisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.Choisir un workflowOuvrir un terminal
+
+Suivi · Support — diagnostic et réponseBoreal — précisions attendues (fixture synthétique)Révision 1 figée · Terminée · 10.10.2026 18:42:43← Retour à la listeOptionsRevenir à l’éditeurHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste
+    Revenir au suiviTerminée8 / 8 étapes6 traitées · 2 non applicablesVoir les résultatsVoir le rapportExécution terminée.Durée totale : 6 s · attentes comprisesDébut : 10.10.2026 18:42:43 · Fin : 10.10.2026 18:42:49
+
+    Simulation. Aucun modèle ni service métier appelé.
+    Transférer vers un projet…GrapheDétail
+    Analyser la demande et son urgence → Préparer la réponse urgente · Urgent · 2 donnéesAnalyser la demande et son urgence → Préparer la réponse sans urgence établie · Sans urgence établie · 2 donnéesAnalyser la demande et son urgence → Préciser ce qui est bloqué · À préciserPréciser ce qui est bloqué → Réévaluer l’urgence avec les faits reçus · 1 donnéeRéévaluer l’urgence avec les faits reçus → Préparer la réponse urgente · Urgent · 2 donnéesRéévaluer l’urgence avec les faits reçus → Préparer la réponse sans urgence établie · Sans urgence établie · 2 donnéesRéévaluer l’urgence avec les faits reçus → Choisir l’investigation manquante · À préciserPréparer la réponse urgente → Reprendre la destination de la réponsePréparer la réponse sans urgence établie → Reprendre la destination de la réponsePréparer la réponse urgente → Mettre la réponse au format choisi · 1 donnéePréparer la réponse sans urgence établie → Mettre la réponse au format choisi · 1 donnéeReprendre la destination de la réponse → Mettre la réponse au format choisi · 1 donnéeUrgent · 2 donnéesSans urgence établie · 2donnéesÀ préciser1 donnéeUrgent · 2 donnéesSans urgence établie · 2donnéesÀ préciser1 donnée1 donnée1 donnée✦Analyser la demande et son urgenceTâche IAProduit · sorties vérifiéesUtilise : demande initiale et contexte · Produit : Constat, Suite proposée, Niveau d’urgence✦Préparer la réponse urgenteTâche IANon applicableUtilise : Constat, Suite proposée · Produit : Proposition✦Préparer la réponse sans urgence établieTâche IAProduit · sorties vérifiéesUtilise : Constat, Suite proposée · Produit : Brouillon?Préciser ce qui est bloquéQuestionRéponduSans donnée provenant d’un autre bloc · Produit : Votre réponse✦Réévaluer l’urgence avec les faits reçusTâche IAProduit · sorties vérifiéesUtilise : Votre réponse · Produit : Constat, Suite proposée, Niveau d’urgence?Choisir l’investigation manquanteQuestionNon applicableSans donnée provenant d’un autre bloc · Produit : Votre réponse✦Reprendre la destination de la réponseTâche IAProduit · sorties vérifiéesUtilise : demande initiale et contexte · Produit : Votre réponse✦Mettre la réponse au format choisiTâche IAProduit · sorties vérifiéesUtilise : Destination choisie, Réponse préparée · Produit : Brouillon8 blocs · 12 liens−100 %+AjusterTerminéeLe rapport réunit les résultats, décisions et preuves de cette exécution. Consultez les résultats validés ou le rapport complet ci-dessus.
+Résultats de cette demande×Boreal — précisions attendues (fixture synthétique)Simulation · ces contenus ne prouvent aucun travail métier réel.Livrable finalBrouillonTexte à reprendreObjet : Suivi de votre demande Odoo
+
+Bonjour,
+Un utilisateur est concerné depuis ce matin. L’export manuel permet de poursuivre le travail. Nous allons reproduire le défaut avec votre exemple avant de conclure.
+
+TEXTE SYNTHÉTIQUE DE RECETTE — aucun email envoyé.Copier le texteRésultats des étapesMettre la réponse au format choisiRésultat validé · tentative 1Compte renduFIXTURE SYNTHÉTIQUE — aucun modèle ni service externe appelé.Contenu produitBrouillonObjet : Suivi de votre demande Odoo
+
+Bonjour,
+Un utilisateur est concerné depuis ce matin. L’export manuel permet de poursuivre le travail. Nous allons reproduire le défaut avec votre exemple avant de conclure.
+
+TEXTE SYNTHÉTIQUE DE RECETTE — aucun email envoyé.Données techniques{
+  "draft": "Objet : Suivi de votre demande Odoo\n\nBonjour,\nUn utilisateur est concerné depuis ce matin. L’export manuel permet de poursuivre le travail. Nous allons reproduire le défaut avec votre exemple avant de conclure.\n\nTEXTE SYNTHÉTIQUE DE RECETTE — aucun email envoyé."
+}Reprendre la destination de la réponseRésultat validé · tentative 1Compte renduFIXTURE SYNTHÉTIQUE — aucun modèle ni service externe appelé.Contenu produitRéponseEmail client, ton factuel. Réponse issue du scénario synthétique.Données techniques{
+  "answer": "Email client, ton factuel. Réponse issue du scénario synthétique."
+}Réévaluer l’urgence avec les faits reçusRésultat validé · tentative 1Compte renduFIXTURE SYNTHÉTIQUE — aucun modèle ni service externe appelé.Contenu produitConstatEXEMPLE SYNTHÉTIQUE : un utilisateur dispose d’un export manuel ; bug suspecté, urgence non établie.Suite proposéeReproduire le défaut avec un exemple.Niveau d’urgenceSans urgence établieDonnées techniques{
+  "finding": "EXEMPLE SYNTHÉTIQUE : un utilisateur dispose d’un export manuel ; bug suspecté, urgence non établie.",
+  "next_action": "Reproduire le défaut avec un exemple.",
+  "severity": "normal"
+}3 résultats affichés sur 6. Le rapport conserve tous les résultats.FermerVoir le rapport complet

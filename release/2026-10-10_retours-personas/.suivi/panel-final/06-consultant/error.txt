@@ -1,0 +1,5 @@
+locator.fill: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for getByPlaceholder('Rechercher un modèle...')[22m
+
+    at /home/blegoff/odoo-tricorder/release/2026-10-10_retours-personas/.suivi/panel-final/06-consultant/parcours.cjs:17:275

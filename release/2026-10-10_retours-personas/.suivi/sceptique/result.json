@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "candidate": "/tmp/tricorder-personas-rc15",
+  "bank": "/tmp/tricorder-sceptique-BOGOcX",
+  "realCommand": true,
+  "realFailureRetry": true,
+  "singleDecision": true,
+  "decisionMissingEvidence": true,
+  "completed": true,
+  "externalServices": false
+}

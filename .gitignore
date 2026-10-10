@@ -15,3 +15,7 @@ playwright-report/
 
 # Audit local contenant des références aux projets clients ; synthèse publique séparée.
 release/2026-10-08_terminal-et-release/
+
+# Raw usage traces and process environment snapshots stay on the test machine.
+release/2026-10-10_retours-*/**/*.zip
+release/2026-10-10_retours-*/**/env*.json

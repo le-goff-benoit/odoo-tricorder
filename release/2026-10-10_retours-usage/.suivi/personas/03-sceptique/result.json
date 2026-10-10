@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "realCommand": true,
+  "externalServices": false,
+  "candidate": "/tmp/tricorder-usage-candidate-a",
+  "bank": "/tmp/tricorder-sceptique-GdB3JB",
+  "journeys": [
+    "failure-retry-completed-duration-return",
+    "create-minimal-template-save-reopen"
+  ]
+}

@@ -1,0 +1,66 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Boréal"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - heading "Client Atlas" [level=1]
+    - paragraph: /tmp/tricorder-persona06-home-QYwLab/projects/p7bf9c6856aab454e
+    - button "Nouvelle demande"
+    - button "Créer un workflow"
+    - group: Options
+    - heading "Demandes et résultats" [level=2]
+    - table:
+      - rowgroup:
+        - row "Workflow Contexte État":
+          - columnheader "Workflow"
+          - columnheader "Contexte"
+          - columnheader "État"
+          - columnheader
+      - rowgroup:
+        - 'row "Réunion Atlas — sources à préciser Réunion Atlas — sources à préciser · 10.10.2026 17:45:27 Exécution réelle Terminée Durée totale : 4 s · attentes comprises Consulter Archiver"':
+          - cell "Réunion Atlas — sources à préciser Réunion Atlas — sources à préciser · 10.10.2026 17:45:27"
+          - cell "Exécution réelle"
+          - 'cell "Terminée Durée totale : 4 s · attentes comprises"'
+          - cell "Consulter Archiver":
+            - button "Consulter"
+            - button "Archiver"
+    - group: Rechercher dans les exécutions
+    - heading "Workflows disponibles" [level=2]
+    - button "Voir les archives"
+    - article:
+      - heading "Réunion Atlas — sources à préciser" [level=3]
+      - paragraph: 1 étapes
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+    - article:
+      - heading "Clôture de réunion" [level=3]
+      - paragraph: 3 étapes · Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+  - status: Réponse enregistrée.

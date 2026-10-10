@@ -7,18 +7,27 @@ et le suivi des demandes dans une application de bureau. Il sert à préparer un
 release, analyser un ticket, clôturer une réunion ou organiser votre propre processus.
 Les projets Odoo sont un usage possible ; le pack Odoo reste facultatif.
 
-**Préversion 0.6.0-rc.13 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.13)
-· [Nouveautés](release/2026-10-10_contrats-et-editeur/README.md)
+**Préversion publiée 0.6.0-rc.15 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.15)
+· [Nouveautés](release/2026-10-10_retours-personas/README.md)
 · [Guide d’utilisation](docs/WORKFLOW-RUNTIME.md)
 
-![Le terminal et les tâches concrètes du workflow](release/2026-10-10_contrats-et-editeur/captures/coordination.png)
+![Retrouver la synthèse et les actions, puis copier le texte final](release/2026-10-10_retours-personas/captures/resultats.png)
 
 *Captures de l’application avec des projets et exécutants fictifs.*
 
+## Une création et un suivi plus compréhensibles
+
+Cette version intègre les [retours d’usage, la revue spécialisée et la nouvelle recette des six personas](release/2026-10-10_retours-personas/README.md).
+**Workflows** ouvre **En cours**, **Modèles** et **Historique**. Les adaptations
+propres aux projets restent dans **Gestion des workflows**. **Nouvelle demande**
+propose la même bibliothèque ; la réutilisation d’une adaptation est un choix explicite.
+Un retour visible ramène à la liste depuis une exécution ou une release. Le catalogue distingue les workflows complets des blocs à composer. Le livrable final apparaît avant les résultats intermédiaires, avec un bouton pour copier son texte.
+Les six agents personas suivent un [mandat de retours à l’usage](docs/RECETTE-USAGE.md).
+
 ## Du workflow au résultat
 
-1. **Choisir ou dessiner.** Ouvrez **Workflows**, partez d’un modèle ou créez votre
-   workflow. Décrivez les blocs, leurs consignes, les données échangées et les décisions.
+1. **Choisir ou dessiner.** Ouvrez **Workflows → Modèles**, utilisez un modèle
+   ou personnalisez une copie ; **Créer un modèle** permet de partir de zéro. Décrivez les blocs, leurs consignes, les données échangées et les décisions.
 2. **Lancer.** Depuis **Nouvelle demande** ou **Exécuter…**, choisissez le workflow
    et son périmètre : sans projet, dans un projet, ou dans plusieurs projets.
 3. **Dialoguer.** **Lancer dans le terminal** ouvre la conversation liée au suivi.
@@ -31,7 +40,7 @@ Les projets Odoo sont un usage possible ; le pack Odoo reste facultatif.
    conserve les demandes et les tentatives ; une reprise indique ce qui va se passer.
 
 Vous pouvez commencer par le terminal. Le bouton **Terminal** l’affiche à tout
-moment ; votre choix de l’afficher ou de le masquer est conservé pendant la navigation. **Autres terminaux** retrouve les sessions ouvertes dans les autres projets sans
+moment ; sa session reste ouverte pendant la navigation. Revenir à une liste ou aux modèles masque le terminal pour libérer la lecture ; le bouton Terminal le retrouve. **Autres terminaux** retrouve les sessions ouvertes dans les autres projets sans
 changer le workflow affiché. Le séparateur ajuste sa place. **Disposition verticale** superpose
 terminal et suivi, et **Agrandir le terminal** lui donne toute la surface.
 En fenêtre compacte, le terminal garde une hauteur utile. Le réaffichage suit
@@ -40,10 +49,11 @@ la sortie courante tout en préservant une lecture volontaire de l’historique.
 ## Utiliser Tricorder sans IA
 
 Partez du modèle **Commande locale avec validation**, renseignez la commande du
-contrôle et ses critères, puis choisissez **Exécuter… → Exécution automatique sans
-conversation → Lancer l’exécution réelle**. La commande s’exécute localement dans
-son environnement isolé. Vous examinez sa sortie, validez son résultat et décidez
-de la suite, sans configurer de fournisseur IA.
+contrôle, puis choisissez **Exécuter… → Lancer l’exécution réelle**. La commande s’exécute localement dans
+son environnement isolé. Une seule décision finale présente sa sortie et sa preuve
+pour décider de la suite, sans configurer de fournisseur IA. Les critères métier
+de ce contrôle se configurent dans cette décision. Un échec présente sa cause et
+le nombre de tentatives avant de proposer une reprise.
 
 Le shell ouvert depuis le suivi démarre à la racine du projet. Celui ouvert dans
 l’éditeur démarre dans `.tricorder/` pour y concevoir la méthode ; son contexte
@@ -54,19 +64,34 @@ contrôle local ne constitue pas à lui seul une attestation du commit Git test�
 ## Votre méthode, vos blocs
 
 L’éditeur relie des tâches, agents, documents, décisions, conditions et opérations.
-Chaque bloc explique son travail, ses entrées, ses sorties et ses critères.
+Chaque bloc explique son travail, ce qu’il utilise, ce qu’il produit et ses critères.
+Les informations portent un nom métier et indiquent les étapes qui les transmettent
+ou les reçoivent. Une question attend une réponse libre ; une décision propose un accord.
 Les données peuvent être un élément ou une liste, requises ou facultatives.
+**Recevoir un résultat existant…** ajoute en une fois l’information et sa liaison
+au producteur. Les nouveaux workflows proposent directement les données structurées.
 Les liens montrent quelles données passent au bloc suivant ; un lien peut aussi
 servir uniquement à définir l’ordre du travail.
 
+Une règle choisit son information dans une liste. Les décisions humaines acceptent
+des choix en français, avec espaces et accents ; renommer un choix conserve sa
+branche. Le mode **Validation du résultat** explique si une tâche attend une
+revue humaine ou poursuit après contrôle de structure. Ce contrôle ne garantit
+pas la qualité métier de la réponse.
+
+Dans **Paramètres du workflow → Paramètres supplémentaires**, ajoutez des valeurs
+fixes par nom et valeur. Pour demander une information à chaque lancement,
+ajoutez une Question ouverte. Le JSON avancé reste disponible pour les structures
+complexes. Le choix d’un type de bloc explique qui agit et ce qui arrête la suite.
+
 Déplacez une carte directement, ajoutez un bloc près de la zone visible et reliez
-ses points d’entrée et de sortie. Une sélection garde le graphe visible ;
-**Propriétés** ouvre la configuration. **Réorganiser le graphe** range les branches.
+ses points d’entrée et de sortie. Cliquer sur un bloc ouvre ses propriétés ; sur un panneau compact, **Retour au graphe** retrouve le dessin.
+Le bouton **Propriétés** reste aussi disponible. **Réorganiser le graphe** range les branches.
 Les déplacements et modifications peuvent être annulés. Les notes permettent
 de commenter votre dessin et restent sans effet sur son exécution.
 
 La méthode appartient au workflow. **Choisir l’IA** règle le fournisseur et le
-modèle ; les profils d’agents précisent les compétences et les consignes de chaque
+modèle dans une liste issue de la configuration locale (avec saisie avancée si nécessaire) ; les profils d’agents précisent les compétences et les consignes de chaque
 bloc. Vous pouvez adapter ces choix sans redessiner votre méthode, sous réserve
 des outils et capacités réellement disponibles chez l’exécutant choisi.
 
@@ -83,7 +108,7 @@ fixes. Le formulaire conserve la saisie lorsque vous redimensionnez la fenêtre.
 | Besoin | Exemple de parcours |
 |---|---|
 | Support | Demande client → analyse → clarification → constat → proposition de réponse |
-| Réunion | Transcription → compte rendu → actions → relecture → brouillon d’email |
+| Réunion | Choix des réunions et sources → analyse → compte rendu, actions et brouillon d’email |
 | Release | Intentions → plan → décision → réalisation → contrôles → proposition de livraison |
 | Travail transversal | Demandes dans plusieurs projets → dépendances → consolidation |
 | Processus personnalisé | Vos blocs, vos données et vos règles de décision |
@@ -110,7 +135,11 @@ et de revenir au workflow parent en conservant le terminal.
 **Vue d’ensemble** rassemble les demandes, les exécutants et leur dernier état
 observé, ainsi que les attentes. Une question, une décision, une dépendance et un échec ont des actions
 propres. **Graphe** montre le parcours ; **Détail** donne la place au contenu à lire.
-Une demande terminée propose **Voir les résultats**, puis son rapport complet. Les branches non applicables sont comptées séparément. Les décisions disposent de leurs actions en pied de panneau, même avec un long contenu à lire.
+Une demande terminée propose **Voir les résultats**, puis son rapport complet.
+La durée totale, début et fin proviennent du journal d’exécution ; elle comprend
+les attentes humaines et ne prétend pas mesurer le temps de calcul de l’IA.
+Les questions attendues sont visibles dans le suivi. Les badges des projets
+donnent accès à la raison et à l’action attendue, même pour un ancien suivi. Les branches non applicables sont comptées séparément. Les décisions disposent de leurs actions en pied de panneau, même avec un long contenu à lire.
 
 Les tentatives précédentes présentent leur compte rendu, leurs preuves et le
 motif de reprise. Une reprise annonce son budget : **Relancer maintenant** exécute
@@ -185,7 +214,7 @@ import. Les comptes, autorisations et anciennes exécutions ne sont pas transfé
 
 ## Installer et mettre à jour
 
-Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.13),
+Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.15),
 installez-le avec le gestionnaire de paquets Ubuntu, puis ouvrez **Tricorder**.
 **Essayer un exemple** permet de découvrir un parcours simulé sans modèle payant.
 
@@ -204,7 +233,7 @@ Un recueil ou un traitement accepte jusqu’à 100 éléments, avec quatre exéc
 maximum dans l’application. Les traitements par élément imbriqués ne sont pas
 encore proposés. L’intégration de code et ses tests restent propres à chaque dépôt.
 
-Les [notes et preuves de réception](release/2026-10-10_contrats-et-editeur/README.md)
+Les [notes et preuves de réception](release/2026-10-10_retours-personas/README.md)
 distinguent essais GUI, simulations et limites. Elles ne qualifient ni un modèle
 commercial, ni un service externe, ni une release cliente réelle.
 

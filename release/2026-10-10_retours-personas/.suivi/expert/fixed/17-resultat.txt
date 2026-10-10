@@ -1,0 +1,73 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Sans projet
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Qualifier une demande avec accord
+    - heading "Qualifier une demande avec accord" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 3 / 3 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 3 s · attentes comprises Début : 10.10.2026 18:33:24 · Fin : 10.10.2026 18:33:27"
+    - strong: Simulation.
+    - text: Aucun modèle ni service métier appelé.
+    - button "Transférer vers un projet…"
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Analyser la demande":
+          - strong: Analyser la demande
+        - button "Étape sélectionnée Décider de la réponse":
+          - text: Étape sélectionnée
+          - strong: Décider de la réponse
+      - paragraph: Approuvée
+      - paragraph:
+        - text: "Décision humaine :"
+        - strong: Approuvée
+        - text: .
+      - group: Entrées, sorties et preuves
+  - status: Décision enregistrée.
+  - dialog "Résultats de cette demande":
+    - heading "Résultats de cette demande" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Qualifier une demande avec accord
+    - paragraph: Simulation · ces contenus ne prouvent aucun travail métier réel.
+    - heading "Livrable final" [level=2]
+    - heading "Reponse proposee" [level=3]
+    - heading "Texte à reprendre" [level=3]
+    - text: Exemple simulé
+    - button "Copier le texte"
+    - group: Résultats des étapes
+    - button "Fermer"
+    - button "Voir le rapport complet"

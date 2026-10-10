@@ -1,0 +1,92 @@
+
+> odoo-tricorder@0.6.0-rc.14 test:ui
+> npm run build && playwright test tests/studio.spec.cjs tests/desktop.spec.cjs tests/editor-gestures.spec.cjs tests/execution-interactions.spec.cjs tests/usage-feedback.spec.cjs tests/panel-graph-layout.spec.cjs --grep human gate|window integration|compact selection|usage —|Support branches|interaction|terminal|question --output=/tmp/tricorder-usage-reception-final
+
+
+> odoo-tricorder@0.6.0-rc.14 build
+> node scripts/build.mjs
+
+
+Running 40 tests using 1 worker
+
+(node:191198) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/desktop.spec.cjs:212:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (3.4s)
+  ✓   2 tests/desktop.spec.cjs:498:1 › release context: none, automatic new release, same terminal and persistence (4.2s)
+  ✓   3 tests/desktop.spec.cjs:574:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (3.1s)
+  ✘   4 tests/desktop.spec.cjs:790:1 › desktop: projects, proof status, sources, real terminal and persistence (34.1s)
+(node:192958) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 tests/desktop.spec.cjs:889:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (5.8s)
+  ✓   6 tests/desktop.spec.cjs:1595:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (7.0s)
+  ✓   7 tests/desktop.spec.cjs:1697:1 › window integration preserves the native conversation while inspecting phases and the library (6.7s)
+  ✓   8 tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session (4.5s)
+  ✓   9 tests/editor-gestures.spec.cjs:95:1 › terminal reveal follows current output, preserves deliberate history and keeps useful compact rows (3.8s)
+  ✓  10 tests/execution-interactions.spec.cjs:90:1 › negative result remains receivable and routes to the corrective branch (6.2s)
+  ✓  11 tests/execution-interactions.spec.cjs:103:1 › uncertain local notification retains receipt lookup without sending twice (6.2s)
+  ✓  12 tests/execution-interactions.spec.cjs:111:1 › live failure updates the graph badge and accessible name without reopening the run (6.0s)
+  ✓  13 tests/execution-interactions.spec.cjs:121:1 › request menu keeps keyboard focus and a question draft while activity changes (6.5s)
+  ✓  14 tests/execution-interactions.spec.cjs:143:1 › search menu keeps its expanded state and keyboard focus when requests arrive (6.0s)
+  ✓  15 tests/execution-interactions.spec.cjs:154:1 › search draft survives polling and deferred request counts refresh after leaving the input (5.9s)
+  ✓  16 tests/execution-interactions.spec.cjs:181:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (5.9s)
+  ✓  17 tests/execution-interactions.spec.cjs:224:1 › a stopped conversation with a pending question resumes explicitly without losing requests or its terminal (5.9s)
+  ✓  18 tests/execution-interactions.spec.cjs:258:1 › a closed historical terminal stays stopped until explicit resume and preserves other sessions (6.4s)
+  ✓  19 tests/panel-graph-layout.spec.cjs:100:1 › Support branches and joins stay readable beside the terminal with native status and ports inside cards (3.5s)
+
+  ✓  20 tests/studio.spec.cjs:107:1 › large release history: startup and refresh preserve projects, workflows and terminal (5.8s)
+  ✓  21 tests/studio.spec.cjs:246:1 › template creation has a real terminal; file edits require validated reload (5.5s)
+  ✓  22 tests/studio.spec.cjs:296:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (5.8s)
+  ✓  23 tests/studio.spec.cjs:537:1 › human gate presents the full external content and candidate before approval (5.9s)
+  ✓  24 tests/studio.spec.cjs:583:1 › native conversation: provider choice, durable questions, live graph and same terminal after restart (12.8s)
+  ✓  25 tests/studio.spec.cjs:651:1 › previous studio terminal is adopted in the main terminal without a new shell (5.5s)
+  ✓  26 tests/studio.spec.cjs:739:1 › terminal visibility preserves a live session while browsing and editing (5.5s)
+  ✓  27 tests/studio.spec.cjs:802:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (5.5s)
+  ✓  28 tests/studio.spec.cjs:846:1 › repository journey: resume a cloned workflow, simulate a question and export a generic work dossier (5.5s)
+  ✓  29 tests/studio.spec.cjs:873:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question (6.0s)
+  ✓  30 tests/studio.spec.cjs:921:1 › workspace layout: focused navigation, adjustable split and editor preserve the same terminal (5.5s)
+  ✓  31 tests/studio.spec.cjs:1036:1 › audit reception: concurrent terminal edit merges with the persisted editor draft (5.5s)
+  ✓  32 tests/studio.spec.cjs:1053:1 › audit reception: stopped native agent resumes explicitly in the same terminal (5.5s)
+
+  ✓  33 tests/studio.spec.cjs:1100:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (7.0s)
+
+  ✓  34 tests/studio.spec.cjs:1135:43 › mail intake: missing access becomes a visible question without inventing a source (5.5s)
+
+  ✓  35 tests/studio.spec.cjs:1135:43 › mail intake: ambiguous access becomes a visible question without inventing a source (5.5s)
+
+  ✓  36 tests/studio.spec.cjs:1145:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (6.9s)
+  ✓  37 tests/usage-feedback.spec.cjs:25:1 › usage — workflows show current work, history with duration and a visible return (2.7s)
+  ✓  38 tests/usage-feedback.spec.cjs:36:1 › usage — new request shares the model library, project adaptations are opt in (2.3s)
+  ✓  39 tests/usage-feedback.spec.cjs:44:1 › usage — question editor asks for free text and models have readable choices (2.8s)
+  ✓  40 tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy (7.0s)
+
+
+  1) tests/desktop.spec.cjs:790:1 › desktop: projects, proof status, sources, real terminal and persistence
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('#tabs [data-view="terminal"]')
+
+
+      55 | async function projectTab(page, view) {
+      56 |   const button = page.locator(`#tabs [data-view="${view}"]`);
+    > 57 |   await button.click();
+         |                ^
+      58 | }
+      59 |
+      60 | async function projectView(page, view) {
+        at projectTab (/home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:57:16)
+        at /home/blegoff/odoo-tricorder/tests/desktop.spec.cjs:870:11
+
+    Error Context: ../../../tmp/tricorder-usage-reception-final/desktop-desktop-projects-p-d49eb-al-terminal-and-persistence/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-usage-reception-final/desktop-desktop-projects-p-d49eb-al-terminal-and-persistence/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-usage-reception-final/desktop-desktop-projects-p-d49eb-al-terminal-and-persistence/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/desktop.spec.cjs:790:1 › desktop: projects, proof status, sources, real terminal and persistence
+  39 passed (4.2m)

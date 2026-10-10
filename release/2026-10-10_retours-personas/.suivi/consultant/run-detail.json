@@ -1,0 +1,396 @@
+{
+  "run": {
+    "contract": "747d89425b29e7875aa53eab879b08d7d0ea2ea5611b46bca96c6496fc3d29de",
+    "created": 1791649298.1450493,
+    "definition": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.",
+      "edges": [
+        {
+          "from": "select",
+          "id": "select-review",
+          "mapping": {
+            "selected_meetings": "selected_meetings"
+          },
+          "outcome": "done",
+          "to": "review"
+        },
+        {
+          "from": "review",
+          "id": "review-mail",
+          "mapping": {
+            "actions": "actions",
+            "analysis": "analysis"
+          },
+          "outcome": "done",
+          "to": "mail"
+        }
+      ],
+      "id": "meeting-conversation-use-fb8864102803",
+      "nodes": [
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "select",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "selected_meetings": {
+              "items": "object",
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire la demande initiale. Identifier les réunions visées : titres ou liens précis, ou période avec ses dates. Il peut y avoir plusieurs réunions dans une semaine. Si le périmètre manque, demander avec ask quelles réunions ou quelle période examiner. Utiliser seulement les sources fournies ou réellement accessibles. Si une recherche produit plusieurs réunions et que la sélection est ambiguë, présenter les titres et dates et faire préciser le choix avec ask. Pour chaque réunion sélectionnée, transmettre titre, date si connue, référence de la source, transcription ou notes effectivement lues et limites. Sans source exploitable, demander la transcription ou les notes avec ask ; ne pas inventer de réunion ou d’accès Meeting Minutes.",
+          "sample_outputs": {
+            "selected_meetings": [
+              {
+                "date": "À préciser",
+                "notes": "Le périmètre du prochain atelier reste à confirmer.",
+                "source": "Notes synthétiques de démonstration",
+                "title": "Atelier fictif"
+              }
+            ]
+          },
+          "title": "Choisir les réunions et leurs sources",
+          "validation": "contract"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "review",
+          "inputs": {
+            "selected_meetings": {
+              "items": "object",
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "actions": "array",
+            "analysis": "string"
+          },
+          "position": {
+            "x": 450,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Analyser les sources des réunions sélectionnées. Présenter les faits et décisions par réunion avec leur provenance ; distinguer décisions, propositions, contradictions et inconnues. Extraire les actions avec responsable et échéance uniquement lorsqu’ils sont explicites ; sinon indiquer à préciser. Poser une question avec ask seulement si une information manque pour produire un résultat utile. Signaler les autres incertitudes dans l’analyse, sans imposer une validation intermédiaire du compte rendu.",
+          "sample_outputs": {
+            "actions": [
+              {
+                "action": "Confirmer le périmètre de l’atelier",
+                "due": "À préciser",
+                "owner": "À préciser"
+              }
+            ],
+            "analysis": "Exemple : les notes de l’atelier fictif laissent le périmètre à confirmer ; aucune décision définitive."
+          },
+          "title": "Analyser les réunions sélectionnées",
+          "validation": "contract"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "mail",
+          "inputs": {
+            "actions": "array",
+            "analysis": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "actions": "array",
+            "draft": "string",
+            "minutes": "string"
+          },
+          "position": {
+            "x": 850,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "À partir de l’analyse et des actions reçues, produire un compte rendu fidèle, la liste d’actions et un texte d’email avec objet et corps. Distinguer les différentes réunions et reprendre les sources, décisions et points à préciser. Ne pas inventer de destinataires. Présenter les incertitudes avec le résultat ; demander une précision seulement si elle est indispensable. Aucun email envoyé ni brouillon créé dans Gmail ; une éventuelle publication exige une opération configurée et autorisée séparément.",
+          "sample_outputs": {
+            "actions": [
+              {
+                "action": "Confirmer le périmètre de l’atelier",
+                "due": "À préciser",
+                "owner": "À préciser"
+              }
+            ],
+            "draft": "Exemple de texte d’email : voici le compte rendu et l’action à préciser. Aucun email envoyé ni brouillon Gmail créé.",
+            "minutes": "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer."
+          },
+          "title": "Préparer le compte rendu et l’email",
+          "validation": "contract"
+        }
+      ],
+      "parameters": {
+        "conversation": "cfe3df7e1f452481a",
+        "depends_on_runs": [],
+        "request": "Atlas — suivi S41\n\nPréparer le compte rendu des deux réunions Atlas du 7 et du 9 octobre, identifier les décisions et actions restantes, distinguer les arbitrages ouverts, puis rédiger un email de synthèse destiné à Camille sans inclure la réunion interne Boréal.\n\nSources des réunions :\n7 octobre : Camille valide le calendrier. Action : Paul transmet le planning vendredi. 9 octobre : le budget reste à confirmer. Ne rien envoyer."
+      },
+      "revision": 1,
+      "schema": 2,
+      "title": "Clôture de réunion"
+    },
+    "driver": "conversation",
+    "id": "r546560cca0984728",
+    "nodes": {
+      "mail": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "review": {
+        "attempt": 0,
+        "status": "pending"
+      },
+      "select": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "status": "ready"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.",
+      "edges": [
+        {
+          "from": "select",
+          "id": "select-review",
+          "mapping": {
+            "selected_meetings": "selected_meetings"
+          },
+          "outcome": "done",
+          "to": "review"
+        },
+        {
+          "from": "review",
+          "id": "review-mail",
+          "mapping": {
+            "actions": "actions",
+            "analysis": "analysis"
+          },
+          "outcome": "done",
+          "to": "mail"
+        }
+      ],
+      "id": "meeting-conversation-use-fb8864102803",
+      "nodes": [
+        {
+          "id": "select",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "selected_meetings": {
+              "items": "object",
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire la demande initiale. Identifier les réunions visées : titres ou liens précis, ou période avec ses dates. Il peut y avoir plusieurs réunions dans une semaine. Si le périmètre manque, demander avec ask quelles réunions ou quelle période examiner. Utiliser seulement les sources fournies ou réellement accessibles. Si une recherche produit plusieurs réunions et que la sélection est ambiguë, présenter les titres et dates et faire préciser le choix avec ask. Pour chaque réunion sélectionnée, transmettre titre, date si connue, référence de la source, transcription ou notes effectivement lues et limites. Sans source exploitable, demander la transcription ou les notes avec ask ; ne pas inventer de réunion ou d’accès Meeting Minutes.",
+          "sample_outputs": {
+            "selected_meetings": [
+              {
+                "date": "À préciser",
+                "notes": "Le périmètre du prochain atelier reste à confirmer.",
+                "source": "Notes synthétiques de démonstration",
+                "title": "Atelier fictif"
+              }
+            ]
+          },
+          "title": "Choisir les réunions et leurs sources",
+          "validation": "contract"
+        },
+        {
+          "id": "review",
+          "inputs": {
+            "selected_meetings": {
+              "items": "object",
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "actions": "array",
+            "analysis": "string"
+          },
+          "position": {
+            "x": 450,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Analyser les sources des réunions sélectionnées. Présenter les faits et décisions par réunion avec leur provenance ; distinguer décisions, propositions, contradictions et inconnues. Extraire les actions avec responsable et échéance uniquement lorsqu’ils sont explicites ; sinon indiquer à préciser. Poser une question avec ask seulement si une information manque pour produire un résultat utile. Signaler les autres incertitudes dans l’analyse, sans imposer une validation intermédiaire du compte rendu.",
+          "sample_outputs": {
+            "actions": [
+              {
+                "action": "Confirmer le périmètre de l’atelier",
+                "due": "À préciser",
+                "owner": "À préciser"
+              }
+            ],
+            "analysis": "Exemple : les notes de l’atelier fictif laissent le périmètre à confirmer ; aucune décision définitive."
+          },
+          "title": "Analyser les réunions sélectionnées",
+          "validation": "contract"
+        },
+        {
+          "id": "mail",
+          "inputs": {
+            "actions": "array",
+            "analysis": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "actions": "array",
+            "draft": "string",
+            "minutes": "string"
+          },
+          "position": {
+            "x": 850,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "À partir de l’analyse et des actions reçues, produire un compte rendu fidèle, la liste d’actions et un texte d’email avec objet et corps. Distinguer les différentes réunions et reprendre les sources, décisions et points à préciser. Ne pas inventer de destinataires. Présenter les incertitudes avec le résultat ; demander une précision seulement si elle est indispensable. Aucun email envoyé ni brouillon créé dans Gmail ; une éventuelle publication exige une opération configurée et autorisée séparément.",
+          "sample_outputs": {
+            "actions": [
+              {
+                "action": "Confirmer le périmètre de l’atelier",
+                "due": "À préciser",
+                "owner": "À préciser"
+              }
+            ],
+            "draft": "Exemple de texte d’email : voici le compte rendu et l’action à préciser. Aucun email envoyé ni brouillon Gmail créé.",
+            "minutes": "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer."
+          },
+          "title": "Préparer le compte rendu et l’email",
+          "validation": "contract"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 2,
+      "title": "Clôture de réunion"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "cfe3df7e1f452481a",
+      "depends_on_runs": [],
+      "request": "Atlas — suivi S41\n\nPréparer le compte rendu des deux réunions Atlas du 7 et du 9 octobre, identifier les décisions et actions restantes, distinguer les arbitrages ouverts, puis rédiger un email de synthèse destiné à Camille sans inclure la réunion interne Boréal.\n\nSources des réunions :\n7 octobre : Camille valide le calendrier. Action : Paul transmet le planning vendredi. 9 octobre : le budget reste à confirmer. Ne rien envoyer."
+    },
+    "plugins": {
+      "path": "/tmp/persona-consultant-rc15-ROVZiN/projects/p5fed7d4946ac40ab/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p5fed7d4946ac40ab",
+    "release": "",
+    "scope": {
+      "id": "p5fed7d4946ac40ab",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791649298.1459482,
+    "timing": {
+      "started": 1791649298.1450493,
+      "finished": null,
+      "duration": null
+    },
+    "origin": null,
+    "focus": {
+      "node": "select",
+      "title": "Choisir les réunions et leurs sources",
+      "status": "ready",
+      "action": "Continuer dans le terminal"
+    },
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    },
+    "launch": {
+      "status": "configuration",
+      "label": "À configurer",
+      "ready_count": 1,
+      "worker_count": 0,
+      "native_count": 0,
+      "configuration_count": 1,
+      "waiting_count": 0,
+      "unknown_count": 0,
+      "active_count": 0,
+      "max_parallel": 4,
+      "nodes": [
+        {
+          "node": "select",
+          "title": "Choisir les réunions et leurs sources",
+          "status": "configuration",
+          "code": "provider.model-required",
+          "action": "new-execution",
+          "native_available": true,
+          "reason": "Aucun modèle explicite pour un agent de bloc. Vous pouvez continuer cette demande dans le terminal. Pour utiliser un agent de bloc, configurez un nouveau lancement ; cette exécution conserve sa version.",
+          "remedy": "Choisissez le modèle à utiliser pour cette étape dans les paramètres IA."
+        }
+      ],
+      "nodes_total": 1,
+      "nodes_truncated": false
+    }
+  },
+  "events": [
+    {
+      "seq": 1,
+      "at": 1791649298.1458004,
+      "node": null,
+      "simulation": false,
+      "type": "started"
+    },
+    {
+      "seq": 2,
+      "at": 1791649298.1458962,
+      "node": "select",
+      "type": "ready"
+    }
+  ],
+  "events_next": null
+}

@@ -22,7 +22,7 @@ async function capture(name) {
   fs.writeFileSync(test.info().outputPath(name), Buffer.from(png, 'base64'));
 }
 async function openEditor() {
-  await page.locator('[data-workflow-route=global]').click();
+  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.locator('[data-action=open-workflow][data-id=layout-guide]').click();
   await expect(page.locator('.workflow-heading h1')).toHaveText('Relecture du guide');
 }
@@ -86,7 +86,7 @@ test('design opens at readable scale and compact properties use the panel withou
   await apply.click(); await expect(apply).toBeFocused();
   const back = page.getByRole('button', { name: 'Retour au graphe', exact: true }); await back.focus(); await page.keyboard.press('Enter');
   await expect(page.locator('.node[data-id=draft]')).toBeFocused(); await expect(page.locator('.canvas-area')).toBeVisible();
-  await page.locator('.node[data-id=draft]').click(); await expect(page.locator('.canvas-area')).toBeVisible(); await page.getByRole('button', { name: 'Propriétés', exact: true }).click(); await expect(prompt).toHaveValue('Texte conservé en passant du bureau à une petite fenêtre.');
+  await page.locator('.node[data-id=draft]').click(); await expect(page.locator('.canvas-area')).toBeHidden(); await expect(prompt).toHaveValue('Texte conservé en passant du bureau à une petite fenêtre.');
   await page.locator('[data-theme-choice=dark]').click();
   await capture('properties-819x640-dark.png');
   await size(1440, 1000); await expect(page.locator('.canvas-area')).toBeVisible();

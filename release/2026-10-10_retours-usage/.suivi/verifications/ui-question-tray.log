@@ -1,0 +1,18 @@
+
+> odoo-tricorder@0.6.0-rc.14 test:ui
+> npm run build && playwright test tests/studio.spec.cjs --grep window closes to Ubuntu tray|mail illustration --output=/tmp/tricorder-usage-studio-diagnostic
+
+
+> odoo-tricorder@0.6.0-rc.14 build
+> node scripts/build.mjs
+
+
+Running 2 tests using 1 worker
+
+(node:189307) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/studio.spec.cjs:288:1 › window closes to Ubuntu tray and remains available (5.5s)
+
+  ✓  2 tests/studio.spec.cjs:1145:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (6.8s)
+
+  2 passed (13.0s)

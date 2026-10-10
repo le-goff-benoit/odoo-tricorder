@@ -1,0 +1,830 @@
+01-accueil
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Activité
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - heading "Activité" [level=1]
+    - paragraph: Votre travail en cours et ce qui attend votre intervention. 3 demandes.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - heading "À traiter" [level=2]
+    - paragraph: 2 exécutions affichées à traiter sur cette page.
+    - 'button "Accueil client Orion Demande · Client Orion · Accueil client Orion Réponse attendue Préciser le contact Depuis le début : 2 s · attentes comprises"':
+      - strong: Accueil client Orion
+      - text: Demande · Client Orion · Accueil client Orion
+      - strong: Réponse attendue
+      - text: "Préciser le contact Depuis le début : 2 s · attentes comprises"
+    - 'button "Renouvellement contrat Atlas Demande · Client Atlas · Renouvellement contrat Atlas Réponse attendue Confirmer le périmètre Depuis le début : 2 s · attentes comprises"':
+      - strong: Renouvellement contrat Atlas
+      - text: Demande · Client Atlas · Renouvellement contrat Atlas
+      - strong: Réponse attendue
+      - text: "Confirmer le périmètre Depuis le début : 2 s · attentes comprises"
+    - heading "Autres exécutions" [level=2]
+    - text: 1 exécution affichée
+    - 'button "Bilan précédent Atlas Demande · Client Atlas · Bilan précédent Atlas Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Bilan précédent Atlas
+      - text: Demande · Client Atlas · Bilan précédent Atlas
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+02-demande-atlas
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Renouvellement contrat Atlas
+    - heading "Renouvellement contrat Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - status:
+        - strong: Votre réponse est attendue
+        - paragraph: Atlas souhaite-t-il inclure le support du samedi ?
+      - strong: Réponse attendue
+      - text: 0 / 1 étapes
+      - button "Répondre à la question"
+      - paragraph: Confirmer le périmètre
+      - group: "Depuis le début : 3 s · attentes comprises Début : 10.10.2026 18:37:15"
+    - group "Affichage du suivi":
+      - button "Graphe" [pressed]
+      - button "Détail"
+    - button "Confirmer le périmètre · Réponse attendue": "Confirmer le périmètre Question Réponse attendue Sans donnée provenant d’un autre bloc · Produit : Votre réponse"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+02b-reponse
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Renouvellement contrat Atlas
+    - heading "Renouvellement contrat Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Réponse attendue
+      - text: 0 / 1 étapes
+      - paragraph: Confirmer le périmètre
+      - group: "Depuis le début : 4 s · attentes comprises Début : 10.10.2026 18:37:15"
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Étape sélectionnée Confirmer le périmètre":
+          - text: Étape sélectionnée
+          - strong: Confirmer le périmètre
+      - paragraph: Atlas souhaite-t-il inclure le support du samedi ?
+      - paragraph: Répondez dans le terminal ou ici.
+      - text: Votre réponse
+      - textbox "Votre réponse"
+      - button "Répondre"
+02c-atlas-traite
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Renouvellement contrat Atlas
+    - heading "Renouvellement contrat Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 1 / 1 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 5 s · attentes comprises Début : 10.10.2026 18:37:15 · Fin : 10.10.2026 18:37:20"
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Étape sélectionnée Confirmer le périmètre":
+          - text: Étape sélectionnée
+          - strong: Confirmer le périmètre
+      - paragraph: Répondu
+      - paragraph: Information fournie
+      - group:
+        - text: Entrées, sorties et preuves
+        - heading "Entrées reçues" [level=3]
+        - term: Précisions
+        - definition:
+          - list:
+            - listitem:
+              - term: Question
+              - definition: Atlas souhaite-t-il inclure le support du samedi ?
+              - term: Réponse
+              - definition: Non, support du lundi au vendredi seulement.
+        - group: Données techniques
+        - heading "Résultat" [level=3]
+        - term: Réponse
+        - definition: Non, support du lundi au vendredi seulement.
+        - group: Données techniques
+  - status: Réponse enregistrée.
+03-nouvelle-demande
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Activité
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - heading "Activité" [level=1]
+    - paragraph: Votre travail en cours et ce qui attend votre intervention. 3 demandes.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - heading "À traiter" [level=2]
+    - paragraph: 1 exécution affichée à traiter sur cette page.
+    - 'button "Accueil client Orion Demande · Client Orion · Accueil client Orion Réponse attendue Préciser le contact Depuis le début : 6 s · attentes comprises"':
+      - strong: Accueil client Orion
+      - text: Demande · Client Orion · Accueil client Orion
+      - strong: Réponse attendue
+      - text: "Préciser le contact Depuis le début : 6 s · attentes comprises"
+    - heading "Autres exécutions" [level=2]
+    - text: 2 exécutions affichées
+    - 'button "Bilan précédent Atlas Demande · Client Atlas · Bilan précédent Atlas Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Bilan précédent Atlas
+      - text: Demande · Client Atlas · Bilan précédent Atlas
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+    - 'button "Renouvellement contrat Atlas Demande · Client Atlas · Renouvellement contrat Atlas Terminée Durée totale : 5 s · attentes comprises"':
+      - strong: Renouvellement contrat Atlas
+      - text: Demande · Client Atlas · Renouvellement contrat Atlas
+      - strong: Terminée
+      - text: "Durée totale : 5 s · attentes comprises"
+  - status: Réponse enregistrée.
+  - dialog "Nouvelle demande":
+    - heading "Nouvelle demande" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Choisissez un modèle, puis indiquez votre demande. Chaque exécution conserve ses propres résultats.
+    - text: Workflow
+    - combobox "Workflow":
+      - option "De la demande au résultat"
+      - option "Commande locale avec validation"
+      - option "Évolution logicielle"
+      - option "Release — demandes, plan, réalisation et validation"
+      - option "Support — diagnostic et réponse"
+      - option "Clôture de réunion"
+      - option "Demande ponctuelle" [selected]
+      - option "Correction express"
+      - option "Intentions, plan et travaux"
+      - option "Développement par élément et tests communs"
+      - option "Nouveau message → notification"
+      - 'option "GitHub → Odoo.sh : staging puis production"'
+      - option "Livraison directe en production"
+      - option "Documentation → Confluence"
+      - option "Orchestration"
+      - option "Analyse"
+      - option "Développement"
+      - option "Tests"
+      - option "Gestion documentaire"
+      - option "Communication"
+    - checkbox "Réutiliser un workflow enregistré dans un projet"
+    - text: Réutiliser un workflow enregistré dans un projet Projet principal
+    - combobox "Projet principal":
+      - option "Sans projet" [selected]
+      - option "Client Atlas"
+      - option "Client Orion"
+    - paragraph: Le modèle sera utilisé dans Sans projet. Ses prochaines modifications ne changeront pas les exécutions déjà lancées.
+    - paragraph: Pour coordonner plusieurs projets, ajoutez-les à l’étape suivante.
+    - button "Continuer"
+04-preparer-reunions
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Clôture de réunion" [level=1]
+    - paragraph: Révision 1 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés" [disabled]
+    - button "Paramètres du workflow"
+    - button "Annuler la modification" [disabled]: ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img:
+      - 'button "Corriger le lien : Choisir les réunions et leurs sources → Analyser les réunions sélectionnées · Réunions sélectionnées · Liste"'
+      - 'button "Corriger le lien : Analyser les réunions sélectionnées → Préparer le compte rendu et l’email · Analyse des réunions · Texte · Liste d’actions · Liste"'
+    - button "Choisir les réunions et leurs sources · Tâche IA": "Choisir les réunions et leurs sources Tâche IA Utilise : demande initiale et contexte · Produit : Réunions sélectionnées"
+    - button "Analyser les réunions sélectionnées · Tâche IA": "Analyser les réunions sélectionnées Tâche IA Utilise : Réunions sélectionnées · Produit : Analyse des réunions, Liste d’actions"
+    - button "Préparer le compte rendu et l’email · Tâche IA": "Préparer le compte rendu et l’email Tâche IA Utilise : Analyse des réunions, Liste d’actions · Produit : Compte rendu, Liste d’actions, Brouillon"
+    - button "Relier vers Choisir les réunions et leurs sources"
+    - button "Relier depuis Choisir les réunions et leurs sources"
+    - button "Relier vers Analyser les réunions sélectionnées"
+    - button "Relier depuis Analyser les réunions sélectionnées"
+    - button "Relier vers Préparer le compte rendu et l’email"
+    - button "Relier depuis Préparer le compte rendu et l’email"
+    - text: 3 blocs · 2 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+  - status: Réponse enregistrée.
+  - dialog "Lancer cette version du workflow":
+    - heading "Lancer cette version du workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - text: Titre court (facultatif)
+    - textbox "Titre court (facultatif)":
+      - /placeholder: Ex. Suivi hebdomadaire Atlas
+    - text: Réunions ou période à analyser
+    - textbox "Réunions ou période à analyser":
+      - /placeholder: "Une ou plusieurs réunions : titres et dates, ou une période précise."
+    - text: Notes, transcriptions ou liens des réunions
+    - textbox "Notes, transcriptions ou liens des réunions":
+      - /placeholder: Collez les notes, les liens ou les chemins des documents. Indiquez à quelle réunion chaque source correspond.
+    - paragraph: Le workflow commencera par identifier les réunions et vérifier leurs sources. L’agent vous demandera les précisions manquantes dans le suivi ou le terminal. Aucun document n’a encore été lu.
+    - group: Inclure d’autres projets
+    - button "Lancer dans le terminal"
+    - button "Vérifier à nouveau"
+    - group: Exécution automatique sans conversation
+    - button "Simuler le parcours"
+05-sources-renseignees
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Clôture de réunion" [level=1]
+    - paragraph: Révision 1 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés" [disabled]
+    - button "Paramètres du workflow"
+    - button "Annuler la modification" [disabled]: ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img:
+      - 'button "Corriger le lien : Choisir les réunions et leurs sources → Analyser les réunions sélectionnées · Réunions sélectionnées · Liste"'
+      - 'button "Corriger le lien : Analyser les réunions sélectionnées → Préparer le compte rendu et l’email · Analyse des réunions · Texte · Liste d’actions · Liste"'
+    - button "Choisir les réunions et leurs sources · Tâche IA": "Choisir les réunions et leurs sources Tâche IA Utilise : demande initiale et contexte · Produit : Réunions sélectionnées"
+    - button "Analyser les réunions sélectionnées · Tâche IA": "Analyser les réunions sélectionnées Tâche IA Utilise : Réunions sélectionnées · Produit : Analyse des réunions, Liste d’actions"
+    - button "Préparer le compte rendu et l’email · Tâche IA": "Préparer le compte rendu et l’email Tâche IA Utilise : Analyse des réunions, Liste d’actions · Produit : Compte rendu, Liste d’actions, Brouillon"
+    - button "Relier vers Choisir les réunions et leurs sources"
+    - button "Relier depuis Choisir les réunions et leurs sources"
+    - button "Relier vers Analyser les réunions sélectionnées"
+    - button "Relier depuis Analyser les réunions sélectionnées"
+    - button "Relier vers Préparer le compte rendu et l’email"
+    - button "Relier depuis Préparer le compte rendu et l’email"
+    - text: 3 blocs · 2 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+  - status: Réponse enregistrée.
+  - dialog "Lancer cette version du workflow":
+    - heading "Lancer cette version du workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - text: Titre court (facultatif)
+    - textbox "Titre court (facultatif)":
+      - /placeholder: Ex. Suivi hebdomadaire Atlas
+      - text: Synthèse hebdomadaire Atlas
+    - text: Réunions ou période à analyser
+    - textbox "Réunions ou période à analyser":
+      - /placeholder: "Une ou plusieurs réunions : titres et dates, ou une période précise."
+      - text: Comités Atlas des lundi 5 et jeudi 8 octobre
+    - text: Notes, transcriptions ou liens des réunions
+    - textbox "Notes, transcriptions ou liens des réunions":
+      - /placeholder: Collez les notes, les liens ou les chemins des documents. Indiquez à quelle réunion chaque source correspond.
+      - text: "Lundi : demander au client sa priorité. Jeudi : Alice prépare un prototype avant vendredi. Sources synthétiques pour recette."
+    - paragraph: Le workflow commencera par identifier les réunions et vérifier leurs sources. L’agent vous demandera les précisions manquantes dans le suivi ou le terminal. Aucun document n’a encore été lu.
+    - group: Inclure d’autres projets
+    - button "Lancer dans le terminal"
+    - button "Vérifier à nouveau"
+    - group: Exécution automatique sans conversation
+    - button "Simuler le parcours"
+06-reunions-terminees
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Clôture de réunion
+    - heading "Synthèse hebdomadaire Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 3 / 3 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 2 s · attentes comprises Début : 10.10.2026 18:37:25 · Fin : 10.10.2026 18:37:28"
+    - strong: Simulation.
+    - text: Aucun modèle ni service métier appelé.
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Étape sélectionnée Choisir les réunions et leurs sources":
+          - text: Étape sélectionnée
+          - strong: Choisir les réunions et leurs sources
+        - button "Analyser les réunions sélectionnées":
+          - strong: Analyser les réunions sélectionnées
+      - paragraph: Produit · sorties vérifiées
+      - paragraph: SIMULATION — Résultat d'exemple pour « Choisir les réunions et leurs sources ». Aucun outil métier ni service externe n'a été appelé.
+      - paragraph: Preuve simulée, sans valeur de test métier réel.
+      - strong: Résultat validé
+      - paragraph: Contrôles techniques automatiques ; aucun critère métier attesté.
+      - group:
+        - text: Entrées, sorties et preuves
+        - heading "Résultat" [level=3]
+        - term: Réunions sélectionnées
+        - definition:
+          - list:
+            - listitem:
+              - term: Date
+              - definition: À préciser
+              - term: Commentaires
+              - definition: Le périmètre du prochain atelier reste à confirmer.
+              - term: Source
+              - definition: Notes synthétiques de démonstration
+              - term: Titre
+              - definition: Atelier fictif
+        - group: Données techniques
+        - heading "Preuves" [level=3]
+        - button "Preuve 1 · 7b60f0d0"
+07-livrable
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Clôture de réunion
+    - heading "Synthèse hebdomadaire Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 3 / 3 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 2 s · attentes comprises Début : 10.10.2026 18:37:25 · Fin : 10.10.2026 18:37:28"
+    - strong: Simulation.
+    - text: Aucun modèle ni service métier appelé.
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Étape sélectionnée Choisir les réunions et leurs sources":
+          - text: Étape sélectionnée
+          - strong: Choisir les réunions et leurs sources
+        - button "Analyser les réunions sélectionnées":
+          - strong: Analyser les réunions sélectionnées
+      - paragraph: Produit · sorties vérifiées
+      - paragraph: SIMULATION — Résultat d'exemple pour « Choisir les réunions et leurs sources ». Aucun outil métier ni service externe n'a été appelé.
+      - paragraph: Preuve simulée, sans valeur de test métier réel.
+      - strong: Résultat validé
+      - paragraph: Contrôles techniques automatiques ; aucun critère métier attesté.
+      - group:
+        - text: Entrées, sorties et preuves
+        - heading "Résultat" [level=3]
+        - term: Réunions sélectionnées
+        - definition:
+          - list:
+            - listitem:
+              - term: Date
+              - definition: À préciser
+              - term: Commentaires
+              - definition: Le périmètre du prochain atelier reste à confirmer.
+              - term: Source
+              - definition: Notes synthétiques de démonstration
+              - term: Titre
+              - definition: Atelier fictif
+        - group: Données techniques
+        - heading "Preuves" [level=3]
+        - button "Preuve 1 · 7b60f0d0"
+  - dialog "Résultats de cette demande":
+    - heading "Résultats de cette demande" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Synthèse hebdomadaire Atlas
+    - paragraph: Simulation · ces contenus ne prouvent aucun travail métier réel.
+    - heading "Livrable final" [level=2]
+    - heading "Liste d’actions" [level=3]
+    - heading "Contenu produit" [level=3]
+    - term: Actions
+    - definition:
+      - region "Actions et responsables":
+        - table:
+          - rowgroup:
+            - row "Action Responsable Échéance":
+              - columnheader "Action"
+              - columnheader "Responsable"
+              - columnheader "Échéance"
+          - rowgroup:
+            - row "Confirmer le périmètre de l’atelier À préciser À préciser":
+              - cell "Confirmer le périmètre de l’atelier"
+              - cell "À préciser"
+              - cell "À préciser"
+    - group: Données techniques
+    - heading "Brouillon" [level=3]
+    - heading "Texte à reprendre" [level=3]
+    - text: "Exemple de texte d’email : voici le compte rendu et l’action à préciser. Aucun email envoyé ni brouillon Gmail créé."
+    - button "Copier le texte"
+    - heading "Compte rendu" [level=3]
+    - heading "Texte à reprendre" [level=3]
+    - text: "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer."
+    - button "Copier le texte"
+    - group: Résultats des étapes
+    - button "Fermer"
+    - button "Voir le rapport complet"
+08-retrouver-historique
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+    - heading "Workflows" [level=1]
+    - paragraph: Les demandes terminées et leurs résultats.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - 'button "Synthèse hebdomadaire Atlas Demande · Client Atlas · Clôture de réunion · Rév. 1 · Simulation · 10.10.2026 18:37:25 Terminée Durée totale : 2 s · attentes comprises"':
+      - strong: Synthèse hebdomadaire Atlas
+      - text: Demande · Client Atlas · Clôture de réunion · Rév. 1 · Simulation · 10.10.2026 18:37:25
+      - strong: Terminée
+      - text: "Durée totale : 2 s · attentes comprises"
+    - 'button "Bilan précédent Atlas Demande · Client Atlas · Bilan précédent Atlas Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Bilan précédent Atlas
+      - text: Demande · Client Atlas · Bilan précédent Atlas
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+    - 'button "Renouvellement contrat Atlas Demande · Client Atlas · Renouvellement contrat Atlas Terminée Durée totale : 5 s · attentes comprises"':
+      - strong: Renouvellement contrat Atlas
+      - text: Demande · Client Atlas · Renouvellement contrat Atlas
+      - strong: Terminée
+      - text: "Durée totale : 5 s · attentes comprises"
+    - group: Gestion des workflows
+09-livrable-retrouve
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Clôture de réunion
+    - heading "Synthèse hebdomadaire Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 3 / 3 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 2 s · attentes comprises Début : 10.10.2026 18:37:25 · Fin : 10.10.2026 18:37:28"
+    - strong: Simulation.
+    - text: Aucun modèle ni service métier appelé.
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - paragraph: Le rapport réunit les résultats, décisions et preuves de cette exécution. Consultez les résultats validés ou le rapport complet ci-dessus.
+  - dialog "Résultats de cette demande":
+    - heading "Résultats de cette demande" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Synthèse hebdomadaire Atlas
+    - paragraph: Simulation · ces contenus ne prouvent aucun travail métier réel.
+    - heading "Livrable final" [level=2]
+    - heading "Liste d’actions" [level=3]
+    - heading "Contenu produit" [level=3]
+    - term: Actions
+    - definition:
+      - region "Actions et responsables":
+        - table:
+          - rowgroup:
+            - row "Action Responsable Échéance":
+              - columnheader "Action"
+              - columnheader "Responsable"
+              - columnheader "Échéance"
+          - rowgroup:
+            - row "Confirmer le périmètre de l’atelier À préciser À préciser":
+              - cell "Confirmer le périmètre de l’atelier"
+              - cell "À préciser"
+              - cell "À préciser"
+    - group: Données techniques
+    - heading "Brouillon" [level=3]
+    - heading "Texte à reprendre" [level=3]
+    - text: "Exemple de texte d’email : voici le compte rendu et l’action à préciser. Aucun email envoyé ni brouillon Gmail créé."
+    - button "Copier le texte"
+    - heading "Compte rendu" [level=3]
+    - heading "Texte à reprendre" [level=3]
+    - text: "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer."
+    - button "Copier le texte"
+    - group: Résultats des étapes
+    - button "Fermer"
+    - button "Voir le rapport complet"
+DEUX INTENTIONS TERMINEES

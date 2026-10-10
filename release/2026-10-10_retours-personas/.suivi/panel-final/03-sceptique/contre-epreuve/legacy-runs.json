@@ -1,0 +1,69 @@
+{
+  "family_counts": {
+    "requests": 1,
+    "tasks": 0,
+    "actions": 0
+  },
+  "items": [
+    {
+      "id": "r1d0b9d8af7904760",
+      "project": "p360504971b10486f",
+      "status": "completed",
+      "created": 1791650836.426912,
+      "updated": 1791650841.8044062,
+      "simulation": false,
+      "completion_outcome": "rejected",
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "iteration_wait": null,
+      "iteration_hold": null,
+      "parent_paused": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "legacy-review",
+        "title": "Ancien aiguillage de publication",
+        "revision": 2
+      },
+      "original": {
+        "id": "legacy-review"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "",
+      "counts": {
+        "skipped": 1,
+        "accepted": 2
+      },
+      "nodes": {
+        "gate": {
+          "status": "accepted"
+        },
+        "publish": {
+          "status": "skipped"
+        },
+        "repair": {
+          "status": "accepted"
+        }
+      },
+      "timing": {
+        "started": 1791650836.426912,
+        "finished": 1791650841.8043957,
+        "duration": 5.377483606338501
+      },
+      "origin": null
+    }
+  ],
+  "total": 1,
+  "offset": 0,
+  "limit": 25,
+  "next": null
+}

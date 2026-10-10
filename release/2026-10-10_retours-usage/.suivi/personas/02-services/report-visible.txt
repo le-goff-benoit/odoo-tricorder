@@ -1,0 +1,228 @@
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 17:29
+SUIVI · SUPPORT — DIAGNOSTIC ET RÉPONSE
+Client Boréal : export PDF vide, bug suspecté. Impact inconnu. Demander les précisions puis préparer le texte d’un brouillon email Gmail, sans envoi.
+
+Révision 2 figée · Terminée · 10.10.2026 17:28:16
+
+← Retour à la liste
+Options
+Revenir au suivi
+Rapport d’exécution
+Exporter le rapport dans le projet
+Export de release…
+Support — diagnostic et réponse
+Demande
+
+Client Boréal : export PDF vide, bug suspecté. Impact inconnu. Demander les précisions puis préparer le texte d’un brouillon email Gmail, sans envoi.
+
+Exécution simulée : aucun résultat métier réel n'est attesté.
+
+Plan
+Travail	État	Critères
+Analyser la demande et son urgence	Validé	Les faits, l’impact et les inconnues sont distingués.; La nature de la demande et son urgence sont distinctes ; la prochaine action est justifiée par les sources reçues.
+Préparer la réponse urgente	Non applicable	La proposition précise le périmètre, les contrôles et le retour arrière.; Aucun déploiement n’est présenté comme effectué ou autorisé par le seul diagnostic.
+Préparer la réponse sans urgence établie	Validé	Le brouillon explique le constat, les inconnues et la suite proposée.; Le message reste un brouillon, sans envoi implicite.
+Préciser ce qui est bloqué	Validé	À préciser
+Réévaluer l’urgence avec les faits reçus	Validé	La nouvelle qualification tient compte de la précision reçue.; Les inconnues restantes sont explicites.
+Choisir l’investigation manquante	Non applicable	À préciser
+Choisir où préparer la réponse	Validé	À préciser
+Mettre la réponse au format choisi	Validé	La réponse respecte la destination choisie.; Aucune création de brouillon externe ni aucun envoi n’est présenté comme effectué.
+Réalisation
+Analyser la demande et son urgence
+
+SIMULATION — Résultat d'exemple pour « Analyser la demande et son urgence ». Aucun outil métier ni service externe n'a été appelé.
+
+État : Validé. Tentative 1.
+
+Résultat simulé : aucun résultat métier réel n’est attesté pour cette tentative.
+
+Date enregistrée : 10.10.2026 à 15:28 UTC.
+
+Résultat
+
+Constat
+
+SIMULATION : bug export PDF suspecté ; personnes touchées, impact et contournement inconnus.
+
+Suite proposée
+
+Exemple : préparer la réponse et les investigations.
+
+Criticité
+
+Indéterminée
+
+Preuves
+Preuve 1
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Préparer la réponse sans urgence établie
+
+SIMULATION — Résultat d'exemple pour « Préparer la réponse sans urgence établie ». Aucun outil métier ni service externe n'a été appelé.
+
+État : Validé. Tentative 1.
+
+Résultat simulé : aucun résultat métier réel n’est attesté pour cette tentative.
+
+Date enregistrée : 10.10.2026 à 15:28 UTC.
+
+Entrées reçues
+
+Constat
+
+Exemple : la précision reçue permet de limiter l’impact.
+
+Suite proposée
+
+Exemple : préparer une réponse documentée.
+
+Résultat
+
+Brouillon
+
+Exemple de brouillon : nous proposons de vérifier le défaut signalé. Aucun message envoyé.
+
+Preuves
+Preuve 1
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Préciser ce qui est bloqué
+
+Information fournie
+
+État : Validé. Tentative 0.
+
+Entrées reçues
+
+Précisions
+
+Élément 1
+
+Réponse
+
+Une seule personne depuis ce matin. Export Excel possible, pas d’échéance cette semaine. Le PDF est probablement défectueux mais aucune urgence métier établie.
+
+Question
+
+Qui est touché, quelle tâche est bloquée et depuis quand ? Existe-t-il un contournement ou une échéance proche ? Indiquez ce que vous savez ; les autres points peuvent rester à préciser.
+
+Résultat
+
+Réponse
+
+Une seule personne depuis ce matin. Export Excel possible, pas d’échéance cette semaine. Le PDF est probablement défectueux mais aucune urgence métier établie.
+
+Réévaluer l’urgence avec les faits reçus
+
+SIMULATION — Résultat d'exemple pour « Réévaluer l’urgence avec les faits reçus ». Aucun outil métier ni service externe n'a été appelé.
+
+État : Validé. Tentative 1.
+
+Résultat simulé : aucun résultat métier réel n’est attesté pour cette tentative.
+
+Date enregistrée : 10.10.2026 à 15:28 UTC.
+
+Entrées reçues
+
+Réponse
+
+Une seule personne depuis ce matin. Export Excel possible, pas d’échéance cette semaine. Le PDF est probablement défectueux mais aucune urgence métier établie.
+
+Résultat
+
+Constat
+
+Exemple : la précision reçue permet de limiter l’impact.
+
+Suite proposée
+
+Exemple : préparer une réponse documentée.
+
+Criticité
+
+Normale
+
+Preuves
+Preuve 1
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Choisir où préparer la réponse
+
+Information fournie
+
+État : Validé. Tentative 0.
+
+Entrées reçues
+
+Précisions
+
+Élément 1
+
+Réponse
+
+Email pour Camille chez Boréal : ton rassurant et factuel, objet explicite. Préparer le texte pour mon brouillon Gmail sans envoi.
+
+Question
+
+Souhaitez-vous un texte d’email à reprendre dans un brouillon Gmail, ou un texte à coller dans un ticket Odoo ? Précisez le destinataire et le ton si nécessaire. Cette étape prépare le contenu ; elle ne crée ni n’envoie de message dans ces services.
+
+Résultat
+
+Réponse
+
+Email pour Camille chez Boréal : ton rassurant et factuel, objet explicite. Préparer le texte pour mon brouillon Gmail sans envoi.
+
+Mettre la réponse au format choisi
+
+SIMULATION — Résultat d'exemple pour « Mettre la réponse au format choisi ». Aucun outil métier ni service externe n'a été appelé.
+
+État : Validé. Tentative 1.
+
+Résultat simulé : aucun résultat métier réel n’est attesté pour cette tentative.
+
+Date enregistrée : 10.10.2026 à 15:28 UTC.
+
+Entrées reçues
+
+Destination
+
+Email pour Camille chez Boréal : ton rassurant et factuel, objet explicite. Préparer le texte pour mon brouillon Gmail sans envoi.
+
+Response
+
+Exemple de brouillon : nous proposons de vérifier le défaut signalé. Aucun message envoyé.
+
+Résultat
+
+Brouillon
+
+Exemple de réponse au format choisi. Aucun email envoyé, brouillon Gmail créé ou ticket Odoo modifié.
+
+Preuves
+Preuve 1
+
+Validation : Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Tests et limites
+
+Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.
+
+Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.
+
+Livraison et documentation
+
+Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.
+
+Décisions et suite
+Préciser ce qui est bloqué — question : Qui est touché, quelle tâche est bloquée et depuis quand ? Existe-t-il un contournement ou une échéance proche ? Indiquez ce que vous savez ; les autres points peuvent rester à préciser. Réponse : Une seule personne depuis ce matin. Export Excel possible, pas d’échéance cette semaine. Le PDF est probablement défectueux mais aucune urgence métier établie.
+Choisir où préparer la réponse — question : Souhaitez-vous un texte d’email à reprendre dans un brouillon Gmail, ou un texte à coller dans un ticket Odoo ? Précisez le destinataire et le ton si nécessaire. Cette étape prépare le contenu ; elle ne crée ni n’envoie de message dans ces services. Réponse : Email pour Camille chez Boréal : ton rassurant et factuel, objet explicite. Préparer le texte pour mon brouillon Gmail sans envoi.
+
+Exécution r6fac05f846844505 · contrat 951b232d4daa6e6a2219a44547403f16b20f94b52b0c0861769f6733915dbc66.

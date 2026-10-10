@@ -1,0 +1,56 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Boréal"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Synthèse de comité Atlas
+    - heading "Synthèse de comité Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - status:
+        - strong: Votre réponse est attendue
+        - paragraph: Quel comité reprendre ?
+      - strong: Réponse attendue
+      - text: 0 / 2 étapes
+      - button "Répondre à la question"
+      - paragraph: Préciser la demande
+      - group: "Depuis le début : 6 s · attentes comprises Début : 10.10.2026 18:47:35"
+    - strong: Simulation.
+    - text: Aucun modèle ni service métier appelé.
+    - group "Affichage du suivi":
+      - button "Graphe" [pressed]
+      - button "Détail"
+    - button "Préciser la demande · Réponse attendue": "Préciser la demande Question Réponse attendue Sans donnée provenant d’un autre bloc · Produit : Votre réponse"
+    - button "Préparer la synthèse · Prévu": "Préparer la synthèse Tâche Prévu Utilise : demande initiale et contexte · Produit : Résultat"
+    - text: 2 blocs · 1 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.

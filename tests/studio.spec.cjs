@@ -49,7 +49,7 @@ test.afterEach(async () => {
   }
 });
 
-async function library(){await page.locator('[data-workflow-route=global]').click();await page.getByRole('navigation',{name:'Bibliothèque de workflows'}).getByRole('button',{name:'Modèles',exact:true}).click();}
+async function library(){await page.locator('[data-workflow-route=global]').click();await page.getByRole('navigation',{name:'Workflows'}).getByRole('button',{name:'Modèles',exact:true}).click();}
 
 async function example() { await page.getByRole('button', { name: 'Essayer un exemple' }).click(); await expect(page.getByRole('heading', { name: "De la demande au résultat" })).toBeVisible(); }
 
@@ -183,7 +183,7 @@ test('simulation: two branches, human decision, truthful results and single docu
   await expect(page.locator('#execution-overview')).toContainText('Terminée');
   await page.getByRole('button', { name: 'Voir le rapport', exact: true }).click();
   await expect(page.getByRole('heading',{name:'Rapport d’exécution'})).toBeVisible();
-  for (const heading of ['Demande', 'Plan', 'Réalisation', 'Tests et limites', 'Livraison et documentation', 'Décisions et suite']) await expect(page.locator('#document-view').getByRole('heading', { name: heading, exact: true })).toBeVisible();
+  for (const heading of ['Demande', 'Plan', 'Réalisation', 'Vérifications et limites', 'Décisions et suite']) await expect(page.locator('#document-view').getByRole('heading', { name: heading, exact: true })).toBeVisible();
   await expect(page.locator('#document-view')).toContainText('aucun résultat métier réel');
 });
 
@@ -206,7 +206,7 @@ test('connections never infer native authentication and real unconfigured launch
   await expect(page.getByText('GitHub → Odoo.sh', { exact: true })).toBeVisible();
   await expect(page.getByText(/Aucun transport authentifié/)).toBeVisible();
   await library();
-  await page.locator('article').filter({ has: page.getByRole('heading', { name: 'Évolution logicielle', exact: true }) }).getByRole('button', { name: 'Utiliser' }).click();
+  await page.locator('article').filter({ has: page.getByRole('heading', { name: 'Évolution logicielle', exact: true }) }).getByRole('button', { name: 'Créer une adaptation…' }).click();
   await page.getByRole('button', { name: 'Créer et ouvrir le workflow' }).click();
   await page.getByRole('button', { name: 'Exécuter…' }).click();
   await page.getByText('Exécution automatique sans conversation',{exact:true}).evaluate(el => { el.parentElement.open = true; });
@@ -268,7 +268,7 @@ test('template creation has a real terminal; file edits require validated reload
 test('recurrence activation shows models and persists; communication needs exact recipients', async () => {
   await library();
   const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Nouveau message → notification', exact: true }) });
-  await card.getByRole('button', { name: 'Utiliser', exact: true }).click();
+  await card.getByRole('button', { name: 'Créer une adaptation…', exact: true }).click();
   await page.getByRole('button', { name: 'Créer et ouvrir le workflow' }).click();
   await page.locator('.node[data-id="notify"]').click();
   await page.getByLabel('Canal de communication').selectOption('telegram');
@@ -310,7 +310,8 @@ test('new plugin declared in the terminal workspace is selectable without a dedi
   await page.getByText('Agent et modèle pour cette étape', { exact: true }).click();
   await page.getByLabel('Agent dédié (facultatif)').selectOption('generalist');
   await page.getByLabel('Capacités de plugins (facultatives)').selectOption({ label: 'Nouveau plugin · read' });
-  await page.getByLabel('Modèle IA', { exact: true }).fill('explicit-test-model');
+  await page.getByLabel('Modèle IA', { exact: true }).selectOption('__custom__');
+  await page.getByLabel('Identifiant technique du modèle', { exact: true }).fill('explicit-test-model');
   await page.getByRole('button', { name: 'Appliquer au bloc' }).click();
   await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
   await page.getByRole('button', { name: 'Exécuter…' }).click();
@@ -319,28 +320,30 @@ test('new plugin declared in the terminal workspace is selectable without a dedi
   await expect(page.getByRole('button', { name: 'Lancer l’exécution réelle' })).toBeDisabled();
 });
 
-test('real isolated command produces evidence, then waits for human receipt', async () => {
+test('real isolated command exposes evidence at its only human decision', async () => {
   await library();
   const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Commande locale avec validation', exact: true }) });
-  await card.getByRole('button', { name: 'Utiliser', exact: true }).click();
+  await card.getByRole('button', { name: 'Créer une adaptation…', exact: true }).click();
   await page.getByRole('button', { name: 'Créer et ouvrir le workflow' }).click();
   await page.getByRole('button', { name: 'Exécuter…' }).click();
-  await page.getByText('Exécution automatique sans conversation',{exact:true}).evaluate(el => { el.parentElement.open = true; });
   await page.getByRole('button', { name: 'Lancer l’exécution réelle' }).click();
-  await expect(page.locator('.node[data-id="check"]')).toHaveAttribute('data-status', 'returned');
+  await expect(page.locator('.node[data-id="check"]')).toHaveAttribute('data-status', 'accepted');
   await page.locator('.node[data-id="check"]').click();
   await expect(page.locator('#inspector')).toContainText('Python opérationnel');
-  await expect(page.locator('.node[data-id="decision"]')).toHaveAttribute('data-status', 'pending');
-  await receive('check', true);
   await expect(page.locator('.node[data-id="decision"]')).toHaveAttribute('data-status', 'waiting');
+  await page.getByRole('button', { name: 'Graphe', exact: true }).click();
+  await page.locator('.node[data-id="decision"]').click();
+  await expect(page.locator('.upstream-command-result')).toContainText('Python opérationnel');
+  await expect(page.locator('.upstream-command-result [data-action=read-proof]')).not.toHaveCount(0);
+  await expect(page.locator('#receipt-form')).toHaveCount(0);
 });
 
 test('global workflow runs independently of Git projects and draws right-angle links', async () => {
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Mes workflows', level: 1 })).toBeVisible();
-  await page.getByRole('button', { name: 'Choisir un modèle' }).click();
+  await expect(page.getByRole('heading', { name: 'Workflows', level: 1, exact:true })).toBeVisible();
+  await page.getByRole('button', { name: 'Modèles', exact:true }).click();
   const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Nouveau message → notification', exact: true }) });
-  await card.getByRole('button', { name: 'Utiliser', exact: true }).click();
+  await card.getByRole('button', { name: 'Créer une adaptation…', exact: true }).click();
   await page.getByRole('button', { name: 'Créer et ouvrir le workflow' }).click();
   await expect(page.locator('.breadcrumb')).toContainText('Sans projet');
   const paths = await page.locator('svg path.edge').evaluateAll(elements => elements.map(e => e.getAttribute('d')));
@@ -432,6 +435,7 @@ test('trusted local adapter runs through the UI and automatic validation complet
   await page.getByRole('button', { name: 'Exécuter le contrôle' }).click();
   await expect(card).toContainText('Utilisable');
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
+  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.getByRole('button', { name: 'Ouvrir le workflow' }).click();
   await page.getByRole('button', { name: 'Exécuter…' }).click();
   await expect(page.getByRole('dialog')).toContainText('Validation automatique');
@@ -447,6 +451,7 @@ test('large workflow remains editable in canvas and keyboard list', async () => 
   const graph = { schema: 1, id: 'large', title: 'Mille étapes', nodes: Array.from({ length: 1000 }, (_, i) => ({ id: `n${i}`, title: `Étape ${i}`, kind: 'join', position: { x: (i % 20) * 300, y: Math.floor(i / 20) * 170 } })), edges: Array.from({ length: 999 }, (_, i) => ({ id: `e${i}`, from: `n${i}`, to: `n${i + 1}` })) };
   await page.evaluate(graph => window.studio.request({ action: 'workflow.save', project: 'workspace', graph }), graph);
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
+  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   const start = Date.now();
   await page.getByRole('button', { name: 'Ouvrir le workflow' }).click();
   await expect(page.locator('.node')).toHaveCount(1000);
@@ -537,6 +542,7 @@ test('human gate presents the full external content and candidate before approva
   const graph = { schema: 1, id: 'exact-review', title: 'Exact review', nodes: [{ id: 'approve', kind: 'decision', title: 'Review publication', operation }], edges: [] };
   await page.evaluate(graph => window.studio.request({ action: 'workflow.save', project: 'workspace', graph }), graph);
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
+  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.getByRole('button', { name: 'Ouvrir le workflow', exact: true }).click();
   await simulate();
   await page.locator('.node[data-id="approve"]').click();
@@ -550,11 +556,12 @@ test('human gate presents the full external content and candidate before approva
 
 test('one provider choice applies to all AI steps and the project offers direct execution', async () => {
   await library();
-  await page.locator('article').filter({ has: page.getByRole('heading', { name: 'Évolution logicielle', exact: true }) }).getByRole('button', { name: 'Utiliser', exact: true }).click();
+  await page.locator('article').filter({ has: page.getByRole('heading', { name: 'Évolution logicielle', exact: true }) }).getByRole('button', { name: 'Créer une adaptation…', exact: true }).click();
   await page.getByRole('button', { name: 'Créer et ouvrir le workflow' }).click();
   await page.getByRole('button', { name: 'Choisir l’IA', exact: true }).click();
   await page.getByRole('dialog').getByLabel('Fournisseur IA', { exact: true }).selectOption('claude');
-  await page.getByLabel('Modèle', { exact: true }).fill('explicit-claude-fixture');
+  await page.getByLabel('Modèle IA', { exact: true }).selectOption('__custom__');
+  await page.getByLabel('Identifiant technique du modèle', { exact: true }).fill('explicit-claude-fixture');
   await page.getByRole('button', { name: 'Appliquer à toutes les étapes IA' }).click();
   await page.locator('.node[data-id="analyse"]').click();
   await expect(page.locator('#inspector')).toContainText('Anthropic · Claude');
@@ -567,6 +574,7 @@ test('one provider choice applies to all AI steps and the project offers direct 
   expect(data.defaults.model).toBe('explicit-claude-fixture');
   expect(data.nodes.filter(n => n.kind === 'agent').every(n => !Object.hasOwn(n, 'model'))).toBe(true);
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
+  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.getByRole('button', { name: 'Exécuter…', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('IA pour les étapes de travail');
   await expect(page.getByRole('dialog').getByLabel('Fournisseur IA', { exact: true })).toHaveValue('claude');
@@ -701,7 +709,7 @@ test('design review: library and management views use the workspace, with readab
     await page.locator(`[data-theme-choice="${theme}"]`).click();
     for (const width of [1440, 1024, 800]) {
       await page.setViewportSize({ width, height: 900 });
-      for (const [route, heading] of [['library', 'Modèles de workflows'], ['projects', 'Vos projets'], ['global', 'Mes workflows'], ['connections', 'Connexions'], ['schedules', 'Planifications']]) {
+      for (const [route, heading] of [['library', 'Modèles de workflows'], ['projects', 'Vos projets'], ['global', 'Workflows'], ['connections', 'Connexions'], ['schedules', 'Planifications']]) {
         if(route==='library')await library();else await page.locator(`[data-workflow-route="${route}"]`).click();
         await expect(page.getByRole('heading', { name: heading, exact: true, level: route === 'projects' ? 2 : 1 })).toBeVisible();
         await expect(page.locator('#terminal-workspace')).toBeHidden();
@@ -730,15 +738,13 @@ test('design review: library and management views use the workspace, with readab
   await page.screenshot({path:test.info().outputPath('library-dark-800.png')});
 });
 
-test('terminal visibility preserves a live session while browsing and editing', async () => {
+test('opening the library frees the content area and preserves the live terminal session', async () => {
   await example();
   await page.getByRole('button', {name:'Ouvrir le terminal existant',exact:true}).click();
   await expect(page.locator('#terminal-workspace')).toBeVisible();
   const before = await page.evaluate(() => window.tricorder.terminals.list());
   expect(before.length).toBe(1);
   await library();
-  await expect(page.locator('#terminal-workspace')).toBeVisible();
-  await page.locator('[data-action="terminal-toggle"]').click();
   await expect(page.locator('#terminal-workspace')).toBeHidden();
   await page.locator('[data-action="terminal-toggle"]').click();
   await expect(page.locator('#terminal-workspace')).toBeVisible();
@@ -822,14 +828,15 @@ for line in sys.stdin:
   expect(JSON.parse(fs.readFileSync(path.join(project.path,'.tricorder/workflows',files[0]))).title).toBe('Décisions du comité produit');
   await page.getByLabel('Fournisseur IA',{exact:true}).selectOption('claude');
   await page.getByRole('button',{name:'Exécuter…',exact:true}).click();
-  await page.getByLabel('Quelle demande souhaitez-vous traiter ?').fill('Préparer les décisions et actions du comité de vendredi.');
+  await page.getByLabel('Réunions ou période à analyser').fill('Préparer les décisions et actions du comité de vendredi.');
   await page.getByRole('button',{name:'Lancer dans le terminal'}).click();
   await expect(page.locator('.xterm-screen:visible')).toContainText('INITIAL-TASKS:1');
   await expect(page.locator('.workflow-heading')).toContainText('Préparer les décisions');
-  await expect(page.locator('.node[data-id=review]')).toHaveAttribute('data-status','ready');
+  await expect(page.locator('.node[data-id=select]')).toHaveAttribute('data-status','ready');
   const before = await page.evaluate(() => window.tricorder.terminals.list());
   await library();
-  await expect(page.locator('#terminal-workspace')).toBeVisible();
+  await expect(page.locator('#terminal-workspace')).toBeHidden();
+  await page.locator('[data-action="terminal-toggle"]').click();
   await expect(page.locator('.xterm-screen:visible')).toContainText('INTENTION:Préparer');
   const after = await page.evaluate(() => window.tricorder.terminals.list());
   expect(after.map(s=>[s.id,s.pid,s.provider,s.alive])).toEqual(before.map(s=>[s.id,s.pid,s.provider,s.alive]));
@@ -964,8 +971,8 @@ test('configuration: pending fields survive I/O editing, block selection and key
   await example();
   await page.locator('.node[data-id=analyse]').click();
   await page.getByLabel('Nom du bloc',{exact:true}).fill('Analyse à conserver');
-  await page.getByRole('button',{name:'Ajouter une sortie',exact:true}).click();
-  await page.getByLabel('Nom (sans espaces)').fill('synthese');
+  await page.getByRole('button',{name:'Ajouter un résultat attendu',exact:true}).click();
+  await page.getByLabel('Nom de l’information').fill('synthese');
   await page.getByRole('button',{name:'Ajouter la donnée'}).click();
   await expect(page.getByLabel('Nom du bloc',{exact:true})).toHaveValue('Analyse à conserver');
   await page.getByLabel('Critères d’acceptation (un par ligne)').fill('Les conclusions sont sourcées.');
@@ -1083,7 +1090,8 @@ async function mailFixture(mode='ready') {
   const config={adapter:path.join(directory,mode==='missing'?'unavailable-adapter.py':'mail-adapter.py'),ambiguous:mode==='ambiguous',question_first:mode==='illustration',requests:['Règle de distance contradictoire dans les devis.','État et menu du projet créé depuis un devis.','Planning vide malgré les jalons.','Montant manuel sans recalcul du sous-total.']};
   fs.writeFileSync(path.join(directory,'mail-fixture.json'),JSON.stringify(config));
   require('node:child_process').execFileSync('python3',['-c',`from email.message import EmailMessage\nfrom pathlib import Path\nimport sys,json\nm=EmailMessage();m['From']='support@example.test';m['To']='team@example.test';m['Subject']='Four synthetic observations';m.set_content('Synthetic observations only; neither causes nor passed QA.\\n'+'\\n'.join(f'R{i}: {text}' for i,text in enumerate(json.loads(sys.argv[2]),1)))\nfor i in range(6): m.add_attachment(b'synthetic image observation '+str(i).encode(),maintype='image',subtype='png',filename=f'observation-{i+1}.png')\nPath(sys.argv[1]).write_bytes(m.as_bytes())`,path.join(directory,'source.eml'),JSON.stringify(config.requests)]);
-  const c=await page.evaluate(async()=>{const p=await window.studio.request({action:'project.create',title:'Email synthétique — préparation de release'});const data=await window.studio.request({action:'bootstrap'});return window.studio.human({action:'conversation.open',project:p.id,provider:'codex',graph:data.templates.find(g=>g.id==='release-conversation')});});
+  // This scenario explicitly tests a missing delegated model, independently of the host's configured native model.
+  const c=await page.evaluate(async mode=>{const p=await window.studio.request({action:'project.create',title:'Email synthétique — préparation de release'});const data=await window.studio.request({action:'bootstrap'});const graph=data.templates.find(g=>g.id==='release-conversation');if(mode==='illustration')graph.nodes.find(n=>n.id==='check').model='';return window.studio.human({action:'conversation.open',project:p.id,provider:'codex',graph});},mode);
   const terminal=await page.evaluate(c=>window.tricorder.workflowTerminal({project:c.project,conversation:c.id}),c);
   await expect.poll(()=>fs.existsSync(path.join(directory,'mail-agent-ready'))).toBe(true);
   await page.evaluate(id=>window.tricorder.terminals.write({session:id,data:'Va chercher cet email et prépare une release.\r'}),terminal.id);
@@ -1177,6 +1185,7 @@ test('mail illustration: four independent states, selected question and QA failu
   await page.setViewportSize({width:1440,height:900});await selectRequest(0);
   await page.getByRole('button',{name:'Détail',exact:true}).click();
   await page.locator('[data-action=terminal-layout]').click();
+  await page.screenshot({path:test.info().outputPath('mail-question-stacked-before-answer.png'),fullPage:true});
   await expect(page.locator('.request-selector')).toBeVisible();await expect(cards.nth(0)).toBeHidden();
   await expect(page.locator('.xterm-screen:visible')).toBeVisible();
   await expect(page.locator('#inspector').getByText('Quelle règle de distance', {exact:false})).toBeInViewport();
@@ -1195,13 +1204,18 @@ test('mail illustration: four independent states, selected question and QA failu
 test('candidate QA: explicit editor control persists typed ports and remains visible after reload', async()=>{
   await example();await page.locator('.node[data-id=analyse]').click();
   await page.getByLabel('Nom du bloc',{exact:true}).fill('Vérifier le candidat sans agent imposé');
+  await expect(page.getByText('Contrôle de code (QA)',{exact:true})).toHaveCount(0);
+  await page.getByRole('button',{name:'Ajouter une information à utiliser',exact:true}).click();
+  await page.getByLabel('Nom de l’information').fill('candidate');
+  await page.getByRole('dialog').getByRole('combobox',{name:'Type',exact:true}).selectOption('object');
+  await page.getByRole('button',{name:'Ajouter la donnée',exact:true}).click();
   await page.locator('#node-form details').filter({has:page.getByText('Contrôle de code (QA)',{exact:true})}).locator('summary').click();
   await page.getByLabel('Contrôle QA du candidat',{exact:true}).check();
   await page.reload();await page.locator('[data-workflow-route=projects]').click();await page.locator('.project-card').first().click();await page.getByRole('button',{name:'Ouvrir le workflow',exact:true}).click();
   await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();
   await page.getByRole('button',{name:'Enregistrer',exact:true}).click();
   await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();
-  await expect(page.locator('.ports')).toContainText('candidate');await expect(page.locator('.ports')).toContainText('verdict');
+  await expect(page.locator('.ports')).toContainText('Version à vérifier');await expect(page.locator('.ports')).toContainText('Résultat du contrôle');
   const mission=page.locator('.node[data-id=analyse] .mission');await expect(mission).toHaveAttribute('title','Vérifier le candidat sans agent imposé');
   const titleBounds=await mission.boundingBox(),nodeBounds=await page.locator('.node[data-id=analyse]').boundingBox(),kindBounds=await page.locator('.node[data-id=analyse] .kind').boundingBox();
   expect(titleBounds.x+titleBounds.width).toBeLessThanOrEqual(nodeBounds.x+nodeBounds.width);

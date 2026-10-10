@@ -9,7 +9,7 @@ const card = id => page.locator(`.node[data-id="${id}"]`);
 const position = item => item.evaluate(element => ({ x: element.offsetLeft, y: element.offsetTop }));
 const port = (id, direction) => page.locator(`.graph-port[data-id="${id}"][data-direction="${direction}"]`);
 async function save() { await page.getByRole('button', { name: 'Enregistrer', exact: true }).click(); await expect(page.locator('.workflow-heading p')).toContainText('Enregistré'); }
-async function open() { await page.locator('[data-workflow-route=global]').click(); await page.locator('[data-action=open-workflow][data-id=gestures]').click(); }
+async function open() { await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click(); await page.locator('[data-action=open-workflow][data-id=gestures]').click(); }
 async function seed(graph = {}) {
   project = await call('project.create', { title: 'Gestes du workflow synthétique' });
   await call('workflow.save', { project: project.id, graph: { schema: 1, id: 'gestures', title: 'Dessiner ensemble', nodes: [
@@ -78,7 +78,7 @@ test('whole-card dragging updates links at each zoom and each gesture has one un
 
 test('compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session', async () => {
   await seed(); await size(1024, 900, 1.25);
-  await card('source').click(); await expect(page.locator('.canvas-area')).toBeVisible(); await expect(page.locator('#node-title')).toHaveCount(0);
+  await card('source').click(); await expect(page.locator('.canvas-area')).toBeHidden(); await expect(page.locator('#node-title')).toBeVisible(); await page.getByRole('button', { name: 'Retour au graphe', exact: true }).click(); await expect(page.locator('.canvas-area')).toBeVisible();
   await card('source').focus(); await page.keyboard.press('ArrowRight'); await expect(card('source')).toBeFocused(); expect(await position(card('source'))).toEqual({ x: 70, y: 60 });
   await page.keyboard.press('Shift+ArrowDown'); expect(await position(card('source'))).toEqual({ x: 70, y: 110 });
   await page.keyboard.press('Control+z'); await expect(card('source')).toBeFocused(); expect(await position(card('source'))).toEqual({ x: 70, y: 60 });

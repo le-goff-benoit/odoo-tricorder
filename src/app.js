@@ -62,6 +62,26 @@ let sessions = [], selectedSession = new Map(), terminals = new Map(), generatio
 let projectError = null, overviewMode = false, split = false, version = '', crewInstalled = true;
 let notificationKeys = new Set();
 let kanbanClosed = false, kanbanExecuting = false;
+const projectHistory = [];
+function rememberProjectView() {
+  if (busy || (!current && !workflowMode && !overviewMode)) return;
+  projectHistory.push({ current, release: detail?.selectedRelease || '', view, overviewMode, workflowMode,
+    workflowProject: workflowContext?.project?.id, workflowRoute: workflowContext?.route,
+    scroll: $('#content').scrollTop, boardScroll: $('.kanban-board')?.scrollLeft || 0 });
+  if (projectHistory.length > 30) projectHistory.shift();
+}
+async function returnToProjectView() {
+  const previous = projectHistory.pop();
+  if (!previous) { await openWorkflows(); await studioUI.navigate('projects'); return; }
+  if (previous.workflowMode) {
+    await openWorkflows(); await studioUI.navigate(previous.workflowProject ? 'project' : previous.workflowRoute || 'projects', previous.workflowProject);
+  } else {
+    if (previous.current && (current !== previous.current || detail?.selectedRelease !== previous.release)) await chooseProject(previous.current, previous.release);
+    setView(previous.overviewMode ? 'kanban' : previous.view);
+    $('#content').scrollTop = previous.scroll;
+    if ($('.kanban-board')) $('.kanban-board').scrollLeft = previous.boardScroll;
+  }
+}
 let launchingTerminal = false;
 let terminalMaximized = false;
 let terminalPreference = null;
@@ -204,6 +224,8 @@ $('#terminal-tabs').addEventListener('focusin', event => {
   tab.closest('.terminal-tab').scrollIntoView({block:'nearest',inline:'nearest'});
 });
 const studioUI = mountStudio(workflowHost, {
+  copyText: text => api.clipboard.write(text),
+  focusContent() { terminalPreference=false;terminalMaximized=false;render(); },
   context(context) { rememberConversationTitle(context.conversation); if(context.conversation?.id && context.conversation.id!==workflowContext?.conversation?.id){const existing=sessions.find(s=>s.alive && terminalIdentity(s).conversation===context.conversation.id);if(existing){workflowTerminalPath=existing.project;selectedSession.set(existing.project,existing.id);}} if (workflowContext?.route === 'workflow' && context.route === 'workflow' && context.mode && context.mode !== workflowContext.mode) terminalMaximized = false; workflowContext = context; if (workflowMode) render(); },
   async openTerminal(project, graph, conversation, resume=false) {
     const result = await api.workflowTerminal({ project: project.id, conversation, resume, design: workflowContext?.route === 'workflow' && workflowContext?.mode === 'design' });
@@ -224,7 +246,7 @@ const studioUI = mountStudio(workflowHost, {
   terminalClosed: conversation => knownTerminalConversation(conversation) && !sessions.some(s => s.alive && terminalIdentity(s).conversation === conversation),
   provider: () => settings.provider || 'codex',
   hasLegacy: folder => projects.some(p => p.path === folder),
-  async openLegacy(project) { await chooseProject(project.path); setView('work'); },
+  async openLegacy(project) { rememberProjectView(); await chooseProject(project.path); setView('work'); },
   async setProvider(provider) { settings = await api.settings({provider}); $('#preferred-provider').value = provider; },
 });
 let workflowNavigation = Promise.resolve();
@@ -250,6 +272,14 @@ function setSyncStatus(message, error = false) {
 function attentionItems() {
   return projects.flatMap(p => [...(p.attention || []).map(t => ({ project: p, task: t })), ...(p.warnings || []).map(reason => ({ project: p, task: { id: 'État', title: 'Lecture à vérifier', reason, status: 'unverified' } }))]);
 }
+function projectAttentionTitle(project) {
+  return (project.attention || []).map(t => `${t.title} : ${t.reason || labels[t.status] || t.status}${t.action ? ' — ' + t.action : ''}`).join('\n');
+}
+function showProjectAttention(projectPath) {
+  const project = projects.find(p => p.path === projectPath);
+  if (!project) return;
+  modal(`<h2>À examiner · ${esc(project.name)}</h2>${(project.attention || []).map(t => `<article class="info-card"><h3>${esc(t.title)}</h3><p>${badge(t.status)}${t.release ? ' · ' + esc(project.releases?.find(r => r.id === t.release)?.title || t.release) + (project.releases?.find(r => r.id === t.release)?.status === 'close' ? ' · Release close, état encore enregistré' : '') : ''}</p><p>${esc(t.reason || labels[t.status] || 'État à vérifier')}</p><button class="secondary" data-attention-project="${esc(project.path)}" data-attention-release="${esc(t.release || '')}" data-task-id="${esc(t.id)}">${esc(t.action || 'Examiner cet élément')}</button></article>`).join('') || '<p>Aucun élément à examiner.</p>'}`);
+}
 function sidebar() {
   $('.kanban-nav').classList.toggle('selected', overviewMode);
   const favorites = settings.favorites || [];
@@ -258,7 +288,7 @@ function sidebar() {
   const listed = merged.sort((a, b) => Number(favorites.includes(b.path)) - Number(favorites.includes(a.path)) || a.name.localeCompare(b.name));
   const projectQuery=$('#project-search').value.trim().toLocaleLowerCase('fr');
   $('#project-list').innerHTML = listed.filter(p=>p.name.toLocaleLowerCase('fr').includes(projectQuery)).map(p => `
-    <button class="project-item side-item ${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'selected' : ''}" ${p.workflowId && (workflowMode || p.generic) ? `data-workflow-project="${esc(p.workflowId)}"` : `data-project="${esc(p.path)}"`} aria-current="${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'page' : 'false'}" data-project-title="${esc(p.name)} · ${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}" title="${esc(p.name)} · ${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name" title="${esc(p.name)}">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${p.attention.length} élément(s) à examiner">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || `<p class="muted pad">${projectQuery ? 'Aucun projet ne correspond.' : catalogError ? 'Projets indisponibles. Réessayez avec Actualiser.' : !bootstrapped ? 'Lecture des projets…' : 'Ajoutez un dépôt depuis Projets, ou commencez un workflow global.'}</p>`;
+    <button class="project-item side-item ${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'selected' : ''}" ${p.workflowId && (workflowMode || p.generic) ? `data-workflow-project="${esc(p.workflowId)}"` : `data-project="${esc(p.path)}"`} aria-current="${!overviewMode && (workflowMode ? workflowContext?.project?.path === p.path && ['project', 'workflow'].includes(workflowContext?.route) : current === p.path) ? 'page' : 'false'}" data-project-title="${esc(p.name)} · ${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}" title="${esc(p.name)} · ${esc(p.path.replace(/^\/home\/[^/]+/, '~'))}">${p.running ? `<span class="live-dot" title="${p.running} en cours" aria-label="${p.running} en cours"></span>` : ''}<span class="project-name" title="${esc(p.name)}">${esc(p.name)}</span>${p.attention?.length ? `<span class="count-pill" title="${esc(projectAttentionTitle(p))}" aria-label="${p.attention.length} élément(s) à examiner : ${esc(projectAttentionTitle(p))}">${p.attention.length}</span>` : favorites.includes(p.path) ? '<span class="fav-dot" aria-label="Favori">★</span>' : ''}</button>`).join('') || `<p class="muted pad">${projectQuery ? 'Aucun projet ne correspond.' : catalogError ? 'Projets indisponibles. Réessayez avec Actualiser.' : !bootstrapped ? 'Lecture des projets…' : 'Ajoutez un dépôt depuis Projets, ou commencez un workflow global.'}</p>`;
   $('.install-agents').hidden = crewInstalled;
   $('[data-action="workflow-workspace"]').hidden = workflowMode;
   cockpitUI.alertSidebar();
@@ -276,6 +306,11 @@ function header() {
   $('#project-meta').innerHTML = overviewMode ? `<span class="muted">${projects.length} projets</span>`
     : project ? `${project.series ? `<span class="meta-pill" title="Série Odoo">${esc(project.series)}</span>` : ''}<button class="icon-button ${settings.favorites?.includes(current) ? 'gold' : ''}" data-action="favorite" title="${settings.favorites?.includes(current) ? 'Retirer des favoris' : 'Mettre en favori'}" aria-pressed="${!!settings.favorites?.includes(current)}">${icon('star')}</button><button class="icon-button" data-action="folder" title="Ouvrir le dossier ${esc(project.path)}">${icon('external')}</button>`
     : '<span class="muted">Choisissez le dossier des projets dans Paramètres.</span>';
+  if (project && !overviewMode) {
+    $('#project-meta').insertAdjacentHTML('afterbegin', '<button class="text-button" data-action="project-back">← Retour</button>');
+    const attention = projects.find(p => p.path === current)?.attention || [];
+    if (attention.length) $('#project-meta').insertAdjacentHTML('beforeend', `<button class="text-button" data-project-attention="${esc(current)}">${attention.length} élément(s) à examiner</button>`);
+  }
   $('#context-bar').hidden = overviewMode || !project;
   $('#tabs').hidden = overviewMode;
   if (project && !overviewMode) {
@@ -339,7 +374,8 @@ function render() {
   if (workflowMode) {
     $('#project-title').textContent = workflowContext?.title || 'Votre espace de travail';
     $('#context-bar').hidden = true; $('#tabs').hidden = true; $('#activity-strip').hidden = true;
-    $('#project-meta').textContent = '';
+    const projectAlerts = projects.find(p => p.path === workflowContext?.project?.path);
+    $('#project-meta').innerHTML = projectAlerts?.attention?.length ? `<button class="text-button" data-project-attention="${esc(projectAlerts.path)}">${projectAlerts.attention.length} élément(s) à examiner</button>` : '';
     $('#content').hidden = true;
     $('[data-action="terminal-maximize"]').textContent = terminalMaximized ? 'Afficher le workflow' : 'Agrandir le terminal';
     renderTerminals(); return;
@@ -725,6 +761,8 @@ async function refresh() {
 document.addEventListener('click', async event => {
   const el = event.target.closest('button, [data-view]'); if (!el) return;
   try {
+    if (el.dataset.action === 'project-back') { await returnToProjectView(); return; }
+    if (el.dataset.projectAttention) { showProjectAttention(el.dataset.projectAttention); return; }
     if (el.dataset.workflowProject) { await openWorkflows(); await studioUI.navigate('project', el.dataset.workflowProject); return; }
     if (el.dataset.workflowRoute) { await openWorkflows(el.dataset.workflowRoute); return; }
     if (el.dataset.action === 'work-details') { detailsOpen = !detailsOpen; tabs(); return; }
@@ -742,10 +780,11 @@ document.addEventListener('click', async event => {
       else requestWork('answer', null, 'Concernant la question ' + el.dataset.workQuestion + ' — ' + (el.dataset.questionText || '') + '\nMa réponse : ');
       return;
     }
-    if (el.dataset.project) return await chooseProject(el.dataset.project);
+    if (el.dataset.project) { rememberProjectView(); return await chooseProject(el.dataset.project); }
     if (el.dataset.launchAgent) return await newTerminal(null, el.dataset.launchAgent);
     if (el.dataset.view) return setView(el.dataset.view);
     if (el.dataset.kanbanProject) {
+      rememberProjectView();
       await chooseProject(el.dataset.kanbanProject, el.dataset.kanbanRelease);
       if (el.dataset.kanbanIntention) {
         setView('intentions');
@@ -756,7 +795,7 @@ document.addEventListener('click', async event => {
     if (el.dataset.action === 'kanban-executing') { kanbanExecuting = !kanbanExecuting; render(); return; }
     if (el.dataset.action === 'kanban-closed') { kanbanClosed = !kanbanClosed; render(); return; }
     if (el.dataset.task) { selectTask(el.dataset.task); return; }
-    if (el.dataset.attentionProject) { await chooseProject(el.dataset.attentionProject, el.dataset.attentionRelease); selectTask(el.dataset.taskId); setView(el.dataset.taskId.startsWith('flow:') ? 'agents' : 'plan'); return; }
+    if (el.dataset.attentionProject) { $('#modal').close(); rememberProjectView(); await chooseProject(el.dataset.attentionProject, el.dataset.attentionRelease); selectTask(el.dataset.taskId); setView(el.dataset.taskId.startsWith('flow:') ? 'agents' : 'plan'); return; }
     if (el.dataset.session) {
       const session = sessions.find(s => s.id === el.dataset.session);
       if (workflowMode && session) { if(el.closest('#modal'))$('#modal').close(); workflowTerminalPath = session.project; selectedSession.set(session.project, session.id); terminalPreference=true; render(); await mountTerminal(session.id); terminals.get(session.id)?.term.focus(); return; }
@@ -821,7 +860,7 @@ document.addEventListener('change', async event => {
   try {
     if (event.target.id === 'preferred-provider') { settings = await api.settings({ provider: event.target.value }); workflowControls(); return; }
     if (event.target.id === 'workflow-choice') { settings = await api.settings({ workflow: event.target.value }); workflowControls(); return; }
-    if (event.target.id === 'release-select') await chooseProject(current, event.target.value);
+    if (event.target.id === 'release-select') { rememberProjectView(); await chooseProject(current, event.target.value); }
     if (event.target.id === 'environment-select') await setEnvironment(event.target.value);
   } catch (error) { toast(error.message); }
 });

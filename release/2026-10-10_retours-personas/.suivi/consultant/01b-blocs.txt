@@ -1,0 +1,89 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Atlas conseil"
+  - button "Boréal formation"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Modèles de workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+    - text: Composer et réutiliser
+    - heading "Modèles de workflows" [level=1]
+    - paragraph: Les workflows complets proposent un parcours. Les blocs à composer sont des points de départ pour votre propre workflow.
+    - button "Importer un workflow"
+    - button "+ Créer un modèle"
+    - text: Rechercher un modèle
+    - searchbox "Rechercher un modèle"
+    - text: Type de modèle
+    - combobox "Type de modèle":
+      - option "Tous les modèles"
+      - option "Workflows complets"
+      - option "Blocs à composer" [selected]
+    - text: "Destination :"
+    - strong: Sans projet
+    - article:
+      - text: Bloc à composer · 1 bloc
+      - heading "Orchestration" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Créer une adaptation…"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: Bloc à composer · 1 bloc
+      - heading "Analyse" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Créer une adaptation…"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: Bloc à composer · 1 bloc
+      - heading "Développement" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Créer une adaptation…"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: Bloc à composer · 1 bloc
+      - heading "Tests" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Créer une adaptation…"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: Bloc à composer · 1 bloc
+      - heading "Gestion documentaire" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Créer une adaptation…"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: Bloc à composer · 1 bloc
+      - heading "Communication" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Créer une adaptation…"
+      - button "Personnaliser une copie…"

@@ -1,0 +1,33 @@
+{
+  "edges": [],
+  "id": "work-a85344de-d711-4728-a822-69e2e2f5057d",
+  "nodes": [
+    {
+      "completion_outcome": "succeeded",
+      "criteria": [],
+      "id": "step-mv2m7g15",
+      "inputs": {},
+      "kind": "decision",
+      "max_attempts": 1,
+      "option_labels": {},
+      "options": [
+        "approve",
+        "reject"
+      ],
+      "outputs": {},
+      "phase": "",
+      "position": {
+        "x": 364,
+        "y": 80
+      },
+      "question": "Préparer un email client ou une réponse dans le ticket Odoo ?",
+      "resources": [],
+      "title": "Choisir où répondre"
+    }
+  ],
+  "parameters": {},
+  "revision": 3,
+  "schema": 2,
+  "title": "Choisir la destination",
+  "_project": "workspace"
+}

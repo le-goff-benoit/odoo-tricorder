@@ -1,0 +1,51 @@
+Activité
+Workflows
+Projets
+Essai développeur sceptique
+Planifications
+Connexions
+Paramètres
+Terminal
+
+
+
+
+← Retour à la liste
+Examiner la décision
+Graphe
+Détail
+Étape sélectionnéeVérifier le runtime Python
+Décider de la suite
+Preuve 1 · d6285379
+Étape sélectionnée
+Vérifier le runtime Python
+→
+Décider de la suite
+
+Produit · sorties vérifiées
+
+Commande terminée avec le code 0. Résultat à examiner.
+
+3.10.12 (main, May 27 2025, 17:12:29) [GCC 11.4.0]
+CORRECTION_VERIFIEE: valeur correcte
+
+Résultat validé
+
+Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Le script affiche la version Python et termine avec code zéro.
+
+Entrées, sorties et preuves
+Preuves
+Preuve 1 · d6285379
+Tentatives précédentes · 1
+Tentative 1
+Échec
+Terminée le 10 oct. 2026, 18:19
+Commande terminée avec le code 7. Résultat à examiner.
+Contrôle non satisfait
+L'exécutant a signalé un échec
+Motif de la reprise suivante
+Le script affiche la version Python et termine avec code zéro.
+Résultats et preuves
+Détails techniques

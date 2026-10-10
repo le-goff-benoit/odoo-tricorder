@@ -1,0 +1,1499 @@
+{
+  "workflows": {
+    "items": [
+      {
+        "description": "",
+        "edges": [
+          {
+            "from": "step-mv2mo0f9",
+            "id": "edge-mv2mo1oi",
+            "mapping": {},
+            "outcome": "email",
+            "to": "step-mv2mo0w8"
+          },
+          {
+            "from": "step-mv2mo0f9",
+            "id": "edge-mv2mo1x1",
+            "mapping": {},
+            "outcome": "ticket",
+            "to": "step-mv2mo0zq"
+          }
+        ],
+        "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2",
+        "nodes": [
+          {
+            "completion_outcome": "succeeded",
+            "criteria": [],
+            "id": "step-mv2mo0f9",
+            "inputs": {},
+            "kind": "condition",
+            "max_attempts": 1,
+            "options": [
+              "email",
+              "ticket"
+            ],
+            "outputs": {},
+            "parameter": "Canal_de_reponse",
+            "phase": "",
+            "position": {
+              "x": 364,
+              "y": 80
+            },
+            "resources": [],
+            "title": "Choisir le canal"
+          },
+          {
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "content": "Brouillon synthétique : Préparer email",
+            "criteria": [],
+            "id": "step-mv2mo0w8",
+            "inputs": {},
+            "kind": "document",
+            "max_attempts": 1,
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 471,
+              "y": 241
+            },
+            "resources": [],
+            "reuse": false,
+            "title": "Préparer email",
+            "validation": "automatic"
+          },
+          {
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "content": "Brouillon synthétique : Préparer ticket",
+            "criteria": [],
+            "id": "step-mv2mo0zq",
+            "inputs": {},
+            "kind": "document",
+            "max_attempts": 1,
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 616,
+              "y": 376
+            },
+            "resources": [],
+            "reuse": false,
+            "title": "Préparer ticket",
+            "validation": "automatic"
+          }
+        ],
+        "parameters": {
+          "Canal_de_reponse": "ticket"
+        },
+        "revision": 3,
+        "schema": 2,
+        "title": "Orientation email ou ticket",
+        "_project": "workspace"
+      },
+      {
+        "edges": [
+          {
+            "from": "step-mv2mnvnu",
+            "id": "link-3493d81e-1cb6-4a7d-a901-6c00a6490ffe",
+            "mapping": {
+              "answer": "Besoin"
+            },
+            "outcome": "done",
+            "to": "start"
+          },
+          {
+            "from": "start",
+            "id": "link-1deb2ee8-a99b-4b56-9397-e306adef89b1",
+            "mapping": {
+              "Proposition": "Proposition_a_valider"
+            },
+            "outcome": "done",
+            "to": "step-mv2mnw7o"
+          }
+        ],
+        "id": "work-2a7bb425-fe96-4190-a6d0-1d5da950a4cd",
+        "nodes": [
+          {
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "criteria": [],
+            "id": "start",
+            "inputs": {
+              "Besoin": {
+                "required": true,
+                "type": "string"
+              }
+            },
+            "kind": "task",
+            "max_attempts": 1,
+            "outputs": {
+              "Proposition": {
+                "required": true,
+                "type": "string"
+              }
+            },
+            "phase": "",
+            "position": {
+              "x": 60,
+              "y": 80
+            },
+            "prompt": "Préparer une proposition courte à partir du besoin transmis.",
+            "resources": [],
+            "title": "Préparer la proposition",
+            "validation": "contract"
+          },
+          {
+            "completion_outcome": "succeeded",
+            "criteria": [],
+            "id": "step-mv2mnvnu",
+            "inputs": {},
+            "kind": "question",
+            "max_attempts": 1,
+            "outputs": {
+              "answer": "string"
+            },
+            "phase": "",
+            "position": {
+              "x": 364,
+              "y": 80
+            },
+            "question": "Quel besoin faut-il traiter ?",
+            "resources": [],
+            "title": "Préciser le besoin"
+          },
+          {
+            "completion_outcome": "succeeded",
+            "criteria": [],
+            "id": "step-mv2mnw7o",
+            "inputs": {
+              "Proposition_a_valider": {
+                "required": true,
+                "type": "string"
+              }
+            },
+            "kind": "decision",
+            "max_attempts": 1,
+            "option_labels": {},
+            "options": [
+              "Accorder",
+              "Refuser"
+            ],
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 376,
+              "y": 216
+            },
+            "question": "La proposition peut-elle être préparée pour le client ?",
+            "resources": [],
+            "title": "Valider la proposition"
+          }
+        ],
+        "parameters": {},
+        "revision": 2,
+        "schema": 2,
+        "title": "Accord intervention PME",
+        "_project": "workspace"
+      }
+    ],
+    "total": 2,
+    "offset": 0,
+    "next": null
+  },
+  "runs": {
+    "family_counts": {
+      "requests": 3,
+      "tasks": 0,
+      "actions": 0
+    },
+    "items": [
+      {
+        "id": "rf53c2d07922c4e8c",
+        "project": "workspace",
+        "status": "completed",
+        "created": 1791650873.0293822,
+        "updated": 1791650873.4926581,
+        "simulation": true,
+        "completion_outcome": "succeeded",
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "iteration_wait": null,
+        "iteration_hold": null,
+        "parent_paused": null,
+        "parent": null,
+        "associated_with": null,
+        "conversation": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2",
+          "title": "Orientation email ou ticket",
+          "revision": 3
+        },
+        "original": {
+          "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2"
+        },
+        "focus": null,
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "",
+        "counts": {
+          "accepted": 2,
+          "skipped": 1
+        },
+        "nodes": {
+          "step-mv2mo0f9": {
+            "status": "accepted"
+          },
+          "step-mv2mo0w8": {
+            "status": "skipped"
+          },
+          "step-mv2mo0zq": {
+            "status": "accepted"
+          }
+        },
+        "timing": {
+          "started": 1791650873.0293822,
+          "finished": 1791650873.4926417,
+          "duration": 0.4632594585418701
+        },
+        "origin": null
+      },
+      {
+        "id": "r44fd2361403141d9",
+        "project": "workspace",
+        "status": "completed",
+        "created": 1791650869.399087,
+        "updated": 1791650869.8808398,
+        "simulation": true,
+        "completion_outcome": "succeeded",
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "iteration_wait": null,
+        "iteration_hold": null,
+        "parent_paused": null,
+        "parent": null,
+        "associated_with": null,
+        "conversation": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2",
+          "title": "Orientation email ou ticket",
+          "revision": 2
+        },
+        "original": {
+          "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2"
+        },
+        "focus": null,
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "",
+        "counts": {
+          "accepted": 2,
+          "skipped": 1
+        },
+        "nodes": {
+          "step-mv2mo0f9": {
+            "status": "accepted"
+          },
+          "step-mv2mo0w8": {
+            "status": "accepted"
+          },
+          "step-mv2mo0zq": {
+            "status": "skipped"
+          }
+        },
+        "timing": {
+          "started": 1791650869.399087,
+          "finished": 1791650869.8808186,
+          "duration": 0.481731653213501
+        },
+        "origin": null
+      },
+      {
+        "id": "r542b05a1c7fb4eeb",
+        "project": "workspace",
+        "status": "completed",
+        "created": 1791650862.3468044,
+        "updated": 1791650864.1817105,
+        "simulation": true,
+        "completion_outcome": "succeeded",
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "iteration_wait": null,
+        "iteration_hold": null,
+        "parent_paused": null,
+        "parent": null,
+        "associated_with": null,
+        "conversation": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "work-2a7bb425-fe96-4190-a6d0-1d5da950a4cd",
+          "title": "Accord intervention PME",
+          "revision": 2
+        },
+        "original": {
+          "id": "work-2a7bb425-fe96-4190-a6d0-1d5da950a4cd"
+        },
+        "focus": null,
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        },
+        "request": "",
+        "counts": {
+          "accepted": 3
+        },
+        "nodes": {
+          "start": {
+            "status": "accepted"
+          },
+          "step-mv2mnvnu": {
+            "status": "accepted"
+          },
+          "step-mv2mnw7o": {
+            "status": "accepted"
+          }
+        },
+        "timing": {
+          "started": 1791650862.3468044,
+          "finished": 1791650864.1815214,
+          "duration": 1.834717035293579
+        },
+        "origin": null
+      }
+    ],
+    "total": 3,
+    "offset": 0,
+    "limit": 25,
+    "next": null
+  },
+  "details": [
+    {
+      "run": {
+        "completion_outcome": "succeeded",
+        "contract": "8088e114375e9214af3bf448a01bad553af3f377d572a241b48ae888b76adcb0",
+        "created": 1791650873.0293822,
+        "definition": {
+          "description": "",
+          "edges": [
+            {
+              "from": "step-mv2mo0f9",
+              "id": "edge-mv2mo1oi",
+              "mapping": {},
+              "outcome": "email",
+              "to": "step-mv2mo0w8"
+            },
+            {
+              "from": "step-mv2mo0f9",
+              "id": "edge-mv2mo1x1",
+              "mapping": {},
+              "outcome": "ticket",
+              "to": "step-mv2mo0zq"
+            }
+          ],
+          "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2",
+          "nodes": [
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "step-mv2mo0f9",
+              "inputs": {},
+              "kind": "condition",
+              "max_attempts": 1,
+              "options": [
+                "email",
+                "ticket"
+              ],
+              "outputs": {},
+              "parameter": "Canal_de_reponse",
+              "phase": "",
+              "position": {
+                "x": 364,
+                "y": 80
+              },
+              "resources": [],
+              "title": "Choisir le canal"
+            },
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "content": "Brouillon synthétique : Préparer email",
+              "criteria": [],
+              "id": "step-mv2mo0w8",
+              "inputs": {},
+              "kind": "document",
+              "max_attempts": 1,
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 471,
+                "y": 241
+              },
+              "resources": [],
+              "reuse": false,
+              "title": "Préparer email",
+              "validation": "automatic"
+            },
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "content": "Brouillon synthétique : Préparer ticket",
+              "criteria": [],
+              "id": "step-mv2mo0zq",
+              "inputs": {},
+              "kind": "document",
+              "max_attempts": 1,
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 616,
+                "y": 376
+              },
+              "resources": [],
+              "reuse": false,
+              "title": "Préparer ticket",
+              "validation": "automatic"
+            }
+          ],
+          "parameters": {
+            "Canal_de_reponse": "ticket",
+            "request": ""
+          },
+          "revision": 3,
+          "schema": 2,
+          "title": "Orientation email ou ticket"
+        },
+        "driver": "automatic",
+        "id": "rf53c2d07922c4e8c",
+        "nodes": {
+          "step-mv2mo0f9": {
+            "attempt": 0,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "ticket",
+            "result": {
+              "outputs": {}
+            },
+            "status": "accepted"
+          },
+          "step-mv2mo0w8": {
+            "attempt": 0,
+            "status": "skipped"
+          },
+          "step-mv2mo0zq": {
+            "attempt": 1,
+            "finished": 1791650873.4923856,
+            "heartbeat": 1791650873.0800092,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "ownership": "managed",
+            "pid": 327952,
+            "processes": [
+              {
+                "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+                "pid": 327952,
+                "session": 327952,
+                "start": "781486"
+              }
+            ],
+            "receipt": {
+              "actor": "validation-policy",
+              "at": 1791650873.4926102,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "8088e114375e9214af3bf448a01bad553af3f377d572a241b48ae888b76adcb0",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "evidence": [
+                {
+                  "sha256": "1c3203be8daf323231459e6035aec2debb97b7699e20f624bfe11b52fbd0841c",
+                  "size": 121
+                }
+              ],
+              "ok": true,
+              "outputs": {},
+              "simulated": true,
+              "summary": "SIMULATION — Résultat d'exemple pour « Préparer ticket ». Aucun outil métier ni service externe n'a été appelé."
+            },
+            "started": 1791650873.0378733,
+            "status": "accepted",
+            "token": "t5d8fb00d7e174616"
+          }
+        },
+        "notifications_authorized": false,
+        "original": {
+          "description": "",
+          "edges": [
+            {
+              "from": "step-mv2mo0f9",
+              "id": "edge-mv2mo1oi",
+              "mapping": {},
+              "outcome": "email",
+              "to": "step-mv2mo0w8"
+            },
+            {
+              "from": "step-mv2mo0f9",
+              "id": "edge-mv2mo1x1",
+              "mapping": {},
+              "outcome": "ticket",
+              "to": "step-mv2mo0zq"
+            }
+          ],
+          "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2",
+          "nodes": [
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "step-mv2mo0f9",
+              "inputs": {},
+              "kind": "condition",
+              "max_attempts": 1,
+              "options": [
+                "email",
+                "ticket"
+              ],
+              "outputs": {},
+              "parameter": "Canal_de_reponse",
+              "phase": "",
+              "position": {
+                "x": 364,
+                "y": 80
+              },
+              "resources": [],
+              "title": "Choisir le canal"
+            },
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "content": "Brouillon synthétique : Préparer email",
+              "criteria": [],
+              "id": "step-mv2mo0w8",
+              "inputs": {},
+              "kind": "document",
+              "max_attempts": 1,
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 471,
+                "y": 241
+              },
+              "resources": [],
+              "reuse": false,
+              "title": "Préparer email",
+              "validation": "automatic"
+            },
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "content": "Brouillon synthétique : Préparer ticket",
+              "criteria": [],
+              "id": "step-mv2mo0zq",
+              "inputs": {},
+              "kind": "document",
+              "max_attempts": 1,
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 616,
+                "y": 376
+              },
+              "resources": [],
+              "reuse": false,
+              "title": "Préparer ticket",
+              "validation": "automatic"
+            }
+          ],
+          "parameters": {
+            "Canal_de_reponse": "ticket"
+          },
+          "revision": 3,
+          "schema": 2,
+          "title": "Orientation email ou ticket"
+        },
+        "packs": [],
+        "parameters": {
+          "Canal_de_reponse": "ticket",
+          "request": ""
+        },
+        "plugins": {
+          "path": "/tmp/tricorder-panel-operations-KR5J2f/workspace/.tricorder/plugins.json",
+          "plugins": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "project": "workspace",
+        "release": "",
+        "scope": {
+          "id": "workspace",
+          "kind": "workspace"
+        },
+        "simulation": true,
+        "status": "completed",
+        "transports": {},
+        "updated": 1791650873.4926581,
+        "timing": {
+          "started": 1791650873.0293822,
+          "finished": 1791650873.4926417,
+          "duration": 0.4632594585418701
+        },
+        "origin": null,
+        "focus": null,
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        }
+      },
+      "events": [
+        {
+          "seq": 19,
+          "at": 1791650873.0298123,
+          "node": null,
+          "simulation": true,
+          "type": "started"
+        },
+        {
+          "seq": 20,
+          "at": 1791650873.029853,
+          "node": "step-mv2mo0f9",
+          "type": "accepted"
+        },
+        {
+          "seq": 21,
+          "at": 1791650873.0298662,
+          "node": "step-mv2mo0w8",
+          "type": "skipped"
+        },
+        {
+          "seq": 22,
+          "at": 1791650873.02988,
+          "node": "step-mv2mo0zq",
+          "type": "ready"
+        },
+        {
+          "seq": 23,
+          "at": 1791650873.0378757,
+          "attempt": 1,
+          "node": "step-mv2mo0zq",
+          "type": "running"
+        },
+        {
+          "seq": 24,
+          "at": 1791650873.49241,
+          "attempt": 1,
+          "node": "step-mv2mo0zq",
+          "type": "returned"
+        },
+        {
+          "seq": 25,
+          "actor": "validation-policy",
+          "at": 1791650873.4926126,
+          "node": "step-mv2mo0zq",
+          "type": "accepted"
+        },
+        {
+          "seq": 26,
+          "at": 1791650873.4926417,
+          "node": null,
+          "type": "completed"
+        }
+      ],
+      "events_next": null
+    },
+    {
+      "run": {
+        "completion_outcome": "succeeded",
+        "contract": "d6334f2451ed177608ecc298dbba569a635c577d401af32f459a41a759065fff",
+        "created": 1791650869.399087,
+        "definition": {
+          "description": "",
+          "edges": [
+            {
+              "from": "step-mv2mo0f9",
+              "id": "edge-mv2mo1oi",
+              "mapping": {},
+              "outcome": "email",
+              "to": "step-mv2mo0w8"
+            },
+            {
+              "from": "step-mv2mo0f9",
+              "id": "edge-mv2mo1x1",
+              "mapping": {},
+              "outcome": "ticket",
+              "to": "step-mv2mo0zq"
+            }
+          ],
+          "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2",
+          "nodes": [
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "step-mv2mo0f9",
+              "inputs": {},
+              "kind": "condition",
+              "max_attempts": 1,
+              "options": [
+                "email",
+                "ticket"
+              ],
+              "outputs": {},
+              "parameter": "Canal_de_reponse",
+              "phase": "",
+              "position": {
+                "x": 364,
+                "y": 80
+              },
+              "resources": [],
+              "title": "Choisir le canal"
+            },
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "content": "Brouillon synthétique : Préparer email",
+              "criteria": [],
+              "id": "step-mv2mo0w8",
+              "inputs": {},
+              "kind": "document",
+              "max_attempts": 1,
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 471,
+                "y": 241
+              },
+              "resources": [],
+              "reuse": false,
+              "title": "Préparer email",
+              "validation": "automatic"
+            },
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "content": "Brouillon synthétique : Préparer ticket",
+              "criteria": [],
+              "id": "step-mv2mo0zq",
+              "inputs": {},
+              "kind": "document",
+              "max_attempts": 1,
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 616,
+                "y": 376
+              },
+              "resources": [],
+              "reuse": false,
+              "title": "Préparer ticket",
+              "validation": "automatic"
+            }
+          ],
+          "parameters": {
+            "Canal_de_reponse": "email",
+            "request": ""
+          },
+          "revision": 2,
+          "schema": 2,
+          "title": "Orientation email ou ticket"
+        },
+        "driver": "automatic",
+        "id": "r44fd2361403141d9",
+        "nodes": {
+          "step-mv2mo0f9": {
+            "attempt": 0,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "email",
+            "result": {
+              "outputs": {}
+            },
+            "status": "accepted"
+          },
+          "step-mv2mo0w8": {
+            "attempt": 1,
+            "finished": 1791650869.8804965,
+            "heartbeat": 1791650869.457555,
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "ownership": "managed",
+            "pid": 327900,
+            "processes": [
+              {
+                "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+                "pid": 327900,
+                "session": 327900,
+                "start": "781123"
+              }
+            ],
+            "receipt": {
+              "actor": "validation-policy",
+              "at": 1791650869.880773,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "d6334f2451ed177608ecc298dbba569a635c577d401af32f459a41a759065fff",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "evidence": [
+                {
+                  "sha256": "51f0b16707401d2363fee782e23a2bf891f79dc318e935c5924a3034f661c9da",
+                  "size": 120
+                }
+              ],
+              "ok": true,
+              "outputs": {},
+              "simulated": true,
+              "summary": "SIMULATION — Résultat d'exemple pour « Préparer email ». Aucun outil métier ni service externe n'a été appelé."
+            },
+            "started": 1791650869.406975,
+            "status": "accepted",
+            "token": "t67c7b569c9274738"
+          },
+          "step-mv2mo0zq": {
+            "attempt": 0,
+            "status": "skipped"
+          }
+        },
+        "notifications_authorized": false,
+        "original": {
+          "description": "",
+          "edges": [
+            {
+              "from": "step-mv2mo0f9",
+              "id": "edge-mv2mo1oi",
+              "mapping": {},
+              "outcome": "email",
+              "to": "step-mv2mo0w8"
+            },
+            {
+              "from": "step-mv2mo0f9",
+              "id": "edge-mv2mo1x1",
+              "mapping": {},
+              "outcome": "ticket",
+              "to": "step-mv2mo0zq"
+            }
+          ],
+          "id": "work-175b68b3-8352-453f-8d18-7c155d2c64d2",
+          "nodes": [
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "step-mv2mo0f9",
+              "inputs": {},
+              "kind": "condition",
+              "max_attempts": 1,
+              "options": [
+                "email",
+                "ticket"
+              ],
+              "outputs": {},
+              "parameter": "Canal_de_reponse",
+              "phase": "",
+              "position": {
+                "x": 364,
+                "y": 80
+              },
+              "resources": [],
+              "title": "Choisir le canal"
+            },
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "content": "Brouillon synthétique : Préparer email",
+              "criteria": [],
+              "id": "step-mv2mo0w8",
+              "inputs": {},
+              "kind": "document",
+              "max_attempts": 1,
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 471,
+                "y": 241
+              },
+              "resources": [],
+              "reuse": false,
+              "title": "Préparer email",
+              "validation": "automatic"
+            },
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "content": "Brouillon synthétique : Préparer ticket",
+              "criteria": [],
+              "id": "step-mv2mo0zq",
+              "inputs": {},
+              "kind": "document",
+              "max_attempts": 1,
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 616,
+                "y": 376
+              },
+              "resources": [],
+              "reuse": false,
+              "title": "Préparer ticket",
+              "validation": "automatic"
+            }
+          ],
+          "parameters": {
+            "Canal_de_reponse": "email"
+          },
+          "revision": 2,
+          "schema": 2,
+          "title": "Orientation email ou ticket"
+        },
+        "packs": [],
+        "parameters": {
+          "Canal_de_reponse": "email",
+          "request": ""
+        },
+        "plugins": {
+          "path": "/tmp/tricorder-panel-operations-KR5J2f/workspace/.tricorder/plugins.json",
+          "plugins": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "project": "workspace",
+        "release": "",
+        "scope": {
+          "id": "workspace",
+          "kind": "workspace"
+        },
+        "simulation": true,
+        "status": "completed",
+        "transports": {},
+        "updated": 1791650869.8808398,
+        "timing": {
+          "started": 1791650869.399087,
+          "finished": 1791650869.8808186,
+          "duration": 0.481731653213501
+        },
+        "origin": null,
+        "focus": null,
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        }
+      },
+      "events": [
+        {
+          "seq": 11,
+          "at": 1791650869.3995273,
+          "node": null,
+          "simulation": true,
+          "type": "started"
+        },
+        {
+          "seq": 12,
+          "at": 1791650869.3995695,
+          "node": "step-mv2mo0f9",
+          "type": "accepted"
+        },
+        {
+          "seq": 13,
+          "at": 1791650869.3995879,
+          "node": "step-mv2mo0w8",
+          "type": "ready"
+        },
+        {
+          "seq": 14,
+          "at": 1791650869.3995972,
+          "node": "step-mv2mo0zq",
+          "type": "skipped"
+        },
+        {
+          "seq": 15,
+          "at": 1791650869.4069765,
+          "attempt": 1,
+          "node": "step-mv2mo0w8",
+          "type": "running"
+        },
+        {
+          "seq": 16,
+          "at": 1791650869.8805203,
+          "attempt": 1,
+          "node": "step-mv2mo0w8",
+          "type": "returned"
+        },
+        {
+          "seq": 17,
+          "actor": "validation-policy",
+          "at": 1791650869.8807764,
+          "node": "step-mv2mo0w8",
+          "type": "accepted"
+        },
+        {
+          "seq": 18,
+          "at": 1791650869.8808186,
+          "node": null,
+          "type": "completed"
+        }
+      ],
+      "events_next": null
+    },
+    {
+      "run": {
+        "completion_outcome": "succeeded",
+        "contract": "ab6504554fc63a446cf214362ba39d47506fc72177135b90b927f3f5067fe9e0",
+        "created": 1791650862.3468044,
+        "definition": {
+          "edges": [
+            {
+              "from": "step-mv2mnvnu",
+              "id": "link-3493d81e-1cb6-4a7d-a901-6c00a6490ffe",
+              "mapping": {
+                "answer": "Besoin"
+              },
+              "outcome": "done",
+              "to": "start"
+            },
+            {
+              "from": "start",
+              "id": "link-1deb2ee8-a99b-4b56-9397-e306adef89b1",
+              "mapping": {
+                "Proposition": "Proposition_a_valider"
+              },
+              "outcome": "done",
+              "to": "step-mv2mnw7o"
+            }
+          ],
+          "id": "work-2a7bb425-fe96-4190-a6d0-1d5da950a4cd",
+          "nodes": [
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "start",
+              "inputs": {
+                "Besoin": {
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "kind": "task",
+              "max_attempts": 1,
+              "outputs": {
+                "Proposition": {
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "phase": "",
+              "position": {
+                "x": 60,
+                "y": 80
+              },
+              "prompt": "Préparer une proposition courte à partir du besoin transmis.",
+              "resources": [],
+              "title": "Préparer la proposition",
+              "validation": "contract"
+            },
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "step-mv2mnvnu",
+              "inputs": {},
+              "kind": "question",
+              "max_attempts": 1,
+              "outputs": {
+                "answer": "string"
+              },
+              "phase": "",
+              "position": {
+                "x": 364,
+                "y": 80
+              },
+              "question": "Quel besoin faut-il traiter ?",
+              "resources": [],
+              "title": "Préciser le besoin"
+            },
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "step-mv2mnw7o",
+              "inputs": {
+                "Proposition_a_valider": {
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "kind": "decision",
+              "max_attempts": 1,
+              "option_labels": {},
+              "options": [
+                "Accorder",
+                "Refuser"
+              ],
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 376,
+                "y": 216
+              },
+              "question": "La proposition peut-elle être préparée pour le client ?",
+              "resources": [],
+              "title": "Valider la proposition"
+            }
+          ],
+          "parameters": {
+            "request": ""
+          },
+          "revision": 2,
+          "schema": 2,
+          "title": "Accord intervention PME"
+        },
+        "driver": "automatic",
+        "id": "r542b05a1c7fb4eeb",
+        "nodes": {
+          "start": {
+            "attempt": 1,
+            "finished": 1791650863.318188,
+            "heartbeat": 1791650862.9064834,
+            "input_sources": {
+              "Besoin": {
+                "edge": "link-3493d81e-1cb6-4a7d-a901-6c00a6490ffe",
+                "node": "step-mv2mnvnu",
+                "port": "answer"
+              }
+            },
+            "inputs": {
+              "Besoin": "Préparer une intervention lundi sur notre planning."
+            },
+            "outcome": "done",
+            "ownership": "managed",
+            "pid": 327801,
+            "processes": [
+              {
+                "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+                "pid": 327801,
+                "session": 327801,
+                "start": "780466"
+              }
+            ],
+            "receipt": {
+              "actor": "contract-policy",
+              "at": 1791650863.3185523,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "ab6504554fc63a446cf214362ba39d47506fc72177135b90b927f3f5067fe9e0",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "evidence": [
+                {
+                  "sha256": "0c9cf8661f6850271e9afc1749ec590b605cb6b523fb4ecbcaab6d08ef3f6699",
+                  "size": 129
+                }
+              ],
+              "ok": true,
+              "outputs": {
+                "Proposition": "Exemple simulé"
+              },
+              "simulated": true,
+              "summary": "SIMULATION — Résultat d'exemple pour « Préparer la proposition ». Aucun outil métier ni service externe n'a été appelé."
+            },
+            "started": 1791650862.8392425,
+            "status": "accepted",
+            "token": "t3991311961db4fcf"
+          },
+          "step-mv2mnvnu": {
+            "attempt": 0,
+            "input_sources": {},
+            "inputs": {},
+            "interactions": [
+              {
+                "answer": "Préparer une intervention lundi sur notre planning.",
+                "question": "Quel besoin faut-il traiter ?"
+              }
+            ],
+            "outcome": "done",
+            "question": {
+              "answer": "Préparer une intervention lundi sur notre planning.",
+              "answered": 1791650862.6234176,
+              "created": 1791650862.3473482,
+              "id": "q958fa42c7b7948fa",
+              "status": "answered",
+              "text": "Quel besoin faut-il traiter ?"
+            },
+            "questions": [
+              {
+                "answer": "Préparer une intervention lundi sur notre planning.",
+                "answered": 1791650862.6234176,
+                "created": 1791650862.3473482,
+                "id": "q958fa42c7b7948fa",
+                "status": "answered",
+                "text": "Quel besoin faut-il traiter ?"
+              }
+            ],
+            "result": {
+              "ok": true,
+              "outputs": {
+                "answer": "Préparer une intervention lundi sur notre planning."
+              },
+              "summary": "Information fournie"
+            },
+            "status": "accepted"
+          },
+          "step-mv2mnw7o": {
+            "attempt": 1,
+            "decision": {
+              "actor": "local-user",
+              "at": 1791650864.1814039,
+              "note": "",
+              "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+              "outcome": "Accorder",
+              "proposal": "ae2cc0840bb3d14ea263767694a38480696e4b352b33bec0de77741f851e9d3f"
+            },
+            "input_sources": {
+              "Proposition_a_valider": {
+                "edge": "link-1deb2ee8-a99b-4b56-9397-e306adef89b1",
+                "node": "start",
+                "port": "Proposition"
+              }
+            },
+            "inputs": {
+              "Proposition_a_valider": "Exemple simulé"
+            },
+            "nonce": "d465d1247cdde4fb9",
+            "operation": null,
+            "outcome": "Accorder",
+            "proposal": "ae2cc0840bb3d14ea263767694a38480696e4b352b33bec0de77741f851e9d3f",
+            "status": "accepted"
+          }
+        },
+        "notifications_authorized": false,
+        "original": {
+          "edges": [
+            {
+              "from": "step-mv2mnvnu",
+              "id": "link-3493d81e-1cb6-4a7d-a901-6c00a6490ffe",
+              "mapping": {
+                "answer": "Besoin"
+              },
+              "outcome": "done",
+              "to": "start"
+            },
+            {
+              "from": "start",
+              "id": "link-1deb2ee8-a99b-4b56-9397-e306adef89b1",
+              "mapping": {
+                "Proposition": "Proposition_a_valider"
+              },
+              "outcome": "done",
+              "to": "step-mv2mnw7o"
+            }
+          ],
+          "id": "work-2a7bb425-fe96-4190-a6d0-1d5da950a4cd",
+          "nodes": [
+            {
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "start",
+              "inputs": {
+                "Besoin": {
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "kind": "task",
+              "max_attempts": 1,
+              "outputs": {
+                "Proposition": {
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "phase": "",
+              "position": {
+                "x": 60,
+                "y": 80
+              },
+              "prompt": "Préparer une proposition courte à partir du besoin transmis.",
+              "resources": [],
+              "title": "Préparer la proposition",
+              "validation": "contract"
+            },
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "step-mv2mnvnu",
+              "inputs": {},
+              "kind": "question",
+              "max_attempts": 1,
+              "outputs": {
+                "answer": "string"
+              },
+              "phase": "",
+              "position": {
+                "x": 364,
+                "y": 80
+              },
+              "question": "Quel besoin faut-il traiter ?",
+              "resources": [],
+              "title": "Préciser le besoin"
+            },
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "id": "step-mv2mnw7o",
+              "inputs": {
+                "Proposition_a_valider": {
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "kind": "decision",
+              "max_attempts": 1,
+              "option_labels": {},
+              "options": [
+                "Accorder",
+                "Refuser"
+              ],
+              "outputs": {},
+              "phase": "",
+              "position": {
+                "x": 376,
+                "y": 216
+              },
+              "question": "La proposition peut-elle être préparée pour le client ?",
+              "resources": [],
+              "title": "Valider la proposition"
+            }
+          ],
+          "parameters": {},
+          "revision": 2,
+          "schema": 2,
+          "title": "Accord intervention PME"
+        },
+        "packs": [],
+        "parameters": {
+          "request": ""
+        },
+        "plugins": {
+          "path": "/tmp/tricorder-panel-operations-KR5J2f/workspace/.tricorder/plugins.json",
+          "plugins": [],
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "project": "workspace",
+        "release": "",
+        "scope": {
+          "id": "workspace",
+          "kind": "workspace"
+        },
+        "simulation": true,
+        "status": "completed",
+        "transports": {},
+        "updated": 1791650864.1817105,
+        "timing": {
+          "started": 1791650862.3468044,
+          "finished": 1791650864.1815214,
+          "duration": 1.834717035293579
+        },
+        "origin": null,
+        "focus": null,
+        "health": {
+          "status": "ok",
+          "total": 0,
+          "issues": []
+        }
+      },
+      "events": [
+        {
+          "seq": 1,
+          "at": 1791650862.3472984,
+          "node": null,
+          "simulation": true,
+          "type": "started"
+        },
+        {
+          "seq": 2,
+          "at": 1791650862.347775,
+          "node": "step-mv2mnvnu",
+          "type": "waiting_input"
+        },
+        {
+          "seq": 3,
+          "answer": "Préparer une intervention lundi sur notre planning.",
+          "at": 1791650862.623425,
+          "node": "step-mv2mnvnu",
+          "question": "q958fa42c7b7948fa",
+          "type": "answer"
+        },
+        {
+          "seq": 4,
+          "at": 1791650862.6234882,
+          "node": "start",
+          "type": "ready"
+        },
+        {
+          "seq": 5,
+          "at": 1791650862.839245,
+          "attempt": 1,
+          "node": "start",
+          "type": "running"
+        },
+        {
+          "seq": 6,
+          "at": 1791650863.3182247,
+          "attempt": 1,
+          "node": "start",
+          "type": "returned"
+        },
+        {
+          "seq": 7,
+          "actor": "validation-policy",
+          "at": 1791650863.3185556,
+          "node": "start",
+          "type": "accepted"
+        },
+        {
+          "seq": 8,
+          "at": 1791650863.3193018,
+          "node": "step-mv2mnw7o",
+          "type": "waiting"
+        },
+        {
+          "seq": 9,
+          "at": 1791650864.1814725,
+          "node": "step-mv2mnw7o",
+          "outcome": "Accorder",
+          "type": "decision"
+        },
+        {
+          "seq": 10,
+          "at": 1791650864.1815214,
+          "node": null,
+          "type": "completed"
+        }
+      ],
+      "events_next": null
+    }
+  ]
+}

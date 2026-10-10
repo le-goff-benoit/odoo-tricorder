@@ -279,6 +279,22 @@ def origin(engine, run, connection=None):
     return {'kind': kind, 'run': row['id'], 'title': row['title'], 'project': row['project']} if row else None
 
 
+def timing(engine, run, connection=None):
+    """Wall time from recorded events, never the last edit/archive timestamp."""
+    finished = None
+    if run['status'] in {'completed', 'cancelled'}:
+        def read(db):
+            row = db.execute("SELECT json_extract(body, '$.at') AS at FROM events WHERE run=? AND json_extract(body, '$.type') IN ('completed', 'cancel') ORDER BY seq DESC LIMIT 1", (run['id'],)).fetchone()
+            return row['at'] if row else None
+        if connection is not None:
+            finished = read(connection)
+        else:
+            with engine.store.connect() as db:
+                finished = read(db)
+    return {'started': run.get('created'), 'finished': finished,
+            'duration': max(0, finished - run['created']) if finished is not None else None}
+
+
 def summary(run, *, engine=None, connection=None):
     conversation = run.get("parameters", {}).get("conversation")
     definitions = {node['id']: node for node in run['definition']['nodes']}
@@ -306,6 +322,7 @@ def summary(run, *, engine=None, connection=None):
         from .associated_actions import view
         result["associated"] = view(engine, run)
     if engine:
+        result['timing'] = timing(engine, run, connection)
         result['origin'] = origin(engine, run, connection)
     if engine and any("children" in state for state in run["nodes"].values()):
         groups, child_workers, total = _coordination(engine, run)
@@ -315,9 +332,12 @@ def summary(run, *, engine=None, connection=None):
     return result
 
 
-def run_page(engine, project=None, *, offset=0, limit=PAGE, query="", status="", simulation=None, archived=False, workflow=None, attention_first=False):
+def run_page(engine, project=None, *, offset=0, limit=PAGE, query="", status="", simulation=None, archived=False, workflow=None, attention_first=False, scope="all"):
     offset, limit = paging(offset, limit)
     where, args = [], []
+    require(scope in {'all', 'current', 'history'}, "Vue d’exécution inconnue")
+    if scope != 'all':
+        where.append("json_extract(body, '$.status') IN " + ("('active','paused')" if scope == 'current' else "('completed','cancelled')"))
     for key, value in (("project", project), ("status", status or None), ("original.id", workflow)):
         if value is not None:
             where.append("json_extract(body, '$." + key + "')=?"); args.append(value)
@@ -423,6 +443,7 @@ def attempt_history(engine, state, node, *, threshold=8000, references=None):
 
 def run_detail(engine, run, *, references=None):
     result = copy.deepcopy(run)
+    result['timing'] = timing(engine, run)
     result['origin'] = origin(engine, run)
     result['focus'] = focus(run)
     result['health'] = health(run)

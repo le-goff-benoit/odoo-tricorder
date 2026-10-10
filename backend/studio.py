@@ -13,6 +13,7 @@ from workflow_engine.library import templates
 from workflow_engine.runtime import capabilities, dispatch, execute, preflight, reconcile, run_driver
 from workflow_engine.schedules import Schedules
 from workflow_engine.packs import inspect_pack, install, resolve_profiles, policy_readiness
+from workflow_engine.model_catalog import provider_models
 
 # Match electron/backend-request.cjs. Check the complete byte-boundary before
 # decoding, including callers other than Electron; never parse a truncated JSON.
@@ -152,7 +153,7 @@ def _request(engine, payload, *, human=False):
             engine.library_project()
         return import_definition(engine, payload["project"], payload["bundle"])
     if action == "overview.get":
-        return {"activity": engine.activity(payload.get("offset", 0)), "schedules": schedule_summaries(engine)}
+        return {"activity": engine.activity(payload.get("offset", 0), scope=payload.get("scope", "all")), "schedules": schedule_summaries(engine)}
     if action == "runtime.tick":
         Schedules(engine).tick()
         projects = {p["id"]: p for p in engine.projects()}
@@ -174,7 +175,7 @@ def _request(engine, payload, *, human=False):
     if action == "bootstrap":
         from workflow_engine.guidance import sync
         setup = sync(engine)
-        return {"activity": engine.activity(), "setup": setup, "providerDefaults": provider_defaults(), "projects": [{k:v for k,v in p.items() if k != "packs"} for p in engine.projects()], "templates": templates() + workflow_page(engine, "library")["items"], "template_page": workflow_page(engine, "library"), "capabilities": capabilities(engine.project(payload["project"]) if payload.get("project") else None, engine), "schedules": schedule_summaries(engine)}
+        return {"activity": engine.activity(), "setup": setup, "providerDefaults": provider_defaults(), "providerModels": provider_models(), "projects": [{k:v for k,v in p.items() if k != "packs"} for p in engine.projects()], "templates": templates() + workflow_page(engine, "library")["items"], "template_page": workflow_page(engine, "library"), "capabilities": capabilities(engine.project(payload["project"]) if payload.get("project") else None, engine), "schedules": schedule_summaries(engine)}
     if action == "design.workspace":
         from workflow_engine.guidance import prepare
         return prepare(engine.project(payload["project"]))

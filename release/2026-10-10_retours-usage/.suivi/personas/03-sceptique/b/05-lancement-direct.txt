@@ -1,0 +1,44 @@
+Activité
+Workflows
+Projets
+Essai développeur sceptique
+Planifications
+Connexions
+Paramètres
+Terminal
+
+
+
+
+← Retour à la liste
+Choisir l’IA
+Enregistrer
+Exécuter…
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Données structurées…
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+✦ Assistant IA
+☷ Liste
+Vérifier le runtime Python → Décider de la suite
+›_Vérifier le runtime PythonCommandeSans donnée provenant d’un autre bloc
+?Décider de la suiteDécision humaineVous
+
+
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+×
+Lancer dans le terminal
+Vérifier à nouveau
+Lancer l’exécution réelle
+Simuler le parcours

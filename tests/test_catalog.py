@@ -256,5 +256,33 @@ class CatalogTests(unittest.TestCase):
         self.assertEqual([a['id'] for a in attention], ['flow:plan-t01-old'])
 
 
+    def test_attention_counts_one_intervention_for_task_and_current_flow(self):
+        folder = self.project / '.odoo-agents/flows'
+        folder.mkdir()
+        self.write_json(folder / 'current.json', {
+            'status': 'blocked', 'plan_task': {'release': str(self.release), 'id': 'T01'}})
+        task = {'id': 'T01', 'title': 'Vérifier le compte rendu', 'status': 'blocked',
+                'source': 'plan', 'reason': 'Source de réunion manquante',
+                'flow': '.odoo-agents/flows/current.json'}
+        with patch.object(catalog, 'plan_tasks', return_value=([task], [])), \
+                patch.object(catalog, 'trusted_module', side_effect=ValueError('Outillage absent')):
+            attention = catalog.summary(self.project)['attention']
+        self.assertEqual(len(attention), 1)
+        self.assertEqual(attention[0]['title'], 'Vérifier le compte rendu')
+        self.assertEqual(attention[0]['reason'], 'Source de réunion manquante')
+        self.assertEqual(attention[0]['action'], 'Examiner le blocage')
+
+    def test_waiting_flow_explains_expected_action(self):
+        folder = self.project / '.odoo-agents/flows'
+        folder.mkdir()
+        self.write_json(folder / 'question.json', {'status': 'waiting_human', 'release': str(self.release)})
+        with patch.object(catalog, 'plan_tasks', return_value=([], [])), \
+                patch.object(catalog, 'trusted_module', side_effect=ValueError('Outillage absent')):
+            attention = catalog.summary(self.project)['attention']
+        self.assertEqual(len(attention), 1)
+        self.assertIn('réponse humaine', attention[0]['reason'])
+        self.assertEqual(attention[0]['action'], 'Répondre dans le workflow')
+
+
 if __name__ == '__main__':
     unittest.main()

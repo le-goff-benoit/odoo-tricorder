@@ -42,7 +42,7 @@ class CollectionTemplateTests(unittest.TestCase):
         graphs = templates()
         self.assertEqual([g['id'] for g in graphs[:5]], ['release-conversation', 'support-conversation',
                          'meeting-conversation', 'request-conversation', 'express-conversation'])
-        self.assertTrue(all(g['schema'] == 1 for g in graphs[:5]))
+        self.assertEqual([g['schema'] for g in graphs[:5]], [1, 1, 2, 1, 1])
         for graph in graphs:
             validate(graph)
         for key in ['intentions-plan-work', 'code-plan-integrate']:

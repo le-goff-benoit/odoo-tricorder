@@ -1,0 +1,140 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Sans projet
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Sans projet / Workflow
+    - heading "Accord intervention PME" [level=1]
+    - paragraph: Révision 1 · Modifications en attente
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer"
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Préparer la proposition · Tâche": "Préparer la proposition Tâche Utilise : demande initiale et contexte · Produit : Proposition"
+    - button "Relier vers Préparer la proposition"
+    - button "Relier depuis Préparer la proposition"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Tâche
+      - heading "Préparer la proposition" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Préparer la proposition
+      - text: Consigne
+      - textbox "Consigne": Préparer une proposition courte à partir du besoin transmis.
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Demande initiale et contexte du workflow. Aucune donnée transmise par un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem:
+            - strong: Proposition
+            - text: Texte · obligatoire Conservé dans le résultat de cette étape
+            - button "Modifier"
+            - button "Retirer"
+        - button "Ajouter un résultat attendu"
+      - button "Données de simulation…"
+      - text: Validation du résultat
+      - combobox "Validation du résultat":
+        - option "Vérifier la structure des sorties puis continuer" [selected]
+        - option "Attendre ma validation"
+      - text: La validation humaine ajoute une pause après cette tâche. Si une Décision humaine suit déjà ce bloc, choisissez ici le contrôle de structure pour éviter deux validations successives. Ce contrôle ne garantit pas la qualité métier.
+      - group: Organisation de l’étape
+      - text: Effort IA de cette étape
+      - combobox "Effort IA de cette étape":
+        - option "Utiliser le niveau de la conversation" [selected]
+        - option "low"
+        - option "medium"
+        - option "high"
+        - option "xhigh"
+      - group: Outils et plugins de cette étape
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+  - status: Bloc modifié. Enregistrez le workflow pour créer une révision.
+  - dialog "Ajouter un bloc":
+    - heading "Ajouter un bloc" [level=2]
+    - button "Fermer la fenêtre": ×
+    - text: Type d'étape
+    - combobox "Type d'étape":
+      - option "Entrée · Recueillir des intentions"
+      - option "Organisation · Pour chaque élément"
+      - option "Organisation · Intégrer les modifications"
+      - option "Travail · Tâche IA autonome"
+      - option "Travail · Tâche guidée dans la conversation" [selected]
+      - option "Travail · Commande"
+      - option "Travail · Document"
+      - option "Aiguillage · Évaluation par un agent"
+      - option "Aiguillage · Règle explicite"
+      - option "Décision · Accord humain"
+      - option "Décision · Question ouverte"
+      - option "Organisation · Réunir"
+      - option "Organisation · Sous-workflow"
+      - option "Organisation · Surveillance"
+      - option "Travail · Opération externe"
+      - option "Travail · Communication"
+    - paragraph: L’agent de la conversation réalise la consigne. Choisissez dans le bloc si son résultat attend votre validation.
+    - text: Nom du bloc
+    - textbox "Nom du bloc":
+      - /placeholder: Quel résultat attendre ?
+    - button "Ajouter au workflow"

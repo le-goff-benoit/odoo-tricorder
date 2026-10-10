@@ -1,0 +1,26 @@
+Workflows
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 17:29
+En cours
+Modèles
+Historique
+Workflows
+
+Les demandes terminées et leurs résultats.
+
+Nouvelle demande
+Actualiser
+Client Boréal : export PDF vide, bug suspecté. Impact inconnu. Demander les précisions puis préparer le texte d’un brouillon email Gmail, sans envoi.
+Demande · Sans projet · Support — diagnostic et réponse · Rév. 2 · Simulation · 10.10.2026 17:28:16
+Terminée
+Durée totale : 40 s · attentes comprises
+→
+Client Atlas : bug suspecté, export PDF vide. Je ne sais pas combien de personnes sont bloquées. Préciser impact puis préparer une réponse à coller dans un ticket Odoo. Aucun envoi.
+Demande · Sans projet · Support Atlas — ticket Odoo · Rév. 1 · Simulation · 10.10.2026 17:25:08
+Terminée
+Durée totale : 16 s · attentes comprises
+→
+Gestion des workflows

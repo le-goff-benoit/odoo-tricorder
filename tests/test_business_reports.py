@@ -60,6 +60,16 @@ class BusinessReportTests(unittest.TestCase):
         self.assertNotIn("Échec", report)
         self.assertEqual(self.engine.run(self.current["id"])["nodes"]["work"]["status"], "returned")
 
+    def test_business_report_uses_same_urgency_labels_and_omits_unrelated_code_sections(self):
+        self.submit("Réponse prête.", "reponse.md", {"severity": "normal", "response": "Texte pour le ticket."})
+        report = markdown(self.current)
+        self.assertIn("Niveau d’urgence", report)
+        self.assertIn("Sans urgence établie", report)
+        self.assertIn("Réponse préparée", report)
+        self.assertNotIn("diff/candidat", report)
+        self.assertNotIn("version déployée", report)
+        self.assertIn("Références techniques de l’exécution</summary>", report)
+
     def test_unknown_fields_survive_and_untrusted_values_cannot_form_links_or_html(self):
         report = "\n".join(value_lines({"custom_field": "KEEP", "actions": [{"action": "<script>x</script>", "owner": "[click](javascript:bad)", "due": "A | B", "extra": "RETAIN"}]}))
         self.assertIn("KEEP", report)

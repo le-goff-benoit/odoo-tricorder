@@ -1,0 +1,521 @@
+{
+  "candidate": "/tmp/tricorder-panel-final",
+  "atlas": {
+    "description": "Adaptation Atlas révisée : décisions et responsables attendus.",
+    "edges": [
+      {
+        "from": "select",
+        "id": "select-review",
+        "mapping": {
+          "selected_meetings": "selected_meetings"
+        },
+        "outcome": "done",
+        "to": "review"
+      },
+      {
+        "from": "review",
+        "id": "review-mail",
+        "mapping": {
+          "actions": "actions",
+          "analysis": "analysis"
+        },
+        "outcome": "done",
+        "to": "mail"
+      }
+    ],
+    "id": "work-8ad64c35-5bf4-40fa-830f-203174391cad",
+    "nodes": [
+      {
+        "id": "select",
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "selected_meetings": {
+            "items": "object",
+            "minItems": 1,
+            "required": true,
+            "type": "array"
+          }
+        },
+        "position": {
+          "x": 70,
+          "y": 100
+        },
+        "profile": "generalist",
+        "prompt": "Lire la demande initiale. Identifier les réunions visées : titres ou liens précis, ou période avec ses dates. Il peut y avoir plusieurs réunions dans une semaine. Si le périmètre manque, demander avec ask quelles réunions ou quelle période examiner. Utiliser seulement les sources fournies ou réellement accessibles. Si une recherche produit plusieurs réunions et que la sélection est ambiguë, présenter les titres et dates et faire préciser le choix avec ask. Pour chaque réunion sélectionnée, transmettre titre, date si connue, référence de la source, transcription ou notes effectivement lues et limites. Sans source exploitable, demander la transcription ou les notes avec ask ; ne pas inventer de réunion ou d’accès Meeting Minutes.",
+        "sample_outputs": {
+          "selected_meetings": [
+            {
+              "date": "À préciser",
+              "notes": "Le périmètre du prochain atelier reste à confirmer.",
+              "source": "Notes synthétiques de démonstration",
+              "title": "Atelier fictif"
+            }
+          ]
+        },
+        "title": "Choisir les réunions et leurs sources",
+        "validation": "contract"
+      },
+      {
+        "id": "review",
+        "inputs": {
+          "selected_meetings": {
+            "items": "object",
+            "minItems": 1,
+            "required": true,
+            "type": "array"
+          }
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "actions": "array",
+          "analysis": "string"
+        },
+        "position": {
+          "x": 450,
+          "y": 100
+        },
+        "profile": "generalist",
+        "prompt": "Analyser les sources des réunions sélectionnées. Présenter les faits et décisions par réunion avec leur provenance ; distinguer décisions, propositions, contradictions et inconnues. Extraire les actions avec responsable et échéance uniquement lorsqu’ils sont explicites ; sinon indiquer à préciser. Poser une question avec ask seulement si une information manque pour produire un résultat utile. Signaler les autres incertitudes dans l’analyse, sans imposer une validation intermédiaire du compte rendu.",
+        "sample_outputs": {
+          "actions": [
+            {
+              "action": "Confirmer le périmètre de l’atelier",
+              "due": "À préciser",
+              "owner": "À préciser"
+            }
+          ],
+          "analysis": "Exemple : les notes de l’atelier fictif laissent le périmètre à confirmer ; aucune décision définitive."
+        },
+        "title": "Analyser les réunions sélectionnées",
+        "validation": "contract"
+      },
+      {
+        "id": "mail",
+        "inputs": {
+          "actions": "array",
+          "analysis": "string"
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "actions": "array",
+          "draft": "string",
+          "minutes": "string"
+        },
+        "position": {
+          "x": 850,
+          "y": 100
+        },
+        "profile": "generalist",
+        "prompt": "À partir de l’analyse et des actions reçues, produire un compte rendu fidèle, la liste d’actions et un texte d’email avec objet et corps. Distinguer les différentes réunions et reprendre les sources, décisions et points à préciser. Ne pas inventer de destinataires. Présenter les incertitudes avec le résultat ; demander une précision seulement si elle est indispensable. Aucun email envoyé ni brouillon créé dans Gmail ; une éventuelle publication exige une opération configurée et autorisée séparément.",
+        "sample_outputs": {
+          "actions": [
+            {
+              "action": "Confirmer le périmètre de l’atelier",
+              "due": "À préciser",
+              "owner": "À préciser"
+            }
+          ],
+          "draft": "Exemple de texte d’email : voici le compte rendu et l’action à préciser. Aucun email envoyé ni brouillon Gmail créé.",
+          "minutes": "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer."
+        },
+        "title": "Préparer le compte rendu et l’email",
+        "validation": "contract"
+      }
+    ],
+    "parameters": {},
+    "revision": 3,
+    "schema": 2,
+    "title": "Comité Atlas",
+    "_project": "p3512b9c7d6114a70"
+  },
+  "boreal": {
+    "description": "Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.",
+    "edges": [
+      {
+        "from": "select",
+        "id": "select-review",
+        "mapping": {
+          "selected_meetings": "selected_meetings"
+        },
+        "outcome": "done",
+        "to": "review"
+      },
+      {
+        "from": "review",
+        "id": "review-mail",
+        "mapping": {
+          "actions": "actions",
+          "analysis": "analysis"
+        },
+        "outcome": "done",
+        "to": "mail"
+      }
+    ],
+    "id": "work-ec1c8c5b-4395-4486-b6bb-5dbdf79b6a64",
+    "nodes": [
+      {
+        "id": "select",
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "selected_meetings": {
+            "items": "object",
+            "minItems": 1,
+            "required": true,
+            "type": "array"
+          }
+        },
+        "position": {
+          "x": 70,
+          "y": 100
+        },
+        "profile": "generalist",
+        "prompt": "Lire la demande initiale. Identifier les réunions visées : titres ou liens précis, ou période avec ses dates. Il peut y avoir plusieurs réunions dans une semaine. Si le périmètre manque, demander avec ask quelles réunions ou quelle période examiner. Utiliser seulement les sources fournies ou réellement accessibles. Si une recherche produit plusieurs réunions et que la sélection est ambiguë, présenter les titres et dates et faire préciser le choix avec ask. Pour chaque réunion sélectionnée, transmettre titre, date si connue, référence de la source, transcription ou notes effectivement lues et limites. Sans source exploitable, demander la transcription ou les notes avec ask ; ne pas inventer de réunion ou d’accès Meeting Minutes.",
+        "sample_outputs": {
+          "selected_meetings": [
+            {
+              "date": "À préciser",
+              "notes": "Le périmètre du prochain atelier reste à confirmer.",
+              "source": "Notes synthétiques de démonstration",
+              "title": "Atelier fictif"
+            }
+          ]
+        },
+        "title": "Choisir les réunions et leurs sources",
+        "validation": "contract"
+      },
+      {
+        "id": "review",
+        "inputs": {
+          "selected_meetings": {
+            "items": "object",
+            "minItems": 1,
+            "required": true,
+            "type": "array"
+          }
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "actions": "array",
+          "analysis": "string"
+        },
+        "position": {
+          "x": 450,
+          "y": 100
+        },
+        "profile": "generalist",
+        "prompt": "Analyser les sources des réunions sélectionnées. Présenter les faits et décisions par réunion avec leur provenance ; distinguer décisions, propositions, contradictions et inconnues. Extraire les actions avec responsable et échéance uniquement lorsqu’ils sont explicites ; sinon indiquer à préciser. Poser une question avec ask seulement si une information manque pour produire un résultat utile. Signaler les autres incertitudes dans l’analyse, sans imposer une validation intermédiaire du compte rendu.",
+        "sample_outputs": {
+          "actions": [
+            {
+              "action": "Confirmer le périmètre de l’atelier",
+              "due": "À préciser",
+              "owner": "À préciser"
+            }
+          ],
+          "analysis": "Exemple : les notes de l’atelier fictif laissent le périmètre à confirmer ; aucune décision définitive."
+        },
+        "title": "Analyser les réunions sélectionnées",
+        "validation": "contract"
+      },
+      {
+        "id": "mail",
+        "inputs": {
+          "actions": "array",
+          "analysis": "string"
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "actions": "array",
+          "draft": "string",
+          "minutes": "string"
+        },
+        "position": {
+          "x": 850,
+          "y": 100
+        },
+        "profile": "generalist",
+        "prompt": "À partir de l’analyse et des actions reçues, produire un compte rendu fidèle, la liste d’actions et un texte d’email avec objet et corps. Distinguer les différentes réunions et reprendre les sources, décisions et points à préciser. Ne pas inventer de destinataires. Présenter les incertitudes avec le résultat ; demander une précision seulement si elle est indispensable. Aucun email envoyé ni brouillon créé dans Gmail ; une éventuelle publication exige une opération configurée et autorisée séparément.",
+        "sample_outputs": {
+          "actions": [
+            {
+              "action": "Confirmer le périmètre de l’atelier",
+              "due": "À préciser",
+              "owner": "À préciser"
+            }
+          ],
+          "draft": "Exemple de texte d’email : voici le compte rendu et l’action à préciser. Aucun email envoyé ni brouillon Gmail créé.",
+          "minutes": "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer."
+        },
+        "title": "Préparer le compte rendu et l’email",
+        "validation": "contract"
+      }
+    ],
+    "parameters": {},
+    "revision": 1,
+    "schema": 2,
+    "title": "Comité Boréal",
+    "_project": "pa7bd694bccbc4d3c"
+  },
+  "run": {
+    "run": {
+      "completion_outcome": "succeeded",
+      "contract": "90de0028f4c6e61147ae57653e27f33cb258cfed69054f751c0c20ebe2d033fb",
+      "created": 1791650855.1009512,
+      "definition": {
+        "edges": [
+          {
+            "from": "ask",
+            "id": "after",
+            "outcome": "done",
+            "to": "work"
+          }
+        ],
+        "id": "suivi-client",
+        "nodes": [
+          {
+            "id": "ask",
+            "kind": "question",
+            "outputs": {
+              "answer": "string"
+            },
+            "question": "Quel comité reprendre ?",
+            "title": "Préciser la demande"
+          },
+          {
+            "id": "work",
+            "kind": "task",
+            "outputs": {
+              "result": "string"
+            },
+            "sample_outputs": {
+              "result": "Synthèse simulée Atlas : envoyer le relevé de décisions."
+            },
+            "title": "Préparer la synthèse",
+            "validation": "contract"
+          }
+        ],
+        "parameters": {},
+        "schema": 1,
+        "title": "Synthèse de comité Atlas"
+      },
+      "driver": "automatic",
+      "id": "r0bfc9088a643494a",
+      "nodes": {
+        "ask": {
+          "attempt": 0,
+          "input_sources": {},
+          "inputs": {
+            "clarifications": [
+              {
+                "answer": "Comité Atlas du lundi, décisions et responsables.",
+                "question": "Quel comité reprendre ?"
+              }
+            ]
+          },
+          "outcome": "done",
+          "question": {
+            "answer": "Comité Atlas du lundi, décisions et responsables.",
+            "answered": 1791650861.6104913,
+            "created": 1791650855.101665,
+            "id": "q4f2f0ea8b7524c06",
+            "status": "answered",
+            "text": "Quel comité reprendre ?"
+          },
+          "questions": [
+            {
+              "answer": "Comité Atlas du lundi, décisions et responsables.",
+              "answered": 1791650861.6104913,
+              "created": 1791650855.101665,
+              "id": "q4f2f0ea8b7524c06",
+              "status": "answered",
+              "text": "Quel comité reprendre ?"
+            }
+          ],
+          "result": {
+            "ok": true,
+            "outputs": {
+              "answer": "Comité Atlas du lundi, décisions et responsables."
+            },
+            "summary": "Information fournie"
+          },
+          "status": "accepted"
+        },
+        "work": {
+          "attempt": 1,
+          "finished": 1791650862.2006814,
+          "heartbeat": 1791650861.7908938,
+          "input_sources": {},
+          "inputs": {},
+          "outcome": "done",
+          "ownership": "managed",
+          "pid": 327778,
+          "processes": [
+            {
+              "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+              "pid": 327778,
+              "session": 327778,
+              "start": "780354"
+            }
+          ],
+          "receipt": {
+            "actor": "contract-policy",
+            "at": 1791650862.2010434,
+            "checks": [
+              "executor-success",
+              "output-types",
+              "evidence-integrity"
+            ],
+            "contract": "90de0028f4c6e61147ae57653e27f33cb258cfed69054f751c0c20ebe2d033fb",
+            "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+          },
+          "result": {
+            "evidence": [
+              {
+                "sha256": "831e8d679ad1408922c8f6dba444d3836065f6a2bee2eefe459337ed25d8136f",
+                "size": 127
+              }
+            ],
+            "ok": true,
+            "outputs": {
+              "result": "Synthèse simulée Atlas : envoyer le relevé de décisions."
+            },
+            "simulated": true,
+            "summary": "SIMULATION — Résultat d'exemple pour « Préparer la synthèse ». Aucun outil métier ni service externe n'a été appelé."
+          },
+          "started": 1791650861.7171717,
+          "status": "accepted",
+          "token": "t43ae4911c3f44f30"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "edges": [
+          {
+            "from": "ask",
+            "id": "after",
+            "outcome": "done",
+            "to": "work"
+          }
+        ],
+        "id": "suivi-client",
+        "nodes": [
+          {
+            "id": "ask",
+            "kind": "question",
+            "outputs": {
+              "answer": "string"
+            },
+            "question": "Quel comité reprendre ?",
+            "title": "Préciser la demande"
+          },
+          {
+            "id": "work",
+            "kind": "task",
+            "outputs": {
+              "result": "string"
+            },
+            "sample_outputs": {
+              "result": "Synthèse simulée Atlas : envoyer le relevé de décisions."
+            },
+            "title": "Préparer la synthèse",
+            "validation": "contract"
+          }
+        ],
+        "schema": 1,
+        "title": "Synthèse de comité Atlas"
+      },
+      "packs": [],
+      "parameters": {},
+      "plugins": {
+        "path": "/tmp/tricorder-consultant-final-wHfDFt/projects/p3512b9c7d6114a70/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p3512b9c7d6114a70",
+      "release": "",
+      "scope": {
+        "id": "p3512b9c7d6114a70",
+        "kind": "project"
+      },
+      "simulation": true,
+      "status": "completed",
+      "transports": {},
+      "updated": 1791650862.201131,
+      "timing": {
+        "started": 1791650855.1009512,
+        "finished": 1791650862.2010963,
+        "duration": 7.100145101547241
+      },
+      "origin": null,
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      }
+    },
+    "events": [
+      {
+        "seq": 1,
+        "at": 1791650855.101603,
+        "node": null,
+        "simulation": true,
+        "type": "started"
+      },
+      {
+        "seq": 2,
+        "at": 1791650855.102323,
+        "node": "ask",
+        "type": "waiting_input"
+      },
+      {
+        "seq": 9,
+        "answer": "Comité Atlas du lundi, décisions et responsables.",
+        "at": 1791650861.610501,
+        "node": "ask",
+        "question": "q4f2f0ea8b7524c06",
+        "type": "answer"
+      },
+      {
+        "seq": 10,
+        "at": 1791650861.6105626,
+        "node": "work",
+        "type": "ready"
+      },
+      {
+        "seq": 11,
+        "at": 1791650861.7171757,
+        "attempt": 1,
+        "node": "work",
+        "type": "running"
+      },
+      {
+        "seq": 12,
+        "at": 1791650862.200719,
+        "attempt": 1,
+        "node": "work",
+        "type": "returned"
+      },
+      {
+        "seq": 13,
+        "actor": "validation-policy",
+        "at": 1791650862.201047,
+        "node": "work",
+        "type": "accepted"
+      },
+      {
+        "seq": 14,
+        "at": 1791650862.2010963,
+        "node": null,
+        "type": "completed"
+      }
+    ],
+    "events_next": null
+  }
+}

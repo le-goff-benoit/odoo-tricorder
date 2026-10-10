@@ -1,0 +1,9 @@
+# Contre-épreuve ciblée — candidat final B
+
+Le 10 octobre 2026 sur `/tmp/tricorder-release-final-b`, vraie fenêtre Electron 1440 × 1000, HOME temporaire neuf. [Script autonome](contre-epreuve.cjs), [journal](contre-epreuve.log). Exit 0, marqueur `CONTRE_EPREUVE_OK`. Pas de nouveau parcours complet ni d’exécution fournisseur : un brouillon GUI suffit à vérifier les trois modifications. Le rapport initial reste inchangé.
+
+- Accord humain : dès sa création, les choix sont « Approuver la suite » et « Refuser la suite ». Je n’ai plus à traduire approve/reject. [Capture](recheck-02-choix-francais.png).
+- Règle explicite : après sélection du paramètre Canal, l’aide indique « Valeurs exactes de l’information ou du paramètre choisi ». Elle correspond désormais à ma configuration fixe. Les exemples true/false restent à remplacer dans le champ ; petit coût conservé. [Capture](recheck-03-aide-parametre.png).
+- Retrouver ma création : le formulaire explique le chemin Workflows → Gestion des workflows → Workflows enregistrés et précise la création d’un modèle partagé via Réutiliser ce workflow. La section Gestion parle des créations/adaptations avec ou sans projet. Le bouton et le titre « Workflows enregistrés » retrouvent effectivement mon brouillon Sans projet. [Aide de création](recheck-01-creation.png), [gestion](recheck-04-gestion.png), [création retrouvée](recheck-05-retrouve.png).
+
+Verdict révisé : les trois points annoncés sont reçus. Le parcours de conception et modification des deux intentions reste celui démontré sur le candidat figé. Le texte guide désormais correctement mon classement ; sa découvrabilité sur une utilisation espacée n’est pas prouvée par cette contre-épreuve guidée. Restent des coûts mineurs : tâche initiale à remplacer pour commencer par une règle, exemples booléens et identifiants normalisés ponctuellement visibles. Aucun obstacle supplémentaire observé sur cette vérification ciblée.

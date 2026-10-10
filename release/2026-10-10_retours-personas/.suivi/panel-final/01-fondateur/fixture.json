@@ -1,0 +1,36 @@
+{
+  "directory": "/tmp/tricorder-founder-n7bRIF",
+  "fixture": {
+    "atlas": {
+      "id": "p4858d890d2fc40b7",
+      "title": "Client Atlas",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/tricorder-founder-n7bRIF/projects/p4858d890d2fc40b7",
+      "managed": true
+    },
+    "orion": {
+      "id": "pb9044ae1b5da4e06",
+      "title": "Client Orion",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/tricorder-founder-n7bRIF/projects/pb9044ae1b5da4e06",
+      "managed": true
+    },
+    "pending": "r43b393759a474195",
+    "done": "r52d59305484f4035"
+  },
+  "declared": "Projets synthétiques. Fournisseurs inertes. États créés par Engine."
+}

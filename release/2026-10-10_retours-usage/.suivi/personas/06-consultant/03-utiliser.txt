@@ -1,0 +1,198 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Boréal"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Modèles de workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+    - text: Composer et réutiliser
+    - heading "Modèles de workflows" [level=1]
+    - paragraph: Choisissez un modèle, adaptez ses étapes, puis lancez votre conversation.
+    - button "Importer un workflow"
+    - button "+ Créer un modèle"
+    - text: Rechercher un modèle
+    - searchbox "Rechercher un modèle"
+    - text: "Destination :"
+    - strong: Sans projet
+    - article:
+      - text: 6 blocs
+      - heading "De la demande au résultat" [level=3]
+      - paragraph: Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 2 blocs
+      - heading "Commande locale avec validation" [level=3]
+      - paragraph: Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 4 blocs
+      - heading "Évolution logicielle" [level=3]
+      - paragraph: Analyser, proposer du code dans une copie isolée, tester cette copie et décider de son application locale. Choisir les modèles et adapter la commande de test au projet.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 9 blocs
+      - heading "Release — demandes, plan, réalisation et validation" [level=3]
+      - paragraph: "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves."
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 8 blocs
+      - heading "Support — diagnostic et réponse" [level=3]
+      - paragraph: Distinguer la nature de la demande et son urgence, préciser les faits manquants puis préparer une réponse pour Gmail ou un ticket Odoo. Aucun message envoyé.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 3 blocs
+      - heading "Clôture de réunion" [level=3]
+      - paragraph: Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 3 blocs
+      - heading "Demande ponctuelle" [level=3]
+      - paragraph: "Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis."
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 6 blocs
+      - heading "Correction express" [level=3]
+      - paragraph: Qualifier un défaut local et réversible, corriger et vérifier. Les demandes portant sur droits, données, schéma ou calcul financier sont réorientées.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 5 blocs
+      - heading "Intentions, plan et travaux" [level=3]
+      - paragraph: "Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents."
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 7 blocs
+      - heading "Développement par élément et tests communs" [level=3]
+      - paragraph: Valider un plan de code, travailler dans des copies isolées puis intégrer les contributions et tester le candidat commun. Commandes Python unittest fournies comme exemples à adapter ; aucun déploiement ni recette Odoo implicite.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 3 blocs
+      - heading "Nouveau message → notification" [level=3]
+      - paragraph: "Brouillon : détecter les nouveaux messages d'un expéditeur confirmé, puis notifier le destinataire choisi. Aucun modèle IA nécessaire pour un filtre exact."
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 8 blocs
+      - 'heading "GitHub → Odoo.sh : staging puis production" [level=3]'
+      - paragraph: Configurer les cibles, le SHA testé et les adaptateurs. Publication GitHub, build Odoo.sh et vérification de la version déployée restent distincts. La documentation est facultative.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 5 blocs
+      - heading "Livraison directe en production" [level=3]
+      - paragraph: "Parcours sans staging imposé : candidat testé, accord exact, publication et version observée. Configurer la cible et le connecteur avant lancement."
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 4 blocs
+      - heading "Documentation → Confluence" [level=3]
+      - paragraph: Préparer le contenu et la version de base, relire, publier après accord exact, puis relire la page distante. Configurer un adaptateur Confluence avec contrôle de version.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 1 bloc
+      - heading "Orchestration" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 1 bloc
+      - heading "Analyse" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 1 bloc
+      - heading "Développement" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 1 bloc
+      - heading "Tests" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 1 bloc
+      - heading "Gestion documentaire" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+    - article:
+      - text: 1 bloc
+      - heading "Communication" [level=3]
+      - paragraph: Composant réutilisable à adapter au projet.
+      - button "Utiliser"
+      - button "Personnaliser une copie…"
+  - dialog "Créer un workflow":
+    - heading "Créer un workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Partez d’une première tâche ou d’un modèle. Configurez les blocs dans l’éditeur. Vos demandes seront données au lancement ou dans le terminal.
+    - text: Modèle de workflow
+    - combobox "Modèle de workflow":
+      - option "Workflow simple — première tâche"
+      - option "De la demande au résultat"
+      - option "Commande locale avec validation"
+      - option "Évolution logicielle"
+      - option "Release — demandes, plan, réalisation et validation"
+      - option "Support — diagnostic et réponse"
+      - option "Clôture de réunion" [selected]
+      - option "Demande ponctuelle"
+      - option "Correction express"
+      - option "Intentions, plan et travaux"
+      - option "Développement par élément et tests communs"
+      - option "Nouveau message → notification"
+      - 'option "GitHub → Odoo.sh : staging puis production"'
+      - option "Livraison directe en production"
+      - option "Documentation → Confluence"
+      - option "Orchestration"
+      - option "Analyse"
+      - option "Développement"
+      - option "Tests"
+      - option "Gestion documentaire"
+      - option "Communication"
+    - text: Nom du workflow
+    - textbox "Nom du workflow": Clôture de réunion
+    - text: Enregistrer dans
+    - combobox "Enregistrer dans":
+      - option "Sans projet" [selected]
+      - option "Client Atlas"
+      - option "Client Boréal"
+    - paragraph: Le workflow sera enregistré dans .tricorder/workflows/ du dossier choisi, prêt à versionner avec Git. Le lancement vient ensuite ; aucun commit ni envoi automatique.
+    - button "Créer et ouvrir le workflow"

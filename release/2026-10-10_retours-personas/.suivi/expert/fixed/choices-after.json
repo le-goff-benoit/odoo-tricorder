@@ -1,0 +1,79 @@
+{
+  "edges": [
+    {
+      "from": "step-mv2m7le6",
+      "id": "edge-mv2m7n3b",
+      "mapping": {},
+      "outcome": "Email_client",
+      "to": "step-mv2m7mja"
+    },
+    {
+      "from": "step-mv2m7le6",
+      "id": "edge-mv2m7nvl",
+      "mapping": {},
+      "outcome": "Ticket_Odoo",
+      "to": "step-mv2m7nd3"
+    }
+  ],
+  "id": "work-5dc5de54-13d4-4f65-be42-d59fff3c0b48",
+  "nodes": [
+    {
+      "completion_outcome": "succeeded",
+      "criteria": [],
+      "id": "step-mv2m7le6",
+      "inputs": {},
+      "kind": "decision",
+      "max_attempts": 1,
+      "option_labels": {
+        "Email_client": "Écrire au client",
+        "Ticket_Odoo": "Répondre dans Odoo"
+      },
+      "options": [
+        "Email_client",
+        "Ticket_Odoo"
+      ],
+      "outputs": {},
+      "phase": "",
+      "position": {
+        "x": 364,
+        "y": 80
+      },
+      "question": "Préparer un email client ou une réponse dans le ticket Odoo ?",
+      "resources": [],
+      "title": "Choisir où répondre"
+    },
+    {
+      "criteria": [],
+      "id": "step-mv2m7mja",
+      "kind": "question",
+      "outputs": {
+        "answer": "string"
+      },
+      "position": {
+        "x": 471,
+        "y": 263
+      },
+      "question": "Confirmer Email client",
+      "title": "Confirmer Email client"
+    },
+    {
+      "criteria": [],
+      "id": "step-mv2m7nd3",
+      "kind": "question",
+      "outputs": {
+        "answer": "string"
+      },
+      "position": {
+        "x": 616,
+        "y": 416
+      },
+      "question": "Confirmer Ticket Odoo",
+      "title": "Confirmer Ticket Odoo"
+    }
+  ],
+  "parameters": {},
+  "revision": 4,
+  "schema": 2,
+  "title": "Choisir la destination",
+  "_project": "workspace"
+}

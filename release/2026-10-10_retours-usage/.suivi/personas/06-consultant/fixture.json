@@ -1,0 +1,30 @@
+[
+  {
+    "id": "p7bf9c6856aab454e",
+    "title": "Client Atlas",
+    "packs": [],
+    "defaults": {
+      "provider": "codex",
+      "profile": "generalist",
+      "model": "",
+      "effort": "medium",
+      "session": "delegated"
+    },
+    "path": "/tmp/tricorder-persona06-home-QYwLab/projects/p7bf9c6856aab454e",
+    "managed": true
+  },
+  {
+    "id": "pb93fec289b664167",
+    "title": "Client Boréal",
+    "packs": [],
+    "defaults": {
+      "provider": "codex",
+      "profile": "generalist",
+      "model": "",
+      "effort": "medium",
+      "session": "delegated"
+    },
+    "path": "/tmp/tricorder-persona06-home-QYwLab/projects/pb93fec289b664167",
+    "managed": true
+  }
+]

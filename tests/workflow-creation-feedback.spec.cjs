@@ -7,6 +7,7 @@ const call = (action, data = {}) => page.evaluate(payload => window.studio.reque
 const snapshot = () => call('workflow.get', { project: project.id, workflow: 'creation-review' });
 async function openWorkflow() {
   await page.locator('[data-workflow-route=global]').click();
+  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.locator('[data-action=open-workflow][data-id=creation-review]').click();
 }
 async function seed(graph) {
@@ -48,7 +49,7 @@ test('typed simulation data persists and a false boolean follows only the normal
   ], edges: [{ id: 'data', from: 'collect', to: 'route', mapping: { critical: 'critical' } }, { id: 'true', from: 'route', to: 'urgent', outcome: 'true' }, { id: 'false', from: 'route', to: 'normal', outcome: 'false' }] });
   await page.locator('.node[data-id=collect]').click();
   const qa = page.locator('#node-form details').filter({ has: page.getByText('Contrôle de code (QA)', { exact: true }) });
-  await expect(qa).not.toHaveAttribute('open');
+  await expect(qa).toHaveCount(0);
   await page.getByRole('button', { name: 'Données de simulation…', exact: true }).click();
   const dialog = page.getByRole('dialog'), critical = dialog.locator('[data-sample-port=critical]');
   await expect(critical).toContainText('L’ancienne valeur n’est pas un booléen');
@@ -101,7 +102,7 @@ test('removing a middle block announces detached data and launch guidance leads 
 
 test('integrated template copies are explicitly named and the source remains available', async () => {
   await page.locator('[data-workflow-route=global]').click();
-  await page.getByRole('navigation', { name: 'Bibliothèque de workflows' }).getByRole('button', { name: 'Modèles', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Workflows' }).getByRole('button', { name: 'Modèles', exact: true }).click();
   const card = page.locator('.template-card').filter({ has: page.getByRole('heading', { name: 'Analyse', exact: true }) });
   await card.getByRole('button', { name: 'Personnaliser une copie…', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('Origine : Analyse'); await expect(page.getByLabel('Nom de votre modèle')).toHaveValue('Analyse — copie');
@@ -109,7 +110,7 @@ test('integrated template copies are explicitly named and the source remains ava
   await expect(page.getByRole('alert')).toContainText('nom distinct');
   await page.getByLabel('Nom de votre modèle').fill('Support interne — analyse'); await page.getByRole('button', { name: 'Créer la copie et l’ouvrir', exact: true }).click();
   await expect(page.locator('.workflow-heading h1')).toHaveText('Support interne — analyse');
-  await page.locator('[data-workflow-route=global]').click(); await page.getByRole('navigation', { name: 'Bibliothèque de workflows' }).getByRole('button', { name: 'Modèles', exact: true }).click();
+  await page.locator('[data-workflow-route=global]').click(); await page.getByRole('navigation', { name: 'Workflows' }).getByRole('button', { name: 'Modèles', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Analyse', exact: true })).toBeVisible();
   const copy = page.locator('.template-card').filter({ has: page.getByRole('heading', { name: 'Support interne — analyse', exact: true }) });
   await expect(copy).toContainText('Copie du modèle intégré');
@@ -144,7 +145,7 @@ test('portable import previews named blocks and data before optional technical J
   await app.evaluate(({ dialog }, selected) => { dialog.showSaveDialog = async () => ({ canceled: false, filePath: selected }); dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [selected] }); }, file);
   await page.locator('.design-menu > summary').click();
   await page.getByRole('button', { name: 'Exporter…', exact: true }).click(); await expect.poll(() => fs.existsSync(file)).toBe(true);
-  await page.locator('[data-workflow-route=global]').click(); await page.getByRole('button', { name: 'Importer un workflow', exact: true }).click();
+  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click(); await page.getByRole('button', { name: 'Importer un workflow', exact: true }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByText('Examiner les étapes et les données', { exact: true }).click();
   await dialog.getByText('Préparer le dossier métier · Tâche', { exact: true }).click();

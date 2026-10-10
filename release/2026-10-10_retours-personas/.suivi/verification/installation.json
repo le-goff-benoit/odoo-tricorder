@@ -1,0 +1,8 @@
+{
+  "version": "0.6.0-rc.15",
+  "previous": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.13/odoo-tricorder",
+  "launcher": "/home/blegoff/.local/bin/odoo-tricorder",
+  "target": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.15/odoo-tricorder",
+  "previous_preserved": true,
+  "deb_sha256": "412ec7dac56819a2fe010d3f865592820b9ff716df773e63ca5010d2fdfc5fd6"
+}

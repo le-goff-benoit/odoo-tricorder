@@ -137,7 +137,7 @@ test('initial request is acknowledged during launch and long terminal names rema
  const request='Préparer le compte rendu de la réunion pour Infrastructure Genève — '+('décisions, responsables et dates ; '.repeat(10))+'FIN DU NOM COMPLET';
  await page.locator('[data-workflow-route="overview"]').click();
  await page.getByRole('button',{name:'Nouvelle demande',exact:true}).click();
- await page.getByRole('dialog').getByRole('combobox',{name:'Workflow',exact:true}).selectOption(fixture.project.id+':examen');
+ await page.locator('#request-existing').check();await page.getByRole('dialog').getByRole('combobox',{name:'Workflow',exact:true}).selectOption(fixture.project.id+':examen');
  await page.getByRole('button',{name:'Continuer',exact:true}).click();
  await page.locator('#initial-request').fill(request);
  await page.evaluate(()=>{

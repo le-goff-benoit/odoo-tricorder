@@ -197,6 +197,11 @@ test('global Kanban: all projects, closed-release filter and exact task navigati
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await expect(page.locator('#task-modal')).toContainText('Contrôler les livraisons Nova');
     expect(JSON.parse(fs.readFileSync(path.join(second, 'changelog', releaseId, 'plan.json')))).toEqual(definition);
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', {name:'← Retour', exact:true}).click();
+    await expect(page.locator('#project-title')).toHaveText('Kanban global');
+    await expect(page.locator('[data-action=kanban-closed]')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.kanban-card')).toHaveCount(5);
   } finally {
     await closeWindow(app).catch(() => app.process().kill('SIGKILL'));
     await cleanupBroker(path.join(temp, 'run/pty.sock'));
@@ -908,6 +913,11 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await expect(page.locator('#release-select')).toHaveValue(releaseId);
     await expect(page.locator('.brand-name')).toHaveText('Tricorder');
     await expect(page.locator('.topbar')).not.toContainText(/poste local/i);
+    await page.locator('[data-project-attention]').click();
+    await expect(page.locator('#modal')).toContainText('Point bloqué');
+    await expect(page.locator('#modal')).toContainText('Historique');
+    await expect(page.locator('#modal').getByRole('button', {name:'Examiner le blocage', exact:true})).toBeVisible();
+    await page.locator('[data-action=modal-close]').click();
     await projectTab(page, 'express');
     await expect(page.locator('.express-card')).toHaveCount(1);
     await expect(page.locator('.express-card')).not.toContainText('Hors release');
@@ -921,6 +931,12 @@ test('lifecycle: releases, remembered tasks, terminal scope, attention and rapid
     await page.locator('#terminal-tabs [data-action="new-terminal"]').click();
     await expect(page.locator('.terminal-host')).toHaveCount(1);
     const terminal = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+    await page.locator('#release-select').selectOption(historical);
+    await page.getByRole('button', {name:'← Retour', exact:true}).click();
+    await expect(page.locator('#release-select')).toHaveValue(releaseId);
+    const afterBack = await page.evaluate(async () => (await window.tricorder.terminals.list())[0]);
+    expect(afterBack.pid).toBe(terminal.pid);
+    expect(afterBack.release).toBe(releaseId);
     await page.locator('#release-select').selectOption(historical);
     await projectTab(page, 'terminal');
     await expect(page.locator('#terminal-mismatch')).toBeVisible();
@@ -1723,9 +1739,9 @@ test('window integration preserves the native conversation while inspecting phas
     expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);
     await studio.getByRole('button', { name: 'Essayer un exemple' }).click();
     await studio.locator('.node[data-id="analyse"]').click();
-    // Selection keeps the compact graph visible; editing is an explicit action.
-    await expect(studio.locator('.canvas-area')).toBeVisible();
-    await studio.getByRole('button', { name: 'Propriétés', exact: true }).click();
+    // A compact selection opens editing directly; the live conversation stays mounted.
+    await expect(studio.locator('.canvas-area')).toBeHidden();
+    await expect(studio.getByRole('button', { name: 'Retour au graphe', exact: true })).toBeVisible();
     await studio.getByLabel('Nom du bloc', { exact: true }).fill('Brouillon non appliqué');
     await page.locator('#project-list [data-project=' + JSON.stringify(project) + ']').click();
     expect(await page.evaluate(() => window.conversationMarker)).toBe('preserved');

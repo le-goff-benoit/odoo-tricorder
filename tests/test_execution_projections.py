@@ -74,6 +74,24 @@ class ExecutionProjectionTests(unittest.TestCase):
         self.assertEqual(len(ids), 28)
         self.assertEqual(self.engine.run(pending['id'])['nodes']['question']['status'], 'waiting_input')
 
+    def test_hub_filters_before_pagination_and_duration_survives_archiving(self):
+        pending = self.engine.start(self.project['id'], graph([task('pending')]))
+        for _ in range(27):
+            done = self.engine.start(self.project['id'], graph([task('done')]))
+            self.submit(done['id'], 'done')
+        current = self.engine.activity(scope='current')
+        self.assertEqual([r['id'] for r in current['runs']], [pending['id']])
+        self.assertIsNone(current['runs'][0]['timing']['finished'])
+        history = self.engine.activity(scope='history')
+        self.assertEqual(history['total'], 27)
+        self.assertEqual(len(history['runs']), 25)
+        measured = history['runs'][0]['timing']
+        self.assertGreaterEqual(measured['duration'], 0)
+        from workflow_engine.lifecycle import archive
+        archive(self.engine, 'run', done['id'], True, human=True)
+        after = run_detail(self.engine, self.engine.run(done['id']))['timing']
+        self.assertEqual(after, measured)
+
     def test_activity_counts_pending_work_beyond_its_first_page(self):
         for _ in range(28):
             self.engine.start(self.project['id'], graph([

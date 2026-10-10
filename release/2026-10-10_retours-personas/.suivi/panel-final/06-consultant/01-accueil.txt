@@ -1,0 +1,47 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Boréal"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Activité
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - heading "Activité" [level=1]
+    - paragraph: Votre travail en cours et ce qui attend votre intervention. 2 demandes.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - heading "À traiter" [level=2]
+    - paragraph: 1 exécution affichée à traiter sur cette page.
+    - 'button "Synthèse de comité Atlas Demande · Client Atlas · Synthèse de comité Atlas · Simulation · 10.10.2026 18:47:35 Réponse attendue Préciser la demande Depuis le début : 1 s · attentes comprises"':
+      - strong: Synthèse de comité Atlas
+      - text: Demande · Client Atlas · Synthèse de comité Atlas · Simulation · 10.10.2026 18:47:35
+      - strong: Réponse attendue
+      - text: "Préciser la demande Depuis le début : 1 s · attentes comprises"
+    - heading "Autres exécutions" [level=2]
+    - text: 1 exécution affichée
+    - 'button "Synthèse validée Boréal Demande · Client Boréal · Synthèse validée Boréal Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Synthèse validée Boréal
+      - text: Demande · Client Boréal · Synthèse validée Boréal
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"

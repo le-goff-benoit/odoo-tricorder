@@ -374,7 +374,10 @@ def summary(root):
                 board.append({k: task.get(k) for k in ('id', 'title', 'status', 'progress', 'validation', 'reason', 'source', 'acceptance', 'flow', 'intentions', 'delivery')} |
                              {'release': release['id'], 'releaseTitle': release['title'],
                               'releaseStatus': release['status'], 'owners': owners})
-            attention.extend(t | {'release': release['id']} for t in release_tasks
+            attention.extend(t | {'release': release['id'], 'action': {
+                'stale': 'Examiner le contrôle à actualiser', 'blocked': 'Examiner le blocage',
+                'interrupted': 'Examiner l’interruption', 'awaiting_receipt': 'Vérifier le résultat à valider',
+            }[t['status']]} for t in release_tasks
                              if t['status'] in ('stale', 'blocked', 'interrupted', 'awaiting_receipt')
                              and not (release['status'] == 'close' and t['status'] == 'stale'))
         except Exception as exc:
@@ -388,9 +391,20 @@ def summary(root):
             if not attempt or (root / attempt).resolve() != (root / relative).resolve():
                 continue  # Superseded attempt: the plan task carries the current state.
             if flow['status'] in ('waiting_human', 'deadlocked', 'blocked'):
+                # One intervention per current task, even when its workflow also
+                # reports the same blocked state. Keep independent project flows.
+                if any(t['id'] == flow.get('taskId') and t.get('release') == flow.get('release') for t in attention):
+                    continue
+                ready = [n['description'] for n in flow['nodes'] if n['status'] == 'ready']
+                reason = '; '.join(ready) or {
+                    'waiting_human': 'Une réponse humaine est attendue dans ce workflow.',
+                    'deadlocked': 'Aucune étape ne peut démarrer ; les dépendances du workflow sont à examiner.',
+                    'blocked': 'Ce workflow est bloqué ; consulter son journal pour identifier la cause.',
+                }[flow['status']]
+                action = 'Répondre dans le workflow' if flow['status'] == 'waiting_human' else 'Examiner le workflow'
                 attention.append({'id': 'flow:' + flow['id'], 'title': 'Workflow du projet : ' + flow['id'],
                                   'release': flow.get('release'),
-                                  'status': flow['status'], 'reason': '; '.join(n['description'] for n in flow['nodes'] if n['status'] == 'ready') or 'Aucune étape prête'})
+                                  'status': flow['status'], 'reason': reason, 'action': action})
         except Exception as exc:
             warnings.append(Path(relative).name + ' : ' + str(exc))
     return {'path': str(root), 'name': root.name, 'series': project_series(root),

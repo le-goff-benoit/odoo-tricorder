@@ -3,7 +3,7 @@ export function requestHeading(...values) {
   for (const value of values) {
     const text = typeof value === 'string' ? value : value?.$artifact && typeof value.preview === 'string' ? value.preview : '';
     const line = text.split('\n')[0].trim();
-    if (line) return line.length > 300 ? line.slice(0, 300) + '…' : line;
+    if (line) return line.length > 100 ? line.slice(0, 100) + '…' : line;
   }
   return 'Demande';
 }

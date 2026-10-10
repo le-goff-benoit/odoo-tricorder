@@ -1,0 +1,166 @@
+{
+  "family_counts": {
+    "requests": 3,
+    "tasks": 0,
+    "actions": 0
+  },
+  "items": [
+    {
+      "id": "r6d75ecfc5d844c68",
+      "project": "p4858d890d2fc40b7",
+      "status": "completed",
+      "created": 1791650245.450946,
+      "updated": 1791650248.0881963,
+      "simulation": true,
+      "completion_outcome": "succeeded",
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "iteration_wait": null,
+      "iteration_hold": null,
+      "parent_paused": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "meeting-conversation-use-fb8864102803",
+        "title": "Clôture de réunion",
+        "revision": 1
+      },
+      "original": {
+        "id": "meeting-conversation-use-fb8864102803"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "Synthèse hebdomadaire Atlas\n\nComités Atlas des lundi 5 et jeudi 8 octobre\n\nSources des réunions :\nLundi : demander au client sa priorité. Jeudi : Alice prépare un prototype avant vendredi. Sources synthétiques pour recette.",
+      "counts": {
+        "accepted": 3
+      },
+      "nodes": {
+        "mail": {
+          "status": "accepted"
+        },
+        "review": {
+          "status": "accepted"
+        },
+        "select": {
+          "status": "accepted"
+        }
+      },
+      "timing": {
+        "started": 1791650245.450946,
+        "finished": 1791650248.0881577,
+        "duration": 2.637211561203003
+      },
+      "origin": null
+    },
+    {
+      "id": "r52d59305484f4035",
+      "project": "p4858d890d2fc40b7",
+      "status": "completed",
+      "created": 1791650235.5715263,
+      "updated": 1791650235.5848894,
+      "simulation": false,
+      "completion_outcome": "succeeded",
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "iteration_wait": null,
+      "iteration_hold": null,
+      "parent_paused": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "done",
+        "title": "Bilan précédent Atlas",
+        "revision": null
+      },
+      "original": {
+        "id": "done"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "",
+      "counts": {
+        "accepted": 1
+      },
+      "nodes": {
+        "work": {
+          "status": "accepted"
+        }
+      },
+      "timing": {
+        "started": 1791650235.5715263,
+        "finished": 1791650235.5848649,
+        "duration": 0.013338565826416016
+      },
+      "origin": null
+    },
+    {
+      "id": "r43b393759a474195",
+      "project": "p4858d890d2fc40b7",
+      "status": "completed",
+      "created": 1791650235.5560975,
+      "updated": 1791650240.6784372,
+      "simulation": false,
+      "completion_outcome": "succeeded",
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "iteration_wait": null,
+      "iteration_hold": null,
+      "parent_paused": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "renewal",
+        "title": "Renouvellement contrat Atlas",
+        "revision": null
+      },
+      "original": {
+        "id": "renewal"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "",
+      "counts": {
+        "accepted": 1
+      },
+      "nodes": {
+        "question": {
+          "status": "accepted"
+        }
+      },
+      "timing": {
+        "started": 1791650235.5560975,
+        "finished": 1791650240.6782014,
+        "duration": 5.122103929519653
+      },
+      "origin": null
+    }
+  ],
+  "total": 3,
+  "offset": 0,
+  "limit": 25,
+  "next": null
+}

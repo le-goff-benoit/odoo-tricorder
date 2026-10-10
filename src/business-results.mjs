@@ -7,7 +7,7 @@ const hash = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const defaultButton = (action, label, css = '', extra = '') => `<button type="button" class="${css}" data-action="${action}" ${extra}>${label}</button>`;
 const fields = {
   action:'Action', actions:'Actions', owner:'Responsable', assignee:'Responsable', due:'Échéance', due_date:'Échéance', deadline:'Échéance',
-  question:'Question', answer:'Réponse', clarifications:'Précisions', summary:'Résumé', finding:'Constat', findings:'Constats', severity:'Criticité',
+  question:'Question', answer:'Réponse', clarifications:'Précisions', summary:'Résumé', finding:'Constat', findings:'Constats', severity:'Niveau d’urgence', selected_meetings:'Réunions sélectionnées', analysis:'Analyse des réunions', destination:'Destination choisie', response:'Réponse préparée',
   next_action:'Suite proposée', next_steps:'Prochaines étapes', rationale:'Justification', missing:'Informations manquantes', impact:'Impact',
   verdict:'Verdict', decision:'Décision', outcome:'Décision', status:'État', request:'Demande', proposal:'Proposition', draft:'Brouillon',
   report:'Rapport', minutes:'Compte rendu', transcript:'Transcription', subject:'Objet', body:'Contenu', recipient:'Destinataire', recipients:'Destinataires', title:'Titre', description:'Description',
@@ -17,8 +17,8 @@ const fields = {
   evidence:'Preuves', source:'Source', sources:'Sources', files:'Fichiers', path:'Chemin', candidate:'Candidat', plan:'Plan', criteria:'Critères',
   exit_code:'Code de sortie', stdout:'Sortie de la commande', stderr:'Erreurs de la commande', ok:'Résultat déclaré par l’exécutant',
 };
-const decisions = {approve:'Approuvée', reject:'Refusée', pass:'Conforme', fail:'Non conforme', critical:'Critique', normal:'Normale', unknown:'Indéterminée', done:'Terminé', blocked:'Bloquée', deferred:'Différée', true:'Oui', false:'Non', yes:'Oui', no:'Non'};
-const severities = {critical:'Critique', normal:'Normale', unknown:'Indéterminée', high:'Élevée', medium:'Moyenne', low:'Faible'};
+const decisions = {approve:'Approuvée', reject:'Refusée', pass:'Conforme', fail:'Non conforme', critical:'Urgent', normal:'Sans urgence établie', unknown:'À préciser', done:'Terminé', blocked:'Bloquée', deferred:'Différée', true:'Oui', false:'Non', yes:'Oui', no:'Non'};
+const severities = {critical:'Urgent', normal:'Sans urgence établie', unknown:'À préciser', high:'Élevée', medium:'Moyenne', low:'Faible'};
 const roles = {source:'Source', plan:'Plan', deliverable:'Livrable', result:'Résultat', evidence:'Preuve', email:'Email d’origine'};
 const types = {'message/rfc822':'Email', 'text/plain':'Texte', 'text/markdown':'Document Markdown', 'application/json':'Document JSON', 'application/pdf':'PDF'};
 const visibleRows = 20;
@@ -26,7 +26,8 @@ const visibleFields = 20;
 const maxDepth = 4;
 
 /** Plain text: callers interpolating this result into HTML must escape it. */
-export function decisionLabel(outcome) {
+export function decisionLabel(outcome, node) {
+  if (typeof node?.option_labels?.[outcome] === 'string') return node.option_labels[outcome];
   return own(decisions, outcome) ? decisions[outcome] : String(outcome ?? 'Non renseignée');
 }
 

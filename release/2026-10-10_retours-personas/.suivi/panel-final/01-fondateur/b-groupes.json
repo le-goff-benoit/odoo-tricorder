@@ -1,0 +1,32 @@
+[
+  {
+    "label": "Workflows complets",
+    "options": [
+      "De la demande au résultat",
+      "Commande locale avec validation",
+      "Évolution logicielle",
+      "Release — demandes, plan, réalisation et validation",
+      "Support — diagnostic et réponse",
+      "Clôture de réunion",
+      "Demande ponctuelle",
+      "Correction express",
+      "Intentions, plan et travaux",
+      "Développement par élément et tests communs",
+      "Nouveau message → notification",
+      "GitHub → Odoo.sh : staging puis production",
+      "Livraison directe en production",
+      "Documentation → Confluence"
+    ]
+  },
+  {
+    "label": "Blocs à composer (avancé)",
+    "options": [
+      "Orchestration",
+      "Analyse",
+      "Développement",
+      "Tests",
+      "Gestion documentaire",
+      "Communication"
+    ]
+  }
+]

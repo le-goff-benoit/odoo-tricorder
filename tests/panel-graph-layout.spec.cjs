@@ -6,7 +6,7 @@ let directory, app, page, project, pageErrors;
 const call = (action, data = {}) => page.evaluate(payload => window.studio.request(payload), { action, ...data });
 const snapshot = id => call('workflow.get', { project: project.id, workflow: id });
 async function openEditor(id) {
-  await page.locator('[data-workflow-route=global]').click();
+  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.locator(`[data-action=open-workflow][data-id="${id}"]`).click();
   await expect(page.locator('.canvas .node').first()).toBeVisible();
 }
@@ -112,7 +112,7 @@ test('Support branches and joins stay readable beside the terminal with native s
   await page.locator('[data-action=terminal-toggle]').click();
   await expect(page.locator('.execution-map .node[data-id=diagnosis] .pill')).toHaveText('Dans la conversation');
   await expect(page.locator('#zoom-label')).toHaveText('100 %');
-  let geometry = await measureDiagram(); expect(geometry.collisions).toEqual([]); expect(geometry.overflows).toEqual([]); expect(geometry.labelAboveWires).toBe(true); expect(geometry.scale).toBe(1); expect(geometry.labels).toBe(7);
+  let geometry = await measureDiagram(); expect(geometry.collisions).toEqual([]); expect(geometry.overflows).toEqual([]); expect(geometry.labelAboveWires).toBe(true); expect(geometry.scale).toBe(1); expect(geometry.labels).toBe(graph.edges.filter(edge => (edge.outcome && edge.outcome !== 'done') || Object.keys(edge.mapping || {}).length).length);
   await page.screenshot({ path: test.info().outputPath('support-terminal-upper-1440.png') });
   await page.locator('.canvas-scroll').evaluate(element => { element.scrollTop = element.scrollHeight; element.scrollLeft = 0; });
   await page.screenshot({ path: test.info().outputPath('support-joins-1440.png') });

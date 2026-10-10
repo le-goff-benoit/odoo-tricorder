@@ -1,0 +1,100 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Sans projet
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Sans projet / Workflow
+    - heading "Orientation email ou ticket" [level=1]
+    - paragraph: Révision 2 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés" [disabled]
+    - button "Paramètres du workflow"
+    - button "Annuler la modification" [disabled]: ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img:
+      - 'button "Corriger le lien : Choisir le canal → Préparer email · email"'
+      - 'button "Corriger le lien : Choisir le canal → Préparer ticket · ticket"'
+    - button "Choisir le canal · Condition": Choisir le canal Condition Sans donnée provenant d’un autre bloc
+    - button "Préparer email · Document": Préparer email Document Sans donnée provenant d’un autre bloc
+    - button "Préparer ticket · Document": Préparer ticket Document Sans donnée provenant d’un autre bloc
+    - button "Relier vers Choisir le canal"
+    - button "Relier depuis Choisir le canal"
+    - button "Relier vers Préparer email"
+    - button "Relier depuis Préparer email"
+    - button "Relier vers Préparer ticket"
+    - button "Relier depuis Préparer ticket"
+    - text: 3 blocs · 2 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+  - dialog "Paramètres du workflow":
+    - heading "Paramètres du workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - text: Nom
+    - textbox "Nom": Orientation email ou ticket
+    - text: Description
+    - textbox "Description"
+    - group "Quand le workflow a une question":
+      - text: Quand le workflow a une question Me prévenir avec
+      - combobox "Me prévenir avec":
+        - option "Dans Tricorder uniquement" [selected]
+      - button "Configurer une notification…"
+      - paragraph: "S’applique aux questions prévues et à celles posées en cours de travail. La notification contient le nom du workflow et sa référence ; la question reste dans Tricorder. Email, Slack ou autre service : ajoutez et vérifiez une connexion de notification pour la choisir ici. Sans connexion, les questions restent visibles dans Tricorder."
+    - group:
+      - text: Paramètres supplémentaires
+      - paragraph: Ces valeurs sont fixes pour les prochains lancements. Pour demander une valeur à chaque exécution, ajoutez une Question ouverte au workflow.
+      - text: Canal de reponse
+      - textbox "Canal de reponse": ticket
+      - button "Retirer le paramètre Canal de reponse": Retirer
+      - text: Nom du nouveau paramètre
+      - textbox "Nom du nouveau paramètre":
+        - /placeholder: Canal de réponse
+      - text: Valeur fixe
+      - textbox "Valeur fixe":
+        - /placeholder: email
+      - button "Ajouter ce paramètre"
+      - group: Configuration avancée (JSON)
+    - button "Appliquer"

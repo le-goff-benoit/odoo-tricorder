@@ -1,0 +1,12 @@
+{
+  "/tmp/tricorder-personas-rc15-final": {
+    "version": "0.6.0-rc.15",
+    "sha256": "4ea175a28dc20fb9f4b30ebe748512b3fd1e6aaf83d99537905bd7c628a4a364",
+    "files": 134
+  },
+  "/tmp/tricorder-expert-fixed": {
+    "version": "0.6.0-rc.15",
+    "sha256": "090d01c2fdb906fd947326ca64d5711d37a9998e527d93f6083cd7748e45e535",
+    "files": 134
+  }
+}

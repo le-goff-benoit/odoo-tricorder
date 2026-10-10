@@ -1,0 +1,101 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Boréal"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - heading "Client Atlas" [level=1]
+    - paragraph: /tmp/tricorder-persona06-home-QYwLab/projects/p7bf9c6856aab454e
+    - button "Nouvelle demande"
+    - button "Créer un workflow"
+    - group: Options
+    - heading "Demandes et résultats" [level=2]
+    - table:
+      - rowgroup:
+        - row "Workflow Contexte État":
+          - columnheader "Workflow"
+          - columnheader "Contexte"
+          - columnheader "État"
+          - columnheader
+      - rowgroup:
+        - 'row "Réunion Atlas — sources à préciser Réunion Atlas — sources à préciser · 10.10.2026 17:45:27 Exécution réelle Terminée Durée totale : 4 s · attentes comprises Consulter Archiver"':
+          - cell "Réunion Atlas — sources à préciser Réunion Atlas — sources à préciser · 10.10.2026 17:45:27"
+          - cell "Exécution réelle"
+          - 'cell "Terminée Durée totale : 4 s · attentes comprises"'
+          - cell "Consulter Archiver":
+            - button "Consulter"
+            - button "Archiver"
+    - group: Rechercher dans les exécutions
+    - heading "Workflows disponibles" [level=2]
+    - button "Voir les archives"
+    - article:
+      - heading "Réunion Atlas — sources à préciser" [level=3]
+      - paragraph: 1 étapes
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+    - article:
+      - heading "Clôture de réunion" [level=3]
+      - paragraph: 3 étapes · Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+  - status: Réponse enregistrée.
+  - dialog "Nouvelle demande":
+    - heading "Nouvelle demande" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Choisissez un modèle, puis indiquez votre demande. Chaque exécution conserve ses propres résultats.
+    - text: Workflow
+    - combobox "Workflow":
+      - option "De la demande au résultat"
+      - option "Commande locale avec validation"
+      - option "Évolution logicielle"
+      - option "Release — demandes, plan, réalisation et validation"
+      - option "Support — diagnostic et réponse"
+      - option "Clôture de réunion"
+      - option "Demande ponctuelle" [selected]
+      - option "Correction express"
+      - option "Intentions, plan et travaux"
+      - option "Développement par élément et tests communs"
+      - option "Nouveau message → notification"
+      - 'option "GitHub → Odoo.sh : staging puis production"'
+      - option "Livraison directe en production"
+      - option "Documentation → Confluence"
+      - option "Orchestration"
+      - option "Analyse"
+      - option "Développement"
+      - option "Tests"
+      - option "Gestion documentaire"
+      - option "Communication"
+    - checkbox "Réutiliser un workflow enregistré dans un projet"
+    - text: Réutiliser un workflow enregistré dans un projet Projet principal
+    - combobox "Projet principal":
+      - option "Sans projet"
+      - option "Client Atlas" [selected]
+      - option "Client Boréal"
+    - paragraph: Le modèle sera utilisé dans Client Atlas. Ses prochaines modifications ne changeront pas les exécutions déjà lancées.
+    - paragraph: Pour coordonner plusieurs projets, ajoutez-les à l’étape suivante.
+    - button "Continuer"

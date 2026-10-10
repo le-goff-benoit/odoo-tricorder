@@ -1,0 +1,1142 @@
+READY /tmp/tricorder-usage-04-auto-wRPXSQ
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+Examiner le résultat
+
+Préparer le message d’accueil
+
+Depuis le début : 2 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Étape sélectionnée
+Qu’attend le client ?
+→
+Préparer le message d’accueil
+
+Répondu
+
+Information fournie
+
+Entrées, sorties et preuves
+Entrées reçues
+Précisions
+Question
+Quel est le nom du client et quelles sont ses attentes prioritaires ?
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Résultat
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Réponse enregistrée.
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+
+Préparer le message d’accueil
+
+Depuis le début : 3 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Qu’attend le client ?
+→
+Étape sélectionnée
+Préparer le message d’accueil
+
+À valider
+
+SIMULATION — Résultat d'exemple pour « Préparer le message d’accueil ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Examiner le résultat
+Commentaire de validation (facultatif)
+Entrées, sorties et preuves
+Résultat
+Message accueil
+Exemple simulé
+Données techniques
+Preuves
+Preuve 1 · 55d156d0
+
+Accueil nouveau client
+Cette proposition · tentative 1 uniquement.
+
+Valider le résultat
+Réponse enregistrée.
+
+En cours
+Modèles
+Historique
+COMPOSER ET RÉUTILISER
+Modèles de workflows
+
+Choisissez un modèle, adaptez ses étapes, puis lancez votre conversation.
+
+Importer un workflow
++ Créer un modèle
+Rechercher un modèle
+Destination : Sans projet
+⑂
+6 blocs
+De la demande au résultat
+
+Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.
+
+Utiliser
+Personnaliser une copie…
+⑂
+2 blocs
+Commande locale avec validation
+
+Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.
+
+Utiliser
+Personnaliser une copie…
+⑂
+4 blocs
+Évolution logicielle
+
+Analyser, proposer du code dans une copie isolée, tester cette copie et décider de son application locale. Choisir les modèles et adapter la commande de test au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+9 blocs
+Release — demandes, plan, réalisation et validation
+
+Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.
+
+Utiliser
+Personnaliser une copie…
+⑂
+8 blocs
+Support — diagnostic et réponse
+
+Distinguer la nature de la demande et son urgence, préciser les faits manquants puis préparer une réponse pour Gmail ou un ticket Odoo. Aucun message envoyé.
+
+Utiliser
+Personnaliser une copie…
+⑂
+3 blocs
+Clôture de réunion
+
+Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.
+
+Utiliser
+Personnaliser une copie…
+⑂
+3 blocs
+Demande ponctuelle
+
+Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.
+
+Utiliser
+Personnaliser une copie…
+⑂
+6 blocs
+Correction express
+
+Qualifier un défaut local et réversible, corriger et vérifier. Les demandes portant sur droits, données, schéma ou calcul financier sont réorientées.
+
+Utiliser
+Personnaliser une copie…
+⑂
+5 blocs
+Intentions, plan et travaux
+
+Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.
+
+Utiliser
+Personnaliser une copie…
+⑂
+7 blocs
+Développement par élément et tests communs
+
+Valider un plan de code, travailler dans des copies isolées puis intégrer les contributions et tester le candidat commun. Commandes Python unittest fournies comme exemples à adapter ; aucun déploiement ni recette Odoo implicite.
+
+Utiliser
+Personnaliser une copie…
+⑂
+3 blocs
+Nouveau message → notification
+
+Brouillon : détecter les nouveaux messages d'un expéditeur confirmé, puis notifier le destinataire choisi. Aucun modèle IA nécessaire pour un filtre exact.
+
+Utiliser
+Personnaliser une copie…
+⑂
+8 blocs
+GitHub → Odoo.sh : staging puis production
+
+Configurer les cibles, le SHA testé et les adaptateurs. Publication GitHub, build Odoo.sh et vérification de la version déployée restent distincts. La documentation est facultative.
+
+Utiliser
+Personnaliser une copie…
+⑂
+5 blocs
+Livraison directe en production
+
+Parcours sans staging imposé : candidat testé, accord exact, publication et version observée. Configurer la cible et le connecteur avant lancement.
+
+Utiliser
+Personnaliser une copie…
+⑂
+4 blocs
+Documentation → Confluence
+
+Préparer le contenu et la version de base, relire, publier après accord exact, puis relire la page distante. Configurer un adaptateur Confluence avec contrôle de version.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Orchestration
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Analyse
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Développement
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Tests
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Gestion documentaire
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Communication
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+2 blocs
+Accueil nouveau client
+
+Demander les attentes du client puis préparer un message d’accueil personnalisé.
+
+Utiliser
+Modifier le modèle
+Réponse enregistrée.
+Créer un workflow
+×
+
+Partez d’une première tâche ou d’un modèle. Configurez les blocs dans l’éditeur. Vos demandes seront données au lancement ou dans le terminal.
+
+Modèle de workflow
+Workflow simple — première tâche
+De la demande au résultat
+Commande locale avec validation
+Évolution logicielle
+Release — demandes, plan, réalisation et validation
+Support — diagnostic et réponse
+Clôture de réunion
+Demande ponctuelle
+Correction express
+Intentions, plan et travaux
+Développement par élément et tests communs
+Nouveau message → notification
+GitHub → Odoo.sh : staging puis production
+Livraison directe en production
+Documentation → Confluence
+Orchestration
+Analyse
+Développement
+Tests
+Gestion documentaire
+Communication
+Projet · Accueil nouveau client
+Nom du workflow
+Enregistrer dans
+Sans projet
+
+Le workflow sera enregistré dans .tricorder/workflows/ du dossier choisi, prêt à versionner avec Git. Le lancement vient ensuite ; aucun commit ni envoi automatique.
+
+Créer et ouvrir le workflow
+READY /tmp/tricorder-usage-04-auto-TvFQUt
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+Examiner le résultat
+
+Préparer le message d’accueil
+
+Depuis le début : 2 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Étape sélectionnée
+Qu’attend le client ?
+→
+Préparer le message d’accueil
+
+Répondu
+
+Information fournie
+
+Entrées, sorties et preuves
+Entrées reçues
+Précisions
+Question
+Quel est le nom du client et quelles sont ses attentes prioritaires ?
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Résultat
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Réponse enregistrée.
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+
+Préparer le message d’accueil
+
+Depuis le début : 3 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Qu’attend le client ?
+→
+Étape sélectionnée
+Préparer le message d’accueil
+
+À valider
+
+SIMULATION — Résultat d'exemple pour « Préparer le message d’accueil ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Examiner le résultat
+Commentaire de validation (facultatif)
+Entrées, sorties et preuves
+Résultat
+Message accueil
+Exemple simulé
+Données techniques
+Preuves
+Preuve 1 · 55d156d0
+
+Accueil nouveau client
+Cette proposition · tentative 1 uniquement.
+
+Valider le résultat
+Réponse enregistrée.
+READY /tmp/tricorder-usage-04-auto-DIaLKK
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+Examiner le résultat
+
+Préparer le message d’accueil
+
+Depuis le début : 3 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Étape sélectionnée
+Qu’attend le client ?
+→
+Préparer le message d’accueil
+
+Répondu
+
+Information fournie
+
+Entrées, sorties et preuves
+Entrées reçues
+Précisions
+Question
+Quel est le nom du client et quelles sont ses attentes prioritaires ?
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Résultat
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Réponse enregistrée.
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+
+Préparer le message d’accueil
+
+Depuis le début : 4 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Qu’attend le client ?
+→
+Étape sélectionnée
+Préparer le message d’accueil
+
+À valider
+
+SIMULATION — Résultat d'exemple pour « Préparer le message d’accueil ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Examiner le résultat
+Commentaire de validation (facultatif)
+Entrées, sorties et preuves
+Résultat
+Message accueil
+Exemple simulé
+Données techniques
+Preuves
+Preuve 1 · 55d156d0
+
+Accueil nouveau client
+Cette proposition · tentative 1 uniquement.
+
+Valider le résultat
+Réponse enregistrée.
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Terminée
+2 / 2 étapes
+Voir les résultats
+Voir le rapport
+
+Exécution terminée.
+
+Durée totale : 4 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Qu’attend le client ?
+→
+Étape sélectionnée
+Préparer le message d’accueil
+
+Validé
+
+SIMULATION — Résultat d'exemple pour « Préparer le message d’accueil ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Résultat validé
+
+Validation enregistrée.
+
+Entrées, sorties et preuves
+Résultat
+Message accueil
+Exemple simulé
+Données techniques
+Preuves
+Preuve 1 · 55d156d0
+Validation enregistrée.
+
+En cours
+Modèles
+Historique
+COMPOSER ET RÉUTILISER
+Modèles de workflows
+
+Choisissez un modèle, adaptez ses étapes, puis lancez votre conversation.
+
+Importer un workflow
++ Créer un modèle
+Rechercher un modèle
+Destination : Sans projet
+⑂
+6 blocs
+De la demande au résultat
+
+Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.
+
+Utiliser
+Personnaliser une copie…
+⑂
+2 blocs
+Commande locale avec validation
+
+Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.
+
+Utiliser
+Personnaliser une copie…
+⑂
+4 blocs
+Évolution logicielle
+
+Analyser, proposer du code dans une copie isolée, tester cette copie et décider de son application locale. Choisir les modèles et adapter la commande de test au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+9 blocs
+Release — demandes, plan, réalisation et validation
+
+Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.
+
+Utiliser
+Personnaliser une copie…
+⑂
+8 blocs
+Support — diagnostic et réponse
+
+Distinguer la nature de la demande et son urgence, préciser les faits manquants puis préparer une réponse pour Gmail ou un ticket Odoo. Aucun message envoyé.
+
+Utiliser
+Personnaliser une copie…
+⑂
+3 blocs
+Clôture de réunion
+
+Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.
+
+Utiliser
+Personnaliser une copie…
+⑂
+3 blocs
+Demande ponctuelle
+
+Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.
+
+Utiliser
+Personnaliser une copie…
+⑂
+6 blocs
+Correction express
+
+Qualifier un défaut local et réversible, corriger et vérifier. Les demandes portant sur droits, données, schéma ou calcul financier sont réorientées.
+
+Utiliser
+Personnaliser une copie…
+⑂
+5 blocs
+Intentions, plan et travaux
+
+Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.
+
+Utiliser
+Personnaliser une copie…
+⑂
+7 blocs
+Développement par élément et tests communs
+
+Valider un plan de code, travailler dans des copies isolées puis intégrer les contributions et tester le candidat commun. Commandes Python unittest fournies comme exemples à adapter ; aucun déploiement ni recette Odoo implicite.
+
+Utiliser
+Personnaliser une copie…
+⑂
+3 blocs
+Nouveau message → notification
+
+Brouillon : détecter les nouveaux messages d'un expéditeur confirmé, puis notifier le destinataire choisi. Aucun modèle IA nécessaire pour un filtre exact.
+
+Utiliser
+Personnaliser une copie…
+⑂
+8 blocs
+GitHub → Odoo.sh : staging puis production
+
+Configurer les cibles, le SHA testé et les adaptateurs. Publication GitHub, build Odoo.sh et vérification de la version déployée restent distincts. La documentation est facultative.
+
+Utiliser
+Personnaliser une copie…
+⑂
+5 blocs
+Livraison directe en production
+
+Parcours sans staging imposé : candidat testé, accord exact, publication et version observée. Configurer la cible et le connecteur avant lancement.
+
+Utiliser
+Personnaliser une copie…
+⑂
+4 blocs
+Documentation → Confluence
+
+Préparer le contenu et la version de base, relire, publier après accord exact, puis relire la page distante. Configurer un adaptateur Confluence avec contrôle de version.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Orchestration
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Analyse
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Développement
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Tests
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Gestion documentaire
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+1 bloc
+Communication
+
+Composant réutilisable à adapter au projet.
+
+Utiliser
+Personnaliser une copie…
+⑂
+2 blocs
+Accueil nouveau client
+
+Demander les attentes du client puis préparer un message d’accueil personnalisé.
+
+Utiliser
+Modifier le modèle
+Validation enregistrée.
+
+SANS PROJET / WORKFLOW
+Réunions semaine du 5 octobre
+
+Révision 1 · Enregistré
+
+← Retour à la liste
+Choisir l’IA
+Options
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Éditeur
+✦ Assistant IA
+☷ Liste
+selected_meetings ·liste
+analysis · un élément ·actions · liste
+✦
+Choisir les réunions et leurs sources
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Réunions sélectionnées
+✦
+Analyser les réunions sélectionnées
+Tâche IA
+Utilise : Réunions sélectionnées · Produit : Analyse des réunions, Liste d’actions
+✦
+Préparer le compte rendu et l’email
+Tâche IA
+Utilise : Analyse des réunions, Liste d’actions · Produit : Compte rendu, Liste d’actions, Brouillon
+3 blocs · 2 liens
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+Lancer cette version du workflow
+×
+Quelle demande souhaitez-vous traiter ?
+
+Cette saisie est facultative : vous pouvez tout expliquer à l’agent dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.
+
+Inclure d’autres projets
+Lancer dans le terminal
+Vérifier à nouveau
+Exécution automatique sans conversation
+Simuler le parcours
+READY /tmp/tricorder-usage-04-auto-gateeZ
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+Examiner le résultat
+
+Préparer le message d’accueil
+
+Depuis le début : 3 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Étape sélectionnée
+Qu’attend le client ?
+→
+Préparer le message d’accueil
+
+Répondu
+
+Information fournie
+
+Entrées, sorties et preuves
+Entrées reçues
+Précisions
+Question
+Quel est le nom du client et quelles sont ses attentes prioritaires ?
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Résultat
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Réponse enregistrée.
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+
+Préparer le message d’accueil
+
+Depuis le début : 3 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Qu’attend le client ?
+→
+Étape sélectionnée
+Préparer le message d’accueil
+
+À valider
+
+SIMULATION — Résultat d'exemple pour « Préparer le message d’accueil ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Examiner le résultat
+Commentaire de validation (facultatif)
+Entrées, sorties et preuves
+Résultat
+Message accueil
+Exemple simulé
+Données techniques
+Preuves
+Preuve 1 · 55d156d0
+
+Accueil nouveau client
+Cette proposition · tentative 1 uniquement.
+
+Valider le résultat
+Réponse enregistrée.
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Terminée
+2 / 2 étapes
+Voir les résultats
+Voir le rapport
+
+Exécution terminée.
+
+Durée totale : 4 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Qu’attend le client ?
+→
+Étape sélectionnée
+Préparer le message d’accueil
+
+Validé
+
+SIMULATION — Résultat d'exemple pour « Préparer le message d’accueil ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Résultat validé
+
+Validation enregistrée.
+
+Entrées, sorties et preuves
+Résultat
+Message accueil
+Exemple simulé
+Données techniques
+Preuves
+Preuve 1 · 55d156d0
+Validation enregistrée.
+
+SANS PROJET / WORKFLOW
+Réunions semaine du 5 octobre
+
+Révision 1 · Enregistré
+
+← Retour à la liste
+Choisir l’IA
+Options
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Éditeur
+✦ Assistant IA
+☷ Liste
+selected_meetings ·liste
+analysis · un élément ·actions · liste
+✦
+Choisir les réunions et leurs sources
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Réunions sélectionnées
+✦
+Analyser les réunions sélectionnées
+Tâche IA
+Utilise : Réunions sélectionnées · Produit : Analyse des réunions, Liste d’actions
+✦
+Préparer le compte rendu et l’email
+Tâche IA
+Utilise : Analyse des réunions, Liste d’actions · Produit : Compte rendu, Liste d’actions, Brouillon
+3 blocs · 2 liens
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+
+SUIVI · RÉUNIONS SEMAINE DU 5 OCTOBRE
+Préparer un compte rendu et un brouillon d’email pour mes deux réunions de la semaine du 5 octobre : réunion commerciale lundi, accueil du client Martin ; réunion opérations jeudi, formation mercredi prochain. Sources de test : notes commerciales et notes opérations. Ne rien envoyer.
+← Retour à la liste
+Options
+En cours
+0 / 3 étapes
+
+Choisir les réunions et leurs sources
+
+Depuis le début : 0 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Choisir les réunions et leurs sources
+→
+Analyser les réunions sélectionnées
+
+En cours
+
+Le travail a commencé. Une fin de processus ne vaut pas validation.
+
+Dernier signal : 17:36:01.
+
+Rechercher un résultat enregistréVérifier la tentative interrompue
+Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+READY /tmp/tricorder-usage-04-auto-MMYIFg
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+Examiner le résultat
+
+Préparer le message d’accueil
+
+Depuis le début : 3 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Étape sélectionnée
+Qu’attend le client ?
+→
+Préparer le message d’accueil
+
+Répondu
+
+Information fournie
+
+Entrées, sorties et preuves
+Entrées reçues
+Précisions
+Question
+Quel est le nom du client et quelles sont ses attentes prioritaires ?
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Résultat
+Réponse
+Client Atelier Martin ; priorité : être accompagné pour ses premières commandes.
+Données techniques
+Réponse enregistrée.
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Résultat à valider
+1 / 2 étapes
+
+Préparer le message d’accueil
+
+Depuis le début : 4 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Qu’attend le client ?
+→
+Étape sélectionnée
+Préparer le message d’accueil
+
+À valider
+
+SIMULATION — Résultat d'exemple pour « Préparer le message d’accueil ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Examiner le résultat
+Commentaire de validation (facultatif)
+Entrées, sorties et preuves
+Résultat
+Message accueil
+Exemple simulé
+Données techniques
+Preuves
+Preuve 1 · 55d156d0
+
+Accueil nouveau client
+Cette proposition · tentative 1 uniquement.
+
+Valider le résultat
+Réponse enregistrée.
+
+SUIVI · ACCUEIL NOUVEAU CLIENT
+Accueil nouveau client
+← Retour à la liste
+Options
+Terminée
+2 / 2 étapes
+Voir les résultats
+Voir le rapport
+
+Exécution terminée.
+
+Durée totale : 4 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Graphe
+Détail
+Qu’attend le client ?
+→
+Étape sélectionnée
+Préparer le message d’accueil
+
+Validé
+
+SIMULATION — Résultat d'exemple pour « Préparer le message d’accueil ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Résultat validé
+
+Validation enregistrée.
+
+Entrées, sorties et preuves
+Résultat
+Message accueil
+Exemple simulé
+Données techniques
+Preuves
+Preuve 1 · 55d156d0
+Validation enregistrée.
+
+SANS PROJET / WORKFLOW
+Réunions semaine du 5 octobre
+
+Révision 1 · Enregistré
+
+← Retour à la liste
+Choisir l’IA
+Options
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Éditeur
+✦ Assistant IA
+☷ Liste
+selected_meetings ·liste
+analysis · un élément ·actions · liste
+✦
+Choisir les réunions et leurs sources
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Réunions sélectionnées
+✦
+Analyser les réunions sélectionnées
+Tâche IA
+Utilise : Réunions sélectionnées · Produit : Analyse des réunions, Liste d’actions
+✦
+Préparer le compte rendu et l’email
+Tâche IA
+Utilise : Analyse des réunions, Liste d’actions · Produit : Compte rendu, Liste d’actions, Brouillon
+3 blocs · 2 liens
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+
+SUIVI · RÉUNIONS SEMAINE DU 5 OCTOBRE
+Préparer un compte rendu et un brouillon d’email pour mes deux réunions de la semaine du 5 octobre : réunion commerciale lundi, accueil du client Martin ; réunion opérations jeudi, formation mercredi prochain. Sources de test : notes commerciales et notes opérations. Ne rien envoyer.
+← Retour à la liste
+Options
+Terminée
+3 / 3 étapes
+Voir les résultats
+Voir le rapport
+
+Exécution terminée.
+
+Durée totale : 4 s · attentes comprises
+Simulation. Aucun modèle ni service métier appelé.
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Choisir les réunions et leurs sources
+→
+Analyser les réunions sélectionnées
+
+Produit · sorties vérifiées
+
+SIMULATION — Résultat d'exemple pour « Choisir les réunions et leurs sources ». Aucun outil métier ni service externe n'a été appelé.
+
+Preuve simulée, sans valeur de test métier réel.
+
+Résultat validé
+
+Contrôles techniques automatiques ; aucun critère métier attesté.
+
+Entrées, sorties et preuves
+Résultat
+Réunions sélectionnées
+Date
+À préciser
+Commentaires
+Le périmètre du prochain atelier reste à confirmer.
+Source
+Notes synthétiques de démonstration
+Titre
+Atelier fictif
+Données techniques
+Preuves
+Preuve 1 · 7b60f0d0
+BUTTONS ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Voir les résultats","Voir le rapport","Transférer vers un projet…","Graphe","Détail","Étape sélectionnéeChoisir les réunions et leurs sources","Analyser les réunions sélectionnées","Preuve 1 · 7b60f0d0"]

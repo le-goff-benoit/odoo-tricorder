@@ -1,0 +1,53 @@
+Activité
+Workflows
+Projets
+Essai développeur sceptique
+Planifications
+Connexions
+Paramètres
+Terminal
+
+
+
+
+← Retour à la liste
+Graphe
+Détail
+Vérifier le runtime Python
+Étape sélectionnéeDécider de la suite
+Preuve 1 · d6285379
+Approuver la suite
+Refuser la suite
+Vérifier le runtime Python
+→
+Étape sélectionnée
+Décider de la suite
+
+Décision attendue
+
+Décision pour cette demande : Vérifier un script local.
+
+Votre décision est attendue
+
+Examinez la sortie et la preuve de la commande : le runtime répond-il et sa version est-elle visible ?
+
+Vérifier le runtime Python
+
+Sortie enregistrée de la commande ; examinez-la avant de décider.
+
+Sortie de la commande
+3.10.12 (main, May 27 2025, 17:12:29) [GCC 11.4.0]
+CORRECTION_VERIFIEE: valeur correcte
+
+Preuves
+Preuve 1 · d6285379
+
+Refuser la suite empêche les étapes liées à l’approbation de démarrer. Ce refus ne demande pas de révision : pour une autre proposition, créez une nouvelle demande.
+
+Commentaire (facultatif)
+
+Vérifier un script local
+Cette proposition · tentative 1 uniquement.
+
+Approuver la suite
+Refuser la suite

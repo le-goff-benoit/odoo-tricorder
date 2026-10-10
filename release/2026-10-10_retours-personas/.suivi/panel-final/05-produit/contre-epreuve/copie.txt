@@ -1,0 +1,3 @@
+Décision : prioriser la visibilité des imports.
+Reporter le nouveau tableau de bord.
+Responsable : équipe Produit.

@@ -1,0 +1,69 @@
+{
+  "edges": [
+    {
+      "from": "gate",
+      "id": "approved-link",
+      "outcome": "approve",
+      "to": "publish"
+    },
+    {
+      "from": "gate",
+      "id": "rejected-link",
+      "outcome": "reject",
+      "to": "repair"
+    }
+  ],
+  "id": "legacy-review",
+  "nodes": [
+    {
+      "completion_outcome": "succeeded",
+      "criteria": [],
+      "id": "gate",
+      "inputs": {},
+      "kind": "decision",
+      "max_attempts": 1,
+      "option_labels": {
+        "approve": "Publier la version",
+        "reject": "Renvoyer pour correction"
+      },
+      "options": [
+        "approve",
+        "reject"
+      ],
+      "outputs": {},
+      "phase": "",
+      "position": {
+        "x": 60,
+        "y": 150
+      },
+      "question": "Publier cette version ?",
+      "resources": [],
+      "title": "Décider de la publication"
+    },
+    {
+      "content": "PUBLICATION VALIDÉE — donnée synthétique",
+      "id": "publish",
+      "kind": "document",
+      "position": {
+        "x": 420,
+        "y": 50
+      },
+      "title": "Publier la note",
+      "validation": "automatic"
+    },
+    {
+      "content": "CORRECTION DEMANDÉE — donnée synthétique",
+      "id": "repair",
+      "kind": "document",
+      "position": {
+        "x": 420,
+        "y": 300
+      },
+      "title": "Demander une correction",
+      "validation": "automatic"
+    }
+  ],
+  "revision": 3,
+  "schema": 1,
+  "title": "Ancien aiguillage de publication"
+}

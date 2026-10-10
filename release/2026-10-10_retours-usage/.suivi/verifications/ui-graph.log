@@ -1,0 +1,16 @@
+
+> odoo-tricorder@0.6.0-rc.14 test:ui
+> npm run build && playwright test tests/panel-graph-layout.spec.cjs --grep Support branches --output=/tmp/tricorder-usage-graph-final
+
+
+> odoo-tricorder@0.6.0-rc.14 build
+> node scripts/build.mjs
+
+
+Running 1 test using 1 worker
+
+(node:170854) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/panel-graph-layout.spec.cjs:100:1 › Support branches and joins stay readable beside the terminal with native status and ports inside cards (6.8s)
+
+  1 passed (7.5s)

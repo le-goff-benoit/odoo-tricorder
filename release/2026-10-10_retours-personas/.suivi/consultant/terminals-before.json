@@ -1,0 +1,21 @@
+[
+  {
+    "id": "f07389f12388414ba4adbae51a5cfd1d",
+    "project": "/tmp/persona-consultant-rc15-ROVZiN/projects/p5fed7d4946ac40ab",
+    "environment": null,
+    "workingDirectory": "/tmp/persona-consultant-rc15-ROVZiN/projects/p5fed7d4946ac40ab",
+    "release": null,
+    "task": null,
+    "createdAt": 1791649298.6758971,
+    "lastOutputAt": 1791649298.724899,
+    "pid": 229578,
+    "program": "codex",
+    "provider": "codex",
+    "foreground": 229582,
+    "promptVerified": true,
+    "idleShell": false,
+    "alive": true,
+    "exitCode": null,
+    "activity": "process"
+  }
+]

@@ -1,0 +1,13 @@
+Paramètres du workflow
+×
+Nom
+Description
+Quand le workflow a une question
+Me prévenir avec
+Dans Tricorder uniquement
+Canal ou destinataire exact
+
+S’applique aux questions prévues et à celles posées en cours de travail. La notification contient le nom du workflow et sa référence ; la question reste dans Tricorder. Email, Slack ou autre service : ajoutez et vérifiez une connexion de notification pour la choisir ici. Sans connexion, les questions restent visibles dans Tricorder.
+
+Paramètres supplémentaires
+Appliquer

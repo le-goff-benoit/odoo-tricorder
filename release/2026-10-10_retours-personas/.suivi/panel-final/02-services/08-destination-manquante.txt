@@ -1,0 +1,40 @@
+
+
+    Tricorder
+
+      Activité
+      Workflows
+      Projets
+
+    Accès rapide aux projets
+    Rechercher un projetAjoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+      PlanificationsConnexions
+      Paramètres
+      Outils et aide
+        Kanban des releases
+        Reprendre le workflow
+        QuotasCommandes des agents
+        Installer le pack OdooAgents pour Claude et Codex
+        Mises à jour
+        À propos v0.6.0-rc.15
+
+
+
+
+    Sans projetTerminalIA des prochains lancementsOpenAI · CodexAnthropic · ClaudeÀ jour
+    StatutTerminalDemandesPlanMémoireExpressTemps
+    Aucun projet sélectionnéChoisissez un projet dans la colonne de gauche.WorkflowRelease OdooDemande OdooDiagnostic OdooDémarrer le workflowTerminalContexteDisposition verticaleAgrandir le terminalSuivantFermerVotre terminalChoisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.Choisir un workflowOuvrir un terminal
+
+
+
+    Sans projetTerminalIA des prochains lancementsOpenAI · CodexAnthropic · ClaudeÀ jour
+    StatutTerminalDemandesPlanMémoireExpressTemps
+    Aucun projet sélectionnéChoisissez un projet dans la colonne de gauche.WorkflowRelease OdooDemande OdooDiagnostic OdooDémarrer le workflowTerminalContexteDisposition verticaleAgrandir le terminalSuivantFermerVotre terminalChoisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.Choisir un workflowOuvrir un terminal
+
+Suivi · Support — diagnostic et réponseBoreal — précisions attendues (fixture synthétique)Révision 1 figée · Réponse attendue · 10.10.2026 18:42:43← Retour à la listeOptionsRevenir à l’éditeurSuspendreAnnulerHistoriqueRapport›_ TerminalPhasesJournal d’exécution☷ Liste
+    Revenir au suiviRéponse attendue6 / 8 étapes4 traitées · 2 non applicablesReprendre la destination de la réponseDepuis le début : 5 s · attentes comprisesDébut : 10.10.2026 18:42:43
+
+    Simulation. Aucun modèle ni service métier appelé.
+    Transférer vers un projet…GrapheDétail
+    Analyser la demande et son urgence → Préparer la réponse urgente · Urgent · 2 donnéesAnalyser la demande et son urgence → Préparer la réponse sans urgence établie · Sans urgence établie · 2 donnéesAnalyser la demande et son urgence → Préciser ce qui est bloqué · À préciserPréciser ce qui est bloqué → Réévaluer l’urgence avec les faits reçus · 1 donnéeRéévaluer l’urgence avec les faits reçus → Préparer la réponse urgente · Urgent · 2 donnéesRéévaluer l’urgence avec les faits reçus → Préparer la réponse sans urgence établie · Sans urgence établie · 2 donnéesRéévaluer l’urgence avec les faits reçus → Choisir l’investigation manquante · À préciserPréparer la réponse urgente → Reprendre la destination de la réponsePréparer la réponse sans urgence établie → Reprendre la destination de la réponsePréparer la réponse urgente → Mettre la réponse au format choisi · 1 donnéePréparer la réponse sans urgence établie → Mettre la réponse au format choisi · 1 donnéeReprendre la destination de la réponse → Mettre la réponse au format choisi · 1 donnéeUrgent · 2 donnéesSans urgence établie · 2donnéesÀ préciser1 donnéeUrgent · 2 donnéesSans urgence établie · 2donnéesÀ préciser1 donnée1 donnée1 donnée✦Analyser la demande et son urgenceTâche IAProduit · sorties vérifiéesUtilise : demande initiale et contexte · Produit : Constat, Suite proposée, Niveau d’urgence✦Préparer la réponse urgenteTâche IANon applicableUtilise : Constat, Suite proposée · Produit : Proposition✦Préparer la réponse sans urgence établieTâche IAProduit · sorties vérifiéesUtilise : Constat, Suite proposée · Produit : Brouillon?Préciser ce qui est bloquéQuestionRéponduSans donnée provenant d’un autre bloc · Produit : Votre réponse✦Réévaluer l’urgence avec les faits reçusTâche IAProduit · sorties vérifiéesUtilise : Votre réponse · Produit : Constat, Suite proposée, Niveau d’urgence?Choisir l’investigation manquanteQuestionNon applicableSans donnée provenant d’un autre bloc · Produit : Votre réponse✦Reprendre la destination de la réponseTâche IARéponse attendueUtilise : demande initiale et contexte · Produit : Votre réponse✦Mettre la réponse au format choisiTâche IAPrévuUtilise : Destination choisie, Réponse préparée · Produit : Brouillon8 blocs · 12 liens−100 %+AjusterPréparer la réponse urgentePréparer la réponse sans urgence établie→Étape sélectionnéeReprendre la destination de la réponse→Mettre la réponse au format choisi×Tâche IAReprendre la destination de la réponseSouhaitez-vous un texte pour un email ou pour un ticket Odoo ?Répondez dans le terminal ou ici.Votre réponseRépondre

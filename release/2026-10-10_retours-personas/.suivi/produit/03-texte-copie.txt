@@ -1,0 +1,63 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Discovery produit B2B"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Discovery produit B2B
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Réponse au comité produit
+    - heading "Réponse au comité produit" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 2 / 2 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 0 s · attentes comprises Début : 10.10.2026 18:28:07 · Fin : 10.10.2026 18:28:07"
+    - group "Affichage du suivi":
+      - button "Graphe" [pressed]
+      - button "Détail"
+    - button "Analyse intermédiaire · Produit · sorties vérifiées": "Analyse intermédiaire Tâche Produit · sorties vérifiées Utilise : demande initiale et contexte · Produit : Analyse des réunions"
+    - button "Recommandation finale · Produit · sorties vérifiées": "Recommandation finale Tâche Produit · sorties vérifiées Utilise : Analyse des réunions · Produit : Brouillon"
+    - text: 2 blocs · 1 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+  - dialog "Résultats validés de cette demande":
+    - heading "Résultats validés de cette demande" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Réponse au comité produit
+    - heading "Livrable final" [level=2]
+    - heading "Brouillon" [level=3]
+    - heading "Texte à reprendre" [level=3]
+    - text: "Bonjour, Je propose de prioriser l’export CSV au prochain sprint, puis les droits par équipe. Trois entretiens soutiennent cette priorité. Décision attendue : confirmer cette séquence avant vendredi."
+    - button "Copier le texte"
+    - group: Résultats des étapes
+    - button "Fermer"
+    - button "Voir le rapport complet"
+  - status: Texte copié.

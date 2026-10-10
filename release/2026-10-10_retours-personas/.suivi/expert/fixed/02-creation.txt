@@ -1,0 +1,76 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Activité
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: De l'intention à la réalisation
+    - heading "Un workflow clair. Un travail que vous pouvez suivre." [level=1]
+    - paragraph: Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.
+    - button "Nouvelle demande"
+    - button "+ Créer un workflow"
+    - button "Essayer un exemple"
+    - paragraph: "L'exemple est simulé : aucun modèle payant, aucune publication."
+    - heading "Vos projets" [level=2]
+    - button "Voir les archives"
+    - paragraph: Un projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.
+    - button "+ Nouveau projet"
+    - button "Importer un workflow"
+    - heading "Votre premier projet commence ici" [level=3]
+    - paragraph: Ajoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.
+  - dialog "Créer un workflow":
+    - heading "Créer un workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Partez d’une première tâche ou d’un modèle. Configurez les blocs dans l’éditeur. Vos demandes seront données au lancement ou dans le terminal.
+    - text: Modèle de workflow
+    - combobox "Modèle de workflow":
+      - option "Workflow simple — première tâche" [selected]
+      - option "De la demande au résultat"
+      - option "Commande locale avec validation"
+      - option "Évolution logicielle"
+      - option "Release — demandes, plan, réalisation et validation"
+      - option "Support — diagnostic et réponse"
+      - option "Clôture de réunion"
+      - option "Demande ponctuelle"
+      - option "Correction express"
+      - option "Intentions, plan et travaux"
+      - option "Développement par élément et tests communs"
+      - option "Nouveau message → notification"
+      - 'option "GitHub → Odoo.sh : staging puis production"'
+      - option "Livraison directe en production"
+      - option "Documentation → Confluence"
+      - option "Orchestration"
+      - option "Analyse"
+      - option "Développement"
+      - option "Tests"
+      - option "Gestion documentaire"
+      - option "Communication"
+    - text: Nom du workflow
+    - textbox "Nom du workflow": Nouveau workflow
+    - text: Enregistrer dans
+    - combobox "Enregistrer dans":
+      - option "Sans projet" [selected]
+    - paragraph: Le workflow sera enregistré dans .tricorder/workflows/ du dossier choisi, prêt à versionner avec Git. Le lancement vient ensuite ; aucun commit ni envoi automatique.
+    - button "Créer et ouvrir le workflow"

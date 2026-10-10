@@ -1,0 +1,37 @@
+Activité
+Workflows
+Projets
+Essai développeur sceptique
+Planifications
+Connexions
+Paramètres
+Terminal
+
+
+
+
+← Retour à la liste
+Choisir l’IA
+Enregistrer
+Exécuter…
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Données structurées…
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+✦ Assistant IA
+☷ Liste
+◇Première étapeTâcheUtilise : demande initiale et contexte
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+×
+Appliquer

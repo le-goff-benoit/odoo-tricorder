@@ -1,0 +1,110 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Clôture de réunion
+    - heading "Synthèse hebdomadaire Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 3 / 3 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 2 s · attentes comprises Début : 10.10.2026 18:37:25 · Fin : 10.10.2026 18:37:28"
+    - strong: Simulation.
+    - text: Aucun modèle ni service métier appelé.
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Étape sélectionnée Choisir les réunions et leurs sources":
+          - text: Étape sélectionnée
+          - strong: Choisir les réunions et leurs sources
+        - button "Analyser les réunions sélectionnées":
+          - strong: Analyser les réunions sélectionnées
+      - paragraph: Produit · sorties vérifiées
+      - paragraph: SIMULATION — Résultat d'exemple pour « Choisir les réunions et leurs sources ». Aucun outil métier ni service externe n'a été appelé.
+      - paragraph: Preuve simulée, sans valeur de test métier réel.
+      - strong: Résultat validé
+      - paragraph: Contrôles techniques automatiques ; aucun critère métier attesté.
+      - group:
+        - text: Entrées, sorties et preuves
+        - heading "Résultat" [level=3]
+        - term: Réunions sélectionnées
+        - definition:
+          - list:
+            - listitem:
+              - term: Date
+              - definition: À préciser
+              - term: Commentaires
+              - definition: Le périmètre du prochain atelier reste à confirmer.
+              - term: Source
+              - definition: Notes synthétiques de démonstration
+              - term: Titre
+              - definition: Atelier fictif
+        - group: Données techniques
+        - heading "Preuves" [level=3]
+        - button "Preuve 1 · 7b60f0d0"
+  - dialog "Résultats de cette demande":
+    - heading "Résultats de cette demande" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Synthèse hebdomadaire Atlas
+    - paragraph: Simulation · ces contenus ne prouvent aucun travail métier réel.
+    - heading "Livrable final" [level=2]
+    - heading "Liste d’actions" [level=3]
+    - heading "Contenu produit" [level=3]
+    - term: Actions
+    - definition:
+      - region "Actions et responsables":
+        - table:
+          - rowgroup:
+            - row "Action Responsable Échéance":
+              - columnheader "Action"
+              - columnheader "Responsable"
+              - columnheader "Échéance"
+          - rowgroup:
+            - row "Confirmer le périmètre de l’atelier À préciser À préciser":
+              - cell "Confirmer le périmètre de l’atelier"
+              - cell "À préciser"
+              - cell "À préciser"
+    - group: Données techniques
+    - heading "Brouillon" [level=3]
+    - heading "Texte à reprendre" [level=3]
+    - text: "Exemple de texte d’email : voici le compte rendu et l’action à préciser. Aucun email envoyé ni brouillon Gmail créé."
+    - button "Copier le texte"
+    - heading "Compte rendu" [level=3]
+    - heading "Texte à reprendre" [level=3]
+    - text: "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer."
+    - button "Copier le texte"
+    - group: Résultats des étapes
+    - button "Fermer"
+    - button "Voir le rapport complet"

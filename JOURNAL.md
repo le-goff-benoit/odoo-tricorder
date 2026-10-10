@@ -1,5 +1,32 @@
 # Journal
 
+## 2026-10-10 — Création et usage consolidés (0.6.0-rc.15)
+
+- Revue spécialisée puis six agents personas, douze intentions et contre-épreuves indépendantes.
+- Liaisons guidées, règles sur informations reçues, choix humains naturels et branches stables.
+- Nouveaux workflows structurés ; validation explicite et paramètres fixes sans JSON.
+- Une décision finale avec preuves après la commande locale ; reprise réelle éprouvée.
+- Synthèses personnalisées et actions toutes visibles ; copie exacte du texte final.
+- Documents locaux prêts exécutables directement ; modèles complets séparés des blocs à composer.
+- Aides sur adaptation client, copie de modèle, paramètres et enregistrement sans projet.
+- 621 tests unitaires, 193 scénarios UI reçus avec trois reprises isolées, 11 parcours du paquet réussis.
+- Paquet Ubuntu rc.15 installé par le lanceur utilisateur ; rc.13 conservée.
+- Réception, limites, vérifications et identité du paquet : release/2026-10-10_retours-personas/.
+
+## 2026-10-10 — Retours d’usage (0.6.0-rc.14, version locale)
+
+- Workflows distingue En cours, Modèles et Historique ; les adaptations client restent accessibles dans Gestion.
+- Utiliser lance une demande ; les modèles inchangés sont réutilisés sans multiplier les copies, les adaptations conservées.
+- Retour workflow/release, alertes explicites et durées enregistrées incluant les attentes.
+- Questions libres visibles, Utilise/Produit et liens nommés, propriétés accessibles sur panneau compact.
+- Noms d’informations naturels convertis en identifiants, rapports métier sans sections logicielles inutiles.
+- Modèles IA proposés depuis les métadonnées locales non secrètes ; catalogue vide et actualisation expliqués.
+- Réunions : périmètre et sources au lancement, sélection, analyse puis compte rendu/actions/email.
+- Support : urgence distincte de nature, clarification concrète puis destination de réponse.
+- Six personas, douze intentions en GUI sur candidat figé, rapports critiques et contre-épreuve séparée.
+- Vérifications : 611 tests unitaires, suite UI et reprises ciblées, huit parcours réussis sur le paquet rc.14 local.
+- Mandat permanent docs/RECETTE-USAGE.md ; résultats et limites dans release/2026-10-10_retours-usage/README.md.
+
 ## 2026-10-10 — Intentions, tâches et résultats suivis (0.6.0-rc.13)
 
 - Recueil versionné de plusieurs intentions, contrats de données simples/listes et sortie vers un plan unique.

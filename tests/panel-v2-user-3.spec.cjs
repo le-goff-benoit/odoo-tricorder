@@ -14,6 +14,8 @@ function engine(command, data) {
 }
 async function create(template, title) {
   await page.locator('[data-workflow-route=global]').click();
+  await page.locator('summary').filter({ hasText: 'Gestion des workflows' }).click();
+  await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.getByRole('button', { name: 'Créer un workflow', exact: true }).click();
   await page.getByLabel('Modèle de workflow', { exact: true }).selectOption(template);
   await page.getByLabel('Nom du workflow', { exact: true }).fill(title);
@@ -61,16 +63,12 @@ test.afterEach(async () => {
 
 test('réunion : adapter un modèle par les formulaires, recevoir le compte rendu, activer un brouillon local', async () => {
   await create('meeting-conversation', 'Clôturer le comité de quartier');
-  await page.getByRole('button', { name: 'Données structurées…', exact: true }).click();
-  await page.getByRole('button', { name: 'Convertir ce brouillon', exact: true }).click();
-  await rename('review', 'Rédiger le compte rendu et les actions');
-  await page.getByLabel('Consigne', { exact: true }).fill('Lire les notes fictives. Séparer les décisions prises et les actions avec responsable et échéance. Demander les précisions manquantes.');
+  await rename('select', 'Choisir les réunions du comité');
+  await rename('review', 'Analyser les décisions et les engagements');
+  await page.getByLabel('Consigne', { exact: true }).fill('Analyser les notes fictives des réunions sélectionnées. Séparer les décisions, propositions et actions avec responsable et échéance. Signaler les précisions manquantes.');
   await page.getByRole('button', { name: 'Appliquer au bloc', exact: true }).click();
-  await page.locator('.node[data-id=mail]').click();
-  await page.getByRole('button', { name: 'Supprimer cette étape', exact: true }).click();
-  await shot('01-suppression-email-obligatoire');
-  await page.getByRole('button', { name: 'Supprimer le bloc et ses liens', exact: true }).click();
-  await rename('approve', 'Valider le compte rendu et les engagements');
+  await rename('mail', 'Préparer le compte rendu et le texte d’email');
+  await shot('01-selection-analyse-et-brouillon-sans-validation-imposee');
   await page.getByRole('button', { name: 'Ajouter une action facultative…', exact: true }).click();
   await page.getByLabel('Nom de l’action', { exact: true }).fill('Préparer un brouillon de suivi');
   await page.getByLabel('Nom du travail', { exact: true }).fill('Brouillon à relire');
@@ -82,19 +80,22 @@ test('réunion : adapter un modèle par les formulaires, recevoir le compte rend
   await page.getByLabel('Texte de la note', { exact: true }).fill('Relire les noms et les dates avant toute diffusion.');
   await page.getByRole('button', { name: 'Ajouter la note', exact: true }).click();
   await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
-  await expect.poll(async () => (await snapshot()).nodes.length).toBe(2);
-  const graph = await snapshot(); expect(graph.nodes).toHaveLength(2); expect(graph.actions).toHaveLength(1); expect(graph.layout.notes).toHaveLength(1);
+  await expect.poll(async () => (await snapshot()).nodes.length).toBe(3);
+  const graph = await snapshot(); expect(graph.nodes).toHaveLength(3); expect(graph.actions).toHaveLength(1); expect(graph.layout.notes).toHaveLength(1);
   await shot('03-workflow-reunion-adapte');
-  // Fixtures Engine : compte rendu IA fictif remis avant ouverture du suivi. Aucun fournisseur lancé.
-  // Exécution non simulée pour éprouver le document LOCAL saisi dans le formulaire ; aucun service externe.
-  const run = engine("r=e.start(p['project'],p['graph'],simulation=False,driver='conversation',parameters={'request':'Clôture du comité fictif : fête samedi 24 octobre, Léa réserve la salle pour le 15 octobre.'});c=e.claim(r['id'],'review');e.submit(r['id'],'review',c['token'],{'ok':True,'summary':'Compte rendu fictif préparé','outputs':{'minutes':'Décision : fête de quartier le samedi 24 octobre. Action : Léa réserve la salle avant le 15 octobre.','actions':[{'responsable':'Léa','action':'Réserver la salle','échéance':'15 octobre'}]}});print(json.dumps({'id':r['id']}))", { project: project.id, graph });
+  // Fixture IA : demander le périmètre puis fournir des résultats synthétiques.
+  // Aucun fournisseur, source réelle ou service externe n’est utilisé.
+  const run = engine("r=e.start(p['project'],p['graph'],simulation=False,driver='conversation',parameters={'request':'Clôturer les réunions du comité cette semaine.'});c=e.claim(r['id'],'select');e.submit(r['id'],'select',c['token'],{'ok':True,'summary':'Périmètre à préciser','question':'Quelles réunions du comité souhaitez-vous examiner ? Donnez les titres ou les dates et leurs notes.','outputs':{}});print(json.dumps({'id':r['id']}))", { project: project.id, graph });
   await openRun(run.id);
-  await page.getByRole('button', { name: 'Examiner la décision', exact: true }).click();
-  await expect(page.locator('#inspector')).toContainText('Léa');
-  await expect(page.locator('#inspector')).toContainText('15 octobre');
-  await shot('04-compte-rendu-et-actions-a-valider');
-  await page.getByRole('button', { name: 'Approuver la suite', exact: true }).click();
+  await page.getByRole('button', { name: 'Détail', exact: true }).click();
+  await expect(page.locator('#inspector')).toContainText('Quelles réunions du comité');
+  await page.getByLabel('Votre réponse', { exact: true }).fill('Les ateliers du 8 et du 10 octobre. Notes : fête le 24 octobre ; Léa réserve la salle pour le 15 octobre.');
+  await shot('04-question-reunions-et-sources-a-preciser');
+  await page.getByRole('button', { name: 'Répondre', exact: true }).click();
+  await expect.poll(async () => (await call('run.get', { run: run.id })).run.nodes.select.status).toBe('ready');
+  engine("rid=p['run'];c=e.claim(rid,'select');e.submit(rid,'select',c['token'],{'ok':True,'summary':'Deux réunions fictives sélectionnées','outputs':{'selected_meetings':[{'title':'Atelier du 8 octobre','source':'Notes fictives du 8','notes':'Fête le 24 octobre.'},{'title':'Atelier du 10 octobre','source':'Notes fictives du 10','notes':'Léa réserve la salle avant le 15 octobre.'}]}});c=e.claim(rid,'review');e.submit(rid,'review',c['token'],{'ok':True,'summary':'Analyse fictive des deux ateliers','outputs':{'analysis':'Décision : fête de quartier le samedi 24 octobre. Action : Léa réserve la salle avant le 15 octobre.','actions':[{'responsable':'Léa','action':'Réserver la salle','échéance':'15 octobre'}]}});c=e.claim(rid,'mail');e.submit(rid,'mail',c['token'],{'ok':True,'summary':'Compte rendu et texte d’email fictifs','outputs':{'minutes':'Décision : fête de quartier le samedi 24 octobre. Action : Léa réserve la salle avant le 15 octobre.','actions':[{'responsable':'Léa','action':'Réserver la salle','échéance':'15 octobre'}],'draft':'Objet : suivi des ateliers. Bonjour, voici les décisions. Aucun email envoyé.'}});print(json.dumps({'fixture':'deux réunions analysées sans validation intermédiaire'}))", { run: run.id });
   await expect.poll(async () => (await call('run.get', { run: run.id })).run.status).toBe('completed');
+  await openRun(run.id);
   await page.getByRole('button', { name: 'Voir les résultats', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('Réserver la salle');
   await shot('05-resultat-principal-termine');
@@ -121,7 +122,7 @@ test('plusieurs sujets : un plan, tâches visibles et brouillon en échec sans p
   await call('workflow.save', { project: project.id, graph: broken });
   await create('intentions-plan-work', 'Clôture de réunion — sujets et engagements');
   await rename('intentions', 'Recueillir les sujets de réunion');
-  const output = page.locator('.port-section').filter({ has: page.locator('strong').filter({ hasText: 'Sorties' }) });
+  const output = page.locator('.port-section').filter({ has: page.locator('strong').filter({ hasText: /Sorties|Produit/ }) });
   await output.getByRole('button', { name: 'Modifier', exact: true }).click();
   await page.getByLabel('Maximum d’éléments (facultatif)', { exact: true }).fill('10');
   await shot('08a-liste-sujets-typee-limitee');

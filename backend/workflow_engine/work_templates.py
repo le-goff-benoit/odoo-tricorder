@@ -7,37 +7,39 @@ def templates():
         return node(nid, title, "agent", profile=profile, validation="contract", max_attempts=2,
                     prompt=extra.pop("prompt", title), **extra)
 
-    support = {"schema": 1, "id": "support-conversation", "title": "Support — diagnostic et suite",
-               "description": "Recevoir une demande, qualifier l’impact, poser les questions utiles et préparer la suite. Agent et branches modifiables.",
+    support = {"schema": 1, "id": "support-conversation", "title": "Support — diagnostic et réponse",
+               "description": "Distinguer la nature de la demande et son urgence, préciser les faits manquants puis préparer une réponse pour Gmail ou un ticket Odoo. Aucun message envoyé.",
                "nodes": [
-                   work("diagnosis", "Analyser la demande de support", outputs={"severity": "string", "finding": "string", "next_action": "string"},
-                        prompt="Lire la demande dans parameters.request. Établir faits, impact, inconnues et suite proposée. severity vaut critical, normal ou unknown. Demander les faits manquants avec ask plutôt que les inventer. Aucun correctif ou envoi implicite."),
-                   node("route", "Support critique ?", "condition", x=370, parameter="severity", options=["critical", "normal", "unknown"],
-                        inputs={"severity": "string", "finding": "string", "next_action": "string"}, outputs={"finding": "string", "next_action": "string"}),
-                   work("urgent", "Préparer le traitement urgent", x=680, y=40, inputs={"finding": "string", "next_action": "string"}, outputs={"proposal": "string"},
-                        prompt="Proposer le traitement urgent à partir du constat. Distinguer urgence et risque. Préciser contrôles, candidat, cible et retour arrière. Ne pas déployer ; le parcours de livraison se dessine et s’autorise séparément."),
-                   work("normal", "Préparer la réponse et la suite", x=680, y=230, inputs={"finding": "string", "next_action": "string"}, outputs={"draft": "string"},
-                        prompt="Préparer un brouillon de réponse et les travaux utiles. Diagnostic, correction et livraison restent distincts. Ne pas envoyer."),
-                   node("clarify", "Préciser l’impact", "question", x=680, y=430, question="Quels faits permettent de préciser l’impact et l’urgence ?", outputs={"answer": "string"}),
-                   work("reassess", "Réévaluer avec la précision reçue", x=990, y=430, inputs={"answer": "string"}, outputs={"severity": "string", "finding": "string", "next_action": "string"}, route_output="severity", options=["critical", "normal", "unknown"],
-                        prompt="Réévaluer parameters.request avec inputs.answer. severity vaut critical, normal ou unknown. Conserver les inconnues ; ne pas inventer une urgence."),
-                   node("unresolved", "Diagnostic encore indéterminé", "question", x=1300, y=430, completion_outcome="blocked", question="L’impact reste indéterminé. Quelle investigation faut-il ouvrir dans une nouvelle tâche ?", outputs={"answer": "string"}),
+                   work("diagnosis", "Analyser la demande et son urgence", route_output="severity", options=["critical", "normal", "unknown"],
+                        outputs={"severity": "string", "finding": "string", "next_action": "string"},
+                        prompt="Lire la demande initiale. Dans le constat, distinguer la nature (bug suspecté, question d’utilisation, évolution ou indéterminée) de l’urgence. Décrire faits, personnes touchées, travail bloqué, contournement et inconnues. Classer l’urgence : urgent si elle est établie, sans urgence établie sinon (un bug reste possible), à préciser si l’impact manque. Justifier la qualification. Aucun correctif ou envoi implicite."),
+                   work("urgent", "Préparer la réponse urgente", x=400, y=40, inputs={"finding": "string", "next_action": "string"}, outputs={"proposal": "string"},
+                        prompt="À partir du constat reçu, préparer la réponse urgente et les prochaines investigations. Distinguer urgence, nature de la demande et risque. Expliquer les mesures proposées et leurs contrôles ; ne pas les présenter comme réalisées. Si un changement est proposé, préciser son périmètre et son retour arrière. Ne pas corriger, déployer ni envoyer."),
+                   work("normal", "Préparer la réponse sans urgence établie", x=400, y=230, inputs={"finding": "string", "next_action": "string"}, outputs={"draft": "string"},
+                        prompt="Préparer une réponse compréhensible à partir du constat et des prochaines investigations. Sans urgence établie ne signifie pas absence de bug. Expliquer les faits, les inconnues et la suite utile. Diagnostic, correction et livraison restent distincts. Ne pas envoyer."),
+                   node("clarify", "Préciser ce qui est bloqué", "question", x=400, y=450,
+                        question="Qui est touché, quelle tâche est bloquée et depuis quand ? Existe-t-il un contournement ou une échéance proche ? Indiquez ce que vous savez ; les autres points peuvent rester à préciser.", outputs={"answer": "string"}),
+                   work("reassess", "Réévaluer l’urgence avec les faits reçus", x=760, y=450, inputs={"answer": "string"}, outputs={"severity": "string", "finding": "string", "next_action": "string"}, route_output="severity", options=["critical", "normal", "unknown"],
+                        prompt="Relire la demande initiale et la précision reçue. Distinguer la nature (bug suspecté, question, évolution, indéterminée) et l’urgence dans le constat. Classer l’urgence : urgent si elle est établie, sans urgence établie sinon (un bug reste possible), à préciser si les faits restent insuffisants. Conserver les inconnues et justifier la prochaine investigation."),
+                   node("unresolved", "Choisir l’investigation manquante", "question", x=1120, y=450, completion_outcome="blocked",
+                        question="Les faits ne suffisent pas à conclure. Quelle investigation faut-il ouvrir : reproduire le problème, obtenir un exemple ou contacter une personne concernée ? Cette exécution se terminera avec un diagnostic non résolu.", outputs={"answer": "string"}),
+                   work("destination", "Reprendre la destination de la réponse", x=1120, y=100,
+                        prompt="Relire la demande initiale et les précisions déjà reçues. Si la destination est explicite (email ou brouillon Gmail, ticket ou message Odoo), la reprendre sans poser à nouveau la question. Restituer cette destination dans la réponse de cette étape. Si elle manque ou se contredit, demander avec ask : souhaitez-vous un texte pour un email ou pour un ticket Odoo ? Ne demander destinataire et ton que s’ils sont indispensables. Aucun message créé ni envoyé.", outputs={"answer": "string"}),
+                   work("response", "Mettre la réponse au format choisi", x=1500, y=100,
+                        inputs={"response": "string", "destination": "string"}, outputs={"draft": "string"},
+                        prompt="Adapter la réponse préparée à la destination choisie. Pour Gmail, fournir objet et corps prêts à reprendre dans un brouillon ; pour un ticket Odoo, fournir le texte à coller. Si la destination n’est pas claire, demander une précision avec ask. Conserver faits, inconnues et suite utile. Ne pas prétendre qu’un brouillon Gmail ou un message Odoo a été créé. Aucun envoi, publication ou connexion externe implicite."),
                ], "edges": [
-                   {**edge("diagnosis", "route"), "mapping": {k: k for k in ("severity", "finding", "next_action")}},
-                   {**edge("route", "urgent", "critical"), "mapping": {k: k for k in ("finding", "next_action")}},
-                   {**edge("route", "normal", "normal"), "mapping": {k: k for k in ("finding", "next_action")}},
-                   edge("route", "clarify", "unknown"), {**edge("clarify", "reassess"), "mapping": {"answer": "answer"}},
+                   {**edge("diagnosis", "urgent", "critical"), "mapping": {k: k for k in ("finding", "next_action")}},
+                   {**edge("diagnosis", "normal", "normal"), "mapping": {k: k for k in ("finding", "next_action")}},
+                   edge("diagnosis", "clarify", "unknown"), {**edge("clarify", "reassess"), "mapping": {"answer": "answer"}},
                    {**edge("reassess", "urgent", "critical"), "mapping": {k: k for k in ("finding", "next_action")}},
                    {**edge("reassess", "normal", "normal"), "mapping": {k: k for k in ("finding", "next_action")}},
                    edge("reassess", "unresolved", "unknown"),
+                   edge("urgent", "destination"), edge("normal", "destination"),
+                   {**edge("urgent", "response"), "mapping": {"proposal": "response"}},
+                   {**edge("normal", "response"), "mapping": {"draft": "response"}},
+                   {**edge("destination", "response"), "mapping": {"answer": "destination"}},
                ]}
-    # Present classification and routing as one configurable business block.
-    support["nodes"] = [n for n in support["nodes"] if n["id"] != "route"]
-    support["nodes"][0].update(title="Support critique ?", route_output="severity", options=["critical", "normal", "unknown"])
-    support["edges"] = [e for e in support["edges"] if e["to"] != "route"]
-    for connection in support["edges"]:
-        if connection["from"] == "route":
-            connection["from"] = "diagnosis"
     release = {"schema": 1, "id": "release-conversation", "title": "Release — demandes, plan, réalisation et validation",
                "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
                "nodes": [
@@ -56,13 +58,23 @@ def templates():
                    {**edge("work", "check"), "mapping": {"result": "result"}}, {**edge("check", "quality"), "mapping": {"verdict": "verdict", "evidence_summary": "evidence_summary"}},
                    {**edge("quality", "delivery", "pass"), "mapping": {"evidence_summary": "evidence_summary"}}, edge("quality", "failure", "fail"), {**edge("delivery", "receipt"), "mapping": {"proposal": "proposal"}},
                ]}
-    meeting = {"schema": 1, "id": "meeting-conversation", "title": "Clôture de réunion",
-               "description": "Vérifier la transcription, extraire décisions et actions, préparer le compte rendu et l’email. Ajouter vos blocs de publication selon les destinations choisies.",
+    meeting = {"schema": 2, "id": "meeting-conversation", "title": "Clôture de réunion",
+               "description": "Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.",
                "nodes": [
-                   work("review", "Vérifier la réunion et sa transcription", outputs={"minutes": "string", "actions": "array"}, prompt="Lire la demande et la transcription fournies. Distinguer décisions, propositions et inconnues, attribuer les actions seulement lorsque c’est explicite. Poser les questions utiles. Produire un compte rendu fidèle."),
-                   node("approve", "Relire le compte rendu", "decision", x=370, inputs={"minutes": "string", "actions": "array"}, outputs={"minutes": "string", "actions": "array"}, question="Le compte rendu et les actions reflètent-ils la réunion ?", options=["approve", "reject"]),
-                   work("mail", "Préparer l’email de suivi", x=680, inputs={"minutes": "string", "actions": "array"}, outputs={"draft": "string"}, prompt="Préparer le brouillon d’email à partir du compte rendu reçu dans cette exécution. Aucun envoi ni publication implicite. Les destinations Confluence, Slack ou mail sont des blocs configurables du workflow."),
-               ], "edges": [{**edge("review", "approve"), "mapping": {"minutes": "minutes", "actions": "actions"}}, {**edge("approve", "mail", "approve"), "mapping": {"minutes": "minutes", "actions": "actions"}}]}
+                   work("select", "Choisir les réunions et leurs sources",
+                        outputs={"selected_meetings": {"type": "array", "items": "object", "required": True, "minItems": 1}},
+                        prompt="Lire la demande initiale. Identifier les réunions visées : titres ou liens précis, ou période avec ses dates. Il peut y avoir plusieurs réunions dans une semaine. Si le périmètre manque, demander avec ask quelles réunions ou quelle période examiner. Utiliser seulement les sources fournies ou réellement accessibles. Si une recherche produit plusieurs réunions et que la sélection est ambiguë, présenter les titres et dates et faire préciser le choix avec ask. Pour chaque réunion sélectionnée, transmettre titre, date si connue, référence de la source, transcription ou notes effectivement lues et limites. Sans source exploitable, demander la transcription ou les notes avec ask ; ne pas inventer de réunion ou d’accès Meeting Minutes."),
+                   work("review", "Analyser les réunions sélectionnées", x=450,
+                        inputs={"selected_meetings": {"type": "array", "items": "object", "required": True, "minItems": 1}},
+                        outputs={"analysis": "string", "actions": "array"},
+                        prompt="Analyser les sources des réunions sélectionnées. Présenter les faits et décisions par réunion avec leur provenance ; distinguer décisions, propositions, contradictions et inconnues. Extraire les actions avec responsable et échéance uniquement lorsqu’ils sont explicites ; sinon indiquer à préciser. Poser une question avec ask seulement si une information manque pour produire un résultat utile. Signaler les autres incertitudes dans l’analyse, sans imposer une validation intermédiaire du compte rendu."),
+                   work("mail", "Préparer le compte rendu et l’email", x=850,
+                        inputs={"analysis": "string", "actions": "array"}, outputs={"minutes": "string", "actions": "array", "draft": "string"},
+                        prompt="À partir de l’analyse et des actions reçues, produire un compte rendu fidèle, la liste d’actions et un texte d’email avec objet et corps. Distinguer les différentes réunions et reprendre les sources, décisions et points à préciser. Ne pas inventer de destinataires. Présenter les incertitudes avec le résultat ; demander une précision seulement si elle est indispensable. Aucun email envoyé ni brouillon créé dans Gmail ; une éventuelle publication exige une opération configurée et autorisée séparément."),
+               ], "edges": [
+                   {**edge("select", "review"), "mapping": {"selected_meetings": "selected_meetings"}},
+                   {**edge("review", "mail"), "mapping": {"analysis": "analysis", "actions": "actions"}},
+               ]}
     request = {"schema": 1, "id": "request-conversation", "title": "Demande ponctuelle",
                "description": "Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.",
                "nodes": [
@@ -95,14 +107,17 @@ def templates():
             "delivery": {"proposal": "Exemple de bilan et de proposition de livraison ; aucune publication effectuée."},
         },
         "support-conversation": {
+            "destination": {"answer": "Exemple de destination : texte pour un ticket Odoo. Destination fictive de simulation, sans lecture de la demande ni création de message."},
             "diagnosis": {"severity": "normal", "finding": "Exemple : un utilisateur rencontre un défaut sans interruption du service.", "next_action": "Exemple : préparer la réponse et les investigations."},
             "urgent": {"proposal": "Exemple de traitement urgent à examiner ; aucun correctif ni déploiement effectué."},
             "normal": {"draft": "Exemple de brouillon : nous proposons de vérifier le défaut signalé. Aucun message envoyé."},
             "reassess": {"severity": "normal", "finding": "Exemple : la précision reçue permet de limiter l’impact.", "next_action": "Exemple : préparer une réponse documentée."},
+            "response": {"draft": "Exemple de réponse au format choisi. Aucun email envoyé, brouillon Gmail créé ou ticket Odoo modifié."},
         },
         "meeting-conversation": {
-            "review": {"minutes": "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer.", "actions": [{"action": "Confirmer le périmètre de l’atelier", "owner": "À préciser", "due": "À préciser"}]},
-            "mail": {"draft": "Exemple de brouillon : voici le compte rendu et l’action à préciser. Aucun email envoyé."},
+            "select": {"selected_meetings": [{"title": "Atelier fictif", "date": "À préciser", "source": "Notes synthétiques de démonstration", "notes": "Le périmètre du prochain atelier reste à confirmer."}]},
+            "review": {"analysis": "Exemple : les notes de l’atelier fictif laissent le périmètre à confirmer ; aucune décision définitive.", "actions": [{"action": "Confirmer le périmètre de l’atelier", "owner": "À préciser", "due": "À préciser"}]},
+            "mail": {"minutes": "Exemple de compte rendu : le périmètre du prochain atelier reste à confirmer.", "actions": [{"action": "Confirmer le périmètre de l’atelier", "owner": "À préciser", "due": "À préciser"}], "draft": "Exemple de texte d’email : voici le compte rendu et l’action à préciser. Aucun email envoyé ni brouillon Gmail créé."},
         },
         "request-conversation": {
             "clarify": {"brief": "Exemple : préparer une synthèse des informations fournies."},
@@ -115,10 +130,11 @@ def templates():
         },
     }
     support_criteria = {
-        "diagnosis": ["Les faits, l’impact et les inconnues sont distingués.", "La criticité et la prochaine action sont justifiées par les sources reçues."],
+        "diagnosis": ["Les faits, l’impact et les inconnues sont distingués.", "La nature de la demande et son urgence sont distinctes ; la prochaine action est justifiée par les sources reçues."],
         "urgent": ["La proposition précise le périmètre, les contrôles et le retour arrière.", "Aucun déploiement n’est présenté comme effectué ou autorisé par le seul diagnostic."],
         "normal": ["Le brouillon explique le constat, les inconnues et la suite proposée.", "Le message reste un brouillon, sans envoi implicite."],
         "reassess": ["La nouvelle qualification tient compte de la précision reçue.", "Les inconnues restantes sont explicites."],
+        "response": ["La réponse respecte la destination choisie.", "Aucune création de brouillon externe ni aucun envoi n’est présenté comme effectué."],
     }
     for step in support["nodes"]:
         if step["id"] in support_criteria:

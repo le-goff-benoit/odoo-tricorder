@@ -9,9 +9,10 @@ FIELDS = {
     "action": "Action", "actions": "Actions", "owner": "Responsable", "assignee": "Responsable",
     "due": "Échéance", "due_date": "Échéance", "deadline": "Échéance", "question": "Question",
     "answer": "Réponse", "clarifications": "Précisions", "summary": "Résumé", "report": "Rapport",
-    "finding": "Constat", "findings": "Constats", "severity": "Criticité", "next_action": "Suite proposée",
+    "finding": "Constat", "findings": "Constats", "severity": "Niveau d’urgence", "next_action": "Suite proposée",
     "next_steps": "Prochaines étapes", "rationale": "Justification", "impact": "Impact", "verdict": "Verdict",
     "decision": "Décision", "outcome": "Décision", "status": "État", "request": "Demande", "result": "Résultat",
+    "selected_meetings": "Réunions sélectionnées", "analysis": "Analyse des réunions", "minutes": "Compte rendu", "destination": "Destination choisie", "response": "Réponse préparée",
     "proposal": "Proposition", "draft": "Brouillon", "subject": "Objet", "body": "Contenu", "recipient": "Destinataire",
     "title": "Titre", "description": "Description", "note": "Commentaire", "notes": "Commentaires",
     "message": "Message", "error": "Erreur", "reason": "Motif", "evidence": "Preuves", "source": "Source",
@@ -19,7 +20,7 @@ FIELDS = {
     "criteria": "Critères", "exit_code": "Code de sortie", "stdout": "Sortie de la commande", "stderr": "Erreurs de la commande",
 }
 DECISIONS = {"approve": "Approuvée", "reject": "Refusée", "pass": "Conforme", "fail": "Non conforme",
-             "critical": "Critique", "normal": "Normale", "unknown": "Indéterminée", "done": "Terminé",
+             "critical": "Urgent", "normal": "Sans urgence établie", "unknown": "À préciser", "done": "Terminé",
              "blocked": "Bloquée", "deferred": "Différée"}
 ROLES = {"source": "Source", "plan": "Plan", "deliverable": "Livrable", "result": "Résultat", "evidence": "Preuve", "email": "Email d’origine"}
 

@@ -1,0 +1,1080 @@
+{
+  "run": {
+    "completion_outcome": "succeeded",
+    "contract": "05ca0b3a662b5f4c05f7c03c433864f385b94b23d8a685a1a4aafdb520ae963a",
+    "created": 1791650556.7566705,
+    "definition": {
+      "description": "Distinguer la nature de la demande et son urgence, préciser les faits manquants puis préparer une réponse pour Gmail ou un ticket Odoo. Aucun message envoyé.",
+      "edges": [
+        {
+          "from": "diagnosis",
+          "id": "diagnosis-urgent",
+          "mapping": {
+            "finding": "finding",
+            "next_action": "next_action"
+          },
+          "outcome": "critical",
+          "to": "urgent"
+        },
+        {
+          "from": "diagnosis",
+          "id": "diagnosis-normal",
+          "mapping": {
+            "finding": "finding",
+            "next_action": "next_action"
+          },
+          "outcome": "normal",
+          "to": "normal"
+        },
+        {
+          "from": "diagnosis",
+          "id": "diagnosis-clarify",
+          "outcome": "unknown",
+          "to": "clarify"
+        },
+        {
+          "from": "clarify",
+          "id": "clarify-reassess",
+          "mapping": {
+            "answer": "answer"
+          },
+          "outcome": "done",
+          "to": "reassess"
+        },
+        {
+          "from": "reassess",
+          "id": "reassess-urgent",
+          "mapping": {
+            "finding": "finding",
+            "next_action": "next_action"
+          },
+          "outcome": "critical",
+          "to": "urgent"
+        },
+        {
+          "from": "reassess",
+          "id": "reassess-normal",
+          "mapping": {
+            "finding": "finding",
+            "next_action": "next_action"
+          },
+          "outcome": "normal",
+          "to": "normal"
+        },
+        {
+          "from": "reassess",
+          "id": "reassess-unresolved",
+          "outcome": "unknown",
+          "to": "unresolved"
+        },
+        {
+          "from": "urgent",
+          "id": "urgent-destination",
+          "outcome": "done",
+          "to": "destination"
+        },
+        {
+          "from": "normal",
+          "id": "normal-destination",
+          "outcome": "done",
+          "to": "destination"
+        },
+        {
+          "from": "urgent",
+          "id": "urgent-response",
+          "mapping": {
+            "proposal": "response"
+          },
+          "outcome": "done",
+          "to": "response"
+        },
+        {
+          "from": "normal",
+          "id": "normal-response",
+          "mapping": {
+            "draft": "response"
+          },
+          "outcome": "done",
+          "to": "response"
+        },
+        {
+          "from": "destination",
+          "id": "destination-response",
+          "mapping": {
+            "answer": "destination"
+          },
+          "outcome": "done",
+          "to": "response"
+        }
+      ],
+      "id": "support-conversation-use-bd25e1341493",
+      "nodes": [
+        {
+          "criteria": [
+            "Les faits, l’impact et les inconnues sont distingués.",
+            "La nature de la demande et son urgence sont distinctes ; la prochaine action est justifiée par les sources reçues."
+          ],
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "diagnosis",
+          "kind": "agent",
+          "max_attempts": 2,
+          "options": [
+            "critical",
+            "normal",
+            "unknown"
+          ],
+          "outputs": {
+            "finding": "string",
+            "next_action": "string",
+            "severity": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire la demande initiale. Dans le constat, distinguer la nature (bug suspecté, question d’utilisation, évolution ou indéterminée) de l’urgence. Décrire faits, personnes touchées, travail bloqué, contournement et inconnues. Classer l’urgence : urgent si elle est établie, sans urgence établie sinon (un bug reste possible), à préciser si l’impact manque. Justifier la qualification. Aucun correctif ou envoi implicite.",
+          "route_output": "severity",
+          "sample_outputs": {
+            "finding": "Exemple : un utilisateur rencontre un défaut sans interruption du service.",
+            "next_action": "Exemple : préparer la réponse et les investigations.",
+            "severity": "normal"
+          },
+          "title": "Analyser la demande et son urgence",
+          "validation": "contract"
+        },
+        {
+          "criteria": [
+            "La proposition précise le périmètre, les contrôles et le retour arrière.",
+            "Aucun déploiement n’est présenté comme effectué ou autorisé par le seul diagnostic."
+          ],
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "urgent",
+          "inputs": {
+            "finding": "string",
+            "next_action": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "proposal": "string"
+          },
+          "position": {
+            "x": 400,
+            "y": 40
+          },
+          "profile": "generalist",
+          "prompt": "À partir du constat reçu, préparer la réponse urgente et les prochaines investigations. Distinguer urgence, nature de la demande et risque. Expliquer les mesures proposées et leurs contrôles ; ne pas les présenter comme réalisées. Si un changement est proposé, préciser son périmètre et son retour arrière. Ne pas corriger, déployer ni envoyer.",
+          "sample_outputs": {
+            "proposal": "Exemple de traitement urgent à examiner ; aucun correctif ni déploiement effectué."
+          },
+          "title": "Préparer la réponse urgente",
+          "validation": "contract"
+        },
+        {
+          "criteria": [
+            "Le brouillon explique le constat, les inconnues et la suite proposée.",
+            "Le message reste un brouillon, sans envoi implicite."
+          ],
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "normal",
+          "inputs": {
+            "finding": "string",
+            "next_action": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "draft": "string"
+          },
+          "position": {
+            "x": 400,
+            "y": 230
+          },
+          "profile": "generalist",
+          "prompt": "Préparer une réponse compréhensible à partir du constat et des prochaines investigations. Sans urgence établie ne signifie pas absence de bug. Expliquer les faits, les inconnues et la suite utile. Diagnostic, correction et livraison restent distincts. Ne pas envoyer.",
+          "sample_outputs": {
+            "draft": "Exemple de brouillon : nous proposons de vérifier le défaut signalé. Aucun message envoyé."
+          },
+          "title": "Préparer la réponse sans urgence établie",
+          "validation": "contract"
+        },
+        {
+          "id": "clarify",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 400,
+            "y": 450
+          },
+          "question": "Qui est touché, quelle tâche est bloquée et depuis quand ? Existe-t-il un contournement ou une échéance proche ? Indiquez ce que vous savez ; les autres points peuvent rester à préciser.",
+          "title": "Préciser ce qui est bloqué"
+        },
+        {
+          "criteria": [
+            "La nouvelle qualification tient compte de la précision reçue.",
+            "Les inconnues restantes sont explicites."
+          ],
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "reassess",
+          "inputs": {
+            "answer": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "options": [
+            "critical",
+            "normal",
+            "unknown"
+          ],
+          "outputs": {
+            "finding": "string",
+            "next_action": "string",
+            "severity": "string"
+          },
+          "position": {
+            "x": 760,
+            "y": 450
+          },
+          "profile": "generalist",
+          "prompt": "Relire la demande initiale et la précision reçue. Distinguer la nature (bug suspecté, question, évolution, indéterminée) et l’urgence dans le constat. Classer l’urgence : urgent si elle est établie, sans urgence établie sinon (un bug reste possible), à préciser si les faits restent insuffisants. Conserver les inconnues et justifier la prochaine investigation.",
+          "route_output": "severity",
+          "sample_outputs": {
+            "finding": "Exemple : la précision reçue permet de limiter l’impact.",
+            "next_action": "Exemple : préparer une réponse documentée.",
+            "severity": "normal"
+          },
+          "title": "Réévaluer l’urgence avec les faits reçus",
+          "validation": "contract"
+        },
+        {
+          "completion_outcome": "blocked",
+          "id": "unresolved",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 1120,
+            "y": 450
+          },
+          "question": "Les faits ne suffisent pas à conclure. Quelle investigation faut-il ouvrir : reproduire le problème, obtenir un exemple ou contacter une personne concernée ? Cette exécution se terminera avec un diagnostic non résolu.",
+          "title": "Choisir l’investigation manquante"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "destination",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 1120,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Relire la demande initiale et les précisions déjà reçues. Si la destination est explicite (email ou brouillon Gmail, ticket ou message Odoo), la reprendre sans poser à nouveau la question. Restituer cette destination dans la réponse de cette étape. Si elle manque ou se contredit, demander avec ask : souhaitez-vous un texte pour un email ou pour un ticket Odoo ? Ne demander destinataire et ton que s’ils sont indispensables. Aucun message créé ni envoyé.",
+          "sample_outputs": {
+            "answer": "Exemple de destination : texte pour un ticket Odoo. Destination fictive de simulation, sans lecture de la demande ni création de message."
+          },
+          "title": "Reprendre la destination de la réponse",
+          "validation": "contract"
+        },
+        {
+          "criteria": [
+            "La réponse respecte la destination choisie.",
+            "Aucune création de brouillon externe ni aucun envoi n’est présenté comme effectué."
+          ],
+          "execution": {
+            "effort": "medium",
+            "model": "",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "response",
+          "inputs": {
+            "destination": "string",
+            "response": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "draft": "string"
+          },
+          "position": {
+            "x": 1500,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Adapter la réponse préparée à la destination choisie. Pour Gmail, fournir objet et corps prêts à reprendre dans un brouillon ; pour un ticket Odoo, fournir le texte à coller. Si la destination n’est pas claire, demander une précision avec ask. Conserver faits, inconnues et suite utile. Ne pas prétendre qu’un brouillon Gmail ou un message Odoo a été créé. Aucun envoi, publication ou connexion externe implicite.",
+          "sample_outputs": {
+            "draft": "Exemple de réponse au format choisi. Aucun email envoyé, brouillon Gmail créé ou ticket Odoo modifié."
+          },
+          "title": "Mettre la réponse au format choisi",
+          "validation": "contract"
+        }
+      ],
+      "parameters": {
+        "request": "Atlas — demande urgente, pas bug confirmé\n\nNotre client Atlas demande une liste supplémentaire dans Odoo pour demain. Aucune fonction existante ne dysfonctionne. Impact : trois gestionnaires font un export manuel, aucune activité bloquée. Ne pas confondre urgence du délai avec un bug. Préparer la réponse pour le ticket Odoo #482, pas un email."
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Support — diagnostic et réponse"
+    },
+    "driver": "automatic",
+    "id": "raf8853b91c7442c1",
+    "nodes": {
+      "clarify": {
+        "attempt": 0,
+        "status": "skipped"
+      },
+      "destination": {
+        "attempt": 1,
+        "finished": 1791650559.2342618,
+        "heartbeat": 1791650558.817874,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 309045,
+        "processes": [
+          {
+            "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+            "pid": 309045,
+            "session": 309045,
+            "start": "750056"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791650559.23492,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "05ca0b3a662b5f4c05f7c03c433864f385b94b23d8a685a1a4aafdb520ae963a",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "3c19c6a4c0cd6bfacb61aa87388a447282be3bd2728d8085df526bb94fc44e04",
+              "size": 144
+            }
+          ],
+          "ok": true,
+          "outputs": {
+            "answer": "Exemple de destination : texte pour un ticket Odoo. Destination fictive de simulation, sans lecture de la demande ni création de message."
+          },
+          "simulated": true,
+          "summary": "SIMULATION — Résultat d'exemple pour « Reprendre la destination de la réponse ». Aucun outil métier ni service externe n'a été appelé."
+        },
+        "started": 1791650558.7343798,
+        "status": "accepted",
+        "token": "taae6916aef8d4cfe"
+      },
+      "diagnosis": {
+        "attempt": 1,
+        "finished": 1791650557.2703452,
+        "heartbeat": 1791650556.8566816,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "normal",
+        "ownership": "managed",
+        "pid": 308870,
+        "processes": [
+          {
+            "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+            "pid": 308870,
+            "session": 308870,
+            "start": "749860"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791650557.2710097,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "05ca0b3a662b5f4c05f7c03c433864f385b94b23d8a685a1a4aafdb520ae963a",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "b4f3fb2cadc8c06a6bbde16781e0757c7000bbc55cc933903ca01c5bb7bb358c",
+              "size": 139
+            }
+          ],
+          "ok": true,
+          "outputs": {
+            "finding": "Exemple : un utilisateur rencontre un défaut sans interruption du service.",
+            "next_action": "Exemple : préparer la réponse et les investigations.",
+            "severity": "normal"
+          },
+          "simulated": true,
+          "summary": "SIMULATION — Résultat d'exemple pour « Analyser la demande et son urgence ». Aucun outil métier ni service externe n'a été appelé."
+        },
+        "started": 1791650556.7688758,
+        "status": "accepted",
+        "token": "tefb28c2433fd435a"
+      },
+      "normal": {
+        "attempt": 1,
+        "finished": 1791650557.7974849,
+        "heartbeat": 1791650557.3826053,
+        "input_sources": {
+          "finding": {
+            "edge": "diagnosis-normal",
+            "node": "diagnosis",
+            "port": "finding"
+          },
+          "next_action": {
+            "edge": "diagnosis-normal",
+            "node": "diagnosis",
+            "port": "next_action"
+          }
+        },
+        "inputs": {
+          "finding": "Exemple : un utilisateur rencontre un défaut sans interruption du service.",
+          "next_action": "Exemple : préparer la réponse et les investigations."
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 308886,
+        "processes": [
+          {
+            "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+            "pid": 308886,
+            "session": 308886,
+            "start": "749916"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791650557.7986422,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "05ca0b3a662b5f4c05f7c03c433864f385b94b23d8a685a1a4aafdb520ae963a",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "f84ba75aeb21461cb3fbde2596f986f2039cb1aca9a55c5a2995a294a4016e0e",
+              "size": 148
+            }
+          ],
+          "ok": true,
+          "outputs": {
+            "draft": "Exemple de brouillon : nous proposons de vérifier le défaut signalé. Aucun message envoyé."
+          },
+          "simulated": true,
+          "summary": "SIMULATION — Résultat d'exemple pour « Préparer la réponse sans urgence établie ». Aucun outil métier ni service externe n'a été appelé."
+        },
+        "started": 1791650557.337142,
+        "status": "accepted",
+        "token": "tbbc09d9151a643ed"
+      },
+      "reassess": {
+        "attempt": 0,
+        "status": "skipped"
+      },
+      "response": {
+        "attempt": 1,
+        "finished": 1791650560.1068609,
+        "heartbeat": 1791650559.6964405,
+        "input_sources": {
+          "destination": {
+            "edge": "destination-response",
+            "node": "destination",
+            "port": "answer"
+          },
+          "response": {
+            "edge": "normal-response",
+            "node": "normal",
+            "port": "draft"
+          }
+        },
+        "inputs": {
+          "destination": "Exemple de destination : texte pour un ticket Odoo. Destination fictive de simulation, sans lecture de la demande ni création de message.",
+          "response": "Exemple de brouillon : nous proposons de vérifier le défaut signalé. Aucun message envoyé."
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 309116,
+        "processes": [
+          {
+            "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+            "pid": 309116,
+            "session": 309116,
+            "start": "750144"
+          }
+        ],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791650560.1072156,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "05ca0b3a662b5f4c05f7c03c433864f385b94b23d8a685a1a4aafdb520ae963a",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "80b9854baa4faccf5a83161051c354fc695dde51fd6d93b3d9b1dfc6cefe05fd",
+              "size": 140
+            }
+          ],
+          "ok": true,
+          "outputs": {
+            "draft": "Exemple de réponse au format choisi. Aucun email envoyé, brouillon Gmail créé ou ticket Odoo modifié."
+          },
+          "simulated": true,
+          "summary": "SIMULATION — Résultat d'exemple pour « Mettre la réponse au format choisi ». Aucun outil métier ni service externe n'a été appelé."
+        },
+        "started": 1791650559.6083076,
+        "status": "accepted",
+        "token": "t8f274e74bd1743e9"
+      },
+      "unresolved": {
+        "attempt": 0,
+        "status": "skipped"
+      },
+      "urgent": {
+        "attempt": 0,
+        "status": "skipped"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "description": "Distinguer la nature de la demande et son urgence, préciser les faits manquants puis préparer une réponse pour Gmail ou un ticket Odoo. Aucun message envoyé.",
+      "edges": [
+        {
+          "from": "diagnosis",
+          "id": "diagnosis-urgent",
+          "mapping": {
+            "finding": "finding",
+            "next_action": "next_action"
+          },
+          "outcome": "critical",
+          "to": "urgent"
+        },
+        {
+          "from": "diagnosis",
+          "id": "diagnosis-normal",
+          "mapping": {
+            "finding": "finding",
+            "next_action": "next_action"
+          },
+          "outcome": "normal",
+          "to": "normal"
+        },
+        {
+          "from": "diagnosis",
+          "id": "diagnosis-clarify",
+          "outcome": "unknown",
+          "to": "clarify"
+        },
+        {
+          "from": "clarify",
+          "id": "clarify-reassess",
+          "mapping": {
+            "answer": "answer"
+          },
+          "outcome": "done",
+          "to": "reassess"
+        },
+        {
+          "from": "reassess",
+          "id": "reassess-urgent",
+          "mapping": {
+            "finding": "finding",
+            "next_action": "next_action"
+          },
+          "outcome": "critical",
+          "to": "urgent"
+        },
+        {
+          "from": "reassess",
+          "id": "reassess-normal",
+          "mapping": {
+            "finding": "finding",
+            "next_action": "next_action"
+          },
+          "outcome": "normal",
+          "to": "normal"
+        },
+        {
+          "from": "reassess",
+          "id": "reassess-unresolved",
+          "outcome": "unknown",
+          "to": "unresolved"
+        },
+        {
+          "from": "urgent",
+          "id": "urgent-destination",
+          "outcome": "done",
+          "to": "destination"
+        },
+        {
+          "from": "normal",
+          "id": "normal-destination",
+          "outcome": "done",
+          "to": "destination"
+        },
+        {
+          "from": "urgent",
+          "id": "urgent-response",
+          "mapping": {
+            "proposal": "response"
+          },
+          "outcome": "done",
+          "to": "response"
+        },
+        {
+          "from": "normal",
+          "id": "normal-response",
+          "mapping": {
+            "draft": "response"
+          },
+          "outcome": "done",
+          "to": "response"
+        },
+        {
+          "from": "destination",
+          "id": "destination-response",
+          "mapping": {
+            "answer": "destination"
+          },
+          "outcome": "done",
+          "to": "response"
+        }
+      ],
+      "id": "support-conversation-use-bd25e1341493",
+      "nodes": [
+        {
+          "criteria": [
+            "Les faits, l’impact et les inconnues sont distingués.",
+            "La nature de la demande et son urgence sont distinctes ; la prochaine action est justifiée par les sources reçues."
+          ],
+          "id": "diagnosis",
+          "kind": "agent",
+          "max_attempts": 2,
+          "options": [
+            "critical",
+            "normal",
+            "unknown"
+          ],
+          "outputs": {
+            "finding": "string",
+            "next_action": "string",
+            "severity": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Lire la demande initiale. Dans le constat, distinguer la nature (bug suspecté, question d’utilisation, évolution ou indéterminée) de l’urgence. Décrire faits, personnes touchées, travail bloqué, contournement et inconnues. Classer l’urgence : urgent si elle est établie, sans urgence établie sinon (un bug reste possible), à préciser si l’impact manque. Justifier la qualification. Aucun correctif ou envoi implicite.",
+          "route_output": "severity",
+          "sample_outputs": {
+            "finding": "Exemple : un utilisateur rencontre un défaut sans interruption du service.",
+            "next_action": "Exemple : préparer la réponse et les investigations.",
+            "severity": "normal"
+          },
+          "title": "Analyser la demande et son urgence",
+          "validation": "contract"
+        },
+        {
+          "criteria": [
+            "La proposition précise le périmètre, les contrôles et le retour arrière.",
+            "Aucun déploiement n’est présenté comme effectué ou autorisé par le seul diagnostic."
+          ],
+          "id": "urgent",
+          "inputs": {
+            "finding": "string",
+            "next_action": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "proposal": "string"
+          },
+          "position": {
+            "x": 400,
+            "y": 40
+          },
+          "profile": "generalist",
+          "prompt": "À partir du constat reçu, préparer la réponse urgente et les prochaines investigations. Distinguer urgence, nature de la demande et risque. Expliquer les mesures proposées et leurs contrôles ; ne pas les présenter comme réalisées. Si un changement est proposé, préciser son périmètre et son retour arrière. Ne pas corriger, déployer ni envoyer.",
+          "sample_outputs": {
+            "proposal": "Exemple de traitement urgent à examiner ; aucun correctif ni déploiement effectué."
+          },
+          "title": "Préparer la réponse urgente",
+          "validation": "contract"
+        },
+        {
+          "criteria": [
+            "Le brouillon explique le constat, les inconnues et la suite proposée.",
+            "Le message reste un brouillon, sans envoi implicite."
+          ],
+          "id": "normal",
+          "inputs": {
+            "finding": "string",
+            "next_action": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "draft": "string"
+          },
+          "position": {
+            "x": 400,
+            "y": 230
+          },
+          "profile": "generalist",
+          "prompt": "Préparer une réponse compréhensible à partir du constat et des prochaines investigations. Sans urgence établie ne signifie pas absence de bug. Expliquer les faits, les inconnues et la suite utile. Diagnostic, correction et livraison restent distincts. Ne pas envoyer.",
+          "sample_outputs": {
+            "draft": "Exemple de brouillon : nous proposons de vérifier le défaut signalé. Aucun message envoyé."
+          },
+          "title": "Préparer la réponse sans urgence établie",
+          "validation": "contract"
+        },
+        {
+          "id": "clarify",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 400,
+            "y": 450
+          },
+          "question": "Qui est touché, quelle tâche est bloquée et depuis quand ? Existe-t-il un contournement ou une échéance proche ? Indiquez ce que vous savez ; les autres points peuvent rester à préciser.",
+          "title": "Préciser ce qui est bloqué"
+        },
+        {
+          "criteria": [
+            "La nouvelle qualification tient compte de la précision reçue.",
+            "Les inconnues restantes sont explicites."
+          ],
+          "id": "reassess",
+          "inputs": {
+            "answer": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "options": [
+            "critical",
+            "normal",
+            "unknown"
+          ],
+          "outputs": {
+            "finding": "string",
+            "next_action": "string",
+            "severity": "string"
+          },
+          "position": {
+            "x": 760,
+            "y": 450
+          },
+          "profile": "generalist",
+          "prompt": "Relire la demande initiale et la précision reçue. Distinguer la nature (bug suspecté, question, évolution, indéterminée) et l’urgence dans le constat. Classer l’urgence : urgent si elle est établie, sans urgence établie sinon (un bug reste possible), à préciser si les faits restent insuffisants. Conserver les inconnues et justifier la prochaine investigation.",
+          "route_output": "severity",
+          "sample_outputs": {
+            "finding": "Exemple : la précision reçue permet de limiter l’impact.",
+            "next_action": "Exemple : préparer une réponse documentée.",
+            "severity": "normal"
+          },
+          "title": "Réévaluer l’urgence avec les faits reçus",
+          "validation": "contract"
+        },
+        {
+          "completion_outcome": "blocked",
+          "id": "unresolved",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 1120,
+            "y": 450
+          },
+          "question": "Les faits ne suffisent pas à conclure. Quelle investigation faut-il ouvrir : reproduire le problème, obtenir un exemple ou contacter une personne concernée ? Cette exécution se terminera avec un diagnostic non résolu.",
+          "title": "Choisir l’investigation manquante"
+        },
+        {
+          "id": "destination",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 1120,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Relire la demande initiale et les précisions déjà reçues. Si la destination est explicite (email ou brouillon Gmail, ticket ou message Odoo), la reprendre sans poser à nouveau la question. Restituer cette destination dans la réponse de cette étape. Si elle manque ou se contredit, demander avec ask : souhaitez-vous un texte pour un email ou pour un ticket Odoo ? Ne demander destinataire et ton que s’ils sont indispensables. Aucun message créé ni envoyé.",
+          "sample_outputs": {
+            "answer": "Exemple de destination : texte pour un ticket Odoo. Destination fictive de simulation, sans lecture de la demande ni création de message."
+          },
+          "title": "Reprendre la destination de la réponse",
+          "validation": "contract"
+        },
+        {
+          "criteria": [
+            "La réponse respecte la destination choisie.",
+            "Aucune création de brouillon externe ni aucun envoi n’est présenté comme effectué."
+          ],
+          "id": "response",
+          "inputs": {
+            "destination": "string",
+            "response": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "draft": "string"
+          },
+          "position": {
+            "x": 1500,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Adapter la réponse préparée à la destination choisie. Pour Gmail, fournir objet et corps prêts à reprendre dans un brouillon ; pour un ticket Odoo, fournir le texte à coller. Si la destination n’est pas claire, demander une précision avec ask. Conserver faits, inconnues et suite utile. Ne pas prétendre qu’un brouillon Gmail ou un message Odoo a été créé. Aucun envoi, publication ou connexion externe implicite.",
+          "sample_outputs": {
+            "draft": "Exemple de réponse au format choisi. Aucun email envoyé, brouillon Gmail créé ou ticket Odoo modifié."
+          },
+          "title": "Mettre la réponse au format choisi",
+          "validation": "contract"
+        }
+      ],
+      "revision": 1,
+      "schema": 1,
+      "title": "Support — diagnostic et réponse"
+    },
+    "packs": [],
+    "parameters": {
+      "request": "Atlas — demande urgente, pas bug confirmé\n\nNotre client Atlas demande une liste supplémentaire dans Odoo pour demain. Aucune fonction existante ne dysfonctionne. Impact : trois gestionnaires font un export manuel, aucune activité bloquée. Ne pas confondre urgence du délai avec un bug. Préparer la réponse pour le ticket Odoo #482, pas un email."
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-services-final-TOKeO7/workspace/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "workspace",
+    "release": "",
+    "scope": {
+      "id": "workspace",
+      "kind": "workspace"
+    },
+    "simulation": true,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791650560.1073163,
+    "timing": {
+      "started": 1791650556.7566705,
+      "finished": 1791650560.1072845,
+      "duration": 3.350614070892334
+    },
+    "origin": null,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 1,
+      "at": 1791650556.7576168,
+      "node": null,
+      "simulation": true,
+      "type": "started"
+    },
+    {
+      "seq": 2,
+      "at": 1791650556.7576568,
+      "node": "diagnosis",
+      "type": "ready"
+    },
+    {
+      "seq": 3,
+      "at": 1791650556.768878,
+      "attempt": 1,
+      "node": "diagnosis",
+      "type": "running"
+    },
+    {
+      "seq": 4,
+      "at": 1791650557.2703948,
+      "attempt": 1,
+      "node": "diagnosis",
+      "type": "returned"
+    },
+    {
+      "seq": 5,
+      "actor": "validation-policy",
+      "at": 1791650557.2710176,
+      "node": "diagnosis",
+      "type": "accepted"
+    },
+    {
+      "seq": 6,
+      "at": 1791650557.2711303,
+      "node": "clarify",
+      "type": "skipped"
+    },
+    {
+      "seq": 7,
+      "at": 1791650557.2711887,
+      "node": "reassess",
+      "type": "skipped"
+    },
+    {
+      "seq": 8,
+      "at": 1791650557.271237,
+      "node": "unresolved",
+      "type": "skipped"
+    },
+    {
+      "seq": 9,
+      "at": 1791650557.2712893,
+      "node": "urgent",
+      "type": "skipped"
+    },
+    {
+      "seq": 10,
+      "at": 1791650557.2713268,
+      "node": "normal",
+      "type": "ready"
+    },
+    {
+      "seq": 11,
+      "at": 1791650557.3371449,
+      "attempt": 1,
+      "node": "normal",
+      "type": "running"
+    },
+    {
+      "seq": 12,
+      "at": 1791650557.7976172,
+      "attempt": 1,
+      "node": "normal",
+      "type": "returned"
+    },
+    {
+      "seq": 13,
+      "actor": "validation-policy",
+      "at": 1791650557.7986572,
+      "node": "normal",
+      "type": "accepted"
+    },
+    {
+      "seq": 14,
+      "at": 1791650557.798911,
+      "node": "destination",
+      "type": "ready"
+    },
+    {
+      "seq": 15,
+      "at": 1791650558.734385,
+      "attempt": 1,
+      "node": "destination",
+      "type": "running"
+    },
+    {
+      "seq": 16,
+      "at": 1791650559.2343383,
+      "attempt": 1,
+      "node": "destination",
+      "type": "returned"
+    },
+    {
+      "seq": 17,
+      "actor": "validation-policy",
+      "at": 1791650559.234927,
+      "node": "destination",
+      "type": "accepted"
+    },
+    {
+      "seq": 18,
+      "at": 1791650559.2350774,
+      "node": "response",
+      "type": "ready"
+    },
+    {
+      "seq": 19,
+      "at": 1791650559.6083114,
+      "attempt": 1,
+      "node": "response",
+      "type": "running"
+    },
+    {
+      "seq": 20,
+      "at": 1791650560.106892,
+      "attempt": 1,
+      "node": "response",
+      "type": "returned"
+    },
+    {
+      "seq": 21,
+      "actor": "validation-policy",
+      "at": 1791650560.10722,
+      "node": "response",
+      "type": "accepted"
+    },
+    {
+      "seq": 22,
+      "at": 1791650560.1072845,
+      "node": null,
+      "type": "completed"
+    }
+  ],
+  "events_next": null
+}

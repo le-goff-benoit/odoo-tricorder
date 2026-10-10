@@ -220,6 +220,16 @@ class ConversationTests(unittest.TestCase):
             else:
                 self.assertEqual(run["nodes"][target]["inputs"]["finding"], "Fait précisé")
                 run = submit(target, {"proposal" if choice == "critical" else "draft": "Proposition"})
+                self.assertEqual(run["nodes"]["destination"]["status"], "ready")
+                self.assertEqual(run["nodes"]["response"]["status"], "pending")
+                if choice == "critical":
+                    claim = self.engine.claim(run["id"], "destination")
+                    run = ask(self.engine, run["id"], "destination", claim["token"], "Email ou ticket Odoo ?")
+                    self.assertEqual(run["nodes"]["destination"]["status"], "waiting_input")
+                    run = answer(self.engine, run["id"], "destination", run["nodes"]["destination"]["question"]["id"], "Texte pour un ticket Odoo")
+                run = submit("destination", {"answer": "Texte pour un ticket Odoo"})
+                self.assertEqual(run["nodes"]["response"]["inputs"], {"response": "Proposition", "destination": "Texte pour un ticket Odoo"})
+                run = submit("response", {"draft": "Texte à coller dans le ticket ; aucun envoi."})
                 self.assertEqual(run["completion_outcome"], "succeeded")
                 self.assertTrue(dependency_satisfied(run))
 

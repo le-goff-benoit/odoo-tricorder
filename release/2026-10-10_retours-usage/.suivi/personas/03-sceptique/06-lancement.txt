@@ -1,0 +1,82 @@
+Activité
+Workflows
+Projets
+Essai développeur sceptique
+Planifications
+Connexions
+Paramètres
+Terminal
+
+
+
+
+← Retour à la liste
+Choisir l’IA
+Enregistrer
+Exécuter…
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Données structurées…
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+✦ Assistant IA
+☷ Liste
+Vérifier le script local → Décider de la suite
+›_Vérifier le script localCommandeSans donnée provenant d’un autre bloc
+?Décider de la suiteDécision humaineVous
+
+
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+×
+Ajouter une information à utiliser
+Ajouter un résultat attendu
+Données de simulation…
+Appliquer au bloc
+Supprimer cette étape
+×
+Lancer dans le terminal
+Vérifier à nouveau
+Simuler le parcours
+×
+COMMANDE
+Vérifier le script local
+Nom du bloc
+Critères d’acceptation (un par ligne)
+Informations de cette étape
+Utilise
+Aucune donnée reçue d’un autre bloc.
+Ajouter une information à utiliser
+Produit
+Aucun résultat déclaré.
+Ajouter un résultat attendu
+Données de simulation…
+Contrôle de code (QA)
+Organisation de l’étape
+Commande et arguments (un par ligne)
+Délai maximal (secondes)
+
+Sans shell ni réseau. Projet monté en lecture seule dans /project ; travail dans /work.
+
+Validation du résultat
+Manuelle
+Automatique — contrôles techniques
+
+La validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+
+Autoriser la réutilisation des preuves pendant 24 h
+Uniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+Configuration technique des données (avancé)
+Reprises, ressources et position
+Appliquer au bloc
+Liens entre les blocs
+Supprimer cette étape

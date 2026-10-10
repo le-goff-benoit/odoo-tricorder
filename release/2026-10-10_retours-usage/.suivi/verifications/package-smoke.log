@@ -1,0 +1,59 @@
+
+> odoo-tricorder@0.6.0-rc.14 test:ui
+> npm run build && playwright test tests/usage-feedback.spec.cjs tests/editor-gestures.spec.cjs tests/desktop.spec.cjs --grep usage —|compact selection|window integration --output=/tmp/tricorder-usage-package-smoke
+
+
+> odoo-tricorder@0.6.0-rc.14 build
+> node scripts/build.mjs
+
+
+Running 6 tests using 1 worker
+
+(node:150439) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/desktop.spec.cjs:1697:1 › window integration preserves the native conversation while inspecting phases and the library (9.6s)
+  ✓  2 tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session (9.8s)
+  ✓  3 tests/usage-feedback.spec.cjs:25:1 › usage — workflows show current work, history with duration and a visible return (6.4s)
+  ✓  4 tests/usage-feedback.spec.cjs:36:1 › usage — new request shares the model library, project adaptations are opt in (7.0s)
+  ✓  5 tests/usage-feedback.spec.cjs:44:1 › usage — question editor asks for free text and models have readable choices (7.0s)
+  ✘  6 tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy (16.8s)
+
+
+  1) tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Notes, transcriptions ou liens des réunions', { exact: true })
+    Expected: "Lundi : bilan partagé. Jeudi : action de test décidée."
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Notes, transcriptions ou liens des réunions', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Notes, transcriptions ou liens des réunions', { exact: true })
+        14 × locator resolved to <textarea id="meeting-sources" placeholder="Collez les notes, les liens ou les chemins des documents. Indiquez à quelle réunion chaque source correspond."></textarea>
+           - unexpected value ""
+
+
+      69 |  const {run:details}=await call('run.get',{run:run.id});expect(details.parameters.request).toContain('Comités du lundi et du jeudi');expect(details.parameters.request).toContain('Jeudi : action de test décidée.');
+      70 |  await open();expect((await copies()).map(g=>g.id)).toEqual(first.map(g=>g.id));
+    > 71 |  await expect(page.getByLabel('Notes, transcriptions ou liens des réunions',{exact:true})).toHaveValue('Lundi : bilan partagé. Jeudi : action de test décidée.');
+         |                                                                                            ^
+      72 |  await page.screenshot({path:test.info().outputPath('meeting-launch.png')});
+      73 |  await page.locator('[data-action=close-modal]').click();await page.locator('.node[data-id=review]').click();
+      74 |  await page.getByRole('button',{name:'Ajouter un résultat attendu',exact:true}).click();await page.getByLabel('Nom de l’information').fill('Synthèse personnelle');await page.getByRole('button',{name:'Ajouter la donnée',exact:true}).click();
+        at /home/blegoff/odoo-tricorder/tests/usage-feedback.spec.cjs:71:92
+
+    Error Context: ../../../tmp/tricorder-usage-package-smoke/usage-feedback-usage-—-usi-da030--the-unchanged-project-copy/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-usage-package-smoke/usage-feedback-usage-—-usi-da030--the-unchanged-project-copy/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-usage-package-smoke/usage-feedback-usage-—-usi-da030--the-unchanged-project-copy/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy
+  5 passed (58.8s)

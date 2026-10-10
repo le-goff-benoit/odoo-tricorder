@@ -1,0 +1,61 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Atlas audit"
+  - button "Boreal audit"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Atlas audit
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Vérifier une livraison Atlas
+    - heading "Vérifier une livraison Atlas" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Échec · reprise nécessaire
+      - text: 0 / 2 étapes
+      - paragraph: Commande terminée avec le code 7. Résultat à examiner.
+      - group: "Depuis le début : 3 s · attentes comprises Début : 10.10.2026 18:28:00"
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Étape sélectionnée Vérifier le runtime Python":
+          - text: Étape sélectionnée
+          - strong: Vérifier le runtime Python
+        - button "Décider de la suite":
+          - strong: Décider de la suite
+      - strong: Cette étape a échoué
+      - paragraph: Tentative 1 sur 2 · 1 reprise restante
+      - paragraph: Commande terminée avec le code 7. Résultat à examiner.
+      - heading "Sortie de la commande" [level=3]
+      - text: ERREUR AUDIT SYNTHETIQUE
+      - heading "Preuves" [level=3]
+      - button "Preuve 1 · 28c82a59"
+      - button "Relancer cette étape…"
+      - paragraph: Précisez la correction avant de relancer. Le résultat précédent reste dans l’historique.
+      - paragraph: L'exécutant a signalé un échec
+      - group: Entrées, résultat technique et historique
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.

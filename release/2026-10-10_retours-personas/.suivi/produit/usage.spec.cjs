@@ -1,0 +1,31 @@
+const {test,expect,_electron:electron}=require('@playwright/test');
+const fs=require('fs'),path=require('path'),{execFile}=require('child_process'),{promisify}=require('util');
+const candidate='/tmp/tricorder-personas-rc15',repo='/home/blegoff/odoo-tricorder';
+test('Persona produit — recevoir une analyse et copier le livrable final',async()=>{
+ const home=fs.mkdtempSync('/tmp/tricorder-produit-rc15-');fs.mkdirSync(home+'/bin');
+ for(const provider of ['codex','claude'])fs.writeFileSync(home+'/bin/'+provider,'#!/bin/sh\necho Fournisseur absent du test persona\nexit 78\n',{mode:0o755});
+ const env={PATH:home+'/bin:/usr/bin:/bin',HOME:home,DISPLAY:':93',LANG:'C.UTF-8',XDG_CONFIG_HOME:home+'/config',XDG_CACHE_HOME:home+'/cache',XDG_DATA_HOME:home+'/data',CODEX_HOME:home+'/.codex',CLAUDE_CONFIG_DIR:home+'/claude',TRICORDER_HOME:home,TRICORDER_STATE_DIR:home,TRICORDER_WORKFLOW_STATE_DIR:home,TRICORDER_RUNTIME_DIR:home+'/runtime',TRICORDER_AGENTS_DIR:home+'/no-pack',TRICORDER_TEST_MODE:'1',PYTHONDONTWRITEBYTECODE:'1'};
+ await promisify(execFile)('/usr/bin/python3',['-c',String.raw`import sys
+sys.path.insert(0,sys.argv[1]);from workflow_engine import Engine
+e=Engine(sys.argv[2]);p=e.create_project('Discovery produit B2B')
+g={'schema':1,'id':'synthese-produit','title':'Synthèse produit à compléter','nodes':[{'id':'analyse','title':'Analyser les entretiens','kind':'task','validation':'contract','outputs':{'analyse_clients':'string'}},{'id':'recommandation','title':'Préparer la recommandation','kind':'task','validation':'contract','outputs':{'draft':'string'}}],'edges':[]}
+e.save(p['id'],g)
+d={'schema':1,'id':'livrable','title':'Réponse au comité produit','nodes':[{'id':'analyse','title':'Analyse intermédiaire','kind':'task','validation':'contract','outputs':{'analysis':'string'}},{'id':'final','title':'Recommandation finale','kind':'task','validation':'contract','inputs':{'analysis':'string'},'outputs':{'draft':'string'}}],'edges':[{'id':'analysis-final','from':'analyse','to':'final','mapping':{'analysis':'analysis'}}]}
+e.save(p['id'],d);r=e.start(p['id'],d);c=e.claim(r['id'],'analyse');e.submit(r['id'],'analyse',c['token'],{'ok':True,'summary':'Comparaison intermédiaire des entretiens.','outputs':{'analysis':'Trois clients demandent un export CSV. Un client demande des droits par équipe.'}})
+c=e.claim(r['id'],'final');e.submit(r['id'],'final',c['token'],{'ok':True,'summary':'Recommandation prête à partager avec le comité produit.','outputs':{'draft':'Bonjour,\n\nJe propose de prioriser l’export CSV au prochain sprint, puis les droits par équipe. Trois entretiens soutiennent cette priorité.\n\nDécision attendue : confirmer cette séquence avant vendredi.'}})
+`,candidate+'/backend',home],{env,encoding:'utf8'});
+ const app=await electron.launch({executablePath:repo+'/node_modules/electron/dist/electron',args:[candidate],env});const page=await app.firstWindow();await page.setViewportSize({width:1440,height:1000});await page.context().tracing.start({screenshots:true,snapshots:true});
+ let index=0;async function note(name){const prefix=String(++index).padStart(2,'0')+'-'+name;await page.screenshot({path:path.join(__dirname,prefix+'.png')});fs.writeFileSync(path.join(__dirname,prefix+'.txt'),await page.locator('body').ariaSnapshot());}
+ try{
+  await expect(page.getByRole('heading',{name:'Activité',exact:true})).toBeVisible();await page.locator('[data-workflow-route=global]').click();await page.getByRole('button',{name:'Historique',exact:true}).click();await page.getByText('Réponse au comité produit',{exact:true}).click();await expect(page.getByRole('heading',{name:'Réponse au comité produit',exact:true})).toBeVisible();await note('livrable-ouvert');
+  await page.getByRole('button',{name:'Voir les résultats',exact:true}).click();await expect(page.getByRole('button',{name:'Copier le texte',exact:true}).first()).toBeVisible();await note('resultats');
+  await page.getByRole('button',{name:'Copier le texte',exact:true}).first().click();const copied=await app.evaluate(({clipboard})=>clipboard.readText());fs.writeFileSync(path.join(__dirname,'texte-copie.txt'),copied);expect(copied).toContain('Je propose de prioriser l’export CSV');expect(copied).not.toContain('Trois clients demandent un export CSV');await note('texte-copie');await page.getByRole('dialog').getByRole('button',{name:'Fermer',exact:true}).click();
+  await page.locator('[data-workflow-route=projects]').click();await page.locator('.project-card').filter({hasText:'Discovery produit B2B'}).click();await page.getByRole('article').filter({has:page.getByRole('heading',{name:'Synthèse produit à compléter',exact:true})}).getByRole('button',{name:'Ouvrir le workflow',exact:true}).click();await expect(page.getByRole('heading',{name:'Synthèse produit à compléter',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'Préparer la recommandation · Tâche',exact:true}).click();await note('bloc-destinataire');
+  await page.getByRole('button',{name:'Recevoir un résultat existant…',exact:true}).click();await expect(page.getByRole('dialog')).toBeVisible();await note('recevoir-resultat');
+  const labels=await page.getByLabel('Résultat à recevoir',{exact:true}).locator('option').allTextContents();const label=labels.find(value=>value.includes('Analyser les entretiens'));expect(label).toBeTruthy();await page.getByLabel('Résultat à recevoir',{exact:true}).selectOption({label});
+  await page.getByLabel('Nom dans cette étape',{exact:true}).fill('Analyse client retenue');await note('source-selectionnee');await page.getByRole('button',{name:'Ajouter et relier',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByRole('group',{name:'Informations de cette étape',exact:true})).toContainText('Analyser les entretiens');await note('resultat-recu');
+  await page.getByRole('button',{name:'Enregistrer',exact:true}).click();await expect(page.getByRole('button',{name:'Enregistrer',exact:true})).toBeDisabled();await expect(page.getByRole('alert')).toHaveCount(0);await note('liaison-enregistree');
+  await page.getByRole('button',{name:'Fermer les propriétés',exact:true}).click();await note('graphe-final');
+ }catch(error){await note('interruption');throw error;}finally{await page.context().tracing.stop({path:path.join(__dirname,'trace.zip')});await app.close();}
+});

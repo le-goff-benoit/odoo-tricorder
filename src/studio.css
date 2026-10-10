@@ -257,7 +257,7 @@ input,select,textarea {font-family:var(--font-ui);font-size:13px;font-weight:400
 /* Diagram text stays readable; wide workflows use the existing scroll surface. */
 .design-view .node .mission {-webkit-line-clamp:unset;display:block;overflow:visible}
 .node .node-footer {flex-wrap:wrap}
-.node .node-footer > span {min-width:0;max-width:100%;overflow-wrap:anywhere}
+.node .node-footer > span {min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .graph-link .edge-hit {fill:none;stroke:transparent;stroke-width:16}
 .graph-link[role=button] {pointer-events:none;cursor:pointer;outline:none}
 .graph-link[role=button] .edge-hit {pointer-events:stroke}

@@ -1,0 +1,311 @@
+{
+  "run": {
+    "completion_outcome": "rejected",
+    "contract": "eb2d0759996b089505aec4b2c4779c2717bc50107dce1625124a5df883a7168a",
+    "created": 1791650836.426912,
+    "definition": {
+      "edges": [
+        {
+          "from": "gate",
+          "id": "approved-link",
+          "outcome": "approve",
+          "to": "publish"
+        },
+        {
+          "from": "gate",
+          "id": "rejected-link",
+          "outcome": "reject",
+          "to": "repair"
+        }
+      ],
+      "id": "legacy-review",
+      "nodes": [
+        {
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "gate",
+          "inputs": {},
+          "kind": "decision",
+          "max_attempts": 1,
+          "option_labels": {
+            "approve": "Publier la version",
+            "reject": "Renvoyer pour correction"
+          },
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 60,
+            "y": 150
+          },
+          "question": "Publier cette version ?",
+          "resources": [],
+          "title": "Décider de la publication"
+        },
+        {
+          "content": "PUBLICATION VALIDÉE — donnée synthétique",
+          "id": "publish",
+          "kind": "document",
+          "position": {
+            "x": 420,
+            "y": 50
+          },
+          "title": "Publier la note",
+          "validation": "automatic"
+        },
+        {
+          "content": "CORRECTION DEMANDÉE — donnée synthétique",
+          "id": "repair",
+          "kind": "document",
+          "position": {
+            "x": 420,
+            "y": 300
+          },
+          "title": "Demander une correction",
+          "validation": "automatic"
+        }
+      ],
+      "parameters": {
+        "request": ""
+      },
+      "revision": 2,
+      "schema": 1,
+      "title": "Ancien aiguillage de publication"
+    },
+    "driver": "automatic",
+    "id": "r1d0b9d8af7904760",
+    "nodes": {
+      "gate": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791650841.7384167,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "reject",
+          "proposal": "edd646030dcad0be2223730f30fe80875adbe1bc186a10d41818ac87fdc6786c"
+        },
+        "input_sources": {},
+        "inputs": {},
+        "nonce": "d0f0e80a9be7b478b",
+        "operation": null,
+        "outcome": "reject",
+        "proposal": "edd646030dcad0be2223730f30fe80875adbe1bc186a10d41818ac87fdc6786c",
+        "status": "accepted"
+      },
+      "publish": {
+        "attempt": 0,
+        "status": "skipped"
+      },
+      "repair": {
+        "attempt": 1,
+        "finished": 1791650841.8042188,
+        "heartbeat": 1791650841.797869,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 327209,
+        "processes": [
+          {
+            "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+            "pid": 327209,
+            "session": 327209,
+            "start": "778358"
+          }
+        ],
+        "receipt": {
+          "actor": "validation-policy",
+          "at": 1791650841.8043723,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "eb2d0759996b089505aec4b2c4779c2717bc50107dce1625124a5df883a7168a",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "4424f66a6f00da357f34ae970366db610b7d9a46dda1764b4f736035ede85322",
+              "size": 45
+            }
+          ],
+          "ok": true,
+          "preview": "CORRECTION DEMANDÉE — donnée synthétique",
+          "summary": "Brouillon préparé. Aucune publication externe."
+        },
+        "started": 1791650841.7554743,
+        "status": "accepted",
+        "token": "t3ac8e858a014423c"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "edges": [
+        {
+          "from": "gate",
+          "id": "approved-link",
+          "outcome": "approve",
+          "to": "publish"
+        },
+        {
+          "from": "gate",
+          "id": "rejected-link",
+          "outcome": "reject",
+          "to": "repair"
+        }
+      ],
+      "id": "legacy-review",
+      "nodes": [
+        {
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "gate",
+          "inputs": {},
+          "kind": "decision",
+          "max_attempts": 1,
+          "option_labels": {
+            "approve": "Publier la version",
+            "reject": "Renvoyer pour correction"
+          },
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 60,
+            "y": 150
+          },
+          "question": "Publier cette version ?",
+          "resources": [],
+          "title": "Décider de la publication"
+        },
+        {
+          "content": "PUBLICATION VALIDÉE — donnée synthétique",
+          "id": "publish",
+          "kind": "document",
+          "position": {
+            "x": 420,
+            "y": 50
+          },
+          "title": "Publier la note",
+          "validation": "automatic"
+        },
+        {
+          "content": "CORRECTION DEMANDÉE — donnée synthétique",
+          "id": "repair",
+          "kind": "document",
+          "position": {
+            "x": 420,
+            "y": 300
+          },
+          "title": "Demander une correction",
+          "validation": "automatic"
+        }
+      ],
+      "revision": 2,
+      "schema": 1,
+      "title": "Ancien aiguillage de publication"
+    },
+    "packs": [],
+    "parameters": {
+      "request": ""
+    },
+    "plugins": {
+      "path": "/tmp/panel-final-sceptique-xgP9CO/projects/p360504971b10486f/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p360504971b10486f",
+    "release": "",
+    "scope": {
+      "id": "p360504971b10486f",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791650841.8044062,
+    "timing": {
+      "started": 1791650836.426912,
+      "finished": 1791650841.8043957,
+      "duration": 5.377483606338501
+    },
+    "origin": null,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 1,
+      "at": 1791650836.4285278,
+      "node": null,
+      "simulation": false,
+      "type": "started"
+    },
+    {
+      "seq": 2,
+      "at": 1791650836.4289682,
+      "node": "gate",
+      "type": "waiting"
+    },
+    {
+      "seq": 3,
+      "at": 1791650841.7384706,
+      "node": "gate",
+      "outcome": "reject",
+      "type": "decision"
+    },
+    {
+      "seq": 4,
+      "at": 1791650841.7385488,
+      "node": "publish",
+      "type": "skipped"
+    },
+    {
+      "seq": 5,
+      "at": 1791650841.7385938,
+      "node": "repair",
+      "type": "ready"
+    },
+    {
+      "seq": 6,
+      "at": 1791650841.7554767,
+      "attempt": 1,
+      "node": "repair",
+      "type": "running"
+    },
+    {
+      "seq": 7,
+      "at": 1791650841.8042336,
+      "attempt": 1,
+      "node": "repair",
+      "type": "returned"
+    },
+    {
+      "seq": 8,
+      "actor": "validation-policy",
+      "at": 1791650841.804374,
+      "node": "repair",
+      "type": "accepted"
+    },
+    {
+      "seq": 9,
+      "at": 1791650841.8043957,
+      "node": null,
+      "type": "completed"
+    }
+  ],
+  "events_next": null
+}

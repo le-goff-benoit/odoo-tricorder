@@ -81,8 +81,12 @@ def markdown(run):
                 lines += [f"##### Tentative {previous['attempt']}", ""] + attempt_lines(previous, node, historical=True, retry_reason=following.get("reason"))
     if not results:
         lines += ["Aucun résultat remis pour le moment.", ""]
-    lines += ["## Tests et limites", "", "Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.", "",
-              "Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.", "", "## Livraison et documentation", "", "Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.", "", "## Décisions et suite", ""]
+    lines += ["## Vérifications et limites", "", "Les états ci-dessus reflètent les validations enregistrées. Les résultats de simulation restent des exemples.", ""]
+    if any(node.get("execution_mode") == "edit" or node.get("candidate_check") or "candidate" in node.get("outputs", {}) for node in graph["nodes"]):
+        lines += ["Aucune modification de code n'est attestée sans diff/candidat et critères associés.", ""]
+    if any(node["kind"] in {"external", "communication"} for node in graph["nodes"]):
+        lines += ["## Opérations externes", "", "Les accusés de réception sont indiqués dans les résultats. Un texte préparé ne prouve pas son envoi ; un accusé de publication ne prouve pas la version déployée.", ""]
+    lines += ["## Décisions et suite", ""]
     if run.get("completion_outcome") in {"blocked", "rejected"}:
         lines += ["**Travail non résolu ou refusé : les tâches dépendantes restent bloquées.**", ""]
     for node in graph["nodes"]:
@@ -95,7 +99,7 @@ def markdown(run):
         elif state.get("decision"):
             outcome = state['decision']['outcome']
             lines += [f"- {node['title']} : **{text(DECISIONS.get(outcome, outcome))}** — décision humaine conservée."]
-    lines += ["", f"Exécution `{run['id']}` · contrat `{run['contract']}`.", ""]
+    lines += ["", "<details><summary>Références techniques de l’exécution</summary>", "", f"Exécution `{run['id']}` · contrat `{run['contract']}`.", "", "</details>", ""]
     return "\n".join(lines)
 
 

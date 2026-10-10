@@ -1,0 +1,65 @@
+{
+  "family_counts": {
+    "requests": 1,
+    "tasks": 0,
+    "actions": 0
+  },
+  "items": [
+    {
+      "id": "r1b77bfa4a17b45ec",
+      "project": "pf7cd70fc24504b68",
+      "status": "completed",
+      "created": 1791650305.7013237,
+      "updated": 1791650338.4227614,
+      "simulation": false,
+      "completion_outcome": "succeeded",
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "iteration_wait": null,
+      "iteration_hold": null,
+      "parent_paused": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "work-8ce6e47d-7fb1-4ec7-b230-5774aa4ae369",
+        "title": "Contrôle local reprise",
+        "revision": 2
+      },
+      "original": {
+        "id": "work-8ce6e47d-7fb1-4ec7-b230-5774aa4ae369"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "",
+      "counts": {
+        "accepted": 2
+      },
+      "nodes": {
+        "check": {
+          "status": "accepted"
+        },
+        "decision": {
+          "status": "accepted"
+        }
+      },
+      "timing": {
+        "started": 1791650305.7013237,
+        "finished": 1791650338.4224932,
+        "duration": 32.72116947174072
+      },
+      "origin": null
+    }
+  ],
+  "total": 1,
+  "offset": 0,
+  "limit": 25,
+  "next": null
+}

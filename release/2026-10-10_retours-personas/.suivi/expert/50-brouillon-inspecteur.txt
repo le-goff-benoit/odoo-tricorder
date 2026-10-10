@@ -1,0 +1,103 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Sans projet
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Sans projet / Workflow
+    - heading "Préserver ma configuration" [level=1]
+    - paragraph: Modifications en attente · enregistrées en quittant cette vue
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer"
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Données structurées…"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification" [disabled]: ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Première étape · Tâche": "Première étape Tâche Utilise : demande initiale et contexte"
+    - button "Relier vers Première étape"
+    - button "Relier depuis Première étape"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Tâche
+      - heading "Première étape" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Analyser les réunions
+      - text: Consigne
+      - textbox "Consigne": "Ne pas perdre cette consigne : vérifier toutes les réunions et les décisions."
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Demande initiale et contexte du workflow. Aucune donnée transmise par un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem: Aucun résultat déclaré.
+        - button "Ajouter un résultat attendu"
+      - button "Données de simulation…"
+      - group: Organisation de l’étape
+      - text: Effort IA de cette étape
+      - combobox "Effort IA de cette étape":
+        - option "Utiliser le niveau de la conversation" [selected]
+        - option "low"
+        - option "medium"
+        - option "high"
+        - option "xhigh"
+      - group: Outils et plugins de cette étape
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - button "Supprimer cette étape"
+  - status: Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.

@@ -1,0 +1,402 @@
+recheck-01-creation: - complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Activité
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: De l'intention à la réalisation
+    - heading "Un workflow clair. Un travail que vous pouvez suivre." [level=1]
+    - paragraph: Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.
+    - button "Nouvelle demande"
+    - button "+ Créer un workflow"
+    - button "Essayer un exemple"
+    - paragraph: "L'exemple est simulé : aucun modèle payant, aucune publication."
+    - heading "Vos projets" [level=2]
+    - button "Voir les archives"
+    - paragraph: Un projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.
+    - button "+ Nouveau projet"
+    - button "Importer un workflow"
+    - heading "Votre premier projet commence ici" [level=3]
+    - paragraph: Ajoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.
+  - dialog "Créer un workflow":
+    - heading "Créer un workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Partez d’une première tâche ou d’un modèle. Configurez les blocs dans l’éditeur. Vos demandes seront données au lancement ou dans le terminal.
+    - text: Modèle de workflow
+    - combobox "Modèle de workflow":
+      - option "Workflow simple — première tâche" [selected]
+      - option "De la demande au résultat"
+      - option "Commande locale avec validation"
+      - option "Évolution logicielle"
+      - option "Release — demandes, plan, réalisation et validation"
+      - option "Support — diagnostic et réponse"
+      - option "Clôture de réunion"
+      - option "Demande ponctuelle"
+      - option "Correction express"
+      - option "Intentions, plan et travaux"
+      - option "Développement par élément et tests communs"
+      - option "Nouveau message → notification"
+      - 'option "GitHub → Odoo.sh : staging puis production"'
+      - option "Livraison directe en production"
+      - option "Documentation → Confluence"
+      - option "Orchestration"
+      - option "Analyse"
+      - option "Développement"
+      - option "Tests"
+      - option "Gestion documentaire"
+      - option "Communication"
+    - text: Nom du workflow
+    - textbox "Nom du workflow": Nouveau workflow
+    - text: Enregistrer dans
+    - combobox "Enregistrer dans":
+      - option "Sans projet" [selected]
+    - paragraph: Retrouvez votre création dans Workflows → Gestion des workflows → Workflows enregistrés, avec ou sans projet. Pour en faire un modèle partagé, utilisez Réutiliser ce workflow dans l’éditeur.
+    - button "Créer et ouvrir le workflow"
+recheck-02-choix-francais: - complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Sans projet
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Sans projet / Workflow
+    - heading "Contre-épreuve opérations" [level=1]
+    - paragraph: Révision 1 · Modifications en attente
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer"
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Première étape · Tâche": "Première étape Tâche Utilise : demande initiale et contexte"
+    - button "Accord · Décision humaine": Accord Décision humaine Vous
+    - button "Relier vers Première étape"
+    - button "Relier depuis Première étape"
+    - button "Relier vers Accord"
+    - button "Relier depuis Accord"
+    - text: 2 blocs · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Décision humaine
+      - heading "Accord" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Accord
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Aucune donnée reçue d’un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem: Aucun résultat déclaré.
+        - button "Ajouter un résultat attendu"
+      - group:
+        - text: 1 point de conception à vérifier
+        - paragraph: Ces indications ne bloquent pas les brouillons ni les étapes volontairement indépendantes.
+        - list:
+          - listitem:
+            - strong: Accord
+            - paragraph: Ce bloc est indépendant du reste du workflow. Reliez-le si son travail doit attendre une autre étape.
+            - button "Vérifier les liens"
+      - group: Organisation de l’étape
+      - text: Question à poser
+      - textbox "Question à poser"
+      - text: Choix possibles (un par ligne)
+      - textbox "Choix possibles (un par ligne)": Approuver la suite Refuser la suite
+      - text: Écrivez les choix présentés à la personne, par exemple Email client et Ticket Odoo. Les liens conservent leur branche lorsque vous renommez un choix. Les accords d’opérations conservent leurs choix d’autorisation et de refus.
+      - paragraph: La suite attend votre décision.
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+  - status: Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+recheck-03-aide-parametre: - complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Sans projet
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Sans projet / Workflow
+    - heading "Contre-épreuve opérations" [level=1]
+    - paragraph: Modifications en attente · enregistrées en quittant cette vue
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer"
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Première étape · Tâche": "Première étape Tâche Utilise : demande initiale et contexte"
+    - button "Accord · Décision humaine": Accord Décision humaine Vous
+    - button "Canal cible · Condition": Canal cible Condition Sans donnée provenant d’un autre bloc
+    - button "Relier vers Première étape"
+    - button "Relier depuis Première étape"
+    - button "Relier vers Accord"
+    - button "Relier depuis Accord"
+    - button "Relier vers Canal cible"
+    - button "Relier depuis Canal cible"
+    - text: 3 blocs · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Condition
+      - heading "Canal cible" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Canal cible
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Aucune donnée reçue d’un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem: Aucun résultat déclaré.
+        - button "Ajouter un résultat attendu"
+      - group:
+        - text: 2 points de conception à vérifier
+        - paragraph: Ces indications ne bloquent pas les brouillons ni les étapes volontairement indépendantes.
+        - list:
+          - listitem:
+            - strong: Canal cible
+            - paragraph: Information à comparer absente. Choisissez une information reçue ou un paramètre déclaré dans les propriétés de cette règle.
+            - button "Vérifier les liens"
+          - listitem:
+            - strong: Canal cible
+            - paragraph: Ce bloc est indépendant du reste du workflow. Reliez-le si son travail doit attendre une autre étape.
+            - button "Vérifier les liens"
+      - group: Organisation de l’étape
+      - paragraph: Cette règle choisit une branche à partir de la donnée reçue.
+      - text: Information à comparer
+      - combobox "Information à comparer":
+        - option "Choisir une information"
+        - option "Canal · paramètre du workflow" [selected]
+        - option "choice · source à configurer"
+      - text: Utilisez « Recevoir un résultat existant… » pour choisir la réponse d’un bloc précédent, ou déclarez un paramètre dans les paramètres du workflow. Type de branchement
+      - combobox "Type de branchement":
+        - option "Oui / Non"
+        - option "Valeurs personnalisées" [selected]
+      - text: Choix possibles (un par ligne)
+      - textbox "Choix possibles (un par ligne)": true false
+      - text: Valeurs exactes de l’information ou du paramètre choisi. Pour comparer un montant, faites produire un résultat Oui / Non par ce bloc.
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+  - status: Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+recheck-04-gestion: - complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+    - heading "Workflows" [level=1]
+    - paragraph: Les demandes en cours et les interventions attendues.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - paragraph: Aucune demande à afficher. « Nouvelle demande » vous permet de choisir un workflow et de démarrer dans le terminal.
+    - group:
+      - text: Gestion des workflows
+      - paragraph: Vos créations et adaptations, avec ou sans projet, restent disponibles pour les modifier ou les réutiliser.
+      - button "Workflows enregistrés"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+recheck-05-retrouve: - complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+    - heading "Workflows enregistrés" [level=1]
+    - paragraph: Choisissez un workflow pour démarrer une demande, ou ouvrez-le pour modifier ses étapes.
+    - button "Nouvelle demande"
+    - button "Créer un workflow"
+    - button "Importer un workflow"
+    - button "Voir les archives"
+    - text: Rechercher un workflow
+    - searchbox "Rechercher un workflow"
+    - article:
+      - heading "Contre-épreuve opérations" [level=3]
+      - paragraph: Sans projet · 3 étapes
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+CONTRE_EPREUVE_OK

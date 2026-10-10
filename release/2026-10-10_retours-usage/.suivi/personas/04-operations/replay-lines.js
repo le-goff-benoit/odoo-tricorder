@@ -1,0 +1,16 @@
+await ui();
+await page.getByRole('button',{name:'Workflows',exact:true}).click(); await ui(); await shot('01-workflows');
+await page.waitForTimeout(1200); await ui();
+await shot('01-workflows-empty'); console.log(await page.locator('body').innerHTML());
+page.on('pageerror',e=>console.log('PAGEERROR',e.message)); page.on('console',m=>console.log('CONSOLE',m.type(),m.text())); await page.reload(); await page.waitForTimeout(1000); await ui();
+console.log(await page.evaluate(()=>Object.keys(window.studio))); console.log(await call('workflow-dashboard'));
+console.log(await page.locator('.page').innerText()); console.log(await page.getByRole('heading').allTextContents()); await page.getByRole('button',{name:'Workflows',exact:true}).click();
+global.ui=async()=>console.log(await page.locator('.page').innerText()); await ui(); await shot('02-workflows');
+await page.getByRole('button',{name:'Modèles',exact:true}).click(); await ui();
+await page.getByRole('button',{name:'+ Créer un modèle',exact:true}).click(); console.log(await page.getByRole('dialog').innerText());
+await page.getByRole('dialog').getByLabel('Nom',{exact:true}).fill('Accueil nouveau client'); await page.getByRole('dialog').getByLabel('Description',{exact:true}).fill('Demander les attentes du client puis préparer un message d’accueil personnalisé.'); await page.getByRole('button',{name:'Appliquer',exact:true}).click(); await ui(); await shot('03-modele-vide');
+global.ui=async()=>console.log(await page.locator('#workflow-panel').evaluate(el=>Array.from(el.shadowRoot.children).filter(x=>x.tagName!=='STYLE').map(x=>x.innerText).join('\n'))); await ui();
+await page.getByRole('button',{name:'Workflows',exact:true}).click(); await page.getByRole('button',{name:'Modèles',exact:true}).click(); await ui();
+await page.getByRole('button',{name:'Modifier le modèle',exact:true}).click(); await ui(); await shot('03-modele-editeur');
+await ui(); console.log(await page.getByRole('button').allTextContents());
+await page.getByRole('button',{name:/Première étapeTâche/}).click(); await ui(); await shot('04-premiere-etape');

@@ -1,0 +1,11 @@
+{
+  "version": "0.6.0-rc.15",
+  "packaged": true,
+  "executable": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.15/odoo-tricorder",
+  "checks": [
+    "Accueil vide",
+    "Workflows",
+    "Modèles"
+  ],
+  "isolated": true
+}

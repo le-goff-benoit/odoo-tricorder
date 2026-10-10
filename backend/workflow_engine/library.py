@@ -19,8 +19,8 @@ def templates():
         node("bilan", "Préparer le bilan", "document", x=1250, y=140, phase="Documentation", sample="Bilan de démonstration : branches reçues et décision humaine conservée.")
     ], "edges": [edge("analyse", "build"), edge("analyse", "test"), edge("build", "join"), edge("test", "join"), edge("join", "decision"), edge("decision", "bilan", "approve")]}
     local = {"schema": 1, "id": "local-check", "title": "Commande locale avec validation", "description": "Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.", "nodes": [
-        node("check", "Vérifier le runtime Python", "command", argv=["python3", "-c", "import sys; print('Python opérationnel'); print(sys.version.split()[0])"], criteria=["Le runtime répond et sa version est visible."], evidence_required=True, max_attempts=2),
-        node("decision", "Décider de la suite", "decision", x=400, question="Le contrôle est reçu. Terminer cette vérification ?", options=["approve", "reject"])
+        node("check", "Vérifier le runtime Python", "command", argv=["python3", "-c", "import sys; print('Python opérationnel'); print(sys.version.split()[0])"], evidence_required=True, max_attempts=2, validation="automatic"),
+        node("decision", "Décider de la suite", "decision", x=400, question="Examinez la sortie et la preuve de la commande : le runtime répond-il et sa version est-elle visible ?", options=["approve", "reject"])
     ], "edges": [edge("check", "decision")]}
     software = {"schema": 1, "id": "software-change", "title": "Évolution logicielle", "description": "Analyser, proposer du code dans une copie isolée, tester cette copie et décider de son application locale. Choisir les modèles et adapter la commande de test au projet.", "nodes": [
         node("analyse", "Analyser la demande", "agent", x=60, model="", prompt="Décrire le changement et les critères attendus.", outputs={"analysis":"string"}, sample_outputs={"analysis": "Exemple d’analyse du changement ; aucun code modifié."}),

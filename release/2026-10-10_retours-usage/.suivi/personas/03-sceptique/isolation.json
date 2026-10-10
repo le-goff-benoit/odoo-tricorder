@@ -1,0 +1,24 @@
+{
+  "bank": "/tmp/tricorder-sceptique-GdB3JB",
+  "candidate": "/tmp/tricorder-usage-candidate-a",
+  "env": {
+    "PATH": "/tmp/tricorder-sceptique-GdB3JB/bin:/usr/bin:/bin",
+    "HOME": "/tmp/tricorder-sceptique-GdB3JB/home",
+    "SHELL": "/bin/bash",
+    "DISPLAY": ":1",
+    "XAUTHORITY": "/run/user/1207/gdm/Xauthority",
+    "LANG": "C.UTF-8",
+    "XDG_CONFIG_HOME": "/tmp/tricorder-sceptique-GdB3JB/config",
+    "XDG_DATA_HOME": "/tmp/tricorder-sceptique-GdB3JB/data",
+    "XDG_CACHE_HOME": "/tmp/tricorder-sceptique-GdB3JB/cache",
+    "CODEX_HOME": "/tmp/tricorder-sceptique-GdB3JB/codex",
+    "CLAUDE_CONFIG_DIR": "/tmp/tricorder-sceptique-GdB3JB/claude",
+    "TRICORDER_HOME": "/tmp/tricorder-sceptique-GdB3JB/home",
+    "TRICORDER_STATE_DIR": "/tmp/tricorder-sceptique-GdB3JB/state",
+    "TRICORDER_WORKFLOW_STATE_DIR": "/tmp/tricorder-sceptique-GdB3JB/workflow-state",
+    "TRICORDER_RUNTIME_DIR": "/tmp/tricorder-sceptique-GdB3JB/runtime",
+    "TRICORDER_AGENTS_DIR": "/tmp/tricorder-sceptique-GdB3JB/no-pack",
+    "TRICORDER_TEST_MODE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}

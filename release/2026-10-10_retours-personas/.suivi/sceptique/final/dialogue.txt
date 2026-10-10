@@ -1,0 +1,19 @@
+Lancer cette version du workflow
+×
+Titre court (facultatif)
+Contexte de cette vérification (facultatif)
+
+Ce workflow exécute ses étapes locales sans fournisseur IA. Les résultats et les éventuelles décisions apparaîtront dans le suivi.
+
+Inclure d’autres projets
+
+Validation automatique : Vérifier le runtime Python. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.
+
+Exécution locale
+
+Vérifier un script local · révision 2 · 2 étapes
+
+Les étapes démarrent dans leur ordre prévu. Les décisions humaines restent dans le suivi.
+
+Lancer l’exécution réelle
+Simuler le parcours

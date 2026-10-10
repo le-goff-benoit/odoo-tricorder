@@ -1,0 +1,38 @@
+
+
+    Tricorder
+
+      Activité
+      Workflows
+      Projets
+
+    Accès rapide aux projets
+    Rechercher un projetAjoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+      PlanificationsConnexions
+      Paramètres
+      Outils et aide
+        Kanban des releases
+        Reprendre le workflow
+        QuotasCommandes des agents
+        Installer le pack OdooAgents pour Claude et Codex
+        Mises à jour
+        À propos v0.6.0-rc.15
+
+
+
+
+    ActivitéTerminalIA des prochains lancementsOpenAI · CodexAnthropic · ClaudeÀ jour
+    StatutTerminalDemandesPlanMémoireExpressTemps
+    Aucun projet sélectionnéChoisissez un projet dans la colonne de gauche.WorkflowRelease OdooDemande OdooDiagnostic OdooDémarrer le workflowTerminalContexteDisposition verticaleAgrandir le terminalSuivantFermerVotre terminalChoisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.Choisir un workflowOuvrir un terminal
+
+
+
+    ActivitéTerminalIA des prochains lancementsOpenAI · CodexAnthropic · ClaudeÀ jour
+    StatutTerminalDemandesPlanMémoireExpressTemps
+    Aucun projet sélectionnéChoisissez un projet dans la colonne de gauche.WorkflowRelease OdooDemande OdooDiagnostic OdooDémarrer le workflowTerminalContexteDisposition verticaleAgrandir le terminalSuivantFermerVotre terminalChoisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.Choisir un workflowOuvrir un terminal
+
+De l'intention à la réalisationUn workflow clair.Un travail que vous pouvez suivre.Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.Nouvelle demande+ Créer un workflowEssayer un exempleL'exemple est simulé : aucun modèle payant, aucune publication.✦ Analyser→? Décider→✓ Valider
+    Vos projetsVoir les archivesUn projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.+ Nouveau projetImporter un workflow
+    Votre premier projet commence iciAjoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.
+Nouvelle demande×Choisissez un modèle, puis indiquez votre demande. Chaque exécution conserve ses propres résultats.WorkflowDe la demande au résultatCommande locale avec validationÉvolution logicielleRelease — demandes, plan, réalisation et validationSupport — diagnostic et réponseClôture de réunionDemande ponctuelleCorrection expressIntentions, plan et travauxDéveloppement par élément et tests communsNouveau message → notificationGitHub → Odoo.sh : staging puis productionLivraison directe en productionDocumentation → ConfluenceOrchestrationAnalyseDéveloppementTestsGestion documentaireCommunicationRéutiliser un workflow enregistré dans un projetProjet principalSans projetLe modèle sera utilisé dans Sans projet. Ses prochaines modifications ne changeront pas les exécutions déjà lancées.Pour coordonner plusieurs projets, ajoutez-les à l’étape suivante.Continuer

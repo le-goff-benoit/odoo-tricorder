@@ -1,0 +1,137 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Sans projet
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Sans projet / Workflow
+    - heading "Explorer les configurations avancées" [level=1]
+    - paragraph: Révision 1 · Modifications en attente
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer"
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Première étape · Tâche": "Première étape Tâche Utilise : demande initiale et contexte"
+    - button "Recueillir les demandes · Entrée utilisateur": "Recueillir les demandes Entrée utilisateur Sans donnée provenant d’un autre bloc · Produit : Demandes à traiter"
+    - button "Traiter chaque demande · Pour chaque élément": "Traiter chaque demande Pour chaque élément Utilise : Éléments à traiter · Produit : Résultats, Contributions"
+    - button "Relier vers Première étape"
+    - button "Relier depuis Première étape"
+    - button "Relier vers Recueillir les demandes"
+    - button "Relier depuis Recueillir les demandes"
+    - button "Relier vers Traiter chaque demande"
+    - button "Relier depuis Traiter chaque demande"
+    - text: 3 blocs · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Pour chaque élément
+      - heading "Traiter chaque demande" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Traiter chaque demande
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - group "Traitement par élément":
+        - text: Traitement par élément Collection à traiter
+        - combobox "Collection à traiter":
+          - option "Liste reçue directement" [selected]
+          - option "Tâches du plan unique"
+        - text: Travaux simultanés au maximum
+        - combobox "Travaux simultanés au maximum":
+          - option "1 · séquentiel"
+          - option "2" [selected]
+          - option "3"
+          - option "4"
+        - paragraph:
+          - text: "Workflow par élément :"
+          - strong: Traiter un élément
+        - button "Choisir le workflow par élément…"
+        - text: Chaque élément garde son exécution. Les dépendances peuvent limiter le nombre réellement actif.
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem:
+            - strong: Éléments à traiter
+            - text: Liste · données regroupées · 0 à 100 éléments · obligatoire À relier à une étape précédente
+            - button "Modifier"
+            - button "Retirer"
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem:
+            - strong: Résultats
+            - text: Liste · données regroupées · 0 à 100 éléments · obligatoire Conservé dans le résultat de cette étape
+            - button "Modifier"
+            - button "Retirer"
+          - listitem:
+            - strong: Contributions
+            - text: Liste · données regroupées · 0 à 100 éléments · obligatoire Conservé dans le résultat de cette étape
+            - button "Modifier"
+            - button "Retirer"
+        - button "Ajouter un résultat attendu"
+      - group:
+        - text: 1 point de conception à vérifier
+        - paragraph: Ces indications ne bloquent pas les brouillons ni les étapes volontairement indépendantes.
+        - list:
+          - listitem:
+            - strong: Traiter chaque demande
+            - paragraph: "Entrée sans lien : items. Ce bloc n’a pas de prédécesseur. La demande initiale sert de contexte à la consigne ; elle ne remplit pas automatiquement les entrées nommées. Pour travailler sur cette demande, précisez les informations à analyser dans la consigne et retirez les entrées inutilisées. Pour recevoir des données structurées d’une étape précédente, reliez ses sorties à ces entrées."
+            - button "Vérifier les liens"
+      - group: Organisation de l’étape
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+  - status: Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.

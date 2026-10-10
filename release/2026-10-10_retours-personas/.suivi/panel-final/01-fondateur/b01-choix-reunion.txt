@@ -1,0 +1,68 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Orion"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Activité
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - heading "Activité" [level=1]
+    - paragraph: Votre travail en cours et ce qui attend votre intervention. 3 demandes.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - heading "À traiter" [level=2]
+    - paragraph: 2 exécutions affichées à traiter sur cette page.
+    - 'button "Accueil client Orion Demande · Client Orion · Accueil client Orion Réponse attendue Préciser le contact Depuis le début : 1 s · attentes comprises"':
+      - strong: Accueil client Orion
+      - text: Demande · Client Orion · Accueil client Orion
+      - strong: Réponse attendue
+      - text: "Préciser le contact Depuis le début : 1 s · attentes comprises"
+    - 'button "Renouvellement contrat Atlas Demande · Client Atlas · Renouvellement contrat Atlas Réponse attendue Confirmer le périmètre Depuis le début : 1 s · attentes comprises"':
+      - strong: Renouvellement contrat Atlas
+      - text: Demande · Client Atlas · Renouvellement contrat Atlas
+      - strong: Réponse attendue
+      - text: "Confirmer le périmètre Depuis le début : 1 s · attentes comprises"
+    - heading "Autres exécutions" [level=2]
+    - text: 1 exécution affichée
+    - 'button "Bilan précédent Atlas Demande · Client Atlas · Bilan précédent Atlas Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Bilan précédent Atlas
+      - text: Demande · Client Atlas · Bilan précédent Atlas
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+  - dialog "Nouvelle demande":
+    - heading "Nouvelle demande" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Choisissez un modèle, puis indiquez votre demande. Chaque exécution conserve ses propres résultats.
+    - text: Workflow
+    - combobox "Workflow"
+    - paragraph: Choisir une ou plusieurs réunions et leurs sources, analyser les décisions et actions, puis préparer le compte rendu et le texte d’email. Les précisions sont demandées seulement si elles manquent ; aucun envoi.
+    - checkbox "Réutiliser un workflow enregistré dans un projet"
+    - text: Réutiliser un workflow enregistré dans un projet Projet principal
+    - combobox "Projet principal":
+      - option "Sans projet"
+      - option "Client Atlas" [selected]
+      - option "Client Orion"
+    - paragraph: Le modèle sera utilisé dans Client Atlas. Ses prochaines modifications ne changeront pas les exécutions déjà lancées.
+    - paragraph: Pour coordonner plusieurs projets, ajoutez-les à l’étape suivante.
+    - button "Continuer"

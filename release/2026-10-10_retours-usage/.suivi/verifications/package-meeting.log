@@ -1,0 +1,16 @@
+
+> odoo-tricorder@0.6.0-rc.14 test:ui
+> npm run build && playwright test tests/usage-feedback.spec.cjs --grep using a meeting model --output=/tmp/tricorder-usage-package-meeting
+
+
+> odoo-tricorder@0.6.0-rc.14 build
+> node scripts/build.mjs
+
+
+Running 1 test using 1 worker
+
+(node:164173) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy (20.1s)
+
+  1 passed (21.4s)

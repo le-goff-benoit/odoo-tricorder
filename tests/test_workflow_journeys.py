@@ -114,3 +114,57 @@ class WorkJourneys(unittest.TestCase):
         self.assertFalse(result[0]['usable'])
         self.assertNotIn('private', json.dumps(result))
         self.assertNotIn('hidden', json.dumps(result))
+
+    def test_meeting_keeps_multiple_sources_through_analysis_and_finishes_without_artificial_gate(self):
+        run = self.engine.start(self.project['id'], self.graph,
+                                parameters={'request': 'Résumer les deux ateliers de la semaine'})
+        def submit(nid, outputs):
+            claim = self.engine.claim(run['id'], nid)
+            return self.engine.submit(run['id'], nid, claim['token'],
+                                      {'ok': True, 'summary': 'Fixture de parcours, aucune réunion réelle lue.', 'outputs': outputs})
+        meetings = [
+            {'title': 'Atelier A', 'source': 'notes-A', 'notes': 'Décision : tester jeudi.'},
+            {'title': 'Atelier B', 'source': 'notes-B', 'notes': 'Proposition : reporter ; pas de décision.'},
+        ]
+        run = submit('select', {'selected_meetings': meetings})
+        self.assertEqual(run['nodes']['review']['inputs']['selected_meetings'], meetings)
+        self.assertEqual(run['nodes']['mail']['status'], 'pending')
+        analysis = 'Atelier A : test décidé. Atelier B : report proposé, à confirmer.'
+        actions = [{'action': 'Tester jeudi', 'owner': 'À préciser'}]
+        run = submit('review', {'analysis': analysis, 'actions': actions})
+        self.assertEqual(run['nodes']['mail']['status'], 'ready')
+        self.assertEqual(run['nodes']['mail']['inputs'], {'analysis': analysis, 'actions': actions})
+        self.assertFalse(any(n['kind'] in ('decision', 'external', 'communication') for n in run['definition']['nodes']))
+        run = submit('mail', {'minutes': analysis, 'actions': actions, 'draft': 'Objet : suivi des ateliers'})
+        self.assertEqual(run['completion_outcome'], 'succeeded')
+        self.assertEqual(run['nodes']['mail']['result']['outputs']['actions'], actions)
+
+    def test_meeting_missing_sources_can_ask_without_accepting_an_empty_selection(self):
+        run = self.engine.start(self.project['id'], self.graph, parameters={'request': 'Faire le compte rendu'})
+        claim = self.engine.claim(run['id'], 'select')
+        run = self.engine.submit(run['id'], 'select', claim['token'],
+                                {'ok': True, 'summary': 'Aucune source', 'outputs': {'selected_meetings': []}})
+        self.assertEqual(run['nodes']['select']['status'], 'returned')
+        self.assertEqual(run['nodes']['review']['status'], 'pending')
+        self.engine.retry(run['id'], 'select', 'Demander les sources manquantes', human=True)
+        claim = self.engine.claim(run['id'], 'select')
+        run = self.engine.submit(run['id'], 'select', claim['token'],
+                                {'ok': True, 'summary': 'Périmètre manquant', 'question': 'Quelles réunions ou quelle période examiner ?', 'outputs': {}})
+        self.assertEqual(run['nodes']['select']['status'], 'waiting_input')
+        run = answer(self.engine, run['id'], 'select', run['nodes']['select']['question']['id'],
+                     'Les ateliers A et B ; voici leurs notes.')
+        self.assertEqual(run['nodes']['select']['status'], 'ready')
+        self.engine.claim(run['id'], 'select')
+        run = self.engine.run(run['id'])
+        self.assertEqual(run['nodes']['select']['interactions'][0]['answer'],
+                         'Les ateliers A et B ; voici leurs notes.')
+
+    def test_loading_updated_templates_preserves_a_saved_legacy_meeting_and_its_run(self):
+        legacy = {'schema': 1, 'id': 'meeting-conversation', 'title': 'Ancienne réunion adaptée',
+                  'nodes': [{'id': 'approve', 'kind': 'decision', 'title': 'Relire avant email'}], 'edges': []}
+        saved = self.engine.save(self.project['id'], legacy)
+        run = self.engine.start(self.project['id'], saved)
+        templates()
+        self.assertEqual(self.engine.workflows(self.project['id']), [saved])
+        self.assertEqual(self.engine.run(run['id'])['definition'], run['definition'])
+        self.assertEqual(self.engine.run(run['id'])['nodes']['approve']['status'], 'waiting')

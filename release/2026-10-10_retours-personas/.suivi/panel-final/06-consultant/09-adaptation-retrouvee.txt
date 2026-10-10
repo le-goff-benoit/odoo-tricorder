@@ -1,0 +1,65 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Boréal"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - heading "Client Atlas" [level=1]
+    - paragraph: /tmp/tricorder-consultant-final-wHfDFt/projects/p3512b9c7d6114a70
+    - button "Nouvelle demande"
+    - button "Créer un workflow"
+    - group: Options
+    - heading "Demandes et résultats" [level=2]
+    - table:
+      - rowgroup:
+        - row "Workflow Contexte État":
+          - columnheader "Workflow"
+          - columnheader "Contexte"
+          - columnheader "État"
+          - columnheader
+      - rowgroup:
+        - 'row "Synthèse de comité Atlas Synthèse de comité Atlas · 10.10.2026 18:47:35 Simulation Réponse attendue Depuis le début : 5 s · attentes comprises Consulter"':
+          - cell "Synthèse de comité Atlas Synthèse de comité Atlas · 10.10.2026 18:47:35"
+          - cell "Simulation"
+          - 'cell "Réponse attendue Depuis le début : 5 s · attentes comprises"'
+          - cell "Consulter":
+            - button "Consulter"
+    - group: Rechercher dans les exécutions
+    - heading "Workflows disponibles" [level=2]
+    - button "Voir les archives"
+    - article:
+      - heading "Synthèse de comité Atlas" [level=3]
+      - paragraph: 2 étapes
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+    - article:
+      - heading "Comité Atlas" [level=3]
+      - paragraph: "3 étapes · Adaptation Atlas révisée : décisions et responsables attendus."
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.

@@ -1,0 +1,14 @@
+Décrire une donnée
+×
+Nom (sans espaces)
+Type
+Texte
+Nombre
+Oui / non
+Données regroupées
+Liste
+Information
+
+Utilisez « Données structurées » dans l’éditeur pour préciser le type des éléments et leur présence.
+
+Ajouter la donnée

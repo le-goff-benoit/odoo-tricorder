@@ -1,0 +1,68 @@
+{
+  "version": "0.6.0-rc.14",
+  "build_command": "npm run dist",
+  "build_exit": 0,
+  "installer": "build-artifacts/odoo-tricorder_0.6.0-rc.14_amd64.deb",
+  "sha256": "627c324c324df0f0ed952782a42c8bd2033afab96f239955f98054fcf7c90ccd",
+  "unit": {
+    "python_passed": 447,
+    "javascript_passed": 164
+  },
+  "local_model_catalogue": {
+    "codex_entries": 7,
+    "claude_entries": 3,
+    "account_access_verified": false
+  },
+  "ui_suite": {
+    "total": 190,
+    "passed": 182,
+    "failed_initially": 6,
+    "skipped": 2,
+    "skipped_reason": "Deux scénarios opt-in sur projets clients réels, non exécutés.",
+    "log": "ui-suite.log",
+    "note": "Reprises ciblées consignées séparément ; ne pas présenter ce passage comme intégralement vert.",
+    "worker_teardown_errors": 1
+  },
+  "personas": {
+    "agents": 6,
+    "intentions": 12,
+    "candidate": "A",
+    "counterchecks": "B : produit et développeur sceptique",
+    "report": "../RECEPTION.md"
+  },
+  "final_source_manifest": "../candidat-final.json",
+  "package_metadata": {
+    "package": "odoo-tricorder",
+    "version": "0.6.0~rc.14",
+    "architecture": "amd64"
+  },
+  "installed": false,
+  "published": false,
+  "packaged_ui": {
+    "passed": 8,
+    "failed": 0,
+    "log": "package-final.log"
+  },
+  "package_source_comparison": {
+    "dist/app.js": "identical",
+    "dist/studio.css": "identical",
+    "version": "0.6.0-rc.14"
+  },
+  "ui_final_targeted": {
+    "total": 40,
+    "passed": 39,
+    "failed": 1,
+    "log": "ui-final-targeted.log",
+    "remaining_failure": "desktop: projects, proof status, sources, real terminal and persistence",
+    "recovery": "Same scenario passed on the final package, package-final.log; intermittent startup/navigation failure, not a reproduced application defect."
+  },
+  "ui_received": {
+    "unique_scenarios": 188,
+    "method": "Full suite plus targeted corrections and package checks; not a single all-green full-suite run.",
+    "skipped_real_projects": 2
+  },
+  "final_checks": {
+    "git_diff_check": true,
+    "source_manifest_unchanged": true
+  }
+}

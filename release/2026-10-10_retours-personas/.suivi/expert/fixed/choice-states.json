@@ -1,0 +1,14 @@
+[
+  {
+    "text": "?Choisir où répondreDécision humaineÉcrire au clientVous",
+    "status": "accepted"
+  },
+  {
+    "text": "?Confirmer Email clientQuestionRéponse attendueSans donnée provenant d’un autre bloc · Produit : Votre réponse",
+    "status": "waiting_input"
+  },
+  {
+    "text": "?Confirmer Ticket OdooQuestionNon applicableSans donnée provenant d’un autre bloc · Produit : Votre réponse",
+    "status": "skipped"
+  }
+]

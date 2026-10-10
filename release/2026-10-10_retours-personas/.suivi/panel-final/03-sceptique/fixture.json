@@ -1,0 +1,19 @@
+{
+  "directory": "/tmp/panel-final-sceptique-8GJr6W",
+  "fixture": {
+    "project": {
+      "id": "pf7cd70fc24504b68",
+      "title": "Atelier sceptique synthétique",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/panel-final-sceptique-8GJr6W/projects/pf7cd70fc24504b68",
+      "managed": true
+    }
+  }
+}

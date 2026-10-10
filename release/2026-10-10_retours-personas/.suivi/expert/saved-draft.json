@@ -1,0 +1,38 @@
+{
+  "items": [
+    {
+      "edges": [],
+      "id": "work-2e1f8a78-c2b0-40ba-a3f2-c7240b766401",
+      "nodes": [
+        {
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "start",
+          "inputs": {},
+          "kind": "task",
+          "max_attempts": 1,
+          "outputs": {
+            "Synthese_des_decisions": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 60,
+            "y": 80
+          },
+          "prompt": "Deuxième consigne saisie avant Enregistrer",
+          "resources": [],
+          "title": "Analyser les réunions"
+        }
+      ],
+      "parameters": {},
+      "revision": 2,
+      "schema": 1,
+      "title": "Préserver ma configuration",
+      "_project": "workspace"
+    }
+  ],
+  "total": 1,
+  "offset": 0,
+  "next": null
+}

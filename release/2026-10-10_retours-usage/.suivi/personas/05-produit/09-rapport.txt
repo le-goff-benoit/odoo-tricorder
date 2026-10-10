@@ -1,0 +1,77 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Portail clients B2B"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Portail clients B2B
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Synthèse entretiens clients
+    - heading "Synthèse entretiens clients" [level=1]
+    - paragraph: Version figée · Terminée · 10.10.2026 17:40:32
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow":
+      - tab "Revenir au suivi"
+    - heading "Rapport d’exécution" [level=2]
+    - button "Exporter le rapport dans le projet"
+    - button "Export de release…"
+    - article:
+      - heading "Synthèse entretiens clients" [level=1]
+      - heading "Demande" [level=2]
+      - paragraph: Demande à préciser dans le workflow.
+      - paragraph: Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.
+      - heading "Plan" [level=2]
+      - table:
+        - rowgroup:
+          - row "Travail État Critères":
+            - columnheader "Travail"
+            - columnheader "État"
+            - columnheader "Critères"
+        - rowgroup:
+          - row "Synthèse livrée Validé À préciser":
+            - cell "Synthèse livrée"
+            - cell "Validé"
+            - cell "À préciser"
+      - heading "Réalisation" [level=2]
+      - heading "Synthèse livrée" [level=3]
+      - paragraph: "Les entretiens confirment le besoin d’export CSV. Prochaine étape : comparer les droits nécessaires."
+      - paragraph:
+        - text: "État :"
+        - strong: Validé
+        - text: . Tentative 1.
+      - paragraph: "Date enregistrée : 10.10.2026 à 15:40 UTC."
+      - paragraph: "Validation : Contrôles techniques automatiques ; aucun critère métier attesté."
+      - heading "Tests et limites" [level=2]
+      - paragraph: Les états ci-dessus reflètent les validations enregistrées. Une fin de commande ou une réponse IA ne suffit pas à prouver un résultat métier.
+      - paragraph: Aucune modification de code n'est attestée sans diff/candidat et critères associés. Les preuves simulées restent des exemples.
+      - heading "Livraison et documentation" [level=2]
+      - paragraph: Les accusés de réception sont indiqués dans les résultats. Un accusé de publication ne prouve pas la version effectivement déployée ; consulter les contrôles et décisions associés.
+      - heading "Décisions et suite" [level=2]
+      - paragraph:
+        - text: Exécution
+        - code: r7dc783b644ef4d43
+        - text: · contrat
+        - code: 0600cf0dae2800c28d986c6d71050b01679f128d9f8761fce55442691df329c9
+        - text: .
+  - status: Réponse enregistrée.

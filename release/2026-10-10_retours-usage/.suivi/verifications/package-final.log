@@ -1,0 +1,24 @@
+
+> odoo-tricorder@0.6.0-rc.14 test:ui
+> npm run build && playwright test tests/usage-feedback.spec.cjs tests/studio.spec.cjs tests/desktop.spec.cjs --grep usage —|human gate|mail illustration|window closes to Ubuntu tray|desktop: projects --output=/tmp/tricorder-usage-package-final
+
+
+> odoo-tricorder@0.6.0-rc.14 build
+> node scripts/build.mjs
+
+
+Running 8 tests using 1 worker
+
+(node:196379) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/desktop.spec.cjs:790:1 › desktop: projects, proof status, sources, real terminal and persistence (5.2s)
+  ✓  2 tests/studio.spec.cjs:288:1 › window closes to Ubuntu tray and remains available (5.7s)
+  ✓  3 tests/studio.spec.cjs:537:1 › human gate presents the full external content and candidate before approval (5.8s)
+
+  ✓  4 tests/studio.spec.cjs:1145:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (8.5s)
+  ✓  5 tests/usage-feedback.spec.cjs:25:1 › usage — workflows show current work, history with duration and a visible return (3.9s)
+  ✓  6 tests/usage-feedback.spec.cjs:36:1 › usage — new request shares the model library, project adaptations are opt in (3.9s)
+  ✓  7 tests/usage-feedback.spec.cjs:44:1 › usage — question editor asks for free text and models have readable choices (4.2s)
+  ✓  8 tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy (8.2s)
+
+  8 passed (46.2s)

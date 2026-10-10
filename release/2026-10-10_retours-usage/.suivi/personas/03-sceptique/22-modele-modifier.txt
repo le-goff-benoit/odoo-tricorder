@@ -1,0 +1,73 @@
+Activité
+Workflows
+Projets
+Essai développeur sceptique
+Planifications
+Connexions
+Paramètres
+Terminal
+
+
+
+
+← Retour à la liste
+Choisir l’IA
+Enregistrer
+Exécuter…
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Données structurées…
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+✦ Assistant IA
+☷ Liste
+◇Résumer le diagnosticTâcheUtilise : demande initiale et contexte · Produit : synthese
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+×
+Ajouter une information à utiliser
+Modifier
+Retirer
+Ajouter un résultat attendu
+Données de simulation…
+Appliquer au bloc
+Supprimer cette étape
+×
+TÂCHE
+Résumer le diagnostic
+Nom du bloc
+Consigne
+Critères d’acceptation (un par ligne)
+Informations de cette étape
+Utilise
+Demande initiale et contexte du workflow. Aucune donnée transmise par un autre bloc.
+Ajouter une information à utiliser
+Produit
+synthese
+Texte · obligatoire
+Conservé dans le résultat de cette étape
+ModifierRetirer
+Ajouter un résultat attendu
+Données de simulation…
+Organisation de l’étape
+Effort IA de cette étape
+Utiliser le niveau de la conversation
+low
+medium
+high
+xhigh
+Outils et plugins de cette étape
+Configuration technique des données (avancé)
+Reprises, ressources et position
+Appliquer au bloc
+Liens entre les blocs
+Supprimer cette étape

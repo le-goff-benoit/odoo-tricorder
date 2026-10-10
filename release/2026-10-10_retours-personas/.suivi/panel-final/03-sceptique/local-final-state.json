@@ -1,0 +1,380 @@
+{
+  "run": {
+    "completion_outcome": "succeeded",
+    "contract": "0efded07da5c4ceed56889b00934c9b70d6bfcb0b633641ff53f88e145d5416b",
+    "created": 1791650305.7013237,
+    "definition": {
+      "description": "Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.",
+      "edges": [
+        {
+          "from": "check",
+          "id": "check-decision",
+          "outcome": "done",
+          "to": "decision"
+        }
+      ],
+      "id": "work-8ce6e47d-7fb1-4ec7-b230-5774aa4ae369",
+      "nodes": [
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "-c",
+            "from pathlib import Path; import sys; ok=Path(\"/project/ready.txt\").exists(); print(\"CONTROLE_OK\" if ok else \"FICHIER_READY_ABSENT — creer ready.txt dans le projet\"); sys.exit(0 if ok else 7)"
+          ],
+          "candidate_check": false,
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {},
+          "kind": "command",
+          "max_attempts": 2,
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "resources": [],
+          "reuse": false,
+          "timeout": 60,
+          "title": "Vérifier le runtime Python",
+          "validation": "automatic"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 400,
+            "y": 100
+          },
+          "question": "Examinez la sortie et la preuve de la commande : le runtime répond-il et sa version est-elle visible ?",
+          "title": "Décider de la suite"
+        }
+      ],
+      "parameters": {
+        "request": ""
+      },
+      "revision": 2,
+      "schema": 1,
+      "title": "Contrôle local reprise"
+    },
+    "driver": "automatic",
+    "id": "r1b77bfa4a17b45ec",
+    "nodes": {
+      "check": {
+        "attempt": 2,
+        "finished": 1791650308.9601507,
+        "heartbeat": 1791650308.8079534,
+        "history": [
+          {
+            "attempt": 1,
+            "finished": 1791650305.9792984,
+            "heartbeat": 1791650305.7953455,
+            "input_sources": {},
+            "inputs": {},
+            "ownership": "managed",
+            "pid": 290308,
+            "processes": [
+              {
+                "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+                "pid": 290306,
+                "session": 290306,
+                "start": "724753"
+              },
+              {
+                "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+                "pid": 290308,
+                "session": 290308,
+                "start": "724759"
+              }
+            ],
+            "result": {
+              "evidence": [
+                {
+                  "sha256": "fd82ef81759ac714693e91fbee16e1eb6e2b0a79a5f4a998e858d28cd06eebe4",
+                  "size": 56
+                }
+              ],
+              "exit_code": 7,
+              "ok": false,
+              "preview": "FICHIER_READY_ABSENT — creer ready.txt dans le projet\n",
+              "scope": "Projet en lecture seule ; aucun accès réseau.",
+              "summary": "Commande terminée avec le code 7. Résultat à examiner."
+            },
+            "started": 1791650305.7082496,
+            "status": "returned",
+            "token": "t2a9617e16d1345dc",
+            "validation_error": "L'exécutant a signalé un échec"
+          }
+        ],
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 290600,
+        "processes": [
+          {
+            "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+            "pid": 290594,
+            "session": 290594,
+            "start": "725048"
+          },
+          {
+            "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+            "pid": 290600,
+            "session": 290600,
+            "start": "725056"
+          }
+        ],
+        "reason": "Le fichier ready.txt a été créé dans le projet depuis son terminal.",
+        "receipt": {
+          "actor": "validation-policy",
+          "at": 1791650308.9611597,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "0efded07da5c4ceed56889b00934c9b70d6bfcb0b633641ff53f88e145d5416b",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "47e58b35a2d57ef62961414f955b40043e9c3540e948444cf77a6b1f5b7c959d",
+              "size": 12
+            }
+          ],
+          "exit_code": 0,
+          "ok": true,
+          "preview": "CONTROLE_OK\n",
+          "scope": "Projet en lecture seule ; aucun accès réseau.",
+          "summary": "Commande terminée avec le code 0. Résultat à examiner."
+        },
+        "started": 1791650308.657168,
+        "status": "accepted",
+        "token": "t8e5d5339d2194503",
+        "attempt_history": [
+          {
+            "status": "returned",
+            "attempt": 1,
+            "started": 1791650305.7082496,
+            "finished": 1791650305.9792984,
+            "ownership": "managed",
+            "failed": true,
+            "validation_error": "L'exécutant a signalé un échec",
+            "inputs": {},
+            "retry_reason": "Le fichier ready.txt a été créé dans le projet depuis son terminal.",
+            "result": {
+              "ok": false,
+              "summary": "Commande terminée avec le code 7. Résultat à examiner.",
+              "evidence": [
+                {
+                  "sha256": "fd82ef81759ac714693e91fbee16e1eb6e2b0a79a5f4a998e858d28cd06eebe4",
+                  "size": 56
+                }
+              ],
+              "preview": "FICHIER_READY_ABSENT — creer ready.txt dans le projet\n"
+            }
+          }
+        ]
+      },
+      "decision": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791650338.4223957,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "18cc11f0ffee694862b7746fd9eecd719106a6564d763d1eb732148f31e253ee"
+        },
+        "input_sources": {},
+        "inputs": {},
+        "nonce": "d2e6bb4bcfd2d4558",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "18cc11f0ffee694862b7746fd9eecd719106a6564d763d1eb732148f31e253ee",
+        "status": "accepted"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "description": "Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.",
+      "edges": [
+        {
+          "from": "check",
+          "id": "check-decision",
+          "outcome": "done",
+          "to": "decision"
+        }
+      ],
+      "id": "work-8ce6e47d-7fb1-4ec7-b230-5774aa4ae369",
+      "nodes": [
+        {
+          "argv": [
+            "/usr/bin/python3",
+            "-c",
+            "from pathlib import Path; import sys; ok=Path(\"/project/ready.txt\").exists(); print(\"CONTROLE_OK\" if ok else \"FICHIER_READY_ABSENT — creer ready.txt dans le projet\"); sys.exit(0 if ok else 7)"
+          ],
+          "candidate_check": false,
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {},
+          "kind": "command",
+          "max_attempts": 2,
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "resources": [],
+          "reuse": false,
+          "timeout": 60,
+          "title": "Vérifier le runtime Python",
+          "validation": "automatic"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 400,
+            "y": 100
+          },
+          "question": "Examinez la sortie et la preuve de la commande : le runtime répond-il et sa version est-elle visible ?",
+          "title": "Décider de la suite"
+        }
+      ],
+      "parameters": {},
+      "revision": 2,
+      "schema": 1,
+      "title": "Contrôle local reprise"
+    },
+    "packs": [],
+    "parameters": {
+      "request": ""
+    },
+    "plugins": {
+      "path": "/tmp/panel-final-sceptique-8GJr6W/projects/pf7cd70fc24504b68/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "pf7cd70fc24504b68",
+    "release": "",
+    "scope": {
+      "id": "pf7cd70fc24504b68",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791650338.4227614,
+    "timing": {
+      "started": 1791650305.7013237,
+      "finished": 1791650338.4224932,
+      "duration": 32.72116947174072
+    },
+    "origin": null,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 1,
+      "at": 1791650305.7027419,
+      "node": null,
+      "simulation": false,
+      "type": "started"
+    },
+    {
+      "seq": 2,
+      "at": 1791650305.7027795,
+      "node": "check",
+      "type": "ready"
+    },
+    {
+      "seq": 3,
+      "at": 1791650305.7082515,
+      "attempt": 1,
+      "node": "check",
+      "type": "running"
+    },
+    {
+      "seq": 4,
+      "at": 1791650305.9793205,
+      "attempt": 1,
+      "node": "check",
+      "type": "returned"
+    },
+    {
+      "seq": 5,
+      "at": 1791650305.9793677,
+      "node": "check",
+      "reason": "L'exécutant a signalé un échec",
+      "type": "validation-failed"
+    },
+    {
+      "seq": 6,
+      "at": 1791650308.6448097,
+      "node": "check",
+      "note": "Le fichier ready.txt a été créé dans le projet depuis son terminal.",
+      "type": "retry"
+    },
+    {
+      "seq": 7,
+      "at": 1791650308.6571708,
+      "attempt": 2,
+      "node": "check",
+      "type": "running"
+    },
+    {
+      "seq": 8,
+      "at": 1791650308.9602675,
+      "attempt": 2,
+      "node": "check",
+      "type": "returned"
+    },
+    {
+      "seq": 9,
+      "actor": "validation-policy",
+      "at": 1791650308.9611697,
+      "node": "check",
+      "type": "accepted"
+    },
+    {
+      "seq": 10,
+      "at": 1791650308.9634924,
+      "node": "decision",
+      "type": "waiting"
+    },
+    {
+      "seq": 11,
+      "at": 1791650338.422438,
+      "node": "decision",
+      "outcome": "approve",
+      "type": "decision"
+    },
+    {
+      "seq": 12,
+      "at": 1791650338.4224932,
+      "node": null,
+      "type": "completed"
+    }
+  ],
+  "events_next": null
+}

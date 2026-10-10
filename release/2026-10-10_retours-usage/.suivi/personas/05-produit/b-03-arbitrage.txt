@@ -1,0 +1,51 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Portail clients B2B"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Portail clients B2B
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Arbitrage export client
+    - heading "Arbitrage export client" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - status:
+        - strong: Votre réponse est attendue
+        - paragraph: Faut-il prioriser l’export CSV ou les droits des équipes ?
+      - strong: Réponse attendue
+      - text: 0 / 1 étapes
+      - button "Répondre à la question"
+      - paragraph: Choisir la priorité
+      - group: "Depuis le début : 6 s · attentes comprises Début : 10.10.2026 17:47:48"
+    - group "Affichage du suivi":
+      - button "Graphe" [pressed]
+      - button "Détail"
+    - button "Choisir la priorité · Réponse attendue": "Choisir la priorité Question Réponse attendue Sans donnée provenant d’un autre bloc · Produit : Votre réponse"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"

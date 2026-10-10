@@ -1,0 +1,18 @@
+[
+  {
+    "text": "?Choisir le canalQuestionRéponduSans donnée provenant d’un autre bloc · Produit : Votre réponse",
+    "status": "accepted"
+  },
+  {
+    "text": "⑂Orienter selon le canalConditionValidéUtilise : Canal choisi",
+    "status": "accepted"
+  },
+  {
+    "text": "?Confirmer emailQuestionRéponse attendueSans donnée provenant d’un autre bloc · Produit : Votre réponse",
+    "status": "waiting_input"
+  },
+  {
+    "text": "?Confirmer ticketQuestionNon applicableSans donnée provenant d’un autre bloc · Produit : Votre réponse",
+    "status": "skipped"
+  }
+]

@@ -1,0 +1,41 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Client synthétique 01
+Client synthétique 02
+Client synthétique 03
+Client synthétique 04
+Client synthétique 05
+Client synthétique 06
+Client synthétique 07
+Client synthétique 08
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Workflows
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Codex · Réunions commerciales du 6 et du 8 octobre : préparer un email regroupé, aucun envoi. Notes synthétiques : Alpha à relancer jeudi ; Beta attend une offre vendredi.
+Conversation du workflow affiché · Shell : Client synthétique 03
+'python3' '/tmp/tricorder-usage-candidate-a/backend/agent_launch.py' '/t
+mp/tricorder-founder-R9yQkx/agent-events/90b23315-0e9f-4bde-b168-6134a4d
+34faf.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/projects/p19d162eba1b94b12$ 'python3' '/tmp/t
+ricorder-usage-candidate-a/backend/agent_launch.py' '/tmp/tricorder-foun
+der-R9yQkx/agent-events/90b23315-0e9f-4bde-b168-6134a4d34faf.launch.json
+'
+PERSONA INERTE : aucun fournisseur contacte

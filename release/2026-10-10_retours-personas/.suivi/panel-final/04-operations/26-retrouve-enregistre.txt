@@ -1,0 +1,53 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - paragraph: Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+    - heading "Workflows enregistrés dans les projets" [level=1]
+    - paragraph: Choisissez un workflow pour démarrer une demande, ou ouvrez-le pour modifier ses étapes.
+    - button "Nouvelle demande"
+    - button "Créer un workflow"
+    - button "Importer un workflow"
+    - button "Voir les archives"
+    - text: Rechercher un workflow
+    - searchbox "Rechercher un workflow"
+    - article:
+      - heading "Orientation email ou ticket" [level=3]
+      - paragraph: Sans projet · 3 étapes
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+    - article:
+      - heading "Accord intervention PME" [level=3]
+      - paragraph: Sans projet · 3 étapes
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.

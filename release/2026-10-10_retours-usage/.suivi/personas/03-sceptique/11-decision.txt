@@ -1,0 +1,41 @@
+Activité
+Workflows
+Projets
+Essai développeur sceptique
+Planifications
+Connexions
+Paramètres
+Terminal
+
+
+
+
+← Retour à la liste
+Graphe
+Détail
+Vérifier le script local
+Étape sélectionnéeDécider de la suite
+Approuver la suite
+Refuser la suite
+Vérifier le script local
+→
+Étape sélectionnée
+Décider de la suite
+
+Décision attendue
+
+Décision pour cette demande : Vérifier un script local.
+
+Votre décision est attendue
+
+Le contrôle est reçu. Terminer cette vérification ?
+
+Refuser la suite empêche les étapes liées à l’approbation de démarrer. Ce refus ne demande pas de révision : pour une autre proposition, créez une nouvelle demande.
+
+Commentaire (facultatif)
+
+Vérifier un script local
+Cette proposition · tentative 1 uniquement.
+
+Approuver la suite
+Refuser la suite

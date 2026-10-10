@@ -1,0 +1,18 @@
+
+Running 11 tests using 1 worker
+
+(node:335155) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/studio.spec.cjs:323:1 › real isolated command exposes evidence at its only human decision (8.7s)
+  ✓   2 tests/studio.spec.cjs:802:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (9.2s)
+  ✓   3 tests/usage-feedback.spec.cjs:25:1 › usage — workflows show current work, history with duration and a visible return (8.8s)
+  ✓   4 tests/usage-feedback.spec.cjs:36:1 › usage — new request shares the model library, project adaptations are opt in (7.2s)
+  ✓   5 tests/usage-feedback.spec.cjs:44:1 › usage — question editor asks for free text and models have readable choices (5.6s)
+  ✓   6 tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy (18.3s)
+  ✓   7 tests/usage-feedback.spec.cjs:83:1 › personas — receive an existing result in one action, preserve notification draft and distinguish templates (9.9s)
+  ✓   8 tests/usage-feedback.spec.cjs:92:1 › personas — local launch has one primary execution and one final human decision (7.9s)
+  ✓   9 tests/usage-feedback.spec.cjs:97:1 › personas — final deliverable is first, copies exactly and a short title preserves the full request (5.2s)
+  ✓  10 tests/usage-feedback.spec.cjs:103:1 › expert — natural decision labels survive renaming and drive the original branch (9.4s)
+  ✓  11 tests/usage-feedback.spec.cjs:111:1 › expert — fixed parameters configure a rule without JSON and task validation is explicit (6.4s)
+
+  11 passed (1.6m)

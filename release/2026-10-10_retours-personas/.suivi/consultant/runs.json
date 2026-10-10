@@ -1,0 +1,100 @@
+{
+  "family_counts": {
+    "requests": 1,
+    "tasks": 0,
+    "actions": 0
+  },
+  "items": [
+    {
+      "id": "r546560cca0984728",
+      "project": "p5fed7d4946ac40ab",
+      "status": "active",
+      "created": 1791649298.1450493,
+      "updated": 1791649298.1459482,
+      "simulation": false,
+      "completion_outcome": null,
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "iteration_wait": null,
+      "iteration_hold": null,
+      "parent_paused": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": "cfe3df7e1f452481a",
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "meeting-conversation-use-fb8864102803",
+        "title": "Clôture de réunion",
+        "revision": 1
+      },
+      "original": {
+        "id": "meeting-conversation-use-fb8864102803"
+      },
+      "focus": {
+        "node": "select",
+        "title": "Choisir les réunions et leurs sources",
+        "status": "ready",
+        "action": "Continuer dans le terminal"
+      },
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "Atlas — suivi S41\n\nPréparer le compte rendu des deux réunions Atlas du 7 et du 9 octobre, identifier les décisions et actions restantes, distinguer les arbitrages ouverts, puis rédiger un email de synthèse destiné à Camille sans inclure la ",
+      "counts": {
+        "ready": 1,
+        "pending": 2
+      },
+      "nodes": {
+        "mail": {
+          "status": "pending"
+        },
+        "review": {
+          "status": "pending"
+        },
+        "select": {
+          "status": "ready"
+        }
+      },
+      "timing": {
+        "started": 1791649298.1450493,
+        "finished": null,
+        "duration": null
+      },
+      "origin": null,
+      "launch": {
+        "status": "configuration",
+        "label": "À configurer",
+        "ready_count": 1,
+        "worker_count": 0,
+        "native_count": 0,
+        "configuration_count": 1,
+        "waiting_count": 0,
+        "unknown_count": 0,
+        "active_count": 0,
+        "max_parallel": 4,
+        "nodes": [
+          {
+            "node": "select",
+            "title": "Choisir les réunions et leurs sources",
+            "status": "configuration",
+            "code": "provider.model-required",
+            "action": "new-execution",
+            "native_available": true,
+            "reason": "Aucun modèle explicite pour un agent de bloc. Vous pouvez continuer cette demande dans le terminal. Pour utiliser un agent de bloc, configurez un nouveau lancement ; cette exécution conserve sa version.",
+            "remedy": "Choisissez le modèle à utiliser pour cette étape dans les paramètres IA."
+          }
+        ],
+        "nodes_total": 1,
+        "nodes_truncated": false
+      }
+    }
+  ],
+  "total": 1,
+  "offset": 0,
+  "limit": 25,
+  "next": null
+}

@@ -127,7 +127,7 @@ test('repair missing model preserves request and additional project through nati
   // project validation, so wait for its own dialog before interacting with it.
   const aiDialog = page.getByRole('dialog', { name: 'Choisir l’IA pour ce workflow', exact: true });
   await expect(aiDialog).toBeVisible();
-  await aiDialog.getByLabel('Modèle', { exact: true }).fill('synthetic-model');
+  await aiDialog.getByLabel('Modèle IA', {exact:true}).selectOption('__custom__');await aiDialog.getByLabel('Identifiant technique du modèle', {exact:true}).fill('synthetic-model');
   await aiDialog.getByRole('button', { name: 'Appliquer ce choix et vérifier', exact: true }).click();
   await expect(requestField()).toHaveValue(text);
   await expect(page.locator(`[name="conversation-project"][value="${beta.id}"]`)).toBeChecked();
@@ -205,6 +205,7 @@ test('repair global code workflow adapts into a project without changing its ori
     { id: 'edit', title: 'Modifier le code', kind: 'agent', execution_mode: 'edit', outputs: { candidate: 'object' } }], edges: [] };
   const original = await call('workflow.save', { project: 'workspace', graph });
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
+  await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.locator('article').filter({ has: page.getByRole('heading', { name: graph.title, exact: true }) }).getByRole('button', { name: 'Ouvrir le workflow', exact: true }).click();
   const text = 'Préparer la correction dans Alpha, sans lancer le travail.';
   await launchDialog(text);

@@ -1,0 +1,9 @@
+{
+  "checks": {
+    "odoo-tricorder": true,
+    "resources/app.asar": true,
+    "backend": true
+  },
+  "app_asar_sha256": "94692effeacba79e150d1cfbd60d196950a7a51c386aaa628d28462d4a3cafb4",
+  "source_backend_files": 58
+}

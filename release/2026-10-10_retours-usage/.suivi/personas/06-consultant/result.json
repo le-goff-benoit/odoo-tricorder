@@ -1,0 +1,12 @@
+{
+  "candidate": "/tmp/tricorder-usage-candidate-a",
+  "completed": true,
+  "scenarios": [
+    "Deux adaptations de réunion, Atlas puis Boréal, retour modèles et projet",
+    "Réponse humaine via GUI, terminé, historique, retour puis nouvelle demande"
+  ],
+  "providerInvoked": false,
+  "externalServices": false,
+  "syntheticFixture": true,
+  "screenshots": 18
+}

@@ -29,7 +29,7 @@ test('clarifications are question and answer dialogues without treating the answ
 
 test('business classification and recorded decisions are translated, unknown values remain explicit',()=>{
   const human=reading(view('Résultat',{finding:'Le fichier est vide',severity:'critical',next_action:'Vérifier le filtre',verdict:'fail'}));
-  assert.match(human,/<dt>Constat<\/dt>/);assert.match(human,/<dt>Criticité<\/dt><dd><span class="business-text">Critique/);
+  assert.match(human,/<dt>Constat<\/dt>/);assert.match(human,/<dt>Niveau d’urgence<\/dt><dd><span class="business-text">Urgent/);
   assert.match(human,/Suite proposée/);assert.match(human,/Non conforme/);assert.doesNotMatch(human,/>critical</);
   assert.equal(decisionLabel('approve'),'Approuvée');assert.equal(decisionLabel('reject'),'Refusée');
   assert.equal(decisionLabel('client_custom_route'),'client_custom_route');

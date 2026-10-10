@@ -1,0 +1,33 @@
+{
+  "home": "/tmp/persona-consultant-rc15-ROVZiN",
+  "projects": [
+    {
+      "id": "p5fed7d4946ac40ab",
+      "title": "Atlas conseil",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/persona-consultant-rc15-ROVZiN/projects/p5fed7d4946ac40ab",
+      "managed": true
+    },
+    {
+      "id": "p6b3ad01113ce4e83",
+      "title": "Boréal formation",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/persona-consultant-rc15-ROVZiN/projects/p6b3ad01113ce4e83",
+      "managed": true
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+
+
+    Tricorder
+
+      Activité
+      Workflows
+      Projets
+
+    Accès rapide aux projets
+    Rechercher un projetAjoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+      PlanificationsConnexions
+      Paramètres
+      Outils et aide
+        Kanban des releases
+        Reprendre le workflow
+        QuotasCommandes des agents
+        Installer le pack OdooAgents pour Claude et Codex
+        Mises à jour
+        À propos v0.6.0-rc.15
+
+
+
+
+    WorkflowsTerminalIA des prochains lancementsOpenAI · CodexAnthropic · ClaudeÀ jour
+    StatutTerminalDemandesPlanMémoireExpressTemps
+    Aucun projet sélectionnéChoisissez un projet dans la colonne de gauche.WorkflowRelease OdooDemande OdooDiagnostic OdooDémarrer le workflowTerminalContexteDisposition verticaleAgrandir le terminalSuivantFermerVotre terminalChoisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.Choisir un workflowOuvrir un terminal
+
+
+
+    WorkflowsTerminalIA des prochains lancementsOpenAI · CodexAnthropic · ClaudeÀ jour
+    StatutTerminalDemandesPlanMémoireExpressTemps
+    Aucun projet sélectionnéChoisissez un projet dans la colonne de gauche.WorkflowRelease OdooDemande OdooDiagnostic OdooDémarrer le workflowTerminalContexteDisposition verticaleAgrandir le terminalSuivantFermerVotre terminalChoisissez un workflow, puis décrivez votre demande à l’agent. Le suivi apparaîtra à côté du terminal.Choisir un workflowOuvrir un terminal
+
+En coursModèlesHistoriqueWorkflowsLes demandes terminées et leurs résultats.Nouvelle demandeActualiserBoreal — précisions attendues (fixture synthétique)Demande · Sans projet · Support — diagnostic et réponse · Rév. 1 · Simulation · 10.10.2026 18:42:43TerminéeDurée totale : 6 s · attentes comprises→Atlas — demande urgente, pas bug confirméDemande · Sans projet · Support — diagnostic et réponse · Rév. 1 · Simulation · 10.10.2026 18:42:36TerminéeDurée totale : 3 s · attentes comprises→Gestion des workflowsLes adaptations enregistrées dans les projets restent disponibles pour les modifier ou les réutiliser.Workflows enregistrés dans les projets

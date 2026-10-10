@@ -16,7 +16,7 @@ test('request headings accept archived long text without coercing objects or los
   assert.equal(view.requestHeading(archived,'Workflow'), 'Préparer le bilan');
   assert.equal(view.requestHeading(null,{$artifact:{}},'Workflow'), 'Workflow');
   assert.equal(view.requestHeading({},'Intention\nContexte'), 'Intention');
-  assert.equal(view.requestHeading('x'.repeat(1000)).length,301);
+  assert.equal(view.requestHeading('x'.repeat(1000)).length,101);
   assert.deepEqual(archived,before);
 });
 

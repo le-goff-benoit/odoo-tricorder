@@ -1,0 +1,29 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Atelier sceptique synthétique
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Atelier sceptique synthétique
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell 1
+Shell du projet · Shell : Atelier sceptique synthétique
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/projects/pf7cd70fc24504b68$ printf "corrige\n" > ready.
+txt
+blegoff@wrk226:~/projects/pf7cd70fc24504b68$

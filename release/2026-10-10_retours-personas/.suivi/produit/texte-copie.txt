@@ -1,0 +1,5 @@
+Bonjour,
+
+Je propose de prioriser l’export CSV au prochain sprint, puis les droits par équipe. Trois entretiens soutiennent cette priorité.
+
+Décision attendue : confirmer cette séquence avant vendredi.

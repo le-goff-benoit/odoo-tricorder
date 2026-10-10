@@ -10,7 +10,7 @@ const call = (action, data = {}) => page.evaluate(payload => window.studio.reque
 const human = (action, data = {}) => page.evaluate(payload => window.studio.human(payload), { action, ...data });
 
 async function openWorkflow(id) {
-  await page.locator('[data-workflow-route=global]').click();
+  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
   await page.locator(`[data-action=open-workflow][data-id="${id}"]`).click();
 }
 async function topOptions(action) {
