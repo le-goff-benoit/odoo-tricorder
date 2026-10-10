@@ -1,0 +1,9 @@
+{
+  "product_commit": "2741188c361b270e88e82d34c599b725c087c04e",
+  "ci_run_id": 38083937290,
+  "ci_artifact_sha256": "b5ebb442dbe59b976e6f1b3694bb70f824e0c852438f1b33953da3dc742f7b5a",
+  "ci_app_asar_sha256": "d24783f175f0f5184a893b037b5874e029eb7fbd7331d4bbbd0a6deede978581",
+  "application_files_compared": 135,
+  "differences": [],
+  "matches_locally_installed_package": true
+}

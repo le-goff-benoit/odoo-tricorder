@@ -1,0 +1,32 @@
+[
+  {
+    "commit": "9cf626cbd4c5f7a54082867053afec2b9e05406b",
+    "run_id": 38082098828,
+    "conclusion": "cancelled",
+    "reason": "Correction restante du choix IA temporaire trouvée avant publication."
+  },
+  {
+    "commit": "f1741c94a6f1f7f0b3813e6bced19c59b60c0fd8",
+    "run_id": 38082711810,
+    "conclusion": "failure",
+    "unit_passed": 707,
+    "ui_passed": 208,
+    "ui_failed": 1,
+    "ui_skipped": 2,
+    "failed_test": "panel-v2-user-6 — dessiner souris et clavier, annoter, sauvegarder puis utiliser avec terminal",
+    "cause": "Protection du clic résiduel après glissement absorbant une activation clavier.",
+    "correction": "2741188c361b270e88e82d34c599b725c087c04e",
+    "new_regression_red_before_fix": true,
+    "source_targeted_passed": 11
+  },
+  {
+    "commit": "2741188c361b270e88e82d34c599b725c087c04e",
+    "run_id": 38083937290,
+    "conclusion": "success",
+    "unit_passed": 707,
+    "ui_passed": 210,
+    "ui_skipped": 2,
+    "packaged_passed": 210,
+    "packaged_skipped": 2
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "artifact": "odoo-tricorder_0.6.0-rc.18_amd64.deb",
+  "sha256": "2d9022ea21df8b1fde4fbb151833c40d94f7c9265ed4c4fce3d80ff2d903be38",
+  "app_asar_sha256": "d24783f175f0f5184a893b037b5874e029eb7fbd7331d4bbbd0a6deede978581",
+  "deb_payload_files_compared": 135,
+  "differences": 0,
+  "installed_asar_identical": true
+}

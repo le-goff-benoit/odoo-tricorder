@@ -10,7 +10,7 @@
 - Planification avec jours choisis, texte fixe ou lecture renouvelée vérifiée ; absence de source sans travail inventé.
 - Sources locales obsolètes, lectures cachées et branches indépendantes rejetées avant effet par le moteur.
 - Neuf découvertes de référence puis neuf réceptions froides ; abandons, corrections et contre-épreuves indépendantes conservés.
-- 707 tests unitaires, 209 parcours UI reçus et 23 parcours distincts du paquet verts ; recette complète consignée dans la release.
+- 707 tests unitaires et 210 parcours verts en CI sur le code source puis sur le paquet ; recette complète consignée dans la release.
 - Chaîne Codex réelle sur deux notes synthétiques terminée ; services externes et automatisation de fin de réunion non qualifiés.
 - rc.18 installée et démarrée ; terminal et paramètres d’accès complet préservés, rc.17 conservée.
 - README, recette et preuves : release/2026-10-10_methodes-reutilisables/.

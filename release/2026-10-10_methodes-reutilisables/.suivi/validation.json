@@ -1,40 +1,134 @@
 {
   "version": "0.6.0-rc.18",
-  "at": "2026-10-10T20:10:25.755167+00:00",
+  "at": "2026-10-10T20:58:01.143731+00:00",
   "unit": {
     "python": 498,
     "javascript": 209,
     "failed": 0
   },
   "ui": {
-    "cases": 211,
+    "cases": 212,
     "passed_first_full_run": 206,
     "failed_first_full_run": 2,
     "corrected_targeted_cases": 2,
-    "received": 209,
+    "received": 210,
     "opt_in_real_project_cases_not_run": 2,
-    "product_changed_after_full_run": true,
-    "new_regression_received": 1,
+    "new_regression_received": 2,
     "final_frontend_targeted_pass": 3,
-    "final_full_frozen_ci": "pending"
+    "final_full_frozen_ci": "success",
+    "final_gesture_targeted_pass": 11,
+    "final_full_frozen_pass": 210,
+    "first_full_cases": 210,
+    "product_changed_after_first_full_run": true,
+    "product_changed_after_final_full_run": false
   },
   "packaged": {
     "first_targeted_pass": 18,
     "final_targeted_pass": 2,
     "responsive_layout_pass": 1,
-    "received": 23,
+    "received": 210,
     "failed": 0,
-    "final_rebuilt_targeted_pass": 10,
-    "new_unique_cases": 2
+    "final_rebuilt_targeted_pass": 21,
+    "new_unique_cases": 2,
+    "final_full_frozen_pass": 210,
+    "local_distinct_received": 34
   },
   "artifact": {
     "file": "odoo-tricorder_0.6.0-rc.18_amd64.deb",
-    "sha256": "6351d72782d6daec2b12965da596415c43fa9b5bc14fcae0ae459225b7f6b0a4",
-    "bytes": 101158552,
-    "debian_version": "0.6.0~rc.18"
+    "sha256": "2d9022ea21df8b1fde4fbb151833c40d94f7c9265ed4c4fce3d80ff2d903be38",
+    "bytes": 101158880,
+    "debian_version": "0.6.0~rc.18",
+    "ci_payload_identical": true,
+    "files_compared": 135
   },
   "providers": {
     "real_codex_text_chain": "ia-texte-v2.json",
     "external_connections_qualified": false
+  },
+  "ci": {
+    "product_commit": "2741188c361b270e88e82d34c599b725c087c04e",
+    "run_id": 38083937290,
+    "url": "https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/38083937290",
+    "status": "success",
+    "python": 498,
+    "javascript": 209,
+    "ui": {
+      "passed": 210,
+      "skipped": 2
+    },
+    "packaged": {
+      "passed": 210,
+      "skipped": 2
+    },
+    "all_steps": [
+      {
+        "name": "Set up job",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/setup-node@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Outillage Odoo de référence",
+        "conclusion": "success"
+      },
+      {
+        "name": "Dépendances du terminal et des commandes isolées",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm ci",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm test",
+        "conclusion": "success"
+      },
+      {
+        "name": "Vérifier le bureau",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run dist",
+        "conclusion": "success"
+      },
+      {
+        "name": "Vérifier l’application empaquetée",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run npm run checksum",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/upload-artifact@v4",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Post Outillage Odoo de référence",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/setup-node@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@v4",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "conclusion": "success"
+      }
+    ]
   }
 }

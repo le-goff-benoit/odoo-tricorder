@@ -73,7 +73,7 @@ recrutés et ne démontre pas que tout utilisateur trouvera chaque parcours faci
 ## Vérification et livraison
 
 Les résultats techniques, l’identité du paquet et l’installation locale sont
-consignés dans [.suivi/validation.md](.suivi/validation.md).
+consignés dans [.suivi/validation.md](.suivi/validation.md). La recette complète du candidat final est verte : 707 tests unitaires et 210 parcours dans chacune des versions source et empaquetée, avec deux essais opt-in non exécutés.
 
 Une exécution Codex réelle sur deux notes synthétiques a terminé les quatre
 travaux de lecture textuelle, analyse, rédaction et vérification. Elle produit

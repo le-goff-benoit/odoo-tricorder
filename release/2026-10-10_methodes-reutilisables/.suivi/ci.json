@@ -1,0 +1,86 @@
+{
+  "product_commit": "2741188c361b270e88e82d34c599b725c087c04e",
+  "run_id": 38083937290,
+  "url": "https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/38083937290",
+  "status": "success",
+  "python": 498,
+  "javascript": 209,
+  "ui": {
+    "passed": 210,
+    "skipped": 2
+  },
+  "packaged": {
+    "passed": 210,
+    "skipped": 2
+  },
+  "all_steps": [
+    {
+      "name": "Set up job",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Outillage Odoo de référence",
+      "conclusion": "success"
+    },
+    {
+      "name": "Dépendances du terminal et des commandes isolées",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm ci",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm test",
+      "conclusion": "success"
+    },
+    {
+      "name": "Vérifier le bureau",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm run dist",
+      "conclusion": "success"
+    },
+    {
+      "name": "Vérifier l’application empaquetée",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm run checksum",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/upload-artifact@v4",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "Post Outillage Odoo de référence",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@v4",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "conclusion": "success"
+    }
+  ]
+}

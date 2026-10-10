@@ -93,3 +93,20 @@ l’annonce. Le changement de vue ne conserve pas non plus cette préparation co
 workflow. Un enregistrement explicite rend la méthode durable. La contre-épreuve
 conserve le test d’absence de copie et vérifie le choix commun sur un modèle déjà
 enregistré. Le moteur et ses contrats restent identiques.
+
+## Liaison au clavier après déplacement
+
+La CI du commit `f1741c9` a reçu 208 parcours et en a refusé un : la première
+activation au clavier après glissement était absorbée par la protection du clic
+résiduel. Une régression reproduit ce cas en retardant le nettoyage du clic ;
+elle était rouge avant correction. Le renderer distingue maintenant les clics
+de pointeur et les activations clavier, et une nouvelle pression du pointeur
+commence une action indépendante. Les onze parcours de gestes et d’utilisation
+avec terminal passent sur affichage isolé, sans affaiblir les assertions du panel.
+
+Les premiers essais ciblés sur le bureau physique ont rencontré un autre
+problème de géométrie du dispositif : la fenêtre conservait 1460 pixels au
+lieu des 1600 ou 1280 demandés, avant le début du scénario. Ces échecs ne qualifient
+pas les gestes ; la cause exacte du redimensionnement sur ce bureau n’a pas été
+isolée. La reprise sur Xvfb utilise la géométrie demandée et conserve les
+contraintes initiales. [CI initiale](https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/38082711810).

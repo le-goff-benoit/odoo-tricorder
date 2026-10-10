@@ -1,11 +1,16 @@
 {
   "version": "0.6.0-rc.18",
   "launcher": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.18/odoo-tricorder",
-  "main_pid": 787946,
+  "main_pid": 813704,
   "renderer_present": true,
   "live_terminal_preserved": true,
   "agentPermissions": "full",
   "settings_bytes_preserved": true,
-  "app_asar_sha256": "8a865d16e5cba6a2925f04eb0cbd4873ac64026a764c250db3e0ff1e81f30dbf",
-  "previous_version_retained": true
+  "app_asar_sha256": "d24783f175f0f5184a893b037b5874e029eb7fbd7331d4bbbd0a6deede978581",
+  "previous_version_retained": true,
+  "installed_package_files_compared": 135,
+  "package_file_differences": 0,
+  "launch_mode": "transient user service; no restart policy",
+  "main_running_at_final_check": true,
+  "checked_at": "2026-10-10T21:00:59.620085+00:00"
 }
