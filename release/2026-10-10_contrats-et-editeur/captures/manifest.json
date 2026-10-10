@@ -1,0 +1,30 @@
+{
+  "coordination.png": {
+    "source": "/tmp/tricorder-rc13-final-target-package/workflow-v2-three-intentio-99b38-e-the-main-result-completed/coordination-graph-terminal-1280.png",
+    "sha256": "1ecaa5563c5384efe13cb5574aa0ba2531ad456680d51451bb202b024bbc338b",
+    "version": "0.6.0-rc.13",
+    "application": "local linux-unpacked candidate",
+    "asar_sha256": "6e173942cf8543ff8ae53ca94957bdd71ba8e9c8fc3adb45a80cae06d4a8d322"
+  },
+  "taches.png": {
+    "source": "/tmp/tricorder-rc13-final-target-package/workflow-v2-three-intentio-99b38-e-the-main-result-completed/coordination-graph-work-items.png",
+    "sha256": "a0aa097fbeb6514615fbd0831eb14b0d0b4fb8c4f6959fabb683c22b47738e22",
+    "version": "0.6.0-rc.13",
+    "application": "local linux-unpacked candidate",
+    "asar_sha256": "6e173942cf8543ff8ae53ca94957bdd71ba8e9c8fc3adb45a80cae06d4a8d322"
+  },
+  "action-facultative.png": {
+    "source": "/tmp/tricorder-rc13-final-target-package/workflow-v2-three-intentio-99b38-e-the-main-result-completed/coordination-result-and-optional-failure.png",
+    "sha256": "49c34093d45d7d042b8b928b02a2e14b43abf8cc703844aa5b7f74f000af6646",
+    "version": "0.6.0-rc.13",
+    "application": "local linux-unpacked candidate",
+    "asar_sha256": "6e173942cf8543ff8ae53ca94957bdd71ba8e9c8fc3adb45a80cae06d4a8d322"
+  },
+  "editeur.png": {
+    "version": "0.6.0-rc.13",
+    "application": "linux-unpacked",
+    "scope": "Temporary synthetic project; built-in model adopted via UI, reduced to its first three blocks and laid out through workflow.save; note added via UI; no execution or provider call.",
+    "sha256": "7e2bdc50e32a7b0497c8a76e21578463b0fbafb926594d05571dcf95b627bdf1",
+    "asar_sha256": "6e173942cf8543ff8ae53ca94957bdd71ba8e9c8fc3adb45a80cae06d4a8d322"
+  }
+}

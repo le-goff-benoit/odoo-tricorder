@@ -1,0 +1,12 @@
+{
+  "child": "r2978636b35b647e4",
+  "parent": "r07cdd587fcd74011",
+  "engineParent": {
+    "attempt": 1,
+    "element": "boreal",
+    "node": "work",
+    "run": "r07cdd587fcd74011"
+  },
+  "directProjectParentCount": 1,
+  "directActivityParentCount": 1
+}

@@ -61,12 +61,12 @@ def capabilities(project, engine=None):
     return result
 
 
-def issues(graph, project=None, engine=None):
+def issues(graph, project=None, engine=None, *, recursive=True):
     from .contracts import ContractError
     known = {p["id"]: p for p in catalog(project)["plugins"]} if project else {}
     result = []
     from .notifications import execution_nodes
-    for node in execution_nodes(graph):
+    for node in execution_nodes(graph, recursive=False):
         bindings = node.get("capabilities", [])
         if bindings and node["kind"] not in {"watch", "communication", "external", "document", "task", "agent"}:
             result.append({"node": node["id"], "message": "Transport non qualifié pour ce type de bloc. Choisir Tâche IA, Travail, Document, Veille, Communication ou Opération externe."})
@@ -93,4 +93,10 @@ def issues(graph, project=None, engine=None):
                                "plugin": binding["plugin"], "operation": binding["operation"],
                                "code": "plugin.connection-required" if action == "connections" else "plugin.effect-incompatible",
                                "remedy": "Configurez et vérifiez cette connexion dans le projet avant de relancer la vérification." if action == "connections" else "Choisissez un type de bloc compatible avec l’effet de cette opération ; les écritures nécessitent une décision humaine."})
+    if recursive:
+        for node in graph["nodes"]:
+            if node["kind"] == "foreach" and isinstance(node.get("workflow"), dict):
+                result.extend({**issue, "node": node["id"], "child_node": issue.get("node"),
+                               "message": node["title"] + " · " + issue["message"]}
+                              for issue in issues(node["workflow"], project, engine))
     return result

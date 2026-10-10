@@ -1,0 +1,401 @@
+{
+  "launches": 2,
+  "sessions": [
+    {
+      "id": "c89118f42022432cbcba9e99fad8da68",
+      "project": "/tmp/tricorder-terminal-resume-ux-YxnVlg/state/workflows/projects/p7a06bcf80dc441c9",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-terminal-resume-ux-YxnVlg/state/workflows/projects/p7a06bcf80dc441c9",
+      "release": null,
+      "task": null,
+      "createdAt": 1791633113.9193838,
+      "lastOutputAt": 1791633121.0303993,
+      "pid": 1894639,
+      "program": "bash",
+      "provider": null,
+      "foreground": 1894639,
+      "promptVerified": true,
+      "idleShell": true,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "conversation": {
+    "created": 1791633111.8561041,
+    "definition": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "edges": [],
+      "id": "analyse",
+      "nodes": [
+        {
+          "id": "work",
+          "kind": "agent",
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "title": "Préparer le diagnostic",
+          "validation": "contract"
+        }
+      ],
+      "schema": 1,
+      "title": "Analyser une demande"
+    },
+    "effort": "medium",
+    "id": "c1b05a7d812784560",
+    "items": [
+      {
+        "created": 1791633111.8594441,
+        "depends_on": [],
+        "id": "wc7509f5acfb647bc",
+        "key": null,
+        "project": "p7a06bcf80dc441c9",
+        "request": "R1 — Examiner les besoins Azur",
+        "run": "r92f41e36e0a74fb5",
+        "request_truncated": false,
+        "execution": {
+          "id": "r92f41e36e0a74fb5",
+          "project": "p7a06bcf80dc441c9",
+          "status": "active",
+          "created": 1791633111.8589203,
+          "updated": 1791633111.8593502,
+          "simulation": false,
+          "completion_outcome": null,
+          "archived": null,
+          "coordination_wait": null,
+          "coordination_hold": null,
+          "iteration_wait": null,
+          "iteration_hold": null,
+          "parent_paused": null,
+          "parent": null,
+          "associated_with": null,
+          "conversation": "c1b05a7d812784560",
+          "workers": [],
+          "workers_total": 0,
+          "definition": {
+            "id": "analyse",
+            "title": "Analyser une demande",
+            "revision": null
+          },
+          "original": {
+            "id": "analyse"
+          },
+          "focus": {
+            "node": "work",
+            "title": "Préparer le diagnostic",
+            "status": "ready",
+            "action": "Continuer dans le terminal"
+          },
+          "health": {
+            "status": "ok",
+            "total": 0,
+            "issues": []
+          },
+          "request": "R1 — Examiner les besoins Azur",
+          "counts": {
+            "ready": 1
+          },
+          "nodes": {
+            "work": {
+              "status": "ready"
+            }
+          },
+          "origin": null,
+          "launch": {
+            "status": "configuration",
+            "label": "À configurer",
+            "ready_count": 1,
+            "worker_count": 0,
+            "native_count": 0,
+            "configuration_count": 1,
+            "waiting_count": 0,
+            "unknown_count": 0,
+            "active_count": 0,
+            "max_parallel": 4,
+            "nodes": [
+              {
+                "node": "work",
+                "title": "Préparer le diagnostic",
+                "status": "configuration",
+                "code": "provider.model-required",
+                "action": "new-execution",
+                "native_available": true,
+                "reason": "Aucun modèle explicite pour un agent de bloc. Vous pouvez continuer cette demande dans le terminal. Pour utiliser un agent de bloc, configurez un nouveau lancement ; cette exécution conserve sa version.",
+                "remedy": "Choisissez le modèle à utiliser pour cette étape dans les paramètres IA."
+              }
+            ],
+            "nodes_total": 1,
+            "nodes_truncated": false
+          }
+        },
+        "dependencies": [],
+        "dependencies_total": 0,
+        "dependencies_truncated": false
+      },
+      {
+        "created": 1791633111.8624208,
+        "depends_on": [],
+        "id": "w253a34db38a941b3",
+        "key": null,
+        "project": "p03e71c59d80a496f",
+        "request": "R2 — Examiner les besoins Corail",
+        "run": "re04a71954f8e4572",
+        "request_truncated": false,
+        "execution": {
+          "id": "re04a71954f8e4572",
+          "project": "p03e71c59d80a496f",
+          "status": "active",
+          "created": 1791633111.8620179,
+          "updated": 1791633111.8623478,
+          "simulation": false,
+          "completion_outcome": null,
+          "archived": null,
+          "coordination_wait": null,
+          "coordination_hold": null,
+          "iteration_wait": null,
+          "iteration_hold": null,
+          "parent_paused": null,
+          "parent": null,
+          "associated_with": null,
+          "conversation": "c1b05a7d812784560",
+          "workers": [],
+          "workers_total": 0,
+          "definition": {
+            "id": "analyse",
+            "title": "Analyser une demande",
+            "revision": null
+          },
+          "original": {
+            "id": "analyse"
+          },
+          "focus": {
+            "node": "work",
+            "title": "Préparer le diagnostic",
+            "status": "ready",
+            "action": "Continuer dans le terminal"
+          },
+          "health": {
+            "status": "ok",
+            "total": 0,
+            "issues": []
+          },
+          "request": "R2 — Examiner les besoins Corail",
+          "counts": {
+            "ready": 1
+          },
+          "nodes": {
+            "work": {
+              "status": "ready"
+            }
+          },
+          "origin": null,
+          "launch": {
+            "status": "configuration",
+            "label": "À configurer",
+            "ready_count": 1,
+            "worker_count": 0,
+            "native_count": 0,
+            "configuration_count": 1,
+            "waiting_count": 0,
+            "unknown_count": 0,
+            "active_count": 0,
+            "max_parallel": 4,
+            "nodes": [
+              {
+                "node": "work",
+                "title": "Préparer le diagnostic",
+                "status": "configuration",
+                "code": "provider.model-required",
+                "action": "new-execution",
+                "native_available": true,
+                "reason": "Aucun modèle explicite pour un agent de bloc. Vous pouvez continuer cette demande dans le terminal. Pour utiliser un agent de bloc, configurez un nouveau lancement ; cette exécution conserve sa version.",
+                "remedy": "Choisissez le modèle à utiliser pour cette étape dans les paramètres IA."
+              }
+            ],
+            "nodes_total": 1,
+            "nodes_truncated": false
+          }
+        },
+        "dependencies": [],
+        "dependencies_total": 0,
+        "dependencies_truncated": false
+      },
+      {
+        "created": 1791633111.8651252,
+        "depends_on": [
+          "wc7509f5acfb647bc"
+        ],
+        "id": "w65de8d81ca1040e7",
+        "key": null,
+        "project": "p7a06bcf80dc441c9",
+        "request": "R3 — Consolider après Azur",
+        "run": "r4b45f863bed74363",
+        "request_truncated": false,
+        "execution": {
+          "id": "r4b45f863bed74363",
+          "project": "p7a06bcf80dc441c9",
+          "status": "paused",
+          "created": 1791633111.86474,
+          "updated": 1791633111.8650522,
+          "simulation": false,
+          "completion_outcome": null,
+          "archived": null,
+          "coordination_wait": true,
+          "coordination_hold": null,
+          "iteration_wait": null,
+          "iteration_hold": null,
+          "parent_paused": null,
+          "parent": null,
+          "associated_with": null,
+          "conversation": "c1b05a7d812784560",
+          "workers": [],
+          "workers_total": 0,
+          "definition": {
+            "id": "analyse",
+            "title": "Analyser une demande",
+            "revision": null
+          },
+          "original": {
+            "id": "analyse"
+          },
+          "focus": null,
+          "health": {
+            "status": "ok",
+            "total": 0,
+            "issues": []
+          },
+          "request": "R3 — Consolider après Azur",
+          "counts": {
+            "pending": 1
+          },
+          "nodes": {
+            "work": {
+              "status": "pending"
+            }
+          },
+          "origin": null,
+          "launch": {
+            "status": "waiting",
+            "label": "En attente",
+            "ready_count": 0,
+            "worker_count": 0,
+            "native_count": 0,
+            "configuration_count": 0,
+            "waiting_count": 0,
+            "unknown_count": 0,
+            "active_count": 0,
+            "max_parallel": 4,
+            "nodes": [],
+            "nodes_total": 0,
+            "nodes_truncated": false
+          }
+        },
+        "dependencies": [
+          {
+            "id": "wc7509f5acfb647bc",
+            "run": "r92f41e36e0a74fb5",
+            "project": "p7a06bcf80dc441c9",
+            "request": "R1 — Examiner les besoins Azur",
+            "request_truncated": false,
+            "status": "active",
+            "completion_outcome": null,
+            "coordination_wait": null,
+            "coordination_hold": null,
+            "focus": {
+              "node": "work",
+              "title": "Préparer le diagnostic",
+              "status": "ready",
+              "action": "Continuer dans le terminal"
+            },
+            "counts": {
+              "ready": 1
+            },
+            "health": {
+              "status": "ok",
+              "total": 0
+            },
+            "satisfied": false
+          }
+        ],
+        "dependencies_total": 1,
+        "dependencies_truncated": false
+      }
+    ],
+    "model": "",
+    "notifications_authorized": false,
+    "project": "p7a06bcf80dc441c9",
+    "projects": [
+      "p7a06bcf80dc441c9",
+      "p03e71c59d80a496f"
+    ],
+    "provider": "codex",
+    "status": "open",
+    "project_contexts": [
+      {
+        "id": "p7a06bcf80dc441c9",
+        "title": "Atelier Azur",
+        "path": "/tmp/tricorder-terminal-resume-ux-YxnVlg/state/workflows/projects/p7a06bcf80dc441c9"
+      },
+      {
+        "id": "p03e71c59d80a496f",
+        "title": "Laboratoire Corail",
+        "path": "/tmp/tricorder-terminal-resume-ux-YxnVlg/state/workflows/projects/p03e71c59d80a496f"
+      }
+    ],
+    "item_count": 3,
+    "total": 3,
+    "offset": 0,
+    "limit": 25,
+    "next": null,
+    "activity": {
+      "items": 3,
+      "running": 0,
+      "ready": 2,
+      "decisions": 0,
+      "questions": 0,
+      "collecting": 0,
+      "coordination": 0,
+      "failed": 0,
+      "dependencies": 1,
+      "completed": 0,
+      "paused": 0,
+      "cancelled": 0,
+      "uncertain": 0,
+      "children": {
+        "items": 0,
+        "running": 0,
+        "ready": 0,
+        "decisions": 0,
+        "questions": 0,
+        "collecting": 0,
+        "coordination": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0,
+        "cancelled": 0,
+        "uncertain": 0
+      },
+      "associated": {
+        "items": 0,
+        "running": 0,
+        "ready": 0,
+        "decisions": 0,
+        "questions": 0,
+        "collecting": 0,
+        "coordination": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0,
+        "cancelled": 0,
+        "uncertain": 0,
+        "actions": 0
+      }
+    }
+  },
+  "draftExecuted": false
+}

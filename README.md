@@ -7,11 +7,11 @@ et le suivi des demandes dans une application de bureau. Il sert à préparer un
 release, analyser un ticket, clôturer une réunion ou organiser votre propre processus.
 Les projets Odoo sont un usage possible ; le pack Odoo reste facultatif.
 
-**Préversion 0.6.0-rc.12 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.12)
-· [Nouveautés](release/2026-10-09_demandes-et-parallele/README.md)
+**Préversion 0.6.0-rc.13 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.13)
+· [Nouveautés](release/2026-10-10_contrats-et-editeur/README.md)
 · [Guide d’utilisation](docs/WORKFLOW-RUNTIME.md)
 
-![Le terminal et le suivi des demandes dans Tricorder](release/2026-10-09_demandes-et-parallele/captures/demandes-et-agents.png)
+![Le terminal et les tâches concrètes du workflow](release/2026-10-10_contrats-et-editeur/captures/coordination.png)
 
 *Captures de l’application avec des projets et exécutants fictifs.*
 
@@ -31,15 +31,39 @@ Les projets Odoo sont un usage possible ; le pack Odoo reste facultatif.
    conserve les demandes et les tentatives ; une reprise indique ce qui va se passer.
 
 Vous pouvez commencer par le terminal. Le bouton **Terminal** l’affiche à tout
-moment ; votre choix de l’afficher ou de le masquer est conservé pendant la navigation. Le séparateur ajuste sa place. **Disposition verticale** superpose
+moment ; votre choix de l’afficher ou de le masquer est conservé pendant la navigation. **Autres terminaux** retrouve les sessions ouvertes dans les autres projets sans
+changer le workflow affiché. Le séparateur ajuste sa place. **Disposition verticale** superpose
 terminal et suivi, et **Agrandir le terminal** lui donne toute la surface.
+En fenêtre compacte, le terminal garde une hauteur utile. Le réaffichage suit
+la sortie courante tout en préservant une lecture volontaire de l’historique.
+
+## Utiliser Tricorder sans IA
+
+Partez du modèle **Commande locale avec validation**, renseignez la commande du
+contrôle et ses critères, puis choisissez **Exécuter… → Exécution automatique sans
+conversation → Lancer l’exécution réelle**. La commande s’exécute localement dans
+son environnement isolé. Vous examinez sa sortie, validez son résultat et décidez
+de la suite, sans configurer de fournisseur IA.
+
+Le shell ouvert depuis le suivi démarre à la racine du projet. Celui ouvert dans
+l’éditeur démarre dans `.tricorder/` pour y concevoir la méthode ; son contexte
+indique ce dossier. Une session déjà ouverte conserve son dossier et son historique.
+Les workflows enregistrés et rapports exportés sont versionnables ; l’export d’un
+contrôle local ne constitue pas à lui seul une attestation du commit Git testé.
 
 ## Votre méthode, vos blocs
 
 L’éditeur relie des tâches, agents, documents, décisions, conditions et opérations.
 Chaque bloc explique son travail, ses entrées, ses sorties et ses critères.
-Les liens montrent quelles données passent au bloc suivant. Un lien peut aussi
-servir uniquement à définir l’ordre du travail. **Réorganiser le graphe** range les branches sans changer leur fonctionnement ; vous pouvez annuler ce geste. Sélectionnez un lien pour examiner les données transmises ou le retirer.
+Les données peuvent être un élément ou une liste, requises ou facultatives.
+Les liens montrent quelles données passent au bloc suivant ; un lien peut aussi
+servir uniquement à définir l’ordre du travail.
+
+Déplacez une carte directement, ajoutez un bloc près de la zone visible et reliez
+ses points d’entrée et de sortie. Une sélection garde le graphe visible ;
+**Propriétés** ouvre la configuration. **Réorganiser le graphe** range les branches.
+Les déplacements et modifications peuvent être annulés. Les notes permettent
+de commenter votre dessin et restent sans effet sur son exécution.
 
 La méthode appartient au workflow. **Choisir l’IA** règle le fournisseur et le
 modèle ; les profils d’agents précisent les compétences et les consignes de chaque
@@ -49,7 +73,7 @@ des outils et capacités réellement disponibles chez l’exécutant choisi.
 **Données de simulation…** permet d’essayer des branches et des valeurs d’exemple.
 La simulation sert à vérifier le parcours ; elle ne réalise pas le travail métier.
 
-![L’éditeur de workflows](release/2026-10-09_demandes-et-parallele/captures/editeur.png)
+![L’éditeur de workflows et ses notes](release/2026-10-10_contrats-et-editeur/captures/editeur.png)
 
 Sur un petit écran, les propriétés utilisent le panneau workflow avec des actions
 fixes. Le formulaire conserve la saisie lorsque vous redimensionnez la fenêtre.
@@ -78,21 +102,51 @@ un clone. Les commits restent sous votre contrôle ; l’historique d’exécuti
 
 ## Comprendre le travail en cours
 
+Le graphe de suivi montre **votre demande, son plan et ses tâches**. Il affiche
+les intentions recueillies, le plan produit puis les éléments en cours, leurs
+dépendances et leurs résultats. Ouvrir une tâche permet d’examiner son travail
+et de revenir au workflow parent en conservant le terminal.
+
 **Vue d’ensemble** rassemble les demandes, les exécutants et leur dernier état
 observé, ainsi que les attentes. Une question, une décision, une dépendance et un échec ont des actions
 propres. **Graphe** montre le parcours ; **Détail** donne la place au contenu à lire.
 Une demande terminée propose **Voir les résultats**, puis son rapport complet. Les branches non applicables sont comptées séparément. Les décisions disposent de leurs actions en pied de panneau, même avec un long contenu à lire.
 
 Les tentatives précédentes présentent leur compte rendu, leurs preuves et le
-motif de reprise. Une reprise annonce son budget et distingue la préparation de
-l’étape du démarrage de l’agent. **Agent arrêté** et **Demande suspendue** sont
-traités séparément.
+motif de reprise. Une reprise annonce son budget : **Relancer maintenant** exécute
+une étape automatique ; **Préparer la reprise** remet une tâche de conversation
+à disposition de son agent. Le diagnostic d’une commande échouée apparaît directement. **Agent arrêté** et **Demande suspendue** sont
+traités séparément. Si son terminal a été fermé, **Retrouver la conversation**
+propose une reprise explicite avant de créer un nouveau terminal.
 
 **Lancer les demandes prêtes** démarre une vague de travail, avec jusqu’à quatre
 exécutants et les verrous nécessaires. Le terminal peut faire la même chose.
 Les demandes qui attendent une réponse ou une validation restent visibles.
 Ce lancement n’installe pas une file autonome : les étapes suivantes demandent
 une nouvelle vague après leurs prérequis.
+
+Les intentions en cours de saisie sont conservées pendant un ajout. Un conflit
+ou un accusé perdu laisse le texte dans **Ajouts à récupérer** : vous pouvez
+réessayer l’ajout sans doublon ou le retirer de cette liste avant de confirmer.
+
+Le modèle **Intentions, plan et travaux** propose un autre parcours :
+plusieurs intentions alimentent un plan unique, que vous validez avant le travail.
+**Refuser la suite** empêche la branche approuvée de démarrer ; cela ne commande
+pas un nouveau plan. Une nouvelle proposition passe actuellement par une nouvelle
+demande, qui conserve séparément ses décisions.
+Le bloc **Pour chaque élément** crée ensuite une exécution pour chaque tâche du
+plan. Sa coordination démarre les éléments prêts, respecte leurs dépendances et
+continue lorsque des places se libèrent. Vous choisissez de un à quatre travaux
+simultanés. Une reprise ciblée conserve les résultats des autres tâches.
+
+Le terminal porte la conversation avec l’agent coordinateur ; Tricorder gère
+la file, les dépendances et les états. Le suivi affiche les exécutants réellement
+actifs et les interventions attendues. Une consultation ne crée aucun agent.
+
+Pour du développement, un second modèle réunit les contributions de code dans
+un candidat commun, exécute ses tests puis présente la décision sur ce candidat.
+Les commandes de test sont à adapter à votre projet. Un conflit entre fichiers
+ou un échec des tests communs empêche l’application du candidat.
 
 ## Fournisseurs, outils et connexions
 
@@ -106,6 +160,13 @@ un email, lire une source locale ou préparer un brouillon. **Connexions** prés
 les plugins détectés. Une opération autonome dans un workflow — notification,
 email ou autre service — demande une capacité vérifiée pour ce connecteur.
 Un brouillon local ne devient pas automatiquement un brouillon dans la messagerie.
+
+Les **actions facultatives** associent un travail complémentaire à un résultat
+ou à une question. Elles sont proposées séparément pour activation. Leur état
+reste visible, même après la fin du résultat principal ; un échec peut être repris
+sur cette action seule. Un envoi au résultat incertain exige d’abord de rechercher
+son accusé. Les notifications automatiques de question disposent de leur réglage
+et de leur autorisation au lancement.
 
 Pour faire relire un contenu avant un envoi, placez une **Décision humaine**
 avant le bloc de communication. La validation du résultat de ce bloc intervient
@@ -124,7 +185,7 @@ import. Les comptes, autorisations et anciennes exécutions ne sont pas transfé
 
 ## Installer et mettre à jour
 
-Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.12),
+Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.13),
 installez-le avec le gestionnaire de paquets Ubuntu, puis ouvrez **Tricorder**.
 **Essayer un exemple** permet de découvrir un parcours simulé sans modèle payant.
 
@@ -135,12 +196,15 @@ relancez-le. Un agent déjà ouvert conserve ses instructions jusqu’à sa repr
 
 ## État de la préversion
 
-Cette version améliore création, dialogue et suivi. Le cycle complet de release
-parallèle — approbation commune, intégration des candidats et QA commune — reste
-à construire. Les demandes utilisent encore des exécutions distinctes : le suivi
-ne les présente pas comme des sous-blocs d’une exécution parent inexistante.
+Les modèles enrichis utilisent un format de workflow versionné. Les anciens
+modèles et leurs exécutions restent consultables avec leur fonctionnement initial ;
+la conversion d’un brouillon est explicite.
 
-Les [notes et preuves de réception](release/2026-10-09_demandes-et-parallele/README.md)
+Un recueil ou un traitement accepte jusqu’à 100 éléments, avec quatre exécutants
+maximum dans l’application. Les traitements par élément imbriqués ne sont pas
+encore proposés. L’intégration de code et ses tests restent propres à chaque dépôt.
+
+Les [notes et preuves de réception](release/2026-10-10_contrats-et-editeur/README.md)
 distinguent essais GUI, simulations et limites. Elles ne qualifient ni un modèle
 commercial, ni un service externe, ni une release cliente réelle.
 

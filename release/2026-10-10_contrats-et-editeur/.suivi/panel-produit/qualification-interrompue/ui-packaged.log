@@ -1,0 +1,38 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:packaged
+PATH: /tmp/tricorder-ci-tools-kvmd_8w4:/usr/bin:/bin
+codex None
+claude None
+
+> odoo-tricorder@0.6.0-rc.13 test:packaged
+> node scripts/test-packaged.mjs
+
+
+Running 182 tests using 1 worker
+
+  ✓    1 tests/attempt-history.spec.cjs:51:1 › large archived inputs keep failure history readable and attached proofs accessible (5.6s)
+  ✓    2 tests/attempt-history.spec.cjs:97:1 › paged large histories remain formatted with accessible proof links (4.2s)
+  ✓    3 tests/collection-input-ux.spec.cjs:38:1 › a second intention submitted during acknowledgement is recorded once without losing text (4.9s)
+  ✓    4 tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (6.1s)
+  ✓    5 tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (2.9s)
+  ✓    6 tests/collection-input-ux.spec.cjs:66:1 › an addition rejected after a concurrent edit survives the next success, reload and targeted retry (5.2s)
+  ✓    7 tests/collection-input-ux.spec.cjs:78:1 › a lost acknowledgement is retried with the same command after reload without duplicating the intention (3.8s)
+  ✓    8 tests/collection-input-ux.spec.cjs:85:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (5.9s)
+  ✓    9 tests/collection-input-ux.spec.cjs:106:1 › two project shells remain discoverable after changing project and reloading the window (5.4s)
+  ✓   10 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.6s)
+  ✓   11 tests/conversation-overview.spec.cjs:88:1 › running: actual agents, failure history and explicit dispatch are distinct (6.7s)
+  ✓   12 tests/conversation-overview.spec.cjs:103:1 › pages: global activity survives paging and off-page dependencies open the named request (6.9s)
+  ✓   13 tests/conversation-overview.spec.cjs:115:1 › compact: terminal working lines and the question answer remain visible together (6.1s)
+  ✓   14 tests/desktop-output-pipes.spec.cjs:6:1 › a recoverable backend rejection stays in the app after its launcher closes log pipes (1.7s)
+  ✘   15 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (4.7s)
+
+  1 interrupted
+    tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons 
+  167 did not run
+  14 passed (1.3m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

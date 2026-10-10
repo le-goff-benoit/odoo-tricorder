@@ -1,0 +1,130 @@
+[
+  {
+    "path": "/tmp/tricorder-editeur-terminal-unchanged/.last-run.json",
+    "sha256": "d038956cdeb94beef895f6270a46039a32c3ad29b18c8868f4db80e148642c2a"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-unchanged/editor-gestures-compact-se-4fd20-uts-retain-the-live-session/trace.zip",
+    "sha256": "4053f74ffb540041632484e109123c2dd70f01a0883f848d0e088c30368175d4"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-unchanged/editor-gestures-compact-se-4fd20-uts-retain-the-live-session-repeat1/trace.zip",
+    "sha256": "8414bc2ebec7b0b7778385ff1dfa8e5472d3470d8fdcff1ca05da6e6e28db9b1"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-unchanged/editor-gestures-compact-se-4fd20-uts-retain-the-live-session-repeat4/trace.zip",
+    "sha256": "d955029061e13567488f2be71f349c4a0c041ae0dcdc8357ad277a44d523629e"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-unchanged/editor-gestures-compact-se-4fd20-uts-retain-the-live-session-repeat3/trace.zip",
+    "sha256": "58151c682f6b54376cb862011aad7e069eec1593bdccc7fb56ae17b15196cee3"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-traced/.last-run.json",
+    "sha256": "cc6c768de96b9e3f688d1ccd14ad361e8c257db456fa907008dc29aec231534e"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-traced/terminal-compact-selection-70cf9-uts-retain-the-live-session/trace.zip",
+    "sha256": "164d70eaf2ae7a5fa825829b24e9bb5dcb20305916fa56c4fcc439f89b7d36d3"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-traced/terminal-compact-selection-70cf9-uts-retain-the-live-session/diagnostic.json",
+    "sha256": "2ddbb489b34603b46c9eb551ac73f09c3b60738f28b8d66b772b6285e1dae94b"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-traced/terminal-compact-selection-70cf9-uts-retain-the-live-session/end.png",
+    "sha256": "6769f9ef38e51e934ffbba52834492812c8d3eb6be662da774f0f7f4ff0590b9"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-traced/terminal-compact-selection-70cf9-uts-retain-the-live-session/electron-trace.zip",
+    "sha256": "71cf0fddc212a941794cfa947505bd0bac853c72234a7d82aab61b200ce2dac3"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-fit-dimensions/.last-run.json",
+    "sha256": "53006e26add91a5e5d2efcc663dee29a31e8c2d2fbb9de83089c63d9ad7ea61d"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-fit-dimensions/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat1/trace.zip",
+    "sha256": "ebd2297de3a03c7fba63bdc7e57255d340268d35b675d4e9c743575474260e36"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-fit-dimensions/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat1/diagnostic.json",
+    "sha256": "28110302f16ba8c21e66da6bc07425733402bf1e96e5befd08b52c8a746c7bde"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-fit-dimensions/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat1/end.png",
+    "sha256": "6769f9ef38e51e934ffbba52834492812c8d3eb6be662da774f0f7f4ff0590b9"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-fit-dimensions/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat1/electron-trace.zip",
+    "sha256": "833b77c9271bc84e4f8105e8bf41856a6d8210aa0a3e948d53d4c31818c25ef0"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-fit-dimensions/fixed-compact-selection-ke-777f5-uts-retain-the-live-session/diagnostic.json",
+    "sha256": "c7829ce8d57d44ca30f187966739fdfd8c710aff9855c7b2b7c795a54b0f928a"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-fit-dimensions/fixed-compact-selection-ke-777f5-uts-retain-the-live-session/end.png",
+    "sha256": "0684a54a89204937189929d31a095ee069c0c61a27fcd009dc9579ed1aa38211"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-fit-dimensions/fixed-compact-selection-ke-777f5-uts-retain-the-live-session/electron-trace.zip",
+    "sha256": "830b01e535730fc451bfc6ddd86c77031af4cfe78c6b9b64a690f120125bb8ac"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/.last-run.json",
+    "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat2/diagnostic.json",
+    "sha256": "02d832b1b679ba4aef64f254d5dfad2860fef16460c23f606d31b841bf6361fa"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat2/end.png",
+    "sha256": "0684a54a89204937189929d31a095ee069c0c61a27fcd009dc9579ed1aa38211"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat2/electron-trace.zip",
+    "sha256": "df55f4bced37f2d0c1c72ef8b8fe32b05ffc8d0ce637dd294125bb1291b52e0f"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat1/diagnostic.json",
+    "sha256": "e0dd53d505fdfc903d556da99dd3e33b5ead5ddc9065ce8f3aff4b893593dc8d"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat1/end.png",
+    "sha256": "0684a54a89204937189929d31a095ee069c0c61a27fcd009dc9579ed1aa38211"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session-repeat1/electron-trace.zip",
+    "sha256": "3e8f5da98a9205b45e159a82431722385306c6832a3b2ec4d0f41e0f51db4b36"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session/diagnostic.json",
+    "sha256": "e59a9ea819bf1253b4cbc25b77364be7b83f8f2965117e4996c4dd96c8a070a7"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session/end.png",
+    "sha256": "fb50bd2d57dd37e34457e1678ae7b2e2b4348c32ec503c349350f5eda7d7ffca"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-visible-fit/fixed-compact-selection-ke-777f5-uts-retain-the-live-session/electron-trace.zip",
+    "sha256": "e85ee90a4d0bc195093dbc5efbafcfe81e9c53e449ed1f9988e990c18174ace4"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-patch/.last-run.json",
+    "sha256": "f82892aa391343cf4c922deeef7f24b3695a278b8708e7b65d11b464298706b3"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-patch/editor-gestures-terminal-r-88e1c-d-keeps-useful-compact-rows/trace.zip",
+    "sha256": "4b564e06c833cb44692d735c4dd64e7abd8e63392be7c8105aa3daaf6c4268ba"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-patch/editor-gestures-terminal-r-88e1c-d-keeps-useful-compact-rows-repeat1/trace.zip",
+    "sha256": "22ce14929b8817fe310bd4878c1f687aef5bcb87f3eb94600c3ed9dca4901519"
+  },
+  {
+    "path": "/tmp/tricorder-editeur-terminal-history/.last-run.json",
+    "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+  }
+]

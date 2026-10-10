@@ -3,6 +3,34 @@ const assert = require('node:assert/strict');
 let view;
 test.before(async()=>{view=await import('../src/execution-view.mjs');});
 
+test('a dependent child and a parent suspension are distinct from a manual child hold',()=>{
+  assert.match(view.executionAction({status:'paused',iteration_wait:true}).detail,/prérequis/);
+  assert.match(view.executionAction({status:'paused',iteration_wait:true,iteration_hold:true}).detail,/manuellement/);
+  assert.equal(view.executionAction({status:'paused',parent_paused:true}).label,'Voir le workflow parent');
+  assert.equal(view.activitySummary([{status:'paused',iteration_wait:true}]).dependencies,1);
+});
+
+test('request headings accept archived long text without coercing objects or losing the original',()=>{
+  const archived={$artifact:{sha256:'a'.repeat(64)},preview:'Préparer le bilan\n'+ 'Source '.repeat(100)};
+  const before=structuredClone(archived);
+  assert.equal(view.requestHeading(archived,'Workflow'), 'Préparer le bilan');
+  assert.equal(view.requestHeading(null,{$artifact:{}},'Workflow'), 'Workflow');
+  assert.equal(view.requestHeading({},'Intention\nContexte'), 'Intention');
+  assert.equal(view.requestHeading('x'.repeat(1000)).length,301);
+  assert.deepEqual(archived,before);
+});
+
+test('missing output gives a readable correction while original diagnostics stay unchanged',()=>{
+  const raw='Sortie text absente ou incompatible avec le type string';
+  const run={health:{issues:[{node:'draft',title:'Brouillon',reason:raw}]}};
+  assert.match(view.executionIssue(run).reason,/doit fournir un texte dans « text »/);
+  assert.match(view.readableFailure(raw),/précisez la correction/);
+  assert.equal(run.health.issues[0].reason,raw);
+  assert.equal(view.readableFailure('Connexion interrompue'),'Connexion interrompue');
+  const artifact={$artifact:{sha256:'a'.repeat(64)}};
+  assert.equal(view.readableFailure(artifact),artifact);
+});
+
 test('completed progress separates treated steps from excluded branches without calling a refusal successful',()=>{
   const run={nodes:{diagnosis:{status:'accepted'},decision:{status:'accepted',outcome:'reject'},work:{status:'skipped'},mail:{status:'skipped'}}};
   const before=structuredClone(run),progress=view.executionProgress(run);
@@ -78,3 +106,5 @@ test('retry guidance explains exhaustion without suggesting an unsafe external r
 });
 
 test('cancelled dependent work opens the report instead of an obsolete wait',()=>{assert.equal(view.executionAction({status:'cancelled',coordination_wait:true}).detail,'Exécution annulée.');});
+
+test('parent activity and next action expose child questions and failures without making optional results block it',()=>{const run={status:'active',focus:{node:'work',status:'waiting_children'},nodes:{work:{status:'waiting_children'}},coordination:{work:{counts:{question:3,failed:1,running:2}}}};assert.equal(view.childActivityLabel(run),'1 élément en échec · 3 réponses attendues');assert.equal(view.executionAction(run).label,'Examiner les éléments en échec');delete run.coordination.work.counts.failed;assert.equal(view.executionAction(run).label,'Répondre aux questions');assert.equal(view.executionAction(run).node,'work');assert.equal(view.activitySummary([run]).questions,3);run.status='completed';run.associated={counts:{failed:1}};assert.equal(view.executionAction(run).mode,'document');});

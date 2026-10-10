@@ -1,0 +1,366 @@
+{
+  "completion_outcome": "succeeded",
+  "contract": "6b12c59b77f485c50488fa84fe8e97f923ba9998ab5451438ae2c1da858cde8b",
+  "created": 1791622001.071161,
+  "definition": {
+    "defaults": {
+      "model": "panel-techlead-fixture",
+      "provider": "codex"
+    },
+    "edges": [
+      {
+        "from": "edit",
+        "id": "edit-qa",
+        "mapping": {
+          "candidate": "candidate"
+        },
+        "outcome": "done",
+        "to": "qa"
+      }
+    ],
+    "id": "code-item",
+    "nodes": [
+      {
+        "execution": {
+          "effort": "medium",
+          "model": "panel-techlead-fixture",
+          "profile": "generalist",
+          "provider": "codex",
+          "session": "delegated"
+        },
+        "execution_mode": "edit",
+        "id": "edit",
+        "inputs": {
+          "candidate": {
+            "required": false,
+            "type": "object"
+          },
+          "item": {
+            "required": true,
+            "type": "object"
+          }
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "candidate": {
+            "required": true,
+            "type": "object"
+          }
+        },
+        "position": {
+          "x": 70,
+          "y": 100
+        },
+        "profile": "generalist",
+        "prompt": "Réaliser uniquement inputs.item dans la copie de travail fournie. Elle inclut la dépendance de code autorisée, si présente. Ne pas écrire dans le dépôt original. Si aucune modification n’est nécessaire, demander un recadrage ; ne pas fabriquer de diff. Les tests seront exécutés par le bloc de commande suivant.",
+        "required_capabilities": [
+          "edit"
+        ],
+        "sample_outputs": {
+          "candidate": {
+            "simulation": true,
+            "summary": "Exemple sans diff applicable"
+          }
+        },
+        "title": "Proposer les modifications",
+        "validation": "contract"
+      },
+      {
+        "argv": [
+          "python3",
+          "-B",
+          "-c",
+          "import sys, unittest; sys.path.insert(0, '/project'); suite = unittest.defaultTestLoader.discover('/project/tests'); assert suite.countTestCases() > 0, 'Aucun test trouvé : adapter la commande au projet'; result = unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())"
+        ],
+        "candidate_check": true,
+        "description": "Exemple Python unittest, à adapter avant lancement. Projet en lecture seule, sans réseau ni base de données ; ce contrôle ne constitue pas une recette Odoo.",
+        "evidence_required": true,
+        "id": "qa",
+        "inputs": {
+          "candidate": {
+            "required": true,
+            "type": "object"
+          }
+        },
+        "kind": "command",
+        "position": {
+          "x": 390,
+          "y": 100
+        },
+        "title": "Tester la contribution",
+        "validation": "automatic"
+      }
+    ],
+    "parameters": {
+      "conversation": "c36546242df2f41c4",
+      "element_id": "a",
+      "item": {
+        "criteria": [
+          "a=1"
+        ],
+        "id": "a",
+        "title": "Modifier la fonction A"
+      },
+      "request": "Modifier la fonction A"
+    },
+    "schema": 2,
+    "title": "Modifier et tester un élément"
+  },
+  "driver": "automatic",
+  "id": "r5f46c84ba9474c4c",
+  "nodes": {
+    "edit": {
+      "attempt": 1,
+      "finished": 1791622001.616512,
+      "heartbeat": 1791622001.5950692,
+      "input_sources": {},
+      "inputs": {
+        "item": {
+          "criteria": [
+            "a=1"
+          ],
+          "id": "a",
+          "title": "Modifier la fonction A"
+        }
+      },
+      "outcome": "done",
+      "ownership": "managed",
+      "processes": [],
+      "receipt": {
+        "actor": "contract-policy",
+        "at": 1791622001.616887,
+        "checks": [
+          "executor-success",
+          "output-types",
+          "evidence-integrity"
+        ],
+        "contract": "6b12c59b77f485c50488fa84fe8e97f923ba9998ab5451438ae2c1da858cde8b",
+        "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+      },
+      "result": {
+        "evidence": [
+          {
+            "sha256": "4d6ab16865d21d318f573235718cd6069de75c05d79259996455e4e058d8631b",
+            "size": 539
+          },
+          {
+            "sha256": "f10ae7f77c4bf547ef69b67e35ad7b12b36f964a1783b24c33738646c630cae9",
+            "size": 48
+          }
+        ],
+        "ok": true,
+        "outputs": {
+          "candidate": {
+            "sha256": "4d6ab16865d21d318f573235718cd6069de75c05d79259996455e4e058d8631b",
+            "size": 539
+          }
+        },
+        "summary": "FIXTURE : modification isolée a"
+      },
+      "seed_inputs": {
+        "item": {
+          "criteria": [
+            "a=1"
+          ],
+          "id": "a",
+          "title": "Modifier la fonction A"
+        }
+      },
+      "started": 1791622001.595069,
+      "status": "accepted",
+      "token": "t90ab7444a1024608"
+    },
+    "qa": {
+      "attempt": 1,
+      "finished": 1791622001.9981627,
+      "heartbeat": 1791622001.8026211,
+      "input_sources": {
+        "candidate": {
+          "edge": "edit-qa",
+          "node": "edit",
+          "port": "candidate"
+        }
+      },
+      "inputs": {
+        "candidate": {
+          "sha256": "4d6ab16865d21d318f573235718cd6069de75c05d79259996455e4e058d8631b",
+          "size": 539
+        }
+      },
+      "outcome": "done",
+      "ownership": "managed",
+      "pid": 1467970,
+      "processes": [
+        {
+          "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+          "pid": 1467952,
+          "session": 1467952,
+          "start": "15581453"
+        },
+        {
+          "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+          "pid": 1467970,
+          "session": 1467970,
+          "start": "15581459"
+        }
+      ],
+      "receipt": {
+        "actor": "validation-policy",
+        "at": 1791622001.9985533,
+        "checks": [
+          "executor-success",
+          "output-types",
+          "evidence-integrity"
+        ],
+        "contract": "6b12c59b77f485c50488fa84fe8e97f923ba9998ab5451438ae2c1da858cde8b",
+        "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+      },
+      "result": {
+        "evidence": [
+          {
+            "sha256": "1ab80e0783c357abc05afc2bea6602f0ca0ad62fbbebaba86dfc4b46a1dbf1cb",
+            "size": 143
+          }
+        ],
+        "exit_code": 0,
+        "ok": true,
+        "preview": "test_individual_bound (test_pair.Pair) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+        "scope": "Projet en lecture seule ; aucun accès réseau.",
+        "summary": "Commande terminée avec le code 0. Résultat à examiner."
+      },
+      "started": 1791622001.7240613,
+      "status": "accepted",
+      "token": "tfca89e21fbe24b93"
+    }
+  },
+  "notifications_authorized": false,
+  "original": {
+    "defaults": {
+      "model": "panel-techlead-fixture",
+      "provider": "codex"
+    },
+    "edges": [
+      {
+        "from": "edit",
+        "id": "edit-qa",
+        "mapping": {
+          "candidate": "candidate"
+        },
+        "outcome": "done",
+        "to": "qa"
+      }
+    ],
+    "id": "code-item",
+    "nodes": [
+      {
+        "execution_mode": "edit",
+        "id": "edit",
+        "inputs": {
+          "candidate": {
+            "required": false,
+            "type": "object"
+          },
+          "item": {
+            "required": true,
+            "type": "object"
+          }
+        },
+        "kind": "agent",
+        "max_attempts": 2,
+        "outputs": {
+          "candidate": {
+            "required": true,
+            "type": "object"
+          }
+        },
+        "position": {
+          "x": 70,
+          "y": 100
+        },
+        "profile": "generalist",
+        "prompt": "Réaliser uniquement inputs.item dans la copie de travail fournie. Elle inclut la dépendance de code autorisée, si présente. Ne pas écrire dans le dépôt original. Si aucune modification n’est nécessaire, demander un recadrage ; ne pas fabriquer de diff. Les tests seront exécutés par le bloc de commande suivant.",
+        "required_capabilities": [
+          "edit"
+        ],
+        "sample_outputs": {
+          "candidate": {
+            "simulation": true,
+            "summary": "Exemple sans diff applicable"
+          }
+        },
+        "title": "Proposer les modifications",
+        "validation": "contract"
+      },
+      {
+        "argv": [
+          "python3",
+          "-B",
+          "-c",
+          "import sys, unittest; sys.path.insert(0, '/project'); suite = unittest.defaultTestLoader.discover('/project/tests'); assert suite.countTestCases() > 0, 'Aucun test trouvé : adapter la commande au projet'; result = unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())"
+        ],
+        "candidate_check": true,
+        "description": "Exemple Python unittest, à adapter avant lancement. Projet en lecture seule, sans réseau ni base de données ; ce contrôle ne constitue pas une recette Odoo.",
+        "evidence_required": true,
+        "id": "qa",
+        "inputs": {
+          "candidate": {
+            "required": true,
+            "type": "object"
+          }
+        },
+        "kind": "command",
+        "position": {
+          "x": 390,
+          "y": 100
+        },
+        "title": "Tester la contribution",
+        "validation": "automatic"
+      }
+    ],
+    "schema": 2,
+    "title": "Modifier et tester un élément"
+  },
+  "packs": [],
+  "parameters": {
+    "conversation": "c36546242df2f41c4",
+    "dependency_results": {},
+    "depends_on_runs": [],
+    "element_id": "a",
+    "item": {
+      "criteria": [
+        "a=1"
+      ],
+      "id": "a",
+      "title": "Modifier la fonction A"
+    },
+    "request": "Modifier la fonction A"
+  },
+  "parent": {
+    "attempt": 1,
+    "element": "a",
+    "node": "work",
+    "run": "r92d2c8cd08cc4fb8"
+  },
+  "plugins": {
+    "path": "/tmp/tricorder-panel-techlead-SUnl7T/workflows/projects/paafc978b553f4c43/.tricorder/plugins.json",
+    "plugins": [],
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "project": "paafc978b553f4c43",
+  "release": "",
+  "scope": {
+    "id": "paafc978b553f4c43",
+    "kind": "project"
+  },
+  "simulation": false,
+  "status": "completed",
+  "transports": {},
+  "updated": 1791622001.9986978,
+  "focus": null,
+  "health": {
+    "status": "ok",
+    "total": 0,
+    "issues": []
+  }
+}

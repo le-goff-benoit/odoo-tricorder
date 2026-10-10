@@ -1,0 +1,78 @@
+{
+  "calls": [
+    {
+      "at": 1791631232598,
+      "request": {
+        "project": "p30f2bfea42d94088",
+        "conversation": "c370540921dfd4ee0",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "ec15abc5c2a94bfbbad9c416c4524731",
+        "pid": 1793911,
+        "agentState": "starting",
+        "idleShell": false,
+        "program": "python3"
+      }
+    },
+    {
+      "at": 1791631236933,
+      "request": {
+        "project": "p30f2bfea42d94088",
+        "conversation": "c370540921dfd4ee0",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "ec15abc5c2a94bfbbad9c416c4524731",
+        "pid": 1793911,
+        "agentState": "busy",
+        "idleShell": false,
+        "program": "sleep"
+      }
+    }
+  ],
+  "events": [
+    {
+      "at": 1791631232522,
+      "action": "conversation-terminal",
+      "cache": []
+    },
+    {
+      "at": 1791631236870,
+      "action": "conversation-terminal",
+      "cache": [
+        {
+          "id": "ec15abc5c2a94bfbbad9c416c4524731",
+          "pid": 1793911,
+          "alive": true,
+          "idleShell": true,
+          "program": "bash"
+        }
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "id": "ec15abc5c2a94bfbbad9c416c4524731",
+      "project": "/tmp/tricorder-independent-terminal-fresh-f8VNTv/projects/p30f2bfea42d94088",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-f8VNTv/projects/p30f2bfea42d94088",
+      "release": null,
+      "task": null,
+      "createdAt": 1791631232.7106318,
+      "lastOutputAt": 1791631237.0913947,
+      "pid": 1793911,
+      "program": "bash",
+      "provider": null,
+      "foreground": 1793911,
+      "promptVerified": true,
+      "idleShell": true,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "launches": 1
+}

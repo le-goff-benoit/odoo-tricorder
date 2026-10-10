@@ -1,0 +1,1355 @@
+{
+  "run": {
+    "associated_actions": [
+      {
+        "action": "action-65101b4c-83d3-4abf-bce0-4411e70f5995",
+        "activated": 1791627838.2543964,
+        "attempt": 1,
+        "authorization": {
+          "actor": "local-user",
+          "project": "workspace",
+          "source": "a3b0ba027a70277eabd7885acaab7754d3a12b3b20606ec09c39f5bb1dd9a2e0",
+          "transports": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "workflow": "efca6d64cd0e0c4a0e568da28b35bb908bfebf43ee2f85d6327bcca8fc414b96"
+        },
+        "created": 1791627819.6120644,
+        "event": "accepted",
+        "id": "action-66d169e1c05e2e7b455d820d860f71e2",
+        "question": null,
+        "run": "r8daa6c3c2c224816",
+        "source": "work",
+        "source_digest": "a3b0ba027a70277eabd7885acaab7754d3a12b3b20606ec09c39f5bb1dd9a2e0",
+        "status": "active",
+        "title": "Résumé facultatif pour comité produit"
+      }
+    ],
+    "completion_outcome": "succeeded",
+    "contract": "bf5a607180c72be7e4154dd6e9a156d79c6f484c488f29f58f23d2316bebfaa2",
+    "created": 1791627670.9806368,
+    "definition": {
+      "actions": [
+        {
+          "enabled": true,
+          "event": "accepted",
+          "id": "action-65101b4c-83d3-4abf-bce0-4411e70f5995",
+          "source": "work",
+          "title": "Résumé facultatif pour comité produit",
+          "workflow": {
+            "edges": [],
+            "id": "item-work",
+            "nodes": [
+              {
+                "content": "Résumé local synthétique : travaux B2B et points à revoir. Aucun envoi.",
+                "id": "draft",
+                "kind": "document",
+                "outputs": {},
+                "title": "Préparer le brouillon",
+                "validation": "human"
+              }
+            ],
+            "schema": 2,
+            "title": "Préparer le brouillon"
+          }
+        }
+      ],
+      "defaults": {
+        "model": "synthetic-local",
+        "provider": "codex"
+      },
+      "description": "Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.",
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "intentions-plan",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "results": "results"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "pm-revision-adaptee",
+      "nodes": [
+        {
+          "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "title": "Recueillir les intentions"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "synthetic-local",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 360,
+            "y": 140
+          },
+          "profile": "generalist",
+          "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.",
+          "sample_outputs": {
+            "plan": {
+              "goal": "Préparer le suivi d’une réunion",
+              "tasks": [
+                {
+                  "criteria": [
+                    "Distinguer les décisions des sujets à confirmer"
+                  ],
+                  "id": "R1",
+                  "title": "Préparer le compte rendu"
+                },
+                {
+                  "criteria": [
+                    "Reprendre les décisions reçues sans envoyer le message"
+                  ],
+                  "depends_on": [
+                    "R1"
+                  ],
+                  "id": "R2",
+                  "title": "Préparer un brouillon d’email"
+                }
+              ]
+            }
+          },
+          "title": "Préparer un plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 670,
+            "y": 140
+          },
+          "question": "Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?",
+          "title": "Valider le plan"
+        },
+        {
+          "collection": "plan.tasks",
+          "completion_outcome": "succeeded",
+          "concurrency": 2,
+          "criteria": [],
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "max_attempts": 1,
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "phase": "",
+          "position": {
+            "x": 980,
+            "y": 140
+          },
+          "resources": [],
+          "title": "Pour chaque élément du plan",
+          "workflow": {
+            "edges": [],
+            "id": "revue-synthetique",
+            "nodes": [
+              {
+                "id": "question",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "question",
+                "outputs": {
+                  "answer": {
+                    "required": true,
+                    "type": "string"
+                  }
+                },
+                "question": "Quel critère confirme la réception de cet élément ?",
+                "title": "Préciser le critère du livrable"
+              }
+            ],
+            "schema": 2,
+            "title": "Réception du livrable synthétique"
+          }
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 1320,
+            "y": 140
+          },
+          "question": "Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.",
+          "title": "Examiner les résultats"
+        }
+      ],
+      "parameters": {},
+      "schema": 2,
+      "title": "Plan B2B révisé — banc synthétique"
+    },
+    "driver": "conversation",
+    "id": "r8268f40473fd4b59",
+    "nodes": {
+      "intentions": {
+        "attempt": 0,
+        "collection": {
+          "closed": 1791627704.2111702,
+          "items": [
+            {
+              "created": 1791627703.875873,
+              "id": "i614842d9d5ec48c3",
+              "text": "Checklist onboarding avec revue UX préalable"
+            },
+            {
+              "created": 1791627703.997887,
+              "id": "if0bd98fecaa64876",
+              "text": "Export CSV contrats actifs : admin uniquement"
+            },
+            {
+              "created": 1791627704.0981603,
+              "id": "ifff0e15a13df42ed",
+              "text": "Cahier notification 30 jours : aucun envoi"
+            }
+          ],
+          "revision": 4
+        },
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "receipt": {
+          "actor": "collection-confirmation",
+          "at": 1791627704.2111683,
+          "revision": 3
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "intentions": [
+              {
+                "created": 1791627703.875873,
+                "id": "i614842d9d5ec48c3",
+                "text": "Checklist onboarding avec revue UX préalable"
+              },
+              {
+                "created": 1791627703.997887,
+                "id": "if0bd98fecaa64876",
+                "text": "Export CSV contrats actifs : admin uniquement"
+              },
+              {
+                "created": 1791627704.0981603,
+                "id": "ifff0e15a13df42ed",
+                "text": "Cahier notification 30 jours : aucun envoi"
+              }
+            ]
+          },
+          "summary": "3 contribution(s) confirmée(s)"
+        },
+        "status": "accepted"
+      },
+      "plan": {
+        "attempt": 1,
+        "finished": 1791627721.3910298,
+        "heartbeat": 1791627721.385796,
+        "input_sources": {
+          "intentions": {
+            "edge": "intentions-plan",
+            "node": "intentions",
+            "port": "intentions"
+          }
+        },
+        "inputs": {
+          "intentions": [
+            {
+              "created": 1791627703.875873,
+              "id": "i614842d9d5ec48c3",
+              "text": "Checklist onboarding avec revue UX préalable"
+            },
+            {
+              "created": 1791627703.997887,
+              "id": "if0bd98fecaa64876",
+              "text": "Export CSV contrats actifs : admin uniquement"
+            },
+            {
+              "created": 1791627704.0981603,
+              "id": "ifff0e15a13df42ed",
+              "text": "Cahier notification 30 jours : aucun envoi"
+            }
+          ]
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791627721.3911314,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "bf5a607180c72be7e4154dd6e9a156d79c6f484c488f29f58f23d2316bebfaa2",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "plan": {
+              "goal": "Périmètre B2B enrichi après refus",
+              "tasks": [
+                {
+                  "criteria": [
+                    "5 étapes ; revue UX préalable"
+                  ],
+                  "id": "A",
+                  "title": "Checklist onboarding et revue UX"
+                },
+                {
+                  "criteria": [
+                    "Client, échéance, montant ; admin uniquement"
+                  ],
+                  "id": "B",
+                  "title": "Spécification export CSV des contrats"
+                },
+                {
+                  "criteria": [
+                    "30 jours ; aucun envoi"
+                  ],
+                  "depends_on": [
+                    "B"
+                  ],
+                  "id": "C",
+                  "title": "Cahier de notification échéance"
+                }
+              ]
+            }
+          },
+          "summary": "Version enrichie synthétique"
+        },
+        "started": 1791627721.385796,
+        "status": "accepted",
+        "token": "tf489f56f99a9445c"
+      },
+      "receipt": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791627820.301213,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "64e7adc82bdd89dff2b82b494635db082cc71658f6b7bd647d61081bc936cff3"
+        },
+        "input_sources": {
+          "results": {
+            "edge": "work-receipt",
+            "node": "work",
+            "port": "results"
+          }
+        },
+        "inputs": {
+          "results": [
+            {
+              "id": "A",
+              "outputs": {
+                "question": {
+                  "answer": "5 étapes de checklist et revue UX ajoutées au périmètre."
+                }
+              },
+              "project": "workspace",
+              "run": "r54d923bf1dc94092",
+              "title": "Checklist onboarding et revue UX"
+            },
+            {
+              "id": "B",
+              "outputs": {
+                "question": {
+                  "answer": "Critères reçus : colonnes client/échéance/montant et export réservé administrateurs."
+                }
+              },
+              "project": "workspace",
+              "run": "r88f2a82ce5fd41ea",
+              "title": "Spécification export CSV des contrats"
+            },
+            {
+              "id": "C",
+              "outputs": {
+                "question": {
+                  "answer": "Cahier 30 jours, brouillon uniquement et aucun envoi."
+                }
+              },
+              "project": "workspace",
+              "run": "rcf5a80bf8ecf4b1d",
+              "title": "Cahier de notification échéance"
+            }
+          ]
+        },
+        "nonce": "d68b57c7ea1b6461a",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "64e7adc82bdd89dff2b82b494635db082cc71658f6b7bd647d61081bc936cff3",
+        "status": "accepted"
+      },
+      "scope": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791627722.385306,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "6e666f421e6706de9cc4253e024fad7030638d82d41de08708bb1ae6a96bcbf2"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "plan-scope",
+            "node": "plan",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "goal": "Périmètre B2B enrichi après refus",
+            "tasks": [
+              {
+                "criteria": [
+                  "5 étapes ; revue UX préalable"
+                ],
+                "id": "A",
+                "title": "Checklist onboarding et revue UX"
+              },
+              {
+                "criteria": [
+                  "Client, échéance, montant ; admin uniquement"
+                ],
+                "id": "B",
+                "title": "Spécification export CSV des contrats"
+              },
+              {
+                "criteria": [
+                  "30 jours ; aucun envoi"
+                ],
+                "depends_on": [
+                  "B"
+                ],
+                "id": "C",
+                "title": "Cahier de notification échéance"
+              }
+            ]
+          }
+        },
+        "nonce": "dd7091dd4055a425b",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "6e666f421e6706de9cc4253e024fad7030638d82d41de08708bb1ae6a96bcbf2",
+        "result": {
+          "outputs": {
+            "plan": {
+              "goal": "Périmètre B2B enrichi après refus",
+              "tasks": [
+                {
+                  "criteria": [
+                    "5 étapes ; revue UX préalable"
+                  ],
+                  "id": "A",
+                  "title": "Checklist onboarding et revue UX"
+                },
+                {
+                  "criteria": [
+                    "Client, échéance, montant ; admin uniquement"
+                  ],
+                  "id": "B",
+                  "title": "Spécification export CSV des contrats"
+                },
+                {
+                  "criteria": [
+                    "30 jours ; aucun envoi"
+                  ],
+                  "depends_on": [
+                    "B"
+                  ],
+                  "id": "C",
+                  "title": "Cahier de notification échéance"
+                }
+              ]
+            }
+          }
+        },
+        "status": "accepted"
+      },
+      "work": {
+        "attempt": 1,
+        "children": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "A",
+            "project": "workspace",
+            "run": "r54d923bf1dc94092",
+            "title": "Checklist onboarding et revue UX"
+          },
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "B",
+            "project": "workspace",
+            "run": "r88f2a82ce5fd41ea",
+            "title": "Spécification export CSV des contrats"
+          },
+          {
+            "base_from": null,
+            "depends_on": [
+              "B"
+            ],
+            "element": "C",
+            "project": "workspace",
+            "run": "rcf5a80bf8ecf4b1d",
+            "title": "Cahier de notification échéance"
+          }
+        ],
+        "enrollment": {
+          "at": 1791627722.6117148,
+          "concurrency": 2,
+          "contract": "c6bbb9069824eb7217c3690acb1140e1464593a7b53ab087c23badc52d4b0ba0"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "scope-work",
+            "node": "scope",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "goal": "Périmètre B2B enrichi après refus",
+            "tasks": [
+              {
+                "criteria": [
+                  "5 étapes ; revue UX préalable"
+                ],
+                "id": "A",
+                "title": "Checklist onboarding et revue UX"
+              },
+              {
+                "criteria": [
+                  "Client, échéance, montant ; admin uniquement"
+                ],
+                "id": "B",
+                "title": "Spécification export CSV des contrats"
+              },
+              {
+                "criteria": [
+                  "30 jours ; aucun envoi"
+                ],
+                "depends_on": [
+                  "B"
+                ],
+                "id": "C",
+                "title": "Cahier de notification échéance"
+              }
+            ]
+          }
+        },
+        "outcome": "done",
+        "receipt": {
+          "actor": "iteration-engine",
+          "at": 1791627819.611625,
+          "contract": "c6bbb9069824eb7217c3690acb1140e1464593a7b53ab087c23badc52d4b0ba0"
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "contributions": [],
+            "results": [
+              {
+                "id": "A",
+                "outputs": {
+                  "question": {
+                    "answer": "5 étapes de checklist et revue UX ajoutées au périmètre."
+                  }
+                },
+                "project": "workspace",
+                "run": "r54d923bf1dc94092",
+                "title": "Checklist onboarding et revue UX"
+              },
+              {
+                "id": "B",
+                "outputs": {
+                  "question": {
+                    "answer": "Critères reçus : colonnes client/échéance/montant et export réservé administrateurs."
+                  }
+                },
+                "project": "workspace",
+                "run": "r88f2a82ce5fd41ea",
+                "title": "Spécification export CSV des contrats"
+              },
+              {
+                "id": "C",
+                "outputs": {
+                  "question": {
+                    "answer": "Cahier 30 jours, brouillon uniquement et aucun envoi."
+                  }
+                },
+                "project": "workspace",
+                "run": "rcf5a80bf8ecf4b1d",
+                "title": "Cahier de notification échéance"
+              }
+            ]
+          },
+          "summary": "3 éléments terminés"
+        },
+        "status": "accepted"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "actions": [
+        {
+          "enabled": true,
+          "event": "accepted",
+          "id": "action-65101b4c-83d3-4abf-bce0-4411e70f5995",
+          "source": "work",
+          "title": "Résumé facultatif pour comité produit",
+          "workflow": {
+            "edges": [],
+            "id": "item-work",
+            "nodes": [
+              {
+                "content": "Résumé local synthétique : travaux B2B et points à revoir. Aucun envoi.",
+                "id": "draft",
+                "kind": "document",
+                "outputs": {},
+                "title": "Préparer le brouillon",
+                "validation": "human"
+              }
+            ],
+            "schema": 2,
+            "title": "Préparer le brouillon"
+          }
+        }
+      ],
+      "defaults": {
+        "model": "synthetic-local",
+        "provider": "codex"
+      },
+      "description": "Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.",
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "intentions-plan",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "results": "results"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "pm-revision-adaptee",
+      "nodes": [
+        {
+          "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "title": "Recueillir les intentions"
+        },
+        {
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 360,
+            "y": 140
+          },
+          "profile": "generalist",
+          "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.",
+          "sample_outputs": {
+            "plan": {
+              "goal": "Préparer le suivi d’une réunion",
+              "tasks": [
+                {
+                  "criteria": [
+                    "Distinguer les décisions des sujets à confirmer"
+                  ],
+                  "id": "R1",
+                  "title": "Préparer le compte rendu"
+                },
+                {
+                  "criteria": [
+                    "Reprendre les décisions reçues sans envoyer le message"
+                  ],
+                  "depends_on": [
+                    "R1"
+                  ],
+                  "id": "R2",
+                  "title": "Préparer un brouillon d’email"
+                }
+              ]
+            }
+          },
+          "title": "Préparer un plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 670,
+            "y": 140
+          },
+          "question": "Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?",
+          "title": "Valider le plan"
+        },
+        {
+          "collection": "plan.tasks",
+          "completion_outcome": "succeeded",
+          "concurrency": 2,
+          "criteria": [],
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "max_attempts": 1,
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "phase": "",
+          "position": {
+            "x": 980,
+            "y": 140
+          },
+          "resources": [],
+          "title": "Pour chaque élément du plan",
+          "workflow": {
+            "edges": [],
+            "id": "revue-synthetique",
+            "nodes": [
+              {
+                "id": "question",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "question",
+                "outputs": {
+                  "answer": {
+                    "required": true,
+                    "type": "string"
+                  }
+                },
+                "question": "Quel critère confirme la réception de cet élément ?",
+                "title": "Préciser le critère du livrable"
+              }
+            ],
+            "schema": 2,
+            "title": "Réception du livrable synthétique"
+          }
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 1320,
+            "y": 140
+          },
+          "question": "Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.",
+          "title": "Examiner les résultats"
+        }
+      ],
+      "schema": 2,
+      "title": "Plan B2B révisé — banc synthétique"
+    },
+    "packs": [],
+    "parameters": {},
+    "plugins": {
+      "path": "/tmp/tricorder-personas-produit/05-product/isolated-home/workflows/workspace/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "workspace",
+    "release": "",
+    "scope": {
+      "id": "workspace",
+      "kind": "workspace"
+    },
+    "simulation": false,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791627838.2545872,
+    "origin": null,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    },
+    "associated": {
+      "items": [
+        {
+          "id": "action-66d169e1c05e2e7b455d820d860f71e2",
+          "action": "action-65101b4c-83d3-4abf-bce0-4411e70f5995",
+          "title": "Résumé facultatif pour comité produit",
+          "source": "work",
+          "event": "accepted",
+          "question": null,
+          "status": "completed",
+          "run": "r8daa6c3c2c224816",
+          "reason": "",
+          "effects": {},
+          "focus": null,
+          "trigger_current": true
+        }
+      ],
+      "total": 1,
+      "counts": {
+        "completed": 1
+      },
+      "offset": 0,
+      "next": null
+    },
+    "coordination": {
+      "work": {
+        "run": "r8268f40473fd4b59",
+        "node": "work",
+        "coordinator": "engine",
+        "concurrency": 2,
+        "status": "completed",
+        "counts": {
+          "completed": 3,
+          "running": 0,
+          "question": 0,
+          "decision": 0,
+          "failed": 0,
+          "waiting": 0
+        },
+        "total": 3,
+        "offset": 0,
+        "next": null,
+        "items": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "A",
+            "project": "workspace",
+            "run": "r54d923bf1dc94092",
+            "title": "Checklist onboarding et revue UX",
+            "dependencies": [],
+            "state": "completed",
+            "execution": {
+              "id": "r54d923bf1dc94092",
+              "project": "workspace",
+              "status": "completed",
+              "created": 1791627722.6137393,
+              "updated": 1791627817.603592,
+              "simulation": false,
+              "completion_outcome": "succeeded",
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "A",
+                "node": "work",
+                "run": "r8268f40473fd4b59"
+              },
+              "associated_with": null,
+              "conversation": null,
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "revue-synthetique",
+                "title": "Réception du livrable synthétique",
+                "revision": null
+              },
+              "original": {
+                "id": "revue-synthetique"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Checklist onboarding et revue UX",
+              "counts": {
+                "accepted": 1
+              },
+              "nodes": {
+                "question": {
+                  "status": "accepted"
+                }
+              }
+            },
+            "reason": ""
+          },
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "B",
+            "project": "workspace",
+            "run": "r88f2a82ce5fd41ea",
+            "title": "Spécification export CSV des contrats",
+            "dependencies": [],
+            "state": "completed",
+            "execution": {
+              "id": "r88f2a82ce5fd41ea",
+              "project": "workspace",
+              "status": "completed",
+              "created": 1791627722.615726,
+              "updated": 1791627787.6811888,
+              "simulation": false,
+              "completion_outcome": "succeeded",
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "B",
+                "node": "work",
+                "run": "r8268f40473fd4b59"
+              },
+              "associated_with": null,
+              "conversation": null,
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "revue-synthetique",
+                "title": "Réception du livrable synthétique",
+                "revision": null
+              },
+              "original": {
+                "id": "revue-synthetique"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Spécification export CSV des contrats",
+              "counts": {
+                "accepted": 1
+              },
+              "nodes": {
+                "question": {
+                  "status": "accepted"
+                }
+              }
+            },
+            "reason": ""
+          },
+          {
+            "base_from": null,
+            "depends_on": [
+              "B"
+            ],
+            "element": "C",
+            "project": "workspace",
+            "run": "rcf5a80bf8ecf4b1d",
+            "title": "Cahier de notification échéance",
+            "dependencies": [
+              {
+                "element": "B",
+                "title": "Spécification export CSV des contrats",
+                "project": "workspace",
+                "run": "r88f2a82ce5fd41ea"
+              }
+            ],
+            "state": "completed",
+            "execution": {
+              "id": "rcf5a80bf8ecf4b1d",
+              "project": "workspace",
+              "status": "completed",
+              "created": 1791627722.617241,
+              "updated": 1791627818.107904,
+              "simulation": false,
+              "completion_outcome": "succeeded",
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "C",
+                "node": "work",
+                "run": "r8268f40473fd4b59"
+              },
+              "associated_with": null,
+              "conversation": null,
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "revue-synthetique",
+                "title": "Réception du livrable synthétique",
+                "revision": null
+              },
+              "original": {
+                "id": "revue-synthetique"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Cahier de notification échéance",
+              "counts": {
+                "accepted": 1
+              },
+              "nodes": {
+                "question": {
+                  "status": "accepted"
+                }
+              }
+            },
+            "reason": ""
+          }
+        ]
+      }
+    }
+  },
+  "events": [
+    {
+      "seq": 20,
+      "at": 1791627670.9830642,
+      "node": null,
+      "simulation": false,
+      "type": "started"
+    },
+    {
+      "seq": 21,
+      "at": 1791627670.9837108,
+      "node": "intentions",
+      "type": "collecting"
+    },
+    {
+      "seq": 22,
+      "at": 1791627703.8758776,
+      "item": null,
+      "node": "intentions",
+      "revision": 1,
+      "type": "collection-add"
+    },
+    {
+      "seq": 23,
+      "at": 1791627703.997895,
+      "item": null,
+      "node": "intentions",
+      "revision": 2,
+      "type": "collection-add"
+    },
+    {
+      "seq": 24,
+      "at": 1791627704.098168,
+      "item": null,
+      "node": "intentions",
+      "revision": 3,
+      "type": "collection-add"
+    },
+    {
+      "seq": 25,
+      "at": 1791627704.2111766,
+      "item": null,
+      "node": "intentions",
+      "revision": 4,
+      "type": "collection-close"
+    },
+    {
+      "seq": 26,
+      "at": 1791627704.2112877,
+      "node": "plan",
+      "type": "ready"
+    },
+    {
+      "seq": 27,
+      "at": 1791627721.3857985,
+      "attempt": 1,
+      "node": "plan",
+      "type": "running"
+    },
+    {
+      "seq": 28,
+      "at": 1791627721.3910573,
+      "attempt": 1,
+      "node": "plan",
+      "type": "returned"
+    },
+    {
+      "seq": 29,
+      "actor": "validation-policy",
+      "at": 1791627721.3911335,
+      "node": "plan",
+      "type": "accepted"
+    },
+    {
+      "seq": 30,
+      "at": 1791627721.3914478,
+      "node": "scope",
+      "type": "waiting"
+    },
+    {
+      "seq": 31,
+      "at": 1791627722.3853672,
+      "node": "scope",
+      "outcome": "approve",
+      "type": "decision"
+    },
+    {
+      "seq": 32,
+      "at": 1791627722.3854325,
+      "node": "work",
+      "type": "ready"
+    },
+    {
+      "seq": 36,
+      "at": 1791627722.6177585,
+      "concurrency": 2,
+      "count": 3,
+      "node": "work",
+      "type": "iteration-enrolled"
+    },
+    {
+      "seq": 49,
+      "at": 1791627819.611629,
+      "count": 3,
+      "node": "work",
+      "type": "iteration-completed"
+    },
+    {
+      "seq": 50,
+      "at": 1791627819.6118581,
+      "node": "receipt",
+      "type": "waiting"
+    },
+    {
+      "seq": 51,
+      "action": "action-66d169e1c05e2e7b455d820d860f71e2",
+      "at": 1791627819.6120656,
+      "node": "work",
+      "status": "awaiting_activation",
+      "type": "associated-action-ready"
+    },
+    {
+      "seq": 52,
+      "at": 1791627820.301252,
+      "node": "receipt",
+      "outcome": "approve",
+      "type": "decision"
+    },
+    {
+      "seq": 53,
+      "at": 1791627820.301302,
+      "node": null,
+      "type": "completed"
+    },
+    {
+      "seq": 56,
+      "action": "action-66d169e1c05e2e7b455d820d860f71e2",
+      "at": 1791627838.2545774,
+      "node": "work",
+      "status": "active",
+      "type": "associated-action-activation"
+    }
+  ],
+  "events_next": null
+}

@@ -2,6 +2,18 @@
 import copy
 
 from .contracts import condition_outcome, require
+from .ports import port_type
+
+
+def _example(port):
+    kind = port_type(port)
+    value = {'string': 'Exemple simulé', 'boolean': True, 'number': 0,
+             'object': {'simulation': True}, 'array': [], 'any': 'Exemple simulé'}[kind]
+    if kind == 'array' and isinstance(port, dict):
+        count = port.get('minItems', 0)
+        require(count <= 1000, 'Simulation limitée à 1 000 éléments par sortie ; fournissez un exemple plus petit dans un modèle adapté.')
+        value = [_example(port.get('items', 'any')) for _ in range(count)]
+    return value
 
 
 def output_examples(graph, node, *, configured=True):
@@ -19,10 +31,8 @@ def output_examples(graph, node, *, configured=True):
     for name in ports:
         if name in outputs:
             continue
-        kind = kinds[name]
-        values = {'string': ['Exemple simulé'], 'boolean': [True, False],
-                  'number': [0], 'object': [{'simulation': True}], 'array': [[]],
-                  'any': ['Exemple simulé']}[kind]
+        kind = port_type(kinds[name])
+        values = [True, False] if kind == 'boolean' else [_example(kinds[name])]
         if name == route_port and kind == 'string':
             values = node['options']
         active_outcome = outputs.get(route_port, 'done') if route_port else 'done'

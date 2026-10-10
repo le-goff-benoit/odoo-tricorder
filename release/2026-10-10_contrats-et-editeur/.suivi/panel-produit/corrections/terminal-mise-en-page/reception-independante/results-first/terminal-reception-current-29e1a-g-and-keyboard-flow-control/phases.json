@@ -1,0 +1,296 @@
+[
+  {
+    "label": "initial",
+    "width": 1600,
+    "height": 1100,
+    "rows": 60,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 185.390625,
+      "width": 665.828125,
+      "height": 906.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 177.390625,
+      "width": 697.828125,
+      "height": 922.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "8415fc9a660245fda0bf25cc49570be4",
+        "pid": 1746283
+      }
+    ]
+  },
+  {
+    "label": "before-hide-current",
+    "width": 1600,
+    "height": 1100,
+    "rows": 60,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 31,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$ for n in {1..24}; do printf \"CURRENT_%03d\\n\" \n\"$n\"; done\nCURRENT_001\nCURRENT_002\nCURRENT_003\nCURRENT_004\nCURRENT_005\nCURRENT_006\nCURRENT_007\nCURRENT_008\nCURRENT_009\nCURRENT_010\nCURRENT_011\nCURRENT_012\nCURRENT_013\nCURRENT_014\nCURRENT_015\nCURRENT_016\nCURRENT_017\nCURRENT_018\nCURRENT_019\nCURRENT_020\nCURRENT_021\nCURRENT_022\nCURRENT_023\nCURRENT_024\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 185.390625,
+      "width": 665.828125,
+      "height": 906.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 177.390625,
+      "width": 697.828125,
+      "height": 922.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "8415fc9a660245fda0bf25cc49570be4",
+        "pid": 1746283
+      }
+    ]
+  },
+  {
+    "label": "useful-check",
+    "width": 819,
+    "height": 720,
+    "rows": 60,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 31,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$ for n in {1..24}; do printf \"CURRENT_%03d\\n\" \n\"$n\"; done\nCURRENT_001\nCURRENT_002\nCURRENT_003\nCURRENT_004\nCURRENT_005\nCURRENT_006\nCURRENT_007\nCURRENT_008\nCURRENT_009\nCURRENT_010\nCURRENT_011\nCURRENT_012\nCURRENT_013\nCURRENT_014\nCURRENT_015\nCURRENT_016\nCURRENT_017\nCURRENT_018\nCURRENT_019\nCURRENT_020\nCURRENT_021\nCURRENT_022\nCURRENT_023\nCURRENT_024\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 177.3874969482422
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 193.3874969482422
+    },
+    "workflow": {
+      "x": 176,
+      "y": 393.7875061035156,
+      "width": 643.2000122070312,
+      "height": 326.2124938964844
+    },
+    "divider": {
+      "x": 176,
+      "y": 387.7875061035156,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "8415fc9a660245fda0bf25cc49570be4",
+        "pid": 1746283
+      }
+    ]
+  },
+  {
+    "label": "compact-current-before-input",
+    "width": 819,
+    "height": 720,
+    "rows": 11,
+    "cols": 77,
+    "baseY": 21,
+    "viewportY": 21,
+    "cursorY": 10,
+    "visible": "CURRENT_015\nCURRENT_016\nCURRENT_017\nCURRENT_018\nCURRENT_019\nCURRENT_020\nCURRENT_021\nCURRENT_022\nCURRENT_023\nCURRENT_024\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 177.3874969482422
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 193.3874969482422
+    },
+    "workflow": {
+      "x": 176,
+      "y": 393.7875061035156,
+      "width": 643.2000122070312,
+      "height": 326.2124938964844
+    },
+    "divider": {
+      "x": 176,
+      "y": 387.7875061035156,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "8415fc9a660245fda0bf25cc49570be4",
+        "pid": 1746283
+      }
+    ]
+  },
+  {
+    "label": "compact-current-after-input",
+    "width": 819,
+    "height": 720,
+    "rows": 11,
+    "cols": 77,
+    "baseY": 24,
+    "viewportY": 24,
+    "cursorY": 10,
+    "visible": "CURRENT_018\nCURRENT_019\nCURRENT_020\nCURRENT_021\nCURRENT_022\nCURRENT_023\nCURRENT_024\nblegoff@wrk226:~/workflows/workspace$ printf '\\x43\\x4f\\x4d\\x50\\x41\\x43\\x54\\x5\nf\\x4c\\x49\\x56\\x45\\n'\nCOMPACT_LIVE\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 177.3874969482422
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 193.3874969482422
+    },
+    "workflow": {
+      "x": 176,
+      "y": 393.7875061035156,
+      "width": 643.2000122070312,
+      "height": 326.2124938964844
+    },
+    "divider": {
+      "x": 176,
+      "y": 387.7875061035156,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "8415fc9a660245fda0bf25cc49570be4",
+        "pid": 1746283
+      }
+    ]
+  },
+  {
+    "label": "same-session",
+    "width": 819,
+    "height": 720,
+    "rows": 11,
+    "cols": 77,
+    "baseY": 24,
+    "viewportY": 24,
+    "cursorY": 10,
+    "visible": "CURRENT_018\nCURRENT_019\nCURRENT_020\nCURRENT_021\nCURRENT_022\nCURRENT_023\nCURRENT_024\nblegoff@wrk226:~/workflows/workspace$ printf '\\x43\\x4f\\x4d\\x50\\x41\\x43\\x54\\x5\nf\\x4c\\x49\\x56\\x45\\n'\nCOMPACT_LIVE\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 177.3874969482422
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 193.3874969482422
+    },
+    "workflow": {
+      "x": 176,
+      "y": 393.7875061035156,
+      "width": 643.2000122070312,
+      "height": 326.2124938964844
+    },
+    "divider": {
+      "x": 176,
+      "y": 387.7875061035156,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "8415fc9a660245fda0bf25cc49570be4",
+        "pid": 1746283
+      }
+    ]
+  },
+  {
+    "label": "final",
+    "width": 1600,
+    "height": 1100,
+    "rows": 59,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 34,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$ for n in {1..24}; do printf \"CURRENT_%03d\\n\" \n\"$n\"; done\nCURRENT_001\nCURRENT_002\nCURRENT_003\nCURRENT_004\nCURRENT_005\nCURRENT_006\nCURRENT_007\nCURRENT_008\nCURRENT_009\nCURRENT_010\nCURRENT_011\nCURRENT_012\nCURRENT_013\nCURRENT_014\nCURRENT_015\nCURRENT_016\nCURRENT_017\nCURRENT_018\nCURRENT_019\nCURRENT_020\nCURRENT_021\nCURRENT_022\nCURRENT_023\nCURRENT_024\nblegoff@wrk226:~/workflows/workspace$ printf '\\x43\\x4f\\x4d\\x50\\x41\\x43\\x54\\x5f\\x4c\\\nx49\\x56\\x45\\n'\nCOMPACT_LIVE\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 205.390625,
+      "width": 665.828125,
+      "height": 886.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 197.390625,
+      "width": 697.828125,
+      "height": 902.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "8415fc9a660245fda0bf25cc49570be4",
+        "pid": 1746283
+      }
+    ]
+  }
+]

@@ -1,0 +1,123 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - button "Client Boréal - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas - onboarding
+  - button "Terminal 1" [pressed]
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:08
+  - button "Actualiser · À jour · 12:08"
+  - strong: Terminal
+  - button "Contexte"
+  - button "Disposition verticale"
+  - button "Agrandir le terminal"
+  - 'button "Shell · Codex arrêté · Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail." [pressed]':
+    - img "Shell"
+    - text: "Shell · Codex arrêté · Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+  - button "Arrêter ce terminal"
+  - button "Nouveau terminal"
+  - button "Rechercher dans le terminal"
+  - text: "Conversation du workflow affiché · Shell : Client Atlas - onboarding · Agent arrêté"
+  - textbox "Terminal input"
+  - separator "Taille du terminal"
+  - main:
+    - text: Suivi · Onboarding Atlas
+    - 'heading "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail." [level=1]'
+    - group: Options
+    - group "Périmètre du suivi":
+      - button "Vue d’ensemble"
+      - button "Demande" [pressed]
+    - tablist "Vues du workflow"
+    - group: 1 demande
+    - paragraph: Aucune étape en cours · 1 décision
+    - button "Reprendre l’agent…"
+    - button "Voir le shell"
+    - region "État et prochaine action":
+      - strong: Décision attendue
+      - text: 2 / 5 étapes
+      - paragraph: Valider le plan
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Préparer un plan":
+          - strong: Préparer un plan
+        - button "Étape sélectionnée Valider le plan":
+          - text: Étape sélectionnée
+          - strong: Valider le plan
+        - button "Si autorisé Pour chaque élément du plan":
+          - text: Si autorisé
+          - strong: Pour chaque élément du plan
+      - paragraph: Décision attendue
+      - paragraph: "Décision pour cette demande : Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail.."
+      - strong: Votre décision est attendue
+      - paragraph: Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?
+      - heading "Entrées reçues" [level=3]
+      - term: Plan
+      - definition:
+        - term: Critères
+        - definition:
+          - list:
+            - listitem: Référent et source CSV confirmés avant import
+        - term: Objectif
+        - definition: Préparer onboarding Atlas (données synthétiques)
+        - term: Tâches
+        - definition:
+          - list:
+            - listitem:
+              - term: Critères
+              - definition:
+                - list:
+                  - listitem: Liste explicite des accès et source attendue
+              - term: Id
+              - definition: cadrage
+              - term: Scope
+              - definition: Préparer liste locale de prérequis, sans contact client
+              - term: Titre
+              - definition: Confirmer fichier CSV et accès auprès de Claire
+            - listitem:
+              - term: Critères
+              - definition:
+                - list:
+                  - listitem: Mention des 8 utilisateurs et formation le 20 octobre
+              - term: Après
+              - definition:
+                - list:
+                  - listitem: Confirmer fichier CSV et accès auprès de Claire
+              - term: Id
+              - definition: mail
+              - term: Scope
+              - definition: Rédaction locale seulement
+              - term: Titre
+              - definition: Préparer brouillon local de mail de lancement
+      - group: Données techniques
+      - paragraph:
+        - text: "Sources : plan ←"
+        - button "Préparer un plan"
+      - text: Commentaire (facultatif)
+      - textbox "Commentaire (facultatif)"
+      - paragraph:
+        - strong: "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+        - text: Cette proposition · tentative 1 uniquement.
+      - button "Approuver la suite"
+      - button "Refuser la suite"

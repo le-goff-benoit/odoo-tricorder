@@ -1,0 +1,33 @@
+{
+  "done": [
+    {
+      "pid": 1613308,
+      "interactions": []
+    }
+  ],
+  "question": [
+    {
+      "pid": 1613313,
+      "interactions": []
+    },
+    {
+      "pid": 1613609,
+      "interactions": [
+        {
+          "answer": "Dépôt Nord",
+          "question": "Quel dépôt provoque le rapport vide ?"
+        }
+      ]
+    }
+  ],
+  "failed": [
+    {
+      "pid": 1613300,
+      "interactions": []
+    },
+    {
+      "pid": 1613842,
+      "interactions": []
+    }
+  ]
+}

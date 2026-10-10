@@ -1,0 +1,17 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test collection-input-ux.spec.cjs workflow-resolution-ux.spec.cjs --output=/tmp/tricorder-persona-corrections-final
+PATH: /tmp/tricorder-ci-tools-djjmyjeu:/usr/bin:/bin
+codex None
+claude None
+
+Running 6 tests using 1 worker
+
+  ✓  1 tests/collection-input-ux.spec.cjs:38:1 › a second intention submitted during acknowledgement is recorded once without losing text (4.4s)
+  ✓  2 tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (4.0s)
+  ✓  3 tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (2.7s)
+  ✓  4 tests/collection-input-ux.spec.cjs:66:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.4s)
+  ✓  5 tests/workflow-resolution-ux.spec.cjs:60:1 › retry states its remaining budget without pretending to start and the completed request exposes its accepted content directly (4.5s)
+  ✓  6 tests/workflow-resolution-ux.spec.cjs:90:1 › refusing a branch shows treated and non-applicable steps separately in the completed follow-up (3.5s)
+
+  6 passed (26.3s)

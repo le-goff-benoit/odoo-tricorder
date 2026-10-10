@@ -1,0 +1,1302 @@
+{
+  "run": {
+    "contract": "5efdd750df6bb3ca61af40182ec731fe111a88bb2a727057f0fad47e3bc676c1",
+    "created": 1791621997.556467,
+    "definition": {
+      "defaults": {
+        "model": "panel-techlead-fixture",
+        "provider": "codex"
+      },
+      "description": "Valider un plan de code, travailler dans des copies isolées puis intégrer les contributions et tester le candidat commun. Commandes Python unittest fournies comme exemples à adapter ; aucun déploiement ni recette Odoo implicite.",
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "intentions-plan",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-integrate",
+          "mapping": {
+            "contributions": "contributions"
+          },
+          "outcome": "done",
+          "to": "integrate"
+        },
+        {
+          "from": "integrate",
+          "id": "integrate-qa",
+          "mapping": {
+            "candidate": "candidate"
+          },
+          "outcome": "done",
+          "to": "qa"
+        },
+        {
+          "from": "integrate",
+          "id": "integrate-receipt",
+          "mapping": {
+            "candidate": "candidate"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        },
+        {
+          "from": "qa",
+          "id": "qa-receipt",
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "work-2a2f12fc-52ba-4c45-a1e8-f0199d5f766e",
+      "nodes": [
+        {
+          "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "title": "Recueillir les intentions"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "panel-techlead-fixture",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 360,
+            "y": 140
+          },
+          "profile": "generalist",
+          "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine. Ce modèle porte uniquement sur des modifications de code. La commande Python unittest des blocs QA est un exemple à adapter au projet avant de valider le plan ; elle n’installe ni Odoo ni une base de données.",
+          "sample_outputs": {
+            "plan": {
+              "goal": "Exemple d’évolution d’un projet Python",
+              "tasks": [
+                {
+                  "criteria": [
+                    "Les tests pertinents couvrent le résultat attendu"
+                  ],
+                  "id": "R1",
+                  "title": "Modifier la fonction et ses tests"
+                }
+              ]
+            }
+          },
+          "title": "Préparer un plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 670,
+            "y": 140
+          },
+          "question": "Le périmètre et les dépendances sont-ils validés ? Vérifiez aussi que les commandes de tests Python de chaque élément et du candidat commun ont été adaptées à ce projet.",
+          "title": "Valider le plan"
+        },
+        {
+          "collection": "plan.tasks",
+          "completion_outcome": "succeeded",
+          "concurrency": 2,
+          "criteria": [],
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "max_attempts": 1,
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "phase": "",
+          "position": {
+            "x": 980,
+            "y": 140
+          },
+          "resources": [],
+          "title": "Pour chaque élément du plan",
+          "workflow": {
+            "edges": [
+              {
+                "from": "edit",
+                "id": "edit-qa",
+                "mapping": {
+                  "candidate": "candidate"
+                },
+                "outcome": "done",
+                "to": "qa"
+              }
+            ],
+            "id": "code-item",
+            "nodes": [
+              {
+                "execution_mode": "edit",
+                "id": "edit",
+                "inputs": {
+                  "candidate": {
+                    "required": false,
+                    "type": "object"
+                  },
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "candidate": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Réaliser uniquement inputs.item dans la copie de travail fournie. Elle inclut la dépendance de code autorisée, si présente. Ne pas écrire dans le dépôt original. Si aucune modification n’est nécessaire, demander un recadrage ; ne pas fabriquer de diff. Les tests seront exécutés par le bloc de commande suivant.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "sample_outputs": {
+                  "candidate": {
+                    "simulation": true,
+                    "summary": "Exemple sans diff applicable"
+                  }
+                },
+                "title": "Proposer les modifications",
+                "validation": "contract"
+              },
+              {
+                "argv": [
+                  "python3",
+                  "-B",
+                  "-c",
+                  "import sys, unittest; sys.path.insert(0, '/project'); suite = unittest.defaultTestLoader.discover('/project/tests'); assert suite.countTestCases() > 0, 'Aucun test trouvé : adapter la commande au projet'; result = unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())"
+                ],
+                "candidate_check": true,
+                "description": "Exemple Python unittest, à adapter avant lancement. Projet en lecture seule, sans réseau ni base de données ; ce contrôle ne constitue pas une recette Odoo.",
+                "evidence_required": true,
+                "id": "qa",
+                "inputs": {
+                  "candidate": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "command",
+                "position": {
+                  "x": 390,
+                  "y": 100
+                },
+                "title": "Tester la contribution",
+                "validation": "automatic"
+              }
+            ],
+            "schema": 2,
+            "title": "Modifier et tester un élément"
+          }
+        },
+        {
+          "application_requires": [
+            "qa",
+            "receipt"
+          ],
+          "id": "integrate",
+          "inputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "integrate",
+          "outputs": {
+            "candidate": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 1310,
+            "y": 140
+          },
+          "title": "Intégrer les modifications",
+          "validation": "automatic"
+        },
+        {
+          "argv": [
+            "python3",
+            "-B",
+            "-c",
+            "exec(open(\"/project/a.py\").read()); exec(open(\"/project/b.py\").read()); assert a+b == 2; print(\"COMMON_QA : a+b=2\")"
+          ],
+          "candidate_check": true,
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "description": "Exemple Python unittest, à adapter avant lancement. Projet en lecture seule, sans réseau ni base de données ; ce contrôle ne constitue pas une recette Odoo.",
+          "evidence_required": true,
+          "id": "qa",
+          "inputs": {
+            "candidate": "object"
+          },
+          "kind": "command",
+          "max_attempts": 1,
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 1640,
+            "y": 140
+          },
+          "resources": [],
+          "reuse": false,
+          "timeout": 60,
+          "title": "Tester le candidat commun",
+          "validation": "automatic"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "candidate": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 1970,
+            "y": 140
+          },
+          "question": "Les tests communs ont réussi sur ce candidat exact. Examinez le diff et les preuves avant l’application au dépôt local. Aucune publication ni livraison n’a été effectuée.",
+          "title": "Décider de l’application locale"
+        }
+      ],
+      "parameters": {
+        "conversation": "c36546242df2f41c4",
+        "depends_on_runs": [],
+        "request": "Réunir deux contributions indépendantes puis vérifier leur résultat commun"
+      },
+      "revision": 4,
+      "schema": 2,
+      "title": "Code Python synthétique — coordination"
+    },
+    "driver": "conversation",
+    "id": "r92d2c8cd08cc4fb8",
+    "nodes": {
+      "integrate": {
+        "attempt": 1,
+        "finished": 1791622004.8374343,
+        "heartbeat": 1791622004.7691505,
+        "input_sources": {
+          "contributions": {
+            "edge": "work-integrate",
+            "node": "work",
+            "port": "contributions"
+          }
+        },
+        "inputs": {
+          "contributions": [
+            {
+              "attempt": 1,
+              "candidate": {
+                "sha256": "4d6ab16865d21d318f573235718cd6069de75c05d79259996455e4e058d8631b",
+                "size": 539
+              },
+              "node": "edit",
+              "run": "r5f46c84ba9474c4c"
+            },
+            {
+              "attempt": 1,
+              "candidate": {
+                "sha256": "08abe081ea87c903f486013c9d0cfa42bf1295bfbd2c7e63504697ed218cb7cf",
+                "size": 539
+              },
+              "node": "edit",
+              "run": "rd607e79c9eb3420b"
+            }
+          ]
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 1468021,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1468021,
+            "session": 1468021,
+            "start": "15581754"
+          }
+        ],
+        "receipt": {
+          "actor": "validation-policy",
+          "at": 1791622004.8626328,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "5efdd750df6bb3ca61af40182ec731fe111a88bb2a727057f0fad47e3bc676c1",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "7a6a311f536254a063c4a57ab43a192790c9c2d09d26fa8a21689bd1d9476a75",
+              "size": 1060
+            },
+            {
+              "sha256": "22fbb3a755017f6762b496221361c7beca7b1fc563b45867fe9c4fb9894575af",
+              "size": 96
+            }
+          ],
+          "ok": true,
+          "outputs": {
+            "candidate": {
+              "sha256": "7a6a311f536254a063c4a57ab43a192790c9c2d09d26fa8a21689bd1d9476a75",
+              "size": 1060
+            }
+          },
+          "patch": {
+            "sha256": "22fbb3a755017f6762b496221361c7beca7b1fc563b45867fe9c4fb9894575af",
+            "size": 96
+          },
+          "summary": "2 contributions intégrées ; 2 fichiers proposés. Tests communs requis avant application."
+        },
+        "started": 1791622004.731905,
+        "status": "accepted",
+        "token": "tb60c5e6627f54577"
+      },
+      "intentions": {
+        "attempt": 0,
+        "collection": {
+          "closed": 1791621999.547678,
+          "commands": {
+            "693ed116-6a91-4ff0-b872-20e8719b6681": "8fa8a98ce88bce49654b76c91d5f1967add02f4241f59961e2b95b7ee0d8dd22",
+            "6a3b103e-4c5c-48d6-896e-27cb73d75a9c": "91654a66e425240333d45e15f61117a79ce3d6dd6684bf8b6bb77fc77c309e3d",
+            "933d4a71-3996-47bb-b63a-e713488a2497": "104a2b4a5de2333ffea6e594084f833c85d502c81cfd833ce0674dc370eb124d",
+            "e67e6c9b-6ef5-4b37-93a0-5648b00e4797": "3b8468ef1fc7719c6e7f448f8bd01d2c44ea4cd68bef673d56920023d602e2f5"
+          },
+          "items": [
+            {
+              "created": 1791621998.8495715,
+              "id": "i9625231341cc408f",
+              "text": "Modifier a dans une copie isolée"
+            },
+            {
+              "created": 1791621999.0455725,
+              "id": "i24a2ecd246734de4",
+              "text": "Modifier b dans une autre copie isolée"
+            },
+            {
+              "created": 1791621999.2013202,
+              "id": "i54e4d5e7c49e4296",
+              "text": "Tester a+b=2 sur le candidat intégré"
+            }
+          ],
+          "revision": 4
+        },
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "receipt": {
+          "actor": "collection-confirmation",
+          "at": 1791621999.5476754,
+          "revision": 3
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "intentions": [
+              {
+                "created": 1791621998.8495715,
+                "id": "i9625231341cc408f",
+                "text": "Modifier a dans une copie isolée"
+              },
+              {
+                "created": 1791621999.0455725,
+                "id": "i24a2ecd246734de4",
+                "text": "Modifier b dans une autre copie isolée"
+              },
+              {
+                "created": 1791621999.2013202,
+                "id": "i54e4d5e7c49e4296",
+                "text": "Tester a+b=2 sur le candidat intégré"
+              }
+            ]
+          },
+          "summary": "3 contribution(s) confirmée(s)"
+        },
+        "status": "accepted"
+      },
+      "plan": {
+        "attempt": 1,
+        "finished": 1791621999.6800673,
+        "heartbeat": 1791621999.6729538,
+        "input_sources": {
+          "intentions": {
+            "edge": "intentions-plan",
+            "node": "intentions",
+            "port": "intentions"
+          }
+        },
+        "inputs": {
+          "intentions": [
+            {
+              "created": 1791621998.8495715,
+              "id": "i9625231341cc408f",
+              "text": "Modifier a dans une copie isolée"
+            },
+            {
+              "created": 1791621999.0455725,
+              "id": "i24a2ecd246734de4",
+              "text": "Modifier b dans une autre copie isolée"
+            },
+            {
+              "created": 1791621999.2013202,
+              "id": "i54e4d5e7c49e4296",
+              "text": "Tester a+b=2 sur le candidat intégré"
+            }
+          ]
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791621999.6801238,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "5efdd750df6bb3ca61af40182ec731fe111a88bb2a727057f0fad47e3bc676c1",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "plan": {
+              "goal": "Résultat commun vérifiable",
+              "tasks": [
+                {
+                  "criteria": [
+                    "a=1"
+                  ],
+                  "id": "a",
+                  "title": "Modifier la fonction A"
+                },
+                {
+                  "criteria": [
+                    "b=1"
+                  ],
+                  "id": "b",
+                  "title": "Modifier la fonction B"
+                }
+              ]
+            }
+          },
+          "summary": "FIXTURE : plan technique décomposé et critères explicites"
+        },
+        "started": 1791621999.6729538,
+        "status": "accepted",
+        "token": "tcf70abe9a4684465"
+      },
+      "qa": {
+        "attempt": 1,
+        "finished": 1791622006.5244856,
+        "heartbeat": 1791622006.3385115,
+        "input_sources": {
+          "candidate": {
+            "edge": "integrate-qa",
+            "node": "integrate",
+            "port": "candidate"
+          }
+        },
+        "inputs": {
+          "candidate": {
+            "sha256": "7a6a311f536254a063c4a57ab43a192790c9c2d09d26fa8a21689bd1d9476a75",
+            "size": 1060
+          }
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 1468082,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1468073,
+            "session": 1468073,
+            "start": "15581904"
+          },
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1468082,
+            "session": 1468082,
+            "start": "15581911"
+          }
+        ],
+        "receipt": {
+          "actor": "validation-policy",
+          "at": 1791622006.5249996,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "5efdd750df6bb3ca61af40182ec731fe111a88bb2a727057f0fad47e3bc676c1",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "a690928191d4aecf9acd3d1045dc4f50fecdae0e873a3fb3fc5f9f5c15f645a5",
+              "size": 18
+            }
+          ],
+          "exit_code": 0,
+          "ok": true,
+          "preview": "COMMON_QA : a+b=2\n",
+          "scope": "Projet en lecture seule ; aucun accès réseau.",
+          "summary": "Commande terminée avec le code 0. Résultat à examiner."
+        },
+        "started": 1791622006.2321882,
+        "status": "accepted",
+        "token": "t465f393726b14907"
+      },
+      "receipt": {
+        "attempt": 1,
+        "input_sources": {
+          "candidate": {
+            "edge": "integrate-receipt",
+            "node": "integrate",
+            "port": "candidate"
+          }
+        },
+        "inputs": {
+          "candidate": {
+            "sha256": "7a6a311f536254a063c4a57ab43a192790c9c2d09d26fa8a21689bd1d9476a75",
+            "size": 1060
+          }
+        },
+        "nonce": "d743bfd9315034236",
+        "operation": null,
+        "proposal": "10c10cb94aac3445dfeeef5ef80e06d083f905365c34fb90a9ff22ed39966a78",
+        "status": "waiting"
+      },
+      "scope": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791622000.8433285,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "a7f37f289664bfa2e7d313e02ab54463ee3605f09414fc2543b3b48cd0dd9418"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "plan-scope",
+            "node": "plan",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "goal": "Résultat commun vérifiable",
+            "tasks": [
+              {
+                "criteria": [
+                  "a=1"
+                ],
+                "id": "a",
+                "title": "Modifier la fonction A"
+              },
+              {
+                "criteria": [
+                  "b=1"
+                ],
+                "id": "b",
+                "title": "Modifier la fonction B"
+              }
+            ]
+          }
+        },
+        "nonce": "dc01214e459bf4666",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "a7f37f289664bfa2e7d313e02ab54463ee3605f09414fc2543b3b48cd0dd9418",
+        "result": {
+          "outputs": {
+            "plan": {
+              "goal": "Résultat commun vérifiable",
+              "tasks": [
+                {
+                  "criteria": [
+                    "a=1"
+                  ],
+                  "id": "a",
+                  "title": "Modifier la fonction A"
+                },
+                {
+                  "criteria": [
+                    "b=1"
+                  ],
+                  "id": "b",
+                  "title": "Modifier la fonction B"
+                }
+              ]
+            }
+          }
+        },
+        "status": "accepted"
+      },
+      "work": {
+        "attempt": 1,
+        "children": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "a",
+            "project": "paafc978b553f4c43",
+            "run": "r5f46c84ba9474c4c",
+            "title": "Modifier la fonction A"
+          },
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "b",
+            "project": "paafc978b553f4c43",
+            "run": "rd607e79c9eb3420b",
+            "title": "Modifier la fonction B"
+          }
+        ],
+        "enrollment": {
+          "at": 1791622001.07003,
+          "concurrency": 2,
+          "contract": "f2cee5ef3065108f52cc16885c692901d65763bbda2d19d70fdb1df41522b011"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "scope-work",
+            "node": "scope",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "goal": "Résultat commun vérifiable",
+            "tasks": [
+              {
+                "criteria": [
+                  "a=1"
+                ],
+                "id": "a",
+                "title": "Modifier la fonction A"
+              },
+              {
+                "criteria": [
+                  "b=1"
+                ],
+                "id": "b",
+                "title": "Modifier la fonction B"
+              }
+            ]
+          }
+        },
+        "outcome": "done",
+        "receipt": {
+          "actor": "iteration-engine",
+          "at": 1791622004.725673,
+          "contract": "f2cee5ef3065108f52cc16885c692901d65763bbda2d19d70fdb1df41522b011"
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "contributions": [
+              {
+                "attempt": 1,
+                "candidate": {
+                  "sha256": "4d6ab16865d21d318f573235718cd6069de75c05d79259996455e4e058d8631b",
+                  "size": 539
+                },
+                "node": "edit",
+                "run": "r5f46c84ba9474c4c"
+              },
+              {
+                "attempt": 1,
+                "candidate": {
+                  "sha256": "08abe081ea87c903f486013c9d0cfa42bf1295bfbd2c7e63504697ed218cb7cf",
+                  "size": 539
+                },
+                "node": "edit",
+                "run": "rd607e79c9eb3420b"
+              }
+            ],
+            "results": [
+              {
+                "id": "a",
+                "outputs": {
+                  "edit": {
+                    "candidate": {
+                      "sha256": "4d6ab16865d21d318f573235718cd6069de75c05d79259996455e4e058d8631b",
+                      "size": 539
+                    }
+                  },
+                  "qa": {}
+                },
+                "project": "paafc978b553f4c43",
+                "run": "r5f46c84ba9474c4c",
+                "title": "Modifier la fonction A"
+              },
+              {
+                "id": "b",
+                "outputs": {
+                  "edit": {
+                    "candidate": {
+                      "sha256": "08abe081ea87c903f486013c9d0cfa42bf1295bfbd2c7e63504697ed218cb7cf",
+                      "size": 539
+                    }
+                  },
+                  "qa": {}
+                },
+                "project": "paafc978b553f4c43",
+                "run": "rd607e79c9eb3420b",
+                "title": "Modifier la fonction B"
+              }
+            ]
+          },
+          "summary": "2 élément(s) terminé(s)"
+        },
+        "status": "accepted"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "model": "panel-techlead-fixture",
+        "provider": "codex"
+      },
+      "description": "Valider un plan de code, travailler dans des copies isolées puis intégrer les contributions et tester le candidat commun. Commandes Python unittest fournies comme exemples à adapter ; aucun déploiement ni recette Odoo implicite.",
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "intentions-plan",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-integrate",
+          "mapping": {
+            "contributions": "contributions"
+          },
+          "outcome": "done",
+          "to": "integrate"
+        },
+        {
+          "from": "integrate",
+          "id": "integrate-qa",
+          "mapping": {
+            "candidate": "candidate"
+          },
+          "outcome": "done",
+          "to": "qa"
+        },
+        {
+          "from": "integrate",
+          "id": "integrate-receipt",
+          "mapping": {
+            "candidate": "candidate"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        },
+        {
+          "from": "qa",
+          "id": "qa-receipt",
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "work-2a2f12fc-52ba-4c45-a1e8-f0199d5f766e",
+      "nodes": [
+        {
+          "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "title": "Recueillir les intentions"
+        },
+        {
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 360,
+            "y": 140
+          },
+          "profile": "generalist",
+          "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine. Ce modèle porte uniquement sur des modifications de code. La commande Python unittest des blocs QA est un exemple à adapter au projet avant de valider le plan ; elle n’installe ni Odoo ni une base de données.",
+          "sample_outputs": {
+            "plan": {
+              "goal": "Exemple d’évolution d’un projet Python",
+              "tasks": [
+                {
+                  "criteria": [
+                    "Les tests pertinents couvrent le résultat attendu"
+                  ],
+                  "id": "R1",
+                  "title": "Modifier la fonction et ses tests"
+                }
+              ]
+            }
+          },
+          "title": "Préparer un plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 670,
+            "y": 140
+          },
+          "question": "Le périmètre et les dépendances sont-ils validés ? Vérifiez aussi que les commandes de tests Python de chaque élément et du candidat commun ont été adaptées à ce projet.",
+          "title": "Valider le plan"
+        },
+        {
+          "collection": "plan.tasks",
+          "completion_outcome": "succeeded",
+          "concurrency": 2,
+          "criteria": [],
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "max_attempts": 1,
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "phase": "",
+          "position": {
+            "x": 980,
+            "y": 140
+          },
+          "resources": [],
+          "title": "Pour chaque élément du plan",
+          "workflow": {
+            "edges": [
+              {
+                "from": "edit",
+                "id": "edit-qa",
+                "mapping": {
+                  "candidate": "candidate"
+                },
+                "outcome": "done",
+                "to": "qa"
+              }
+            ],
+            "id": "code-item",
+            "nodes": [
+              {
+                "execution_mode": "edit",
+                "id": "edit",
+                "inputs": {
+                  "candidate": {
+                    "required": false,
+                    "type": "object"
+                  },
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "candidate": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Réaliser uniquement inputs.item dans la copie de travail fournie. Elle inclut la dépendance de code autorisée, si présente. Ne pas écrire dans le dépôt original. Si aucune modification n’est nécessaire, demander un recadrage ; ne pas fabriquer de diff. Les tests seront exécutés par le bloc de commande suivant.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "sample_outputs": {
+                  "candidate": {
+                    "simulation": true,
+                    "summary": "Exemple sans diff applicable"
+                  }
+                },
+                "title": "Proposer les modifications",
+                "validation": "contract"
+              },
+              {
+                "argv": [
+                  "python3",
+                  "-B",
+                  "-c",
+                  "import sys, unittest; sys.path.insert(0, '/project'); suite = unittest.defaultTestLoader.discover('/project/tests'); assert suite.countTestCases() > 0, 'Aucun test trouvé : adapter la commande au projet'; result = unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())"
+                ],
+                "candidate_check": true,
+                "description": "Exemple Python unittest, à adapter avant lancement. Projet en lecture seule, sans réseau ni base de données ; ce contrôle ne constitue pas une recette Odoo.",
+                "evidence_required": true,
+                "id": "qa",
+                "inputs": {
+                  "candidate": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "command",
+                "position": {
+                  "x": 390,
+                  "y": 100
+                },
+                "title": "Tester la contribution",
+                "validation": "automatic"
+              }
+            ],
+            "schema": 2,
+            "title": "Modifier et tester un élément"
+          }
+        },
+        {
+          "application_requires": [
+            "qa",
+            "receipt"
+          ],
+          "id": "integrate",
+          "inputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "integrate",
+          "outputs": {
+            "candidate": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 1310,
+            "y": 140
+          },
+          "title": "Intégrer les modifications",
+          "validation": "automatic"
+        },
+        {
+          "argv": [
+            "python3",
+            "-B",
+            "-c",
+            "exec(open(\"/project/a.py\").read()); exec(open(\"/project/b.py\").read()); assert a+b == 2; print(\"COMMON_QA : a+b=2\")"
+          ],
+          "candidate_check": true,
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "description": "Exemple Python unittest, à adapter avant lancement. Projet en lecture seule, sans réseau ni base de données ; ce contrôle ne constitue pas une recette Odoo.",
+          "evidence_required": true,
+          "id": "qa",
+          "inputs": {
+            "candidate": "object"
+          },
+          "kind": "command",
+          "max_attempts": 1,
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 1640,
+            "y": 140
+          },
+          "resources": [],
+          "reuse": false,
+          "timeout": 60,
+          "title": "Tester le candidat commun",
+          "validation": "automatic"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "candidate": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 1970,
+            "y": 140
+          },
+          "question": "Les tests communs ont réussi sur ce candidat exact. Examinez le diff et les preuves avant l’application au dépôt local. Aucune publication ni livraison n’a été effectuée.",
+          "title": "Décider de l’application locale"
+        }
+      ],
+      "parameters": {},
+      "revision": 4,
+      "schema": 2,
+      "title": "Code Python synthétique — coordination"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "c36546242df2f41c4",
+      "depends_on_runs": [],
+      "request": "Réunir deux contributions indépendantes puis vérifier leur résultat commun"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-techlead-SUnl7T/workflows/projects/paafc978b553f4c43/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "paafc978b553f4c43",
+    "release": "",
+    "scope": {
+      "id": "paafc978b553f4c43",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791622006.5260448
+  },
+  "candidate": {
+    "schema": 1,
+    "project": "paafc978b553f4c43",
+    "source_run": "r92d2c8cd08cc4fb8",
+    "files": {
+      "a.py": {
+        "sha256": "d9dd4efc6bb045cf7f141c5f0659571db14235ac0c7fe0841d670c532670761c",
+        "mode": 436
+      },
+      "b.py": {
+        "sha256": "5d87160c60ba1770755f67e27559e37c7268a813c20bc5324505c91a329e9197",
+        "mode": 436
+      },
+      "tests/test_pair.py": {
+        "sha256": "f85393569cc8f7706b2c2fbcdccbe9298e51712751624493505c90e249faef24",
+        "mode": 436
+      }
+    },
+    "changes": [
+      {
+        "path": "a.py",
+        "before": "d9dd4efc6bb045cf7f141c5f0659571db14235ac0c7fe0841d670c532670761c",
+        "content": "a = 1\n"
+      },
+      {
+        "path": "b.py",
+        "before": "5d87160c60ba1770755f67e27559e37c7268a813c20bc5324505c91a329e9197",
+        "content": "b = 1\n"
+      }
+    ],
+    "integration": {
+      "node": "integrate",
+      "attempt": 1,
+      "contributions": [
+        {
+          "run": "r5f46c84ba9474c4c",
+          "node": "edit",
+          "attempt": 1,
+          "candidate": {
+            "sha256": "4d6ab16865d21d318f573235718cd6069de75c05d79259996455e4e058d8631b",
+            "size": 539
+          }
+        },
+        {
+          "run": "rd607e79c9eb3420b",
+          "node": "edit",
+          "attempt": 1,
+          "candidate": {
+            "sha256": "08abe081ea87c903f486013c9d0cfa42bf1295bfbd2c7e63504697ed218cb7cf",
+            "size": 539
+          }
+        }
+      ]
+    }
+  }
+}

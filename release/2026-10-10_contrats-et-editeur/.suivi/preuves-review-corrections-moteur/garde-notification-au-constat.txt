@@ -1,0 +1,27 @@
+def claim_guard(engine, db, child, *, source=False):
+    if child.get("parent"):
+        from .iterations import permission_guard
+        permission_guard(engine, db, child, source=source)
+    ref = child.get("associated_with")
+    if ref:
+        parent = engine.run(ref["run"], db)
+        claim_guard(engine, db, parent, source=True)
+        record = next((r for r in parent.get("associated_actions", []) if r["id"] == ref["action"]), None)
+        require(record and record.get("run") == child["id"] and child["project"] == parent["project"], "Action hors du workflow autorisé")
+        require(parent["status"] in {"active", "completed"} and _current(parent, record),
+                "Action devenue obsolète, suspendue ou annulée ; aucun nouvel envoi autorisé")
+        authorization = record.get("authorization", {})
+        require(authorization.get("workflow") == child["contract"] and authorization.get("source") == record["source_digest"]
+                and authorization.get("transports") == digest(child.get("transports", {})), "Autorisation de l'action périmée")
+    elif child.get("parameters", {}).get("source_question"):
+        # Existing on_question notifications also stop when their question has
+        # been answered; no migration of historical run data is needed.
+        parameters = child["parameters"]
+        parent = engine.run(parameters["source_run"], db)
+        state = parent["nodes"].get(parameters["source_node"], {})
+        question = state.get("question", {})
+        require(parent["status"] == "active" and state.get("status") == "waiting_input"
+                and question.get("id") == parameters["source_question"] and question.get("status") == "waiting",
+                "Question déjà traitée, suspendue ou annulée ; notification obsolète")
+
+

@@ -1,0 +1,12 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test tests/collection-input-ux.spec.cjs --grep a new identical --output=/tmp/tricorder-persona-identical-ci-final
+PATH: /tmp/tricorder-ci-tools-32hnra0j:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (3.0s)
+
+  1 passed (3.5s)

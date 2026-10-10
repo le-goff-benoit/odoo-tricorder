@@ -1,0 +1,10 @@
+test_development_model_has_actual_common_qa_and_exact_candidate_decision (test_collection_templates.CollectionTemplateTests) ... ok
+test_example_test_command_fails_without_tests_and_executes_real_tests (test_collection_templates.CollectionTemplateTests) ... ok
+test_multiple_intentions_single_plan_documentary_children_and_common_receipt (test_collection_templates.CollectionTemplateTests) ... ok
+test_new_models_are_valid_separate_and_do_not_replace_legacy_models (test_collection_templates.CollectionTemplateTests) ... ok
+test_saved_workflow_has_a_stable_git_diff_after_reopening (test_collection_templates.CollectionTemplateTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.627s
+
+OK

@@ -72,9 +72,10 @@ const stackedTerminal = () => terminalLayout === 'stacked' || window.innerWidth 
 function terminalSplitState(preferred = stackedTerminal() ? terminalStackedSplit : terminalSplit) {
   const stacked=stackedTerminal(), bounds=$('.main-content')?.getBoundingClientRect();
   const extent=stacked ? bounds?.height : bounds?.width;
-  // Match the grid's minimum in workspace-layout.css without overwriting the
-  // saved preference when the window changes size or zoom level.
-  const pixels=stacked ? (window.innerHeight<=700 ? Math.min(220,(extent || 0)*.42) : 140) : 220;
+  // Reserve useful terminal rows below its toolbars, without overwriting the
+  // saved preference when the window changes size or zoom level. Short windows
+  // already use the compact toolbar layout in workspace-layout.css.
+  const pixels=stacked ? (window.innerHeight<=700 ? Math.min(220,(extent || 0)*.42) : 300) : 220;
   const minimum=extent>0 ? Math.min(70,Math.max(30,100*pixels/extent)) : 30;
   return {minimum,maximum:70,value:Math.max(minimum,Math.min(70,preferred))};
 }
@@ -205,7 +206,8 @@ $('#terminal-tabs').addEventListener('focusin', event => {
 const studioUI = mountStudio(workflowHost, {
   context(context) { rememberConversationTitle(context.conversation); if(context.conversation?.id && context.conversation.id!==workflowContext?.conversation?.id){const existing=sessions.find(s=>s.alive && terminalIdentity(s).conversation===context.conversation.id);if(existing){workflowTerminalPath=existing.project;selectedSession.set(existing.project,existing.id);}} if (workflowContext?.route === 'workflow' && context.route === 'workflow' && context.mode && context.mode !== workflowContext.mode) terminalMaximized = false; workflowContext = context; if (workflowMode) render(); },
   async openTerminal(project, graph, conversation, resume=false) {
-    const result = await api.workflowTerminal({ project: project.id, conversation, resume });
+    const result = await api.workflowTerminal({ project: project.id, conversation, resume, design: workflowContext?.route === 'workflow' && workflowContext?.mode === 'design' });
+    if (result.terminalState === 'closed') { await refreshSessions(); render(); return result; }
     if (conversation) sessionConversations.set(result.id, {id: conversation, provider: workflowContext?.conversation?.provider});
     workflowTerminalPath = result.project; terminalPreference = true; terminalMaximized = false;
     selectedSession.set(result.project, result.id);
@@ -215,10 +217,11 @@ const studioUI = mountStudio(workflowHost, {
   },
   terminalStatus(conversation) {
     const session = sessions.find(s => s.alive && terminalIdentity(s).conversation === conversation);
-    if (!session) return 'unknown';
+    if (!session) return knownTerminalConversation(conversation) ? 'stopped' : 'unknown';
     if (session.idleShell) return 'stopped';
     return ['codex', 'claude'].includes(session.provider) ? 'running' : 'busy';
   },
+  terminalClosed: conversation => knownTerminalConversation(conversation) && !sessions.some(s => s.alive && terminalIdentity(s).conversation === conversation),
   provider: () => settings.provider || 'codex',
   hasLegacy: folder => projects.some(p => p.path === folder),
   async openLegacy(project) { await chooseProject(project.path); setView('work'); },
@@ -405,6 +408,9 @@ function renderDocuments() {
   // Rich view rendered by cockpitUI.augment().
   $('#content').innerHTML = '<div class="page"></div>';
 }
+function knownTerminalConversation(conversation) {
+  return !!(settings.workflowTerminals?.[conversation] || settings.workflowAgents?.[conversation] || [...sessionConversations.values()].some(item => item.id === conversation));
+}
 function terminalIdentity(session) {
   const remembered=sessionConversations.get(session.id);
   const conversation=remembered?.id || Object.entries(settings.workflowTerminals || {}).find(([,id])=>id===session.id)?.[0];
@@ -436,6 +442,8 @@ function renderTerminals() {
     const label = `${identity.label}${identity.title ? ' · ' + identity.title : ' ' + (i + 1)}${s.task ? ' · ' + s.task : ''}`;
     return `<div class="terminal-tab ${s.id === id ? 'active' : ''}"><button data-session="${s.id}" title="${esc(label)}" aria-label="${esc(label)}" aria-pressed="${s.id === id}"><span class="${s.alive ? 'local-dot' : 'dead-dot'}" title="${s.alive ? 'Terminal ouvert — ne prouve pas qu’une étape travaille' : 'Terminal fermé'}"></span>${providerIcon(identity.provider)}<span class="terminal-tab-label">${esc(label)}</span></button><button data-stop="${s.id}" title="Arrêter ce terminal" aria-label="Arrêter ce terminal">${icon('close')}</button></div>`;
   }).join('') + `<button class="icon-button" data-action="new-terminal" title="Nouveau terminal">${icon('plus')}</button>`;
+  const otherSessions=workflowMode?sessions.filter(s=>s.alive && s.project!==terminalProject()):[];
+  if(otherSessions.length)$('#terminal-tabs').insertAdjacentHTML('beforeend',`<button class="secondary" data-action="choose-open-terminal" aria-label="Choisir un terminal ouvert">Autres terminaux (${otherSessions.length})</button>`);
   const selected = own.find(s => s.id === id);
   $('#terminal-tabs').insertAdjacentHTML('beforeend', `<div class="terminal-tab-tools"><button class="icon-button" data-action="find" title="Rechercher · Ctrl Shift F" aria-label="Rechercher dans le terminal">${icon('search')}</button>${own.length > 1 ? `<button class="icon-button" data-action="split" title="Diviser les terminaux" aria-label="Diviser les terminaux">${icon('grid')}</button>` : ''}</div>`);
   tabBar.scrollLeft = tabScroll;
@@ -456,11 +464,12 @@ function renderTerminals() {
     const shellProject=contexts.find(p=>p.path===selected.project) || (workflowContext?.project?.path===selected.project ? workflowContext.project : null);
     const projectTitle=shellProject?.title || projects.find(p=>p.path===selected.project)?.name || selected.project.split('/').at(-1);
     const requestProject=contexts.find(p=>p.id===workflowContext?.run?.project) || workflowContext?.project;
-    const scope=identity.conversation ? (matches ? 'Conversation du workflow affiché' : 'Autre conversation') : 'Shell du projet';
+    const designShell=!identity.conversation && selected.workingDirectory===selected.project+'/.tricorder';
+    const scope=identity.conversation ? (matches ? 'Conversation du workflow affiché' : 'Autre conversation') : designShell ? 'Shell de conception du workflow' : 'Shell du projet';
     const crossProject=requestProject?.path && requestProject.path!==selected.project;
     const description = `${crossProject ? 'Shell : '+projectTitle+' · Demande affichée : '+requestProject.title+' · '+scope : scope+' · Shell : '+projectTitle}${identity.conversation && selected.idleShell ? ' · Agent arrêté' : ''}${identity.title && !matches ? ' · ' + identity.title : ''}`;
     $('#terminal-context').classList.toggle('cross-project', !!crossProject);
-    $('#terminal-context').innerHTML = `<span class="terminal-scope" title="${esc(description)}">${esc(description)}</span>${crossProject || terminalContextOpen ? `<small class="terminal-origin">Projet du shell à son ouverture ; le dossier courant peut changer.${terminalContextOpen ? ' '+esc(selected.project) : ''}</small>` : ''}`;
+    $('#terminal-context').innerHTML = `<span class="terminal-scope" title="${esc(description)}">${esc(description)}</span>${crossProject || terminalContextOpen ? `<small class="terminal-origin">${designShell ? 'Conception dans .tricorder. ' : ''}Dossier à l’ouverture ; le dossier courant peut changer.${terminalContextOpen ? ' '+esc(selected.workingDirectory || selected.project) : ''}</small>` : ''}`;
   }
   if (selected) $('#terminal-context').insertAdjacentHTML('afterbegin', `<span class="terminal-session-title">${esc(tabBar.querySelector('.terminal-tab.active [data-session]')?.getAttribute('aria-label') || '')}</span>`);
   if (env?.kind === 'production') $('#terminal-context').prepend('PRODUCTION · aucune permission accordée ');
@@ -521,10 +530,34 @@ function closeTerminalSearch() {
   fitVisible();
   terminals.get(selectedSession.get(current))?.term.focus();
 }
-function fitVisible() { if (overviewMode || $('#terminal-workspace').hidden) return; for (const t of terminals.values()) if (!t.host.hidden && t.host.clientWidth > 0 && t.host.clientHeight > 0) { try { t.fit.fit(); } catch {} } }
+function terminalIsVisible(t) {
+  return !overviewMode && !$('#terminal-workspace').hidden && t.host.isConnected && !t.host.hidden && t.host.clientWidth > 0 && t.host.clientHeight > 0;
+}
+function cancelTerminalFit(t) { t.pendingFit?.dispose(); t.pendingFit = null; }
+function fitVisible() {
+  for (const t of terminals.values()) {
+    if (!terminalIsVisible(t)) { cancelTerminalFit(t); continue; }
+    if (t.pendingFit) continue;
+    // xterm suspends its renderer while hidden. Fitting before its first visible
+    // render resizes the buffer against stale viewport dimensions, leaving the
+    // prompt offscreen. Coalesce fits and let that render finish first.
+    const pending = t.term.onRender(() => {
+      pending.dispose();
+      queueMicrotask(() => {
+        if (t.pendingFit !== pending) return;
+        t.pendingFit = null;
+        if (!terminalIsVisible(t)) return;
+        const buffer = t.term.buffer.active, followedBottom = buffer.viewportY === buffer.baseY;
+        try { t.fit.fit(); if (followedBottom) t.term.scrollToBottom(); } catch {}
+      });
+    });
+    t.pendingFit = pending;
+    t.term.refresh(0, t.term.rows - 1);
+  }
+}
 new ResizeObserver(fitVisible).observe($('#terminal-hosts'));
 let reattachNeeded = false;
-function disposeTerminal(id) { const t = terminals.get(id); t?.term.dispose(); t?.host.remove(); terminals.delete(id); }
+function disposeTerminal(id) { const t = terminals.get(id); if (t) cancelTerminalFit(t); t?.term.dispose(); t?.host.remove(); terminals.delete(id); }
 async function reattachTerminals() {
   // Output subscriptions belong to the broker connection: after a reconnection,
   // every mounted terminal replays its scrollback and follows the new stream.
@@ -563,7 +596,7 @@ async function newTerminal(task = null, provider = null, work = undefined) {
   terminalPreference = true;
   if (workflowMode) {
     const project = workflowContext?.project || (await window.studio.request({ action: 'workspace.get' })).project;
-    await studioUI.ready; await api.workflowTerminal({ project: project.id }).then(async result => {
+    await studioUI.ready; await api.workflowTerminal({ project: project.id, design: workflowContext?.route === 'workflow' && workflowContext?.mode === 'design' }).then(async result => {
       workflowTerminalPath = result.project; terminalPreference = true; terminalMaximized = false; selectedSession.set(result.project, result.id);
       await refreshSessions(); render();
     }); return;
@@ -726,7 +759,7 @@ document.addEventListener('click', async event => {
     if (el.dataset.attentionProject) { await chooseProject(el.dataset.attentionProject, el.dataset.attentionRelease); selectTask(el.dataset.taskId); setView(el.dataset.taskId.startsWith('flow:') ? 'agents' : 'plan'); return; }
     if (el.dataset.session) {
       const session = sessions.find(s => s.id === el.dataset.session);
-      if (workflowMode && session) { workflowTerminalPath = session.project; selectedSession.set(session.project, session.id); render(); return; }
+      if (workflowMode && session) { if(el.closest('#modal'))$('#modal').close(); workflowTerminalPath = session.project; selectedSession.set(session.project, session.id); terminalPreference=true; render(); await mountTerminal(session.id); terminals.get(session.id)?.term.focus(); return; }
       if (session && session.project !== current) await chooseProject(session.project);
       if (session?.project === current) { selectedSession.set(current, session.id); setView('terminal'); }
       return;
@@ -757,6 +790,10 @@ document.addEventListener('click', async event => {
       }
       case 'workflow-start': await startWorkflow(); break;
       case 'terminal-new-request': studioUI.newRequest(); break;
+      case 'choose-open-terminal': {
+        const contexts=[...(workflowContext?.projects || []),...(workflowContext?.conversation?.project_contexts || [])];
+        modal(`<h2>Terminaux ouverts</h2><p>Retrouvez une session existante. Le workflow affiché reste inchangé.</p><div class="open-terminal-list">${sessions.filter(s=>s.alive).map(s=>{const name=contexts.find(p=>p.path===s.project)?.title || s.project.split('/').at(-1),identity=terminalIdentity(s);return `<button class="info-card" data-session="${s.id}"><strong>${esc(name)} · ${esc(identity.label)}</strong><p>${esc(identity.title || s.workingDirectory || s.project)}</p></button>`;}).join('')}</div>`);break;
+      }
       case 'new-terminal': await newTerminal(); break;
       case 'task-terminal': {
         const session = sessions.find(s => s.id === selectedSession.get(current) && s.alive) || sessions.find(s => s.project === current && s.alive);

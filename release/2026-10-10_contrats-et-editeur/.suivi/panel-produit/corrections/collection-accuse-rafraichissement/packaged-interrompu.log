@@ -1,0 +1,105 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:packaged
+PATH: /tmp/tricorder-ci-tools-acu634pa:/usr/bin:/bin
+codex None
+claude None
+
+> odoo-tricorder@0.6.0-rc.13 test:packaged
+> node scripts/test-packaged.mjs
+
+
+Running 185 tests using 1 worker
+
+  ✓    1 tests/attempt-history.spec.cjs:51:1 › large archived inputs keep failure history readable and attached proofs accessible (3.1s)
+  ✓    2 tests/attempt-history.spec.cjs:97:1 › paged large histories remain formatted with accessible proof links (3.2s)
+  ✓    3 tests/collection-input-ux.spec.cjs:38:1 › a second intention submitted during acknowledgement is recorded once without losing text (3.4s)
+  ✓    4 tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (5.1s)
+  ✓    5 tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (4.3s)
+  ✓    6 tests/collection-input-ux.spec.cjs:66:1 › an addition rejected after a concurrent edit survives the next success, reload and targeted retry (6.6s)
+  ✓    7 tests/collection-input-ux.spec.cjs:78:1 › a lost acknowledgement is retried with the same command after reload without duplicating the intention (4.2s)
+  ✘    8 tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (8.3s)
+  ✓    9 tests/collection-input-ux.spec.cjs:96:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.6s)
+  ✓   10 tests/collection-input-ux.spec.cjs:117:1 › two project shells remain discoverable after changing project and reloading the window (6.1s)
+  ✓   11 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.3s)
+  ✓   12 tests/conversation-overview.spec.cjs:88:1 › running: actual agents, failure history and explicit dispatch are distinct (6.5s)
+  ✓   13 tests/conversation-overview.spec.cjs:103:1 › pages: global activity survives paging and off-page dependencies open the named request (6.4s)
+  ✓   14 tests/conversation-overview.spec.cjs:115:1 › compact: terminal working lines and the question answer remain visible together (6.5s)
+  ✓   15 tests/desktop-output-pipes.spec.cjs:6:1 › a recoverable backend rejection stays in the app after its launcher closes log pipes (2.8s)
+  ✓   16 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (6.7s)
+  ✓   17 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (1.6s)
+  ✓   18 tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (4.5s)
+  ✓   19 tests/desktop.spec.cjs:292:1 › design system: common gutters, cards and controls across every project view (8.2s)
+  ✓   20 tests/desktop.spec.cjs:355:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (2.8s)
+  ✓   21 tests/desktop.spec.cjs:408:1 › effort: partial recorded time survives missing roles, task filtering and refresh (2.8s)
+  ✓   22 tests/desktop.spec.cjs:450:1 › effort: open release updates task and agent percentages before closure (2.7s)
+  ✓   23 tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence (7.2s)
+  ✓   24 tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (4.1s)
+  ✓   25 tests/desktop.spec.cjs:681:1 › Markdown preview: readable safe content and recovery from a project read error (4.2s)
+  ✓   26 tests/desktop.spec.cjs:734:1 › email removed: no UI or API, old private records preserved, project still usable (3.0s)
+  ✓   27 tests/desktop.spec.cjs:785:1 › desktop: projects, proof status, sources, real terminal and persistence (5.6s)
+  ✓   28 tests/desktop.spec.cjs:884:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (7.3s)
+  -   29 tests/desktop.spec.cjs:1010:1 › real project: read-only release/task/mission screens
+  ✓   30 tests/desktop.spec.cjs:1098:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (11.5s)
+  ✓   31 tests/desktop.spec.cjs:1242:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (7.6s)
+  ✓   32 tests/desktop.spec.cjs:1339:1 › live requests appear before planning and reconcile with tasks without manual refresh (9.3s)
+  ✓   33 tests/desktop.spec.cjs:1393:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (14.1s)
+
+  ✓   34 tests/desktop.spec.cjs:1529:1 › work page starts a contextual request and resumes a task without changing its state (2.8s)
+  ✓   35 tests/desktop.spec.cjs:1579:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (8.2s)
+  ✓   36 tests/desktop.spec.cjs:1681:1 › window integration preserves the native conversation while inspecting phases and the library (6.0s)
+  ✓   37 tests/editor-gestures.spec.cjs:57:1 › whole-card dragging updates links at each zoom and each gesture has one undo; cancellations restore the graph (9.2s)
+  ✓   38 tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session (4.0s)
+  ✓   39 tests/editor-gestures.spec.cjs:95:1 › terminal reveal follows current output, preserves deliberate history and keeps useful compact rows (3.8s)
+  ✓   40 tests/editor-gestures.spec.cjs:121:1 › connections support click, drag and keyboard with confirmation, direct editing and cancellation (7.1s)
+  ✓   41 tests/editor-gestures.spec.cjs:137:1 › notes are editable, movable and undoable presentation metadata preserved by save and portable export (9.2s)
+  ✓   42 tests/editor-gestures.spec.cjs:150:1 › new blocks and notes appear in the visible part of a large graph and zoom keeps its center (4.4s)
+  ✓   43 tests/editor-gestures.spec.cjs:166:1 › a frozen execution exposes neither notes nor editor handles and pointer or keyboard gestures cannot change its definition (4.6s)
+  ✓   44 tests/editor-gestures.spec.cjs:179:1 › a note below adjacent blocks stays draggable while its detour avoids all cards and ports (5.8s)
+
+
+  1) tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.collection-recovery article')
+    Expected: 2
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.collection-recovery article') with timeout 5000ms
+      - waiting for locator('.collection-recovery article')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      87 |  await input().fill('Deux interventions identiques');await add().click();await expect(page.locator('.collection-recovery')).toContainText('Accusé perdu synthétique');
+      88 |  await input().fill('');await input().fill('Deux interventions identiques');await add().click();
+    > 89 |  await expect(page.locator('.collection-recovery article')).toHaveCount(2);expect(await stored()).toEqual(['Deux interventions identiques']);
+         |                                                             ^
+      90 |  await expect(input()).toHaveValue('Deux interventions identiques');
+      91 |  await page.locator('.collection-recovery article').filter({hasText:'Le recueil a changé'}).getByRole('button',{name:'Réessayer cet ajout',exact:true}).click();await expect(input()).toHaveValue('');
+      92 |  await expect.poll(stored).toEqual(['Deux interventions identiques','Deux interventions identiques']);
+        at /home/blegoff/odoo-tricorder/tests/collection-input-ux.spec.cjs:89:61
+
+    Error Context: test-results/collection-input-ux-a-new--5a636-retrying-the-first-addition/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/collection-input-ux-a-new--5a636-retrying-the-first-addition/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/collection-input-ux-a-new--5a636-retrying-the-first-addition/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition 
+  1 skipped
+  141 did not run
+  42 passed (5.1m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

@@ -180,7 +180,7 @@ test('simulation: two branches, human decision, truthful results and single docu
   await page.screenshot({ path: path.join(test.info().outputDir, 'studio-decision.png'), fullPage: true });
   await page.getByRole('button', { name: 'Approuver la suite' }).click();
   await receive('bilan');
-  await expect(page.locator('#run-banner')).toContainText('Terminée');
+  await expect(page.locator('#execution-overview')).toContainText('Terminée');
   await page.getByRole('button', { name: 'Voir le rapport', exact: true }).click();
   await expect(page.getByRole('heading',{name:'Rapport d’exécution'})).toBeVisible();
   for (const heading of ['Demande', 'Plan', 'Réalisation', 'Tests et limites', 'Livraison et documentation', 'Décisions et suite']) await expect(page.locator('#document-view').getByRole('heading', { name: heading, exact: true })).toBeVisible();
@@ -437,7 +437,7 @@ test('trusted local adapter runs through the UI and automatic validation complet
   await expect(page.getByRole('dialog')).toContainText('Validation automatique');
   await page.getByText('Exécution automatique sans conversation',{exact:true}).evaluate(el => { el.parentElement.open = true; });
   await page.getByRole('button', { name: 'Lancer l’exécution réelle' }).click();
-  await expect(page.locator('#run-banner')).toContainText('Terminée');
+  await expect(page.locator('#execution-overview')).toContainText('Terminée');
   await expect(page.locator('.node[data-id="read"]')).toHaveAttribute('data-status', 'accepted');
   await expect(page.getByRole('button', { name: 'Valider le résultat' })).toHaveCount(0);
   await page.screenshot({ path: path.join(test.info().outputDir, 'automatic-adapter.png'), fullPage: true });
@@ -900,7 +900,7 @@ else:
   await expect(page.locator('#inspector')).toContainText('Qui doit relire');
   await expect.poll(() => fs.existsSync(path.join(directory,'notifications.txt'))).toBe(true);
   await page.getByRole('button',{name:'Suivre la notification'}).click();
-  await expect(page.locator('#run-banner')).toContainText('Terminée');
+  await expect(page.locator('#execution-overview')).toContainText('Terminée');
   await page.getByRole('button',{name:'Revenir à l’exécution'}).click();
   await expect(page.locator('.node[data-id=clarify]')).toHaveAttribute('data-status','waiting_input');
   await expect(page.getByRole('button',{name:'Détail',exact:true})).toHaveAttribute('aria-pressed','true');
@@ -975,6 +975,8 @@ test('configuration: pending fields survive I/O editing, block selection and key
   await page.getByLabel('Nom du bloc',{exact:true}).fill('Analyse finale');
   await page.keyboard.press('Control+s');
   await expect(page.locator('.workflow-heading p')).toContainText('Enregistré');
+  const keyboardSaved=await page.evaluate(async()=>{const p=(await window.studio.request({action:'bootstrap'})).projects[0];return window.studio.request({action:'project.get',project:p.id});});
+  expect(keyboardSaved.workflows[0].nodes.find(n=>n.id==='analyse').title).toBe('Analyse finale');
   await page.getByLabel('Nom du bloc',{exact:true}).fill('Analyse après navigation');
   await page.locator('[data-workflow-route=projects]').click();
   await page.locator('.project-card').filter({hasText:'Mon premier projet'}).click();
@@ -1152,6 +1154,9 @@ test('mail illustration: four independent states, selected question and QA failu
   await page.setViewportSize({width:1024,height:768});await expect(page.locator('.xterm-screen:visible')).toBeVisible();
   await expect(page.locator('#inspector').getByText('Quelle règle de distance', {exact:false})).toBeInViewport();
   await expect(page.locator('.question-context > summary')).toBeInViewport();
+  await expect(page.locator('#question-answer')).toBeInViewport();
+  await expect(page.locator('#question-form button')).toBeInViewport();
+  await expect(page.locator('.question-preview')).toHaveCount(0); // Full request/source paths belong to the expandable context.
   expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
   await page.locator('.request-selector > summary').click();
   for(let i=0;i<4;i++)await expect.poll(async()=>{const box=await cards.nth(i).boundingBox();return !!box && box.x+box.width<=1024;}).toBe(true);
@@ -1175,6 +1180,8 @@ test('mail illustration: four independent states, selected question and QA failu
   await expect(page.locator('.request-selector')).toBeVisible();await expect(cards.nth(0)).toBeHidden();
   await expect(page.locator('.xterm-screen:visible')).toBeVisible();
   await expect(page.locator('#inspector').getByText('Quelle règle de distance', {exact:false})).toBeInViewport();
+  await expect(page.locator('.question-context > summary')).toBeInViewport();
+  await expect(page.locator('#question-answer')).toBeInViewport();
   await expect(page.locator('#question-form button')).toBeInViewport();
   await page.screenshot({path:test.info().outputPath('mail-question-stacked-1440.png'),fullPage:true});
   await page.locator('.request-selector > summary').click();await expect(cards).toHaveCount(4);await expect(cards.nth(3)).toBeVisible();

@@ -1,0 +1,205 @@
+{
+  "calls": [
+    {
+      "at": 1791631242323,
+      "request": {
+        "project": "p42cc503d9e804319",
+        "conversation": "c6ebf00651ac14dd2",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "009a42c4b76846ddadec03f2613186ce",
+        "pid": 1794654,
+        "agentState": "starting",
+        "idleShell": false,
+        "program": "python3"
+      }
+    },
+    {
+      "at": 1791631243267,
+      "request": {
+        "project": "p42cc503d9e804319",
+        "conversation": "c752fa54999cb4fae",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "e4f4582f8efc4c78b41638ae3c885117",
+        "pid": 1794722,
+        "agentState": "starting",
+        "idleShell": false,
+        "program": "python3"
+      }
+    },
+    {
+      "at": 1791631244191,
+      "request": {
+        "project": "p42cc503d9e804319",
+        "conversation": "c6ebf00651ac14dd2",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "009a42c4b76846ddadec03f2613186ce",
+        "pid": 1794654,
+        "agentState": "active",
+        "idleShell": false,
+        "program": "codex"
+      }
+    },
+    {
+      "at": 1791631244840,
+      "request": {
+        "project": "p42cc503d9e804319",
+        "conversation": "c752fa54999cb4fae",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "e4f4582f8efc4c78b41638ae3c885117",
+        "pid": 1794722,
+        "agentState": "active",
+        "idleShell": false,
+        "program": "codex"
+      }
+    },
+    {
+      "at": 1791631245470,
+      "request": {
+        "project": "p42cc503d9e804319",
+        "conversation": "c6ebf00651ac14dd2",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "009a42c4b76846ddadec03f2613186ce",
+        "pid": 1794654,
+        "agentState": "active",
+        "idleShell": false,
+        "program": "codex"
+      }
+    }
+  ],
+  "events": [
+    {
+      "at": 1791631242268,
+      "action": "conversation-terminal",
+      "cache": []
+    },
+    {
+      "at": 1791631243206,
+      "action": "conversation-terminal",
+      "cache": [
+        {
+          "id": "009a42c4b76846ddadec03f2613186ce",
+          "pid": 1794654,
+          "alive": true,
+          "idleShell": false,
+          "program": "bash"
+        }
+      ]
+    },
+    {
+      "at": 1791631244132,
+      "action": "conversation-terminal",
+      "cache": [
+        {
+          "id": "009a42c4b76846ddadec03f2613186ce",
+          "pid": 1794654,
+          "alive": true,
+          "idleShell": false,
+          "program": "codex"
+        },
+        {
+          "id": "e4f4582f8efc4c78b41638ae3c885117",
+          "pid": 1794722,
+          "alive": true,
+          "idleShell": false,
+          "program": "bash"
+        }
+      ]
+    },
+    {
+      "at": 1791631244783,
+      "action": "conversation-terminal",
+      "cache": [
+        {
+          "id": "009a42c4b76846ddadec03f2613186ce",
+          "pid": 1794654,
+          "alive": true,
+          "idleShell": false,
+          "program": "codex"
+        },
+        {
+          "id": "e4f4582f8efc4c78b41638ae3c885117",
+          "pid": 1794722,
+          "alive": true,
+          "idleShell": false,
+          "program": "codex"
+        }
+      ]
+    },
+    {
+      "at": 1791631245417,
+      "action": "conversation-terminal",
+      "cache": [
+        {
+          "id": "009a42c4b76846ddadec03f2613186ce",
+          "pid": 1794654,
+          "alive": true,
+          "idleShell": false,
+          "program": "codex"
+        },
+        {
+          "id": "e4f4582f8efc4c78b41638ae3c885117",
+          "pid": 1794722,
+          "alive": true,
+          "idleShell": false,
+          "program": "codex"
+        }
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "id": "009a42c4b76846ddadec03f2613186ce",
+      "project": "/tmp/tricorder-independent-terminal-fresh-Te7gUS/projects/p42cc503d9e804319",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-Te7gUS/projects/p42cc503d9e804319",
+      "release": null,
+      "task": null,
+      "createdAt": 1791631242.4439793,
+      "lastOutputAt": 1791631245.4858842,
+      "pid": 1794654,
+      "program": "codex",
+      "provider": "codex",
+      "foreground": 1794657,
+      "promptVerified": true,
+      "idleShell": false,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    },
+    {
+      "id": "e4f4582f8efc4c78b41638ae3c885117",
+      "project": "/tmp/tricorder-independent-terminal-fresh-Te7gUS/projects/p42cc503d9e804319",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-Te7gUS/projects/p42cc503d9e804319",
+      "release": null,
+      "task": null,
+      "createdAt": 1791631243.3703423,
+      "lastOutputAt": 1791631243.393739,
+      "pid": 1794722,
+      "program": "codex",
+      "provider": "codex",
+      "foreground": 1794725,
+      "promptVerified": true,
+      "idleShell": false,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "launches": 2
+}

@@ -1,0 +1,85 @@
+
+Running 3 tests using 1 worker
+
+(node:1679747) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/collection-input-ux.spec.cjs:38:1 › a second intention submitted during acknowledgement is recorded once without losing text (2.9s)
+  ✘  2 tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (8.0s)
+(node:1680724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (6.7s)
+
+
+  1) tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Nouvelle intention', { exact: true })
+    Expected: "Demande encore en rédaction"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Nouvelle intention', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Nouvelle intention', { exact: true })
+        14 × locator resolved to <textarea name="text" required="" maxlength="12000" id="collection-text"></textarea>
+           - unexpected value ""
+
+
+      47 |  await holdNextAdd();await input().fill('Demande enregistrée');await add().click();await waitAck();
+      48 |  await input().fill('Demande encore en rédaction');await releaseAck();
+    > 49 |  await expect.poll(stored).toEqual(['Demande enregistrée']);await expect(input()).toHaveValue('Demande encore en rédaction');
+         |                                                                                   ^
+      50 |  await page.reload();await page.locator('[data-workflow-route=projects]').click();await page.locator('.project-card').filter({hasText:project.title}).click();await page.locator(`[data-action=open-run][data-id="${run.id}"]`).click();await page.getByRole('button',{name:'Détail',exact:true}).click();await expect(input()).toHaveValue('Demande encore en rédaction');
+      51 |  await page.getByRole('button',{name:'Confirmer la liste et continuer',exact:true}).click();
+      52 |  await expect(page.locator('#feedback')).toContainText('Ajoutez l’intention saisie');expect((await call('run.get',{run:run.id})).run.status).toBe('active');
+        at /home/blegoff/odoo-tricorder/tests/collection-input-ux.spec.cjs:49:83
+
+    Error Context: ../../../tmp/tricorder-persona-collection-baseline/collection-input-ux-a-newe-762ec-ly-left-out-on-confirmation/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-persona-collection-baseline/collection-input-ux-a-newe-762ec-ly-left-out-on-confirmation/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-persona-collection-baseline/collection-input-ux-a-newe-762ec-ly-left-out-on-confirmation/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+      Array [
+        "Deux interventions identiques",
+    +   "Deux interventions identiques",
+      ]
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      60 |  await holdNextAdd();await input().fill('Deux interventions identiques');await add().click();await waitAck();await add().click();
+      61 |  await input().fill('');await input().fill('Deux interventions identiques');await releaseAck();
+    > 62 |  await expect.poll(stored).toEqual(['Deux interventions identiques']);await expect(input()).toHaveValue('Deux interventions identiques');
+         |                            ^
+      63 |  await add().click();await expect.poll(stored).toEqual(['Deux interventions identiques','Deux interventions identiques']);await expect(input()).toHaveValue('');
+      64 | });
+      65 |
+        at /home/blegoff/odoo-tricorder/tests/collection-input-ux.spec.cjs:62:28
+
+    Error Context: ../../../tmp/tricorder-persona-collection-baseline/collection-input-ux-retypi-cf37f-ding-submit-is-deduplicated/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-persona-collection-baseline/collection-input-ux-retypi-cf37f-ding-submit-is-deduplicated/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-persona-collection-baseline/collection-input-ux-retypi-cf37f-ding-submit-is-deduplicated/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation 
+    tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated 
+  1 passed (18.4s)

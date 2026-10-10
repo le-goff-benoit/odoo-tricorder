@@ -149,7 +149,7 @@ class Engine:
             db.execute("INSERT INTO workflows VALUES (?, ?, ?, ?)", (project_id, graph["id"], current + 1, self.store.encode(graph)))
             target.parent.mkdir(parents=True, exist_ok=True)
             temporary = target.with_suffix("." + uuid.uuid4().hex + ".tmp")
-            temporary.write_text(json.dumps(graph, ensure_ascii=False, indent=2) + "\n")
+            temporary.write_text(json.dumps(graph, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
             temporary.replace(target)
         return graph
 
@@ -198,13 +198,15 @@ class Engine:
             db.execute("INSERT INTO workflows VALUES (?, ?, ?, ?)", (project_id, workflow_id, revision, self.store.encode(graph)))
         return graph
 
-    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None, notifications_authorized=False, reuse_from=None, deferred=False, driver="automatic"):
+    def start(self, project_id, graph, *, simulation=False, parameters=None, library=None, connection=None, occurrence=None, notifications_authorized=False, reuse_from=None, deferred=False, driver="automatic", parent=None, initial_inputs=None):
         from .integrations import catalog, issues as plugin_issues
         require(driver in {"automatic", "conversation"}, "Mode de pilotage inconnu")
         require("driver" not in graph, "Ce modèle contient le contexte d’une ancienne conversation. Enregistrez le workflow à nouveau avant de le lancer.")
         require(not occurrence or driver == "automatic", "Une planification nécessite une exécution automatique")
         original = copy.deepcopy(graph)
         resolved = expand(graph, library or {})
+        from .annotations import without_annotations
+        resolved = without_annotations(resolved)
         project = self.project(project_id, connection)
         resolved["parameters"] = {**resolved.get("parameters", {}), **(parameters or {})}
         from .packs import resolve_profiles, policy_readiness
@@ -225,6 +227,11 @@ class Engine:
                "contract": semantic_digest(resolved), "parameters": {**resolved.get("parameters", {}), **(parameters or {})},
                "nodes": {n["id"]: {"status": "pending", "attempt": 0} for n in resolved["nodes"]}}
         run["transports"] = {}
+        if parent:
+            run["parent"] = copy.deepcopy(parent)
+        for nid, inputs in (initial_inputs or {}).items():
+            require(nid in run["nodes"] and isinstance(inputs, dict), "Entrées initiales invalides")
+            run["nodes"][nid]["seed_inputs"] = copy.deepcopy(inputs)
         if deferred:
             run["coordination_wait"] = True
         if not simulation:
@@ -301,17 +308,36 @@ class Engine:
                 if incoming and not active:
                     state.update(status="skipped")
                 else:
-                    state["inputs"] = {}
+                    state["inputs"] = copy.deepcopy(state.get("seed_inputs", {}))
                     state["input_sources"] = {}
-                    for edge in active:
-                        outputs = run["nodes"][edge["from"]].get("result", {}).get("outputs", {})
-                        for src, dst in edge.get("mapping", {}).items():
-                            require(src in outputs, f"{node['id']} : résultat source {src} absent")
-                            require(dst not in state["inputs"] or state["inputs"][dst] == outputs[src], f"{node['id']} : plusieurs valeurs incompatibles pour {dst}")
-                            state["inputs"][dst] = outputs[src]
-                            state["input_sources"][dst] = {"node": edge["from"], "port": src, "edge": edge["id"]}
+                    try:
+                        for edge in active:
+                            outputs = run["nodes"][edge["from"]].get("result", {}).get("outputs", {})
+                            for src, dst in edge.get("mapping", {}).items():
+                                if src not in outputs and run["definition"]["schema"] == 2:
+                                    producer = next(n for n in run["definition"]["nodes"] if n["id"] == edge["from"])
+                                    from .ports import port_required
+                                    if not port_required(producer.get("outputs", {}).get(src), "outputs"):
+                                        continue
+                                require(src in outputs, f"{node['id']} : résultat source {src} absent")
+                                require(dst not in state["inputs"] or state["inputs"][dst] == outputs[src], f"{node['id']} : plusieurs valeurs incompatibles pour {dst}")
+                                state["inputs"][dst] = outputs[src]
+                                state["input_sources"][dst] = {"node": edge["from"], "port": src, "edge": edge["id"]}
+                        if run["definition"]["schema"] == 2:
+                            from .ports import validate_values
+                            validate_values(node.get("inputs", {}), state["inputs"], "inputs")
+                    except ContractError as exc:
+                        if run["definition"]["schema"] == 1:
+                            raise
+                        state.update(status="blocked", reason=str(exc), validation_error=str(exc))
+                        changed = True
+                        self._event(db, run, "input-invalid", node["id"], reason=str(exc))
+                        continue
                     state.update(status="ready")
-                    if node["kind"] == "join":
+                    if node["kind"] == "input":
+                        from .collection import initialize
+                        initialize(state)
+                    elif node["kind"] == "join":
                         outputs = {k: state["inputs"][k] for k in node.get("outputs", {}) if k in state["inputs"]}
                         outcome = "done"
                         if node.get("component_exit"):
@@ -321,13 +347,21 @@ class Engine:
                             elif len(choices) == 1 and next(iter(choices)) in node.get("options", []):
                                 outcome = next(iter(choices))
                         if outcome != "reject":
-                            validate_outputs(node, {"outputs": outputs})
+                            try:
+                                validate_outputs(node, {"outputs": outputs})
+                            except ContractError as exc:
+                                if run["definition"]["schema"] == 1:
+                                    raise
+                                state.update(status="blocked", reason=str(exc), validation_error=str(exc))
+                                self._event(db, run, "output-invalid", node["id"], reason=str(exc))
+                                changed = True
+                                continue
                         state.update(status="accepted", outcome=outcome, result={"outputs": outputs})
                     elif node["kind"] == "condition":
                         outcome = state["inputs"].get(node["parameter"], node.get("parameters", run["parameters"]).get(node["parameter"]))
                         outcome = condition_outcome(node, outcome)
                         if outcome in node.get("options", []):
-                            state.update(status="accepted", outcome=outcome, result={"outputs": {k: state["inputs"].get(k) for k in node.get("outputs", {})}})
+                            state.update(status="accepted", outcome=outcome, result={"outputs": {k: state["inputs"].get(k) for k in node.get("outputs", {}) if run["definition"]["schema"] == 1 or k in state["inputs"]}})
                         else:
                             state.update(status="blocked", reason=f"Paramètre {node['parameter']} absent ou issue inconnue")
                     elif node["kind"] == "question":
@@ -353,15 +387,22 @@ class Engine:
                                           "node": node["id"], "account": node.get("account"), "message": message["id"]})
                             db.execute("INSERT OR IGNORE INTO consumed_messages VALUES (?, ?)", (key, time.time()))
             self._event(db, run, "completed")
+        from .associated_actions import sync
+        sync(self, db, run)
 
     def claim(self, run_id, node_id, *, executor="managed", owner_pid=None):
         with self.store.transaction() as db:
             run = self.run(run_id, db)
             require(run["status"] == "active", "Exécution suspendue ou terminée")
+            from .iterations import claim_guard
+            claim_guard(self, db, run)
+            from .associated_actions import claim_guard as action_guard
+            action_guard(self, db, run)
             running = sum(s["status"] == "running" for row in db.execute("SELECT body FROM runs") for s in self.store.body(row)["nodes"].values())
             require(running < 4, "Quatre étapes sont déjà en cours : attente d'une place d'exécution")
             node = next((n for n in run["definition"]["nodes"] if n["id"] == node_id), None)
             require(node is not None, "Bloc inconnu")
+            require(node["kind"] not in {"input", "foreach"}, "Ce bloc est piloté par les commandes de recueil ou de coordination")
             state = run["nodes"][node_id]
             require(state["status"] == "ready", "Ce bloc n'est pas prêt")
             from .packs import policy_issues
@@ -452,6 +493,9 @@ class Engine:
         try:
             require(state["result"].get("ok") is True, "L'exécutant a signalé un échec")
             validate_result(run["definition"], node, state["result"])
+            if node["kind"] == "integrate" and not run["simulation"]:
+                from connectors.candidate_integration import validate_integration
+                validate_integration(self, run, node, state["result"]["outputs"]["candidate"])
             if node.get("validation") == "automatic" or node.get("evidence_required"):
                 require(state["result"].get("evidence"), "Preuve requise pour la validation automatique")
             for evidence in state["result"].get("evidence", []):
@@ -492,6 +536,9 @@ class Engine:
             node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
             require(state["result"].get("ok") is True, "Le résultat indique un échec : correction requise")
             validate_result(run["definition"], node, state["result"])
+            if node["kind"] == "integrate" and not run["simulation"]:
+                from connectors.candidate_integration import validate_integration
+                validate_integration(self, run, node, state["result"]["outputs"]["candidate"])
             expected = node.get("criteria", [])
             require(checks == expected, "Tous les critères doivent être explicitement examinés")
             require(not expected or bool(note.strip()), "Une conclusion de validation est requise")
@@ -516,7 +563,7 @@ class Engine:
             require(outcome in node.get("options", ["approve", "reject"]), "Choix inconnu")
             state.update(status="accepted", outcome=outcome, decision={"at": time.time(), "actor": "local-user", "outcome": outcome, "proposal": proposal, "operation": digest(state.get("operation", node.get("operation"))), "note": note})
             if node.get("outputs"):
-                state["result"] = {"outputs": {key: state.get("inputs", {}).get(key) for key in node["outputs"]}}
+                state["result"] = {"outputs": {key: state.get("inputs", {}).get(key) for key in node["outputs"] if run["definition"]["schema"] == 1 or key in state.get("inputs", {})}}
                 validate_result(run["definition"], node, state["result"], outcome)
             self._event(db, run, "decision", node_id, outcome=outcome)
             self._advance(db, run)
@@ -528,6 +575,16 @@ class Engine:
         with self.store.transaction() as db:
             run = self.run(run_id, db)
             require(run["status"] in {"active", "paused"}, "Exécution déjà terminée")
+            if action == "resume" and run.get("iteration_wait"):
+                # Resume the wish to participate, never release a dependency.
+                # The durable coordinator alone supplies dependency outputs.
+                run.pop("iteration_hold", None)
+                self._event(db, run, "iteration-unheld", reason="En attente des dépendances")
+                self._save(db, run)
+                return run
+            if action == "resume":
+                from .associated_actions import claim_guard as authorization_guard
+                authorization_guard(self, db, run)
             if action == "resume" and run.get("coordination_wait"):
                 predecessors = [self.run(rid, db) for rid in run["parameters"].get("depends_on_runs", [])]
                 require(all(dependency_satisfied(r) for r in predecessors), "Les tâches précédentes ne sont pas terminées ou ont été refusées")
@@ -538,6 +595,15 @@ class Engine:
             if action == "resume":
                 run.pop("coordination_hold", None)
             run["status"] = {"pause": "paused", "resume": "active", "cancel": "cancelled"}[action]
+            if run.get("parent") and action == "pause":
+                run["iteration_hold"] = True
+            elif action == "resume":
+                run.pop("iteration_hold", None)
+            from .iterations import control_children
+            control_children(self, db, run, action)
+            if action == "cancel":
+                from .associated_actions import cancel
+                cancel(self, db, run)
             self._event(db, run, action)
             if action == "resume":
                 for nid in run["nodes"]:
@@ -554,7 +620,7 @@ class Engine:
             state = run["nodes"][node_id]
             node = next(n for n in run["definition"]["nodes"] if n["id"] == node_id)
             require(state["status"] == "returned", "Seul un résultat remis peut être repris ; réconcilier d'abord une opération incertaine")
-            require(node["kind"] != "external" and not state.get("effect_uncertain"), "Opération externe : nouvelle proposition et nouvel accord requis")
+            require(node["kind"] != "external" and not state.get("effect_uncertain") and not state.get("result", {}).get("effect_id"), "Opération externe : vérifier l'effet et son accusé avant une nouvelle tentative")
             require(state["attempt"] < node.get("max_attempts", 1), "Limite de reprises atteinte")
             history = state.get("history", []) + [{k: v for k, v in state.items() if k != "history"}]
             run["nodes"][node_id] = {"status": "ready", "attempt": state["attempt"], "history": history, "reason": note, "inputs": state.get("inputs", {})}

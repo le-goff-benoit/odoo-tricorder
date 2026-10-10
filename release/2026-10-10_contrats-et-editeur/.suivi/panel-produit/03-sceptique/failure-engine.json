@@ -1,0 +1,326 @@
+{
+  "run": {
+    "contract": "b9a2dfe4b8b84834a8ada6d119c9de2eae392494cc14fba79af99b66b60c60c7",
+    "created": 1791626933.4795704,
+    "definition": {
+      "description": "Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.",
+      "edges": [
+        {
+          "from": "check",
+          "id": "check-decision",
+          "outcome": "done",
+          "to": "decision"
+        }
+      ],
+      "id": "work-ee5f777a-1459-460f-ae24-604f424701a1",
+      "nodes": [
+        {
+          "argv": [
+            "python3",
+            "/project/check.py"
+          ],
+          "candidate_check": false,
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "expected.txt contient OK ; sortie CONTROL_PASS et code 0."
+          ],
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {},
+          "kind": "command",
+          "max_attempts": 2,
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "resources": [],
+          "reuse": false,
+          "timeout": 60,
+          "title": "Contrôler expected.txt — version Git",
+          "validation": "human"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 400,
+            "y": 100
+          },
+          "question": "Le contrôle est reçu. Terminer cette vérification ?",
+          "title": "Décider de la suite"
+        }
+      ],
+      "parameters": {
+        "request": ""
+      },
+      "revision": 3,
+      "schema": 1,
+      "title": "Revue locale reproductible"
+    },
+    "driver": "automatic",
+    "id": "re18c85faf8ad4881",
+    "nodes": {
+      "check": {
+        "attempt": 2,
+        "finished": 1791626965.2705393,
+        "heartbeat": 1791626965.0794075,
+        "history": [
+          {
+            "attempt": 1,
+            "finished": 1791626933.80067,
+            "heartbeat": 1791626933.5988538,
+            "input_sources": {},
+            "inputs": {},
+            "ownership": "managed",
+            "pid": 1654838,
+            "processes": [
+              {
+                "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+                "pid": 1654837,
+                "session": 1654837,
+                "start": "16074629"
+              },
+              {
+                "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+                "pid": 1654838,
+                "session": 1654838,
+                "start": "16074637"
+              }
+            ],
+            "result": {
+              "evidence": [
+                {
+                  "sha256": "83641b6773f3f4f6ad052b6e7e9f558754b9b1d569bf1e56bdaf73f462dbea06",
+                  "size": 238
+                }
+              ],
+              "exit_code": 1,
+              "ok": false,
+              "preview": "CONTROL_STDERR: valeur attendue OK\nCHECK_VALUE=BAD\nTraceback (most recent call last):\n  File \"/project/check.py\", line 7, in <module>\n    assert value == 'OK', 'expected.txt doit contenir OK'\nAssertionError: expected.txt doit contenir OK\n",
+              "scope": "Projet en lecture seule ; aucun accès réseau.",
+              "summary": "Commande terminée avec le code 1. Résultat à examiner."
+            },
+            "started": 1791626933.4886498,
+            "status": "returned",
+            "token": "t8de04ae304dc453a"
+          }
+        ],
+        "inputs": {},
+        "ownership": "managed",
+        "pid": 1655890,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1655889,
+            "session": 1655889,
+            "start": "16077782"
+          },
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1655890,
+            "session": 1655890,
+            "start": "16077786"
+          }
+        ],
+        "reason": "expected.txt réparé dans le shell du dépôt ; relancer le même contrôle.",
+        "result": {
+          "evidence": [
+            {
+              "sha256": "83641b6773f3f4f6ad052b6e7e9f558754b9b1d569bf1e56bdaf73f462dbea06",
+              "size": 238
+            }
+          ],
+          "exit_code": 1,
+          "ok": false,
+          "preview": "CONTROL_STDERR: valeur attendue OK\nCHECK_VALUE=BAD\nTraceback (most recent call last):\n  File \"/project/check.py\", line 7, in <module>\n    assert value == 'OK', 'expected.txt doit contenir OK'\nAssertionError: expected.txt doit contenir OK\n",
+          "scope": "Projet en lecture seule ; aucun accès réseau.",
+          "summary": "Commande terminée avec le code 1. Résultat à examiner."
+        },
+        "started": 1791626965.0153902,
+        "status": "returned",
+        "token": "t8c873c35510a4102",
+        "attempt_history": [
+          {
+            "status": "returned",
+            "attempt": 1,
+            "started": 1791626933.4886498,
+            "finished": 1791626933.80067,
+            "ownership": "managed",
+            "failed": true,
+            "inputs": {},
+            "retry_reason": "expected.txt réparé dans le shell du dépôt ; relancer le même contrôle.",
+            "result": {
+              "ok": false,
+              "summary": "Commande terminée avec le code 1. Résultat à examiner.",
+              "evidence": [
+                {
+                  "sha256": "83641b6773f3f4f6ad052b6e7e9f558754b9b1d569bf1e56bdaf73f462dbea06",
+                  "size": 238
+                }
+              ],
+              "preview": "CONTROL_STDERR: valeur attendue OK\nCHECK_VALUE=BAD\nTraceback (most recent call last):\n  File \"/project/check.py\", line 7, in <module>\n    assert value == 'OK', 'expected.txt doit contenir OK'\nAssertionError: expected.txt doit contenir OK\n"
+            }
+          }
+        ]
+      },
+      "decision": {
+        "attempt": 0,
+        "status": "pending"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "description": "Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.",
+      "edges": [
+        {
+          "from": "check",
+          "id": "check-decision",
+          "outcome": "done",
+          "to": "decision"
+        }
+      ],
+      "id": "work-ee5f777a-1459-460f-ae24-604f424701a1",
+      "nodes": [
+        {
+          "argv": [
+            "python3",
+            "/project/check.py"
+          ],
+          "candidate_check": false,
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "expected.txt contient OK ; sortie CONTROL_PASS et code 0."
+          ],
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {},
+          "kind": "command",
+          "max_attempts": 2,
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "resources": [],
+          "reuse": false,
+          "timeout": 60,
+          "title": "Contrôler expected.txt — version Git",
+          "validation": "human"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 400,
+            "y": 100
+          },
+          "question": "Le contrôle est reçu. Terminer cette vérification ?",
+          "title": "Décider de la suite"
+        }
+      ],
+      "parameters": {},
+      "revision": 3,
+      "schema": 1,
+      "title": "Revue locale reproductible"
+    },
+    "packs": [],
+    "parameters": {
+      "request": ""
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-personas-produit/03-sceptique/repo/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p0ac563676a974dd2",
+    "release": "",
+    "scope": {
+      "id": "p0ac563676a974dd2",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791626965.270629,
+    "origin": null,
+    "focus": {
+      "node": "check",
+      "title": "Contrôler expected.txt — version Git",
+      "status": "returned",
+      "action": "Examiner l’échec"
+    },
+    "health": {
+      "status": "failed",
+      "total": 1,
+      "issues": [
+        {
+          "node": "check",
+          "title": "Contrôler expected.txt — version Git",
+          "reason": "Commande terminée avec le code 1. Résultat à examiner."
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "seq": 13,
+      "at": 1791626933.4811609,
+      "node": null,
+      "simulation": false,
+      "type": "started"
+    },
+    {
+      "seq": 14,
+      "at": 1791626933.4812157,
+      "node": "check",
+      "type": "ready"
+    },
+    {
+      "seq": 15,
+      "at": 1791626933.4886518,
+      "attempt": 1,
+      "node": "check",
+      "type": "running"
+    },
+    {
+      "seq": 16,
+      "at": 1791626933.80077,
+      "attempt": 1,
+      "node": "check",
+      "type": "returned"
+    },
+    {
+      "seq": 17,
+      "at": 1791626964.3181803,
+      "node": "check",
+      "note": "expected.txt réparé dans le shell du dépôt ; relancer le même contrôle.",
+      "type": "retry"
+    },
+    {
+      "seq": 18,
+      "at": 1791626965.0153935,
+      "attempt": 2,
+      "node": "check",
+      "type": "running"
+    },
+    {
+      "seq": 19,
+      "at": 1791626965.270562,
+      "attempt": 2,
+      "node": "check",
+      "type": "returned"
+    }
+  ],
+  "events_next": null
+}

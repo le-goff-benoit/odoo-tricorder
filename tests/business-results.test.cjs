@@ -78,3 +78,35 @@ test('deep and long structures bound the reading view while retaining every orig
   assert.doesNotMatch(html,/<details[^>]* open/);
   assert.match(view('Liste',[]),/Aucun élément/);assert.equal(view('Vide',{}),'');
 });
+
+test('per-item deliverables expose answers directly without execution envelopes or empty code contributions',()=>{
+  const values={results:[{id:'r1',title:'Engagements de la réunion',project:'p1',run:'run-secret-id',outputs:{confirm:{answer:'Léa réserve la salle le 15 octobre.'}}},
+    {id:'r2',title:'Synthèse',project:'p1',run:'run-two',outputs:{perform:{result:'Décision commune : lancement mercredi.'}},extra_note:'Valeur supplémentaire conservée'}],contributions:[]};
+  const human=reading(view('Résultats',values,{projects:[{id:'p1',title:'Comité de quartier'}]}));
+  assert.match(human,/<h4>Engagements de la réunion<\/h4>/);
+  assert.match(human,/Projet : Comité de quartier/);
+  assert.match(human,/<dt>Réponse<\/dt><dd><span class="business-text">Léa réserve la salle/);
+  assert.match(human,/Décision commune : lancement mercredi/);
+  assert.match(human,/Valeur supplémentaire conservée/);
+  assert.doesNotMatch(human,/Structure détaillée|run-secret-id|Contributions de code|Confirm|Perform|&quot;answer&quot;/);
+  assert.match(view('',values),/run-secret-id/); // original remains in optional diagnostics
+});
+
+test('meeting actions recognize supplied French keys without concealing conflicting aliases',()=>{
+  const french={actions:[{action:'Réserver la salle',responsable:'Léa',échéance:'15 octobre'}]};
+  const human=reading(view('',french));
+  assert.match(human,/Léa/);assert.match(human,/15 octobre/);
+  assert.doesNotMatch(human,/Non renseigné|Autres informations/);
+  const ambiguous=reading(view('',{actions:[{action:'Relire',owner:'Alex',responsable:'Léa',deadline:'Demain'}]}));
+  assert.match(ambiguous,/Alex/);assert.match(ambiguous,/Léa/);assert.match(ambiguous,/Autres informations/);
+});
+
+test('plan project and dependency identities are readable while technical values remain intact',()=>{
+  const input={plan:{goal:'Livrer ensemble',tasks:[{id:'a',title:'Préparer Atlas',project:'p1'}, {id:'b',title:'Recetter Boréal',project:'p2',depends_on:['a']}]}}, original=structuredClone(input);
+  const html=view('Plan',input,{projects:[{id:'p1',title:'Atlas'},{id:'p2',title:'Boréal'}]});
+  const human=reading(html);
+  assert.match(human,/Objectif/);assert.match(human,/Livrer ensemble/);assert.match(human,/>Atlas</);assert.match(human,/>Boréal</);
+  assert.match(human,/<dt>Après<\/dt>.*Préparer Atlas/s);
+  assert.doesNotMatch(human,/>p1<|>p2</);assert.deepEqual(input,original);
+  assert.equal(decisionLabel('true'),'Oui');assert.equal(decisionLabel('false'),'Non');
+});

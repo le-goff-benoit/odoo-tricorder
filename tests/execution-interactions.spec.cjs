@@ -214,6 +214,9 @@ test('terminal identifies another conversation and preserves the same PTY throug
   await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();
   // A remembered AI provider is not evidence that this foreground program is AI.
   await expect(page.locator('.terminal-tab.active [data-session]')).toHaveText('sleep · R1 — Demande synthétique');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect((await terminals()).find(s=>s.id===first.id).pid).toBe(first.pid);
+  expect(await terminals()).toHaveLength(2);
   await input.focus();await page.keyboard.press('Control+C');
   await expect.poll(async () => (await terminals()).find(s=>s.id===first.id)?.idleShell).toBe(true);
 });
@@ -250,4 +253,42 @@ test('a stopped conversation with a pending question resumes explicitly without 
   const [current] = await terminals(); expect(current.id).toBe(first.id); expect(current.pid).toBe(first.pid);
   expect(await terminals()).toHaveLength(1);
   await page.screenshot({path:test.info().outputPath('conversation-resumed-same-terminal.png')});
+});
+
+test('a closed historical terminal stays stopped until explicit resume and preserves other sessions', async () => {
+  const executable = path.join(directory, 'bin/codex'), marker = path.join(directory, 'agent-launches');
+  fs.writeFileSync(executable, fs.readFileSync(executable, 'utf8').replace('#!/bin/sh\n', '#!/bin/sh\nprintf "launch\\n" >> "$TRICORDER_STATE_DIR/agent-launches"\n'));
+  const launches = () => fs.existsSync(marker) ? fs.readFileSync(marker, 'utf8').trim().split('\n').length : 0;
+  const terminals = () => page.evaluate(() => window.tricorder.terminals.list());
+  const alive = async () => (await terminals()).filter(s => s.alive);
+  const command = async text => { await page.locator('.xterm-helper-textarea:visible').focus(); await page.keyboard.type(text); await page.keyboard.press('Enter'); };
+  await page.getByRole('button', {name:'Retrouver la conversation',exact:true}).click();
+  await expect(page.locator('.xterm-screen:visible')).toContainText('INERT REVIEW AGENT'); await expect.poll(launches).toBe(1);
+  const [first] = await alive(), before = await call('conversation.get', {conversation:fixture.conversation});
+  await openRun(fixture.second_run); await page.getByRole('button', {name:'Retrouver la conversation',exact:true}).click();
+  await expect.poll(launches).toBe(2); const other = (await alive()).find(s => s.id !== first.id);
+  await openRun(); await expect(page.locator('.terminal-tab.active [data-session]')).toHaveAttribute('data-session', first.id);
+  await command('exit'); await expect.poll(async () => (await terminals()).find(s => s.id === first.id)?.idleShell).toBe(true);
+  await command('exit'); await expect.poll(async () => (await terminals()).find(s => s.id === first.id)?.alive || false).toBe(false);
+  const closed = await page.evaluate(value => window.tricorder.workflowTerminal(value), {project:fixture.project.id,conversation:fixture.conversation});
+  expect(closed).toMatchObject({agentState:'stopped',terminalState:'closed'}); expect(closed.id).toBeUndefined();
+  expect(launches()).toBe(2); expect((await alive()).map(s => [s.id,s.pid])).toEqual([[other.id,other.pid]]);
+  // The consultation path receives the closed response without mounting a fake terminal.
+  const tray = page.locator('#conversation-tray');
+  await expect(tray.getByRole('button', {name:'Reprendre l’agent…',exact:true})).toBeVisible({timeout:10000});
+  await tray.getByRole('button', {name:'Voir le shell',exact:true}).click();
+  await expect(page.locator('.terminal-host[data-terminal="undefined"]')).toHaveCount(0);
+  expect(launches()).toBe(2); expect((await alive()).map(s => [s.id,s.pid])).toEqual([[other.id,other.pid]]);
+  await tray.getByRole('button', {name:'Reprendre l’agent…',exact:true}).click();
+  await expect(page.getByRole('dialog')).toContainText('Le terminal précédent est fermé'); expect(launches()).toBe(2);
+  await page.getByRole('button', {name:'Revenir',exact:true}).click();
+  expect(launches()).toBe(2); expect((await alive()).map(s => [s.id,s.pid])).toEqual([[other.id,other.pid]]);
+  await tray.getByRole('button', {name:'Reprendre l’agent…',exact:true}).click();
+  await page.getByRole('button', {name:'Ouvrir un terminal et reprendre',exact:true}).click();
+  await expect.poll(launches).toBe(3); await expect.poll(async () => (await alive()).length).toBe(2);
+  const current = await alive(), replacement = current.find(s => s.id !== other.id);
+  expect(current.find(s => s.id === other.id).pid).toBe(other.pid); expect(replacement.id).not.toBe(first.id); expect(replacement.pid).not.toBe(first.pid);
+  const after = await call('conversation.get', {conversation:fixture.conversation});
+  expect(after.items.map(i => [i.id,i.run,i.request])).toEqual(before.items.map(i => [i.id,i.run,i.request]));
+  expect((await call('run.get', {run:fixture.run})).run.nodes.question.status).toBe('waiting_input');
 });

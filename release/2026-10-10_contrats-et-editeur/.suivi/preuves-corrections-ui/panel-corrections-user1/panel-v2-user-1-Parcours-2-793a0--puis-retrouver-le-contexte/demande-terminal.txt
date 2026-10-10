@@ -1,0 +1,34 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Lancement produit synthétique
+Réunion commerciale synthétique
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Lancement produit synthétique
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell occupé · Organiser la préparation du lancement produit avec trois livrables.
+Conversation du workflow affiché · Shell : Lancement produit synthétique
+'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tmp/tricorder-pa
+nel-pm-wlUa3L/agent-events/ca2a5604-101a-46fd-a337-2ed3693e3946.launch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/projects/paf75fbe9a9fb4082$ 'python3' '/home/blegoff/odo
+o-tricorder/backend/agent_launch.py' '/tmp/tricorder-panel-pm-wlUa3L/agent-events/c
+a2a5604-101a-46fd-a337-2ed3693e3946.launch.json'
+PANEL_PM_INERT — aucun fournisseur contacte
+ 

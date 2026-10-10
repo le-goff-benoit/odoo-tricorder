@@ -1,0 +1,12 @@
+{
+  "scope": "Build local figé pendant le panel ; recette Electron indépendante avec état synthétique et fournisseurs inertes.",
+  "sha256": {
+    "dist/app.js": "769515bf8cbd5cf312cb5df1346fa85b0443b55216f4b5ffd6be843d898f5946",
+    "dist/app.css": "d3be2009e29166ce3889a3c189e65822da978911a5c20e96285057fdde759f14",
+    "dist/studio.css": "f1d9b32a996f0a7cb14993655a179fe643505dfbb39b8e13601ade1a0cf1c784",
+    "src/studio.js": "52a06b519570d0dd107f3f096081f59a043a031f7063a135ed58f6215bc33041",
+    "src/execution-layout.mjs": "354ab900826fa01b69c79df1091b0b541dfccb076ad0392c2fa954ea600841f0",
+    "src/editor-gestures.mjs": "e76beced56d7f710408b16d378202eff4f04ea5030e42eddddc62df93bb0d475",
+    "src/workflow-coordination-view.mjs": "0a6719f7ea3d40a64f9651778f72174537b1e29a35ba2b6e2de23e057f48176e"
+  }
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "case": "notification-of-optional-grandchild-respects-main-pause",
+    "ok": true,
+    "evidence": {
+      "blocked": true,
+      "reason": "Action devenue obsolète, suspendue ou annulée ; aucun nouvel envoi autorisé",
+      "accepted_before_rejection": [],
+      "pause_after_claim_refused": "Action devenue obsolète, suspendue ou annulée ; aucun nouvel envoi autorisé",
+      "resume_authorized": true,
+      "cancel_refused": "Coordination suspendue, terminée ou annulée ; aucun nouvel agent ne peut démarrer",
+      "external_calls": false
+    }
+  },
+  {
+    "case": "completed-main-allows-current-optional-question-notification",
+    "ok": true,
+    "evidence": {
+      "main_completed_action_notification_permitted": true,
+      "stale_notification_blocked": true,
+      "stale_reason": "Question déjà traitée, suspendue ou annulée ; notification obsolète"
+    }
+  }
+]

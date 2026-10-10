@@ -1,0 +1,280 @@
+{
+  "run": {
+    "completion_outcome": "succeeded",
+    "contract": "b9a2dfe4b8b84834a8ada6d119c9de2eae392494cc14fba79af99b66b60c60c7",
+    "created": 1791626997.0250795,
+    "definition": {
+      "description": "Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.",
+      "edges": [
+        {
+          "from": "check",
+          "id": "check-decision",
+          "outcome": "done",
+          "to": "decision"
+        }
+      ],
+      "id": "work-ee5f777a-1459-460f-ae24-604f424701a1",
+      "nodes": [
+        {
+          "argv": [
+            "python3",
+            "/project/check.py"
+          ],
+          "candidate_check": false,
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "expected.txt contient OK ; sortie CONTROL_PASS et code 0."
+          ],
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {},
+          "kind": "command",
+          "max_attempts": 2,
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "resources": [],
+          "reuse": false,
+          "timeout": 60,
+          "title": "Contrôler expected.txt — version Git",
+          "validation": "human"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 400,
+            "y": 100
+          },
+          "question": "Le contrôle est reçu. Terminer cette vérification ?",
+          "title": "Décider de la suite"
+        }
+      ],
+      "parameters": {
+        "request": ""
+      },
+      "revision": 3,
+      "schema": 1,
+      "title": "Revue locale reproductible"
+    },
+    "driver": "automatic",
+    "id": "r3485e66f95d242fe",
+    "nodes": {
+      "check": {
+        "attempt": 1,
+        "finished": 1791626997.2902758,
+        "heartbeat": 1791626997.1033425,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 1657151,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1657150,
+            "session": 1657150,
+            "start": "16080984"
+          },
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1657151,
+            "session": 1657151,
+            "start": "16080988"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791627016.0550663,
+          "checks": [
+            "expected.txt contient OK ; sortie CONTROL_PASS et code 0."
+          ],
+          "contract": "b9a2dfe4b8b84834a8ada6d119c9de2eae392494cc14fba79af99b66b60c60c7",
+          "note": "Contrôle réussi après réparation explicite du fichier racine ; échec précédent conservé."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "6646a745d1b020a4adf74a2305d4ac1e2f1d4f19fc452ccf3f0bfcabd8f8aede",
+              "size": 63
+            }
+          ],
+          "exit_code": 0,
+          "ok": true,
+          "preview": "CONTROL_STDERR: valeur attendue OK\nCHECK_VALUE=OK\nCONTROL_PASS\n",
+          "scope": "Projet en lecture seule ; aucun accès réseau.",
+          "summary": "Commande terminée avec le code 0. Résultat à examiner."
+        },
+        "started": 1791626997.0319505,
+        "status": "accepted",
+        "token": "tc1d30204cfbb42e3"
+      },
+      "decision": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791627019.6159828,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "72d8f712baee06a4e5ee40a9740c05f7a802a3a77f5b377567293223c735bcb0"
+        },
+        "input_sources": {},
+        "inputs": {},
+        "nonce": "d2bff4cb4c80a4567",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "72d8f712baee06a4e5ee40a9740c05f7a802a3a77f5b377567293223c735bcb0",
+        "status": "accepted"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "description": "Une vraie commande isolée, puis examen du résultat. Pas de réseau, projet en lecture seule.",
+      "edges": [
+        {
+          "from": "check",
+          "id": "check-decision",
+          "outcome": "done",
+          "to": "decision"
+        }
+      ],
+      "id": "work-ee5f777a-1459-460f-ae24-604f424701a1",
+      "nodes": [
+        {
+          "argv": [
+            "python3",
+            "/project/check.py"
+          ],
+          "candidate_check": false,
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "expected.txt contient OK ; sortie CONTROL_PASS et code 0."
+          ],
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {},
+          "kind": "command",
+          "max_attempts": 2,
+          "outputs": {},
+          "phase": "",
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "resources": [],
+          "reuse": false,
+          "timeout": 60,
+          "title": "Contrôler expected.txt — version Git",
+          "validation": "human"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 400,
+            "y": 100
+          },
+          "question": "Le contrôle est reçu. Terminer cette vérification ?",
+          "title": "Décider de la suite"
+        }
+      ],
+      "parameters": {},
+      "revision": 3,
+      "schema": 1,
+      "title": "Revue locale reproductible"
+    },
+    "packs": [],
+    "parameters": {
+      "request": ""
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-personas-produit/03-sceptique/repo/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p0ac563676a974dd2",
+    "release": "",
+    "scope": {
+      "id": "p0ac563676a974dd2",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791627019.6163087,
+    "origin": null,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 20,
+      "at": 1791626997.0265675,
+      "node": null,
+      "simulation": false,
+      "type": "started"
+    },
+    {
+      "seq": 21,
+      "at": 1791626997.0266154,
+      "node": "check",
+      "type": "ready"
+    },
+    {
+      "seq": 22,
+      "at": 1791626997.0319526,
+      "attempt": 1,
+      "node": "check",
+      "type": "running"
+    },
+    {
+      "seq": 23,
+      "at": 1791626997.2903266,
+      "attempt": 1,
+      "node": "check",
+      "type": "returned"
+    },
+    {
+      "seq": 24,
+      "at": 1791627016.0550687,
+      "node": "check",
+      "type": "accepted"
+    },
+    {
+      "seq": 25,
+      "at": 1791627016.0552568,
+      "node": "decision",
+      "type": "waiting"
+    },
+    {
+      "seq": 26,
+      "at": 1791627019.6160204,
+      "node": "decision",
+      "outcome": "approve",
+      "type": "decision"
+    },
+    {
+      "seq": 27,
+      "at": 1791627019.6160684,
+      "node": null,
+      "type": "completed"
+    }
+  ],
+  "events_next": null
+}

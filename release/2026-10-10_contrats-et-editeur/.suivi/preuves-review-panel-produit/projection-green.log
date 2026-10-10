@@ -1,0 +1,16 @@
+test_activity_counts_families_before_pagination_and_names_durable_parent (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_child_states_count_without_inflating_main_requests (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_children_of_optional_action_never_become_principal_work (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_collection_is_actionable_without_exposing_idempotency_ledger (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_compact_coordination_and_lists_preserve_child_and_parent_suspension (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_declared_parent_reference_without_membership_never_adds_child_counts (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_large_child_output_is_not_loaded_per_child_or_embedded_in_parent (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_optional_action_has_distinct_activity_count_and_durable_origin (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_optional_failure_stays_separate_after_principal_completion (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_paged_coordination_exposes_dependency_names_and_keeps_all_counts (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+test_waiting_child_keeps_dependency_and_manual_hold_distinct_in_all_projections (test_orchestration_projections.OrchestrationProjectionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.616s
+
+OK

@@ -69,9 +69,34 @@ function intersectsCard(points, card) {
   });
 }
 
+function clearObstacles(points, obstacles) {
+  let result=points;
+  for(let attempt=0;attempt<40;attempt++) {
+    let found=null;
+    for(let index=1;index<result.length && !found;index++)for(const box of obstacles) {
+      const segment=[result[index-1],result[index]];
+      if(intersectsCard(segment,box)) {found={index,box,segment};break;}
+    }
+    if(!found)break;
+    const {index,box,segment:[from,to]}=found;
+    const inside=point=>point[0]>box.x-3&&point[0]<box.x+box.width+3&&point[1]>box.y-3&&point[1]<box.y+box.height+3;
+    if(inside(from)||inside(to))break; // An annotation deliberately over a port cannot hide its card.
+    // Turn close to the obstacle, rather than at the segment endpoints: the
+    // latter can send a note's detour back through its source/destination card.
+    const horizontal=from[1]===to[1], forward=horizontal?to[0]>from[0]:to[1]>from[1];
+    const near=horizontal?(forward?box.x-12:box.x+box.width+12):(forward?box.y-12:box.y+box.height+12);
+    const far=horizontal?(forward?box.x+box.width+12:box.x-12):(forward?box.y+box.height+12:box.y-12);
+    const choices=horizontal ? [box.y-12,box.y+box.height+12].filter(y=>y>=0).map(y=>[from,[near,from[1]],[near,y],[far,y],[far,to[1]],to]) : [box.x-12,box.x+box.width+12].filter(x=>x>=0).map(x=>[from,[from[0],near],[x,near],[x,far],[to[0],far],to]);
+    const score=route=>obstacles.filter(other=>intersectsCard(route,other)).length*100000+route.slice(1).reduce((sum,point,i)=>sum+Math.abs(point[0]-route[i][0])+Math.abs(point[1]-route[i][1]),0);
+    choices.sort((a,b)=>score(a)-score(b));if(!choices.length)break;
+    result=[...result.slice(0,index-1),...choices[0],...result.slice(index+1)];
+  }
+  return result;
+}
 export function designRoutes(graph, heights = {}, labels = {}) {
   const cards = new Map(graph.nodes.map((node, i) => [node.id, { ...(node.position || { x: 50 + i % 4 * 300, y: 60 + Math.floor(i / 4) * 180 }), width: 240, height: heights[node.id] || 132 }]));
-  let bottom = Math.max(0, ...[...cards.values()].map(card => card.y + card.height)) + 48;
+  const notes=(graph.layout?.notes || []).map(note=>({...note.position,width:note.size?.width || 280,height:note.size?.height || 180}));
+  let bottom = Math.max(0, ...[...cards.values(),...notes].map(card => card.y + card.height)) + 48;
   const placed = [];
   return graph.edges.flatMap(edge => {
     const from = cards.get(edge.from), to = cards.get(edge.to);
@@ -80,9 +105,9 @@ export function designRoutes(graph, heights = {}, labels = {}) {
     const middle = (start[0] + end[0]) / 2;
     const label = edgeLabelBox(labels[edge.id]);
     let points = [start, [middle, start[1]], [middle, end[1]], end];
-    const obstacles = [...cards.entries()].filter(([id]) => id !== edge.from && id !== edge.to).map(([, card]) => card);
+    const obstacles = [...[...cards.entries()].filter(([id]) => id !== edge.from && id !== edge.to).map(([, card]) => card),...notes];
     let x = middle - label.width / 2, y = (start[1] + end[1]) / 2 - label.height - 6;
-    const obstructed = () => [...cards.values(), ...placed].some(card => rectanglesOverlap({ x, y, ...label }, card, 5));
+    const obstructed = () => [...cards.values(), ...notes, ...placed].some(card => rectanglesOverlap({ x, y, ...label }, card, 5));
     // Long edges on an old, manually drawn line go around intervening cards.
     // Labels have their own lane if a join would otherwise stack them.
     if (end[0] - start[0] < label.width + 24 || obstacles.some(card => intersectsCard(points, card)) || obstructed()) {
@@ -91,6 +116,9 @@ export function designRoutes(graph, heights = {}, labels = {}) {
       x = Math.max(12, (start[0] + end[0]) / 2 - label.width / 2); y = lane - label.height - 6;
       bottom = lane + 38;
     }
+    // Keep the two port attachment segments; the routed body must avoid every
+    // card, including the cards owning those ports.
+    points=[points[0],...clearObstacles(points.slice(1,-1),[...cards.values(),...notes]),points.at(-1)];
     const box = { x, y, ...label }; placed.push(box);
     return [{ id: edge.id, points, path: polylinePath(points), label: box }];
   });

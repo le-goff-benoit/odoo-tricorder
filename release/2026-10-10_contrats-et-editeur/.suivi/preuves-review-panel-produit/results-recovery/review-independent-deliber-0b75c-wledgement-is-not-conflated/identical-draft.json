@@ -1,0 +1,25 @@
+{
+  "calls": [
+    {
+      "action": "collection.change",
+      "run": "r8d8e976b442e4278",
+      "node": "intentions",
+      "revision": 0,
+      "operation": "add",
+      "key": "14b70b5b-1e98-4e72-8ef0-15224aee0f0e",
+      "text": "Intention identique mais délibérément répétée"
+    },
+    {
+      "action": "collection.change",
+      "run": "r8d8e976b442e4278",
+      "node": "intentions",
+      "revision": 0,
+      "operation": "add",
+      "key": "14b70b5b-1e98-4e72-8ef0-15224aee0f0e",
+      "text": "Intention identique mais délibérément répétée"
+    }
+  ],
+  "stored": [
+    "Intention identique mais délibérément répétée"
+  ]
+}

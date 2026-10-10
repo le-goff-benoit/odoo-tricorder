@@ -48,6 +48,16 @@ def _request(engine, cid, action, payload):
     nid = payload["node"]
     node = next((n for n in run["definition"]["nodes"] if n["id"] == nid), None)
     require(node is not None, "Bloc inconnu")
+    if action == "collect":
+        from workflow_engine.collection import change
+        return change(engine, run["id"], nid, payload["revision"], payload["operation"],
+                      key=payload["key"], item=payload.get("item"), text=payload.get("text"))
+    if action == "iterate":
+        from workflow_engine.iterations import activate
+        return activate(engine, run["id"], nid)
+    if action == "children":
+        from workflow_engine.iterations import overview
+        return overview(engine, run, nid, offset=payload.get("offset", 0), limit=payload.get("limit", 25))
     if action == "heartbeat":
         engine.heartbeat(run["id"], nid, payload["token"])
         return {"ok": True}
@@ -87,7 +97,7 @@ def _request(engine, cid, action, payload):
         return engine.execution_context(run["id"], nid, payload["context"])
     if action == "execute":
         from workflow_engine.runtime import execute
-        require(node["kind"] in {"agent", "command", "document"}, "Exécutant non accessible depuis la conversation")
+        require(node["kind"] in {"agent", "command", "document", "integrate"}, "Exécutant non accessible depuis la conversation")
         claim = engine.claim(run["id"], nid)
         execute(engine, run["id"], nid, claim["token"])
         return engine.run(run["id"])
@@ -104,11 +114,14 @@ def _request(engine, cid, action, payload):
 def request(engine, cid, action, payload):
     """Every native response uses the same bounded view and explicit readers."""
     value = _request(engine, cid, action, payload)
+    from workflow_engine.annotations import agent_view
     from workflow_engine.projections import run_detail
     if action == 'claim':
-        return {**value, 'run': run_detail(engine, value['run'])}
-    if action in {'context', 'execute', 'result', 'ask', 'answer'}:
-        return run_detail(engine, value)
+        return {**value, 'run': agent_view(run_detail(engine, value['run']))}
+    if action in {'context', 'execute', 'result', 'ask', 'answer', 'collect', 'iterate'}:
+        return agent_view(run_detail(engine, value))
+    if action in {'status', 'inspect'}:
+        return agent_view(value)
     return value
 
 
@@ -116,7 +129,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", required=True)
     parser.add_argument("--conversation", required=True)
-    parser.add_argument("action", choices=["status", "add", "ready", "dispatch", "claim", "context", "execute", "result", "ask", "answer", "artifact", "heartbeat", "prepare-candidate", "inspect", "read"])
+    parser.add_argument("action", choices=["status", "add", "ready", "dispatch", "claim", "context", "execute", "result", "ask", "answer", "artifact", "heartbeat", "prepare-candidate", "inspect", "read", "collect", "iterate", "children"])
     parser.add_argument("--offset", type=int, default=0)
     parser.add_argument("--query", default="")
     args = parser.parse_args()

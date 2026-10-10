@@ -1,0 +1,12 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-activity-resume/playwright.config.cjs --output=/tmp/tricorder-review-activity-resume/results-source-green
+PATH: /tmp/tricorder-ci-tools-9g92xwdq:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✓  1 ../../../tmp/tricorder-review-activity-resume/activity.spec.cjs:51:1 › independent activity announces action and stage while preserving draft and original conversation (9.7s)
+
+  1 passed (10.1s)

@@ -1,0 +1,25 @@
+✔ drag threshold uses screen pixels and displacement uses graph scale, with bounded coordinates (2.162803ms)
+✔ zoom preserves the logical viewport center, including deep scroll (0.416311ms)
+✔ new items stay visible even when the selection is far away, and avoid nearby cards when possible (4.449595ms)
+✔ a dense visible grid finds nearby empty space instead of covering another block (6.180993ms)
+✔ fit uses the true content bounds and fits both dimensions without moving saved coordinates (0.880277ms)
+✔ Support skip edges and joins reserve readable labels and never cross cards at split width (4.026485ms)
+✔ explicit design layout separates alternatives, places join after both, and changes positions only (1.441368ms)
+✔ a branch in the saved single-line drawing goes around the intervening card without changing positions (0.269741ms)
+✔ long branch names wrap in the allocated band and malformed drafts remain inspectable (1.22485ms)
+✔ notes are obstacles for both routes and their labels even when moved onto a previous wire (0.415772ms)
+✔ a note below neighbouring cards never reroutes a link through its source or destination (0.509859ms)
+✔ explicit conversion preserves historical input presence and required outputs without modifying original (1.208546ms)
+✔ links require presence, cardinality and covariant list bounds and items (0.265321ms)
+✔ advanced blocks carry one collection value and explicit per-item execution only (0.509662ms)
+✔ collection accepts zero when the contract allows it and graph highlights blockers beyond the first three elements (2.803262ms)
+✔ a plan goal is visible even without a title (0.260304ms)
+✔ coordination labels use natural singular and plural without inventing active agents (0.281617ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97.010099

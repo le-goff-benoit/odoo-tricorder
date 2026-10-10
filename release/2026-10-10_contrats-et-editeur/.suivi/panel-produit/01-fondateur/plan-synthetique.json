@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "summary": "FOURNISSEUR SYNTHÉTIQUE : plan de démonstration, aucune implémentation ni connexion réelle.",
+  "outputs": {
+    "plan": {
+      "goal": "Préparer onboarding Atlas (données synthétiques)",
+      "criteria": [
+        "Référent et source CSV confirmés avant import"
+      ],
+      "tasks": [
+        {
+          "id": "cadrage",
+          "title": "Confirmer fichier CSV et accès auprès de Claire",
+          "scope": "Préparer liste locale de prérequis, sans contact client",
+          "criteria": [
+            "Liste explicite des accès et source attendue"
+          ]
+        },
+        {
+          "id": "mail",
+          "title": "Préparer brouillon local de mail de lancement",
+          "scope": "Rédaction locale seulement",
+          "criteria": [
+            "Mention des 8 utilisateurs et formation le 20 octobre"
+          ],
+          "depends_on": [
+            "cadrage"
+          ]
+        }
+      ]
+    }
+  },
+  "evidence": []
+}

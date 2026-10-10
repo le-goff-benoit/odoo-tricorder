@@ -1,3 +1,6 @@
+import { portType, portRequired, normalizedPort, portDescription, typeNames, incompatibleReason, convertWorkflow, collectionPort, basicChildWorkflow, advancedNode, descriptorFromFields } from './workflow-contract-ui.mjs';
+import { collectionView, coordinationView, associatedView, runtimeCardContent } from './workflow-coordination-view.mjs';
+import { movedEnough, dragPosition, placement, zoomScroll, fitViewport } from './editor-gestures.mjs';
 import { scheduleFrequency, replacementScheduleDraft } from './schedule-configuration.mjs';
 import { businessDataView, businessProofView, decisionLabel } from './business-results.mjs';
 import { executionLayout } from './execution-layout.mjs';
@@ -6,7 +9,7 @@ import { activityText, conversationOverviewView, dependencyBlocked } from './con
 import { attemptHistoryView } from './execution-attempts.mjs';
 import { reusableWorkflow, connectionOutcomes, designWarnings, simulationValues, copyTitle } from './workflow-design.mjs';
 import DOMPurify from 'dompurify';
-import { executionAction, executionIssue, failedResult, retryGuidance, launchReadiness, executionProgress } from './execution-view.mjs';
+import { executionAction, executionIssue, failedResult, retryGuidance, launchReadiness, executionProgress, childActivity, childActivityLabel, readableFailure, requestHeading } from './execution-view.mjs';
 import { marked } from 'marked';
 import { states, kinds, symbols, nodePosition, effectiveExecution, History, applyPatch, patchSummary, displayGraph, withWorkflowAI } from './studio-model.js';
 
@@ -33,6 +36,10 @@ const clone = value => structuredClone(value);
 const options = (values, selected) => values.map(([value, label]) => `<option value="${esc(value)}" ${value === selected ? 'selected' : ''}>${esc(label)}</option>`).join('');
 const state = { projects: [], templates: [], capabilities: [], route: 'overview', project: null, workflows: [], runs: [], graph: null, savedRevision: 0, run: null, events: [], selected: null, mode: 'design', view: 'canvas', zoom: 1, history: new History(), dirty: false, polling: false, modal: null, collapsed: new Set(), launchDrafts: {}, scheduleDrafts: {}, launchReturn: null };
 let toastTimer;
+const parentViews = [];
+const collectionDrafts = new Map();
+const collectionInFlight = new Set();
+let editorGesture = null, suppressGestureClick = false;
 let actionQueue = Promise.resolve();
 let viewEpoch = 0;
 const pendingInteractions = new Set();
@@ -45,6 +52,8 @@ function toast(message) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => el.remove(), 5500);
 }
 function error(message) {
+  const node=state.graph?.nodes.find(node=>String(message).startsWith(node.id+' :'));
+  if(node)message=node.title+String(message).slice(node.id.length);
   const target = document.querySelector('.modal-card .status-line') || document.querySelector('#feedback');
   if (target) { target.innerHTML = `<div class="error" role="alert">${esc(message)}</div>`; target.scrollIntoView({ block: 'nearest' }); }
   else toast(message);
@@ -61,15 +70,17 @@ function nodeLabel(node, definition, run=state.run) {
   if(node?.status === 'accepted' && node.decision) return decisionLabel(node.decision.outcome);
   const ready=node?.status==='ready' && launchReadiness(run,definition?.id);
   if(ready && run?.parameters?.conversation && (ready.status==='native' || ready.native_available))return 'Dans la conversation';
+  if(node?.status==='accepted') { if(node.decision?.outcome==='approve')return 'Approuvé par vous'; if(['contract-policy','validation-policy'].includes(node.receipt?.actor))return 'Produit · sorties vérifiées'; if(definition?.kind==='question')return 'Répondu'; if(definition?.kind==='input')return 'Liste confirmée'; if(definition?.kind==='foreach')return 'Éléments terminés'; }
   return ready ? ({configuration:'À configurer',native:'Dans le terminal',waiting:'En attente',unknown:'À vérifier',ready:'Prêt'}[ready.status] || states.ready) : states[node?.status || 'pending'];
 }
+function retryRunsAutomatically(node) { return (state.run.driver ?? state.run.definition.driver ?? 'automatic') === 'automatic' || !['agent','task','document','foreach'].includes(node.kind); }
 function nodeBadge(node, definition) { return `<span class="pill ${nodeFailed(node,definition) ? 'failed' : node?.status === 'accepted' && node.decision?.outcome === 'reject' ? 'decision-rejected' : node?.status === 'accepted' && node.decision && node.decision.outcome !== 'approve' ? 'decision-recorded' : esc(node?.status || 'pending')}">${esc(nodeLabel(node,definition))}</span>`; }
 function frozenRevision(run) { return run?.definition?.revision ? `Révision ${run.definition.revision} figée` : 'Version figée'; }
 function badge(status) { return `<span class="pill ${esc(status)}">${esc(states[status] || status)}</span>`; }
 function updateRunBanner() {
   const banner = document.querySelector('#run-banner');
   if (state.mode === 'run') renderExecutionOverview();
-  if (banner && state.run) banner.innerHTML = `${state.run.simulation ? '<strong>Simulation.</strong> Aucun modèle ni service métier appelé. ' : '<strong>Exécution réelle.</strong> '}${esc(runLabel(state.run))}. ${Object.values(state.run.nodes).filter(n => ['waiting', 'waiting_input', 'returned'].includes(n.status)).length} bloc(s) attendent votre intervention.`;
+  if (banner && state.run) banner.innerHTML = `${state.run.simulation ? '<strong>Simulation.</strong> Aucun modèle ni service métier appelé. ' : '<strong>Exécution réelle.</strong> '}`;
   const pause = document.querySelector('[data-action=pause]');
   if (pause && state.run && !['active','paused'].includes(state.run.status)) pause.remove();
   if(pause && state.run?.status==='paused' && !manuallyPaused(state.run))pause.hidden=true;
@@ -79,7 +90,7 @@ function updateRunBanner() {
   if (heading && state.mode === 'run') heading.textContent = `${frozenRevision(state.run)} · ${runLabel(state.run)}${state.conversation ? '' : ' · '+new Date(state.run.created * 1000).toLocaleString('fr-CH')}`;
 }
 function agentStopped() { return state.agentState === 'stopped' && state.agentConversation === state.conversation?.id; }
-function manuallyPaused(run) { return run?.status==='paused' && (!run.coordination_wait || run.coordination_hold); }
+function manuallyPaused(run) { return run?.status==='paused' && !run.parent_paused && (run.iteration_hold || (!run.iteration_wait && (!run.coordination_wait || run.coordination_hold))); }
 function currentWorkFinished() {
   if(state.run && !conversationOverviewActive())return ['completed','cancelled'].includes(state.run.status);
   const c=state.conversation;
@@ -188,7 +199,7 @@ function shell() {
   if (state.project?.id !== terminal.active) terminal.host.hidden = true;
 }
 
-function content(html) { const target = document.querySelector('#studio-content'); target.classList.toggle('execution-view', state.route === 'workflow' && state.mode === 'run' && !!state.run); target.classList.toggle('design-view', state.route === 'workflow' && state.mode === 'design'); target.innerHTML = html; }
+function content(html) { cancelConnection(false); const target = document.querySelector('#studio-content'); target.classList.toggle('execution-view', state.route === 'workflow' && state.mode === 'run' && !!state.run); target.classList.toggle('design-view', state.route === 'workflow' && state.mode === 'design'); target.innerHTML = html; }
 async function readActivity(offset=0) {
   const [overview,conversations]=await Promise.all([call('overview.get',{offset}),call('conversation.list')]);
   for(const run of overview.activity.runs) run.agentStopped=!!run.conversation && integration.terminalStatus?.(run.conversation)==='stopped';
@@ -204,13 +215,14 @@ function renderOverview() {
   if(!state.projects.length && !activity.workflow_count && !activity.runs.length && !state.pendingConversations?.length){renderProjects();return;}
   const needsAttention=r=>(!r.coordination_wait || r.coordination_hold) && ['active','paused'].includes(r.status) && (r.status==='paused' || (r.agentStopped && conversationReady(r)) || r.health?.status==='failed' || ['waiting','waiting_input','returned','blocked','failed'].includes(r.focus?.status) || Object.values(r.nodes || {}).some(n=>['waiting','waiting_input','returned','blocked'].includes(n.status)));
   const waiting=activity.runs.filter(needsAttention), other=activity.runs.filter(r=>!needsAttention(r));
-  content(`<section class="page activity-page"><div class="page-heading"><div><h1>Activité</h1><p>Votre travail en cours et ce qui attend votre intervention. ${activity.total || 0} demande${activity.total===1?'':'s'} au total.</p></div><div class="row">${button('new-request','Nouvelle demande','primary')}${button('refresh-overview','Actualiser')}</div></div>${pendingConversations()}${waiting.length ? `<section class="activity-section"><h2>À traiter</h2><p class="muted">${waiting.length} demande${waiting.length===1?'':'s'} affichée${waiting.length===1?'':'s'} à traiter sur cette page.</p>${activityTable(waiting)}</section>` : ''}<section class="activity-section"><div class="row between"><h2>${waiting.length?'Autres demandes':'Demandes récentes'}</h2><span class="muted">${other.length} demande${other.length===1?'':'s'} affichée${other.length===1?'':'s'}</span></div>${activityTable(other)}</section><div class="row">${activity.offset ? button('overview-page','Précédentes','',`data-offset="${Math.max(0,activity.offset-25)}"`) : ''}${activity.next!=null ? button('overview-page','Suivantes','',`data-offset="${activity.next}"`) : ''}</div></section>`);
+  content(`<section class="page activity-page"><div class="page-heading"><div><h1>Activité</h1><p>Votre travail en cours et ce qui attend votre intervention. ${activity.family_counts ? [[activity.family_counts.requests,'demande'],[activity.family_counts.tasks,'tâche'],[activity.family_counts.actions,'action facultative']].filter(([count],index)=>index===0 || count>0).map(([count,label])=>`${count} ${count===1?label:label==='action facultative'?'actions facultatives':label+'s'}`).join(' · ')+'.' : `${activity.total || 0} exécution${activity.total===1?'':'s'} au total.`}</p></div><div class="row">${button('new-request','Nouvelle demande','primary')}${button('refresh-overview','Actualiser')}</div></div>${pendingConversations()}${waiting.length ? `<section class="activity-section"><h2>À traiter</h2><p class="muted">${waiting.length} exécution${waiting.length===1?'':'s'} affichée${waiting.length===1?'':'s'} à traiter sur cette page.</p>${activityTable(waiting)}</section>` : ''}<section class="activity-section"><div class="row between"><h2>${waiting.length?'Autres exécutions':'Exécutions récentes'}</h2><span class="muted">${other.length} exécution${other.length===1?'':'s'} affichée${other.length===1?'':'s'}</span></div>${activityTable(other)}</section><div class="row">${activity.offset ? button('overview-page','Précédentes','',`data-offset="${Math.max(0,activity.offset-25)}"`) : ''}${activity.next!=null ? button('overview-page','Suivantes','',`data-offset="${activity.next}"`) : ''}</div></section>`);
 }
 function activityTable(runs) {
   if(!runs.length)return '<p class="muted activity-empty">Aucune demande à afficher. « Nouvelle demande » vous permet de choisir un workflow et de démarrer dans le terminal.</p>';
   return `<div class="activity-list">${runs.map(r=>{
     const native=!!r.conversation && conversationReady(r), action=conversationNextAction(r,r.agentStopped);
-    return `<button class="activity-row" data-action="${native && r.agentStopped?'activity-resume-agent':'activity-run'}" data-project="${r.project}" data-id="${r.id}"><span class="activity-identity"><strong>${esc((r.request || r.parameters?.request || r.definition.title).split('\n')[0])}</strong><small>${esc(r.project==='workspace'?'Sans projet':r.project_title)} · ${esc(r.definition.title)}${r.definition.revision ? ' · Rév. '+esc(r.definition.revision) : ''}${r.simulation?' · Simulation · '+new Date(r.created*1000).toLocaleString('fr-CH'):''}</small></span><span class="activity-state"><strong>${esc(native ? r.agentStopped?'Agent arrêté': 'À traiter dans la conversation' : runLabel(r))}</strong><small>${esc(native?action.label:r.focus?.title || '')}</small></span><span aria-hidden="true">→</span></button>`;
+    const hint=[native?action.label:'',r.focus?.title].filter(Boolean).join(' · ');
+    return `<button class="activity-row" data-action="${native && r.agentStopped?'activity-resume-agent':'activity-run'}" data-project="${r.project}" data-id="${r.id}"><span class="activity-identity"><strong>${esc(requestHeading(r.request, r.parameters?.request, r.definition.title))}</strong><small>${r.origin ? `${r.origin.kind==='task'?'Tâche':r.origin.kind==='action'?'Action facultative':'Notification'} de ${esc(r.origin.title)} · ` : 'Demande · '}${esc(r.project==='workspace'?'Sans projet':r.project_title)} · ${esc(r.definition.title)}${r.definition.revision ? ' · Rév. '+esc(r.definition.revision) : ''}${r.simulation?' · Simulation · '+new Date(r.created*1000).toLocaleString('fr-CH'):''}</small></span><span class="activity-state"><strong>${esc(native ? r.agentStopped?'Agent arrêté': 'À traiter dans la conversation' : runLabel(r))}</strong><small>${esc(hint)}</small></span><span aria-hidden="true">→</span></button>`;
   }).join('')}</div>`;
 }
 function renderProjects() {
@@ -230,10 +242,13 @@ function runTools() { const p=state.run_page || {};return `<form id="run-filters
 async function loadRunPage(offset=0) { const f=state.runFilters || {}; const page=await call('run.list',{project:state.project.id,offset,...f,...(f.simulation === '' || f.simulation === undefined ? {simulation:null} : {simulation:f.simulation === 'true'}),workflow:state.mode === 'history' ? state.graph.id : null});state.runs=page.items;state.run_page=page; if(state.route==='project')renderProject();else renderEditor(); }
 function runTable(runs) {
   if (!runs.length) return '<p class="muted">Aucune exécution lancée.</p>';
-  return `<table><thead><tr><th>Workflow</th><th>Contexte</th><th>État</th><th></th></tr></thead><tbody>${runs.map(r => `<tr><td>${esc((r.request || r.parameters?.request || r.definition.title).split('\n')[0])}<br><small>${esc(r.definition.title)}${r.definition.revision ? ' · Rév. '+esc(r.definition.revision) : ''} · ${new Date(r.created * 1000).toLocaleString('fr-CH')}</small></td><td>${r.simulation ? 'Simulation' : 'Exécution réelle'}</td><td>${esc(runLabel(r))}</td><td>${button('open-run', 'Consulter', '', `data-id="${r.id}"`)}${!['active','paused'].includes(r.status) ? button('archive-item',r.archived ? 'Restaurer' : 'Archiver','flat',`data-kind="run" data-id="${r.id}" data-archived="${!!r.archived}"`) : ''}</td></tr>`).join('')}</tbody></table>`;
+  return `<table class="run-table"><thead><tr><th>Workflow</th><th>Contexte</th><th>État</th><th></th></tr></thead><tbody>${runs.map(r => `<tr><td>${esc(requestHeading(r.request, r.parameters?.request, r.definition.title))}<br><small>${esc(r.definition.title)}${r.definition.revision ? ' · Rév. '+esc(r.definition.revision) : ''} · ${new Date(r.created * 1000).toLocaleString('fr-CH')}</small></td><td class="run-context">${r.simulation ? 'Simulation' : 'Exécution réelle'}</td><td class="run-status">${esc(runLabel(r))}</td><td class="run-actions">${button('open-run', 'Consulter', '', `data-id="${r.id}"`)}${!['active','paused'].includes(r.status) ? button('archive-item',r.archived ? 'Restaurer' : 'Archiver','flat',`data-kind="run" data-id="${r.id}" data-archived="${!!r.archived}"`) : ''}</td></tr>`).join('')}</tbody></table>`;
 }
 function runLabel(run) {
   if(run.status==='cancelled')return 'Annulée';
+  if(run.parent_paused)return 'Workflow parent suspendu';
+  if(run.iteration_hold)return 'Suspendue manuellement';
+  if(run.iteration_wait)return 'Attend ses dépendances';
   if (run.coordination_hold) return 'Suspendue manuellement';
   if (run.coordination_wait) return 'Attend une autre demande';
   if (run.status === 'active') {
@@ -242,8 +257,10 @@ function runLabel(run) {
       if (run.focus?.status==='waiting') return 'Décision attendue · échec à examiner';
       return 'Échec · reprise nécessaire';
     }
+    if(childActivityLabel(run))return childActivityLabel(run);
+    if(run.focus?.status==='ready' && conversationReady(run))return 'À traiter dans la conversation';
     if(run.focus?.status==='ready' && run.launch?.ready_count)return run.launch.label;
-    if (run.focus) return ({failed:'Échec · reprise nécessaire',blocked:'Bloquée',waiting_input:'Réponse attendue',waiting:'Décision attendue',returned:'Résultat à valider',running:'En cours',ready:'Prête'})[run.focus.status] || 'Attend une dépendance';
+    if (run.focus) return ({failed:'Échec · reprise nécessaire',blocked:'Bloquée',waiting_input:'Réponse attendue',waiting:'Décision attendue',returned:'Résultat à valider',running:'En cours',ready:'Prête',collecting:'Recueil ouvert',waiting_children:'Coordination en cours'})[run.focus.status] || 'Attend une dépendance';
     const nodes=Object.values(run.nodes || {});
     if(executionIssue(run))return 'Échec · reprise nécessaire';
     for(const [status,label] of [['blocked','Bloquée'],['waiting_input','Réponse attendue'],['waiting','Décision attendue'],['returned','Résultat à valider'],['running','En cours'],['ready','Prête']])if(run.counts?.[status] || nodes.some(n=>n.status===status))return label;
@@ -292,17 +309,20 @@ function renderEditor() {
   if (!graph) return;
   const running = ['run', 'document'].includes(state.mode) && state.run;
   const selectedRequest = running && state.conversation?.items.find(i=>i.run===state.run.id);
-  const heading = (selectedRequest?.request || (running && state.conversation && state.run.parameters?.request) || graph.title).split('\n')[0];
+  const heading = requestHeading(selectedRequest?.request, running && state.run.parameters?.request, graph.title);
   integration.context({ projects: state.projects, project: state.project, graph, run: state.run, conversation: state.conversation, route: state.route, mode: state.mode, activeRoute: state.project?.library ? 'global' : state.project?.scope === 'workspace' ? 'global' : 'projects', title: projectTitle(state.project) });
   const scroll = document.querySelector('.canvas-scroll');
   const position = scroll ? [scroll.scrollLeft, scroll.scrollTop] : [0, 0];
+  const focusedCard = document.activeElement?.closest('.node[data-id],.note-heading');
+  const previousFocus = focusedCard && { id: focusedCard.dataset.id, note: focusedCard.matches('.note-heading') };
   content(`<div class="workflow-heading ${running ? 'execution-heading' : ''}"><div><div class="eyebrow breadcrumb">${running ? 'Suivi · '+esc(graph.title) : esc(projectTitle(state.project))+' / Workflow'}</div><h1 title="${esc(heading)}">${esc(heading)}</h1><p title="${esc(graph.title)}">${selectedRequest ? esc(graph.title.split('—')[0].trim())+' · ' : ''}${running ? `${esc(frozenRevision(state.run))} · ${esc(runLabel(state.run))}${selectedRequest ? '' : ' · '+new Date(state.run.created * 1000).toLocaleString('fr-CH')}` : `Révision ${state.savedRevision || 'initiale'} · ${state.dirty ? 'Modifications en attente' : 'Enregistré'}`}</p></div><div class="row">${!running ? button('workflow-ai', 'Choisir l’IA') + '<details class="compact-menu design-menu"><summary>Options</summary><div>' + button('schedule', 'Planifier') + button('reuse-workflow', 'Réutiliser…') + button('export-workflow', 'Exporter…') + '</div></details>' + button('save', 'Enregistrer', '', state.dirty ? '' : 'disabled') + button('start-preview', 'Exécuter…', 'primary') : button('back-design', 'Revenir à l’éditeur') + (['active', 'paused'].includes(state.run.status) ? button('pause', state.run.status === 'paused' ? 'Reprendre' : 'Suspendre') + button('cancel', 'Annuler', 'flat') : '')}</div></div>
     ${launchReturnNotice()}${state.mode==='design' ? '<p class="muted editor-save-help" style="margin:0;padding:8px 20px">Enregistrez ici ; la navigation principale enregistre aussi vos modifications.</p>' + handoffNotice(graph) : ''}<div class="tabs" role="tablist" aria-label="Vues du workflow">${[['design', 'Éditeur'], ['run', 'Exécution'], ['history', 'Historique'], ['document', 'Rapport']].map(([mode, label]) => `<button role="tab" aria-selected="${state.mode === mode}" class="${state.mode === mode ? 'active' : ''}" data-action="mode" data-mode="${mode}" ${['run', 'document'].includes(mode) && !state.run ? 'disabled' : ''}>${label}</button>`).join('')}</div>
     ${state.mode === 'history' ? `<section class="page"><h2>Exécutions du workflow</h2>${runTools()}${runTable(state.runs.filter(r => r.original.id === state.graph.id))}</section>` : state.mode === 'document' ? '<section class="page"><div class="row between"><h2>Rapport d’exécution</h2><div class="row"><button data-action="export-work">Exporter le rapport dans le projet</button><button data-action="export-release" class="flat">Export de release…</button></div></div><article class="document" id="document-view">Chargement…</article></section>' : `
-    ${running && state.run.parameters?.source_run ? `<div class="notice">Notification liée à une question. ${button('notification-run', 'Revenir à l’exécution', '', `data-id="${esc(state.run.parameters.source_run)}"`)}</div>` : ''}${running ? `<div class="banner ${state.run.simulation ? 'amber' : ''}" id="run-banner">${state.run.simulation ? '<strong>Simulation.</strong> Aucun modèle ni service métier appelé. ' : '<strong>Exécution réelle.</strong> '}${Object.values(state.run.nodes).filter(n => n.status === 'waiting').length} décision(s) attendue(s) · un résultat remis reste à valider.</div>` : ''}
-    <div class="toolbar">${!running ? button('add-node', '+ Ajouter un bloc') + button('connect', 'Relier') + button('workflow-settings', 'Paramètres du workflow') + '<span class="separator"></span>' + button('undo', '↶', '', `aria-label="Annuler la modification" ${state.history.past.length ? '' : 'disabled'}`) + button('redo', '↷', '', `aria-label="Rétablir la modification" ${state.history.future.length ? '' : 'disabled'}`) : ''}<span class="fill"></span>${!running ? button('assistant', '✦ Assistant IA') : `<div class="execution-switch" role="group" aria-label="Affichage du suivi">${button('execution-graph', 'Graphe', state.reviewFocus ? '' : 'active', `aria-pressed="${!state.reviewFocus}"`)}${button('execution-details', 'Détail', state.reviewFocus ? 'active' : '', `aria-pressed="${!!state.reviewFocus}"`)}</div>` + button('timeline', 'Journal d’exécution')}${button('view', state.view === 'canvas' ? '☷ Liste' : '⑂ Graphe', '', 'aria-label="Changer la vue graphe ou liste"')}</div>
-    <div class="editor ${running && state.reviewFocus ? 'review-focus' : ''}"><div class="canvas-area">${state.view === 'canvas' ? '<div class="canvas-scroll" tabindex="0" aria-label="Graphe du workflow"><div class="canvas-size"><div class="canvas"><svg aria-hidden="true"></svg><div id="nodes"></div></div></div></div>' : '<div class="table-wrap" id="node-list"></div>'}<div class="canvas-footer"><span>${graph.nodes.length} bloc${graph.nodes.length > 1 ? 's' : ''} · ${graph.edges.length} lien${graph.edges.length > 1 ? 's' : ''}</span><div class="row">${button('zoom-out', '−', 'flat', 'aria-label="Réduire le graphe"')}<span id="zoom-label">${Math.round(state.zoom * 100)} %</span>${button('zoom-in', '+', 'flat', 'aria-label="Agrandir le graphe"')}${button('fit', 'Ajuster', 'flat')}${!running ? button('organize-graph', 'Réorganiser le graphe', 'flat', 'title="Disposer les branches selon leurs liens. Cette modification peut être annulée."') : ''}</div></div></div><aside class="inspector" aria-label="Inspecteur du bloc" id="inspector"></aside></div>`}`);
+    ${running ? `<div class="banner ${state.run.simulation ? 'amber' : ''}" id="run-banner">${state.run.simulation ? '<strong>Simulation.</strong> Aucun modèle ni service métier appelé. ' : '<strong>Exécution réelle.</strong> '}</div>` : ''}
+    <div class="toolbar">${!running ? button('add-node', '+ Ajouter un bloc') + button('connect', 'Relier') + button('add-note', '+ Note') + button('open-properties', 'Propriétés', '', state.selected ? '' : 'disabled') + (graph.schema === 1 ? button('convert-workflow', 'Données structurées…') : '') + button('workflow-settings', 'Paramètres du workflow') + '<span class="separator"></span>' + button('undo', '↶', '', `aria-label="Annuler la modification" ${state.history.past.length ? '' : 'disabled'}`) + button('redo', '↷', '', `aria-label="Rétablir la modification" ${state.history.future.length ? '' : 'disabled'}`) : ''}<span class="fill"></span>${!running ? button('assistant', '✦ Assistant IA') : `<div class="execution-switch" role="group" aria-label="Affichage du suivi">${button('execution-graph', 'Graphe', state.reviewFocus ? '' : 'active', `aria-pressed="${!state.reviewFocus}"`)}${button('execution-details', 'Détail', state.reviewFocus ? 'active' : '', `aria-pressed="${!!state.reviewFocus}"`)}</div>` + button('timeline', 'Journal d’exécution')}${button('view', state.view === 'canvas' ? '☷ Liste' : '⑂ Graphe', '', 'aria-label="Changer la vue graphe ou liste"')}</div>
+    <div class="editor ${running && state.reviewFocus ? 'review-focus' : ''}"><div class="canvas-area">${state.view === 'canvas' ? '<div class="canvas-scroll" tabindex="0" aria-label="Graphe du workflow"><div class="canvas-size"><div class="canvas"><div id="notes"></div><svg aria-hidden="true"></svg><div id="nodes"></div><div id="graph-ports"></div></div></div></div>' : '<div class="table-wrap" id="node-list"></div>'}<div class="canvas-footer"><span>${graph.nodes.length} bloc${graph.nodes.length > 1 ? 's' : ''} · ${graph.edges.length} lien${graph.edges.length > 1 ? 's' : ''}</span><div class="row">${button('zoom-out', '−', 'flat', 'aria-label="Réduire le graphe"')}<button id="zoom-label" class="flat" data-action="zoom-reset" title="Rétablir le zoom à 100 %">${Math.round(state.zoom * 100)} %</button>${button('zoom-in', '+', 'flat', 'aria-label="Agrandir le graphe"')}${button('fit', 'Ajuster', 'flat')}${!running ? button('organize-graph', 'Réorganiser le graphe', 'flat', 'title="Disposer les branches selon leurs liens. Cette modification peut être annulée."') : ''}</div></div></div><aside class="inspector" aria-label="Inspecteur du bloc" id="inspector"></aside></div>`}`);
   if (['design', 'run'].includes(state.mode)) { document.querySelector('.toolbar .fill').insertAdjacentHTML('beforebegin', (state.mode === 'run' && state.project.scope === 'workspace' ? button('handoff', 'Transférer vers un projet…') : '') + button('terminal', '›_ Terminal', '', `aria-label="${state.conversation ? 'Retrouver la conversation' : 'Ouvrir le terminal existant'}"`) + (state.mode === 'design' ? '<details class="workflow-options"><summary>Éditeur</summary><div>' + button('phases', 'Phases') + button('workflow-file', 'Fichier JSON du workflow…') + button('reload-file', 'Recharger et valider') + (localStorage.getItem(draftKey()+':previous') ? button('restore-previous-draft','Récupérer le brouillon précédent') : '') + '</div></details>' : button('phases', 'Phases'))); renderGraph(); renderInspector(); const nextScroll = document.querySelector('.canvas-scroll'); if (nextScroll) { nextScroll.scrollLeft = position[0]; nextScroll.scrollTop = position[1]; } }
+  if (previousFocus && state.mode === 'design') focusGraphItem(previousFocus.id, previousFocus.note);
   if (state.mode === 'document') safe(loadDocument);
   if (running && state.mode === 'run' && state.conversation) document.querySelector('.workflow-heading')?.after(conversationScopeSwitch());
   renderConversation();
@@ -356,7 +376,7 @@ function renderConversationReady() {
   const c=state.conversation,graph=c.definition;
   const submitted=state.initialRequests?.[c.id] || c.items?.[0]?.request;
   integration.context({projects:state.projects,project:state.project,graph,run:null,conversation:c,route:'workflow',mode:'run',activeRoute:state.project.scope==='workspace'?'global':'projects',title:projectTitle(state.project)});
-  content(`<section class="page conversation-ready"><div class="page-heading"><div><div class="eyebrow">Suivi du workflow</div><h1>${esc(graph.title)}</h1><p>Conversation ouverte · ${c.provider==='claude'?'Anthropic · Claude':'OpenAI · Codex'}</p></div></div><div class="notice"><h2>${submitted ? 'Votre demande est enregistrée' : agentStopped()?'Agent arrêté':'Prêt pour votre demande'}</h2><p>${submitted ? agentStopped()?'Le travail est conservé. Reprenez l’agent pour continuer ; vous n’avez pas à ressaisir votre demande.':'Votre demande a été transmise à la conversation. Son suivi apparaîtra ici ; vous n’avez pas à la ressaisir.' : agentStopped()?'Reprenez l’agent avant de décrire votre demande. Le terminal est actuellement au prompt du shell.':'Décrivez le travail à l’agent dans le terminal. Il créera les tâches et leur progression apparaîtra ici.'}</p>${submitted ? `<details><summary>Demande enregistrée</summary><p class="initial-request-copy">${esc(submitted)}</p></details>` : ''}${button(agentStopped()?'resume-agent':'conversation-terminal',agentStopped()?'Reprendre l’agent…':'Retrouver le terminal','primary')}</div><h2>Étapes du workflow</h2><ol class="ready-steps">${graph.nodes.map(n=>`<li><span aria-hidden="true">${symbols[n.kind]}</span><div><strong>${esc(n.title)}</strong><small>${esc(kinds[n.kind])} · ${portSummary(n)}</small></div></li>`).join('')}</ol><p class="muted">Aucune étape n’est en cours tant que l’agent n’a pas créé de demande.</p></section>`);
+  content(`<section class="page conversation-ready"><div class="page-heading"><div><div class="eyebrow">Suivi du workflow</div><h1>${esc(graph.title)}</h1><p>Conversation ouverte · ${c.provider==='claude'?'Anthropic · Claude':'OpenAI · Codex'}</p></div></div><div class="notice"><h2>${submitted ? 'Votre demande est enregistrée' : agentStopped()?'Agent arrêté':'Prêt pour votre demande'}</h2><p>${submitted ? agentStopped()?'Le travail est conservé. Reprenez l’agent pour continuer ; vous n’avez pas à ressaisir votre demande.':'Votre demande a été transmise à la conversation. Son suivi apparaîtra ici ; vous n’avez pas à la ressaisir.' : agentStopped()?'Reprenez l’agent avant de décrire votre demande. La conversation est conservée.':'Décrivez le travail à l’agent dans le terminal. Il créera les tâches et leur progression apparaîtra ici.'}</p>${submitted ? `<details><summary>Demande enregistrée</summary><p class="initial-request-copy">${esc(submitted)}</p></details>` : ''}${button(agentStopped()?'resume-agent':'conversation-terminal',agentStopped()?'Reprendre l’agent…':'Retrouver le terminal','primary')}</div><h2>Étapes du workflow</h2><ol class="ready-steps">${graph.nodes.map(n=>`<li><span aria-hidden="true">${symbols[n.kind]}</span><div><strong>${esc(n.title)}</strong><small>${esc(kinds[n.kind])} · ${portSummary(n)}</small></div></li>`).join('')}</ol><p class="muted">Aucune étape n’est en cours tant que l’agent n’a pas créé de demande.</p></section>`);
 }
 
 function dependencyItems() {
@@ -374,13 +394,16 @@ async function dependencyChoices(offset=0, query='') {
   const page=await call('conversation.get',{conversation:draft.conversation,offset,query});
   if(state.dependencyDraft!==draft || !document.querySelector('#dependency-choices'))return;
   draft.page=page;draft.query=query;
-  document.querySelector('#dependency-choices').innerHTML=page.items.map(i=>`<label><input type="checkbox" name="depends" value="${esc(i.id)}" ${draft.selected.has(i.id)?'checked':''} ${dependencyBlocked(i.execution)?'disabled':''}><span>${esc(i.request)}<small>${esc(state.projects.find(p=>p.id===i.project)?.title || 'Sans projet')} · ${esc(runLabel(i.execution))}${dependencyBlocked(i.execution)?' · ne peut pas débloquer la suite':''}</small></span></label>`).join('') || '<p>Aucune demande correspondante.</p>';
+  document.querySelector('#dependency-choices').innerHTML=page.items.map(i=>`<label><input type="checkbox" name="depends" value="${esc(i.id)}" ${draft.selected.has(i.id)?'checked':''} ${dependencyBlocked(i.execution)?'disabled':''}><span>${esc(i.request)}<small>${esc(state.projects.find(p=>p.id===i.project)?.title || 'Sans projet')} · ${esc(conversationReady(i.execution) ? 'À traiter dans la conversation' : runLabel(i.execution))}${dependencyBlocked(i.execution)?' · ne peut pas débloquer la suite':''}</small></span></label>`).join('') || '<p>Aucune demande correspondante.</p>';
   document.querySelector('#dependency-pages').innerHTML=(page.offset ? button('dependency-page','Précédentes','','data-offset="'+Math.max(0,page.offset-25)+'" type="button"'):'')+(page.next!=null ? button('dependency-page','Suivantes','','data-offset="'+page.next+'" type="button"'):'');
   document.querySelector('#dependency-count').textContent=`${draft.selected.size} demande(s) préalable(s) sélectionnée(s). La nouvelle demande attendra leur réussite à toutes.`;
 }
 async function addRequestDialog(replacement=false) {
-  state.dependencyDraft={conversation:state.conversation.id,selected:new Set(),query:''};
-  modal(replacement ? 'Créer une demande de remplacement' : 'Ajouter une demande', `<form id="conversation-add-form">${replacement?'<p>La demande précédente reste conservée avec ses résultats et son blocage. Décrivez la nouvelle demande et choisissez ses prérequis ; aucune validation passée ne sera transférée.</p>':''}<label>Demande<textarea name="request" required>${replacement?esc(state.run.parameters.request || ''):''}</textarea></label><label>Projet<select name="project">${options(state.conversation.projects.map(id=>[id,state.projects.find(p=>p.id===id)?.title || state.project.title]),state.project.id)}</select></label><fieldset class="dependency-picker"><legend>Demandes préalables (facultatif)</legend><p>Aucune sélection : la demande est indépendante. Sélectionnez plusieurs demandes pour attendre leur réussite à toutes.</p><div class="row"><label for="dependency-query" class="sr-only">Rechercher un prérequis</label><input id="dependency-query" type="search" placeholder="Rechercher une demande…">${button('dependency-search','Rechercher','','type="button"')}</div><div id="dependency-choices"></div><div id="dependency-pages" class="row"></div><p id="dependency-count" role="status"></p></fieldset><button class="primary">Enregistrer la demande</button></form>`);
+  const run=state.run, conversation=state.conversation, epoch=viewEpoch;
+  const request=replacement ? await executionRequest(run) : '';
+  if(epoch!==viewEpoch || state.conversation?.id!==conversation.id || (replacement && state.run?.id!==run.id))return;
+  state.dependencyDraft={conversation:state.conversation.id,selected:new Set(),query:'',replacement};
+  modal(replacement ? 'Créer une demande de remplacement' : 'Ajouter une demande', `<form id="conversation-add-form">${replacement?'<p>La demande précédente reste conservée avec ses résultats et son blocage. Décrivez la nouvelle demande et choisissez ses prérequis ; aucune validation passée ne sera transférée.</p>':''}<label>Demande<textarea name="request" required>${esc(request)}</textarea></label><label>Projet<select name="project">${options(state.conversation.projects.map(id=>[id,state.projects.find(p=>p.id===id)?.title || state.project.title]),state.project.id)}</select></label><fieldset class="dependency-picker"><legend>Demandes préalables (facultatif)</legend><p>Aucune sélection : la demande est indépendante. Sélectionnez plusieurs demandes pour attendre leur réussite à toutes.</p><div class="row"><label for="dependency-query" class="sr-only">Rechercher un prérequis</label><input id="dependency-query" type="search" placeholder="Rechercher une demande…">${button('dependency-search','Rechercher','','type="button"')}</div><div id="dependency-choices"></div><div id="dependency-pages" class="row"></div><p id="dependency-count" role="status"></p></fieldset><button class="primary">Enregistrer la demande</button></form>`);
   await dependencyChoices();
 }
 function completedResults() {
@@ -397,8 +420,21 @@ function attemptBudget(data, node) {
 function executionEmptyDetail() {
   if (!state.run) return '<p>Sélectionnez une étape du graphe.</p>';
   if (['completed','cancelled'].includes(state.run.status)) return `<h2>${esc(runLabel(state.run))}</h2><p>Le rapport réunit les résultats, décisions et preuves de cette exécution. Consultez les résultats validés ou le rapport complet ci-dessus.</p>`;
+  if(state.run.parent_paused || state.run.iteration_wait && !state.run.iteration_hold)return `<h2>${esc(runLabel(state.run))}</h2><p>${esc(state.run.coordination_issue || (state.run.parent_paused?'Le workflow parent est suspendu. Reprenez-le depuis son suivi pour continuer.':'Cette tâche attend ses prérequis. Le coordinateur la démarrera lorsqu’ils seront terminés. Consultez les tâches et leurs dépendances dans le workflow parent.'))}</p>${button('return-parent','Voir le workflow parent','primary')}`;
   if (state.run.coordination_wait) return `<h2>${blockedDependencies().length ? 'Bloquée par une demande préalable' : state.run.coordination_hold ? 'Exécution suspendue manuellement' : 'En attente d’autres demandes'}</h2><p>${blockedDependencies().length ? 'Une demande préalable est annulée ou terminée sans autoriser la suite. Cette exécution ne peut pas reprendre avec ces dépendances.' : state.run.coordination_hold ? 'La reprise reste à votre initiative. Les dépendances ci-dessous doivent aussi être satisfaites.' : 'Cette demande commencera après la réussite des demandes suivantes.'}</p><div class="dependency-list">${dependencyItems().map(i => `<button data-action="conversation-item" data-id="${esc(i.run)}"><strong>${esc(i.title)}</strong><span>${esc(i.execution ? runLabel(i.execution) : i.status || 'En attente')}</span><span aria-hidden="true">→</span></button>`).join('')}</div>${state.conversation?.items.find(i=>i.run===state.run.id)?.dependencies_truncated ? '<p class="muted">Les 25 premières dépendances sont affichées, en priorité celles qui restent à traiter. La liste complète reste consultable dans le terminal.</p>' : ''}<p class="muted">Vous pouvez consulter et traiter chaque attente sans changer les dépendances.</p>${blockedDependencies().length ? button('replace-dependent','Créer une demande de remplacement') : ''}${resumeRequestButton()}`;
   return `<h2>${esc(runLabel(state.run))}</h2><p>${state.run.status === 'paused' ? 'Cette demande a été suspendue explicitement. Sa reprise est indépendante de la relance de l’agent.' : 'Sélectionnez une étape dans le graphe pour consulter son résultat.'}</p>${resumeRequestButton()}`;
+}
+function runOrigin(run=state.run) {
+  if(run?.origin)return run.origin;
+  const ref=run?.parent || run?.associated_with;
+  if(ref)return {kind:run.parent?'task':'action',run:ref.run};
+  return run?.parameters?.source_run ? {kind:'notification',run:run.parameters.source_run} : null;
+}
+function originView(run) {
+  const origin=runOrigin(run);if(!origin)return '';
+  const kind=origin.kind==='task'?'Tâche':origin.kind==='action'?'Action facultative':'Notification';
+  const project=state.projects.find(project=>project.id===origin.project)?.title;
+  return `<div class="run-origin"><small>${kind}${origin.kind==='action'?` : ${esc(run.definition?.title || 'Complément au résultat')}`:''}${origin.title?` · ${esc(origin.title)}`:''}${project?` · ${esc(project)}`:''}</small>${button('return-parent',origin.kind==='action'?'← Revenir au résultat principal':origin.kind==='notification'?'Revenir à l’exécution':'← Revenir au workflow parent','flat')}</div>`;
 }
 function renderExecutionOverview() {
   let target = document.querySelector('#execution-overview');
@@ -409,8 +445,9 @@ function renderExecutionOverview() {
   const cause=issue?.reason || run.nodes[run.focus?.node]?.reason;
   const dependencies=run.coordination_wait ? dependencyItems() : [];
   const detail=dependencies.length ? 'Après : '+dependencies.map(i=>i.title).join(' · ') : cause || action.detail;
-  const html=`<div class="execution-state"><div><strong class="execution-label ${issue ? 'has-issue' : ''}">${esc(action.action ? agentStopped()?'Agent arrêté':'À traiter dans la conversation' : runLabel(run))}</strong><span class="execution-progress">${progress.finished} / ${progress.total} étapes${progress.detail ? `<small>${esc(progress.detail)}</small>` : ''}</span></div>${completedResults().length ? button('execution-results','Voir les résultats','primary') : ''}${manuallyPaused(run) ? resumeRequestButton() : state.reviewFocus && action.node && state.selected===action.node && !action.action ? '' : button(action.action || 'execution-next-action',esc(action.label),'primary')}</div><p class="execution-next" title="${esc(detail)}">${esc(detail)}</p>`;
-  if(target.innerHTML!==html)target.innerHTML=html;
+  const html=`<div class="execution-state"><div><strong class="execution-label ${issue ? 'has-issue' : ''}">${esc(action.action ? agentStopped()?'Agent arrêté':'À traiter dans la conversation' : runLabel(run))}</strong><span class="execution-progress">${progress.finished} / ${progress.total} étapes${progress.detail ? `<small>${esc(progress.detail)}</small>` : ''}</span></div>${completedResults().length ? button('execution-results','Voir les résultats','primary') : ''}${manuallyPaused(run) ? resumeRequestButton() : state.reviewFocus && action.node && state.selected===action.node && !action.action ? '' : button(action.action || 'execution-next-action',esc(action.label),'primary')}</div>${detail && detail!==runLabel(run) ? `<p class="execution-next" title="${esc(detail)}">${esc(detail)}</p>` : ''}`;
+  const extended = originView(run) + html + associatedView(run.associated);
+  if(target.dataset.content!==extended) { const opened=target.querySelector('.associated-panel details')?.open; target.innerHTML=extended;target.dataset.content=extended; if(opened)target.querySelector('.associated-panel details')?.setAttribute('open',''); }
 }
 function renderConversation() {
   const old=document.querySelector('#conversation-tray'), c=state.conversation;
@@ -446,10 +483,11 @@ async function launchConversation() {
 }
 
 function portSummary(node) {
+  if (currentGraph()?.schema === 2) return Object.entries(node.outputs || {}).map(([name, port]) => `${name} · ${portType(port) === 'array' ? 'liste' : 'un élément'}`).join(' ; ') || 'Aucune sortie';
   const inputs = Object.keys(node.inputs || {}).length, outputs = Object.keys(node.outputs || {}).length;
   return `${inputs} entrée${inputs > 1 ? 's' : ''} → ${outputs} sortie${outputs > 1 ? 's' : ''}`;
 }
-function renderGraph() {
+function renderGraph(positionsOnly = false) {
   updateRunBanner();
   const running = state.mode === 'run';
   let graph = document.querySelector('#node-list') ? currentGraph() : displayGraph(currentGraph(), state.collapsed, running ? state.run : null);
@@ -461,13 +499,32 @@ function renderGraph() {
   }
   const canvas = document.querySelector('.canvas'); if (!canvas) return;
   canvas.classList.toggle('execution-map',running);canvas.style.setProperty('--run-node-width',(graph.nodeWidth || 240)+'px');
-  const edgeLabels = Object.fromEntries(graph.edges.map(edge => [edge.id, [edge.outcome && edge.outcome !== 'done' ? decisionLabel(edge.outcome) : '', Object.keys(edge.mapping || {}).length ? `${Object.keys(edge.mapping).length} donnée${Object.keys(edge.mapping).length > 1 ? 's' : ''}` : ''].filter(Boolean).join(' · ')]));
+  const edgeLabels = Object.fromEntries(graph.edges.map(edge => [edge.id, [edge.outcome && edge.outcome !== 'done' ? decisionLabel(edge.outcome) : '', Object.keys(edge.mapping || {}).length ? graph.schema === 2 ? Object.keys(edge.mapping).map(name => `${name} · ${portType(graph.nodes.find(n => n.id === edge.from)?.outputs?.[name]) === 'array' ? 'liste' : 'un élément'}`).join(' · ') : `${Object.keys(edge.mapping).length} donnée${Object.keys(edge.mapping).length > 1 ? 's' : ''}` : ''].filter(Boolean).join(' · ')]));
   const nodeContainer = document.querySelector('#nodes');
-  nodeContainer.innerHTML = graph.nodes.map((n, i) => {
+  if (!positionsOnly) nodeContainer.innerHTML = graph.nodes.map((n, i) => {
     const p = nodePosition(n, i), status = n.kind === 'group' ? n.status : running ? state.run.nodes[n.id]?.status || 'pending' : 'pending';
     if (n.kind === 'group') return `<button class="node" data-action="expand-phase" data-phase="${esc(n.phase)}" data-group="${esc(n.phase)}" data-status="${status}" style="left:${p.x}px;top:${p.y}px" aria-label="Déplier la phase ${esc(n.title)}"><span class="node-main"><span class="icon">⊞</span><span><span class="mission" title="${esc(n.title)}">${esc(n.title)}</span><span class="kind">${n.members.length} étapes · déplier</span></span></span><span class="node-footer">${badge(status)}</span></button>`;
-    return `<button class="node ${state.selected === n.id ? 'selected' : ''}" data-action="select-node" data-id="${n.id}" data-status="${status}" data-failed="${running && nodeFailed(state.run.nodes[n.id], n) ? 'true' : 'false'}" style="left:${p.x}px;top:${p.y}px" aria-label="${esc(n.title)} · ${running ? nodeLabel(state.run.nodes[n.id], n) : kinds[n.kind]}"><span class="port in" aria-hidden="true"></span><span class="port out" aria-hidden="true"></span>${!running ? '<span class="drag-handle" aria-hidden="true">⋮⋮ Déplacer</span>' : ''}<span class="node-main"><span class="icon" aria-hidden="true">${symbols[n.kind]}</span><span><span class="mission" title="${esc(n.title)}">${esc(n.title)}</span><span class="kind">${esc(n.phase || kinds[n.kind])}</span></span></span><span class="node-footer">${running ? nodeBadge(state.run.nodes[n.id], n) : n.phase ? `<span>${esc(kinds[n.kind])}</span>` : ''}<span title="${esc('Entrées : ' + (Object.keys(n.inputs || {}).join(', ') || 'aucune') + ' · Sorties : ' + (Object.keys(n.outputs || {}).join(', ') || 'aucune'))}">${n.kind === 'decision' ? 'Vous' : portSummary(n)}</span></span></button>`;
+    const card = `<button class="node ${state.selected === n.id ? 'selected' : ''}" data-action="select-node" data-id="${n.id}" data-status="${status}" data-failed="${running && nodeFailed(state.run.nodes[n.id], n) ? 'true' : 'false'}" style="left:${p.x}px;top:${p.y}px" aria-label="${esc(n.title)} · ${running ? nodeLabel(state.run.nodes[n.id], n) : kinds[n.kind]}">${running ? '<span class="port in" aria-hidden="true"></span><span class="port out" aria-hidden="true"></span>' : ''}<span class="node-main"><span class="icon" aria-hidden="true">${symbols[n.kind]}</span><span><span class="mission" title="${esc(n.title)}">${esc(n.title)}</span><span class="kind">${esc(n.phase || kinds[n.kind])}</span></span></span><span class="node-footer">${running ? nodeBadge(state.run.nodes[n.id], n) : n.phase ? `<span>${esc(kinds[n.kind])}</span>` : ''}<span title="${esc('Entrées : ' + (Object.keys(n.inputs || {}).join(', ') || 'aucune') + ' · Sorties : ' + (Object.keys(n.outputs || {}).join(', ') || 'aucune'))}">${n.kind === 'decision' ? 'Vous' : portSummary(n)}</span></span></button>`;
+    const live = running ? runtimeCardContent(n, state.run, state.projects) : '';
+    if (!live) return card;
+    const opening = card.indexOf('>');
+    return card.slice(0,opening).replace('<button','<article').replace('class="node ', 'class="node execution-live-node ') + '><button type="button" class="execution-node-summary" data-action="select-node" data-id="'+esc(n.id)+'" aria-label="'+esc(n.title)+'">' + card.slice(opening+1,-9) + '</button>' + live + '</article>';
   }).join('');
+  if (positionsOnly) for (const [i, node] of graph.nodes.entries()) {
+    const card = nodeContainer.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`), p = nodePosition(node, i);
+    if (card) { card.style.left = p.x + 'px'; card.style.top = p.y + 'px'; }
+  }
+  renderEditorNotes(graph, running, positionsOnly);
+  const ports = document.querySelector('#graph-ports');
+  if (!positionsOnly && ports) ports.innerHTML = running ? '' : graph.nodes.filter(n => n.kind !== 'group').map(n => ['in', 'out'].map(direction => `<button type="button" class="graph-port ${direction}" data-action="connection-port" data-id="${esc(n.id)}" data-direction="${direction}" aria-label="${direction === 'out' ? 'Relier depuis' : 'Relier vers'} ${esc(n.title)}" title="${direction === 'out' ? 'Sortie : cliquer puis choisir une entrée, ou faire glisser' : 'Entrée : cible de liaison'}"><span></span></button>`).join('')).join('');
+  if (!running && ports) for (const [i, node] of graph.nodes.entries()) {
+    const p = nodePosition(node, i);
+    for (const port of ports.querySelectorAll(`[data-id="${CSS.escape(node.id)}"]`)) {
+      port.style.left = (p.x + (port.dataset.direction === 'out' ? 240 : 0)) + 'px'; port.style.top = (p.y + 58) + 'px';
+      port.classList.toggle('link-origin', state.connectSource?.id === node.id && state.connectSource.direction === port.dataset.direction);
+    }
+  }
+  canvas.style.setProperty('--graph-zoom', state.zoom);
   // Measure natural card heights before routing: long titles and status badges
   // reserve space rather than being clipped or overflowing their footer.
   const heights = Object.fromEntries([...nodeContainer.querySelectorAll('.node')].map((node, i) => [graph.nodes[i].id, node.offsetHeight]));
@@ -476,8 +533,9 @@ function renderGraph() {
     graph.nodes.forEach((node, i) => { const card = nodeContainer.children[i]; card.style.left = node.position.x + 'px'; card.style.top = node.position.y + 'px'; });
   }
   const routes = running ? graph.routes : designRoutes(graph, heights, edgeLabels);
-  const width = Math.max(running ? graph.layoutWidth : 900, ...graph.nodes.map((node, i) => nodePosition(node, i).x + (running ? graph.nodeWidth : 240) + 24), ...routes.map(route => Math.max(route.label.x + route.label.width, ...route.points.map(point => point[0])) + 24));
-  const height = Math.max(running ? graph.layoutHeight : 500, ...graph.nodes.map((node, i) => nodePosition(node, i).y + (heights[node.id] || 132) + 24), ...routes.map(route => Math.max(route.label.y + route.label.height, ...route.points.map(point => point[1])) + 24));
+  const notes = running ? [] : graph.layout?.notes || [];
+  const width = Math.max(running ? graph.layoutWidth : 900, ...notes.map(n => n.position.x + (n.size?.width || 280) + 24), ...graph.nodes.map((node, i) => nodePosition(node, i).x + (running ? graph.nodeWidth : 240) + 24), ...routes.map(route => Math.max(route.label.x + route.label.width, ...route.points.map(point => point[0])) + 24));
+  const height = Math.max(running ? graph.layoutHeight : 500, ...notes.map(n => n.position.y + (n.size?.height || 180) + 24), ...graph.nodes.map((node, i) => nodePosition(node, i).y + (heights[node.id] || 132) + 24), ...routes.map(route => Math.max(route.label.y + route.label.height, ...route.points.map(point => point[1])) + 24));
   canvas.style.width = width + 'px'; canvas.style.height = height + 'px'; canvas.style.transform = `scale(${state.zoom})`;
   document.querySelector('.canvas-size').style.width = width * state.zoom + 'px'; document.querySelector('.canvas-size').style.height = height * state.zoom + 'px';
   const svg = canvas.querySelector('svg'); svg.setAttribute('width', width); svg.setAttribute('height', height);
@@ -506,7 +564,7 @@ function renderGraph() {
 }
 
 function executionTrail(node) {
-  const graph=currentGraph(),label=outcome=>({done:'',approve:'Si autorisé',reject:'Si refusé',pass:'Si conforme',fail:'Si non conforme'}[outcome] ?? 'Si : '+outcome);
+  const graph=currentGraph(),label=outcome=>({done:'',approve:'Si autorisé',reject:'Si refusé',pass:'Si conforme',fail:'Si non conforme'}[outcome] ?? 'Si : '+decisionLabel(outcome));
   const neighbours=(direction)=>graph.edges.filter(e=>e[direction==='before'?'to':'from']===node.id).map(e=>({node:graph.nodes.find(n=>n.id===e[direction==='before'?'from':'to']),outcome:e.outcome || 'done'})).filter(e=>e.node);
   const previous=neighbours('before'),next=neighbours('after');
   const group=(entries,title,current=false)=>`<div class="step-trail-group" aria-label="${title}">${entries.map(entry=>`<button data-action="select-node" data-id="${entry.node.id}" class="${entry.outcome==='done'?'edge-default':''}" ${current?'aria-current="step"':''}><small>${current?'Étape sélectionnée':esc(label(entry.outcome))}</small><strong>${esc(entry.node.title)}</strong></button>`).join('')}</div>`;
@@ -514,7 +572,7 @@ function executionTrail(node) {
 }
 function interactionDraftKey(form) {
   const node=state.run?.nodes[state.selected];
-  if(!node || !['question-form','decision-form','receipt-form'].includes(form.id))return null;
+  if(!node || !['question-form','decision-form','receipt-form','collection-form'].includes(form.id))return null;
   const attempt=node.question?.id || node.nonce || node.started || '';
   return `tricorder-interaction:${state.run.id}:${state.selected}:${form.id}:${attempt}`;
 }
@@ -532,10 +590,11 @@ function renderInspector() {
   target.classList.remove('interaction-panel');
   if (state.mode === 'run' && state.run?.coordination_wait) { target.innerHTML=executionEmptyDetail(); target.dataset.node='dependencies'; return; }
   const graph = currentGraph(); const node = graph.nodes.find(n => n.id === state.selected);
-  document.querySelector('#studio-content').classList.toggle('properties-open', state.mode === 'design' && !!node);
+  document.querySelector('#studio-content').classList.toggle('properties-open', state.mode === 'design' && !!node && state.propertiesOpen !== false);
   const opened = target.dataset.node === node?.id ? [...target.querySelectorAll('details[open] > summary')].map(s => s.textContent) : [];
+  if (state.mode === 'design' && state.propertiesOpen === false) { target.innerHTML = ''; return; }
   if (!node) { target.innerHTML = state.mode === 'run' ? executionEmptyDetail() : ''; return; }
-  const properties = `${state.mode==='run' ? executionTrail(node) : ''}${button('close-inspector', '×', 'flat inspector-close','aria-label="Fermer les propriétés"')}<div class="eyebrow">${esc(node.route_output ? 'Condition évaluée par un agent' : kinds[node.kind])}</div><h2>${esc(node.title)}</h2>${state.mode === 'run' && state.run ? runInspector(node) : designInspector(node)}`;
+  const properties = `${state.mode==='run' ? executionTrail(node) : ''}${button('close-inspector', '×', 'flat inspector-close','aria-label="Fermer les propriétés"')}<div class="eyebrow">${esc(node.route_output ? 'Condition évaluée par un agent' : kinds[node.kind])}</div><h2>${esc(node.title)}</h2>${state.mode === 'run' && state.run ? (node.kind==='input'?collectionRecoveryView(node):'')+runInspector(node) : designInspector(node)}`;
   target.innerHTML = state.mode === 'design' ? `<header class="design-inspector-header">${button('close-inspector', '← Retour au graphe', '', 'type="button" aria-label="Retour au graphe"')}<strong>${esc(node.title)}</strong></header><div class="design-inspector-scroll">${properties}</div><footer class="design-inspector-actions"><button type="submit" form="node-form" class="primary">Appliquer au bloc</button></footer>` : properties;
   const fixedActions=state.mode==='run' && target.querySelector('.interaction-actions');
   target.classList.toggle('interaction-panel', !!fixedActions);
@@ -547,7 +606,7 @@ function renderInspector() {
     const footer=document.createElement('footer');footer.className='interaction-footer';footer.append(fixedActions);target.append(footer);
   }
   target.dataset.node = node.id;restoreInteractionDraft(target);
-  const interaction = target.querySelector('#question-form,#decision-form,#receipt-form');
+  const interaction = target.querySelector('#question-form,#decision-form,#receipt-form,#collection-form');
   target.dataset.interaction = interaction ? interactionDraftKey(interaction) : '';
   if(interaction && pendingInteractions.has(target.dataset.interaction))for(const field of interaction.elements)field.disabled=true;
   if(interaction && oldIdentity && oldIdentity===target.dataset.interaction) for(const field of interaction.querySelectorAll('input[name],textarea[name],select[name]')) {
@@ -571,14 +630,14 @@ function applyNodeForm(form, render = true) {
   const bindings = form.querySelector('#node-capabilities') ? new FormData(form).getAll('capabilities').filter(Boolean).map(v => JSON.parse(v)) : null;
   const g = clone(state.graph);
 
-  const n = g.nodes.find(n => n.id === state.selected);
+  const n = g.nodes.find(n => n.id === state.selected), previousCollection = n.collection;
   if (bindings) n.capabilities = bindings;
   if (['command', 'document'].includes(n.kind)) n.reuse = data.reuse === 'on';
   for (const [key, value] of Object.entries(data)) {
     if (['criteria', 'options', 'argv', 'resources', 'required_capabilities'].includes(key)) n[key] = value.split('\n').map(s => s.trim()).filter(Boolean);
     else if (['inputs', 'outputs', 'operation', 'input_mapping', 'output_mapping'].includes(key)) n[key] = JSON.parse(value);
-    else if (['max_attempts', 'timeout'].includes(key)) n[key] = Number(value);
-    else if (['capabilities', 'reuse', 'link_operation', 'candidate_check'].includes(key) || key.startsWith('op_')) continue;
+    else if (['max_attempts', 'timeout', 'concurrency'].includes(key)) n[key] = Number(value);
+    else if (['capabilities', 'reuse', 'link_operation', 'candidate_check', 'condition_type'].includes(key) || key.startsWith('op_')) continue;
     else if (['environment', 'effort'].includes(key) && !value) delete n[key];
     else if (!['x', 'y'].includes(key)) n[key] = value;
   }
@@ -600,6 +659,7 @@ function applyNodeForm(form, render = true) {
   if (!n.route_output) delete n.route_output;
   if (n.operation && !Object.keys(n.operation).length) delete n.operation;
   if (n.execution_mode === 'edit') n.outputs = { ...(n.outputs || {}), candidate: 'object' };
+  if (n.kind === 'foreach') { const root = n.collection.split('.')[0], previousRoot = previousCollection?.split('.')[0]; if(n.collection!==previousCollection && root!==previousRoot){ n.inputs ||= {}; delete n.inputs[previousRoot]; n.inputs[root] ||= root === 'plan' ? {type:'object',required:true} : collectionPort(); } n.criteria = []; }
   n.position = { x: Number(data.x), y: Number(data.y) };
 
   state.history.push(state.graph); state.graph = g; state.dirty = true;
@@ -613,7 +673,7 @@ function flushNodeForm() {
 }
 
 function portEditor(node) {
-  return `<fieldset class="ports"><legend>Entrées et sorties</legend>${[['inputs','Entrées'],['outputs','Sorties']].map(([direction,label]) => `<section class="port-section"><strong>${label}</strong><ul>${Object.entries(node[direction] || {}).map(([name,type]) => `<li><code>${esc(name)}</code> · ${esc(({string:'Texte',number:'Nombre',boolean:'Oui / Non',object:'Objet',array:'Liste'})[type] || type)} ${button('remove-port', 'Retirer', 'flat', `data-direction="${direction}" data-port="${esc(name)}"`)}</li>`).join('') || '<li>Aucune donnée déclarée</li>'}</ul>${button('add-port', 'Ajouter une ' + (direction === 'inputs' ? 'entrée' : 'sortie'), 'flat', `data-direction="${direction}"`)}</section>`).join('')}</fieldset>`;
+  return `<fieldset class="ports"><legend>Entrées et sorties</legend>${[['inputs','Entrées'],['outputs','Sorties']].map(([direction,label]) => `<section class="port-section"><strong>${label}</strong><ul>${Object.entries(node[direction] || {}).map(([name,port]) => `<li><strong>${esc(name)}</strong><span>${esc(portDescription(port,direction))}</span><div>${button('edit-port','Modifier','flat',`data-direction="${direction}" data-port="${esc(name)}"`)}${button('remove-port','Retirer','flat',`data-direction="${direction}" data-port="${esc(name)}"`)}</div></li>`).join('') || '<li>Aucune donnée déclarée</li>'}</ul>${button('add-port','Ajouter une '+(direction === 'inputs' ? 'entrée' : 'sortie'),'flat',`data-direction="${direction}"`)}</section>`).join('')}</fieldset>`;
 }
 function designGuidance(graph = state.graph, selected = null) {
   const warnings = designWarnings(graph).filter(item => !selected || item.node === selected);
@@ -622,7 +682,8 @@ function designGuidance(graph = state.graph, selected = null) {
 }
 function simulationForm(node) {
   const types = { string: 'Texte', boolean: 'Oui / Non', number: 'Nombre', object: 'Objet JSON', array: 'Liste JSON', any: 'Valeur JSON' };
-  const fields = Object.entries(node.outputs || {}).map(([name, type], index) => {
+  const fields = Object.entries(node.outputs || {}).map(([name, specification], index) => {
+    const type = portType(specification);
     const custom = Object.hasOwn(node.sample_outputs || {}, name), value = node.sample_outputs?.[name];
     const id = `sample-${index}`, disabled = custom ? '' : 'disabled';
     const invalidBoolean = type === 'boolean' && custom && typeof value !== 'boolean';
@@ -630,7 +691,7 @@ function simulationForm(node) {
     if (type === 'boolean') field = `<select id="${id}" ${disabled}>${invalidBoolean ? `<option value="" selected>Valeur incompatible : ${esc(JSON.stringify(value))}</option>` : ''}${options([['true','Oui (true)'],['false','Non (false)']], custom && !invalidBoolean ? String(value) : invalidBoolean ? '' : 'true')}</select>`;
     else if (type === 'number') field = `<input id="${id}" inputmode="decimal" ${disabled} value="${esc(custom ? String(value) : '0')}">`;
     else field = `<textarea id="${id}" rows="${['object','array','any'].includes(type) ? 4 : 2}" ${disabled}>${esc(custom ? typeof value === 'string' && type === 'string' ? value : JSON.stringify(value, null, 2) : type === 'object' ? '{}' : type === 'array' ? '[]' : type === 'any' ? 'null' : '')}</textarea>`;
-    return `<fieldset data-sample-port="${esc(name)}"><legend>${esc(name)} · ${types[type] || esc(type)}</legend><label><input type="checkbox" data-sample-custom ${custom ? 'checked' : ''}>Définir une valeur pour cet essai</label><div data-sample-value ${custom ? '' : 'hidden'}><label for="${id}">Valeur simulée</label>${field}${invalidBoolean ? '<p class="error" data-sample-error>L’ancienne valeur n’est pas un booléen. Corrigez-la ou décochez la valeur personnalisée.</p>' : ''}</div><small data-sample-automatic ${custom ? 'hidden' : ''}>Exemple automatique du type attendu.</small></fieldset>`;
+    return `<fieldset data-sample-port="${esc(name)}"><legend>${esc(name)} · ${esc(portDescription(specification))}</legend><label><input type="checkbox" data-sample-custom ${custom ? 'checked' : ''}>Définir une valeur pour cet essai</label><div data-sample-value ${custom ? '' : 'hidden'}><label for="${id}">Valeur simulée</label>${field}${invalidBoolean ? '<p class="error" data-sample-error>L’ancienne valeur n’est pas un booléen. Corrigez-la ou décochez la valeur personnalisée.</p>' : ''}</div><small data-sample-automatic ${custom ? 'hidden' : ''}>Exemple automatique du type attendu.</small></fieldset>`;
   }).join('');
   return `<form id="simulation-form"><p>Ces données servent uniquement à simuler le parcours. Elles ne prouvent aucun travail réel et n’autorisent aucune opération.</p><p>Sans valeur personnalisée, Tricorder génère un exemple du type attendu. Personnalisez une sortie pour essayer une autre branche.</p>${fields || '<p>Aucune sortie déclarée. Ajoutez une sortie dans les propriétés du bloc pour définir ses données de simulation.</p>'}<div class="modal-actions"><button type="submit" class="primary">Appliquer les données de simulation</button></div></form>`;
 }
@@ -642,20 +703,268 @@ function confirmDesignRemoval(kind, id) {
   state.designRemoval = { kind, id };
   modal(kind === 'node' ? 'Supprimer ce bloc' : 'Supprimer ce lien', `<p>${kind === 'node' ? `Le bloc « ${esc(node.title)} » sera supprimé avec ${removed.length} lien${removed.length > 1 ? 's' : ''}.` : 'Ce lien sera supprimé.'}</p>${removed.length ? `<ul>${removed.map(edge => `<li>${esc(label(edge.from))} → ${esc(label(edge.to))}${Object.keys(edge.mapping || {}).length ? ` · données : ${esc(Object.values(edge.mapping).join(', '))}` : ''}</li>`).join('')}</ul><p>Les étapes restantes pourraient démarrer indépendamment ou ne plus recevoir leurs données. Vérifiez leurs liens avant le prochain lancement.</p>` : ''}<p class="muted">Vous pouvez annuler cette modification dans l’éditeur. Les exécutions déjà lancées gardent leur version.</p>`, button('close-modal', 'Conserver') + button('confirm-design-removal', kind === 'node' ? 'Supprimer le bloc et ses liens' : 'Supprimer le lien', 'danger'));
 }
-function refreshConnectionForm() {
+function refreshConnectionForm(initialMapping = null) {
   const form = document.querySelector('#connect-form'); if (!form) return;
   const source = state.graph.nodes.find(n => n.id === form.elements.from.value);
   const target = state.graph.nodes.find(n => n.id === form.elements.to.value);
   const outcomes = connectionOutcomes(source), selectedOutcome = form.elements.outcome.value;
   form.elements.outcome.innerHTML = options(outcomes.map(v => [v, v === 'done' ? 'Travail terminé' : decisionLabel(v)]), outcomes.includes(selectedOutcome) ? selectedOutcome : outcomes[0]);
-  form.elements.output.innerHTML = options([['','Aucune donnée supplémentaire'], ...Object.keys(source.outputs || {}).map(k => [k,k])]);
-  form.elements.input.innerHTML = options([['','Choisir une entrée'], ...Object.keys(target.inputs || {}).map(k => [k,k])]);
-  const mapping = Object.fromEntries(Object.entries(source.outputs || {}).filter(([key,type]) => target.inputs?.[key] === type).map(([key]) => [key,key]));
+  form.elements.output.innerHTML = options([['','Aucune donnée supplémentaire'], ...Object.keys(source.outputs || {}).map(k => [k,`${k} — ${portDescription(source.outputs[k])}`])]);
+  form.elements.input.innerHTML = options([['','Choisir une entrée'], ...Object.keys(target.inputs || {}).map(k => [k,`${k} — ${portDescription(target.inputs[k],'inputs')}`])]);
+  const previous = initialMapping || JSON.parse(form.elements.mapping.value || '{}');
+  const retained = Object.fromEntries(Object.entries(previous).filter(([from, to]) => source.outputs?.[from] && !incompatibleReason(source.outputs[from], target.inputs[to], state.graph.schema)));
+  const mapping = initialMapping !== null ? initialMapping : Object.keys(retained).length ? retained : Object.fromEntries(Object.entries(source.outputs || {}).filter(([key,type]) => target.inputs?.[key] && !incompatibleReason(type, target.inputs[key], state.graph.schema)).map(([key]) => [key,key]));
   const orderOnly = form.elements.order_only.checked;
   for (const name of ['output','input','mapping']) form.elements[name].disabled = orderOnly;
   form.elements.mapping.value = JSON.stringify(orderOnly ? {} : mapping);
   if (orderOnly) { form.querySelector('.mapping-summary').textContent = 'Ordre d’exécution uniquement : aucune donnée ne sera transmise.'; return; }
   form.querySelector('.mapping-summary').textContent = Object.keys(mapping).length ? 'Données reliées par leur nom : ' + Object.keys(mapping).join(', ') : 'Choisissez les données à transmettre, ou reliez seulement les étapes.';
+}
+
+function openConnection({ from, to, edge } = {}) {
+  if (state.mode !== 'design') return;
+  if (state.graph.nodes.length < 2) { toast('Ajoutez un deuxième bloc pour créer une liaison.'); return; }
+  cancelConnection(false);
+  from ||= edge?.from || state.selected || state.graph.nodes[0].id;
+  to ||= edge?.to || state.graph.nodes.find(n => n.id !== from)?.id;
+  modal(edge ? 'Modifier le lien' : 'Relier deux étapes', `<form id="connect-form"><input type="hidden" name="edge_id" value="${esc(edge?.id || '')}"><label for="edge-from">Depuis</label><select id="edge-from" name="from">${options(state.graph.nodes.map(n => [n.id,n.title]), from)}</select><label for="edge-outcome">Après l’issue</label><select id="edge-outcome" name="outcome"></select><label for="edge-to">Vers</label><select id="edge-to" name="to">${options(state.graph.nodes.map(n => [n.id,n.title]), to)}</select><p class="mapping-summary" role="status"></p><label><input type="checkbox" name="order_only" ${edge && !Object.keys(edge.mapping || {}).length ? 'checked' : ''}>Ne transmettre aucune donnée (ordre d’exécution uniquement)</label><label>Sortie à transmettre<select name="output"></select></label><label>Entrée destinataire<select name="input"></select></label><details><summary>Configuration des échanges</summary><label for="edge-mapping">Données transmises (JSON : sortie → entrée)</label><textarea id="edge-mapping" name="mapping">{}</textarea></details><div class="modal-actions"><button class="primary">${edge ? 'Enregistrer le lien' : 'Créer le lien'}</button></div></form>`, edge ? button('close-modal', 'Conserver le lien') + button('delete-edge', 'Retirer ce lien…', 'danger', `data-id="${esc(edge.id)}"`) : '');
+  refreshConnectionForm(edge?.mapping || null);
+  if (edge) document.querySelector('#edge-outcome').value = edge.outcome || 'done';
+}
+function viewportGeometry() {
+  const viewport = document.querySelector('.canvas-scroll');
+  return viewport ? { left: viewport.scrollLeft, top: viewport.scrollTop, width: viewport.clientWidth, height: viewport.clientHeight } : { left: 0, top: 0, width: 900, height: 500 };
+}
+function newItemPosition(size) {
+  const boxes = state.graph.nodes.map((node, i) => ({ ...nodePosition(node, i), width: 240, height: document.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`)?.offsetHeight || 132, id: node.id }));
+  const notes = (state.graph.layout?.notes || []).map(note => ({ ...note.position, width: note.size?.width || 280, height: note.size?.height || 180 }));
+  const routes=size ? [...document.querySelectorAll('.edge')].flatMap(path=>{const points=[...path.getAttribute('d').matchAll(/[ML]([\d.-]+),([\d.-]+)/g)].map(match=>[Number(match[1]),Number(match[2])]);return points.slice(1).map((point,i)=>({x:Math.min(point[0],points[i][0]),y:Math.min(point[1],points[i][1]),width:Math.max(1,Math.abs(point[0]-points[i][0])),height:Math.max(1,Math.abs(point[1]-points[i][1]))}));}) : [];
+  const labels=size ? [...document.querySelectorAll('.edge-label-background')].map(element=>{const box=element.getBBox();return {x:box.x,y:box.y,width:box.width,height:box.height};}) : [];
+  return placement(viewportGeometry(), state.zoom, boxes.find(box => box.id === state.selected), [...boxes, ...notes,...routes,...labels], size);
+}
+function focusGraphItem(id, note = false, reveal = false) {
+  const item = document.querySelector(note ? `.graph-note[data-note-id="${CSS.escape(id)}"] .note-heading` : `.node[data-id="${CSS.escape(id)}"]`);
+  if (reveal && item) {
+    const viewport = document.querySelector('.canvas-scroll'), card = note ? item.closest('.graph-note') : item;
+    if (viewport) {
+      const x = card.offsetLeft * state.zoom, y = card.offsetTop * state.zoom, width = card.offsetWidth * state.zoom, height = card.offsetHeight * state.zoom;
+      if (x < viewport.scrollLeft + 16 || x + width > viewport.scrollLeft + viewport.clientWidth - 16) viewport.scrollLeft = Math.max(0, x + width / 2 - viewport.clientWidth / 2);
+      if (y < viewport.scrollTop + 16 || y + height > viewport.scrollTop + viewport.clientHeight - 16) viewport.scrollTop = Math.max(0, y + height / 2 - viewport.clientHeight / 2);
+    }
+  }
+  item?.focus({ preventScroll: true });
+}
+function setGraphZoom(next) {
+  const position = zoomScroll(viewportGeometry(), state.zoom, next);
+  state.zoom = next; renderGraph();
+  const viewport = document.querySelector('.canvas-scroll');
+  if (viewport) { viewport.scrollLeft = position.left; viewport.scrollTop = position.top; }
+  document.querySelector('#zoom-label').textContent = Math.round(next * 100) + ' %';
+}
+function fitCurrentGraph() {
+  const canvas=document.querySelector('.canvas'), viewport=document.querySelector('.canvas-scroll');if(!canvas || !viewport)return;
+  const origin=canvas.getBoundingClientRect(), boxes=[...canvas.querySelectorAll('.node,.graph-note,.edge-label-background')].map(element=>{const box=element.getBoundingClientRect();return {x:(box.left-origin.left)/state.zoom,y:(box.top-origin.top)/state.zoom,width:box.width/state.zoom,height:box.height/state.zoom};});
+  const fit=fitViewport(boxes,{width:viewport.clientWidth,height:viewport.clientHeight});
+  state.zoom=fit.zoom;renderGraph();viewport.scrollLeft=fit.left;viewport.scrollTop=fit.top;
+  document.querySelector('#zoom-label').textContent=Math.round(state.zoom*100)+' %';
+}
+function renderEditorNotes(graph, running, positionsOnly) {
+  const target = document.querySelector('#notes'); if (!target) return;
+  const notes = running ? [] : graph.layout?.notes || [];
+  if (!positionsOnly) target.innerHTML = notes.map(note => `<article class="graph-note" data-note-id="${esc(note.id)}" aria-label="Note : ${esc(note.title || 'Sans titre')}"><button type="button" class="note-heading" data-action="edit-note" data-id="${esc(note.id)}" title="Modifier la note · faire glisser pour déplacer"><small>Note · sans effet sur l’exécution</small><strong>${esc(note.title || 'Sans titre')}</strong></button><div class="note-text">${esc(note.text)}</div></article>`).join('');
+  for (const note of notes) {
+    const card = target.querySelector(`[data-note-id="${CSS.escape(note.id)}"]`); if (!card) continue;
+    Object.assign(card.style, { left: note.position.x + 'px', top: note.position.y + 'px', width: (note.size?.width || 280) + 'px', height: (note.size?.height || 180) + 'px' });
+  }
+}
+function noteForm(id) {
+  if (state.mode !== 'design') return;
+  const note = state.graph.layout?.notes?.find(n => n.id === id);
+  if (!note && (state.graph.layout?.notes?.length || 0) >= 200) { toast('Ce workflow contient déjà 200 notes.'); return; }
+  modal(note ? 'Modifier la note' : 'Ajouter une note', `<p>Note · sans effet sur l’exécution. Ce texte accompagne le dessin ; il n’est pas transmis aux agents.</p><form id="note-form"><input type="hidden" name="note_id" value="${esc(note?.id || '')}"><label for="note-title">Titre</label><input name="title" id="note-title" maxlength="160" value="${esc(note?.title || '')}" placeholder="À retenir"><label for="note-text">Texte de la note</label><textarea name="text" id="note-text" maxlength="20000" rows="6">${esc(note?.text || '')}</textarea><details><summary>Taille de la note</summary><label>Largeur<input name="width" type="number" min="160" max="1000" required value="${note?.size?.width || 280}"></label><label>Hauteur<input name="height" type="number" min="160" max="1000" required value="${note?.size?.height || 180}"></label></details><div class="modal-actions"><button class="primary">${note ? 'Enregistrer la note' : 'Ajouter la note'}</button></div></form>`, note ? button('delete-note', 'Supprimer la note', 'danger', `data-id="${esc(id)}"`) : '');
+}
+function cancelConnection(restoreFocus = true) {
+  const source = state.connectSource; state.connectSource = null;
+  document.querySelector('.connection-instruction')?.remove(); document.querySelector('.connection-preview')?.remove();
+  document.querySelectorAll('.graph-port.link-origin').forEach(port => port.classList.remove('link-origin'));
+  if (source && restoreFocus) document.querySelector(`.graph-port[data-id="${CSS.escape(source.id)}"][data-direction="${source.direction}"]`)?.focus({ preventScroll: true });
+}
+function connectionPort(port) {
+  if (state.mode !== 'design') return;
+  const selected = { id: port.dataset.id, direction: port.dataset.direction }, source = state.connectSource;
+  if (source && source.id !== selected.id && source.direction !== selected.direction) {
+    openConnection({ from: source.direction === 'out' ? source.id : selected.id, to: source.direction === 'in' ? source.id : selected.id }); return;
+  }
+  if (source && source.id === selected.id && source.direction !== selected.direction) { toast('Un bloc ne peut pas être relié à lui-même. Choisissez un autre bloc.'); return; }
+  cancelConnection(false); state.connectSource = selected; port.classList.add('link-origin');
+  const notice = document.createElement('div'); notice.className = 'connection-instruction'; notice.setAttribute('role', 'status');
+  notice.innerHTML = `Choisissez ${selected.direction === 'out' ? 'une entrée' : 'une sortie'} sur un autre bloc. Échap pour annuler.`;
+  document.querySelector('.canvas-area')?.append(notice);
+}
+
+function installEditorGestures() {
+  const listen = (type, fn) => window.document.addEventListener(type, fn, true);
+  const unlisten = (type, fn) => window.document.removeEventListener(type, fn, true);
+  document.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || state.mode !== 'design' || state.route !== 'workflow' || document.querySelector('.modal') || editorGesture) return;
+    const port = event.target.closest('.graph-port'), card = event.target.closest('.node[data-id],.note-heading');
+    if (!port && !card) return;
+    try { flushNodeForm(); } catch (e) { error(e.message); return; }
+    const note = card?.matches('.note-heading'), id = (port || card).dataset.id;
+    const item = !port && (note ? state.graph.layout.notes.find(n => n.id === id) : state.graph.nodes.find(n => n.id === id));
+    const before = clone(state.graph), start = item && { ...(item.position || nodePosition(item, state.graph.nodes.indexOf(item))) };
+    const origin = { x: event.clientX, y: event.clientY }, capture = port || card, pointerId = event.pointerId;
+    let moved = false;
+    const move = e => {
+      if (e.pointerId !== pointerId) return;
+      const pointer = { x: e.clientX, y: e.clientY };
+      if (!moved && !movedEnough(origin, pointer)) return;
+      e.preventDefault();
+      if (!moved) { moved = true; capture.setPointerCapture(pointerId); capture.classList.add('is-dragging'); if (port) connectionPort(port); }
+      if (port) {
+        const canvas = document.querySelector('.canvas'), box = canvas.getBoundingClientRect(), svg = canvas.querySelector('svg');
+        let preview = svg.querySelector('.connection-preview');
+        if (!preview) { preview = window.document.createElementNS('http://www.w3.org/2000/svg', 'path'); preview.classList.add('connection-preview'); svg.append(preview); }
+        preview.setAttribute('d', `M${parseFloat(port.style.left)},${parseFloat(port.style.top)} L${(e.clientX - box.left) / state.zoom},${(e.clientY - box.top) / state.zoom}`);
+      } else {
+        item.position = dragPosition(start, origin, pointer, state.zoom);
+        renderGraph(true);
+      }
+    };
+    const finish = (cancelled, e) => {
+      if (e?.pointerId != null && e.pointerId !== pointerId) return;
+      unlisten('pointermove', move); unlisten('pointerup', end); unlisten('pointercancel', cancel); window.removeEventListener('blur', cancel);
+      editorGesture = null; capture.classList.remove('is-dragging');
+      if (capture.hasPointerCapture(pointerId)) capture.releasePointerCapture(pointerId);
+      if (!moved) return;
+      suppressGestureClick = true; setTimeout(() => { suppressGestureClick = false; }, 0);
+      if (port) {
+        document.querySelector('.connection-preview')?.remove();
+        if (cancelled) { cancelConnection(); return; }
+        const destination = root.elementFromPoint(e.clientX, e.clientY)?.closest('.graph-port');
+        if (destination && destination !== port) connectionPort(destination);
+        else toast('Liaison en cours : choisissez une entrée ou appuyez sur Échap.');
+      } else {
+        if (cancelled) state.graph = before;
+        else { state.history.push(before); state.dirty = true; state.selected = note ? state.selected : id; state.propertiesOpen = false; persistDraft(); }
+        renderEditor(); focusGraphItem(id, note);
+      }
+    };
+    const end = e => finish(false, e), cancel = e => finish(true, e);
+    editorGesture = { cancel }; listen('pointermove', move); listen('pointerup', end); listen('pointercancel', cancel); window.addEventListener('blur', cancel);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && (editorGesture || state.connectSource)) { event.preventDefault(); editorGesture?.cancel(); cancelConnection(); return; }
+    if (state.mode !== 'design' || document.querySelector('.modal') || !['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)) return;
+    const card = event.target.closest('.node[data-id],.note-heading'); if (!card || event.ctrlKey || event.metaKey || event.altKey) return;
+    event.preventDefault(); const note = card.matches('.note-heading'), id = card.dataset.id, delta = event.shiftKey ? 50 : 10;
+    flushNodeForm(); edit(graph => {
+      const item = note ? graph.layout.notes.find(n => n.id === id) : graph.nodes.find(n => n.id === id);
+      const position = item.position || nodePosition(item, graph.nodes.indexOf(item));
+      item.position = dragPosition(position, { x: 0, y: 0 }, { x: event.key === 'ArrowLeft' ? -delta : event.key === 'ArrowRight' ? delta : 0, y: event.key === 'ArrowUp' ? -delta : event.key === 'ArrowDown' ? delta : 0 }, 1);
+    }); focusGraphItem(id, note);
+  });
+}
+
+function conversionDialog() {
+  modal('Activer les données structurées', '<p>Cette conversion concerne le brouillon ouvert. Elle permet de décrire les éléments des listes, les données requises et les traitements par élément.</p><p>Les entrées historiques restent facultatives et les sorties restent requises. Les exécutions déjà lancées conservent leur contrat.</p>', button('close-modal','Conserver le format actuel') + button('confirm-conversion','Convertir ce brouillon','primary'));
+}
+function showPortForm(direction, name) {
+  const node = selectedNode(), port = normalizedPort(node[direction]?.[name] || 'string', direction), modern = state.graph.schema === 2;
+  if (!name && modern) port.required = true;
+  modal(name ? 'Modifier une donnée' : 'Décrire une donnée', `<form id="port-form"><input type="hidden" name="direction" value="${direction}"><label>Nom (sans espaces)<input name="port" required pattern="[a-zA-Z][a-zA-Z0-9_.-]{0,79}" value="${esc(name || '')}" ${name?'readonly':''}></label><label>Type<select id="port-type" name="type">${options(Object.entries(typeNames),port.type)}</select></label>${modern ? `<label><input type="checkbox" name="required" ${port.required?'checked':''}>Donnée requise</label><p class="muted">Facultative signifie que la donnée peut être absente. Une liste vide est une donnée présente.</p><fieldset data-list-contract ${port.type!=='array'?'hidden':''}><legend>Éléments de la liste</legend><label for="port-items">Type des éléments</label><select id="port-items" name="items">${options(Object.entries(typeNames),port.items || 'any')}</select><label for="port-minimum">Minimum d’éléments</label><input id="port-minimum" name="minimum" type="number" min="0" step="1" value="${port.minItems ?? 0}"><label for="port-maximum">Maximum d’éléments (facultatif)</label><input id="port-maximum" name="maximum" type="number" min="0" step="1" value="${port.maxItems ?? ''}"></fieldset>` : '<p class="muted">Utilisez « Données structurées » dans l’éditeur pour préciser le type des éléments et leur présence.</p>'}<button class="primary">${name?'Enregistrer la donnée':'Ajouter la donnée'}</button></form>`);
+}
+function advancedNodeFields(node) {
+  if (node.kind === 'input') return '<p class="notice">Ce bloc recueille plusieurs contributions. Leur confirmation transmet une liste unique, sans lancer un agent pour chaque intention.</p>';
+  if (node.kind === 'integrate') return '<p class="notice">Le moteur rassemble les candidats acceptés sur une base identique. Les conflits restent visibles. Prévoyez ensuite une QA commune et une décision sur le candidat intégré.</p>';
+  if (node.kind !== 'foreach') return '';
+  return `<fieldset><legend>Traitement par élément</legend><label for="each-collection">Collection à traiter</label><select id="each-collection" name="collection">${options([['items','Liste reçue directement'],['plan.tasks','Tâches du plan unique'], ...!['items','plan.tasks'].includes(node.collection) ? [[node.collection, node.collection]] : []], node.collection || 'items')}</select><label for="each-concurrency">Travaux simultanés au maximum</label><select id="each-concurrency" name="concurrency">${options([1,2,3,4].map(n=>[String(n),n===1?'1 · séquentiel':String(n)]),String(node.concurrency || 1))}</select><p>Workflow par élément : <strong>${esc(typeof node.workflow === 'object' ? node.workflow.title : node.workflow || 'À choisir')}</strong></p>${button('choose-child','Choisir le workflow par élément…','','type="button"')}<small>Chaque élément garde son exécution. Les dépendances peuvent limiter le nombre réellement actif.</small></fieldset>`;
+}
+function workflowChoices() {
+  return [...new Map([...state.workflows,...state.templates].filter(graph=>graph.id!==state.graph.id).map(graph=>[`${graph._project || state.project.id}:${graph.id}`,graph])).entries()];
+}
+function childChoiceFields(existing, action = false) {
+  state.childChoiceExisting = existing;
+  state.childChoices = workflowChoices();
+  const work = existing?.nodes?.length === 1 ? existing.nodes[0] : null;
+  return `<label for="child-choice">Workflow à utiliser</label><select id="child-choice" name="workflow_choice">${options([...(existing ? [['__current__',`Conserver : ${existing.title}`]] : []), ['__basic__',action?'Un document à préparer':'Un travail IA par élément'],...state.childChoices.map(([key,g])=>[key,g.title])],existing?'__current__':'__basic__')}</select><div data-basic-workflow ${existing?'hidden':''}><label for="child-work-title">Nom du travail</label><input id="child-work-title" name="work_title" value="${esc(work?.title || (action?'Préparer le brouillon':'Traiter un élément'))}"><label for="child-work-prompt">${action?'Contenu du document':'Consigne par élément'}</label><textarea id="child-work-prompt" name="work_prompt">${esc(action ? work?.content || 'Brouillon à relire avant toute publication.' : work?.prompt || 'Traiter uniquement l’élément reçu dans item. Produire un résultat documenté.')}</textarea></div><input name="child_action" type="hidden" value="${action?'yes':'no'}"><p class="muted">Une copie de cette version sera intégrée au bloc. Modifier le modèle ultérieurement ne changera pas ce workflow.</p><label><input name="convert_child" type="checkbox">Si le modèle est ancien, convertir sa copie au format structuré</label>`;
+}
+function childWorkflowForm() { modal('Workflow pour chaque élément', `<form id="child-workflow-form">${childChoiceFields(typeof selectedNode().workflow === 'object' ? selectedNode().workflow : null)}<button class="primary">Utiliser ce workflow</button></form>`); }
+async function selectedChildWorkflow(data) {
+  let graph;
+  if (data.workflow_choice === '__current__') graph = clone(state.childChoiceExisting);
+  else if (data.workflow_choice === '__basic__') {
+    graph = basicChildWorkflow(data.work_title.trim() || 'Traiter un élément');
+    if(data.child_action==='yes')graph.nodes=[{id:'draft',kind:'document',title:graph.title,content:data.work_prompt,outputs:{},validation:'human'}];
+    else graph.nodes[0].prompt=data.work_prompt;
+  } else {
+    const chosen=state.childChoices.find(([key])=>key===data.workflow_choice)?.[1]; if(!chosen)throw new Error('Choisissez un workflow.');
+    graph=chosen.summary || !chosen.nodes ? await call('workflow.get',{project:chosen._project || state.project.id,workflow:chosen.id}) : clone(chosen);
+  }
+  if(graph.schema===1){if(data.convert_child!=='on')throw new Error('Ce modèle utilise l’ancien format. Confirmez la conversion de sa copie.');graph=convertWorkflow(graph);}
+  delete graph._project; delete graph.revision; delete graph.driver;
+  if (data.child_action!=='yes' && graph.nodes.some(node=>node.kind==='foreach'))throw new Error('Choisissez un workflow sans traitement par élément imbriqué.');
+  if (data.child_action==='yes' && graph.actions?.length)throw new Error('Une action facultative ne peut pas déclencher d’autres actions associées.');
+  await call('workflow.validate',{graph,simulation:true}); return graph;
+}
+function associatedEditor(node) {
+  if(state.graph.schema!==2)return '';
+  const actions=(state.graph.actions || []).filter(action=>action.source===node.id);
+  return `<section class="associated-editor"><h3>Actions facultatives</h3><p>Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.</p>${actions.map(action=>`<p><strong>${esc(action.title)}</strong> · ${action.enabled?'proposée':'désactivée'} · ${action.event==='question'?'sur une question':'après résultat accepté'} ${button('edit-associated','Configurer','flat',`data-id="${esc(action.id)}"`)}</p>`).join('')}${button('add-associated','Ajouter une action facultative…')}</section>`;
+}
+function associatedForm(id) {
+  const action=state.graph.actions?.find(a=>a.id===id), canQuestion=['question','agent','task','document'].includes(selectedNode().kind);
+  const events=[['accepted','Résultat du bloc accepté'], ...(canQuestion ? [['question','Question ouverte par le bloc']] : action?.event==='question' ? [['question','Question — déclencheur incompatible, à reconfigurer']] : [])];
+  modal(action?'Configurer l’action facultative':'Ajouter une action facultative',`<form id="associated-form"><input name="associated_id" type="hidden" value="${esc(id || '')}"><label for="associated-title">Nom de l’action</label><input id="associated-title" name="title" required maxlength="160" value="${esc(action?.title || '')}" placeholder="Préparer un email"><label>Déclencheur<select name="event">${options(events,action?.event || 'accepted')}</select></label><label><input name="enabled" type="checkbox" ${action?.enabled!==false?'checked':''}>Proposer cette action lorsqu’elle est déclenchée</label>${childChoiceFields(action?.workflow,true)}<p class="notice">Aucun envoi automatique : vous devrez activer l’action dans le suivi. Un document local, un brouillon distant et un envoi sont des opérations différentes.</p><button class="primary">Enregistrer l’action facultative</button></form>`,action?button('remove-associated','Supprimer cette action','danger',`data-id="${esc(id)}"`):'');
+}
+function updateConnectionCompatibility() {
+  const form=document.querySelector('#connect-form');if(!form || !form.elements.output.value)return;
+  const source=state.graph.nodes.find(n=>n.id===form.elements.from.value),target=state.graph.nodes.find(n=>n.id===form.elements.to.value),port=source.outputs[form.elements.output.value];
+  const reasons=[];
+  for(const option of form.elements.input.options){if(!option.value)continue;const reason=incompatibleReason(port,target.inputs[option.value],state.graph.schema);option.disabled=false;option.title=reason;if(reason)reasons.push(`${option.value} : ${reason}`);}
+  form.querySelector('.mapping-summary').textContent=reasons.length?reasons.join(' '):'Choisissez l’entrée destinataire compatible.';
+}
+function validateSimulationPorts(node, values) {
+  for(const [name,value] of Object.entries(values)){
+    const port=normalizedPort(node.outputs[name]);if(port.type!=='array')continue;
+    if(value.length<(port.minItems || 0) || value.length>(port.maxItems ?? Infinity))throw new Error(`${name} : respectez la taille prévue pour cette liste (${port.minItems || 0}…${port.maxItems ?? 'N'} éléments).`);
+    if(port.items && port.items!=='any')for(const item of value){const type=Array.isArray(item)?'array':item===null?'null':typeof item;if(type!==port.items)throw new Error(`${name} : les éléments doivent être de type ${typeNames[port.items]}.`);}
+  }
+}
+function collectionJobs(run, node) {
+  try { return JSON.parse(localStorage.getItem(`tricorder-collection-jobs:${run}:${node}`) || '[]'); } catch { return []; }
+}
+function saveCollectionJob(job, remove=false) {
+  const key=`tricorder-collection-jobs:${job.run}:${job.node}`,jobs=collectionJobs(job.run,job.node).filter(item=>item.id!==job.id);
+  if(!remove)jobs.push(job);
+  if(jobs.length)localStorage.setItem(key,JSON.stringify(jobs));else localStorage.removeItem(key);
+}
+function collectionRecoveryView(node) {
+  const jobs=collectionJobs(state.run.id,node.id).filter(job=>!collectionInFlight.has(job.id));
+  return jobs.length ? `<section class="collection-recovery notice"><h3>Ajouts à récupérer</h3><p>Ces textes n’ont pas de confirmation d’enregistrement. Vérifiez la liste, puis réessayez l’ajout ou retirez-le de cette liste de récupération.</p>${jobs.map(job=>`<article data-collection-job="${esc(job.id)}">${dataView('Intention conservée',job.text)}${job.error?`<p>${esc(job.error)}</p>`:''}<div class="row">${button('collection-retry-add','Réessayer cet ajout','','data-id="'+esc(job.id)+'"')}${button('collection-discard-add','Retirer de la récupération','flat','data-id="'+esc(job.id)+'"')}</div></article>`).join('')}</section>` : '';
+}
+async function changeCollection(operation, fields={}, submitted=null) {
+  const run=submitted?.run || state.run.id,node=submitted?.node || state.selected;
+  const current=submitted?.refresh || state.run?.id!==run ? (await call('run.get',{run})).run : state.run;
+  const revision=current.nodes[node].collection.revision;
+  const signature=JSON.stringify({run,node,operation,...fields}),previous=submitted?.id ? null : collectionDrafts.get(signature),request=submitted?.request || previous || {run,node,revision,operation,key:crypto.randomUUID(),...fields};
+  if(submitted?.id){submitted.request=request;submitted.refresh=false;saveCollectionJob(submitted);}
+  collectionDrafts.set(signature,request);
+  try { const next=await call('collection.change',request);collectionDrafts.delete(signature);
+    if(submitted?.id)saveCollectionJob(submitted,true);
+    if(operation==='add' && submitted && localStorage.getItem(submitted.draftKey)===submitted.draft){
+      const form=document.querySelector('#collection-form');
+      if(form && interactionDraftKey(form)===submitted.draftKey){const field=form.elements.namedItem('text');if(field.value===fields.text)field.value='';}
+      localStorage.removeItem(submitted.draftKey);
+    }
+    if(state.run?.id!==run)return;state.run=next;
+    renderGraph();renderInspector();renderExecutionOverview();
+  } catch(error){
+    const conflict=error.message.includes('Le recueil a changé');
+    if(submitted?.id){submitted.error=error.message;if(conflict){submitted.request=null;submitted.refresh=true;}saveCollectionJob(submitted);}
+    if(conflict){collectionDrafts.delete(signature);const latest=await call('run.get',{run});if(state.run?.id===run)state.run=latest.run;}
+    throw error;
+  }
 }
 
 function operationField(value) {return value?.input ? "@"+value.input : value || "";}
@@ -676,13 +985,17 @@ function odooWorkflowFields() {
   const field = (name, label, placeholder) => `<label for="context-${name}">${label}</label><input id="context-${name}" name="context_${name}" value="${esc(typeof p[name] === 'string' ? p[name] : p[name] == null ? '' : JSON.stringify(p[name]))}" placeholder="${placeholder}">`;
   return `<fieldset class="workflow-context"><legend>Contexte Odoo</legend>${field('series', 'Version d’Odoo', 'Exemple : 19.0')}${state.project.series ? `<small>Conversation : la version ${esc(state.project.series)} du projet est prioritaire. Ce réglage sert aussi au mode automatique.</small>` : ''}<label for="context-platform">Hébergement</label><select id="context-platform" name="context_platform">${contextOptions([['', 'À préciser'], ['custom', 'Odoo.sh ou serveur dédié'], ['odoo.sh', 'Odoo.sh'], ['online', 'Odoo Online'], ['on-premise', 'Serveur dédié']], p.platform || '')}</select>${state.project.platform ? `<small>Conversation : hébergement du projet ${esc(state.project.platform)}.</small>` : ''}<label for="context-route">Type de réalisation</label><select id="context-route" name="context_route">${contextOptions([['', 'À déterminer pendant l’analyse'], ['module', 'Module Odoo'], ['studio', 'Odoo Studio']], p.route || '')}</select><label for="context-environment">Environnement de recette</label><select id="context-environment" name="context_environment">${contextOptions([['', 'À préparer avec l’agent'], ['local', 'Copie locale neutralisée'], ['staging', 'Staging (non admis pour cette recette)'], ['production', 'Production (non admise pour les tests)']], p.environment || '')}</select>${field('neutralized_copy', 'Référence de la copie de test', 'Chemin ou identifiant de la copie préparée')}<small>Ces informations seront nécessaires avant la recette. La copie doit être réellement préparée et vérifiée ; remplir ces champs ne crée pas de base de test.</small></fieldset>`;
 }
+function conditionFields(node) {
+  const boolean=(node.options || []).length===2 && node.options.includes('true') && node.options.includes('false');
+  return `<p class="muted">Cette règle choisit une branche à partir de la donnée reçue.</p><label for="node-parameter">Donnée à comparer (entrée ou paramètre du workflow)</label><input id="node-parameter" name="parameter" value="${esc(node.parameter || '')}"><label for="condition-type">Type de branchement</label><select id="condition-type" name="condition_type">${options([['boolean','Oui / Non'],['values','Valeurs personnalisées']],boolean?'boolean':'values')}</select><p data-condition-boolean ${boolean?'':'hidden'}>Deux branches : <strong>Oui</strong> et <strong>Non</strong>. Reliez chacune à l’étape correspondante.</p><div data-condition-custom ${boolean?'hidden':''}><label for="node-options">Choix possibles (un par ligne)</label><textarea id="node-options" name="options">${esc((node.options || ['true','false']).join('\n'))}</textarea><small>Valeurs exactes produites par le bloc précédent. Pour comparer un montant, faites produire un résultat Oui / Non par ce bloc.</small></div>`;
+}
 function designInspector(node) {
   const isAgent = node.kind === 'agent';
   const hasInstructions = ['agent','task'].includes(node.kind);
   const effective = isAgent ? effectiveExecution(state.project, state.graph, node) : null;
   const profiles = [['generalist', 'Aucun agent dédié'], ...(state.project.packs || []).flatMap(pack => pack.profiles.map(profile => [profile.id, profile.title || profile.id]))];
   if (effective && !profiles.some(([id]) => id === effective.profile.value)) profiles.push([effective.profile.value, effective.profile.value + ' (pack absent)']);
-  return `<form id="node-form"><label for="node-title">Nom du bloc</label><input id="node-title" name="title" value="${esc(node.title)}" required>${hasInstructions ? `<label for="node-prompt">Consigne</label><textarea id="node-prompt" name="prompt">${esc(node.prompt || "")}</textarea>` : ""}<label for="node-criteria">Critères d’acceptation (un par ligne)</label><textarea id="node-criteria" name="criteria">${esc((node.criteria || []).join("\n"))}</textarea>${portEditor(node)}${['agent','task','command','document','watch','communication','external'].includes(node.kind) ? button('simulation-data', 'Données de simulation…', 'flat', 'type="button"') : ''}${designGuidance(state.graph, node.id)}${['agent','task','command'].includes(node.kind) ? `<details ${node.candidate_check ? 'open' : ''}><summary>Contrôle de code (QA)</summary><fieldset><legend>Validation du candidat</legend><label><input type="checkbox" name="candidate_check" ${node.candidate_check ? 'checked' : ''}>Contrôle QA du candidat</label><small>Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. ${node.kind==='command' ? 'La commande doit réussir (code 0) avec une preuve.' : 'La sortie verdict est ajoutée : pass ou fail, avec preuves réelles.'} Un document ou un simple transfert ne valide pas le code.</small></fieldset></details>` : ''}${isAgent ? `<label for="node-route-output">Sortie de branchement (facultatif)</label><select id="node-route-output" name="route_output">${options([['', 'Aucun branchement conditionnel'], ...Object.entries(node.outputs || {}).filter(([,t]) => t === 'string').map(([k]) => [k,k])], node.route_output || '')}</select>${node.route_output ? `<label>Valeurs de branchement (une par ligne)<textarea name="options">${esc(node.options.join('\n'))}</textarea></label>` : ''}<label>Validation du résultat<select name="validation">${options([['contract','Valider automatiquement les sorties'],['human','Attendre ma validation']], node.validation || 'human')}</select></label>` : ''}<details><summary>Organisation de l’étape</summary><label for="node-completion">Effet du résultat sur les tâches dépendantes</label><select id="node-completion" name="completion_outcome">${options([['succeeded', 'Permettre la suite'], ['blocked', 'Bloquer la suite : travail non résolu']], node.completion_outcome || 'succeeded')}</select><label for="node-phase">Phase</label><input id="node-phase" name="phase" value="${esc(node.phase || '')}" placeholder="Analyse, qualité…"></details>
+  return `<form id="node-form"><label for="node-title">Nom du bloc</label><input id="node-title" name="title" value="${esc(node.title)}" required>${hasInstructions ? `<label for="node-prompt">Consigne</label><textarea id="node-prompt" name="prompt">${esc(node.prompt || "")}</textarea>` : ""}<label for="node-criteria">Critères d’acceptation (un par ligne)</label><textarea id="node-criteria" name="criteria">${esc((node.criteria || []).join("\n"))}</textarea>${node.validation==='automatic'?'<p class="muted criteria-help">Ces critères demandent une réception humaine. Choisissez « Manuelle » dans Validation du résultat, ou placez-les dans la Décision humaine qui réceptionne ce travail.</p>':''}${advancedNodeFields(node)}${portEditor(node)}${['agent','task','command','document','watch','communication','external'].includes(node.kind) ? button('simulation-data', 'Données de simulation…', 'flat', 'type="button"') : ''}${designGuidance(state.graph, node.id)}${['agent','task','command'].includes(node.kind) ? `<details ${node.candidate_check ? 'open' : ''}><summary>Contrôle de code (QA)</summary><fieldset><legend>Validation du candidat</legend><label><input type="checkbox" name="candidate_check" ${node.candidate_check ? 'checked' : ''}>Contrôle QA du candidat</label><small>Ce bloc vérifie le candidat reçu. L’entrée candidate est ajoutée ; reliez-la au producteur. ${node.kind==='command' ? 'La commande doit réussir (code 0) avec une preuve.' : 'La sortie verdict est ajoutée : pass ou fail, avec preuves réelles.'} Un document ou un simple transfert ne valide pas le code.</small></fieldset></details>` : ''}${isAgent ? `<label for="node-route-output">Sortie de branchement (facultatif)</label><select id="node-route-output" name="route_output">${options([['', 'Aucun branchement conditionnel'], ...Object.entries(node.outputs || {}).filter(([,t]) => portType(t) === 'string').map(([k]) => [k,k])], node.route_output || '')}</select>${node.route_output ? `<label>Valeurs de branchement (une par ligne)<textarea name="options">${esc(node.options.join('\n'))}</textarea></label>` : ''}<label>Validation du résultat<select name="validation">${options([['contract','Valider automatiquement les sorties'],['human','Attendre ma validation']], node.validation || 'human')}</select></label>` : ''}<details><summary>Organisation de l’étape</summary><label for="node-completion">Effet du résultat sur les tâches dépendantes</label><select id="node-completion" name="completion_outcome">${options([['succeeded', 'Permettre la suite'], ['blocked', 'Bloquer la suite : travail non résolu']], node.completion_outcome || 'succeeded')}</select><label for="node-phase">Phase</label><input id="node-phase" name="phase" value="${esc(node.phase || '')}" placeholder="Analyse, qualité…"></details>
     ${(node.profile || state.graph.defaults?.profile || state.project.defaults?.profile) === 'odoo-tester' || Object.hasOwn(node, 'environment') ? `<label for="node-environment">Environnement de recette de cette étape</label><select id="node-environment" name="environment">${options([['', 'Utiliser le contexte du workflow'], ['local', 'Copie locale neutralisée'], ['staging', 'Staging (non admis pour cette recette)'], ['production', 'Production (non admise pour les tests)']], node.environment || '')}</select>` : ''}
     ${['task','document'].includes(node.kind) ? `<label for="node-effort">Effort IA de cette étape</label><select id="node-effort" name="effort">${options([['', 'Utiliser le niveau de la conversation'], ...['low','medium','high','xhigh'].map(v => [v,v])], node.effort || '')}</select>` : ''}
     ${node.kind === 'watch' ? `<label for="watch-connection">Messagerie</label><select name="connection" id="watch-connection">${options([['gmail', 'Gmail'], ['outlook', 'Outlook']], node.connection || 'gmail')}</select><label for="watch-account">Compte à surveiller (référence, sans secret)</label><input name="account" id="watch-account" value="${esc(node.account || '')}"><label for="watch-sender">Adresse exacte de l'expéditeur</label><input name="sender" id="watch-sender" type="email" value="${esc(node.sender || '')}" placeholder="contact@exemple.test"><p class="muted">Nouveaux messages seulement. Le nom d'affichage ne suffit pas à identifier un expéditeur.</p>` : ''}
@@ -692,13 +1005,27 @@ function designInspector(node) {
     ${['decision', 'review', 'question'].includes(node.kind) ? `<label for="node-question">Question à poser</label><textarea id="node-question" name="question">${esc(node.question || '')}</textarea><label for="node-options">Choix possibles (un par ligne)</label><textarea id="node-options" name="options">${esc((node.options || ['approve', 'reject']).join('\n'))}</textarea><p class="muted">Une attente humaine persiste après fermeture. Le silence n'autorise rien.</p>` : ''}
     ${node.kind === 'command' ? `<label for="node-argv">Commande et arguments (un par ligne)</label><textarea id="node-argv" name="argv" spellcheck="false">${esc((node.argv || []).join('\n'))}</textarea><label for="node-timeout">Délai maximal (secondes)</label><input type="number" min="1" max="3600" id="node-timeout" name="timeout" value="${node.timeout || 60}"><p class="muted">Sans shell ni réseau. Projet monté en lecture seule dans /project ; travail dans /work.</p>` : ''}
     ${node.kind === 'document' ? `<label for="node-content">Contenu du brouillon</label><textarea id="node-content" name="content">${esc(node.content || '')}</textarea><small>Préparation locale. La publication demande une opération et un accord distincts.</small>` : ''}
-    ${node.kind === 'condition' ? `<p class="muted">Cette règle compare une valeur exacte à chaque branche. Elle ne calcule pas une expression comme « montant &gt; 500 ». Faites produire le résultat du contrôle par un bloc précédent.</p><label for="node-parameter">Donnée à comparer (entrée ou paramètre du workflow)</label><input id="node-parameter" name="parameter" value="${esc(node.parameter || '')}"><label for="node-options">Choix possibles (un par ligne)</label><textarea id="node-options" name="options">${esc((node.options || ['yes', 'no']).join('\n'))}</textarea><p class="muted">Pour une donnée Oui / Non, utilisez les branches true et false. Reliez ensuite chaque branche à l’étape correspondante.</p>` : ''}
+    ${node.kind === 'condition' ? conditionFields(node) : ''}
     ${node.kind === 'subworkflow' ? `<p>Les ports de même nom sont reliés aux blocs d’entrée et de sortie du composant. Décrivez les autres correspondances ci-dessous.</p><details><summary>Correspondances du composant</summary><label>Entrées publiques → blocs (JSON)<textarea name="input_mapping">${esc(JSON.stringify(node.input_mapping || {},null,2))}</textarea></label><label>Sorties publiques ← blocs (JSON)<textarea name="output_mapping">${esc(JSON.stringify(node.output_mapping || {},null,2))}</textarea></label><small>Exemple : {"demande": {"node": "analyse", "port": "request"}}</small></details><label for="node-workflow">Composant de bibliothèque</label><select id="node-workflow" name="workflow">${options(state.templates.map(g => [g.id, g.title]), node.workflow)}</select>` : ''}
     ${['decision', 'external'].includes(node.kind) ? `<fieldset><legend>Opération externe exacte</legend><label for="op-action">Action</label><input id="op-action" name="op_action" value="${esc(operationField(node.operation?.action))}" placeholder="publish-candidate"><label for="op-target">Cible</label><input id="op-target" name="op_target" value="${esc(operationField(node.operation?.target))}" placeholder="Dépôt et branche de production"><label for="op-candidate">Candidat ou version exacte</label><input id="op-candidate" name="op_candidate" value="${esc(operationField(node.operation?.candidate))}" placeholder="SHA du candidat testé">${node.kind === 'external' ? `<label for="node-approval">Décision humaine qui autorisera cette opération</label><select id="node-approval" name="approval">${options([['','Choisir une décision'], ...state.graph.nodes.filter(n => n.kind === 'decision').map(n => [n.id,n.title])], node.approval || '')}</select><label><input type="checkbox" name="link_operation">Relier cette décision et y copier l’opération exacte</label>` : ''}<small>Utilisez @nom_entree pour une cible ou un candidat produit en amont. Les données reliées seront affichées dans la proposition exacte avant l’accord.</small><details><summary>Paramètres supplémentaires du connecteur</summary><label for="node-operation">Paramètres complets (JSON)</label><textarea id="node-operation" name="operation">${esc(JSON.stringify(node.operation || {}, null, 2))}</textarea></details></fieldset>` : ''}
     ${['command', 'document', 'watch', 'communication'].includes(node.kind) ? `<label for="node-validation">Validation du résultat</label><select id="node-validation" name="validation">${options([['human', node.kind === 'communication' ? 'Manuelle — après opération' : 'Manuelle'], ['automatic', 'Automatique — contrôles techniques']], node.validation || 'human')}</select><p class="muted">${node.kind === 'communication' ? 'La validation manuelle examine le résultat après l’envoi ou l’opération du connecteur. Pour relire avant envoi, préparez le contenu dans un bloc Document ou Agent, puis placez une Décision humaine avant ce bloc Communication. ' : ''}La validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide.${node.kind === 'communication' ? '' : ' Ajoutez une Décision humaine pour confirmer une action.'}</p>` : ''}
     ${['command', 'document'].includes(node.kind) ? `<label><input type="checkbox" name="reuse" ${node.reuse ? 'checked' : ''}>Autoriser la réutilisation des preuves pendant 24 h</label><small>Uniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.</small>` : ''}
     <details><summary>Entrées et sorties</summary><label for="node-inputs">Entrées (nom : type, JSON)</label><textarea id="node-inputs" name="inputs">${esc(JSON.stringify(node.inputs || {}, null, 2))}</textarea><label for="node-outputs">Sorties (nom : type, JSON)</label><textarea id="node-outputs" name="outputs">${esc(JSON.stringify(node.outputs || {}, null, 2))}</textarea></details>${["communication", "external"].includes(node.kind) ? `<label for="node-reconciliation">Capacité de recherche d’accusé (lecture, facultative)</label><input id="node-reconciliation" name="reconciliation" value="${esc(node.reconciliation || "")}">` : ""}<details><summary>Reprises, ressources et position</summary><label for="node-attempts">Tentatives maximales</label><input id="node-attempts" name="max_attempts" type="number" min="1" max="10" value="${node.max_attempts || 1}"><label for="node-resources">Ressources exclusives (une par ligne)</label><textarea name="resources" id="node-resources">${esc((node.resources || []).join('\n'))}</textarea><div class="row"><div class="fill"><label for="node-x">Position X</label><input type="number" min="0" max="20000" name="x" id="node-x" value="${nodePosition(node, state.graph.nodes.indexOf(node)).x}"></div><div class="fill"><label for="node-y">Position Y</label><input type="number" min="0" max="20000" name="y" id="node-y" value="${nodePosition(node, state.graph.nodes.indexOf(node)).y}"></div></div></details><div class="row" style="margin-top:22px"><button class="primary" type="submit">Appliquer au bloc</button></div></form>
-    <details class="design-links"><summary>Liens entre les blocs</summary>${state.graph.edges.filter(e => e.from === node.id || e.to === node.id).map(e => `<p class="muted">${esc(state.graph.nodes.find(n => n.id === e.from)?.title || e.from)} → ${esc(state.graph.nodes.find(n => n.id === e.to)?.title || e.to)} · ${esc(e.outcome && e.outcome !== 'done' ? decisionLabel(e.outcome) : 'Travail terminé')}${Object.entries(e.mapping || {}).length ? `<br><span>Données : ${Object.entries(e.mapping).map(([from,to]) => `${esc(from)} → ${esc(to)}`).join(', ')}</span>` : '<br><span>Ordre d’exécution uniquement · aucune donnée transmise</span>'} ${button('delete-edge', 'Retirer', 'flat', `data-id="${e.id}"`)}</p>`).join('') || '<p class="muted">Aucun lien.</p>'}${button('connect-input', 'Relier une entrée…', 'flat', `data-id="${esc(node.id)}"`)}</details><hr>${button('delete-node', 'Supprimer cette étape', 'danger')}`;
+    <details class="design-links"><summary>Liens entre les blocs</summary>${state.graph.edges.filter(e => e.from === node.id || e.to === node.id).map(e => `<p class="muted">${esc(state.graph.nodes.find(n => n.id === e.from)?.title || e.from)} → ${esc(state.graph.nodes.find(n => n.id === e.to)?.title || e.to)} · ${esc(e.outcome && e.outcome !== 'done' ? decisionLabel(e.outcome) : 'Travail terminé')}${Object.entries(e.mapping || {}).length ? `<br><span>Données : ${Object.entries(e.mapping).map(([from,to]) => `${esc(from)} → ${esc(to)}`).join(', ')}</span>` : '<br><span>Ordre d’exécution uniquement · aucune donnée transmise</span>'} ${button('delete-edge', 'Retirer', 'flat', `data-id="${e.id}"`)}</p>`).join('') || '<p class="muted">Aucun lien.</p>'}${button('connect-input', 'Relier une entrée…', 'flat', `data-id="${esc(node.id)}"`)}</details><hr>${associatedEditor(node)}${button('delete-node', 'Supprimer cette étape', 'danger')}`;
+}
+
+function shortQuestionContext(inputs) {
+  if(!inputs || inputs.$artifact)return '';
+  const values=[];let length=0;
+  for(const [key,value] of Object.entries(inputs)) {
+    if(!['string','number','boolean'].includes(typeof value))continue;
+    const text=String(value).trim();
+    // Show complete short facts only. Long requests and source references stay
+    // in the full context below, rather than pushing the answer out of view.
+    if(!text || text.length>240 || text.split('\n').length>2 || length+key.length+text.length>320)continue;
+    values.push([key,value]);length+=key.length+text.length;if(values.length===3)break;
+  }
+  return values.length ? `<section class="question-preview" aria-label="À examiner avant de répondre" tabindex="0"><strong>À examiner avant de répondre</strong>${values.map(([key,value])=>`<p><b>${esc(key.replaceAll('_',' '))} :</b> <span class="business-text">${esc(typeof value==='boolean'?value?'Oui':'Non':value)}</span></p>`).join('')}</section>` : '';
 }
 
 function runInspector(node) {
@@ -708,22 +1035,24 @@ function runInspector(node) {
   const requestText=state.run.parameters?.request;
   const sourceNames=typeof requestText==='string' ? [...requestText.matchAll(/(?:^|\n)(?:Original|Source[^:]*|Pièces[^:]*)\s*:\s*([^\n]+)/g)].map(m=>m[1].split('/').at(-1)).slice(0,3) : [];
   const received = dataView('Entrées reçues', values.inputs) + (values.input_sources && Object.keys(values.input_sources).length && !values.input_sources.$artifact ? `<p class="muted">Sources : ${Object.entries(values.input_sources).map(([key, source]) => `${esc(sourceLabel(key))} ← ${button('select-node', esc(state.run.definition.nodes.find(n=>n.id===source.node)?.title || source.node), 'flat', `data-id="${esc(source.node)}"`)}`).join(' · ')}</p>` : '') + (values.input_sources?.$artifact ? dataView('Sources des entrées',values.input_sources) : '') + dataView('Résultat', values.result?.outputs) + evidenceView(values) + attemptHistoryView(values,node);
+  if (node.kind === 'input' && values.status === 'collecting') return collectionView(node, values, state.run.status === 'cancelled');
+  if (node.kind === 'foreach') return coordinationView(state.iterationPage?.run === state.run.id && state.iterationPage.node === node.id ? state.iterationPage : state.run.coordination?.[node.id], node, state.run, state.projects) + received;
   if(['cancelled','paused'].includes(state.run.status)) return `${state.run.status==='cancelled' ? '<p class="notice"><strong>Exécution annulée</strong></p><p>Les résultats sont conservés en lecture seule. Cette exécution ne reprendra pas.</p>' : executionEmptyDetail()}${pendingQuestion ? dataView('Question conservée',{question:pendingQuestion.text,answer:null}) : ''}${values.result?.summary ? dataView('Dernier résultat',values.result.summary) : ''}${received}`;
-  if (state.run.nodes[node.id].status === 'waiting_input') return `${pendingQuestion.text?.$artifact ? dataView('Question',pendingQuestion.text) : `<p>${esc(pendingQuestion.text)}</p>`}${pendingQuestion.notification?.run ? button('notification-run', 'Suivre la notification', '', `data-id="${esc(pendingQuestion.notification.run)}"`) : pendingQuestion.notification?.status === 'blocked' ? `<p class="notice">Notification bloquée : ${esc(pendingQuestion.notification.reason)}</p>` : ''}${received ? `<details class="question-context"><summary>${sourceNames.length ? 'Sources référencées : '+esc(sourceNames.join(', ')) : 'Entrées et sources de la demande'}</summary>${received}</details>` : ''}<p class="muted question-help">Répondez dans le terminal ou ici.</p><form id="question-form"><label>Votre réponse<textarea id="question-answer" name="answer" required></textarea></label><button class="primary">Répondre</button></form>`;
+  if (state.run.nodes[node.id].status === 'waiting_input') return `${pendingQuestion.text?.$artifact ? dataView('Question',pendingQuestion.text) : `<p>${esc(pendingQuestion.text)}</p>`}${pendingQuestion.notification?.run ? button('notification-run', 'Suivre la notification', '', `data-id="${esc(pendingQuestion.notification.run)}"`) : pendingQuestion.notification?.status === 'blocked' ? `<p class="notice">Notification bloquée : ${esc(pendingQuestion.notification.reason)}</p>` : ''}${shortQuestionContext(values.inputs)}${received ? `<details class="question-context"><summary>${sourceNames.length ? 'Sources référencées : '+esc(sourceNames.join(', ')) : 'Entrées et sources de la demande'}</summary>${received}</details>` : ''}<p class="muted question-help">Répondez dans le terminal ou ici.</p><form id="question-form"><label>Votre réponse<textarea id="question-answer" name="answer" required></textarea></label><button class="primary">Répondre</button></form>`;
   const data = state.run.nodes[node.id]; if (!data) return '';
   if (failedResult(data, node) && !['accepted','skipped'].includes(data.status)) {
     const reason=(data.result?.ok===false && data.result?.summary) || data.validation_error || data.result?.summary || data.reason || 'Le résultat ne satisfait pas le contrôle demandé.';
     const canRetry=data.status==='returned' && node.kind!=='external' && !data.result?.effect_id && data.attempt<(node.max_attempts || 1);
-    return `<section class="failure-summary"><strong>Cette étape a échoué</strong><p class="attempt-budget">${esc(attemptBudget(data,node))}</p>${reason?.$artifact ? dataView('Cause',reason) : `<p>${esc(reason)}</p>`}</section><div class="failure-actions">${data.result?.effect_id ? button('reconcile-effect','Rechercher l’accusé distant','primary') : ''}${canRetry ? button('retry','Préparer la reprise','primary') : node.kind!=='external' && !data.result?.effect_id && !data.effect_uncertain ? button('new-request','Choisir un workflow adapté') : ''}${['agent','task','document'].includes(node.kind) && !data.result?.effect_id && !data.effect_uncertain ? button('configure-execution','Configurer un nouveau lancement…','',`data-id="${esc(state.run.id)}"`) : ''}${state.conversation ? button('conversation-terminal','Retrouver la conversation') : ''}</div><p class="muted">${esc(retryGuidance(data,node))}</p>${node.execution_mode==='edit' && typeof reason==='string' && reason.includes('aucune modification de fichier') ? '<p class="notice">Ce bloc exige des modifications de code. Une collecte de sources, une analyse ou une coordination doit utiliser un workflow adapté à ce travail. Les demandes de correction restent suivies séparément dans la vue d’ensemble.</p>' : ''}${data.validation_error && data.validation_error!==reason ? (data.validation_error?.$artifact ? dataView('Contrôle',data.validation_error) : `<p class="muted">${esc(data.validation_error)}</p>`) : ''}<details class="result-context"><summary>Entrées, résultat technique et historique</summary>${received}</details>`;
+    return `<section class="failure-summary"><strong>Cette étape a échoué</strong><p class="attempt-budget">${esc(attemptBudget(data,node))}</p>${reason?.$artifact ? dataView('Cause',reason) : `<p>${esc(readableFailure(reason))}</p>${readableFailure(reason)!==reason?`<details><summary>Diagnostic technique</summary><p>${esc(reason)}</p></details>`:''}`}${node.kind==='command' && data.result?.preview ? `<section class="command-failure-output">${dataView('Sortie de la commande',data.result.preview)}${evidenceView(data)}</section>` : ''}</section><div class="failure-actions">${data.result?.effect_id ? button('reconcile-effect','Rechercher l’accusé distant','primary') : ''}${canRetry ? button('retry',retryRunsAutomatically(node)?'Relancer cette étape…':'Préparer la reprise','primary') : node.kind!=='external' && !data.result?.effect_id && !data.effect_uncertain ? button('new-request','Choisir un workflow adapté') : ''}${['agent','task','document'].includes(node.kind) && !data.result?.effect_id && !data.effect_uncertain ? button('configure-execution','Configurer un nouveau lancement…','',`data-id="${esc(state.run.id)}"`) : ''}${state.conversation ? button('conversation-terminal','Retrouver la conversation') : ''}</div><p class="muted">${esc(retryGuidance(data,node))}</p>${node.execution_mode==='edit' && typeof reason==='string' && reason.includes('aucune modification de fichier') ? '<p class="notice">Ce bloc exige des modifications de code. Une collecte de sources, une analyse ou une coordination doit utiliser un workflow adapté à ce travail. Les demandes de correction restent suivies séparément dans la vue d’ensemble.</p>' : ''}${data.validation_error && data.validation_error!==reason ? (data.validation_error?.$artifact ? dataView('Contrôle',data.validation_error) : `<p class="muted">${esc(data.validation_error)}</p>`) : ''}<details class="result-context"><summary>Entrées, résultat technique et historique</summary>${received}</details>`;
   }
   let html = `<p>${nodeBadge(data,node)}</p>`;
-  const requestTitle=state.run.parameters?.request?.split?.('\n')[0] || state.conversation?.items.find(i=>i.run===state.run.id)?.request.split('\n')[0] || state.run.definition.title;
+  const requestTitle=requestHeading(state.run.parameters?.request, state.conversation?.items.find(i=>i.run===state.run.id)?.request, state.run.definition.title);
   const scope=`<p class="interaction-scope"><strong>${esc(requestTitle)}</strong><span>Cette proposition · tentative ${esc(data.attempt || 1)} uniquement.</span></p>`;
   if(data.status==='waiting') html += `<p class="decision-scope">Décision pour cette demande : ${esc(requestTitle)}.</p>`;
 
   const operation=data.operation || node.operation;
   if (data.status === 'waiting') {
-    html += `<div class="notice amber"><strong>Votre décision est attendue</strong><p>${esc(node.question || 'Examiner le résultat avant la suite.')}</p>${operation?.$artifact ? dataView('Contenu exact de l’opération',operation) : operation ? `<p>Action : <strong>${esc(operation.action)}</strong><br>Cible : <strong>${esc(operation.target)}</strong><br>Candidat : <code>${esc(operation.candidate)}</code></p><details open><summary>Contenu exact de l’opération</summary><pre>${esc(JSON.stringify(operation, null, 2))}</pre></details>` : ''}</div>${received}<form id="decision-form"><label for="decision-note">Commentaire (facultatif)</label><textarea id="decision-note" name="note"></textarea><div class="interaction-actions">${scope}<div class="row">${(node.options || ['approve', 'reject']).map(o => `<button id="decision-outcome-${esc(o)}" type="submit" name="outcome" value="${esc(o)}" class="${o === 'approve' ? 'primary' : ''}">${o === 'approve' ? operation ? 'Autoriser cette opération' : 'Approuver la suite' : o === 'reject' ? 'Refuser la suite' : esc(o)}</button>`).join('')}</div></div></form>`;
+    html += `<div class="notice amber"><strong>Votre décision est attendue</strong><p>${esc(node.question || 'Examiner le résultat avant la suite.')}</p>${operation?.$artifact ? dataView('Contenu exact de l’opération',operation) : operation ? `<p>Action : <strong>${esc(operation.action)}</strong><br>Cible : <strong>${esc(operation.target)}</strong><br>Candidat : <code>${esc(operation.candidate)}</code></p><details open><summary>Contenu exact de l’opération</summary><pre>${esc(JSON.stringify(operation, null, 2))}</pre></details>` : ''}</div>${received}${(node.options || ['approve','reject']).includes('reject') && !state.run.definition.edges.some(edge=>edge.from===node.id && edge.outcome==='reject') ? '<p class="decision-consequence">Refuser la suite empêche les étapes liées à l’approbation de démarrer. Ce refus ne demande pas de révision : pour une autre proposition, créez une nouvelle demande.</p>' : ''}<form id="decision-form"><label for="decision-note">Commentaire (facultatif)</label><textarea id="decision-note" name="note"></textarea><div class="interaction-actions">${scope}<div class="row">${(node.options || ['approve', 'reject']).map(o => `<button id="decision-outcome-${esc(o)}" type="submit" name="outcome" value="${esc(o)}" class="${o === 'approve' ? 'primary' : ''}">${o === 'approve' ? operation ? 'Autoriser cette opération' : 'Approuver la suite' : o === 'reject' ? 'Refuser la suite' : esc(o)}</button>`).join('')}</div></div></form>`;
   }
   if (data.result) {
     html += `${data.result.summary?.$artifact ? dataView('Compte rendu',data.result.summary) : `<p>${esc(data.result.summary)}</p>`}${data.result.preview?.$artifact ? dataView('Aperçu complet',data.result.preview) : data.result.preview ? `<pre>${esc(data.result.preview)}</pre>` : ''}${data.result.simulated ? '<p class="notice amber">Preuve simulée, sans valeur de test métier réel.</p>' : ''}`;
@@ -741,7 +1070,7 @@ function runInspector(node) {
     const readiness=launchReadiness(state.run,node.id);
     if(data.status==='ready' && readiness && readiness.status!=='ready') {
       const native=state.conversation && (readiness.status==='native' || readiness.native_available);
-      html += `<section class="notice launch-readiness"><strong>${esc(native ? agentStopped()?'Agent arrêté':'À traiter dans la conversation' : readiness.label)}</strong><p>${esc(native ? agentStopped()?'Le terminal est au prompt du shell. Reprenez l’agent pour traiter cette étape.':'Cette étape peut être traitée par l’agent de la conversation.' : readiness.reason)}</p>${native ? button(agentStopped()?'resume-agent':'conversation-terminal',agentStopped()?'Reprendre l’agent…':'Continuer dans la conversation','primary') : ''}${readiness.status==='configuration' ? (native?'<details><summary>Agent de bloc séparé (facultatif)</summary><p>'+esc(readiness.reason)+'</p>':'')+button('configure-execution','Configurer un nouveau lancement…','',`data-id="${esc(state.run.id)}"`)+(native?'</details>':'') : ''}</section>`;
+      html += `<section class="notice launch-readiness"><strong>${esc(native ? agentStopped()?'Agent arrêté':'À traiter dans la conversation' : readiness.label)}</strong><p>${esc(native ? agentStopped()?'Reprenez l’agent pour traiter cette étape.':'Cette étape peut être traitée par l’agent de la conversation.' : readiness.reason)}</p>${native ? button(agentStopped()?'resume-agent':'conversation-terminal',agentStopped()?'Reprendre l’agent…':'Continuer dans la conversation','primary') : ''}${readiness.status==='configuration' ? (native?'<details><summary>Agent de bloc séparé (facultatif)</summary><p>'+esc(readiness.reason)+'</p>':'')+button('configure-execution','Configurer un nouveau lancement…','',`data-id="${esc(state.run.id)}"`)+(native?'</details>':'') : ''}</section>`;
     } else html += `<p class="muted">${data.status === 'ready' ? (state.run.driver ?? state.run.definition.driver) === 'conversation' && ['agent', 'task', 'document'].includes(node.kind) ? 'Cette étape est prête. Poursuivez dans le terminal de la conversation.' : 'Le moteur lancera cette étape dès que ses ressources seront disponibles.' : data.status === 'skipped' ? 'Cette branche n’a pas été sélectionnée.' : 'Cette étape attend ses dépendances.'}</p>`;
   }
   if(data.status!=='waiting' && received) html += `<details class="result-context" ${data.result && data.status!=='running' ? 'open' : ''}><summary>Entrées, sorties et preuves</summary>${received}</details>`;
@@ -759,7 +1088,7 @@ async function ensureProject() {
   Object.assign(state, await call('workspace.get'));
 }
 async function openProject(id, render = true) {
-  viewEpoch++;
+  parentViews.length=0;viewEpoch++;
   const data = await call('project.get', { project: id }); Object.assign(state, data); state.repositoryFiles = await call('workflow.repository', { project: id }); state.repositoryProject = id; state.conversations = await call('conversation.list', { project: id }); state.route = 'project';
   if (render) shell();
 }
@@ -833,7 +1162,8 @@ async function save() {
   if (state.project.library) state.templates = (await call('bootstrap')).templates;
   if (state.route === 'workflow') renderEditor(); toast('Workflow enregistré. Les exécutions précédentes gardent leur version.');
 }
-async function openRun(id, stillCurrent = null) {
+async function openRun(id, stillCurrent = null, preserveParent = false) {
+  if(!preserveParent)parentViews.length=0;
   if (!stillCurrent) viewEpoch++;
   const data = await call('run.get', { run: id });
   if (stillCurrent && !stillCurrent()) return;
@@ -856,9 +1186,9 @@ function focusSelectedNode() {
   const node=document.querySelector(`.node[data-id="${CSS.escape(state.selected)}"]`);
   if(!viewport || !node)return;
   viewport.scrollLeft=Math.max(0,(node.offsetLeft+node.offsetWidth/2)*state.zoom-viewport.clientWidth/2);
-  viewport.scrollTop=Math.max(0,(node.offsetTop+node.offsetHeight/2)*state.zoom-viewport.clientHeight/2);
+  viewport.scrollTop=Math.max(0,node.offsetHeight*state.zoom>viewport.clientHeight-32 ? node.offsetTop*state.zoom-12 : (node.offsetTop+node.offsetHeight/2)*state.zoom-viewport.clientHeight/2);
 }
-function dataView(label, values) { return businessDataView(label,values,{button}); }
+function dataView(label, values) { return businessDataView(label,values,{button,projects:state.projects}); }
 function evidenceView(data) {
   const proofs = data.result?.evidence || [];
   if (proofs.$artifact) return dataView('Preuves',proofs);
@@ -935,8 +1265,8 @@ const actions = {
   'new-request': prepareRequest,
   async 'request-workflow'(el) {closeModal();await actions['run-workflow'](el);},
   'resume-agent'() {
-    const c=state.conversation, shell=state.projects.find(p=>p.id===c.project) || c.project_contexts?.find(p=>p.id===c.project), shown=state.projects.find(p=>p.id===state.run?.project);
-    modal('Reprendre l’agent de cette conversation',`<p>Vos demandes, réponses et résultats sont conservés. L’agent pourra continuer le travail dans cette conversation.</p><p class="resume-project-scope"><strong>Projet du terminal à son ouverture : ${esc(projectTitle(shell) || 'projet de la conversation')}</strong>${shown && shown.id!==c.project ? `<br>Demande affichée : ${esc(projectTitle(shown))}` : ''}. Le dossier courant du shell peut avoir changé.</p><p>${manuallyPaused(state.run)?'Cette demande restera suspendue. Utilisez « Reprendre la demande » pour poursuivre son exécution.':'Cette reprise conserve les suspensions et les dépendances entre demandes.'}</p><p class="notice amber">La reprise se fait uniquement si le terminal est au prompt du shell. Elle efface sa ligne de saisie en cours.</p><details><summary>Détails de la session fournisseur</summary><p>La session fournisseur est reprise si son identifiant est connu ; sinon un nouvel agent relit les demandes et résultats conservés, sans créer une seconde conversation Tricorder.</p></details>`,button('close-modal','Revenir')+button('confirm-resume-agent','Reprendre dans ce terminal','primary'));
+    const c=state.conversation, closed=integration.terminalClosed?.(c.id), shell=state.projects.find(p=>p.id===c.project) || c.project_contexts?.find(p=>p.id===c.project), shown=state.projects.find(p=>p.id===state.run?.project);
+    modal('Reprendre l’agent de cette conversation',`<p>Vos demandes, réponses et résultats sont conservés. L’agent pourra continuer le travail dans cette conversation.</p><p class="resume-project-scope"><strong>Projet du terminal à son ouverture : ${esc(projectTitle(shell) || 'projet de la conversation')}</strong>${shown && shown.id!==c.project ? `<br>Demande affichée : ${esc(projectTitle(shown))}` : ''}. Le dossier courant du shell peut avoir changé.</p><p>${manuallyPaused(state.run)?'Cette demande restera suspendue. Utilisez « Reprendre la demande » pour poursuivre son exécution.':'Cette reprise conserve les suspensions et les dépendances entre demandes.'}</p><p class="notice amber">${closed ? 'Le terminal précédent est fermé. Un nouveau terminal sera ouvert et l’agent sera lancé uniquement après votre confirmation.' : 'La reprise se fait uniquement si le terminal est au prompt du shell. Elle efface sa ligne de saisie en cours. Si ce terminal a été fermé entre-temps, un nouveau terminal sera ouvert après confirmation.'}</p><details><summary>Détails de la session fournisseur</summary><p>La session fournisseur est reprise si son identifiant est connu ; sinon un nouvel agent relit les demandes et résultats conservés, sans créer une seconde conversation Tricorder.</p></details>`,button('close-modal','Revenir')+button('confirm-resume-agent',closed?'Ouvrir un terminal et reprendre':'Reprendre dans ce terminal','primary'));
   },
   async 'confirm-resume-agent'() { const {project}=await call('project.get',{project:state.conversation.project});closeModal();await terminal.open(project,state.conversation.definition,state.conversation.id,true); },
   'select-value'(el) { const pre=el.closest('.execution-value').querySelector('pre'); const selection=window.getSelection(); const range=window.document.createRange(); range.selectNodeContents(pre); selection.removeAllRanges();selection.addRange(range);pre.focus();toast('Texte sélectionné : Ctrl+C pour copier.'); },
@@ -1017,7 +1347,7 @@ const actions = {
   'open-project': el => openProject(el.dataset.id),
   async 'open-workflow'(el) {const project=el.dataset.project || state.project.id,workflow=el.dataset.id;await openProject(project,false);await openWorkflow(await call('workflow.get',{project,workflow}));},
   'open-run': el => {state.conversationScope='request';return openRun(el.dataset.id);},
-  'notification-run': el => openRun(el.dataset.id),
+  'notification-run': el => actions['open-child'](el),
   'library-project'() { state.route = 'library'; shell(); },
   'use-template': el => prepareWork(el.dataset.id),
   'new-work': () => prepareWork(),
@@ -1106,15 +1436,45 @@ const actions = {
   },
   async terminal() { if (!state.project) await ensureProject(); if (state.dirty) await save(); await terminal.open(state.project, state.graph, state.conversation?.id); },
   async 'reload-file'() { if (state.dirty) return showConflict(); const graph = await call('workflow.reload', { project: state.project.id, workflow: state.graph.id, revision: state.savedRevision }); state.graph = graph; state.savedRevision = graph.revision; state.history = new History(); renderEditor(); toast('Fichier validé et nouvelle révision chargée. Les exécutions existantes sont inchangées.'); },
-  'select-node'(el) { state.selected = el.dataset.id; if (state.mode === 'run') { state.reviewFocus = true; renderEditor(); return; } document.querySelectorAll('.node').forEach(n => n.classList.toggle('selected', n.dataset.id === state.selected)); renderInspector(); if (host.clientWidth <= 760) document.querySelector('#node-title')?.focus({preventScroll:true}); },
+  'select-node'(el) { state.iterationPage = null; state.selected = el.dataset.id; state.selectedNote = null; state.propertiesOpen = host.clientWidth > 760; if (state.mode === 'run') { state.reviewFocus = true; renderEditor(); return; } document.querySelectorAll('.node').forEach(n => n.classList.toggle('selected', n.dataset.id === state.selected)); renderInspector(); const properties = document.querySelector('[data-action=open-properties]'); if (properties) properties.disabled = false; },
+  'open-properties'() { if (!state.selected || state.mode !== 'design') return; state.propertiesOpen = true; renderInspector(); document.querySelector('#node-title')?.focus({preventScroll:true}); },
+  'add-note'() { noteForm(); },
+  'edit-note'(el) { noteForm(el.dataset.id); },
+  'delete-note'(el) { edit(g => { g.layout.notes = g.layout.notes.filter(n => n.id !== el.dataset.id); }); closeModal(); },
+  'connection-port'(el) { connectionPort(el); },
   'workflow-settings'() { modal('Paramètres du workflow', `<form id="workflow-form"><label for="workflow-title">Nom</label><input id="workflow-title" name="title" value="${esc(state.graph.title)}" required><label for="workflow-description">Description</label><textarea id="workflow-description" name="description">${esc(state.graph.description || '')}</textarea>${questionNotificationForm()}${odooWorkflowFields()}<details><summary>Paramètres supplémentaires</summary><label for="workflow-parameters">Paramètres (objet JSON)</label><textarea id="workflow-parameters" name="parameters" spellcheck="false">${esc(JSON.stringify(workflowExtraParameters(), null, 2))}</textarea></details><div class="modal-actions"><button class="primary" type="submit">Appliquer</button></div></form>`, state.launchReturn ? button('return-to-launch', state.launchReturn.kind === 'schedule' ? 'Revenir à la planification' : 'Revenir au lancement') : ''); },
-  'add-node'() { modal('Ajouter un bloc', `<form id="add-node-form"><label for="add-kind">Type d'étape</label><select id="add-kind" name="kind">${options([['agent', 'Travail · Agent'], ['task', 'Travail · Tâche dans la conversation'], ['command', 'Travail · Commande'], ['document', 'Travail · Document'], ['agent-route', 'Aiguillage · Évaluation par un agent'], ['condition', 'Aiguillage · Règle explicite'], ['decision', 'Décision · Accord humain'], ['question', 'Décision · Question ouverte'], ['join', 'Organisation · Réunir'], ['subworkflow', 'Organisation · Sous-workflow'], ['watch', 'Organisation · Surveillance'], ['external', 'Travail · Opération externe'], ['communication', 'Travail · Communication']], 'agent')}</select><label for="add-title">Nom du bloc</label><input id="add-title" name="title" required placeholder="Quel résultat attendre ?"><div class="modal-actions"><button class="primary" type="submit">Ajouter au workflow</button></div></form>`); },
-  connect() { modal('Relier deux étapes', `<form id="connect-form"><label for="edge-from">Depuis</label><select id="edge-from" name="from">${options(state.graph.nodes.map(n => [n.id,n.title]), state.selected || state.graph.nodes[0].id)}</select><label for="edge-outcome">Après l’issue</label><select id="edge-outcome" name="outcome"></select><label for="edge-to">Vers</label><select id="edge-to" name="to">${options(state.graph.nodes.map(n => [n.id,n.title]), state.graph.nodes.find(n => n.id !== (state.selected || state.graph.nodes[0].id))?.id)}</select><p class="mapping-summary"></p><label><input type="checkbox" name="order_only">Ne transmettre aucune donnée (ordre d’exécution uniquement)</label><label>Sortie à transmettre<select name="output"></select></label><label>Entrée destinataire<select name="input"></select></label><details><summary>Configuration des échanges</summary><label for="edge-mapping">Données transmises (JSON : sortie → entrée)</label><textarea id="edge-mapping" name="mapping">{}</textarea></details><div class="modal-actions"><button class="primary">Créer le lien</button></div></form>`); refreshConnectionForm(); },
-  'add-port'(el) { modal('Décrire une donnée', `<form id="port-form"><input type="hidden" name="direction" value="${el.dataset.direction}"><label>Nom (sans espaces)<input name="port" required pattern="[a-zA-Z][a-zA-Z0-9_.-]{0,79}" placeholder="criticite"></label><label>Type<select name="type">${options([['string','Texte'],['object','Objet structuré'],['array','Liste'],['boolean','Oui / non'],['number','Nombre']])}</select></label><button class="primary">Ajouter la donnée</button></form>`); },
+  'add-node'() { modal('Ajouter un bloc', `<form id="add-node-form"><label for="add-kind">Type d'étape</label><select id="add-kind" name="kind">${options([['input', 'Entrée · Recueillir des intentions'], ['foreach', 'Organisation · Pour chaque élément'], ['integrate', 'Organisation · Intégrer les modifications'], ['agent', 'Travail · Agent'], ['task', 'Travail · Tâche dans la conversation'], ['command', 'Travail · Commande'], ['document', 'Travail · Document'], ['agent-route', 'Aiguillage · Évaluation par un agent'], ['condition', 'Aiguillage · Règle explicite'], ['decision', 'Décision · Accord humain'], ['question', 'Décision · Question ouverte'], ['join', 'Organisation · Réunir'], ['subworkflow', 'Organisation · Sous-workflow'], ['watch', 'Organisation · Surveillance'], ['external', 'Travail · Opération externe'], ['communication', 'Travail · Communication']], 'agent')}</select><label for="add-title">Nom du bloc</label><input id="add-title" name="title" required placeholder="Quel résultat attendre ?">${state.graph.schema === 1 ? '<label data-convert-required hidden><input type="checkbox" name="convert">Convertir ce brouillon au format de données structuré. Les exécutions existantes sont conservées.</label>' : ''}<div class="modal-actions"><button class="primary" type="submit">Ajouter au workflow</button></div></form>`); },
+  connect() { openConnection(); },
+  'legacy-add-port'(el) { modal('Décrire une donnée', `<form id="port-form"><input type="hidden" name="direction" value="${el.dataset.direction}"><label>Nom (sans espaces)<input name="port" required pattern="[a-zA-Z][a-zA-Z0-9_.-]{0,79}" placeholder="criticite"></label><label>Type<select name="type">${options([['string','Texte'],['object','Objet structuré'],['array','Liste'],['boolean','Oui / non'],['number','Nombre']])}</select></label><button class="primary">Ajouter la donnée</button></form>`); },
+  'add-port'(el) { showPortForm(el.dataset.direction); },
+  'edit-port'(el) { showPortForm(el.dataset.direction, el.dataset.port); },
+  'convert-workflow'() { conversionDialog(); },
+  async 'confirm-conversion'() { const graph = convertWorkflow(state.graph); await call('workflow.validate',{graph,simulation:true}); edit(g => Object.assign(g,graph)); closeModal(); toast('Brouillon converti. Les exécutions déjà lancées gardent leur version.'); },
+  'choose-child'() { childWorkflowForm(); },
+  'add-associated'() { associatedForm(); },
+  'edit-associated'(el) { associatedForm(el.dataset.id); },
+  'remove-associated'(el) { edit(g => {g.actions = (g.actions || []).filter(a=>a.id !== el.dataset.id);}); closeModal(); },
+  async 'iteration-start'() { state.run = await call('iteration.start',{run:state.run.id,node:state.selected},true); renderEditor(); },
+  async 'iteration-page'(el) { state.iterationPage = await call('iteration.get',{run:state.run.id,node:state.selected,offset:Number(el.dataset.offset)}); renderInspector(); },
+  async 'open-child'(el) { parentViews.push({run:state.run.id,selected:state.selected,reviewFocus:state.reviewFocus,zoom:state.zoom,scroll:viewportGeometry(),iterationPage:state.iterationPage}); await openRun(el.dataset.id,null,true); },
+  async 'return-parent'() { const origin=runOrigin(), previous=parentViews.at(-1); if(!origin)return;const parent=previous?.run===origin.run?parentViews.pop():null;const selected=state.run.parent?.node || state.run.associated_with?.source;await openRun(origin.run,null,true);state.reviewFocus=parent?.reviewFocus ?? false;state.selected=parent?.selected || selected || state.selected;if(parent){state.zoom=parent.zoom;state.iterationPage=parent.iterationPage;}renderEditor();const scroll=document.querySelector('.canvas-scroll');if(parent && scroll){scroll.scrollLeft=parent.scroll.left;scroll.scrollTop=parent.scroll.top;}else requestAnimationFrame(focusSelectedNode); },
+  async 'actions-page'(el) { state.run.associated=await call('action.list',{run:state.run.id,offset:Number(el.dataset.offset)}); renderExecutionOverview(); },
+  'activate-action'(el) { const item=state.run.associated.items.find(a=>a.id===el.dataset.id); modal('Activer une action facultative',`<p><strong>${esc(item.title)}</strong></p><p>Cette activation lance le workflow associé. Les opérations qu’il contient et leurs validations s’appliquent. Le résultat principal reste indépendant.</p>`,button('close-modal','Conserver en attente')+button('confirm-action','Activer cette action','primary',`data-id="${esc(item.id)}"`)); },
+  async 'confirm-action'(el) { state.run=await call('action.activate',{run:state.run.id,id:el.dataset.id},true);closeModal();renderExecutionOverview(); },
+  'collection-edit'(el) { const item=state.run.nodes[state.selected].collection.items.find(item=>item.id===el.dataset.id);modal('Modifier une intention',`<form id="collection-edit-form"><input name="item" type="hidden" value="${esc(item.id)}"><input name="revision" type="hidden" value="${state.run.nodes[state.selected].collection.revision}"><label for="collection-edit-text">Intention</label><textarea id="collection-edit-text" name="text" required maxlength="12000">${esc(item.text)}</textarea><button class="primary">Enregistrer l’intention</button></form>`); },
+  async 'collection-remove'(el) { await changeCollection('remove',{item:el.dataset.id}); },
+  async 'collection-retry-add'(el) {
+    const job=collectionJobs(state.run.id,state.selected).find(item=>item.id===el.dataset.id);if(!job || collectionInFlight.has(job.id))return;
+    collectionInFlight.add(job.id);renderInspector();
+    try { await changeCollection('add',{text:job.text},job); }
+    finally {collectionInFlight.delete(job.id);if(state.run?.id===job.run)renderInspector();}
+  },
+  'collection-discard-add'(el) {const job=collectionJobs(state.run.id,state.selected).find(item=>item.id===el.dataset.id);if(job && !collectionInFlight.has(job.id)){saveCollectionJob(job,true);renderInspector();}},
+  async 'collection-close'() { if(collectionJobs(state.run.id,state.selected).length)throw new Error('Résolvez les ajouts à récupérer avant de confirmer le recueil.');const field=document.querySelector('#collection-text');if(field?.value.trim()){field.focus();throw new Error('Ajoutez l’intention saisie à la liste, ou effacez-la, avant de confirmer le recueil.');}await changeCollection('close'); },
   'remove-port'(el) { edit(g => { delete g.nodes.find(n => n.id === state.selected)[el.dataset.direction][el.dataset.port]; }); },
-  'close-inspector'() { if(state.mode === 'run') { state.reviewFocus=false;renderEditor();requestAnimationFrame(focusSelectedNode);return; } const previous = state.selected; state.selected = null; renderInspector(); renderGraph(); document.querySelector(`[data-action="select-node"][data-id="${CSS.escape(previous)}"]`)?.focus({preventScroll:true}); },
+  'close-inspector'() { if(state.mode === 'run') { state.reviewFocus=false;renderEditor();requestAnimationFrame(focusSelectedNode);return; } const previous = state.selected; state.propertiesOpen = false; renderInspector(); renderGraph(); document.querySelector(`[data-action="select-node"][data-id="${CSS.escape(previous)}"]`)?.focus({preventScroll:true}); },
   'simulation-data'() { modal('Données de simulation du bloc', simulationForm(selectedNode())); },
-  'repair-design'(el) { rememberLaunchDraft(); closeModal(); state.selected = el.dataset.id; renderEditor(); const links = document.querySelector('.design-links'); if (links) { links.open = true; links.scrollIntoView({ block: 'nearest' }); } },
+  'repair-design'(el) { rememberLaunchDraft(); closeModal(); state.selected = el.dataset.id; state.propertiesOpen = true; renderEditor(); const links = document.querySelector('.design-links'); if (links) { links.open = true; links.scrollIntoView({ block: 'nearest' }); } },
   'connect-input'(el) { actions.connect(); const form = document.querySelector('#connect-form'); form.elements.to.value = el.dataset.id; form.elements.from.value = state.graph.nodes.find(node => node.id !== el.dataset.id)?.id || el.dataset.id; refreshConnectionForm(); },
   'delete-edge'(el) { confirmDesignRemoval('edge', el.dataset.id); },
   'delete-node'() { flushNodeForm(); confirmDesignRemoval('node', state.selected); },
@@ -1129,15 +1489,14 @@ const actions = {
   },
   'select-edge'(element) {
     if (state.mode !== 'design') return;
-    const edge = state.graph.edges.find(item => item.id === element.dataset.id); if (!edge) return;
-    const name = id => state.graph.nodes.find(node => node.id === id)?.title || id;
-    modal('Lien entre les blocs', `<p><strong>${esc(name(edge.from))} → ${esc(name(edge.to))}</strong></p><p>${esc(edge.outcome && edge.outcome !== 'done' ? decisionLabel(edge.outcome) : 'Travail terminé')}</p>${Object.keys(edge.mapping || {}).length ? `<p>Données : ${Object.entries(edge.mapping).map(([from, to]) => `${esc(from)} → ${esc(to)}`).join(', ')}</p>` : '<p>Ordre d’exécution uniquement · aucune donnée transmise.</p>'}<p>Pour changer la destination ou les données, retirez ce lien puis utilisez « Relier ». Les modifications peuvent être annulées.</p>`, button('close-modal', 'Conserver le lien') + button('delete-edge', 'Retirer ce lien…', 'danger', `data-id="${esc(edge.id)}"`));
+    const edge = state.graph.edges.find(item => item.id === element.dataset.id); if (edge) openConnection({ edge });
   },
   undo() { state.graph = state.history.undo(state.graph); state.dirty = true; persistDraft(); renderEditor(); },
   redo() { state.graph = state.history.redo(state.graph); state.dirty = true; persistDraft(); renderEditor(); },
   view() { state.view = state.view === 'canvas' ? 'list' : 'canvas'; renderEditor();if(state.view==='canvas')requestAnimationFrame(focusSelectedNode); },
-  'zoom-in'() { state.zoom = Math.min(1.6, state.zoom + 0.1); renderGraph(); document.querySelector('#zoom-label').textContent = Math.round(state.zoom * 100) + ' %'; },
-  'zoom-out'() { state.zoom = Math.max(0.4, state.zoom - 0.1); renderGraph(); document.querySelector('#zoom-label').textContent = Math.round(state.zoom * 100) + ' %'; },
+  'zoom-in'() { setGraphZoom(Math.min(1.6, state.zoom + 0.1)); },
+  'zoom-out'() { setGraphZoom(Math.max(0.4, state.zoom - 0.1)); },
+  'zoom-reset'() { setGraphZoom(1); },
   phases() {
     const phases = [...new Set(currentGraph().nodes.map(n => n.phase).filter(Boolean))];
     const intro = '<p>Replier une phase simplifie le dessin. Les décisions et blocages restent visibles.</p>';
@@ -1146,7 +1505,7 @@ const actions = {
   },
   'toggle-phase'(el) { const phase = el.dataset.phase; if (state.collapsed.has(phase)) state.collapsed.delete(phase); else state.collapsed.add(phase); renderGraph(); actions.phases(); },
   'expand-phase'(el) { state.collapsed.delete(el.dataset.phase); renderGraph(); },
-  fit() { if(state.mode==='run'){state.zoom=1;renderGraph();requestAnimationFrame(focusSelectedNode);return;} const g = currentGraph(), width = Math.max(...g.nodes.map((n, i) => nodePosition(n, i).x + 320)); state.zoom = Math.max(0.4, Math.min(1, (document.querySelector('.canvas-area').clientWidth - 30) / width)); renderEditor(); },
+  fit() { fitCurrentGraph(); },
   'back-design'() { state.mode = 'design'; state.selected = null; renderEditor(); },
   async mode(el) { if (state.mode === 'design' && state.dirty) await save(); state.mode = el.dataset.mode; state.selected = state.mode==='run' ? state.run?.focus?.node || null : null; if (state.mode === 'history') { await loadRunPage(); return; } renderEditor(); },
   async 'start-preview'() {
@@ -1224,7 +1583,13 @@ const actions = {
     else { state.route = 'workflow'; state.mode = 'run'; shell(); }
   },
   'start-conversation': launchConversation,
-  async 'conversation-terminal'() { if(integration.terminalStatus?.(state.conversation.id)==='stopped'){state.agentState='stopped';state.agentConversation=state.conversation.id;return actions['resume-agent']();} const { project } = await call('project.get', { project: state.conversation.project }); await terminal.open(project, state.conversation.definition, state.conversation.id); },
+  async 'conversation-terminal'() {
+    const { project } = await call('project.get', { project: state.conversation.project });
+    // The foreground program may have changed since the last terminal poll.
+    // Find the existing session first; only its fresh state can require a resume.
+    const result = await terminal.open(project, state.conversation.definition, state.conversation.id);
+    if (result?.agentState === 'stopped') return actions['resume-agent']();
+  },
   async 'conversation-shell'() { const { project } = await call('project.get', { project: state.conversation.project }); await terminal.open(project, state.conversation.definition, integration.terminalStatus?.(state.conversation.id)==='unknown' ? undefined : state.conversation.id); },
   async 'conversation-item'(el) { const selector=document.querySelector('.request-selector');if(selector)selector.open=false;state.compactRequestsOpen=false;if(conversationOverviewActive())state.conversationScroll=document.querySelector('#conversation-overview')?.scrollTop || 0;state.conversationScope='request';await openRun(el.dataset.id); },
   async 'conversation-item-action'(el) {await actions['conversation-item'](el);const next=conversationNextAction(state.run);if(next.action)await actions[next.action]();else actions['execution-next-action']();},
@@ -1250,12 +1615,12 @@ const actions = {
   async pause() { if(state.run.status==='paused' && (!manuallyPaused(state.run) || blockedDependencies().length)) {state.reviewFocus=true;state.selected=null;renderEditor();return;} state.run = await call('run.control', { run: state.run.id, control: state.run.status === 'paused' ? 'resume' : 'pause' }); renderEditor(); },
   async reconcile() { state.run = await call('run.reconcile', { run: state.run.id, node: state.selected }); renderInspector(); },
   retry() {
-    const node = selectedNode(), data = state.run.nodes[state.selected];
-    modal('Préparer la reprise de cette étape', `<form id="retry-form"><p><strong>${esc(attemptBudget(data,node))}</strong></p><p>Le résultat précédent reste dans l’historique. Cette action prépare le bloc ; elle ne démarre pas l’agent. Le suivi indiquera ensuite comment poursuivre.</p>${data.result?.summary ? dataView('Résultat précédent',data.result.summary) : ''}<label for="retry-note">Correction attendue</label><textarea id="retry-note" name="note" required></textarea><div class="modal-actions"><button class="primary" type="submit">Préparer cette étape pour reprise</button></div></form>`);
+    const node = selectedNode(), data = state.run.nodes[state.selected], automatic=retryRunsAutomatically(node);
+    modal(automatic?'Relancer cette étape maintenant':'Préparer la reprise de cette étape', `<form id="retry-form"><p><strong>${esc(attemptBudget(data,node))}</strong></p><p>Le résultat précédent reste dans l’historique. ${automatic ? 'La validation de ce formulaire relance immédiatement cette étape dès qu’une ressource est disponible et consomme une tentative. Effectuez votre correction avant de confirmer.' : 'Cette action prépare le bloc ; elle ne démarre pas l’agent. Le suivi indiquera ensuite comment poursuivre.'}</p>${data.result?.summary ? dataView('Résultat précédent',data.result.summary) : ''}<label for="retry-note">Correction attendue</label><textarea id="retry-note" name="note" required></textarea><div class="modal-actions"><button class="primary" type="submit">${automatic?'Relancer maintenant':'Préparer cette étape pour reprise'}</button></div></form>`);
   },
   'execution-results'() {
     const results = completedResults();
-    modal('Résultats validés de cette demande', `<p>${esc(state.run.parameters?.request || state.run.definition.title)}</p>${state.run.simulation ? '<p class="notice amber">Simulation · ces contenus ne prouvent aucun travail métier réel.</p>' : ''}${results.slice(-3).reverse().map(({node,data}) => `<section class="completed-result"><h3>${esc(node.title)}</h3><p class="muted">Résultat validé · tentative ${data.attempt || 1}</p>${dataView('Compte rendu',data.result.summary)}${data.result.outputs ? dataView('Contenu produit',data.result.outputs) : ''}${evidenceView(data)}</section>`).join('')}${results.length > 3 ? `<p>${3} résultats affichés sur ${results.length}. Le rapport conserve tous les résultats.</p>` : ''}`, button('close-modal','Fermer') + button('results-report','Voir le rapport complet'), true);
+    modal('Résultats validés de cette demande', `<p>${esc(requestHeading(state.run.parameters?.request,state.run.definition.title))}</p>${state.run.simulation ? '<p class="notice amber">Simulation · ces contenus ne prouvent aucun travail métier réel.</p>' : ''}${results.slice(-3).reverse().map(({node,data}) => `<section class="completed-result"><h3>${esc(node.title)}</h3><p class="muted">Résultat validé · tentative ${data.attempt || 1}</p>${dataView('Compte rendu',data.result.summary)}${data.result.outputs ? dataView('Contenu produit',data.result.outputs) : ''}${evidenceView(data)}</section>`).join('')}${results.length > 3 ? `<p>${3} résultats affichés sur ${results.length}. Le rapport conserve tous les résultats.</p>` : ''}`, button('close-modal','Fermer') + button('results-report','Voir le rapport complet'), true);
   },
   async 'results-report'() { closeModal(); await actions.mode({dataset:{mode:'document'}}); },
   timeline: showTimeline,
@@ -1277,6 +1642,7 @@ async function launch(simulation) {
 }
 
 document.addEventListener('click', event => {
+  if (suppressGestureClick) { suppressGestureClick = false; event.preventDefault(); return; }
   const el = event.target.closest('[data-action]'); if (!el) return;
   const action = actions[el.dataset.action]; if (!action) return;
   event.preventDefault(); if (el.dataset.pending) return; el.dataset.pending = '1';
@@ -1293,8 +1659,13 @@ document.addEventListener('keydown', event => { if(event.key==='Escape') { const
 document.addEventListener('toggle', event => {
   if (event.target.matches('.workflow-options')) positionWorkflowOptions();
 }, true);
+let observedWidth=0, observedHeight=0, resizeFrame=0;
 new ResizeObserver(() => {
   positionWorkflowOptions();
+  const width=Math.round(host.clientWidth),height=Math.round(host.clientHeight), resized=width!==observedWidth || height!==observedHeight;observedWidth=width;observedHeight=height;
+  if(resized) {cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{
+    if(state.route==='workflow' && state.mode==='run' && !state.reviewFocus && document.querySelector('.canvas')) {renderGraph();focusSelectedNode();}
+  });}
   const compact=host.clientHeight>0 && host.clientHeight<480;
   if(compact!==!!state.compactHeight) {
     state.compactHeight=compact;document.body.classList.toggle('compact-height',compact);
@@ -1303,6 +1674,11 @@ new ResizeObserver(() => {
 }).observe(host);
 
 document.addEventListener('change', event => {
+  if(event.target.id==='condition-type'){const form=event.target.form, boolean=event.target.value==='boolean';form.querySelector('[data-condition-boolean]').hidden=!boolean;form.querySelector('[data-condition-custom]').hidden=boolean;if(boolean)form.elements.options.value='true\nfalse';}
+  if(event.target.id==='port-type') {const list=document.querySelector('[data-list-contract]');if(list)list.hidden=event.target.value!=='array';}
+  if(event.target.id==='add-kind'){const box=document.querySelector('[data-convert-required]');if(box){box.hidden=!['input','foreach','integrate'].includes(event.target.value);box.querySelector('input').required=!box.hidden;}}
+  if(event.target.name==='workflow_choice'){const basic=document.querySelector('[data-basic-workflow]');if(basic)basic.hidden=event.target.value!=='__basic__';}
+  if(event.target.closest('#connect-form') && event.target.name==='output')updateConnectionCompatibility();
   if (event.target.id === 'project-location') {
     const repository = event.target.value === 'repository', form = event.target.form;
     form.querySelector('[data-repository-project]').hidden = !repository;
@@ -1334,13 +1710,24 @@ document.addEventListener('change', event => {
 });
 document.addEventListener('input', event => {
   if(event.target.matches('#dependency-choices input[name=depends]')) {const selected=state.dependencyDraft.selected;event.target.checked?selected.add(event.target.value):selected.delete(event.target.value);document.querySelector('#dependency-count').textContent=`${selected.size} demande(s) préalable(s) sélectionnée(s). La nouvelle demande attendra leur réussite à toutes.`;}
-  const interaction=event.target.closest('#question-form,#decision-form,#receipt-form');if(interaction){const key=interactionDraftKey(interaction);if(key)localStorage.setItem(key,JSON.stringify(Object.fromEntries([...interaction.querySelectorAll('textarea[name]')].map(field=>[field.name,field.value]))));}
+  const interaction=event.target.closest('#question-form,#decision-form,#receipt-form,#collection-form');if(interaction){const key=interactionDraftKey(interaction);if(key){const draft=Object.fromEntries([...interaction.querySelectorAll('textarea[name]')].map(field=>[field.name,field.value]));if(interaction.id==='collection-form')draft.edited=crypto.randomUUID();localStorage.setItem(key,JSON.stringify(draft));}}
   if (event.target.closest('#node-form')) { const form=event.target.closest('#node-form');localStorage.setItem(draftKey(),JSON.stringify({graph:state.graph,revision:state.savedRevision,form:{node:state.selected,values:formDraft(form)}})); document.querySelector('[data-action=save]')?.removeAttribute('disabled'); const heading = document.querySelector('.workflow-heading p'); if (heading) heading.textContent = 'Modifications en attente · enregistrées en quittant cette vue'; }
   if (event.target.id === 'workflow-model') document.querySelector('[data-action="start-real"]')?.setAttribute('disabled', '');
 });
 
 document.addEventListener('submit', event => {
   event.preventDefault(); const form = event.target; const submitterValue=event.submitter?.value; const data = Object.fromEntries(new FormData(form));
+  if(form.id==='collection-form') {
+    if(!form.reportValidity())return;
+    const draftKey=interactionDraftKey(form),draft=localStorage.getItem(draftKey);
+    const submitted={id:crypto.randomUUID(),run:state.run.id,node:state.selected,text:data.text,draftKey,draft};
+    const pending=JSON.stringify({draftKey,draft,text:data.text});
+    if(pendingInteractions.has(pending))return;
+    try {saveCollectionJob(submitted);}catch {error('Le brouillon local ne peut pas être enregistré. Conservez votre texte avant de réessayer.');return;}
+    pendingInteractions.add(pending);collectionInFlight.add(submitted.id);
+    enqueue(async()=>{try{await changeCollection('add',{text:data.text},submitted);}finally{pendingInteractions.delete(pending);collectionInFlight.delete(submitted.id);if(state.run?.id===submitted.run)renderInspector();}});
+    return;
+  }
   if (['question-form','decision-form','receipt-form'].includes(form.id)) {
     if(!form.reportValidity())return;
     const draft=interactionDraftKey(form);
@@ -1402,9 +1789,13 @@ document.addEventListener('submit', event => {
     return;
   }
   enqueue(async () => {
+    if (form.id === 'collection-edit-form') { await changeCollection('update',{text:data.text,item:data.item,revision:Number(data.revision)});closeModal();return; }
+    if(form.id==='child-workflow-form'){const workflow=await selectedChildWorkflow(data);edit(g=>{g.nodes.find(n=>n.id===state.selected).workflow=workflow;});closeModal();return;}
+    if(form.id==='associated-form'){if(data.event==='question' && !['question','agent','task','document'].includes(selectedNode().kind))throw new Error('Ce bloc ne pose pas de question directement. Choisissez le résultat accepté ou configurez l’action sur le bloc qui pose la question.');const workflow=await selectedChildWorkflow(data);edit(g=>{g.actions ||= [];const value={id:data.associated_id || 'action-'+crypto.randomUUID(),title:data.title,source:state.selected,event:data.event,enabled:data.enabled==='on',workflow};const index=g.actions.findIndex(a=>a.id===value.id);if(index<0)g.actions.push(value);else g.actions[index]=value;});closeModal();return;}
     if (form.id === 'simulation-form') {
       const fields = Object.fromEntries([...form.querySelectorAll('[data-sample-port]')].map(row => [row.dataset.samplePort, { custom: row.querySelector('[data-sample-custom]').checked, value: row.querySelector('select,textarea,input:not([type=checkbox])').value }]));
-      const values = simulationValues(selectedNode(), fields);
+      const node = selectedNode(), values = simulationValues({...node,outputs:Object.fromEntries(Object.entries(node.outputs || {}).map(([key,port])=>[key,portType(port)]))}, fields);
+      validateSimulationPorts(node, values);
       edit(graph => { const node = graph.nodes.find(item => item.id === state.selected); if (Object.keys(values).length) node.sample_outputs = values; else delete node.sample_outputs; });
       closeModal(); toast('Données de simulation appliquées au brouillon. Aucun travail réel exécuté.'); return;
     }
@@ -1442,8 +1833,14 @@ document.addEventListener('submit', event => {
       state.launchReturn = null; await actions['start-preview'](); return;
     }
     if (form.id === 'work-export-form') { const path = await call('work.export', { run: state.run.id, name: data.name }); closeModal(); toast('Rapport exporté : ' + path); return; }
-    if (form.id === 'port-form') { edit(g => { const n = g.nodes.find(n => n.id === state.selected); n[data.direction] ||= {}; n[data.direction][data.port] = data.type; }); closeModal(); return; }
-    if (form.id === 'conversation-add-form') { await call('conversation.add', { conversation: state.conversation.id, request: data.request, project: data.project, depends_on: [...state.dependencyDraft.selected] }); closeModal(); await pollConversation(); return; }
+    if (form.id === 'port-form') { const port=state.graph.schema===2 ? descriptorFromFields(data) : data.type; edit(g => { const n=g.nodes.find(n=>n.id===state.selected); n[data.direction] ||= {}; n[data.direction][data.port]=port; }); closeModal(); return; }
+    if (form.id === 'conversation-add-form') {
+      const draft=state.dependencyDraft;
+      const item=await call('conversation.add', { conversation: draft.conversation, request: data.request, project: data.project, depends_on: [...draft.selected] });
+      closeModal();
+      if(draft.replacement)await openRun(item.run);else await pollConversation();
+      toast(draft.replacement ? 'La demande de remplacement est ouverte. La demande précédente reste conservée.' : 'Demande ajoutée à la conversation.'); return;
+    }
     if (form.id === 'workflow-ai-form') { flushNodeForm(); const next = withWorkflowAI(state.graph, data); edit(g => Object.assign(g, next)); await save(); await integration.setProvider(data.provider); closeModal(); if (data.preview === 'yes') await actions['return-to-launch'](); return; }
     if (form.id === 'connection-context-form') { if (data.project === 'workspace') await call('workspace.get'); if (data.project === 'library') await call('template.workspace'); Object.assign(state, await call('project.get', { project: data.project })); renderConnections(); terminal.host.hidden = true; }
     if (form.id === 'handoff-form') { const graph = await call('run.handoff', { run: state.run.id, project: data.project, graph: state.templates.find(t => t.id === data.template) }, true); closeModal(); await openProject(data.project, false); openWorkflow(graph); toast('Brouillon créé avec sa source globale.'); }
@@ -1452,13 +1849,20 @@ document.addEventListener('submit', event => {
     if (form.id === 'node-form') { applyNodeForm(form); if (host.clientWidth <= 760) document.querySelector('.design-inspector-actions button')?.focus({preventScroll:true}); toast('Bloc modifié. Enregistrez le workflow pour créer une révision.'); }
     if (form.id === 'workflow-form') { const parameters = JSON.parse(data.parameters); if (!parameters || Array.isArray(parameters) || typeof parameters !== 'object') throw new Error('Les paramètres doivent être un objet.'); for (const [key,value] of Object.entries(data)) if (key.startsWith('context_')) { const name=key.slice(8); if (value.trim()) parameters[name]=value.trim(); else delete parameters[name]; } if (data.question_notification && !data.question_recipient.trim()) throw new Error('Renseigner le destinataire de notification.'); edit(g => { Object.assign(g, { title: data.title, description: data.description, parameters }); if (data.question_notification) { g.on_question = { ...JSON.parse(data.question_notification), recipient: data.question_recipient.trim() }; } else delete g.on_question; }); closeModal(); }
     if (form.id === 'add-node-form') {
-      const id = 'step-' + Date.now().toString(36); edit(g => { const count = g.nodes.length; const n = { id, title: data.title, kind: data.kind, position: { x: 60 + count % 4 * 300, y: 80 + Math.floor(count / 4) * 190 }, criteria: [] }; if (data.kind === 'agent-route') { n.kind = 'agent'; n.route_output = 'choice'; n.options = ['yes', 'no', 'unknown']; n.outputs = { choice: 'string', reason: 'string' }; n.validation = 'contract'; } if (data.kind === 'agent') n.validation = 'contract'; if (data.kind === 'question') { n.question = data.title; n.outputs = {answer: 'string'}; } if (data.kind === 'command') n.argv = ['python3', '-c', 'print("Hello")']; if (data.kind === 'condition') { n.parameter = 'choice'; n.options = ['yes', 'no']; } if (data.kind === 'subworkflow') n.workflow = 'analysis'; g.nodes.push(n); state.selected = id; }); closeModal(); document.querySelector('#node-title')?.focus({preventScroll:true});
+      const advanced=['input','foreach','integrate'].includes(data.kind); if(advanced && state.graph.schema===1 && data.convert!=='on')throw new Error('Confirmez la conversion de ce brouillon pour utiliser ce bloc.');
+      const id = 'step-' + Date.now().toString(36), position = newItemPosition(); state.propertiesOpen = host.clientWidth > 760; edit(g => { if(advanced && g.schema===1)Object.assign(g,convertWorkflow(g)); const n = { id, title: data.title, kind: data.kind, position, criteria: [], ...advancedNode(data.kind) }; if (data.kind === 'agent-route') { n.kind = 'agent'; n.route_output = 'choice'; n.options = ['yes', 'no', 'unknown']; n.outputs = { choice: 'string', reason: 'string' }; n.validation = 'contract'; } if (data.kind === 'agent') n.validation = 'contract'; if (data.kind === 'question') { n.question = data.title; n.outputs = {answer: 'string'}; } if (data.kind === 'command') n.argv = ['python3', '-c', 'print("Hello")']; if (data.kind === 'condition') { n.parameter = 'choice'; n.options = ['true', 'false']; } if (data.kind === 'subworkflow') n.workflow = 'analysis'; g.nodes.push(n); state.selected = id; }); closeModal(); focusGraphItem(id, false, true); if(state.propertiesOpen)document.querySelector('#node-title')?.focus({preventScroll:true});
+    }
+    if (form.id === 'note-form') {
+      const id = data.note_id || 'note-' + crypto.randomUUID(), existing = state.graph.layout?.notes?.find(n => n.id === id);
+      const note = { id, title: data.title.trim(), text: data.text, position: existing?.position || newItemPosition({width:Number(data.width),height:Number(data.height)}), size: {width:Number(data.width),height:Number(data.height)} };
+      edit(g => { g.layout ||= {}; g.layout.notes ||= []; const index = g.layout.notes.findIndex(n => n.id === id); if (index < 0) g.layout.notes.push(note); else g.layout.notes[index] = note; });
+      closeModal(); focusGraphItem(id, true, true); return;
     }
     if (form.id === 'connect-form') {
       if (!!data.output !== !!data.input) throw new Error('Choisissez la sortie et l’entrée destinataire pour transmettre les données. Pour un lien d’ordre uniquement, cochez « Ne transmettre aucune donnée ».');
-      const proposed = clone(state.graph); const mapping = JSON.parse(data.mapping || '{}'); if (data.output && data.input) { for (const [source,target] of Object.entries(mapping)) if (target === data.input) delete mapping[source]; mapping[data.output] = data.input; } proposed.edges.push({ id: 'edge-' + Date.now().toString(36), from: data.from, to: data.to, outcome: data.outcome, mapping }); await call('workflow.validate', { graph: proposed, simulation: true }); edit(g => { g.edges = proposed.edges; }); closeModal();
+      const proposed = clone(state.graph); const mapping = JSON.parse(data.mapping || '{}'); if (data.output && data.input) { for (const [source,target] of Object.entries(mapping)) if (target === data.input) delete mapping[source]; mapping[data.output] = data.input; } const edge = { id: data.edge_id || 'edge-' + Date.now().toString(36), from: data.from, to: data.to, outcome: data.outcome, mapping }; if (data.edge_id) proposed.edges = proposed.edges.map(previous => previous.id === data.edge_id ? edge : previous); else proposed.edges.push(edge); for(const [out,input] of Object.entries(mapping)){const reason=incompatibleReason(proposed.nodes.find(n=>n.id===data.from).outputs?.[out],proposed.nodes.find(n=>n.id===data.to).inputs?.[input],proposed.schema);if(reason)throw new Error(`Impossible de relier « ${out} » à « ${input} » : ${reason}`);} await call('workflow.validate', { graph: proposed, simulation: true }); edit(g => { g.edges = proposed.edges; }); closeModal();
     }
-    if (form.id === 'retry-form') { state.run = await call('run.retry', { run: state.run.id, node: state.selected, note: data.note }, true); closeModal(); renderGraph(); renderInspector(); toast('Reprise préparée. Consultez la prochaine action du suivi pour poursuivre.'); }
+    if (form.id === 'retry-form') { const automatic=retryRunsAutomatically(selectedNode()); state.run = await call('run.retry', { run: state.run.id, node: state.selected, note: data.note }, true); closeModal(); renderGraph(); renderInspector(); toast(automatic?'Relance demandée. Suivez cette nouvelle tentative.':'Reprise préparée. Consultez la prochaine action du suivi pour poursuivre.'); }
     if (form.id === 'export-form') { const path = await call('release.export', { run: state.run.id, ...data }); closeModal(); toast('Release exportée : ' + path); }
     if (form.id === 'assistant-form') {
       const snapshot = JSON.stringify(state.graph);
@@ -1487,6 +1891,11 @@ document.addEventListener('submit', event => {
 
 document.addEventListener('keydown', event => {
   const dialog = document.querySelector('.modal');
+  if (event.target.closest('.xterm')) return;
+  if (!dialog && state.route === 'workflow' && state.mode === 'design' && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') { event.preventDefault(); enqueue(save); return; }
+  if (event.target.closest('input,textarea,select,[contenteditable="true"],.xterm')) {
+    if (!dialog || !['Escape','Tab'].includes(event.key)) return;
+  }
   if (dialog && event.key === 'Escape') { event.preventDefault(); closeModal(); return; }
   if (dialog && event.key === 'Tab') {
     const focusable = [...dialog.querySelectorAll('button:not(:disabled),input,select,textarea,summary,[tabindex="0"]')].filter(el => el.getClientRects().length);
@@ -1494,19 +1903,12 @@ document.addEventListener('keydown', event => {
     else if (!event.shiftKey && document.activeElement === focusable.at(-1)) { event.preventDefault(); focusable[0]?.focus(); }
     return;
   }
-  if (!dialog && state.route === 'workflow' && state.mode === 'design' && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') { event.preventDefault(); enqueue(save); return; }
   if (event.target.matches('input,textarea,select') || dialog || state.route !== 'workflow' || state.mode !== 'design') return;
   if ((event.ctrlKey || event.metaKey) && ['s', 'z', 'y'].includes(event.key.toLowerCase())) { event.preventDefault(); safe(() => event.key.toLowerCase() === 's' ? save() : event.key.toLowerCase() === 'y' || event.shiftKey ? actions.redo() : actions.undo()); }
 });
 
-document.addEventListener('pointerdown', event => {
-  const handle = event.target.closest('.drag-handle'); if (!handle || state.mode !== 'design') return;
-  event.preventDefault(); try { flushNodeForm(); } catch (e) { error(e.message); return; } const card = handle.closest('.node'); const node = state.graph.nodes.find(n => n.id === card.dataset.id); const before = clone(state.graph);
-  const start = nodePosition(node, state.graph.nodes.indexOf(node)); const pointer = { x: event.clientX, y: event.clientY }; let moved = false;
-  function move(e) { moved = true; node.position = { x: Math.max(0, Math.round(start.x + (e.clientX - pointer.x) / state.zoom)), y: Math.max(30, Math.round(start.y + (e.clientY - pointer.y) / state.zoom)) }; card.style.left = node.position.x + 'px'; card.style.top = node.position.y + 'px'; }
-  function end() { document.removeEventListener('pointermove', move); document.removeEventListener('pointerup', end); if (moved) { state.history.push(before); state.dirty = true; persistDraft(); renderEditor(); } }
-  document.addEventListener('pointermove', move); document.addEventListener('pointerup', end, { once: true });
-});
+// Pointer, keyboard and connection gestures are installed below.
+installEditorGestures();
 
 let conversationPolling = false;
 async function pollConversation() {
@@ -1538,6 +1940,7 @@ async function poll() {
     const id = state.run.id, epoch = viewEpoch; const data = await call('run.get', { run: id, after: state.events.at(-1)?.seq || 0 });
     if (state.run?.id !== id || state.route !== 'workflow' || epoch !== viewEpoch) return;
     const previous = state.run; state.run = data.run; mergeEvents(data);
+    if(state.iterationPage?.run===state.run.id && state.iterationPage.node===state.selected)state.iterationPage=await call('iteration.get',{run:state.run.id,node:state.selected,offset:state.iterationPage.offset || 0});
     if (conversationOverviewActive()) return;
     // Follow a changing active step only while watching the graph. Reading a
     // result or typing an answer must never be interrupted by polling.
@@ -1547,6 +1950,7 @@ async function poll() {
       renderInspector(); requestAnimationFrame(focusSelectedNode);
     }
     if (state.mode === 'run') {
+      if(state.run.definition.schema===2 && (JSON.stringify(previous.nodes)!==JSON.stringify(state.run.nodes) || JSON.stringify(previous.coordination)!==JSON.stringify(state.run.coordination))) {const focused=document.activeElement?.closest('.canvas [data-action][data-id]');const identity=focused && {action:focused.dataset.action,id:focused.dataset.id};renderGraph();if(identity)document.querySelector(`.canvas [data-action="${CSS.escape(identity.action)}"][data-id="${CSS.escape(identity.id)}"]`)?.focus({preventScroll:true});}
       for (const [nid, s] of Object.entries(state.run.nodes)) {
         const card = document.querySelector(`.node[data-id="${CSS.escape(nid)}"]`);
         const definition=state.run.definition.nodes.find(n=>n.id===nid);
@@ -1560,7 +1964,7 @@ async function poll() {
         const card = document.querySelector(`[data-group="${CSS.escape(group.phase)}"]`);
         if (card) { card.dataset.status = group.status; card.querySelector('.pill').outerHTML = badge(group.status); }
       }
-      if (previous.status!==state.run.status || previous.coordination_wait!==state.run.coordination_wait || JSON.stringify(previous.launch)!==JSON.stringify(state.run.launch) || (state.selected && JSON.stringify(previous.nodes[state.selected]) !== JSON.stringify(state.run.nodes[state.selected]))) renderInspector();
+      if (previous.status!==state.run.status || previous.coordination_wait!==state.run.coordination_wait || JSON.stringify(previous.launch)!==JSON.stringify(state.run.launch) || JSON.stringify(previous.coordination)!==JSON.stringify(state.run.coordination) || (state.selected && JSON.stringify(previous.nodes[state.selected]) !== JSON.stringify(state.run.nodes[state.selected]))) renderInspector();
       if (state.view === 'list' && !document.querySelector('#node-list')?.contains(document.activeElement)) renderGraph();
       updateRunBanner();
     }

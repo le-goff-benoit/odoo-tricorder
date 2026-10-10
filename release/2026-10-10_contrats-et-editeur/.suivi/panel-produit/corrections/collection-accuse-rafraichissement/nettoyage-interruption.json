@@ -1,0 +1,13 @@
+{
+  "isolated_display": ":189",
+  "test_mode_required": true,
+  "temporary_state_prefix": "/tmp/tricorder-",
+  "terminated_processes": [
+    1817416,
+    1817512,
+    1817514
+  ],
+  "reason": "Runner interrupted during initial page loading; orphaned synthetic Electron ERR_FAILED dialog.",
+  "force_stopped_main_after_modal_blocked_sigterm": 1817416,
+  "remaining_processes": []
+}

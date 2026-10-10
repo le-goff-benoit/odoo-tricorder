@@ -1,0 +1,26 @@
+{
+  "parent_driver": "conversation",
+  "children_drivers": [
+    "automatic",
+    "automatic",
+    "automatic"
+  ],
+  "before_dispatch": [
+    "ready",
+    "ready",
+    "ready"
+  ],
+  "after_dispatch": [
+    "running",
+    "running",
+    "running"
+  ],
+  "attempts": [
+    1,
+    1,
+    1
+  ],
+  "worker_reservations": 3,
+  "fixture_claim_refused": "Limite de travaux simultanés atteinte pour cette collection",
+  "repeat_dispatch_no_extra_worker_or_state_change": true
+}

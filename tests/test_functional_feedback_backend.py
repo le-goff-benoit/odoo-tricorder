@@ -52,8 +52,8 @@ class FunctionalFeedbackBackendTests(unittest.TestCase):
         with self.engine.store.connect() as db:
             return '\n'.join(db.iterdump())
 
-    def simulate(self, graph, decisions=None, parameters=None):
-        run = self.engine.start(self.project['id'], graph, simulation=True, parameters=parameters)
+    def simulate(self, graph, decisions=None, parameters=None, *, run_id=None):
+        run = self.engine.run(run_id) if run_id else self.engine.start(self.project['id'], graph, simulation=True, parameters=parameters)
         interactions = []
         with patch('workflow_engine.runtime.time.sleep'), patch('workflow_engine.runtime.execute_text') as provider, patch('workflow_engine.runtime.subprocess.Popen') as process:
             for _ in range(100):
@@ -65,7 +65,28 @@ class FunctionalFeedbackBackendTests(unittest.TestCase):
                 definitions = {n['id']: n for n in run['definition']['nodes']}
                 for nid, state in run['nodes'].items():
                     self.assertNotIn('validation_error', state, f'{graph["id"]}/{nid}: {state}')
-                    if state['status'] == 'ready':
+                    if state['status'] == 'collecting':
+                        from workflow_engine.collection import change
+                        port = next(iter(definitions[nid]['outputs'].values()))
+                        minimum = port.get('minItems', 0) if isinstance(port, dict) else 0
+                        for index in range(minimum):
+                            change(self.engine, run['id'], nid, index, 'add', key=f'example-{index}', text=f'Intention synthétique {index + 1}')
+                        change(self.engine, run['id'], nid, minimum, 'close', key='example-close')
+                        interactions.append((nid, 'collect')); progressed = True
+                    elif state['status'] == 'ready' and definitions[nid]['kind'] == 'foreach':
+                        from workflow_engine.iterations import activate
+                        activate(self.engine, run['id'], nid)
+                        progressed = True
+                    elif state['status'] == 'waiting_children':
+                        from workflow_engine.iterations import tick
+                        for member in state['children']:
+                            child = self.engine.run(member['run'])
+                            if child['status'] == 'active':
+                                self.simulate(child['definition'], decisions, run_id=child['id'])
+                                progressed = True
+                                tick(self.engine, run['id'])
+                        tick(self.engine, run['id'])
+                    elif state['status'] == 'ready':
                         claim = self.engine.claim(run['id'], nid)
                         execute(self.engine, run['id'], nid, claim['token'])
                         result = self.engine.run(run['id'])['nodes'][nid]['result']

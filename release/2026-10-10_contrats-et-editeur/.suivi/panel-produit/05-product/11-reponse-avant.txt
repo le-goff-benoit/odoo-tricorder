@@ -1,0 +1,38 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:18
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  

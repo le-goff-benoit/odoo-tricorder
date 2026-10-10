@@ -1,0 +1,1985 @@
+{
+  "conversation": {
+    "created": 1791622878.0101538,
+    "definition": {
+      "defaults": {
+        "model": "synthetic",
+        "provider": "codex"
+      },
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "i-p",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "p-s",
+          "mapping": {
+            "plan": "plan"
+          },
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "s-w",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        }
+      ],
+      "id": "coordination-programme",
+      "nodes": [
+        {
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Recueillir les objectifs"
+        },
+        {
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "task",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Construire le plan transverse",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Approuver le plan transverse"
+        },
+        {
+          "collection": "plan.tasks",
+          "concurrency": 2,
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Réaliser les tâches du programme",
+          "workflow": {
+            "edges": [],
+            "id": "jalon",
+            "nodes": [
+              {
+                "id": "confirmation",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "question",
+                "outputs": {
+                  "answer": {
+                    "required": true,
+                    "type": "string"
+                  }
+                },
+                "question": "Le jalon de cette tâche est-il livré ?",
+                "title": "Recevoir le jalon"
+              }
+            ],
+            "schema": 2,
+            "title": "Confirmer un jalon projet"
+          }
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 2,
+      "title": "Coordonner les jalons du programme"
+    },
+    "effort": "medium",
+    "id": "cebd6095443064233",
+    "items": [
+      {
+        "created": 1791622878.0161939,
+        "depends_on": [],
+        "id": "wba201e337f6e45a0",
+        "key": "initial",
+        "project": "p96b00991ae6841ba",
+        "request": "Synchroniser les livraisons Atlas et Boréal avec un seul plan.",
+        "run": "r07cdd587fcd74011",
+        "request_truncated": false,
+        "execution": {
+          "id": "r07cdd587fcd74011",
+          "project": "p96b00991ae6841ba",
+          "status": "active",
+          "created": 1791622878.0145214,
+          "updated": 1791622878.0159166,
+          "simulation": false,
+          "completion_outcome": null,
+          "archived": null,
+          "coordination_wait": null,
+          "coordination_hold": null,
+          "parent": null,
+          "associated_with": null,
+          "conversation": "cebd6095443064233",
+          "workers": [],
+          "workers_total": 0,
+          "definition": {
+            "id": "coordination-programme",
+            "title": "Coordonner les jalons du programme",
+            "revision": 1
+          },
+          "original": {
+            "id": "coordination-programme"
+          },
+          "focus": {
+            "node": "intentions",
+            "title": "Recueillir les objectifs",
+            "status": "collecting",
+            "action": "Compléter et confirmer les intentions"
+          },
+          "health": {
+            "status": "ok",
+            "total": 0,
+            "issues": []
+          },
+          "request": "Synchroniser les livraisons Atlas et Boréal avec un seul plan.",
+          "counts": {
+            "collecting": 1,
+            "pending": 3
+          },
+          "nodes": {
+            "intentions": {
+              "status": "collecting"
+            },
+            "plan": {
+              "status": "pending"
+            },
+            "scope": {
+              "status": "pending"
+            },
+            "work": {
+              "status": "pending"
+            }
+          },
+          "origin": null,
+          "launch": {
+            "status": "waiting",
+            "label": "En attente",
+            "ready_count": 0,
+            "worker_count": 0,
+            "native_count": 0,
+            "configuration_count": 0,
+            "waiting_count": 0,
+            "unknown_count": 0,
+            "active_count": 0,
+            "max_parallel": 4,
+            "nodes": [],
+            "nodes_total": 0,
+            "nodes_truncated": false
+          }
+        },
+        "dependencies": [],
+        "dependencies_total": 0,
+        "dependencies_truncated": false
+      }
+    ],
+    "model": "synthetic",
+    "notifications_authorized": false,
+    "project": "p96b00991ae6841ba",
+    "projects": [
+      "p96b00991ae6841ba",
+      "p8f44f5e3c91d4576"
+    ],
+    "provider": "codex",
+    "status": "open",
+    "project_contexts": [
+      {
+        "id": "p96b00991ae6841ba",
+        "title": "Programme Atlas",
+        "path": "/tmp/tricorder-panel-programme-TNwjtv/state/workflows/projects/p96b00991ae6841ba"
+      },
+      {
+        "id": "p8f44f5e3c91d4576",
+        "title": "Programme Boréal",
+        "path": "/tmp/tricorder-panel-programme-TNwjtv/state/workflows/projects/p8f44f5e3c91d4576"
+      }
+    ],
+    "item_count": 1,
+    "total": 1,
+    "offset": 0,
+    "limit": 25,
+    "next": null,
+    "activity": {
+      "items": 1,
+      "running": 0,
+      "ready": 0,
+      "decisions": 0,
+      "questions": 0,
+      "collecting": 1,
+      "coordination": 0,
+      "failed": 0,
+      "dependencies": 0,
+      "completed": 0,
+      "paused": 0,
+      "cancelled": 0,
+      "uncertain": 0,
+      "children": {
+        "items": 0,
+        "running": 0,
+        "ready": 0,
+        "decisions": 0,
+        "questions": 0,
+        "collecting": 0,
+        "coordination": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0,
+        "cancelled": 0,
+        "uncertain": 0
+      },
+      "associated": {
+        "items": 0,
+        "running": 0,
+        "ready": 0,
+        "decisions": 0,
+        "questions": 0,
+        "collecting": 0,
+        "coordination": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0,
+        "cancelled": 0,
+        "uncertain": 0,
+        "actions": 0
+      }
+    }
+  },
+  "started": {
+    "contract": "fb87d67a58513bef6cad5b5cff92b327f57742d43469a510f76be15cf24ea78f",
+    "created": 1791622878.0145214,
+    "definition": {
+      "defaults": {
+        "model": "synthetic",
+        "provider": "codex"
+      },
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "i-p",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "p-s",
+          "mapping": {
+            "plan": "plan"
+          },
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "s-w",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        }
+      ],
+      "id": "coordination-programme",
+      "nodes": [
+        {
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Recueillir les objectifs"
+        },
+        {
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "task",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Construire le plan transverse",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Approuver le plan transverse"
+        },
+        {
+          "collection": "plan.tasks",
+          "concurrency": 2,
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Réaliser les tâches du programme",
+          "workflow": {
+            "edges": [],
+            "id": "jalon",
+            "nodes": [
+              {
+                "id": "confirmation",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "question",
+                "outputs": {
+                  "answer": {
+                    "required": true,
+                    "type": "string"
+                  }
+                },
+                "question": "Le jalon de cette tâche est-il livré ?",
+                "title": "Recevoir le jalon"
+              }
+            ],
+            "schema": 2,
+            "title": "Confirmer un jalon projet"
+          }
+        }
+      ],
+      "parameters": {
+        "conversation": "cebd6095443064233",
+        "depends_on_runs": [],
+        "request": "Synchroniser les livraisons Atlas et Boréal avec un seul plan."
+      },
+      "revision": 1,
+      "schema": 2,
+      "title": "Coordonner les jalons du programme"
+    },
+    "driver": "conversation",
+    "id": "r07cdd587fcd74011",
+    "nodes": {
+      "intentions": {
+        "attempt": 0,
+        "collection": {
+          "closed": 1791622879.0552278,
+          "items": [
+            {
+              "created": 1791622878.8807654,
+              "id": "i9f2eacfc6e564889",
+              "text": "Livrer le jalon Atlas"
+            },
+            {
+              "created": 1791622878.9760032,
+              "id": "ib7b78605495449ce",
+              "text": "Recetter le jalon Boréal après Atlas"
+            }
+          ],
+          "revision": 3
+        },
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "receipt": {
+          "actor": "collection-confirmation",
+          "at": 1791622879.0552254,
+          "revision": 2
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "intentions": [
+              {
+                "created": 1791622878.8807654,
+                "id": "i9f2eacfc6e564889",
+                "text": "Livrer le jalon Atlas"
+              },
+              {
+                "created": 1791622878.9760032,
+                "id": "ib7b78605495449ce",
+                "text": "Recetter le jalon Boréal après Atlas"
+              }
+            ]
+          },
+          "summary": "2 contribution(s) confirmée(s)"
+        },
+        "status": "accepted"
+      },
+      "plan": {
+        "attempt": 1,
+        "finished": 1791622879.2662523,
+        "heartbeat": 1791622879.2441444,
+        "input_sources": {
+          "intentions": {
+            "edge": "i-p",
+            "node": "intentions",
+            "port": "intentions"
+          }
+        },
+        "inputs": {
+          "intentions": [
+            {
+              "created": 1791622878.8807654,
+              "id": "i9f2eacfc6e564889",
+              "text": "Livrer le jalon Atlas"
+            },
+            {
+              "created": 1791622878.9760032,
+              "id": "ib7b78605495449ce",
+              "text": "Recetter le jalon Boréal après Atlas"
+            }
+          ]
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791622879.2663124,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "fb87d67a58513bef6cad5b5cff92b327f57742d43469a510f76be15cf24ea78f",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "plan": {
+              "tasks": [
+                {
+                  "id": "atlas",
+                  "project": "p96b00991ae6841ba",
+                  "title": "Livrer le jalon Atlas"
+                },
+                {
+                  "depends_on": [
+                    "atlas"
+                  ],
+                  "id": "boreal",
+                  "project": "p8f44f5e3c91d4576",
+                  "title": "Recetter le jalon Boréal"
+                }
+              ],
+              "title": "Un plan transverse Atlas → Boréal"
+            }
+          },
+          "summary": "Plan synthétique pour deux projets, une dépendance"
+        },
+        "started": 1791622879.2441444,
+        "status": "accepted",
+        "token": "tfe0bae74c9d9477a"
+      },
+      "scope": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791622880.8809445,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "fc9d6b26564bc01690ad4ace72c354184185be84de4c9aac24df0ddbb07ebac0"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "p-s",
+            "node": "plan",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "tasks": [
+              {
+                "id": "atlas",
+                "project": "p96b00991ae6841ba",
+                "title": "Livrer le jalon Atlas"
+              },
+              {
+                "depends_on": [
+                  "atlas"
+                ],
+                "id": "boreal",
+                "project": "p8f44f5e3c91d4576",
+                "title": "Recetter le jalon Boréal"
+              }
+            ],
+            "title": "Un plan transverse Atlas → Boréal"
+          }
+        },
+        "nonce": "dea98e4bb8dcd4e2d",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "fc9d6b26564bc01690ad4ace72c354184185be84de4c9aac24df0ddbb07ebac0",
+        "result": {
+          "outputs": {
+            "plan": {
+              "tasks": [
+                {
+                  "id": "atlas",
+                  "project": "p96b00991ae6841ba",
+                  "title": "Livrer le jalon Atlas"
+                },
+                {
+                  "depends_on": [
+                    "atlas"
+                  ],
+                  "id": "boreal",
+                  "project": "p8f44f5e3c91d4576",
+                  "title": "Recetter le jalon Boréal"
+                }
+              ],
+              "title": "Un plan transverse Atlas → Boréal"
+            }
+          }
+        },
+        "status": "accepted"
+      },
+      "work": {
+        "attempt": 1,
+        "children": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "atlas",
+            "project": "p96b00991ae6841ba",
+            "run": "r0b4d0b57e0a44827",
+            "title": "Livrer le jalon Atlas"
+          },
+          {
+            "base_from": null,
+            "depends_on": [
+              "atlas"
+            ],
+            "element": "boreal",
+            "project": "p8f44f5e3c91d4576",
+            "run": "r2978636b35b647e4",
+            "title": "Recetter le jalon Boréal"
+          }
+        ],
+        "enrollment": {
+          "at": 1791622881.1090047,
+          "concurrency": 2,
+          "contract": "204aae181998c3b4f5ba7db668bb476800553ab24c3f00b2525d9df0b931e100"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "s-w",
+            "node": "scope",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "tasks": [
+              {
+                "id": "atlas",
+                "project": "p96b00991ae6841ba",
+                "title": "Livrer le jalon Atlas"
+              },
+              {
+                "depends_on": [
+                  "atlas"
+                ],
+                "id": "boreal",
+                "project": "p8f44f5e3c91d4576",
+                "title": "Recetter le jalon Boréal"
+              }
+            ],
+            "title": "Un plan transverse Atlas → Boréal"
+          }
+        },
+        "status": "waiting_children"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "model": "synthetic",
+        "provider": "codex"
+      },
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "i-p",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "p-s",
+          "mapping": {
+            "plan": "plan"
+          },
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "s-w",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        }
+      ],
+      "id": "coordination-programme",
+      "nodes": [
+        {
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Recueillir les objectifs"
+        },
+        {
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "task",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Construire le plan transverse",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Approuver le plan transverse"
+        },
+        {
+          "collection": "plan.tasks",
+          "concurrency": 2,
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Réaliser les tâches du programme",
+          "workflow": {
+            "edges": [],
+            "id": "jalon",
+            "nodes": [
+              {
+                "id": "confirmation",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "question",
+                "outputs": {
+                  "answer": {
+                    "required": true,
+                    "type": "string"
+                  }
+                },
+                "question": "Le jalon de cette tâche est-il livré ?",
+                "title": "Recevoir le jalon"
+              }
+            ],
+            "schema": 2,
+            "title": "Confirmer un jalon projet"
+          }
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 2,
+      "title": "Coordonner les jalons du programme"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "cebd6095443064233",
+      "depends_on_runs": [],
+      "request": "Synchroniser les livraisons Atlas et Boréal avec un seul plan."
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-programme-TNwjtv/state/workflows/projects/p96b00991ae6841ba/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p96b00991ae6841ba",
+    "release": "",
+    "scope": {
+      "id": "p96b00991ae6841ba",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791622881.1174445,
+    "origin": null,
+    "focus": {
+      "node": "work",
+      "title": "Réaliser les tâches du programme",
+      "status": "waiting_children",
+      "action": "Suivre les éléments"
+    },
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    },
+    "coordination": {
+      "work": {
+        "run": "r07cdd587fcd74011",
+        "node": "work",
+        "coordinator": "engine",
+        "concurrency": 2,
+        "status": "active",
+        "counts": {
+          "completed": 0,
+          "running": 0,
+          "question": 1,
+          "decision": 0,
+          "failed": 0,
+          "waiting": 1
+        },
+        "total": 2,
+        "offset": 0,
+        "next": null,
+        "items": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "atlas",
+            "project": "p96b00991ae6841ba",
+            "run": "r0b4d0b57e0a44827",
+            "title": "Livrer le jalon Atlas",
+            "dependencies": [],
+            "state": "question",
+            "execution": {
+              "id": "r0b4d0b57e0a44827",
+              "project": "p96b00991ae6841ba",
+              "status": "active",
+              "created": 1791622881.1098053,
+              "updated": 1791622881.117289,
+              "simulation": false,
+              "completion_outcome": null,
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "atlas",
+                "node": "work",
+                "run": "r07cdd587fcd74011"
+              },
+              "associated_with": null,
+              "conversation": "cebd6095443064233",
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "jalon",
+                "title": "Confirmer un jalon projet",
+                "revision": null
+              },
+              "original": {
+                "id": "jalon"
+              },
+              "focus": {
+                "node": "confirmation",
+                "title": "Recevoir le jalon",
+                "status": "waiting_input",
+                "action": "Répondre à la question"
+              },
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Livrer le jalon Atlas",
+              "counts": {
+                "waiting_input": 1
+              },
+              "nodes": {
+                "confirmation": {
+                  "status": "waiting_input"
+                }
+              }
+            },
+            "reason": ""
+          },
+          {
+            "base_from": null,
+            "depends_on": [
+              "atlas"
+            ],
+            "element": "boreal",
+            "project": "p8f44f5e3c91d4576",
+            "run": "r2978636b35b647e4",
+            "title": "Recetter le jalon Boréal",
+            "dependencies": [
+              {
+                "element": "atlas",
+                "title": "Livrer le jalon Atlas",
+                "project": "p96b00991ae6841ba",
+                "run": "r0b4d0b57e0a44827"
+              }
+            ],
+            "state": "waiting",
+            "execution": {
+              "id": "r2978636b35b647e4",
+              "project": "p8f44f5e3c91d4576",
+              "status": "paused",
+              "created": 1791622881.1104188,
+              "updated": 1791622881.1106434,
+              "simulation": false,
+              "completion_outcome": null,
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "boreal",
+                "node": "work",
+                "run": "r07cdd587fcd74011"
+              },
+              "associated_with": null,
+              "conversation": "cebd6095443064233",
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "jalon",
+                "title": "Confirmer un jalon projet",
+                "revision": null
+              },
+              "original": {
+                "id": "jalon"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Recetter le jalon Boréal",
+              "counts": {
+                "pending": 1
+              },
+              "nodes": {
+                "confirmation": {
+                  "status": "pending"
+                }
+              }
+            },
+            "reason": "Dépendances à terminer"
+          }
+        ]
+      }
+    }
+  },
+  "released": {
+    "contract": "3add675caae80d1db55833b707d28daccb2ca3ddbd3511b7582892e755e41096",
+    "created": 1791622881.1104188,
+    "definition": {
+      "defaults": {
+        "model": "synthetic",
+        "provider": "codex"
+      },
+      "edges": [],
+      "id": "jalon",
+      "nodes": [
+        {
+          "id": "confirmation",
+          "inputs": {
+            "item": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "question",
+          "outputs": {
+            "answer": {
+              "required": true,
+              "type": "string"
+            }
+          },
+          "question": "Le jalon de cette tâche est-il livré ?",
+          "title": "Recevoir le jalon"
+        }
+      ],
+      "parameters": {
+        "conversation": "cebd6095443064233",
+        "element_id": "boreal",
+        "item": {
+          "depends_on": [
+            "atlas"
+          ],
+          "id": "boreal",
+          "project": "p8f44f5e3c91d4576",
+          "title": "Recetter le jalon Boréal"
+        },
+        "request": "Recetter le jalon Boréal"
+      },
+      "schema": 2,
+      "title": "Confirmer un jalon projet"
+    },
+    "driver": "automatic",
+    "id": "r2978636b35b647e4",
+    "nodes": {
+      "confirmation": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {
+          "item": {
+            "depends_on": [
+              "atlas"
+            ],
+            "id": "boreal",
+            "project": "p8f44f5e3c91d4576",
+            "title": "Recetter le jalon Boréal"
+          }
+        },
+        "question": {
+          "created": 1791622882.0013402,
+          "id": "q873f632a047b42e3",
+          "status": "waiting",
+          "text": "Le jalon de cette tâche est-il livré ?"
+        },
+        "questions": [
+          {
+            "created": 1791622882.0013402,
+            "id": "q873f632a047b42e3",
+            "status": "waiting",
+            "text": "Le jalon de cette tâche est-il livré ?"
+          }
+        ],
+        "seed_inputs": {
+          "item": {
+            "depends_on": [
+              "atlas"
+            ],
+            "id": "boreal",
+            "project": "p8f44f5e3c91d4576",
+            "title": "Recetter le jalon Boréal"
+          }
+        },
+        "status": "waiting_input"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "model": "synthetic",
+        "provider": "codex"
+      },
+      "edges": [],
+      "id": "jalon",
+      "nodes": [
+        {
+          "id": "confirmation",
+          "inputs": {
+            "item": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "question",
+          "outputs": {
+            "answer": {
+              "required": true,
+              "type": "string"
+            }
+          },
+          "question": "Le jalon de cette tâche est-il livré ?",
+          "title": "Recevoir le jalon"
+        }
+      ],
+      "schema": 2,
+      "title": "Confirmer un jalon projet"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "cebd6095443064233",
+      "dependency_results": {
+        "r0b4d0b57e0a44827": {
+          "id": "atlas",
+          "outputs": {
+            "confirmation": {
+              "answer": "Atlas livré, preuve synthétique reçue."
+            }
+          },
+          "project": "p96b00991ae6841ba",
+          "run": "r0b4d0b57e0a44827",
+          "title": "Livrer le jalon Atlas"
+        }
+      },
+      "depends_on_runs": [
+        "r0b4d0b57e0a44827"
+      ],
+      "element_id": "boreal",
+      "item": {
+        "depends_on": [
+          "atlas"
+        ],
+        "id": "boreal",
+        "project": "p8f44f5e3c91d4576",
+        "title": "Recetter le jalon Boréal"
+      },
+      "request": "Recetter le jalon Boréal"
+    },
+    "parent": {
+      "attempt": 1,
+      "element": "boreal",
+      "node": "work",
+      "run": "r07cdd587fcd74011"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-programme-TNwjtv/state/workflows/projects/p8f44f5e3c91d4576/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p8f44f5e3c91d4576",
+    "release": "",
+    "scope": {
+      "id": "p8f44f5e3c91d4576",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "active",
+    "transports": {},
+    "updated": 1791622882.0016553,
+    "origin": {
+      "kind": "task",
+      "run": "r07cdd587fcd74011",
+      "title": "Synchroniser les livraisons Atlas et Boréal avec un seul plan.",
+      "project": "p96b00991ae6841ba"
+    },
+    "focus": {
+      "node": "confirmation",
+      "title": "Recevoir le jalon",
+      "status": "waiting_input",
+      "action": "Répondre à la question"
+    },
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "completed": {
+    "completion_outcome": "succeeded",
+    "contract": "fb87d67a58513bef6cad5b5cff92b327f57742d43469a510f76be15cf24ea78f",
+    "created": 1791622878.0145214,
+    "definition": {
+      "defaults": {
+        "model": "synthetic",
+        "provider": "codex"
+      },
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "i-p",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "p-s",
+          "mapping": {
+            "plan": "plan"
+          },
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "s-w",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        }
+      ],
+      "id": "coordination-programme",
+      "nodes": [
+        {
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Recueillir les objectifs"
+        },
+        {
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "task",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Construire le plan transverse",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Approuver le plan transverse"
+        },
+        {
+          "collection": "plan.tasks",
+          "concurrency": 2,
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Réaliser les tâches du programme",
+          "workflow": {
+            "edges": [],
+            "id": "jalon",
+            "nodes": [
+              {
+                "id": "confirmation",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "question",
+                "outputs": {
+                  "answer": {
+                    "required": true,
+                    "type": "string"
+                  }
+                },
+                "question": "Le jalon de cette tâche est-il livré ?",
+                "title": "Recevoir le jalon"
+              }
+            ],
+            "schema": 2,
+            "title": "Confirmer un jalon projet"
+          }
+        }
+      ],
+      "parameters": {
+        "conversation": "cebd6095443064233",
+        "depends_on_runs": [],
+        "request": "Synchroniser les livraisons Atlas et Boréal avec un seul plan."
+      },
+      "revision": 1,
+      "schema": 2,
+      "title": "Coordonner les jalons du programme"
+    },
+    "driver": "conversation",
+    "id": "r07cdd587fcd74011",
+    "nodes": {
+      "intentions": {
+        "attempt": 0,
+        "collection": {
+          "closed": 1791622879.0552278,
+          "items": [
+            {
+              "created": 1791622878.8807654,
+              "id": "i9f2eacfc6e564889",
+              "text": "Livrer le jalon Atlas"
+            },
+            {
+              "created": 1791622878.9760032,
+              "id": "ib7b78605495449ce",
+              "text": "Recetter le jalon Boréal après Atlas"
+            }
+          ],
+          "revision": 3
+        },
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "receipt": {
+          "actor": "collection-confirmation",
+          "at": 1791622879.0552254,
+          "revision": 2
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "intentions": [
+              {
+                "created": 1791622878.8807654,
+                "id": "i9f2eacfc6e564889",
+                "text": "Livrer le jalon Atlas"
+              },
+              {
+                "created": 1791622878.9760032,
+                "id": "ib7b78605495449ce",
+                "text": "Recetter le jalon Boréal après Atlas"
+              }
+            ]
+          },
+          "summary": "2 contribution(s) confirmée(s)"
+        },
+        "status": "accepted"
+      },
+      "plan": {
+        "attempt": 1,
+        "finished": 1791622879.2662523,
+        "heartbeat": 1791622879.2441444,
+        "input_sources": {
+          "intentions": {
+            "edge": "i-p",
+            "node": "intentions",
+            "port": "intentions"
+          }
+        },
+        "inputs": {
+          "intentions": [
+            {
+              "created": 1791622878.8807654,
+              "id": "i9f2eacfc6e564889",
+              "text": "Livrer le jalon Atlas"
+            },
+            {
+              "created": 1791622878.9760032,
+              "id": "ib7b78605495449ce",
+              "text": "Recetter le jalon Boréal après Atlas"
+            }
+          ]
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791622879.2663124,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "fb87d67a58513bef6cad5b5cff92b327f57742d43469a510f76be15cf24ea78f",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "plan": {
+              "tasks": [
+                {
+                  "id": "atlas",
+                  "project": "p96b00991ae6841ba",
+                  "title": "Livrer le jalon Atlas"
+                },
+                {
+                  "depends_on": [
+                    "atlas"
+                  ],
+                  "id": "boreal",
+                  "project": "p8f44f5e3c91d4576",
+                  "title": "Recetter le jalon Boréal"
+                }
+              ],
+              "title": "Un plan transverse Atlas → Boréal"
+            }
+          },
+          "summary": "Plan synthétique pour deux projets, une dépendance"
+        },
+        "started": 1791622879.2441444,
+        "status": "accepted",
+        "token": "tfe0bae74c9d9477a"
+      },
+      "scope": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791622880.8809445,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "fc9d6b26564bc01690ad4ace72c354184185be84de4c9aac24df0ddbb07ebac0"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "p-s",
+            "node": "plan",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "tasks": [
+              {
+                "id": "atlas",
+                "project": "p96b00991ae6841ba",
+                "title": "Livrer le jalon Atlas"
+              },
+              {
+                "depends_on": [
+                  "atlas"
+                ],
+                "id": "boreal",
+                "project": "p8f44f5e3c91d4576",
+                "title": "Recetter le jalon Boréal"
+              }
+            ],
+            "title": "Un plan transverse Atlas → Boréal"
+          }
+        },
+        "nonce": "dea98e4bb8dcd4e2d",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "fc9d6b26564bc01690ad4ace72c354184185be84de4c9aac24df0ddbb07ebac0",
+        "result": {
+          "outputs": {
+            "plan": {
+              "tasks": [
+                {
+                  "id": "atlas",
+                  "project": "p96b00991ae6841ba",
+                  "title": "Livrer le jalon Atlas"
+                },
+                {
+                  "depends_on": [
+                    "atlas"
+                  ],
+                  "id": "boreal",
+                  "project": "p8f44f5e3c91d4576",
+                  "title": "Recetter le jalon Boréal"
+                }
+              ],
+              "title": "Un plan transverse Atlas → Boréal"
+            }
+          }
+        },
+        "status": "accepted"
+      },
+      "work": {
+        "attempt": 1,
+        "children": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "atlas",
+            "project": "p96b00991ae6841ba",
+            "run": "r0b4d0b57e0a44827",
+            "title": "Livrer le jalon Atlas"
+          },
+          {
+            "base_from": null,
+            "depends_on": [
+              "atlas"
+            ],
+            "element": "boreal",
+            "project": "p8f44f5e3c91d4576",
+            "run": "r2978636b35b647e4",
+            "title": "Recetter le jalon Boréal"
+          }
+        ],
+        "enrollment": {
+          "at": 1791622881.1090047,
+          "concurrency": 2,
+          "contract": "204aae181998c3b4f5ba7db668bb476800553ab24c3f00b2525d9df0b931e100"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "s-w",
+            "node": "scope",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "tasks": [
+              {
+                "id": "atlas",
+                "project": "p96b00991ae6841ba",
+                "title": "Livrer le jalon Atlas"
+              },
+              {
+                "depends_on": [
+                  "atlas"
+                ],
+                "id": "boreal",
+                "project": "p8f44f5e3c91d4576",
+                "title": "Recetter le jalon Boréal"
+              }
+            ],
+            "title": "Un plan transverse Atlas → Boréal"
+          }
+        },
+        "outcome": "done",
+        "receipt": {
+          "actor": "iteration-engine",
+          "at": 1791622886.5166836,
+          "contract": "204aae181998c3b4f5ba7db668bb476800553ab24c3f00b2525d9df0b931e100"
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "contributions": [],
+            "results": [
+              {
+                "id": "atlas",
+                "outputs": {
+                  "confirmation": {
+                    "answer": "Atlas livré, preuve synthétique reçue."
+                  }
+                },
+                "project": "p96b00991ae6841ba",
+                "run": "r0b4d0b57e0a44827",
+                "title": "Livrer le jalon Atlas"
+              },
+              {
+                "id": "boreal",
+                "outputs": {
+                  "confirmation": {
+                    "answer": "Boréal recetté après le jalon Atlas."
+                  }
+                },
+                "project": "p8f44f5e3c91d4576",
+                "run": "r2978636b35b647e4",
+                "title": "Recetter le jalon Boréal"
+              }
+            ]
+          },
+          "summary": "2 élément(s) terminé(s)"
+        },
+        "status": "accepted"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "model": "synthetic",
+        "provider": "codex"
+      },
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "i-p",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "p-s",
+          "mapping": {
+            "plan": "plan"
+          },
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "s-w",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        }
+      ],
+      "id": "coordination-programme",
+      "nodes": [
+        {
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Recueillir les objectifs"
+        },
+        {
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "task",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Construire le plan transverse",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "title": "Approuver le plan transverse"
+        },
+        {
+          "collection": "plan.tasks",
+          "concurrency": 2,
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 0,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "title": "Réaliser les tâches du programme",
+          "workflow": {
+            "edges": [],
+            "id": "jalon",
+            "nodes": [
+              {
+                "id": "confirmation",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "question",
+                "outputs": {
+                  "answer": {
+                    "required": true,
+                    "type": "string"
+                  }
+                },
+                "question": "Le jalon de cette tâche est-il livré ?",
+                "title": "Recevoir le jalon"
+              }
+            ],
+            "schema": 2,
+            "title": "Confirmer un jalon projet"
+          }
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 2,
+      "title": "Coordonner les jalons du programme"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "cebd6095443064233",
+      "depends_on_runs": [],
+      "request": "Synchroniser les livraisons Atlas et Boréal avec un seul plan."
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-programme-TNwjtv/state/workflows/projects/p96b00991ae6841ba/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p96b00991ae6841ba",
+    "release": "",
+    "scope": {
+      "id": "p96b00991ae6841ba",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791622886.517,
+    "origin": null,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    },
+    "coordination": {
+      "work": {
+        "run": "r07cdd587fcd74011",
+        "node": "work",
+        "coordinator": "engine",
+        "concurrency": 2,
+        "status": "completed",
+        "counts": {
+          "completed": 2,
+          "running": 0,
+          "question": 0,
+          "decision": 0,
+          "failed": 0,
+          "waiting": 0
+        },
+        "total": 2,
+        "offset": 0,
+        "next": null,
+        "items": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "atlas",
+            "project": "p96b00991ae6841ba",
+            "run": "r0b4d0b57e0a44827",
+            "title": "Livrer le jalon Atlas",
+            "dependencies": [],
+            "state": "completed",
+            "execution": {
+              "id": "r0b4d0b57e0a44827",
+              "project": "p96b00991ae6841ba",
+              "status": "completed",
+              "created": 1791622881.1098053,
+              "updated": 1791622881.8500614,
+              "simulation": false,
+              "completion_outcome": "succeeded",
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "atlas",
+                "node": "work",
+                "run": "r07cdd587fcd74011"
+              },
+              "associated_with": null,
+              "conversation": "cebd6095443064233",
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "jalon",
+                "title": "Confirmer un jalon projet",
+                "revision": null
+              },
+              "original": {
+                "id": "jalon"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Livrer le jalon Atlas",
+              "counts": {
+                "accepted": 1
+              },
+              "nodes": {
+                "confirmation": {
+                  "status": "accepted"
+                }
+              }
+            },
+            "reason": ""
+          },
+          {
+            "base_from": null,
+            "depends_on": [
+              "atlas"
+            ],
+            "element": "boreal",
+            "project": "p8f44f5e3c91d4576",
+            "run": "r2978636b35b647e4",
+            "title": "Recetter le jalon Boréal",
+            "dependencies": [
+              {
+                "element": "atlas",
+                "title": "Livrer le jalon Atlas",
+                "project": "p96b00991ae6841ba",
+                "run": "r0b4d0b57e0a44827"
+              }
+            ],
+            "state": "completed",
+            "execution": {
+              "id": "r2978636b35b647e4",
+              "project": "p8f44f5e3c91d4576",
+              "status": "completed",
+              "created": 1791622881.1104188,
+              "updated": 1791622886.0382597,
+              "simulation": false,
+              "completion_outcome": "succeeded",
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "boreal",
+                "node": "work",
+                "run": "r07cdd587fcd74011"
+              },
+              "associated_with": null,
+              "conversation": "cebd6095443064233",
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "jalon",
+                "title": "Confirmer un jalon projet",
+                "revision": null
+              },
+              "original": {
+                "id": "jalon"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Recetter le jalon Boréal",
+              "counts": {
+                "accepted": 1
+              },
+              "nodes": {
+                "confirmation": {
+                  "status": "accepted"
+                }
+              }
+            },
+            "reason": ""
+          }
+        ]
+      }
+    }
+  },
+  "terminalBefore": [
+    [
+      "e962618ac91741fb91902659a64ceba8",
+      1481806
+    ]
+  ],
+  "terminalAfter": [
+    [
+      "e962618ac91741fb91902659a64ceba8",
+      1481806
+    ]
+  ]
+}

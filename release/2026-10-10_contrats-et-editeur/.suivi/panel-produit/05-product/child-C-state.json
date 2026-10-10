@@ -1,0 +1,160 @@
+{
+  "run": {
+    "contract": "54e212f343581672ca7b6d47fbc6a112835b85c632059f2877a39678e6938502",
+    "created": 1791627722.617241,
+    "definition": {
+      "defaults": {
+        "model": "synthetic-local",
+        "provider": "codex"
+      },
+      "edges": [],
+      "id": "revue-synthetique",
+      "nodes": [
+        {
+          "id": "question",
+          "inputs": {
+            "item": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "question",
+          "outputs": {
+            "answer": {
+              "required": true,
+              "type": "string"
+            }
+          },
+          "question": "Quel critère confirme la réception de cet élément ?",
+          "title": "Préciser le critère du livrable"
+        }
+      ],
+      "parameters": {
+        "element_id": "C",
+        "item": {
+          "criteria": [
+            "30 jours ; aucun envoi"
+          ],
+          "depends_on": [
+            "B"
+          ],
+          "id": "C",
+          "title": "Cahier de notification échéance"
+        },
+        "request": "Cahier de notification échéance"
+      },
+      "schema": 2,
+      "title": "Réception du livrable synthétique"
+    },
+    "driver": "automatic",
+    "id": "rcf5a80bf8ecf4b1d",
+    "iteration_wait": true,
+    "nodes": {
+      "question": {
+        "attempt": 0,
+        "seed_inputs": {
+          "item": {
+            "criteria": [
+              "30 jours ; aucun envoi"
+            ],
+            "depends_on": [
+              "B"
+            ],
+            "id": "C",
+            "title": "Cahier de notification échéance"
+          }
+        },
+        "status": "pending"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "model": "synthetic-local",
+        "provider": "codex"
+      },
+      "edges": [],
+      "id": "revue-synthetique",
+      "nodes": [
+        {
+          "id": "question",
+          "inputs": {
+            "item": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "question",
+          "outputs": {
+            "answer": {
+              "required": true,
+              "type": "string"
+            }
+          },
+          "question": "Quel critère confirme la réception de cet élément ?",
+          "title": "Préciser le critère du livrable"
+        }
+      ],
+      "schema": 2,
+      "title": "Réception du livrable synthétique"
+    },
+    "packs": [],
+    "parameters": {
+      "element_id": "C",
+      "item": {
+        "criteria": [
+          "30 jours ; aucun envoi"
+        ],
+        "depends_on": [
+          "B"
+        ],
+        "id": "C",
+        "title": "Cahier de notification échéance"
+      },
+      "request": "Cahier de notification échéance"
+    },
+    "parent": {
+      "attempt": 1,
+      "element": "C",
+      "node": "work",
+      "run": "r8268f40473fd4b59"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-personas-produit/05-product/isolated-home/workflows/workspace/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "workspace",
+    "release": "",
+    "scope": {
+      "id": "workspace",
+      "kind": "workspace"
+    },
+    "simulation": false,
+    "status": "paused",
+    "transports": {},
+    "updated": 1791627722.6176918,
+    "origin": {
+      "kind": "task",
+      "run": "r8268f40473fd4b59",
+      "title": "Plan B2B révisé — banc synthétique",
+      "project": "workspace"
+    },
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 35,
+      "at": 1791627722.6176,
+      "node": null,
+      "simulation": false,
+      "type": "started"
+    }
+  ],
+  "events_next": null
+}

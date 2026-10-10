@@ -1,0 +1,49 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-activity-resume/playwright.config.cjs --output=/tmp/tricorder-review-activity-resume/results-package-red
+PATH: /tmp/tricorder-ci-tools-9llbj9ie:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✘  1 ../../../tmp/tricorder-review-activity-resume/activity.spec.cjs:51:1 › independent activity announces action and stage while preserving draft and original conversation (15.4s)
+
+
+  1) ../../../tmp/tricorder-review-activity-resume/activity.spec.cjs:51:1 › independent activity announces action and stage while preserving draft and original conversation 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.activity-row').filter({ hasText: 'R1 — Examiner les besoins Azur' })
+    Expected substring: "Reprendre l’agent"
+    Received string:    "R1 — Examiner les besoins AzurDemande · Atelier Azur · Analyser une demandeAgent arrêtéPréparer le diagnostic→"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "soft toContainText" locator('.activity-row').filter({ hasText: 'R1 — Examiner les besoins Azur' }) with timeout 5000ms
+      - waiting for locator('.activity-row').filter({ hasText: 'R1 — Examiner les besoins Azur' })
+        14 × locator resolved to <button class="activity-row" data-id="rfcc8d91003de4021" data-project="p546e2da08b994d5e" data-action="activity-resume-agent">…</button>
+           - unexpected value "R1 — Examiner les besoins AzurDemande · Atelier Azur · Analyser une demandeAgent arrêtéPréparer le diagnostic→"
+
+
+      55 |  const activity=page.locator('.activity-row').filter({hasText:fixture.items[0].request});
+      56 |  await expect(activity).toContainText('Agent arrêté');await expect(activity).toContainText('Préparer le diagnostic');
+    > 57 |  await expect.soft(activity).toContainText('Reprendre l’agent');await expect(activity).toHaveAttribute('data-action','activity-resume-agent');
+         |                              ^
+      58 |  const dependent=page.locator('.activity-row').filter({hasText:fixture.items[2].request});await expect(dependent).toHaveAttribute('data-action','activity-run');await expect(dependent).not.toContainText('Reprendre l’agent');
+      59 |  await capture('activity-before-click');await activity.click();
+      60 |  await expect(page.getByRole('dialog')).toContainText('Reprendre l’agent de cette conversation');await expect(page.getByRole('dialog')).toContainText('Elle efface sa ligne de saisie en cours');
+        at /tmp/tricorder-review-activity-resume/activity.spec.cjs:57:30
+
+    Error Context: ../../../tmp/tricorder-review-activity-resume/results-package-red/activity-independent-activ-3f515-t-and-original-conversation/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-review-activity-resume/results-package-red/activity-independent-activ-3f515-t-and-original-conversation/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-review-activity-resume/results-package-red/activity-independent-activ-3f515-t-and-original-conversation/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    ../../../tmp/tricorder-review-activity-resume/activity.spec.cjs:51:1 › independent activity announces action and stage while preserving draft and original conversation 

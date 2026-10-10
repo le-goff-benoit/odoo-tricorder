@@ -1,0 +1,97 @@
+{
+  "calls": [
+    {
+      "at": 1791631115065,
+      "request": {
+        "project": "pf754b3cf0fc346e4",
+        "conversation": "c5a2a5c076a4f4018",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "d1255a8224684112a43536a6bd1ddab5",
+        "pid": 1792838,
+        "agentState": "starting",
+        "idleShell": false,
+        "program": "python3"
+      }
+    },
+    {
+      "at": 1791631115593,
+      "request": {
+        "project": "pf754b3cf0fc346e4",
+        "conversation": "c5a2a5c076a4f4018",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "87f44642df774dbc87ed2bdf5691aa9a",
+        "pid": 1792854,
+        "agentState": "starting",
+        "idleShell": false,
+        "program": "python3"
+      }
+    }
+  ],
+  "events": [
+    {
+      "at": 1791631114981,
+      "action": "conversation-terminal",
+      "cache": []
+    },
+    {
+      "at": 1791631115523,
+      "action": "conversation-terminal",
+      "cache": [
+        {
+          "id": "d1255a8224684112a43536a6bd1ddab5",
+          "pid": 1792838,
+          "alive": false,
+          "idleShell": false,
+          "program": null
+        }
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "id": "d1255a8224684112a43536a6bd1ddab5",
+      "project": "/tmp/tricorder-independent-terminal-fresh-CRQi7W/projects/pf754b3cf0fc346e4",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-CRQi7W/projects/pf754b3cf0fc346e4",
+      "release": null,
+      "task": null,
+      "createdAt": 1791631115.1813443,
+      "lastOutputAt": 1791631115.460823,
+      "pid": 1792838,
+      "program": null,
+      "provider": null,
+      "foreground": null,
+      "promptVerified": true,
+      "idleShell": false,
+      "alive": false,
+      "exitCode": 0,
+      "activity": "exited"
+    },
+    {
+      "id": "87f44642df774dbc87ed2bdf5691aa9a",
+      "project": "/tmp/tricorder-independent-terminal-fresh-CRQi7W/projects/pf754b3cf0fc346e4",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-CRQi7W/projects/pf754b3cf0fc346e4",
+      "release": null,
+      "task": null,
+      "createdAt": 1791631115.6981094,
+      "lastOutputAt": 1791631115.7327063,
+      "pid": 1792854,
+      "program": "codex",
+      "provider": "codex",
+      "foreground": 1792857,
+      "promptVerified": true,
+      "idleShell": false,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "launches": 2
+}

@@ -1,0 +1,1 @@
+Recettes interrompues volontairement par SIGINT pour intégrer le correctif distinguant une nouvelle intention identique de la reprise d’un ajout sans accusé. Aucune qualification finale déduite de ces exécutions partielles.

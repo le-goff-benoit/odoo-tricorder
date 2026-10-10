@@ -15,16 +15,24 @@ from .candidate_sources import DENIED, safe_path, snapshot, streamed_file, regul
 MAX_BYTES = 2_000_000
 
 
-def prepare(engine, run, job):
+def prepare(engine, run, job, base_candidate=None):
     require(run['scope']['kind'] == 'project', 'L’édition de code nécessite un projet Git')
     base, workspace = Path(job)/'base', Path(job)/'workspace'
     require(not base.exists() and not base.is_symlink() and not workspace.exists() and not workspace.is_symlink(),
             'Le dossier de cette tentative contient déjà une copie. Reprenez le bloc avec une nouvelle tentative ; aucune copie existante n’a été supprimée.')
+    parent = None
+    if base_candidate is not None:
+        from .candidate_integration import base_producer
+        parent = base_producer(engine, run, base_candidate)
     files = snapshot(engine.project(run['project']), base, copies=2)
     try:
         # copytree may use the kernel's streaming copy, but never shares inodes
         # with the original or baseline (no hard links).
         shutil.copytree(base, workspace)
+        if parent is not None:
+            candidate = load(engine, base_candidate, run['project'])
+            require(files == candidate['files'], 'Les sources ont changé depuis la dépendance de code : produire un nouveau candidat')
+            write_changes(candidate, workspace)
     except BaseException as error:
         if workspace.exists():
             shutil.rmtree(workspace)
@@ -36,15 +44,16 @@ def prepare(engine, run, job):
         raise
     # Native file tools only see this copy. Baseline and runtime state live outside.
     excerpts, listed, total, budget, listing_budget = {}, [], 0, 60_000, 12_000
-    for name in files:
-        size = (base/name).stat().st_size
+    workspace_files = sorted(str(path.relative_to(workspace)) for path in workspace.rglob('*') if path.is_file())
+    for name in workspace_files:
+        size = (workspace/name).stat().st_size
         total += size
         encoded_name = len(json.dumps(name, ensure_ascii=False).encode()) + 2
         if encoded_name <= listing_budget:
             listed.append(name)
             listing_budget -= encoded_name
         if size <= min(budget, 16000):
-            content = (base/name).read_bytes()
+            content = (workspace/name).read_bytes()
             try:
                 text = content.decode()
                 if '\0' in text:
@@ -55,11 +64,15 @@ def prepare(engine, run, job):
                     budget -= cost
             except UnicodeError:
                 pass
-    context = {'files': listed, 'file_count': len(files), 'omitted_files': len(files)-len(listed), 'source_bytes': total, 'contents': excerpts,
+    context = {'files': listed, 'file_count': len(workspace_files), 'omitted_files': len(workspace_files)-len(listed), 'source_bytes': total, 'contents': excerpts,
                'scope': 'Copie des fichiers Git suivis et des fichiers non ignorés, y compris historiques et pièces. Fichiers sensibles connus, dépendances et dossiers internes exclus. '
                         'La liste et les extraits ci-dessus sont bornés ; utilisez Glob, Read ou Grep dans la copie pour consulter les autres fichiers. '
                         'Seules les modifications de fichiers texte de 2 Mo maximum sont prises en charge ; les gros fichiers inchangés sont conservés.'}
-    return {'base': base, 'workspace': workspace, 'files': files, 'context': context}
+    prepared = {'base': base, 'workspace': workspace, 'files': files, 'context': context}
+    if parent is not None:
+        prepared['parent_candidate'] = parent
+        context['base_candidate'] = parent
+    return prepared
 
 
 def changed_content(root, name, expected_hash):
@@ -81,6 +94,10 @@ def changed_content(root, name, expected_hash):
 
 def capture(engine, run, prepared):
     base, workspace = prepared['base'], prepared['workspace']
+    if prepared.get('parent_candidate'):
+        from .candidate_integration import base_producer
+        require(base_producer(engine, run, prepared['parent_candidate']['candidate']) == prepared['parent_candidate'],
+                'La dépendance de code a changé pendant le travail : produire un nouveau candidat')
     paths = set(prepared['files'])
     for path in workspace.rglob('*'):
         require(not path.is_symlink(), 'Un candidat ne peut pas créer de lien symbolique')
@@ -91,6 +108,10 @@ def capture(engine, run, prepared):
             paths.add(relative)
     require(len(paths) <= 10000, 'Trop de fichiers dans le candidat')
     candidate = {'schema': 1, 'project': run['project'], 'source_run': run['id'], 'files': prepared['files'], 'changes': []}
+    if prepared.get('parent_candidate'):
+        candidate['parent_candidate'] = prepared['parent_candidate']
+    if prepared.get('integration'):
+        candidate['integration'] = prepared['integration']
     candidate_bytes = len(json.dumps(candidate, ensure_ascii=False).encode())
     changes, diff, diff_bytes = candidate['changes'], [], 0
     for name in sorted(paths):
@@ -132,14 +153,65 @@ def capture(engine, run, prepared):
 
 
 def load(engine, reference, project):
-    candidate = json.loads(engine.evidence(reference))
+    content = engine.evidence(reference)
+    require(len(content) <= MAX_BYTES, 'Candidat supérieur à 2 Mo')
+    try:
+        candidate = json.loads(content)
+    except (ValueError, UnicodeError):
+        raise ContractError('Preuve de candidat invalide') from None
+    require(isinstance(candidate, dict), 'Candidat invalide')
     require(candidate.get('schema') == 1 and candidate.get('project') == project, 'Candidat d’un autre projet')
     require(isinstance(candidate.get('changes'), list) and 0 < len(candidate['changes']) <= 100, 'Candidat invalide')
+    require(isinstance(candidate.get('files'), dict) and len(candidate['files']) <= 10000, 'Inventaire de candidat invalide')
     root = Path(engine.project(project)['path'])
+    import re
+    for name, original in candidate['files'].items():
+        require(isinstance(name, str) and str(Path(name)) == name, 'Chemin de candidat non normalisé')
+        safe_path(root, name)
+        require(isinstance(original, dict) and isinstance(original.get('sha256'), str)
+                and re.fullmatch(r'[a-f0-9]{64}', original['sha256'])
+                and type(original.get('mode')) is int and 0 <= original['mode'] <= 0o777,
+                'Inventaire de candidat invalide')
+    seen = set()
     for change in candidate['changes']:
+        require(isinstance(change, dict) and isinstance(change.get('path'), str)
+                and str(Path(change['path'])) == change['path'] and change['path'] not in seen,
+                'Chemin de candidat dupliqué ou non normalisé')
         safe_path(root, change['path'])
-        require(change['content'] is None or isinstance(change['content'], str), 'Contenu de candidat invalide')
+        seen.add(change['path'])
+        require('content' in change and (change['content'] is None or isinstance(change['content'], str)), 'Contenu de candidat invalide')
+        require(change.get('before') == candidate['files'].get(change['path'], {}).get('sha256'), 'Base de modification incohérente')
+        require(change['content'] is None or ('\0' not in change['content'] and len(change['content'].encode()) <= MAX_BYTES),
+                'Contenu binaire ou trop volumineux dans le candidat')
+    check_tree(candidate)
     return candidate
+
+
+def check_tree(candidate):
+    """A union must describe files, never a path that is also a directory."""
+    files = set(candidate['files'])
+    for change in candidate['changes']:
+        if change['content'] is None:
+            files.discard(change['path'])
+        else:
+            files.add(change['path'])
+    for name in sorted(files):
+        for parent in Path(name).parents:
+            require(str(parent) not in files, f'Conflit fichier/dossier : {parent} et {name}. Séparez ou corrigez ces contributions avant intégration.')
+            require(str(parent) not in candidate['files'],
+                    f'Transformation fichier/dossier non prise en charge : {parent}. Préparez séparément cette réorganisation du dépôt.')
+    for name in candidate['files']:
+        for parent in Path(name).parents:
+            require(str(parent) not in files,
+                    f'Transformation dossier/fichier non prise en charge : {parent}. Préparez séparément cette réorganisation du dépôt.')
+
+
+def write_changes(candidate, target):
+    """Apply deletions before writes in an isolated tree; no implicit merging."""
+    for change in sorted(candidate['changes'], key=lambda c: (c['content'] is not None, c['path'])):
+        path = safe_path(target, change['path'])
+        _write(path, change['content'].encode() if change['content'] is not None else None,
+               candidate['files'].get(change['path'], {}).get('mode', 0o644), root=target)
 
 
 def materialize(engine, reference, project, target):
@@ -149,10 +221,7 @@ def materialize(engine, reference, project, target):
     # that already existed when this attempt started.
     try:
         require(files == candidate['files'], 'Les sources ont changé depuis la proposition : générer un nouveau candidat')
-        for change in candidate['changes']:
-            path = safe_path(target, change['path'])
-            _write(path, change['content'].encode() if change['content'] is not None else None,
-                   candidate['files'].get(change['path'], {}).get('mode', 0o644), root=target)
+        write_changes(candidate, target)
     except BaseException as error:
         shutil.rmtree(target)
         if isinstance(error, OSError) and error.errno == errno.ENOSPC:
@@ -276,13 +345,19 @@ def apply(engine, run_id, node_id, expected, *, human=False):
                 run = engine.run(run_id, db)
                 state = run['nodes'][node_id]
                 definition = next(n for n in run['definition']['nodes'] if n['id'] == node_id)
-                require(definition.get('execution_mode') == 'edit', 'Ce bloc ne produit pas de candidat de code')
+                require(definition.get('execution_mode') == 'edit' or definition['kind'] == 'integrate', 'Ce bloc ne produit pas de candidat de code')
                 require(not run['simulation'] and run['status'] != 'cancelled' and state['status'] == 'accepted', 'Valider le résultat réel avant application')
                 reference = state['result']['outputs']['candidate']
                 require(expected == reference['sha256'], 'Le candidat a changé depuis sa présentation')
                 require(not state.get('applied_candidate'), 'Candidat déjà appliqué')
                 candidate = load(engine, reference, run['project'])
                 require(candidate.get('source_run') == run_id, 'Candidat d’une autre exécution')
+                if definition['kind'] == 'integrate':
+                    from .candidate_integration import validate_integration
+                    validate_integration(engine, run, definition, reference)
+                elif run.get('parent') or candidate.get('parent_candidate'):
+                    from .candidate_integration import validate_candidate_context
+                    validate_candidate_context(engine, run, definition, state, candidate)
                 require_checks(run, node_id, reference, engine)
                 project = engine.project(run['project'], db)
                 root = Path(repository(project['path']))

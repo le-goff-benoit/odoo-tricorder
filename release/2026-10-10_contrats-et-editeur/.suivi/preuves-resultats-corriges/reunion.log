@@ -1,0 +1,13 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test panel-v2-user-3.spec.cjs --output=test-results/corrections-results-user3
+PATH: /tmp/tricorder-ci-tools-6d2zpgp1:/usr/bin:/bin
+codex None
+claude None
+
+Running 2 tests using 1 worker
+
+  ✓  1 tests/panel-v2-user-3.spec.cjs:62:1 › réunion : adapter un modèle par les formulaires, recevoir le compte rendu, activer un brouillon local (8.3s)
+  ✓  2 tests/panel-v2-user-3.spec.cjs:118:1 › plusieurs sujets : un plan, tâches visibles et brouillon en échec sans perdre les résultats (33.2s)
+
+  2 passed (41.9s)

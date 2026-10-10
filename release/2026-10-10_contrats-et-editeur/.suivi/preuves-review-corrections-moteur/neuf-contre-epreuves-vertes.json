@@ -1,0 +1,103 @@
+[
+  {
+    "case": "read-write-notify-child-preflight",
+    "ok": true,
+    "evidence": {
+      "lookup": {
+        "issues": 0,
+        "message": ""
+      },
+      "publish": {
+        "issues": 1,
+        "message": "Notifier chaque élément · Connexion Outil synthétique (fixture), opération publish : Effet de l’outil incompatible : les écritures exigent un bloc externe et un accord exact"
+      },
+      "send": {
+        "issues": 1,
+        "message": "Notifier chaque élément · Connexion Outil synthétique (fixture), opération send : Effet de l’outil incompatible : les écritures exigent un bloc externe et un accord exact"
+      },
+      "bad_on_question": "Notifier chaque élément · Connexion Outil synthétique (fixture), opération lookup : Une notification de question exige une capacité de notification"
+    }
+  },
+  {
+    "case": "write-child-retains-exact-human-gate",
+    "ok": true,
+    "evidence": {
+      "preview_notifications": 0,
+      "child_external": "pending",
+      "claim_refused": "Ce bloc n'est pas prêt"
+    }
+  },
+  {
+    "case": "manifest-changed-after-first-child-rolls-back-whole-family",
+    "ok": true,
+    "evidence": {
+      "first_child_created_inside_uncommitted_transaction": 1,
+      "children_persisted": 0,
+      "parent_events_unchanged": true,
+      "error": "Connexion Outil synthétique (changed during enrollment) (fixture), opération send : Transport non qualifié ou modifié : vérification humaine requise"
+    }
+  },
+  {
+    "case": "optional-action-does-not-inherit-conversation-other-projects",
+    "ok": true,
+    "evidence": {
+      "error": "remote : projet hors du périmètre autorisé",
+      "local_children": 0,
+      "remote_children": 0,
+      "main_status": "completed"
+    }
+  },
+  {
+    "case": "child-on-question-connection-change-keeps-question-blocks-notify",
+    "ok": true,
+    "evidence": {
+      "question_retained": true,
+      "notification": {
+        "status": "blocked",
+        "reason": "Connexion modifiée depuis le lancement"
+      },
+      "stale_answer_refused": true,
+      "notification_child_created": false
+    }
+  },
+  {
+    "case": "scheduled-child-transport-change-blocks-before-start",
+    "ok": true,
+    "evidence": {
+      "schedule_status": "blocked",
+      "error": "Catalogue modifié : recréer la récurrence après vérification",
+      "runs": 0
+    }
+  },
+  {
+    "case": "restart-family-pagination-bounded-readonly",
+    "ok": true,
+    "evidence": {
+      "runs": 36,
+      "page_size": 7,
+      "payload_bytes": 77001,
+      "source_result_bytes": 1250000,
+      "durable_origins": 35,
+      "state_events_unchanged": true,
+      "artifacts_unchanged": true
+    }
+  },
+  {
+    "case": "notification-of-optional-grandchild-respects-main-pause",
+    "ok": true,
+    "evidence": {
+      "blocked": true,
+      "reason": "Action devenue obsolète, suspendue ou annulée ; aucun nouvel envoi autorisé",
+      "accepted_before_rejection": []
+    }
+  },
+  {
+    "case": "completed-main-allows-current-optional-question-notification",
+    "ok": true,
+    "evidence": {
+      "main_completed_action_notification_permitted": true,
+      "stale_notification_blocked": true,
+      "stale_reason": "Question déjà traitée, suspendue ou annulée ; notification obsolète"
+    }
+  }
+]

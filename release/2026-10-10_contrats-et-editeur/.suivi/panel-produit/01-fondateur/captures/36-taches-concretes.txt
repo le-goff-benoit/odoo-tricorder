@@ -1,0 +1,99 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - button "Client Boréal - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas - onboarding
+  - button "Terminal 1" [pressed]
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:09
+  - button "Actualiser · À jour · 12:09"
+  - strong: Terminal
+  - button "Contexte"
+  - button "Disposition verticale"
+  - button "Agrandir le terminal"
+  - 'button "Shell · Codex arrêté · Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail." [pressed]':
+    - img "Shell"
+    - text: "Shell · Codex arrêté · Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+  - button "Arrêter ce terminal"
+  - button "Nouveau terminal"
+  - button "Rechercher dans le terminal"
+  - text: "Conversation du workflow affiché · Shell : Client Atlas - onboarding · Agent arrêté"
+  - textbox "Terminal input"
+  - separator "Taille du terminal"
+  - main:
+    - text: Suivi · Onboarding Atlas
+    - 'heading "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail." [level=1]'
+    - group: Options
+    - group "Périmètre du suivi":
+      - button "Vue d’ensemble"
+      - button "Demande" [pressed]
+    - tablist "Vues du workflow"
+    - group: 1 demande
+    - paragraph:
+      - strong: Agent arrêté · progression conservée.
+      - text: Aucune étape en cours · 1 demande à prendre en charge
+    - button "Reprendre l’agent…"
+    - button "Voir le shell"
+    - region "État et prochaine action":
+      - strong: Coordination en cours
+      - text: 3 / 5 étapes
+      - button "Suivre les éléments"
+      - paragraph: "Coordination du workflow : travaux, agents et dépendances par élément."
+    - group "Affichage du suivi":
+      - button "Graphe" [pressed]
+      - button "Détail"
+    - article "Recueillir les besoins client · Liste confirmée":
+      - button "Recueillir les besoins client": Recueillir les besoins client Entrée utilisateur Liste confirmée intentions · liste
+      - strong: 1 intention confirmée(s)
+      - list:
+        - listitem: "Créer les accès pour 8 utilisateurs Atlas avec rôles commercial et administrateur. Référent : Claire. Échéance : 20 octobre."
+    - article "Préparer un plan · Produit · sorties vérifiées":
+      - button "Préparer un plan": Préparer un plan Tâche IA Produit · sorties vérifiées plan · un élément
+      - strong: Préparer onboarding Atlas (données synthétiques)
+      - text: 2 tâches · un plan
+      - list:
+        - listitem: Confirmer fichier CSV et accès auprès de Claire
+        - listitem: Préparer brouillon local de mail de lancement
+    - article "Valider le plan · Approuvée":
+      - button "Valider le plan": Valider le plan Décision humaine Approuvée Vous
+      - strong: Préparer onboarding Atlas (données synthétiques)
+      - text: 2 tâches · un plan
+      - list:
+        - listitem: Confirmer fichier CSV et accès auprès de Claire
+        - listitem: Préparer brouillon local de mail de lancement
+    - article "Pour chaque élément du plan · Coordination en cours":
+      - button "Pour chaque élément du plan": Pour chaque élément du plan Pour chaque élément Coordination en cours contributions · liste ; results · liste
+      - strong: 0/2 terminé · 0 en cours · 2 en attente
+      - text: "Coordination : Tricorder · 0 exécutant actif"
+      - button "Confirmer fichier CSV et accès auprès de Claire En attente Prêt pour un exécutant":
+        - strong: Confirmer fichier CSV et accès auprès de Claire
+        - text: En attente Prêt pour un exécutant
+      - button "Préparer brouillon local de mail de lancement En attente Dépendances à terminer Après Confirmer fichier CSV et accès auprès de Claire":
+        - strong: Préparer brouillon local de mail de lancement
+        - text: En attente Dépendances à terminer Après Confirmer fichier CSV et accès auprès de Claire
+      - button "Voir les 2 éléments"
+    - button "Examiner les résultats · Prévu": Examiner les résultats Décision humaine Prévu Vous
+    - text: 5 blocs · 4 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"

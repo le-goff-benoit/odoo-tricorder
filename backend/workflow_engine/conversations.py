@@ -145,7 +145,7 @@ class Conversations:
             def execution(rid):
                 if rid not in observed:
                     run = self.engine.run(rid)
-                    projection = summary(run)
+                    projection = summary(run, engine=self.engine)
                     if run['status'] == 'completed':
                         projection['completion_outcome'] = completion_outcome(run)
                     observed[rid] = projection, dependency_satisfied(run)
@@ -183,8 +183,22 @@ class Conversations:
         return result
 
     def checked_run(self, cid, rid):
-        require(any(i["run"] == rid for i in self.get(cid)["items"]), "Tâche d’une autre conversation")
-        return self.engine.run(rid)
+        run = self.engine.run(rid)
+        roots = {i["run"] for i in self.get(cid)["items"]}
+        current, seen = run, set()
+        while current["id"] not in roots:
+            require(current["id"] not in seen and len(seen) < 20, "Lignée de coordination invalide")
+            seen.add(current["id"])
+            ref = current.get("parent") or current.get("associated_with")
+            require(ref and ref.get("run"), "Tâche d’une autre conversation")
+            parent = self.engine.run(ref["run"])
+            if current.get("parent"):
+                state = parent["nodes"].get(ref["node"], {})
+                require(state.get("attempt") == ref["attempt"] and any(m["run"] == current["id"] and m["element"] == ref["element"] for m in state.get("children", [])), "Élément hors de la coordination")
+            else:
+                require(any(r["id"] == ref["action"] and r.get("run") == current["id"] for r in parent.get("associated_actions", [])), "Action hors de la conversation")
+            current = parent
+        return run
 
 
 def ask(engine, rid, nid, token, text):
@@ -203,6 +217,8 @@ def ask(engine, rid, nid, token, text):
         state.update(status="waiting_input", question=question)
         db.execute("DELETE FROM resources WHERE run=? AND node=? AND token=?", (rid, nid, token))
         engine._event(db, run, "question", nid, question=question)
+        from .associated_actions import sync
+        sync(engine, db, run)
         engine._save(db, run)
         return run
 
@@ -218,7 +234,11 @@ def answer(engine, rid, nid, qid, text):
         for previous in state["questions"]:
             if previous["id"] == qid:
                 previous.update(state["question"])
-        state["inputs"]["clarifications"] = [{"question": q["text"], "answer": q.get("answer")} for q in state["questions"]]
+        interactions = [{"question": q["text"], "answer": q.get("answer")} for q in state["questions"]]
+        if run["definition"]["schema"] == 2:
+            state["interactions"] = interactions
+        else:
+            state["inputs"]["clarifications"] = interactions
         node = next(n for n in run["definition"]["nodes"] if n["id"] == nid)
         if node["kind"] == "question":
             state.update(status="accepted", outcome="done", result={"ok": True, "summary": "Information fournie", "outputs": {"answer": text}})

@@ -1,0 +1,51 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-collection-ack/playwright.config.cjs --output=/tmp/tricorder-review-collection-ack/results-package
+PATH: /tmp/tricorder-ci-tools-dhuvbnki:/usr/bin:/bin
+codex None
+claude None
+
+Running 2 tests using 1 worker
+
+  ✓  1 ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with stale revision preserve exactly two intentions (6.2s)
+  ✘  2 ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with fresh revision preserve exactly two intentions (9.3s)
+
+
+  1) ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with fresh revision preserve exactly two intentions 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.collection-items li')
+    Expected: 2
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('.collection-items li') with timeout 5000ms
+      - waiting for locator('.collection-items li')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      67 |  }else{
+      68 |   await expect(page.locator('.collection-recovery article')).toHaveCount(1);
+    > 69 |   await expect(page.locator('.collection-items li')).toHaveCount(2);
+         |                                                      ^
+      70 |  }
+      71 |  await expect.poll(stored).toEqual([text,text]);await expect(input()).toHaveValue('');
+      72 |  const pre=await app.evaluate(()=>reviewCalls.filter(c=>c.action==='collection.change'));
+        at /tmp/tricorder-review-collection-ack/review.spec.cjs:69:54
+
+    Error Context: ../../../tmp/tricorder-review-collection-ack/results-package/review-independent-identic-a088a-erve-exactly-two-intentions/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-review-collection-ack/results-package/review-independent-identic-a088a-erve-exactly-two-intentions/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-review-collection-ack/results-package/review-independent-identic-a088a-erve-exactly-two-intentions/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with fresh revision preserve exactly two intentions 
+  1 passed (16.0s)

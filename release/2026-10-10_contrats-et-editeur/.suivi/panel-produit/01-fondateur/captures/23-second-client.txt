@@ -1,0 +1,37 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Projets
+  - button "Terminal 1"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:06
+  - button "Actualiser · À jour · 12:06"
+  - main:
+    - heading "Vos projets" [level=2]
+    - button "Voir les archives"
+    - paragraph: Un projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.
+    - button "+ Nouveau projet"
+    - button "Importer un workflow"
+    - button "Client Atlas - onboarding /tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p883958b73e7944f7":
+      - heading "Client Atlas - onboarding" [level=3]
+      - text: /tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p883958b73e7944f7
+    - button "Essayer un exemple"

@@ -1,0 +1,166 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:ui
+PATH: /tmp/tricorder-ci-tools-p211a5x8:/usr/bin:/bin
+codex None
+claude None
+
+> odoo-tricorder@0.6.0-rc.13 test:ui
+> npm run build && playwright test --output=/tmp/tricorder-rc13-final-source-results
+
+
+> odoo-tricorder@0.6.0-rc.13 build
+> node scripts/build.mjs
+
+
+Running 183 tests using 1 worker
+
+  ✓    1 tests/attempt-history.spec.cjs:51:1 › large archived inputs keep failure history readable and attached proofs accessible (3.0s)
+  ✓    2 tests/attempt-history.spec.cjs:97:1 › paged large histories remain formatted with accessible proof links (3.2s)
+  ✓    3 tests/collection-input-ux.spec.cjs:38:1 › a second intention submitted during acknowledgement is recorded once without losing text (2.7s)
+  ✓    4 tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (4.4s)
+  ✓    5 tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (4.0s)
+  ✓    6 tests/collection-input-ux.spec.cjs:66:1 › an addition rejected after a concurrent edit survives the next success, reload and targeted retry (6.1s)
+  ✓    7 tests/collection-input-ux.spec.cjs:78:1 › a lost acknowledgement is retried with the same command after reload without duplicating the intention (5.3s)
+  ✓    8 tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (4.1s)
+  ✓    9 tests/collection-input-ux.spec.cjs:96:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (7.9s)
+  ✓   10 tests/collection-input-ux.spec.cjs:117:1 › two project shells remain discoverable after changing project and reloading the window (5.8s)
+  ✓   11 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (7.1s)
+  ✓   12 tests/conversation-overview.spec.cjs:88:1 › running: actual agents, failure history and explicit dispatch are distinct (6.5s)
+  ✓   13 tests/conversation-overview.spec.cjs:103:1 › pages: global activity survives paging and off-page dependencies open the named request (7.0s)
+  ✓   14 tests/conversation-overview.spec.cjs:115:1 › compact: terminal working lines and the question answer remain visible together (6.7s)
+  ✓   15 tests/desktop-output-pipes.spec.cjs:6:1 › a recoverable backend rejection stays in the app after its launcher closes log pipes (2.5s)
+  ✓   16 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (7.8s)
+  ✓   17 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (3.2s)
+  ✓   18 tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (6.1s)
+  ✓   19 tests/desktop.spec.cjs:292:1 › design system: common gutters, cards and controls across every project view (9.0s)
+  ✓   20 tests/desktop.spec.cjs:355:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (3.3s)
+  ✓   21 tests/desktop.spec.cjs:408:1 › effort: partial recorded time survives missing roles, task filtering and refresh (3.9s)
+  ✓   22 tests/desktop.spec.cjs:450:1 › effort: open release updates task and agent percentages before closure (3.3s)
+  ✓   23 tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence (6.0s)
+  ✓   24 tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (3.9s)
+  ✓   25 tests/desktop.spec.cjs:681:1 › Markdown preview: readable safe content and recovery from a project read error (4.2s)
+  ✓   26 tests/desktop.spec.cjs:734:1 › email removed: no UI or API, old private records preserved, project still usable (2.7s)
+  ✓   27 tests/desktop.spec.cjs:785:1 › desktop: projects, proof status, sources, real terminal and persistence (5.2s)
+  ✓   28 tests/desktop.spec.cjs:884:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (7.0s)
+  -   29 tests/desktop.spec.cjs:1010:1 › real project: read-only release/task/mission screens
+  ✓   30 tests/desktop.spec.cjs:1098:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (11.5s)
+  ✓   31 tests/desktop.spec.cjs:1242:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (7.9s)
+  ✓   32 tests/desktop.spec.cjs:1339:1 › live requests appear before planning and reconcile with tasks without manual refresh (7.9s)
+  ✓   33 tests/desktop.spec.cjs:1393:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (10.7s)
+
+  ✓   34 tests/desktop.spec.cjs:1529:1 › work page starts a contextual request and resumes a task without changing its state (3.2s)
+  ✓   35 tests/desktop.spec.cjs:1579:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (6.5s)
+  ✓   36 tests/desktop.spec.cjs:1681:1 › window integration preserves the native conversation while inspecting phases and the library (6.1s)
+  ✓   37 tests/editor-gestures.spec.cjs:57:1 › whole-card dragging updates links at each zoom and each gesture has one undo; cancellations restore the graph (6.4s)
+  ✘   38 tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session (9.4s)
+  ✓   39 tests/editor-gestures.spec.cjs:95:1 › connections support click, drag and keyboard with confirmation, direct editing and cancellation (4.5s)
+  ✓   40 tests/editor-gestures.spec.cjs:111:1 › notes are editable, movable and undoable presentation metadata preserved by save and portable export (5.5s)
+  ✓   41 tests/editor-gestures.spec.cjs:124:1 › new blocks and notes appear in the visible part of a large graph and zoom keeps its center (3.3s)
+  ✓   42 tests/editor-gestures.spec.cjs:140:1 › a frozen execution exposes neither notes nor editor handles and pointer or keyboard gestures cannot change its definition (4.4s)
+  ✓   43 tests/editor-gestures.spec.cjs:153:1 › a note below adjacent blocks stays draggable while its detour avoids all cards and ports (5.0s)
+  ✓   44 tests/editor-layout-ux.spec.cjs:59:1 › design opens at readable scale and compact properties use the panel without losing edits on resize (9.8s)
+  ✓   45 tests/editor-layout-ux.spec.cjs:98:1 › compact editing retains the live terminal and shows full sidebar project names on pointer and keyboard focus (3.4s)
+  ✓   46 tests/execution-interactions.spec.cjs:90:1 › negative result remains receivable and routes to the corrective branch (6.0s)
+  ✓   47 tests/execution-interactions.spec.cjs:103:1 › uncertain local notification retains receipt lookup without sending twice (6.1s)
+  ✓   48 tests/execution-interactions.spec.cjs:111:1 › live failure updates the graph badge and accessible name without reopening the run (6.5s)
+  ✓   49 tests/execution-interactions.spec.cjs:121:1 › request menu keeps keyboard focus and a question draft while activity changes (6.0s)
+  ✓   50 tests/execution-interactions.spec.cjs:143:1 › search menu keeps its expanded state and keyboard focus when requests arrive (6.1s)
+  ✓   51 tests/execution-interactions.spec.cjs:154:1 › search draft survives polling and deferred request counts refresh after leaving the input (6.3s)
+  ✓   52 tests/execution-interactions.spec.cjs:181:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (11.6s)
+  ✓   53 tests/execution-interactions.spec.cjs:221:1 › a stopped conversation with a pending question resumes explicitly without losing requests or its terminal (8.1s)
+  ✓   54 tests/functional-feedback.spec.cjs:25:1 › business feedback: create an AND dependency on four demands, then explain a cancelled prerequisite (4.8s)
+  ✓   55 tests/functional-feedback.spec.cjs:39:1 › business feedback: a focused inspector updates after completion without stale ready instructions (3.5s)
+  ✓   56 tests/functional-feedback.spec.cjs:47:1 › business feedback: a late conversation reply cannot overwrite the editor or raise a null query error (3.7s)
+  ✓   57 tests/functional-feedback.spec.cjs:56:1 › business feedback: task instructions save with the common AI selection and survive reopen (3.6s)
+  ✓   58 tests/functional-feedback.spec.cjs:63:1 › business feedback: pause and cancellation update an open inspector even when the node is unchanged (4.4s)
+  ✓   59 tests/functional-feedback.spec.cjs:71:1 › handover feedback: source execution stays reachable from its new workflow without reading JSON (3.6s)
+  ✓   60 tests/functional-feedback.spec.cjs:83:1 › creation feedback: choosing a model keeps the custom workflow name already entered (5.7s)
+  ✓   61 tests/functional-feedback.spec.cjs:92:1 › version feedback: a missing delegated model keeps native work actionable and offers optional configuration (4.6s)
+  ✓   62 tests/functional-feedback.spec.cjs:110:1 › version feedback: an automatic failure can configure a new copy while preserving its results (4.7s)
+  ✓   63 tests/functional-feedback.spec.cjs:131:1 › long request replacement retains the complete text and finished results keep a readable title (5.7s)
+  ✓   64 tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch (6.1s)
+  ✓   65 tests/launch-repair.spec.cjs:146:1 › repair secondary-project connection diagnoses before launch and returns without retyping (7.8s)
+  ✓   66 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain) (6.1s)
+  ✓   67 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile) (5.9s)
+  ✘   68 tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin (6.1s)
+
+
+  1) tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.xterm-screen:visible')
+    Expected substring: "GESTURE_TERMINAL_OK"
+    Received string:    ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;To run a command as administrator (user \"root\"), use \"sudo <command>\".See \"man sudo_root\" for details.blegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; comm"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.xterm-screen:visible') with timeout 5000ms
+      - waiting for locator('.xterm-screen:visible')
+        14 × locator resolved to <div class="xterm-screen">…</div>
+           - unexpected value ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;To run a command as administrator (user "root"), use "sudo <command>".See "man sudo_root" for details.blegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; comm"
+
+
+      89 |   await page.locator('[data-action=terminal-toggle]').click(); await page.locator('.xterm-helper-textarea:visible').focus();
+      90 |   await page.keyboard.type('printf "GESTURE_TERMINAL_OK\\n"'); await page.keyboard.press('ArrowLeft'); await page.keyboard.press('ArrowRight'); await page.keyboard.press('Control+s'); await page.keyboard.press('Control+q'); await page.keyboard.press('Enter');
+    > 91 |   await expect(page.locator('.xterm-screen:visible')).toContainText('GESTURE_TERMINAL_OK');
+         |                                                       ^
+      92 |   expect((await page.evaluate(() => window.tricorder.terminals.list())).filter(s => s.alive).map(s => [s.id,s.pid])).toEqual(before.map(s => [s.id,s.pid])); expect((await snapshot()).nodes).toEqual(saved.nodes);
+      93 | });
+      94 |
+        at /home/blegoff/odoo-tricorder/tests/editor-gestures.spec.cjs:91:55
+
+    Error Context: ../../../tmp/tricorder-rc13-final-source-results/editor-gestures-compact-se-4fd20-uts-retain-the-live-session/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-rc13-final-source-results/editor-gestures-compact-se-4fd20-uts-retain-the-live-session/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-rc13-final-source-results/editor-gestures-compact-se-4fd20-uts-retain-the-live-session/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin 
+
+    Test was interrupted.
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for getByRole('button', { name: 'Workflows', exact: true })
+        - locator resolved to <button class="side-item" aria-current="false" data-workflow-route="global">…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+      205 |     { id: 'edit', title: 'Modifier le code', kind: 'agent', execution_mode: 'edit', outputs: { candidate: 'object' } }], edges: [] };
+      206 |   const original = await call('workflow.save', { project: 'workspace', graph });
+    > 207 |   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
+          |                                                                      ^
+      208 |   await page.locator('article').filter({ has: page.getByRole('heading', { name: graph.title, exact: true }) }).getByRole('button', { name: 'Ouvrir le workflow', exact: true }).click();
+      209 |   const text = 'Préparer la correction dans Alpha, sans lancer le travail.';
+      210 |   await launchDialog(text);
+        at /home/blegoff/odoo-tricorder/tests/launch-repair.spec.cjs:207:70
+
+    Error Context: ../../../tmp/tricorder-rc13-final-source-results/launch-repair-repair-globa-4fb23-without-changing-its-origin/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-rc13-final-source-results/launch-repair-repair-globa-4fb23-without-changing-its-origin/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-rc13-final-source-results/launch-repair-repair-globa-4fb23-without-changing-its-origin/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session 
+  1 interrupted
+    tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin 
+  1 skipped
+  115 did not run
+  65 passed (6.4m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

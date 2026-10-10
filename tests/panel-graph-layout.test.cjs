@@ -67,3 +67,16 @@ test('long branch names wrap in the allocated band and malformed drafts remain i
   graph.edges.push({ id: 'back', from: 'b', to: 'a' });
   assert.ok(executionLayout(graph).nodes.every(node => Number.isFinite(node.position.y)));
 });
+
+test('notes are obstacles for both routes and their labels even when moved onto a previous wire',()=>{const graph={nodes:[{id:'plan',position:{x:40,y:80}},{id:'scope',position:{x:720,y:80}}],edges:[{id:'next',from:'plan',to:'scope'}],layout:{notes:[{id:'note',position:{x:350,y:100},size:{width:280,height:180}}]}};const before=structuredClone(graph);const note={...graph.layout.notes[0].position,...graph.layout.notes[0].size};for(const position of [{x:350,y:100},{x:300,y:30},{x:420,y:160}]){Object.assign(note,position);graph.layout.notes[0].position=position;const routes=designRoutes(graph,{}, {next:'Plan · un élément'});verifyLabels(routes,[note]);verifyRoutes(routes,[note]);}assert.deepEqual(graph.nodes,before.nodes);assert.deepEqual(graph.edges,before.edges);});
+
+test('a note below neighbouring cards never reroutes a link through its source or destination',()=>{
+  const graph={nodes:['intentions','plan','scope','work'].map((id,i)=>({id,position:{x:40+i*330,y:60}})),edges:[{id:'i-p',from:'intentions',to:'plan'},{id:'p-s',from:'plan',to:'scope'},{id:'s-w',from:'scope',to:'work'}],layout:{notes:[{id:'note',position:{x:496,y:336},size:{width:280,height:180}}]}};
+  const heights=Object.fromEntries(graph.nodes.map(node=>[node.id,114]));
+  const cards=graph.nodes.map(node=>({id:node.id,...node.position,width:240,height:114}));
+  const note={id:'note',...graph.layout.notes[0].position,...graph.layout.notes[0].size};
+  const before=structuredClone(graph);
+  const routes=designRoutes(graph,heights,{'i-p':'intentions · liste','p-s':'plan · un élément','s-w':'Approuvée · plan · un élément'});
+  verifyLabels(routes,[...cards,note]);verifyRoutes(routes,[...cards,note]);
+  assert.deepEqual(graph,before);
+});

@@ -1,0 +1,363 @@
+[
+  {
+    "project": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "id": "p34450b6a9ddb4c33",
+      "managed": true,
+      "packs": [],
+      "path": "/tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p34450b6a9ddb4c33",
+      "title": "Client Boréal - onboarding"
+    },
+    "runs": []
+  },
+  {
+    "project": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "id": "p883958b73e7944f7",
+      "managed": true,
+      "packs": [],
+      "path": "/tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p883958b73e7944f7",
+      "title": "Client Atlas - onboarding"
+    },
+    "runs": [
+      {
+        "id": "rce1d066abe5843c0",
+        "request": {
+          "conversation": "ce6bb1876a1844dce",
+          "depends_on_runs": [],
+          "request": "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+        },
+        "nodes": {
+          "intentions": {
+            "attempt": 0,
+            "collection": {
+              "closed": 1791626763.049075,
+              "commands": {
+                "a448955a-7bd6-4c86-ad4b-e6370ad5f786": "1598fbc694cd243cef1501b3f49065b2b201750b997816d8563664f9098041dd",
+                "f4a848c2-0b06-412c-89f3-bba189e2b402": "993c626bfc281843f6908cca5d9f8abe0483e8e23566610e110523c6d91bdc5e"
+              },
+              "items": [
+                {
+                  "created": 1791626762.7980273,
+                  "id": "i6730daa935244d09",
+                  "text": "Créer les accès pour 8 utilisateurs Atlas avec rôles commercial et administrateur. Référent : Claire. Échéance : 20 octobre."
+                }
+              ],
+              "revision": 2
+            },
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "receipt": {
+              "actor": "collection-confirmation",
+              "at": 1791626763.0490735,
+              "revision": 1
+            },
+            "result": {
+              "ok": true,
+              "outputs": {
+                "intentions": [
+                  {
+                    "created": 1791626762.7980273,
+                    "id": "i6730daa935244d09",
+                    "text": "Créer les accès pour 8 utilisateurs Atlas avec rôles commercial et administrateur. Référent : Claire. Échéance : 20 octobre."
+                  }
+                ]
+              },
+              "summary": "1 contribution(s) confirmée(s)"
+            },
+            "status": "accepted"
+          },
+          "plan": {
+            "attempt": 0,
+            "input_sources": {
+              "intentions": {
+                "edge": "intentions-plan",
+                "node": "intentions",
+                "port": "intentions"
+              }
+            },
+            "inputs": {
+              "intentions": [
+                {
+                  "created": 1791626762.7980273,
+                  "id": "i6730daa935244d09",
+                  "text": "Créer les accès pour 8 utilisateurs Atlas avec rôles commercial et administrateur. Référent : Claire. Échéance : 20 octobre."
+                }
+              ]
+            },
+            "status": "ready"
+          },
+          "receipt": {
+            "attempt": 0,
+            "status": "pending"
+          },
+          "scope": {
+            "attempt": 0,
+            "status": "pending"
+          },
+          "work": {
+            "attempt": 0,
+            "status": "pending"
+          }
+        },
+        "definition": {
+          "defaults": {
+            "effort": "medium",
+            "model": "modele-local-inerte",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "description": "Copie du modèle intégré « Intentions, plan et travaux ».\n\nRecueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.",
+          "edges": [
+            {
+              "from": "intentions",
+              "id": "intentions-plan",
+              "mapping": {
+                "intentions": "intentions"
+              },
+              "outcome": "done",
+              "to": "plan"
+            },
+            {
+              "from": "plan",
+              "id": "plan-scope",
+              "mapping": {
+                "plan": "plan"
+              },
+              "outcome": "done",
+              "to": "scope"
+            },
+            {
+              "from": "scope",
+              "id": "scope-work",
+              "mapping": {
+                "plan": "plan"
+              },
+              "outcome": "approve",
+              "to": "work"
+            },
+            {
+              "from": "work",
+              "id": "work-receipt",
+              "mapping": {
+                "results": "results"
+              },
+              "outcome": "done",
+              "to": "receipt"
+            }
+          ],
+          "id": "custom-0893ef21-6651-4950-be67-945f7c167906-import-c716c01df9ad",
+          "nodes": [
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [
+                "Identifier objectif métier, utilisateurs, données à importer et échéance",
+                "Confirmer les accès requis et le responsable client"
+              ],
+              "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+              "id": "intentions",
+              "inputs": {},
+              "kind": "input",
+              "max_attempts": 1,
+              "outputs": {
+                "intentions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "minItems": 1,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "phase": "",
+              "position": {
+                "x": 50,
+                "y": 140
+              },
+              "resources": [],
+              "title": "Recueillir les besoins client"
+            },
+            {
+              "candidate_check": false,
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "effort": "medium",
+              "execution": {
+                "effort": "medium",
+                "model": "modele-local-inerte",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "execution_mode": "text",
+              "id": "plan",
+              "inputs": {
+                "intentions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "minItems": 1,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "kind": "agent",
+              "max_attempts": 2,
+              "outputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "phase": "",
+              "position": {
+                "x": 360,
+                "y": 140
+              },
+              "profile": "generalist",
+              "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.\nPour cet onboarding SaaS : cadrage client, import de données, configuration des utilisateurs et formation. Préparer aussi un brouillon local de mail récapitulatif pour relecture.",
+              "required_capabilities": [],
+              "resources": [],
+              "session": "delegated",
+              "title": "Préparer un plan",
+              "validation": "contract"
+            },
+            {
+              "id": "scope",
+              "inputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "outputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "position": {
+                "x": 670,
+                "y": 140
+              },
+              "question": "Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?",
+              "title": "Valider le plan"
+            },
+            {
+              "collection": "plan.tasks",
+              "concurrency": 2,
+              "id": "work",
+              "inputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "kind": "foreach",
+              "outputs": {
+                "contributions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                },
+                "results": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "position": {
+                "x": 980,
+                "y": 140
+              },
+              "title": "Pour chaque élément du plan",
+              "workflow": {
+                "edges": [],
+                "id": "work-item",
+                "nodes": [
+                  {
+                    "id": "perform",
+                    "inputs": {
+                      "item": {
+                        "required": true,
+                        "type": "object"
+                      }
+                    },
+                    "kind": "agent",
+                    "max_attempts": 2,
+                    "outputs": {
+                      "result": "string"
+                    },
+                    "position": {
+                      "x": 70,
+                      "y": 100
+                    },
+                    "profile": "generalist",
+                    "prompt": "Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.",
+                    "sample_outputs": {
+                      "result": "Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."
+                    },
+                    "title": "Effectuer le travail de cet élément",
+                    "validation": "contract"
+                  }
+                ],
+                "schema": 2,
+                "title": "Traiter un élément du plan"
+              }
+            },
+            {
+              "id": "receipt",
+              "inputs": {
+                "results": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "position": {
+                "x": 1320,
+                "y": 140
+              },
+              "question": "Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.",
+              "title": "Examiner les résultats"
+            }
+          ],
+          "parameters": {
+            "conversation": "ce6bb1876a1844dce",
+            "depends_on_runs": [],
+            "request": "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+          },
+          "revision": 1,
+          "schema": 2,
+          "title": "Onboarding Atlas"
+        }
+      }
+    ]
+  }
+]

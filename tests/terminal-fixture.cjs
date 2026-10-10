@@ -29,7 +29,7 @@ async function cleanupBroker(socket) {
   // HISTFILE after the broker closes, racing deletion of the synthetic home.
   const live = pid => {
     try { return !['Z', 'X'].includes(fs.readFileSync(`/proc/${pid}/stat`, 'utf8').split(') ')[1].split(' ')[0]); }
-    catch (error) { if (error.code === 'ENOENT') return false; throw error; }
+    catch (error) { if (['ENOENT', 'ESRCH'].includes(error.code)) return false; throw error; }
   };
   await expect.poll(() => shellPids.filter(live), { timeout: 8000,
     message: 'Synthetic shells must exit before deleting their home' }).toEqual([]);

@@ -1,0 +1,4113 @@
+[
+  {
+    "created": 1791626863.6967452,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+      "edges": [
+        {
+          "from": "intent",
+          "id": "intent-plan",
+          "mapping": {
+            "intent": "intent"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-check",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "check"
+        },
+        {
+          "from": "check",
+          "id": "check-quality",
+          "mapping": {
+            "evidence_summary": "evidence_summary",
+            "verdict": "verdict"
+          },
+          "outcome": "done",
+          "to": "quality"
+        },
+        {
+          "from": "quality",
+          "id": "quality-delivery",
+          "mapping": {
+            "evidence_summary": "evidence_summary"
+          },
+          "outcome": "pass",
+          "to": "delivery"
+        },
+        {
+          "from": "quality",
+          "id": "quality-failure",
+          "outcome": "fail",
+          "to": "failure"
+        },
+        {
+          "from": "delivery",
+          "id": "delivery-receipt",
+          "mapping": {
+            "proposal": "proposal"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "work-d9560356-9f70-4040-9926-62c90144ebc6",
+      "nodes": [
+        {
+          "id": "intent",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "intent": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+          "title": "Analyser la demande",
+          "validation": "contract"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Chaque demande a un responsable et un critère vérifiable",
+            "Les dépendances et décisions bloquantes sont explicites"
+          ],
+          "effort": "medium",
+          "execution_mode": "text",
+          "id": "plan",
+          "inputs": {
+            "intent": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "model": "",
+          "outputs": {
+            "plan": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 360,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+          "provider": "codex",
+          "required_capabilities": [],
+          "resources": [],
+          "session": "delegated",
+          "title": "Préparer le plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": "string"
+          },
+          "position": {
+            "x": 660,
+            "y": 100
+          },
+          "question": "Le plan et le périmètre affichés conviennent-ils ?",
+          "title": "Valider le plan"
+        },
+        {
+          "id": "work",
+          "inputs": {
+            "plan": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 960,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+          "required_capabilities": [
+            "edit"
+          ],
+          "title": "Réaliser le périmètre accepté",
+          "validation": "contract"
+        },
+        {
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "evidence_summary": "string",
+            "verdict": "string"
+          },
+          "position": {
+            "x": 1260,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+          "required_capabilities": [
+            "shell"
+          ],
+          "title": "Vérifier le résultat",
+          "validation": "contract"
+        },
+        {
+          "id": "quality",
+          "inputs": {
+            "evidence_summary": "string",
+            "verdict": "string"
+          },
+          "kind": "condition",
+          "options": [
+            "pass",
+            "fail"
+          ],
+          "outputs": {
+            "evidence_summary": "string"
+          },
+          "parameter": "verdict",
+          "position": {
+            "x": 1560,
+            "y": 100
+          },
+          "title": "Les contrôles passent-ils ?"
+        },
+        {
+          "id": "delivery",
+          "inputs": {
+            "evidence_summary": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "proposal": "string"
+          },
+          "position": {
+            "x": 1860,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+          "title": "Préparer la livraison et le bilan",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "proposal": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 2160,
+            "y": 100
+          },
+          "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+          "title": "Valider les résultats"
+        },
+        {
+          "completion_outcome": "blocked",
+          "id": "failure",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 1860,
+            "y": 320
+          },
+          "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+          "title": "Décider de la correction"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 1,
+      "title": "Release Boréal — méthode équipe"
+    },
+    "effort": "medium",
+    "id": "ceb4467eedbde44bd",
+    "items": [
+      {
+        "created": 1791626863.6990054,
+        "depends_on": [],
+        "id": "w1d684a268a6a4ae2",
+        "key": "initial",
+        "project": "p8854bc2cae9548bc",
+        "request": "Coordination Boréal C1 : publier localement le contrat API v2 validé pour Atlas, responsable Lina. Préparer et valider le plan.",
+        "run": "rbd1fc34861c54703",
+        "execution": {
+          "completion_outcome": "succeeded",
+          "contract": "f007df735735cc629e38599282aa614ec67e42f583cd5ade348cb7cdbae2d64e",
+          "created": 1791626863.6982808,
+          "definition": {
+            "defaults": {
+              "effort": "medium",
+              "model": "",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+            "edges": [
+              {
+                "from": "intent",
+                "id": "intent-plan",
+                "mapping": {
+                  "intent": "intent"
+                },
+                "outcome": "done",
+                "to": "plan"
+              },
+              {
+                "from": "plan",
+                "id": "plan-scope",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "done",
+                "to": "scope"
+              },
+              {
+                "from": "scope",
+                "id": "scope-work",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "approve",
+                "to": "work"
+              },
+              {
+                "from": "work",
+                "id": "work-check",
+                "mapping": {
+                  "result": "result"
+                },
+                "outcome": "done",
+                "to": "check"
+              },
+              {
+                "from": "check",
+                "id": "check-quality",
+                "mapping": {
+                  "evidence_summary": "evidence_summary",
+                  "verdict": "verdict"
+                },
+                "outcome": "done",
+                "to": "quality"
+              },
+              {
+                "from": "quality",
+                "id": "quality-delivery",
+                "mapping": {
+                  "evidence_summary": "evidence_summary"
+                },
+                "outcome": "pass",
+                "to": "delivery"
+              },
+              {
+                "from": "quality",
+                "id": "quality-failure",
+                "outcome": "fail",
+                "to": "failure"
+              },
+              {
+                "from": "delivery",
+                "id": "delivery-receipt",
+                "mapping": {
+                  "proposal": "proposal"
+                },
+                "outcome": "done",
+                "to": "receipt"
+              }
+            ],
+            "id": "work-d9560356-9f70-4040-9926-62c90144ebc6",
+            "nodes": [
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "intent",
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "intent": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+                "title": "Analyser la demande",
+                "validation": "contract"
+              },
+              {
+                "candidate_check": false,
+                "capabilities": [],
+                "completion_outcome": "succeeded",
+                "criteria": [
+                  "Chaque demande a un responsable et un critère vérifiable",
+                  "Les dépendances et décisions bloquantes sont explicites"
+                ],
+                "effort": "medium",
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "execution_mode": "text",
+                "id": "plan",
+                "inputs": {
+                  "intent": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "model": "",
+                "outputs": {
+                  "plan": "string"
+                },
+                "phase": "",
+                "position": {
+                  "x": 360,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+                "provider": "codex",
+                "required_capabilities": [],
+                "resources": [],
+                "session": "delegated",
+                "title": "Préparer le plan",
+                "validation": "contract"
+              },
+              {
+                "id": "scope",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "outputs": {
+                  "plan": "string"
+                },
+                "position": {
+                  "x": 660,
+                  "y": 100
+                },
+                "question": "Le plan et le périmètre affichés conviennent-ils ?",
+                "title": "Valider le plan"
+              },
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "work",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 960,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "title": "Réaliser le périmètre accepté",
+                "validation": "contract"
+              },
+              {
+                "evidence_required": true,
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "check",
+                "inputs": {
+                  "result": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "position": {
+                  "x": 1260,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+                "required_capabilities": [
+                  "shell"
+                ],
+                "title": "Vérifier le résultat",
+                "validation": "contract"
+              },
+              {
+                "id": "quality",
+                "inputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "kind": "condition",
+                "options": [
+                  "pass",
+                  "fail"
+                ],
+                "outputs": {
+                  "evidence_summary": "string"
+                },
+                "parameter": "verdict",
+                "position": {
+                  "x": 1560,
+                  "y": 100
+                },
+                "title": "Les contrôles passent-ils ?"
+              },
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "delivery",
+                "inputs": {
+                  "evidence_summary": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "proposal": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+                "title": "Préparer la livraison et le bilan",
+                "validation": "contract"
+              },
+              {
+                "id": "receipt",
+                "inputs": {
+                  "proposal": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "position": {
+                  "x": 2160,
+                  "y": 100
+                },
+                "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+                "title": "Valider les résultats"
+              },
+              {
+                "completion_outcome": "blocked",
+                "id": "failure",
+                "kind": "question",
+                "outputs": {
+                  "answer": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 320
+                },
+                "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+                "title": "Décider de la correction"
+              }
+            ],
+            "parameters": {
+              "conversation": "ceb4467eedbde44bd",
+              "depends_on_runs": [],
+              "request": "Coordination Boréal C1 : publier localement le contrat API v2 validé pour Atlas, responsable Lina. Préparer et valider le plan."
+            },
+            "revision": 1,
+            "schema": 1,
+            "title": "Release Boréal — méthode équipe"
+          },
+          "driver": "conversation",
+          "id": "rbd1fc34861c54703",
+          "nodes": {
+            "check": {
+              "attempt": 2,
+              "finished": 1791626936.7941496,
+              "heartbeat": 1791626936.7887483,
+              "history": [
+                {
+                  "attempt": 1,
+                  "finished": 1791626905.1364272,
+                  "heartbeat": 1791626905.1313925,
+                  "input_sources": {
+                    "result": {
+                      "edge": "work-check",
+                      "node": "work",
+                      "port": "result"
+                    }
+                  },
+                  "inputs": {
+                    "result": "SYNTHÉTIQUE : contrat API v2 local rédigé par Karim ; compatibility v1 maintenue, revue Lina."
+                  },
+                  "ownership": "native",
+                  "processes": [],
+                  "result": {
+                    "ok": true,
+                    "outputs": {
+                      "evidence_summary": "SYNTHÉTIQUE : 5 cas de contrat examinés. Aucun test réel ni fournisseur réel qualifié.",
+                      "verdict": "pass"
+                    },
+                    "summary": "Résultat synthétique check"
+                  },
+                  "started": 1791626905.1313922,
+                  "status": "returned",
+                  "token": "t8815fab9bf044b8e",
+                  "validation_error": "Preuve requise pour la validation automatique"
+                }
+              ],
+              "inputs": {
+                "result": "SYNTHÉTIQUE : contrat API v2 local rédigé par Karim ; compatibility v1 maintenue, revue Lina."
+              },
+              "outcome": "done",
+              "ownership": "native",
+              "processes": [],
+              "reason": "Ajouter le fichier de preuve synthétique des cinq cas ; ne prétend pas qualifier une QA métier réelle.",
+              "receipt": {
+                "actor": "contract-policy",
+                "at": 1791626936.7945487,
+                "checks": [
+                  "executor-success",
+                  "output-types",
+                  "evidence-integrity"
+                ],
+                "contract": "f007df735735cc629e38599282aa614ec67e42f583cd5ade348cb7cdbae2d64e",
+                "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+              },
+              "result": {
+                "evidence": [
+                  {
+                    "sha256": "c269f4ca7c92671218dd19f30df42ca8969f34d34a9666d5b2770ff7ba736385",
+                    "size": 75
+                  }
+                ],
+                "ok": true,
+                "outputs": {
+                  "evidence_summary": "5 cas SYNTHETIQUES, pas une QA reelle",
+                  "verdict": "pass"
+                },
+                "summary": "Controle synthetique avec preuve integre"
+              },
+              "started": 1791626936.788748,
+              "status": "accepted",
+              "token": "t5929f4388ef64750"
+            },
+            "delivery": {
+              "attempt": 1,
+              "finished": 1791626936.802219,
+              "heartbeat": 1791626936.7992566,
+              "input_sources": {
+                "evidence_summary": {
+                  "edge": "quality-delivery",
+                  "node": "quality",
+                  "port": "evidence_summary"
+                }
+              },
+              "inputs": {
+                "evidence_summary": "5 cas SYNTHETIQUES, pas une QA reelle"
+              },
+              "outcome": "done",
+              "ownership": "native",
+              "processes": [],
+              "receipt": {
+                "actor": "contract-policy",
+                "at": 1791626936.8022962,
+                "checks": [
+                  "executor-success",
+                  "output-types",
+                  "evidence-integrity"
+                ],
+                "contract": "f007df735735cc629e38599282aa614ec67e42f583cd5ade348cb7cdbae2d64e",
+                "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+              },
+              "result": {
+                "ok": true,
+                "outputs": {
+                  "proposal": "C1 — Résultat SYNTHÉTIQUE à recevoir : contrat v2 documenté, maintien v1 trois mois ; responsable Lina ; consultant Karim. Réception locale seulement. Aucun envoi ni déploiement. Votre accord libérera la demande C2 Atlas."
+                },
+                "summary": "Proposition de reception locale synthetique"
+              },
+              "started": 1791626936.7992563,
+              "status": "accepted",
+              "token": "td1b07a946a994908"
+            },
+            "failure": {
+              "attempt": 0,
+              "status": "skipped"
+            },
+            "intent": {
+              "attempt": 1,
+              "finished": 1791626892.2035975,
+              "heartbeat": 1791626892.1999254,
+              "input_sources": {},
+              "inputs": {},
+              "outcome": "done",
+              "ownership": "native",
+              "processes": [],
+              "receipt": {
+                "actor": "contract-policy",
+                "at": 1791626892.20373,
+                "checks": [
+                  "executor-success",
+                  "output-types",
+                  "evidence-integrity"
+                ],
+                "contract": "f007df735735cc629e38599282aa614ec67e42f583cd5ade348cb7cdbae2d64e",
+                "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+              },
+              "result": {
+                "ok": true,
+                "outputs": {
+                  "intent": "C1 : contrat API v2 pour intégration Atlas ; Lina responsable, Karim réalise."
+                },
+                "summary": "Résultat synthétique intent"
+              },
+              "started": 1791626892.1999252,
+              "status": "accepted",
+              "token": "t26287791adbf48cb"
+            },
+            "plan": {
+              "attempt": 1,
+              "finished": 1791626892.2499833,
+              "heartbeat": 1791626892.2448754,
+              "input_sources": {
+                "intent": {
+                  "edge": "intent-plan",
+                  "node": "intent",
+                  "port": "intent"
+                }
+              },
+              "inputs": {
+                "intent": "C1 : contrat API v2 pour intégration Atlas ; Lina responsable, Karim réalise."
+              },
+              "outcome": "done",
+              "ownership": "native",
+              "processes": [],
+              "receipt": {
+                "actor": "contract-policy",
+                "at": 1791626892.2501235,
+                "checks": [
+                  "executor-success",
+                  "output-types",
+                  "evidence-integrity"
+                ],
+                "contract": "f007df735735cc629e38599282aa614ec67e42f583cd5ade348cb7cdbae2d64e",
+                "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+              },
+              "result": {
+                "ok": true,
+                "outputs": {
+                  "plan": "Plan C1 : Karim rédige le contrat v2 et teste la compatibilité v1 ; Lina relit les champs. Le chef d’équipe accepte ce périmètre local. Livraison distante exclue. C2 Atlas attend la réception complète de C1, pas seulement cet accord."
+                },
+                "summary": "Résultat synthétique plan"
+              },
+              "started": 1791626892.2448752,
+              "status": "accepted",
+              "token": "t7c999b4728bd497a"
+            },
+            "quality": {
+              "attempt": 0,
+              "input_sources": {
+                "evidence_summary": {
+                  "edge": "check-quality",
+                  "node": "check",
+                  "port": "evidence_summary"
+                },
+                "verdict": {
+                  "edge": "check-quality",
+                  "node": "check",
+                  "port": "verdict"
+                }
+              },
+              "inputs": {
+                "evidence_summary": "5 cas SYNTHETIQUES, pas une QA reelle",
+                "verdict": "pass"
+              },
+              "outcome": "pass",
+              "result": {
+                "outputs": {
+                  "evidence_summary": "5 cas SYNTHETIQUES, pas une QA reelle"
+                }
+              },
+              "status": "accepted"
+            },
+            "receipt": {
+              "attempt": 1,
+              "decision": {
+                "actor": "local-user",
+                "at": 1791626949.6859038,
+                "note": "",
+                "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+                "outcome": "approve",
+                "proposal": "76419767bf0eb48b72589d8a25b4b9821d58617010591564be4e682b56c3cc67"
+              },
+              "input_sources": {
+                "proposal": {
+                  "edge": "delivery-receipt",
+                  "node": "delivery",
+                  "port": "proposal"
+                }
+              },
+              "inputs": {
+                "proposal": "C1 — Résultat SYNTHÉTIQUE à recevoir : contrat v2 documenté, maintien v1 trois mois ; responsable Lina ; consultant Karim. Réception locale seulement. Aucun envoi ni déploiement. Votre accord libérera la demande C2 Atlas."
+              },
+              "nonce": "ddcc9d9a6c2174bef",
+              "operation": null,
+              "outcome": "approve",
+              "proposal": "76419767bf0eb48b72589d8a25b4b9821d58617010591564be4e682b56c3cc67",
+              "status": "accepted"
+            },
+            "scope": {
+              "attempt": 1,
+              "decision": {
+                "actor": "local-user",
+                "at": 1791626893.7447102,
+                "note": "",
+                "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+                "outcome": "approve",
+                "proposal": "4435af40576a4d1b37e1487a666236ef6ed344ccedd5c013a0ec74fbf9d968f4"
+              },
+              "input_sources": {
+                "plan": {
+                  "edge": "plan-scope",
+                  "node": "plan",
+                  "port": "plan"
+                }
+              },
+              "inputs": {
+                "plan": "Plan C1 : Karim rédige le contrat v2 et teste la compatibilité v1 ; Lina relit les champs. Le chef d’équipe accepte ce périmètre local. Livraison distante exclue. C2 Atlas attend la réception complète de C1, pas seulement cet accord."
+              },
+              "nonce": "d9a3acf11b7da48ad",
+              "operation": null,
+              "outcome": "approve",
+              "proposal": "4435af40576a4d1b37e1487a666236ef6ed344ccedd5c013a0ec74fbf9d968f4",
+              "result": {
+                "outputs": {
+                  "plan": "Plan C1 : Karim rédige le contrat v2 et teste la compatibilité v1 ; Lina relit les champs. Le chef d’équipe accepte ce périmètre local. Livraison distante exclue. C2 Atlas attend la réception complète de C1, pas seulement cet accord."
+                }
+              },
+              "status": "accepted"
+            },
+            "work": {
+              "attempt": 1,
+              "finished": 1791626905.0790267,
+              "heartbeat": 1791626905.0755086,
+              "input_sources": {
+                "plan": {
+                  "edge": "scope-work",
+                  "node": "scope",
+                  "port": "plan"
+                }
+              },
+              "inputs": {
+                "plan": "Plan C1 : Karim rédige le contrat v2 et teste la compatibilité v1 ; Lina relit les champs. Le chef d’équipe accepte ce périmètre local. Livraison distante exclue. C2 Atlas attend la réception complète de C1, pas seulement cet accord."
+              },
+              "outcome": "done",
+              "ownership": "native",
+              "processes": [],
+              "receipt": {
+                "actor": "contract-policy",
+                "at": 1791626905.0791388,
+                "checks": [
+                  "executor-success",
+                  "output-types",
+                  "evidence-integrity"
+                ],
+                "contract": "f007df735735cc629e38599282aa614ec67e42f583cd5ade348cb7cdbae2d64e",
+                "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+              },
+              "result": {
+                "ok": true,
+                "outputs": {
+                  "result": "SYNTHÉTIQUE : contrat API v2 local rédigé par Karim ; compatibility v1 maintenue, revue Lina."
+                },
+                "summary": "Résultat synthétique work"
+              },
+              "started": 1791626905.075508,
+              "status": "accepted",
+              "token": "te94208418a604332"
+            }
+          },
+          "notifications_authorized": false,
+          "original": {
+            "defaults": {
+              "effort": "medium",
+              "model": "",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+            "edges": [
+              {
+                "from": "intent",
+                "id": "intent-plan",
+                "mapping": {
+                  "intent": "intent"
+                },
+                "outcome": "done",
+                "to": "plan"
+              },
+              {
+                "from": "plan",
+                "id": "plan-scope",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "done",
+                "to": "scope"
+              },
+              {
+                "from": "scope",
+                "id": "scope-work",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "approve",
+                "to": "work"
+              },
+              {
+                "from": "work",
+                "id": "work-check",
+                "mapping": {
+                  "result": "result"
+                },
+                "outcome": "done",
+                "to": "check"
+              },
+              {
+                "from": "check",
+                "id": "check-quality",
+                "mapping": {
+                  "evidence_summary": "evidence_summary",
+                  "verdict": "verdict"
+                },
+                "outcome": "done",
+                "to": "quality"
+              },
+              {
+                "from": "quality",
+                "id": "quality-delivery",
+                "mapping": {
+                  "evidence_summary": "evidence_summary"
+                },
+                "outcome": "pass",
+                "to": "delivery"
+              },
+              {
+                "from": "quality",
+                "id": "quality-failure",
+                "outcome": "fail",
+                "to": "failure"
+              },
+              {
+                "from": "delivery",
+                "id": "delivery-receipt",
+                "mapping": {
+                  "proposal": "proposal"
+                },
+                "outcome": "done",
+                "to": "receipt"
+              }
+            ],
+            "id": "work-d9560356-9f70-4040-9926-62c90144ebc6",
+            "nodes": [
+              {
+                "id": "intent",
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "intent": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+                "title": "Analyser la demande",
+                "validation": "contract"
+              },
+              {
+                "candidate_check": false,
+                "capabilities": [],
+                "completion_outcome": "succeeded",
+                "criteria": [
+                  "Chaque demande a un responsable et un critère vérifiable",
+                  "Les dépendances et décisions bloquantes sont explicites"
+                ],
+                "effort": "medium",
+                "execution_mode": "text",
+                "id": "plan",
+                "inputs": {
+                  "intent": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "model": "",
+                "outputs": {
+                  "plan": "string"
+                },
+                "phase": "",
+                "position": {
+                  "x": 360,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+                "provider": "codex",
+                "required_capabilities": [],
+                "resources": [],
+                "session": "delegated",
+                "title": "Préparer le plan",
+                "validation": "contract"
+              },
+              {
+                "id": "scope",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "outputs": {
+                  "plan": "string"
+                },
+                "position": {
+                  "x": 660,
+                  "y": 100
+                },
+                "question": "Le plan et le périmètre affichés conviennent-ils ?",
+                "title": "Valider le plan"
+              },
+              {
+                "id": "work",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 960,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "title": "Réaliser le périmètre accepté",
+                "validation": "contract"
+              },
+              {
+                "evidence_required": true,
+                "id": "check",
+                "inputs": {
+                  "result": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "position": {
+                  "x": 1260,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+                "required_capabilities": [
+                  "shell"
+                ],
+                "title": "Vérifier le résultat",
+                "validation": "contract"
+              },
+              {
+                "id": "quality",
+                "inputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "kind": "condition",
+                "options": [
+                  "pass",
+                  "fail"
+                ],
+                "outputs": {
+                  "evidence_summary": "string"
+                },
+                "parameter": "verdict",
+                "position": {
+                  "x": 1560,
+                  "y": 100
+                },
+                "title": "Les contrôles passent-ils ?"
+              },
+              {
+                "id": "delivery",
+                "inputs": {
+                  "evidence_summary": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "proposal": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+                "title": "Préparer la livraison et le bilan",
+                "validation": "contract"
+              },
+              {
+                "id": "receipt",
+                "inputs": {
+                  "proposal": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "position": {
+                  "x": 2160,
+                  "y": 100
+                },
+                "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+                "title": "Valider les résultats"
+              },
+              {
+                "completion_outcome": "blocked",
+                "id": "failure",
+                "kind": "question",
+                "outputs": {
+                  "answer": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 320
+                },
+                "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+                "title": "Décider de la correction"
+              }
+            ],
+            "parameters": {},
+            "revision": 1,
+            "schema": 1,
+            "title": "Release Boréal — méthode équipe"
+          },
+          "packs": [],
+          "parameters": {
+            "conversation": "ceb4467eedbde44bd",
+            "depends_on_runs": [],
+            "request": "Coordination Boréal C1 : publier localement le contrat API v2 validé pour Atlas, responsable Lina. Préparer et valider le plan."
+          },
+          "plugins": {
+            "path": "/tmp/tricorder-personas-produit/02-services/state/workflows/projects/p8854bc2cae9548bc/.tricorder/plugins.json",
+            "plugins": [],
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "project": "p8854bc2cae9548bc",
+          "release": "",
+          "scope": {
+            "id": "p8854bc2cae9548bc",
+            "kind": "project"
+          },
+          "simulation": false,
+          "status": "completed",
+          "transports": {},
+          "updated": 1791626949.6861887
+        }
+      },
+      {
+        "created": 1791626877.136604,
+        "depends_on": [
+          "w1d684a268a6a4ae2"
+        ],
+        "id": "w8fac9ba1da4243a2",
+        "key": null,
+        "project": "pabd1860534794a2d",
+        "request": "Coordination Atlas C2 : intégrer le contrat API Boréal v2 dans le portail. Responsable Emma ; consultant Hugo. Attendre la réception complète de C1.",
+        "run": "rdfb3d863e247459f",
+        "execution": {
+          "contract": "0857d1e7aa7f9a1fd075b87057a1716f8ac0e5c99a82eca27f6f9a975973d880",
+          "created": 1791626877.1358597,
+          "definition": {
+            "defaults": {
+              "effort": "medium",
+              "model": "",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+            "edges": [
+              {
+                "from": "intent",
+                "id": "intent-plan",
+                "mapping": {
+                  "intent": "intent"
+                },
+                "outcome": "done",
+                "to": "plan"
+              },
+              {
+                "from": "plan",
+                "id": "plan-scope",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "done",
+                "to": "scope"
+              },
+              {
+                "from": "scope",
+                "id": "scope-work",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "approve",
+                "to": "work"
+              },
+              {
+                "from": "work",
+                "id": "work-check",
+                "mapping": {
+                  "result": "result"
+                },
+                "outcome": "done",
+                "to": "check"
+              },
+              {
+                "from": "check",
+                "id": "check-quality",
+                "mapping": {
+                  "evidence_summary": "evidence_summary",
+                  "verdict": "verdict"
+                },
+                "outcome": "done",
+                "to": "quality"
+              },
+              {
+                "from": "quality",
+                "id": "quality-delivery",
+                "mapping": {
+                  "evidence_summary": "evidence_summary"
+                },
+                "outcome": "pass",
+                "to": "delivery"
+              },
+              {
+                "from": "quality",
+                "id": "quality-failure",
+                "outcome": "fail",
+                "to": "failure"
+              },
+              {
+                "from": "delivery",
+                "id": "delivery-receipt",
+                "mapping": {
+                  "proposal": "proposal"
+                },
+                "outcome": "done",
+                "to": "receipt"
+              }
+            ],
+            "id": "work-d9560356-9f70-4040-9926-62c90144ebc6",
+            "nodes": [
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "intent",
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "intent": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+                "title": "Analyser la demande",
+                "validation": "contract"
+              },
+              {
+                "candidate_check": false,
+                "capabilities": [],
+                "completion_outcome": "succeeded",
+                "criteria": [
+                  "Chaque demande a un responsable et un critère vérifiable",
+                  "Les dépendances et décisions bloquantes sont explicites"
+                ],
+                "effort": "medium",
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "execution_mode": "text",
+                "id": "plan",
+                "inputs": {
+                  "intent": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "model": "",
+                "outputs": {
+                  "plan": "string"
+                },
+                "phase": "",
+                "position": {
+                  "x": 360,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+                "provider": "codex",
+                "required_capabilities": [],
+                "resources": [],
+                "session": "delegated",
+                "title": "Préparer le plan",
+                "validation": "contract"
+              },
+              {
+                "id": "scope",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "outputs": {
+                  "plan": "string"
+                },
+                "position": {
+                  "x": 660,
+                  "y": 100
+                },
+                "question": "Le plan et le périmètre affichés conviennent-ils ?",
+                "title": "Valider le plan"
+              },
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "work",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 960,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "title": "Réaliser le périmètre accepté",
+                "validation": "contract"
+              },
+              {
+                "evidence_required": true,
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "check",
+                "inputs": {
+                  "result": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "position": {
+                  "x": 1260,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+                "required_capabilities": [
+                  "shell"
+                ],
+                "title": "Vérifier le résultat",
+                "validation": "contract"
+              },
+              {
+                "id": "quality",
+                "inputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "kind": "condition",
+                "options": [
+                  "pass",
+                  "fail"
+                ],
+                "outputs": {
+                  "evidence_summary": "string"
+                },
+                "parameter": "verdict",
+                "position": {
+                  "x": 1560,
+                  "y": 100
+                },
+                "title": "Les contrôles passent-ils ?"
+              },
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "delivery",
+                "inputs": {
+                  "evidence_summary": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "proposal": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+                "title": "Préparer la livraison et le bilan",
+                "validation": "contract"
+              },
+              {
+                "id": "receipt",
+                "inputs": {
+                  "proposal": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "position": {
+                  "x": 2160,
+                  "y": 100
+                },
+                "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+                "title": "Valider les résultats"
+              },
+              {
+                "completion_outcome": "blocked",
+                "id": "failure",
+                "kind": "question",
+                "outputs": {
+                  "answer": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 320
+                },
+                "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+                "title": "Décider de la correction"
+              }
+            ],
+            "parameters": {
+              "conversation": "ceb4467eedbde44bd",
+              "depends_on_runs": [
+                "rbd1fc34861c54703"
+              ],
+              "request": "Coordination Atlas C2 : intégrer le contrat API Boréal v2 dans le portail. Responsable Emma ; consultant Hugo. Attendre la réception complète de C1."
+            },
+            "revision": 1,
+            "schema": 1,
+            "title": "Release Boréal — méthode équipe"
+          },
+          "driver": "conversation",
+          "id": "rdfb3d863e247459f",
+          "nodes": {
+            "check": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "delivery": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "failure": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "intent": {
+              "attempt": 0,
+              "input_sources": {},
+              "inputs": {},
+              "status": "ready"
+            },
+            "plan": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "quality": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "receipt": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "scope": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "work": {
+              "attempt": 0,
+              "status": "pending"
+            }
+          },
+          "notifications_authorized": false,
+          "original": {
+            "defaults": {
+              "effort": "medium",
+              "model": "",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+            "edges": [
+              {
+                "from": "intent",
+                "id": "intent-plan",
+                "mapping": {
+                  "intent": "intent"
+                },
+                "outcome": "done",
+                "to": "plan"
+              },
+              {
+                "from": "plan",
+                "id": "plan-scope",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "done",
+                "to": "scope"
+              },
+              {
+                "from": "scope",
+                "id": "scope-work",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "approve",
+                "to": "work"
+              },
+              {
+                "from": "work",
+                "id": "work-check",
+                "mapping": {
+                  "result": "result"
+                },
+                "outcome": "done",
+                "to": "check"
+              },
+              {
+                "from": "check",
+                "id": "check-quality",
+                "mapping": {
+                  "evidence_summary": "evidence_summary",
+                  "verdict": "verdict"
+                },
+                "outcome": "done",
+                "to": "quality"
+              },
+              {
+                "from": "quality",
+                "id": "quality-delivery",
+                "mapping": {
+                  "evidence_summary": "evidence_summary"
+                },
+                "outcome": "pass",
+                "to": "delivery"
+              },
+              {
+                "from": "quality",
+                "id": "quality-failure",
+                "outcome": "fail",
+                "to": "failure"
+              },
+              {
+                "from": "delivery",
+                "id": "delivery-receipt",
+                "mapping": {
+                  "proposal": "proposal"
+                },
+                "outcome": "done",
+                "to": "receipt"
+              }
+            ],
+            "id": "work-d9560356-9f70-4040-9926-62c90144ebc6",
+            "nodes": [
+              {
+                "id": "intent",
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "intent": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+                "title": "Analyser la demande",
+                "validation": "contract"
+              },
+              {
+                "candidate_check": false,
+                "capabilities": [],
+                "completion_outcome": "succeeded",
+                "criteria": [
+                  "Chaque demande a un responsable et un critère vérifiable",
+                  "Les dépendances et décisions bloquantes sont explicites"
+                ],
+                "effort": "medium",
+                "execution_mode": "text",
+                "id": "plan",
+                "inputs": {
+                  "intent": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "model": "",
+                "outputs": {
+                  "plan": "string"
+                },
+                "phase": "",
+                "position": {
+                  "x": 360,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+                "provider": "codex",
+                "required_capabilities": [],
+                "resources": [],
+                "session": "delegated",
+                "title": "Préparer le plan",
+                "validation": "contract"
+              },
+              {
+                "id": "scope",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "outputs": {
+                  "plan": "string"
+                },
+                "position": {
+                  "x": 660,
+                  "y": 100
+                },
+                "question": "Le plan et le périmètre affichés conviennent-ils ?",
+                "title": "Valider le plan"
+              },
+              {
+                "id": "work",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 960,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "title": "Réaliser le périmètre accepté",
+                "validation": "contract"
+              },
+              {
+                "evidence_required": true,
+                "id": "check",
+                "inputs": {
+                  "result": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "position": {
+                  "x": 1260,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+                "required_capabilities": [
+                  "shell"
+                ],
+                "title": "Vérifier le résultat",
+                "validation": "contract"
+              },
+              {
+                "id": "quality",
+                "inputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "kind": "condition",
+                "options": [
+                  "pass",
+                  "fail"
+                ],
+                "outputs": {
+                  "evidence_summary": "string"
+                },
+                "parameter": "verdict",
+                "position": {
+                  "x": 1560,
+                  "y": 100
+                },
+                "title": "Les contrôles passent-ils ?"
+              },
+              {
+                "id": "delivery",
+                "inputs": {
+                  "evidence_summary": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "proposal": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+                "title": "Préparer la livraison et le bilan",
+                "validation": "contract"
+              },
+              {
+                "id": "receipt",
+                "inputs": {
+                  "proposal": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "position": {
+                  "x": 2160,
+                  "y": 100
+                },
+                "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+                "title": "Valider les résultats"
+              },
+              {
+                "completion_outcome": "blocked",
+                "id": "failure",
+                "kind": "question",
+                "outputs": {
+                  "answer": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 320
+                },
+                "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+                "title": "Décider de la correction"
+              }
+            ],
+            "parameters": {},
+            "revision": 1,
+            "schema": 1,
+            "title": "Release Boréal — méthode équipe"
+          },
+          "packs": [],
+          "parameters": {
+            "conversation": "ceb4467eedbde44bd",
+            "dependency_results": {
+              "rbd1fc34861c54703": {
+                "check": {
+                  "evidence": [
+                    {
+                      "sha256": "c269f4ca7c92671218dd19f30df42ca8969f34d34a9666d5b2770ff7ba736385",
+                      "size": 75
+                    }
+                  ],
+                  "ok": true,
+                  "outputs": {
+                    "evidence_summary": "5 cas SYNTHETIQUES, pas une QA reelle",
+                    "verdict": "pass"
+                  },
+                  "summary": "Controle synthetique avec preuve integre"
+                },
+                "delivery": {
+                  "ok": true,
+                  "outputs": {
+                    "proposal": "C1 — Résultat SYNTHÉTIQUE à recevoir : contrat v2 documenté, maintien v1 trois mois ; responsable Lina ; consultant Karim. Réception locale seulement. Aucun envoi ni déploiement. Votre accord libérera la demande C2 Atlas."
+                  },
+                  "summary": "Proposition de reception locale synthetique"
+                },
+                "intent": {
+                  "ok": true,
+                  "outputs": {
+                    "intent": "C1 : contrat API v2 pour intégration Atlas ; Lina responsable, Karim réalise."
+                  },
+                  "summary": "Résultat synthétique intent"
+                },
+                "plan": {
+                  "ok": true,
+                  "outputs": {
+                    "plan": "Plan C1 : Karim rédige le contrat v2 et teste la compatibilité v1 ; Lina relit les champs. Le chef d’équipe accepte ce périmètre local. Livraison distante exclue. C2 Atlas attend la réception complète de C1, pas seulement cet accord."
+                  },
+                  "summary": "Résultat synthétique plan"
+                },
+                "quality": {
+                  "outputs": {
+                    "evidence_summary": "5 cas SYNTHETIQUES, pas une QA reelle"
+                  }
+                },
+                "receipt": null,
+                "scope": {
+                  "outputs": {
+                    "plan": "Plan C1 : Karim rédige le contrat v2 et teste la compatibilité v1 ; Lina relit les champs. Le chef d’équipe accepte ce périmètre local. Livraison distante exclue. C2 Atlas attend la réception complète de C1, pas seulement cet accord."
+                  }
+                },
+                "work": {
+                  "ok": true,
+                  "outputs": {
+                    "result": "SYNTHÉTIQUE : contrat API v2 local rédigé par Karim ; compatibility v1 maintenue, revue Lina."
+                  },
+                  "summary": "Résultat synthétique work"
+                }
+              }
+            },
+            "depends_on_runs": [
+              "rbd1fc34861c54703"
+            ],
+            "request": "Coordination Atlas C2 : intégrer le contrat API Boréal v2 dans le portail. Responsable Emma ; consultant Hugo. Attendre la réception complète de C1."
+          },
+          "plugins": {
+            "path": "/tmp/tricorder-personas-produit/02-services/state/workflows/projects/pabd1860534794a2d/.tricorder/plugins.json",
+            "plugins": [],
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "project": "pabd1860534794a2d",
+          "release": "",
+          "scope": {
+            "id": "pabd1860534794a2d",
+            "kind": "project"
+          },
+          "simulation": false,
+          "status": "active",
+          "transports": {},
+          "updated": 1791626950.2345884
+        }
+      }
+    ],
+    "model": "",
+    "notifications_authorized": false,
+    "project": "p8854bc2cae9548bc",
+    "projects": [
+      "p8854bc2cae9548bc",
+      "pabd1860534794a2d"
+    ],
+    "provider": "codex",
+    "status": "open",
+    "transports": {
+      "p8854bc2cae9548bc": {},
+      "pabd1860534794a2d": {}
+    },
+    "project_contexts": [
+      {
+        "id": "p8854bc2cae9548bc",
+        "title": "Boréal — release API partenaires",
+        "path": "/tmp/tricorder-personas-produit/02-services/state/workflows/projects/p8854bc2cae9548bc"
+      },
+      {
+        "id": "pabd1860534794a2d",
+        "title": "Atlas — release portail clients",
+        "path": "/tmp/tricorder-personas-produit/02-services/state/workflows/projects/pabd1860534794a2d"
+      }
+    ]
+  },
+  {
+    "created": 1791626781.5178835,
+    "definition": {
+      "defaults": {
+        "provider": "codex"
+      },
+      "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+      "edges": [
+        {
+          "from": "intent",
+          "id": "intent-plan",
+          "mapping": {
+            "intent": "intent"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-check",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "check"
+        },
+        {
+          "from": "check",
+          "id": "check-quality",
+          "mapping": {
+            "evidence_summary": "evidence_summary",
+            "verdict": "verdict"
+          },
+          "outcome": "done",
+          "to": "quality"
+        },
+        {
+          "from": "quality",
+          "id": "quality-delivery",
+          "mapping": {
+            "evidence_summary": "evidence_summary"
+          },
+          "outcome": "pass",
+          "to": "delivery"
+        },
+        {
+          "from": "quality",
+          "id": "quality-failure",
+          "outcome": "fail",
+          "to": "failure"
+        },
+        {
+          "from": "delivery",
+          "id": "delivery-receipt",
+          "mapping": {
+            "proposal": "proposal"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "work-7880ec0c-6325-491a-aa9b-b0e353c170fa",
+      "nodes": [
+        {
+          "id": "intent",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "intent": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+          "sample_outputs": {
+            "intent": "Exemple : clarifier la demande et ses critères."
+          },
+          "title": "Analyser la demande",
+          "validation": "contract"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Chaque demande a un responsable et un critère vérifiable",
+            "Les dépendances et décisions bloquantes sont explicites"
+          ],
+          "effort": "medium",
+          "execution_mode": "text",
+          "id": "plan",
+          "inputs": {
+            "intent": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "model": "",
+          "outputs": {
+            "plan": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 360,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+          "provider": "codex",
+          "required_capabilities": [],
+          "resources": [],
+          "sample_outputs": {
+            "plan": "Exemple : réaliser le périmètre accepté, puis vérifier le résultat."
+          },
+          "session": "delegated",
+          "title": "Préparer le plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": "string"
+          },
+          "position": {
+            "x": 660,
+            "y": 100
+          },
+          "question": "Le plan et le périmètre affichés conviennent-ils ?",
+          "title": "Valider le plan"
+        },
+        {
+          "id": "work",
+          "inputs": {
+            "plan": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 960,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+          "required_capabilities": [
+            "edit"
+          ],
+          "sample_outputs": {
+            "result": "Exemple de résultat ; aucun fichier du projet n’a été modifié."
+          },
+          "title": "Réaliser le périmètre accepté",
+          "validation": "contract"
+        },
+        {
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "evidence_summary": "string",
+            "verdict": "string"
+          },
+          "position": {
+            "x": 1260,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+          "required_capabilities": [
+            "shell"
+          ],
+          "sample_outputs": {
+            "evidence_summary": "Exemple de contrôle réussi ; aucun test métier exécuté.",
+            "verdict": "pass"
+          },
+          "title": "Vérifier le résultat",
+          "validation": "contract"
+        },
+        {
+          "id": "quality",
+          "inputs": {
+            "evidence_summary": "string",
+            "verdict": "string"
+          },
+          "kind": "condition",
+          "options": [
+            "pass",
+            "fail"
+          ],
+          "outputs": {
+            "evidence_summary": "string"
+          },
+          "parameter": "verdict",
+          "position": {
+            "x": 1560,
+            "y": 100
+          },
+          "title": "Les contrôles passent-ils ?"
+        },
+        {
+          "id": "delivery",
+          "inputs": {
+            "evidence_summary": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "proposal": "string"
+          },
+          "position": {
+            "x": 1860,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+          "sample_outputs": {
+            "proposal": "Exemple de bilan et de proposition de livraison ; aucune publication effectuée."
+          },
+          "title": "Préparer la livraison et le bilan",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "proposal": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 2160,
+            "y": 100
+          },
+          "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+          "title": "Valider les résultats"
+        },
+        {
+          "completion_outcome": "blocked",
+          "id": "failure",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 1860,
+            "y": 320
+          },
+          "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+          "title": "Décider de la correction"
+        }
+      ],
+      "parameters": {},
+      "revision": 2,
+      "schema": 1,
+      "title": "Méthode équipe — préparer une release"
+    },
+    "effort": "medium",
+    "id": "c1bf22fad76d342a0",
+    "items": [
+      {
+        "created": 1791626781.520295,
+        "depends_on": [],
+        "id": "w93909750d4964a9b",
+        "key": "initial",
+        "project": "pabd1860534794a2d",
+        "request": "Atlas R2026.10 : portail clients. Chef de projet Emma, consultant Hugo. Préparer le plan de release.",
+        "run": "r003ab838f6c648f3",
+        "execution": {
+          "contract": "aa2d0d89ce00dfa3fd6cf01fc74b87cc86e396c263a6835bd217814eb51d4973",
+          "created": 1791626781.51949,
+          "definition": {
+            "defaults": {
+              "provider": "codex"
+            },
+            "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+            "edges": [
+              {
+                "from": "intent",
+                "id": "intent-plan",
+                "mapping": {
+                  "intent": "intent"
+                },
+                "outcome": "done",
+                "to": "plan"
+              },
+              {
+                "from": "plan",
+                "id": "plan-scope",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "done",
+                "to": "scope"
+              },
+              {
+                "from": "scope",
+                "id": "scope-work",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "approve",
+                "to": "work"
+              },
+              {
+                "from": "work",
+                "id": "work-check",
+                "mapping": {
+                  "result": "result"
+                },
+                "outcome": "done",
+                "to": "check"
+              },
+              {
+                "from": "check",
+                "id": "check-quality",
+                "mapping": {
+                  "evidence_summary": "evidence_summary",
+                  "verdict": "verdict"
+                },
+                "outcome": "done",
+                "to": "quality"
+              },
+              {
+                "from": "quality",
+                "id": "quality-delivery",
+                "mapping": {
+                  "evidence_summary": "evidence_summary"
+                },
+                "outcome": "pass",
+                "to": "delivery"
+              },
+              {
+                "from": "quality",
+                "id": "quality-failure",
+                "outcome": "fail",
+                "to": "failure"
+              },
+              {
+                "from": "delivery",
+                "id": "delivery-receipt",
+                "mapping": {
+                  "proposal": "proposal"
+                },
+                "outcome": "done",
+                "to": "receipt"
+              }
+            ],
+            "id": "work-7880ec0c-6325-491a-aa9b-b0e353c170fa",
+            "nodes": [
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "intent",
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "intent": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+                "sample_outputs": {
+                  "intent": "Exemple : clarifier la demande et ses critères."
+                },
+                "title": "Analyser la demande",
+                "validation": "contract"
+              },
+              {
+                "candidate_check": false,
+                "capabilities": [],
+                "completion_outcome": "succeeded",
+                "criteria": [
+                  "Chaque demande a un responsable et un critère vérifiable",
+                  "Les dépendances et décisions bloquantes sont explicites"
+                ],
+                "effort": "medium",
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "execution_mode": "text",
+                "id": "plan",
+                "inputs": {
+                  "intent": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "model": "",
+                "outputs": {
+                  "plan": "string"
+                },
+                "phase": "",
+                "position": {
+                  "x": 360,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+                "provider": "codex",
+                "required_capabilities": [],
+                "resources": [],
+                "sample_outputs": {
+                  "plan": "Exemple : réaliser le périmètre accepté, puis vérifier le résultat."
+                },
+                "session": "delegated",
+                "title": "Préparer le plan",
+                "validation": "contract"
+              },
+              {
+                "id": "scope",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "outputs": {
+                  "plan": "string"
+                },
+                "position": {
+                  "x": 660,
+                  "y": 100
+                },
+                "question": "Le plan et le périmètre affichés conviennent-ils ?",
+                "title": "Valider le plan"
+              },
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "work",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 960,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "sample_outputs": {
+                  "result": "Exemple de résultat ; aucun fichier du projet n’a été modifié."
+                },
+                "title": "Réaliser le périmètre accepté",
+                "validation": "contract"
+              },
+              {
+                "evidence_required": true,
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "check",
+                "inputs": {
+                  "result": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "position": {
+                  "x": 1260,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+                "required_capabilities": [
+                  "shell"
+                ],
+                "sample_outputs": {
+                  "evidence_summary": "Exemple de contrôle réussi ; aucun test métier exécuté.",
+                  "verdict": "pass"
+                },
+                "title": "Vérifier le résultat",
+                "validation": "contract"
+              },
+              {
+                "id": "quality",
+                "inputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "kind": "condition",
+                "options": [
+                  "pass",
+                  "fail"
+                ],
+                "outputs": {
+                  "evidence_summary": "string"
+                },
+                "parameter": "verdict",
+                "position": {
+                  "x": 1560,
+                  "y": 100
+                },
+                "title": "Les contrôles passent-ils ?"
+              },
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "delivery",
+                "inputs": {
+                  "evidence_summary": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "proposal": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+                "sample_outputs": {
+                  "proposal": "Exemple de bilan et de proposition de livraison ; aucune publication effectuée."
+                },
+                "title": "Préparer la livraison et le bilan",
+                "validation": "contract"
+              },
+              {
+                "id": "receipt",
+                "inputs": {
+                  "proposal": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "position": {
+                  "x": 2160,
+                  "y": 100
+                },
+                "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+                "title": "Valider les résultats"
+              },
+              {
+                "completion_outcome": "blocked",
+                "id": "failure",
+                "kind": "question",
+                "outputs": {
+                  "answer": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 320
+                },
+                "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+                "title": "Décider de la correction"
+              }
+            ],
+            "parameters": {
+              "conversation": "c1bf22fad76d342a0",
+              "depends_on_runs": [],
+              "request": "Atlas R2026.10 : portail clients. Chef de projet Emma, consultant Hugo. Préparer le plan de release."
+            },
+            "revision": 2,
+            "schema": 1,
+            "title": "Méthode équipe — préparer une release"
+          },
+          "driver": "conversation",
+          "id": "r003ab838f6c648f3",
+          "nodes": {
+            "check": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "delivery": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "failure": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "intent": {
+              "attempt": 1,
+              "finished": 1791626811.7266297,
+              "heartbeat": 1791626811.721431,
+              "input_sources": {},
+              "inputs": {},
+              "outcome": "done",
+              "ownership": "native",
+              "processes": [],
+              "receipt": {
+                "actor": "contract-policy",
+                "at": 1791626811.7267551,
+                "checks": [
+                  "executor-success",
+                  "output-types",
+                  "evidence-integrity"
+                ],
+                "contract": "aa2d0d89ce00dfa3fd6cf01fc74b87cc86e396c263a6835bd217814eb51d4973",
+                "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+              },
+              "result": {
+                "ok": true,
+                "outputs": {
+                  "intent": "Atlas R2026.10 : portail clients. Chef de projet Emma, consultant Hugo. Préparer le plan de release."
+                },
+                "summary": "Intention synthétique recueillie"
+              },
+              "started": 1791626811.721431,
+              "status": "accepted",
+              "token": "td97223ea456a47b5"
+            },
+            "plan": {
+              "attempt": 1,
+              "finished": 1791626811.782583,
+              "heartbeat": 1791626811.7788734,
+              "input_sources": {
+                "intent": {
+                  "edge": "intent-plan",
+                  "node": "intent",
+                  "port": "intent"
+                }
+              },
+              "inputs": {
+                "intent": "Atlas R2026.10 : portail clients. Chef de projet Emma, consultant Hugo. Préparer le plan de release."
+              },
+              "outcome": "done",
+              "ownership": "native",
+              "processes": [],
+              "receipt": {
+                "actor": "contract-policy",
+                "at": 1791626811.7827115,
+                "checks": [
+                  "executor-success",
+                  "output-types",
+                  "evidence-integrity"
+                ],
+                "contract": "aa2d0d89ce00dfa3fd6cf01fc74b87cc86e396c263a6835bd217814eb51d4973",
+                "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+              },
+              "result": {
+                "ok": true,
+                "outputs": {
+                  "plan": "Atlas R2026.10 — Emma responsable ; Hugo consultant. Demande A1 : corriger le formulaire portail (2 jours), recette utilisateur de 5 cas, sans livraison. Dépendance documentaire : contrat API Boréal v2 avant intégration finale. Accord demandé maintenant : réalisation du formulaire seulement. Livraison exclue de cet accord."
+                },
+                "summary": "Plan synthétique Atlas proposé au chef d’équipe"
+              },
+              "started": 1791626811.7788734,
+              "status": "accepted",
+              "token": "tb726775fec884cc0"
+            },
+            "quality": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "receipt": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "scope": {
+              "attempt": 1,
+              "decision": {
+                "actor": "local-user",
+                "at": 1791626824.6459517,
+                "note": "",
+                "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+                "outcome": "approve",
+                "proposal": "925aef9ede65dc6781ebbc0732733964251887a8e11f0e422127e9b5a85d0124"
+              },
+              "input_sources": {
+                "plan": {
+                  "edge": "plan-scope",
+                  "node": "plan",
+                  "port": "plan"
+                }
+              },
+              "inputs": {
+                "plan": "Atlas R2026.10 — Emma responsable ; Hugo consultant. Demande A1 : corriger le formulaire portail (2 jours), recette utilisateur de 5 cas, sans livraison. Dépendance documentaire : contrat API Boréal v2 avant intégration finale. Accord demandé maintenant : réalisation du formulaire seulement. Livraison exclue de cet accord."
+              },
+              "nonce": "da591047bc5094f4f",
+              "operation": null,
+              "outcome": "approve",
+              "proposal": "925aef9ede65dc6781ebbc0732733964251887a8e11f0e422127e9b5a85d0124",
+              "result": {
+                "outputs": {
+                  "plan": "Atlas R2026.10 — Emma responsable ; Hugo consultant. Demande A1 : corriger le formulaire portail (2 jours), recette utilisateur de 5 cas, sans livraison. Dépendance documentaire : contrat API Boréal v2 avant intégration finale. Accord demandé maintenant : réalisation du formulaire seulement. Livraison exclue de cet accord."
+                }
+              },
+              "status": "accepted"
+            },
+            "work": {
+              "attempt": 0,
+              "input_sources": {
+                "plan": {
+                  "edge": "scope-work",
+                  "node": "scope",
+                  "port": "plan"
+                }
+              },
+              "inputs": {
+                "plan": "Atlas R2026.10 — Emma responsable ; Hugo consultant. Demande A1 : corriger le formulaire portail (2 jours), recette utilisateur de 5 cas, sans livraison. Dépendance documentaire : contrat API Boréal v2 avant intégration finale. Accord demandé maintenant : réalisation du formulaire seulement. Livraison exclue de cet accord."
+              },
+              "status": "ready"
+            }
+          },
+          "notifications_authorized": false,
+          "original": {
+            "defaults": {
+              "provider": "codex"
+            },
+            "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+            "edges": [
+              {
+                "from": "intent",
+                "id": "intent-plan",
+                "mapping": {
+                  "intent": "intent"
+                },
+                "outcome": "done",
+                "to": "plan"
+              },
+              {
+                "from": "plan",
+                "id": "plan-scope",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "done",
+                "to": "scope"
+              },
+              {
+                "from": "scope",
+                "id": "scope-work",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "approve",
+                "to": "work"
+              },
+              {
+                "from": "work",
+                "id": "work-check",
+                "mapping": {
+                  "result": "result"
+                },
+                "outcome": "done",
+                "to": "check"
+              },
+              {
+                "from": "check",
+                "id": "check-quality",
+                "mapping": {
+                  "evidence_summary": "evidence_summary",
+                  "verdict": "verdict"
+                },
+                "outcome": "done",
+                "to": "quality"
+              },
+              {
+                "from": "quality",
+                "id": "quality-delivery",
+                "mapping": {
+                  "evidence_summary": "evidence_summary"
+                },
+                "outcome": "pass",
+                "to": "delivery"
+              },
+              {
+                "from": "quality",
+                "id": "quality-failure",
+                "outcome": "fail",
+                "to": "failure"
+              },
+              {
+                "from": "delivery",
+                "id": "delivery-receipt",
+                "mapping": {
+                  "proposal": "proposal"
+                },
+                "outcome": "done",
+                "to": "receipt"
+              }
+            ],
+            "id": "work-7880ec0c-6325-491a-aa9b-b0e353c170fa",
+            "nodes": [
+              {
+                "id": "intent",
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "intent": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+                "sample_outputs": {
+                  "intent": "Exemple : clarifier la demande et ses critères."
+                },
+                "title": "Analyser la demande",
+                "validation": "contract"
+              },
+              {
+                "candidate_check": false,
+                "capabilities": [],
+                "completion_outcome": "succeeded",
+                "criteria": [
+                  "Chaque demande a un responsable et un critère vérifiable",
+                  "Les dépendances et décisions bloquantes sont explicites"
+                ],
+                "effort": "medium",
+                "execution_mode": "text",
+                "id": "plan",
+                "inputs": {
+                  "intent": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "model": "",
+                "outputs": {
+                  "plan": "string"
+                },
+                "phase": "",
+                "position": {
+                  "x": 360,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+                "provider": "codex",
+                "required_capabilities": [],
+                "resources": [],
+                "sample_outputs": {
+                  "plan": "Exemple : réaliser le périmètre accepté, puis vérifier le résultat."
+                },
+                "session": "delegated",
+                "title": "Préparer le plan",
+                "validation": "contract"
+              },
+              {
+                "id": "scope",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "outputs": {
+                  "plan": "string"
+                },
+                "position": {
+                  "x": 660,
+                  "y": 100
+                },
+                "question": "Le plan et le périmètre affichés conviennent-ils ?",
+                "title": "Valider le plan"
+              },
+              {
+                "id": "work",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 960,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "sample_outputs": {
+                  "result": "Exemple de résultat ; aucun fichier du projet n’a été modifié."
+                },
+                "title": "Réaliser le périmètre accepté",
+                "validation": "contract"
+              },
+              {
+                "evidence_required": true,
+                "id": "check",
+                "inputs": {
+                  "result": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "position": {
+                  "x": 1260,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+                "required_capabilities": [
+                  "shell"
+                ],
+                "sample_outputs": {
+                  "evidence_summary": "Exemple de contrôle réussi ; aucun test métier exécuté.",
+                  "verdict": "pass"
+                },
+                "title": "Vérifier le résultat",
+                "validation": "contract"
+              },
+              {
+                "id": "quality",
+                "inputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "kind": "condition",
+                "options": [
+                  "pass",
+                  "fail"
+                ],
+                "outputs": {
+                  "evidence_summary": "string"
+                },
+                "parameter": "verdict",
+                "position": {
+                  "x": 1560,
+                  "y": 100
+                },
+                "title": "Les contrôles passent-ils ?"
+              },
+              {
+                "id": "delivery",
+                "inputs": {
+                  "evidence_summary": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "proposal": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+                "sample_outputs": {
+                  "proposal": "Exemple de bilan et de proposition de livraison ; aucune publication effectuée."
+                },
+                "title": "Préparer la livraison et le bilan",
+                "validation": "contract"
+              },
+              {
+                "id": "receipt",
+                "inputs": {
+                  "proposal": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "position": {
+                  "x": 2160,
+                  "y": 100
+                },
+                "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+                "title": "Valider les résultats"
+              },
+              {
+                "completion_outcome": "blocked",
+                "id": "failure",
+                "kind": "question",
+                "outputs": {
+                  "answer": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 320
+                },
+                "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+                "title": "Décider de la correction"
+              }
+            ],
+            "parameters": {},
+            "revision": 2,
+            "schema": 1,
+            "title": "Méthode équipe — préparer une release"
+          },
+          "packs": [],
+          "parameters": {
+            "conversation": "c1bf22fad76d342a0",
+            "depends_on_runs": [],
+            "request": "Atlas R2026.10 : portail clients. Chef de projet Emma, consultant Hugo. Préparer le plan de release."
+          },
+          "plugins": {
+            "path": "/tmp/tricorder-personas-produit/02-services/state/workflows/projects/pabd1860534794a2d/.tricorder/plugins.json",
+            "plugins": [],
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "project": "pabd1860534794a2d",
+          "release": "",
+          "scope": {
+            "id": "pabd1860534794a2d",
+            "kind": "project"
+          },
+          "simulation": false,
+          "status": "active",
+          "transports": {},
+          "updated": 1791626824.6462631
+        }
+      }
+    ],
+    "model": "",
+    "notifications_authorized": false,
+    "project": "pabd1860534794a2d",
+    "projects": [
+      "pabd1860534794a2d"
+    ],
+    "provider": "codex",
+    "status": "open",
+    "transports": {
+      "pabd1860534794a2d": {}
+    },
+    "project_contexts": [
+      {
+        "id": "pabd1860534794a2d",
+        "title": "Atlas — release portail clients",
+        "path": "/tmp/tricorder-personas-produit/02-services/state/workflows/projects/pabd1860534794a2d"
+      }
+    ]
+  },
+  {
+    "created": 1791626763.4237423,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+      "edges": [
+        {
+          "from": "intent",
+          "id": "intent-plan",
+          "mapping": {
+            "intent": "intent"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-check",
+          "mapping": {
+            "result": "result"
+          },
+          "outcome": "done",
+          "to": "check"
+        },
+        {
+          "from": "check",
+          "id": "check-quality",
+          "mapping": {
+            "evidence_summary": "evidence_summary",
+            "verdict": "verdict"
+          },
+          "outcome": "done",
+          "to": "quality"
+        },
+        {
+          "from": "quality",
+          "id": "quality-delivery",
+          "mapping": {
+            "evidence_summary": "evidence_summary"
+          },
+          "outcome": "pass",
+          "to": "delivery"
+        },
+        {
+          "from": "quality",
+          "id": "quality-failure",
+          "outcome": "fail",
+          "to": "failure"
+        },
+        {
+          "from": "delivery",
+          "id": "delivery-receipt",
+          "mapping": {
+            "proposal": "proposal"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "work-d9560356-9f70-4040-9926-62c90144ebc6",
+      "nodes": [
+        {
+          "id": "intent",
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "intent": "string"
+          },
+          "position": {
+            "x": 70,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+          "title": "Analyser la demande",
+          "validation": "contract"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Chaque demande a un responsable et un critère vérifiable",
+            "Les dépendances et décisions bloquantes sont explicites"
+          ],
+          "effort": "medium",
+          "execution_mode": "text",
+          "id": "plan",
+          "inputs": {
+            "intent": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "model": "",
+          "outputs": {
+            "plan": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 360,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+          "provider": "codex",
+          "required_capabilities": [],
+          "resources": [],
+          "session": "delegated",
+          "title": "Préparer le plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": "string"
+          },
+          "position": {
+            "x": 660,
+            "y": 100
+          },
+          "question": "Le plan et le périmètre affichés conviennent-ils ?",
+          "title": "Valider le plan"
+        },
+        {
+          "id": "work",
+          "inputs": {
+            "plan": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "result": "string"
+          },
+          "position": {
+            "x": 960,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+          "required_capabilities": [
+            "edit"
+          ],
+          "title": "Réaliser le périmètre accepté",
+          "validation": "contract"
+        },
+        {
+          "evidence_required": true,
+          "id": "check",
+          "inputs": {
+            "result": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "evidence_summary": "string",
+            "verdict": "string"
+          },
+          "position": {
+            "x": 1260,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+          "required_capabilities": [
+            "shell"
+          ],
+          "title": "Vérifier le résultat",
+          "validation": "contract"
+        },
+        {
+          "id": "quality",
+          "inputs": {
+            "evidence_summary": "string",
+            "verdict": "string"
+          },
+          "kind": "condition",
+          "options": [
+            "pass",
+            "fail"
+          ],
+          "outputs": {
+            "evidence_summary": "string"
+          },
+          "parameter": "verdict",
+          "position": {
+            "x": 1560,
+            "y": 100
+          },
+          "title": "Les contrôles passent-ils ?"
+        },
+        {
+          "id": "delivery",
+          "inputs": {
+            "evidence_summary": "string"
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "proposal": "string"
+          },
+          "position": {
+            "x": 1860,
+            "y": 100
+          },
+          "profile": "generalist",
+          "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+          "title": "Préparer la livraison et le bilan",
+          "validation": "contract"
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "proposal": "string"
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 2160,
+            "y": 100
+          },
+          "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+          "title": "Valider les résultats"
+        },
+        {
+          "completion_outcome": "blocked",
+          "id": "failure",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "position": {
+            "x": 1860,
+            "y": 320
+          },
+          "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+          "title": "Décider de la correction"
+        }
+      ],
+      "parameters": {},
+      "revision": 1,
+      "schema": 1,
+      "title": "Release Boréal — méthode équipe"
+    },
+    "effort": "medium",
+    "id": "c6efc52938ae94709",
+    "items": [
+      {
+        "created": 1791626763.426339,
+        "depends_on": [],
+        "id": "w6bb16cc6b16144bb",
+        "key": "initial",
+        "project": "p8854bc2cae9548bc",
+        "request": "Boréal R2026.10 : contrat API v2. Chef de projet Lina, consultant Karim. Préparer le plan et les contrôles avant toute livraison.",
+        "run": "r78409ceaff3243e4",
+        "execution": {
+          "contract": "cc4241e9543d44a70c28ed6992cc2c3464f82094bf57c4fce51439655a4f75a3",
+          "created": 1791626763.4255166,
+          "definition": {
+            "defaults": {
+              "effort": "medium",
+              "model": "",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+            "edges": [
+              {
+                "from": "intent",
+                "id": "intent-plan",
+                "mapping": {
+                  "intent": "intent"
+                },
+                "outcome": "done",
+                "to": "plan"
+              },
+              {
+                "from": "plan",
+                "id": "plan-scope",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "done",
+                "to": "scope"
+              },
+              {
+                "from": "scope",
+                "id": "scope-work",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "approve",
+                "to": "work"
+              },
+              {
+                "from": "work",
+                "id": "work-check",
+                "mapping": {
+                  "result": "result"
+                },
+                "outcome": "done",
+                "to": "check"
+              },
+              {
+                "from": "check",
+                "id": "check-quality",
+                "mapping": {
+                  "evidence_summary": "evidence_summary",
+                  "verdict": "verdict"
+                },
+                "outcome": "done",
+                "to": "quality"
+              },
+              {
+                "from": "quality",
+                "id": "quality-delivery",
+                "mapping": {
+                  "evidence_summary": "evidence_summary"
+                },
+                "outcome": "pass",
+                "to": "delivery"
+              },
+              {
+                "from": "quality",
+                "id": "quality-failure",
+                "outcome": "fail",
+                "to": "failure"
+              },
+              {
+                "from": "delivery",
+                "id": "delivery-receipt",
+                "mapping": {
+                  "proposal": "proposal"
+                },
+                "outcome": "done",
+                "to": "receipt"
+              }
+            ],
+            "id": "work-d9560356-9f70-4040-9926-62c90144ebc6",
+            "nodes": [
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "intent",
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "intent": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+                "title": "Analyser la demande",
+                "validation": "contract"
+              },
+              {
+                "candidate_check": false,
+                "capabilities": [],
+                "completion_outcome": "succeeded",
+                "criteria": [
+                  "Chaque demande a un responsable et un critère vérifiable",
+                  "Les dépendances et décisions bloquantes sont explicites"
+                ],
+                "effort": "medium",
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "execution_mode": "text",
+                "id": "plan",
+                "inputs": {
+                  "intent": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "model": "",
+                "outputs": {
+                  "plan": "string"
+                },
+                "phase": "",
+                "position": {
+                  "x": 360,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+                "provider": "codex",
+                "required_capabilities": [],
+                "resources": [],
+                "session": "delegated",
+                "title": "Préparer le plan",
+                "validation": "contract"
+              },
+              {
+                "id": "scope",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "outputs": {
+                  "plan": "string"
+                },
+                "position": {
+                  "x": 660,
+                  "y": 100
+                },
+                "question": "Le plan et le périmètre affichés conviennent-ils ?",
+                "title": "Valider le plan"
+              },
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "work",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 960,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "title": "Réaliser le périmètre accepté",
+                "validation": "contract"
+              },
+              {
+                "evidence_required": true,
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "check",
+                "inputs": {
+                  "result": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "position": {
+                  "x": 1260,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+                "required_capabilities": [
+                  "shell"
+                ],
+                "title": "Vérifier le résultat",
+                "validation": "contract"
+              },
+              {
+                "id": "quality",
+                "inputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "kind": "condition",
+                "options": [
+                  "pass",
+                  "fail"
+                ],
+                "outputs": {
+                  "evidence_summary": "string"
+                },
+                "parameter": "verdict",
+                "position": {
+                  "x": 1560,
+                  "y": 100
+                },
+                "title": "Les contrôles passent-ils ?"
+              },
+              {
+                "execution": {
+                  "effort": "medium",
+                  "model": "",
+                  "profile": "generalist",
+                  "provider": "codex",
+                  "session": "delegated"
+                },
+                "id": "delivery",
+                "inputs": {
+                  "evidence_summary": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "proposal": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+                "title": "Préparer la livraison et le bilan",
+                "validation": "contract"
+              },
+              {
+                "id": "receipt",
+                "inputs": {
+                  "proposal": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "position": {
+                  "x": 2160,
+                  "y": 100
+                },
+                "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+                "title": "Valider les résultats"
+              },
+              {
+                "completion_outcome": "blocked",
+                "id": "failure",
+                "kind": "question",
+                "outputs": {
+                  "answer": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 320
+                },
+                "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+                "title": "Décider de la correction"
+              }
+            ],
+            "parameters": {
+              "conversation": "c6efc52938ae94709",
+              "depends_on_runs": [],
+              "request": "Boréal R2026.10 : contrat API v2. Chef de projet Lina, consultant Karim. Préparer le plan et les contrôles avant toute livraison."
+            },
+            "revision": 1,
+            "schema": 1,
+            "title": "Release Boréal — méthode équipe"
+          },
+          "driver": "conversation",
+          "id": "r78409ceaff3243e4",
+          "nodes": {
+            "check": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "delivery": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "failure": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "intent": {
+              "attempt": 1,
+              "finished": 1791626811.843627,
+              "heartbeat": 1791626811.8390658,
+              "input_sources": {},
+              "inputs": {},
+              "outcome": "done",
+              "ownership": "native",
+              "processes": [],
+              "receipt": {
+                "actor": "contract-policy",
+                "at": 1791626811.8437276,
+                "checks": [
+                  "executor-success",
+                  "output-types",
+                  "evidence-integrity"
+                ],
+                "contract": "cc4241e9543d44a70c28ed6992cc2c3464f82094bf57c4fce51439655a4f75a3",
+                "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+              },
+              "result": {
+                "ok": true,
+                "outputs": {
+                  "intent": "Boréal R2026.10 : contrat API v2. Chef de projet Lina, consultant Karim. Préparer le plan et les contrôles avant toute livraison."
+                },
+                "summary": "Intention synthétique recueillie"
+              },
+              "started": 1791626811.8390653,
+              "status": "accepted",
+              "token": "t647a1c9adf6d4b9e"
+            },
+            "plan": {
+              "attempt": 1,
+              "heartbeat": 1791626811.880125,
+              "input_sources": {
+                "intent": {
+                  "edge": "intent-plan",
+                  "node": "intent",
+                  "port": "intent"
+                }
+              },
+              "inputs": {
+                "clarifications": [
+                  {
+                    "answer": "Oui, conserver v1 pendant trois mois. Lina fait valider la migration ; Karim documente les tests de compatibilité.",
+                    "question": "Lina demande : conserver la compatibilité API v1 pendant trois mois ? Cela change le périmètre de Karim et le délai de recette."
+                  }
+                ],
+                "intent": "Boréal R2026.10 : contrat API v2. Chef de projet Lina, consultant Karim. Préparer le plan et les contrôles avant toute livraison."
+              },
+              "ownership": "native",
+              "processes": [],
+              "question": {
+                "answer": "Oui, conserver v1 pendant trois mois. Lina fait valider la migration ; Karim documente les tests de compatibilité.",
+                "answered": 1791626832.5464578,
+                "created": 1791626811.8839488,
+                "id": "q93755f7f04624e3d",
+                "status": "answered",
+                "text": "Lina demande : conserver la compatibilité API v1 pendant trois mois ? Cela change le périmètre de Karim et le délai de recette."
+              },
+              "questions": [
+                {
+                  "answer": "Oui, conserver v1 pendant trois mois. Lina fait valider la migration ; Karim documente les tests de compatibilité.",
+                  "answered": 1791626832.5464578,
+                  "created": 1791626811.8839488,
+                  "id": "q93755f7f04624e3d",
+                  "status": "answered",
+                  "text": "Lina demande : conserver la compatibilité API v1 pendant trois mois ? Cela change le périmètre de Karim et le délai de recette."
+                }
+              ],
+              "resume_question": true,
+              "started": 1791626811.880124,
+              "status": "ready"
+            },
+            "quality": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "receipt": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "scope": {
+              "attempt": 0,
+              "status": "pending"
+            },
+            "work": {
+              "attempt": 0,
+              "status": "pending"
+            }
+          },
+          "notifications_authorized": false,
+          "original": {
+            "defaults": {
+              "effort": "medium",
+              "model": "",
+              "profile": "generalist",
+              "provider": "codex",
+              "session": "delegated"
+            },
+            "description": "Votre parcours de release dans une conversation : recueil, plan, travail, contrôles et préparation de livraison. Chaque demande garde ses preuves.",
+            "edges": [
+              {
+                "from": "intent",
+                "id": "intent-plan",
+                "mapping": {
+                  "intent": "intent"
+                },
+                "outcome": "done",
+                "to": "plan"
+              },
+              {
+                "from": "plan",
+                "id": "plan-scope",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "done",
+                "to": "scope"
+              },
+              {
+                "from": "scope",
+                "id": "scope-work",
+                "mapping": {
+                  "plan": "plan"
+                },
+                "outcome": "approve",
+                "to": "work"
+              },
+              {
+                "from": "work",
+                "id": "work-check",
+                "mapping": {
+                  "result": "result"
+                },
+                "outcome": "done",
+                "to": "check"
+              },
+              {
+                "from": "check",
+                "id": "check-quality",
+                "mapping": {
+                  "evidence_summary": "evidence_summary",
+                  "verdict": "verdict"
+                },
+                "outcome": "done",
+                "to": "quality"
+              },
+              {
+                "from": "quality",
+                "id": "quality-delivery",
+                "mapping": {
+                  "evidence_summary": "evidence_summary"
+                },
+                "outcome": "pass",
+                "to": "delivery"
+              },
+              {
+                "from": "quality",
+                "id": "quality-failure",
+                "outcome": "fail",
+                "to": "failure"
+              },
+              {
+                "from": "delivery",
+                "id": "delivery-receipt",
+                "mapping": {
+                  "proposal": "proposal"
+                },
+                "outcome": "done",
+                "to": "receipt"
+              }
+            ],
+            "id": "work-d9560356-9f70-4040-9926-62c90144ebc6",
+            "nodes": [
+              {
+                "id": "intent",
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "intent": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Clarifier parameters.request, ses critères, risques, inconnues et périmètre. Poser les questions manquantes. Ne pas développer pendant le recueil.",
+                "title": "Analyser la demande",
+                "validation": "contract"
+              },
+              {
+                "candidate_check": false,
+                "capabilities": [],
+                "completion_outcome": "succeeded",
+                "criteria": [
+                  "Chaque demande a un responsable et un critère vérifiable",
+                  "Les dépendances et décisions bloquantes sont explicites"
+                ],
+                "effort": "medium",
+                "execution_mode": "text",
+                "id": "plan",
+                "inputs": {
+                  "intent": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "model": "",
+                "outputs": {
+                  "plan": "string"
+                },
+                "phase": "",
+                "position": {
+                  "x": 360,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer le plan de release : nommer le chef de projet responsable, le consultant exécutant, les critères, dépendances et blocages. Présenter exactement le périmètre soumis au chef d’équipe. Aucun déploiement.",
+                "provider": "codex",
+                "required_capabilities": [],
+                "resources": [],
+                "session": "delegated",
+                "title": "Préparer le plan",
+                "validation": "contract"
+              },
+              {
+                "id": "scope",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "outputs": {
+                  "plan": "string"
+                },
+                "position": {
+                  "x": 660,
+                  "y": 100
+                },
+                "question": "Le plan et le périmètre affichés conviennent-ils ?",
+                "title": "Valider le plan"
+              },
+              {
+                "id": "work",
+                "inputs": {
+                  "plan": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 960,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Relire le plan accepté dans l’exécution. Réaliser uniquement le périmètre autorisé dans le projet de la tâche. Respecter sa série et ses règles ; préserver les travaux existants. Remettre les preuves des modifications.",
+                "required_capabilities": [
+                  "edit"
+                ],
+                "title": "Réaliser le périmètre accepté",
+                "validation": "contract"
+              },
+              {
+                "evidence_required": true,
+                "id": "check",
+                "inputs": {
+                  "result": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "position": {
+                  "x": 1260,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Exécuter les contrôles pertinents, comparer au résultat métier attendu et fournir les preuves réelles. Pour Odoo : copie locale neutralisée, jamais tests en production. verdict vaut pass ou fail ; un contrôle non exécuté n’est pas pass.",
+                "required_capabilities": [
+                  "shell"
+                ],
+                "title": "Vérifier le résultat",
+                "validation": "contract"
+              },
+              {
+                "id": "quality",
+                "inputs": {
+                  "evidence_summary": "string",
+                  "verdict": "string"
+                },
+                "kind": "condition",
+                "options": [
+                  "pass",
+                  "fail"
+                ],
+                "outputs": {
+                  "evidence_summary": "string"
+                },
+                "parameter": "verdict",
+                "position": {
+                  "x": 1560,
+                  "y": 100
+                },
+                "title": "Les contrôles passent-ils ?"
+              },
+              {
+                "id": "delivery",
+                "inputs": {
+                  "evidence_summary": "string"
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "proposal": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Préparer candidat exact, cible, preuves, limites et retour arrière. Consolider le bilan dans le document de release existant. Sans opération externe configurée et accord exact, rester à une proposition de livraison.",
+                "title": "Préparer la livraison et le bilan",
+                "validation": "contract"
+              },
+              {
+                "id": "receipt",
+                "inputs": {
+                  "proposal": "string"
+                },
+                "kind": "decision",
+                "options": [
+                  "approve",
+                  "reject"
+                ],
+                "position": {
+                  "x": 2160,
+                  "y": 100
+                },
+                "question": "Le travail, ses preuves et sa proposition de livraison sont-ils validés ?",
+                "title": "Valider les résultats"
+              },
+              {
+                "completion_outcome": "blocked",
+                "id": "failure",
+                "kind": "question",
+                "outputs": {
+                  "answer": "string"
+                },
+                "position": {
+                  "x": 1860,
+                  "y": 320
+                },
+                "question": "Les contrôles ont échoué. Quel périmètre de correction souhaitez-vous ouvrir dans une nouvelle tâche ? Cette réponse ne valide pas le travail en échec.",
+                "title": "Décider de la correction"
+              }
+            ],
+            "parameters": {},
+            "revision": 1,
+            "schema": 1,
+            "title": "Release Boréal — méthode équipe"
+          },
+          "packs": [],
+          "parameters": {
+            "conversation": "c6efc52938ae94709",
+            "depends_on_runs": [],
+            "request": "Boréal R2026.10 : contrat API v2. Chef de projet Lina, consultant Karim. Préparer le plan et les contrôles avant toute livraison."
+          },
+          "plugins": {
+            "path": "/tmp/tricorder-personas-produit/02-services/state/workflows/projects/p8854bc2cae9548bc/.tricorder/plugins.json",
+            "plugins": [],
+            "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+          },
+          "project": "p8854bc2cae9548bc",
+          "release": "",
+          "scope": {
+            "id": "p8854bc2cae9548bc",
+            "kind": "project"
+          },
+          "simulation": false,
+          "status": "active",
+          "transports": {},
+          "updated": 1791626832.5466828
+        }
+      }
+    ],
+    "model": "",
+    "notifications_authorized": false,
+    "project": "p8854bc2cae9548bc",
+    "projects": [
+      "p8854bc2cae9548bc"
+    ],
+    "provider": "codex",
+    "status": "open",
+    "transports": {
+      "p8854bc2cae9548bc": {}
+    },
+    "project_contexts": [
+      {
+        "id": "p8854bc2cae9548bc",
+        "title": "Boréal — release API partenaires",
+        "path": "/tmp/tricorder-personas-produit/02-services/state/workflows/projects/p8854bc2cae9548bc"
+      }
+    ]
+  }
+]

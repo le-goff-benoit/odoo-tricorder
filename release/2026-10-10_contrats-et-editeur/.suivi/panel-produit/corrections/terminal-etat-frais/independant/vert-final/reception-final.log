@@ -1,0 +1,15 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-terminal-fresh/playwright.config.cjs --output=/tmp/tricorder-review-terminal-fresh/results-final
+PATH: /tmp/tricorder-ci-tools-p9em6jww:/usr/bin:/bin
+codex None
+claude None
+
+Running 4 tests using 1 worker
+
+  ✓  1 ../../../tmp/tricorder-review-terminal-fresh/fresh.spec.cjs:104:1 › independent busy foreground command wins over an old stopped-agent cache (7.1s)
+  ✓  2 ../../../tmp/tricorder-review-terminal-fresh/fresh.spec.cjs:114:1 › independent live shell never restarts its stopped agent before explicit confirmation (3.2s)
+  ✓  3 ../../../tmp/tricorder-review-terminal-fresh/fresh.spec.cjs:123:1 › independent two existing conversations retain their original PTYs while navigating (5.2s)
+  ✓  4 ../../../tmp/tricorder-review-terminal-fresh/fresh.spec.cjs:139:1 › independent dead historical PTY requires explicit agreement before an agent is recreated (7.9s)
+
+  4 passed (23.9s)

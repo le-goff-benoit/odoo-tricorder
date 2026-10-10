@@ -57,6 +57,8 @@ test('stopped agent is resumed explicitly from overview and activity without dup
   await page.locator('[data-workflow-route="overview"]').click();
   const activity=page.locator('.activity-row').filter({hasText:fixture.items[0].request});
   await expect(activity).toContainText('Agent arrêté');await expect(activity).toContainText('Reprendre l’agent');
+  await expect(activity).toContainText('Préparer le diagnostic');
+  await expect(activity).toHaveAttribute('data-action','activity-resume-agent');
   await snapshot(info,'activity-agent-stopped');
   await activity.click();await expect(page.getByRole('dialog')).toBeVisible();
   const before=(await sessions()).map(s=>[s.id,s.pid]);

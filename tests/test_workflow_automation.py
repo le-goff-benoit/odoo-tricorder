@@ -174,9 +174,9 @@ class AutomationTests(unittest.TestCase):
         run = self.execute(run,'notify')
         self.assertFalse(run['nodes']['notify']['result']['ok'])
         self.assertEqual(scheduler.tick(now=2300),[])
-        self.engine.retry(run['id'],'notify','Vérification synthétique',human=True)
-        run = self.execute(run,'notify')
-        self.assertIn('incertain',run['nodes']['notify']['result']['summary'])
+        with self.assertRaisesRegex(ContractError, 'effet'):
+            self.engine.retry(run['id'],'notify','Vérification synthétique',human=True)
+        self.assertEqual(self.engine.run(run['id'])['nodes']['notify']['attempt'], 1)
         calls = [json.loads(s) for s in (self.root/'calls.jsonl').read_text().splitlines()]
         self.assertEqual(sum(c['operation']=='send' for c in calls),1)
 

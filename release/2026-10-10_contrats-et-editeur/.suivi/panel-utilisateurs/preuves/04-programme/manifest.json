@@ -1,0 +1,72 @@
+{
+  "profile": 4,
+  "build_renderer_sha256": "769515bf8cbd5cf312cb5df1346fa85b0443b55216f4b5ffd6be843d898f5946",
+  "spec_sha256": "253132aef478c3d37990b78a61055dde3606c8c0a1d6da319c000631ae88e041",
+  "captures": [
+    {
+      "file": "01-01-adoption-modele.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--d5af8-m\u00e9langer-copies-et-demandes/01-adoption-modele.png",
+      "sha256": "2d7ce3bb56b1644d307bcc3219e325ff8e23b8f0521366406fd69c5e48c96427"
+    },
+    {
+      "file": "02-02-atlas-contexte-isole.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--d5af8-m\u00e9langer-copies-et-demandes/02-atlas-contexte-isole.png",
+      "sha256": "4545be57f19ef0196ae1b48385942d1064746bdb32acdc72ff3a2fcf97625ff8"
+    },
+    {
+      "file": "03-03-boreal-contexte-isole.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--d5af8-m\u00e9langer-copies-et-demandes/03-boreal-contexte-isole.png",
+      "sha256": "aaf5e42ac05d66fa9db0e7537181a34d84a0d6b63c23461c82a20b7f92198a7d"
+    },
+    {
+      "file": "04-04-plan-transverse-approbation.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--518e1--depuis-Projets-et-Activit\u00e9/04-plan-transverse-approbation.png",
+      "sha256": "9ccfd49bea6ec53f5a36f85a59897b4ff4ae47e3b35b7aa3fde67f919c8420f8"
+    },
+    {
+      "file": "05-05-coordination-dependance.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--518e1--depuis-Projets-et-Activit\u00e9/05-coordination-dependance.png",
+      "sha256": "f4f379ebaf757d065b15cc9414eb3eed5843cb42cf18a6e00994d781d860d68f"
+    },
+    {
+      "file": "06-07-boreal-contexte-terminal.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--518e1--depuis-Projets-et-Activit\u00e9/07-boreal-contexte-terminal.png",
+      "sha256": "0e82d0b026d57c305475c0f3bf7c6dec86239cf72f97a58fce609e7661614ee9"
+    },
+    {
+      "file": "07-08a-enfant-direct-projet.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--518e1--depuis-Projets-et-Activit\u00e9/08a-enfant-direct-projet.png",
+      "sha256": "8e386b7beca50bf0f55f6666aabc49acd9d6ef9da5d10389e2affab183a93cc1"
+    },
+    {
+      "file": "08-08b-enfant-direct-activite.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--518e1--depuis-Projets-et-Activit\u00e9/08b-enfant-direct-activite.png",
+      "sha256": "b9e88f86d88a9c6081bf47b4f80b82fbb50152dfea51ae9b095d1a71d84f009f"
+    },
+    {
+      "file": "09-09-programme-termine.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--518e1--depuis-Projets-et-Activit\u00e9/09-programme-termine.png",
+      "sha256": "85cf6ce185a39dea409f49551b19088be77959a2890478ce7c8127e461da6416"
+    },
+    {
+      "file": "10-08-activite-parent-enfants.png",
+      "source": "test-results/panel-v2-user-4/panel-v2-user-4-programme--518e1--depuis-Projets-et-Activit\u00e9/08-activite-parent-enfants.png",
+      "sha256": "cb62ae9e62dba144b6a408084e69c78d7f5eb660d14bcf2b45c14a54b4526e4b"
+    }
+  ],
+  "scope": "Original panel on frozen source build; synthetic fixtures, inert providers; screenshots visually reviewed by the testing agent.",
+  "additional_evidence": [
+    {
+      "file": "copies-et-contextes.json",
+      "sha256": "65f2fbe7920cc1a8f2628535477ee7d7eb1d0705e126a92d01c490137d46322e"
+    },
+    {
+      "file": "retour-parent-direct.json",
+      "sha256": "e6eca51d3e5058738596bfc7d3b286bc73c4d91c1a7f88c71897525796474dec"
+    },
+    {
+      "file": "coordination-preuves.json",
+      "sha256": "4fd0a098c0cf462afb7e1fa282f800180c28788be4aba11aa2cae460933eab8c"
+    }
+  ]
+}

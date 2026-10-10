@@ -1,0 +1,12 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-panel-produit/playwright.config.cjs --output=/tmp/tricorder-review-panel-produit/results-identical-final --grep deliberately retyped
+PATH: /tmp/tricorder-ci-tools-6zrmhaxz:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✓  1 ../../../tmp/tricorder-review-panel-produit/review.spec.cjs:93:1 › independent: deliberately retyped identical intent after an unknown acknowledgement is not conflated (3.2s)
+
+  1 passed (3.7s)

@@ -1,0 +1,31 @@
+{
+  "source_characters": 73647,
+  "source_bytes": 82848,
+  "proof_pages": 3,
+  "full_recovery_exact": true,
+  "run_unchanged": true,
+  "frontend_run_unchanged": true,
+  "heading": "Préparer un bilan complet",
+  "bounded_title": true,
+  "recovery_refuses_nonprogress_and_nontext": true,
+  "replacement_preserved": false,
+  "replacement_excerpt": "[object Object]",
+  "transport_calls": [
+    {
+      "action": "run.proof",
+      "offset": 0
+    },
+    {
+      "action": "run.proof",
+      "offset": 32000
+    },
+    {
+      "action": "run.proof",
+      "offset": 64000
+    }
+  ],
+  "sources": {
+    "executionRequest": "async function executionRequest(run) {\n  const request=run.parameters?.request;\n  if(typeof request==='string')return request;\n  if(!request?.$artifact)return '';\n  const chunks=[];let offset=0;\n  while(offset!==null) {\n    const page=await call('run.proof',{run:run.id,sha256:request.$artifact.sha256,offset});\n    if(typeof page.text!=='string' || (page.next!==null && page.next<=offset))throw new Error('Impossible de récupérer la demande complète. Aucun nouveau lancement préparé.');\n    chunks.push(page.text);offset=page.next;\n  }\n  return chunks.join('');\n}",
+    "addRequestDialog": "async function addRequestDialog(replacement=false) {\n  state.dependencyDraft={conversation:state.conversation.id,selected:new Set(),query:''};\n  modal(replacement ? 'Créer une demande de remplacement' : 'Ajouter une demande', `<form id=\"conversation-add-form\">${replacement?'<p>La demande précédente reste conservée avec ses résultats et son blocage. Décrivez la nouvelle demande et choisissez ses prérequis ; aucune validation passée ne sera transférée.</p>':''}<label>Demande<textarea name=\"request\" required>${replacement?esc(state.run.parameters.request || ''):''}</textarea></label><label>Projet<select name=\"project\">${options(state.conversation.projects.map(id=>[id,state.projects.find(p=>p.id===id)?.title || state.project.title]),state.project.id)}</select></label><fieldset class=\"dependency-picker\"><legend>Demandes préalables (facultatif)</legend><p>Aucune sélection : la demande est indépendante. Sélectionnez plusieurs demandes pour attendre leur réussite à toutes.</p><div class=\"row\"><label for=\"dependency-query\" class=\"sr-only\">Rechercher un prérequis</label><input id=\"dependency-query\" type=\"search\" placeholder=\"Rechercher une demande…\">${button('dependency-search','Rechercher','','type=\"button\"')}</div><div id=\"dependency-choices\"></div><div id=\"dependency-pages\" class=\"row\"></div><p id=\"dependency-count\" role=\"status\"></p></fieldset><button class=\"primary\">Enregistrer la demande</button></form>`);\n  await dependencyChoices();\n}"
+  }
+}

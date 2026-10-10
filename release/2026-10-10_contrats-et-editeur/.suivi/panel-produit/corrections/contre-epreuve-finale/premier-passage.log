@@ -1,0 +1,92 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test tests/collection-input-ux.spec.cjs tests/workflow-v2.spec.cjs --output=/tmp/tricorder-persona-reception-accepted
+PATH: /tmp/tricorder-ci-tools-c782ekya:/usr/bin:/bin
+codex None
+claude None
+
+Running 13 tests using 1 worker
+
+  ✓   1 tests/collection-input-ux.spec.cjs:38:1 › a second intention submitted during acknowledgement is recorded once without losing text (2.6s)
+  ✓   2 tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (4.0s)
+  ✓   3 tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (2.7s)
+  ✓   4 tests/collection-input-ux.spec.cjs:66:1 › an addition rejected after a concurrent edit survives the next success, reload and targeted retry (3.9s)
+  ✓   5 tests/collection-input-ux.spec.cjs:78:1 › a lost acknowledgement is retried with the same command after reload without duplicating the intention (3.1s)
+  ✘   6 tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (7.2s)
+  ✓   7 tests/collection-input-ux.spec.cjs:93:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.4s)
+  ✓   8 tests/collection-input-ux.spec.cjs:114:1 › two project shells remain discoverable after changing project and reloading the window (3.8s)
+  ✓   9 tests/workflow-v2.spec.cjs:31:1 › editor converts explicitly, describes typed list ports, configures per-item work and optional actions without JSON (4.0s)
+  ✓  10 tests/workflow-v2.spec.cjs:44:1 › three intentions feed one accepted plan, explicit child coordination and a failed optional action leave the main result completed (14.1s)
+  ✘  11 tests/workflow-v2.spec.cjs:74:1 › renaming per-item work preserves configured ports and the integration block can be saved (9.9s)
+  ✓  12 tests/workflow-v2.spec.cjs:80:1 › an empty optional collection can close and transmit an empty list without inventing an intention (3.5s)
+  ✓  13 tests/workflow-v2.spec.cjs:84:1 › dependent children show the wait and parent suspension without offering a manual resume (7.0s)
+
+
+  1) tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Nouvelle intention', { exact: true })
+    Expected: ""
+    Received: "Deux interventions identiques"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Nouvelle intention', { exact: true }) with timeout 5000ms
+      - waiting for getByLabel('Nouvelle intention', { exact: true })
+        14 × locator resolved to <textarea name="text" required="" maxlength="12000" id="collection-text"></textarea>
+           - unexpected value "Deux interventions identiques"
+
+
+      86 |  await app.evaluate(({ipcMain})=>{const original=ipcMain._invokeHandlers.get('studio:request');let lost=false;ipcMain.removeHandler('studio:request');ipcMain.handle('studio:request',async(event,payload)=>{const result=await original(event,payload);if(payload.action==='collection.change'&&payload.operation==='add'&&!lost){lost=true;throw new Error('Accusé perdu synthétique');}return result;});});
+      87 |  await input().fill('Deux interventions identiques');await add().click();await expect(page.locator('.collection-recovery')).toContainText('Accusé perdu synthétique');
+    > 88 |  await input().fill('');await input().fill('Deux interventions identiques');await add().click();await expect(input()).toHaveValue('');
+         |                                                                                                                       ^
+      89 |  await expect.poll(stored).toEqual(['Deux interventions identiques','Deux interventions identiques']);
+      90 |  await page.getByRole('button',{name:'Réessayer cet ajout',exact:true}).click();await expect(page.locator('.collection-recovery')).toHaveCount(0);expect(await stored()).toEqual(['Deux interventions identiques','Deux interventions identiques']);
+      91 | });
+        at /home/blegoff/odoo-tricorder/tests/collection-input-ux.spec.cjs:88:119
+
+    Error Context: ../../../tmp/tricorder-persona-reception-accepted/collection-input-ux-a-new--5a636-retrying-the-first-addition/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-persona-reception-accepted/collection-input-ux-a-new--5a636-retrying-the-first-addition/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-persona-reception-accepted/collection-input-ux-a-new--5a636-retrying-the-first-addition/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/workflow-v2.spec.cjs:74:1 › renaming per-item work preserves configured ports and the integration block can be saved 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "automatic"
+    Received: undefined
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      76 |  await seed({schema:2,nodes:[{id:'each',kind:'foreach',title:'Travaux',collection:'items',concurrency:2,workflow:child,inputs:{items:list,context:{type:'string',required:false}},outputs:{results:{...list,minItems:0,maxItems:100},contributions:{...list,minItems:0,maxItems:100}},position:{x:50,y:50}}],edges:[]});
+      77 |  await page.locator('.node[data-id=each]').click();await page.getByLabel('Nom du bloc',{exact:true}).fill('Travaux renommés');await page.getByRole('button',{name:'Appliquer au bloc',exact:true}).click();await page.getByRole('button',{name:'Enregistrer',exact:true}).click();await expect.poll(async()=>(await snapshot()).nodes[0].title).toBe('Travaux renommés');expect((await snapshot()).nodes[0].inputs).toEqual({items:list,context:{type:'string',required:false}});
+    > 78 |  await page.getByRole('button',{name:'+ Ajouter un bloc',exact:true}).click();await page.getByLabel("Type d'étape",{exact:true}).selectOption('integrate');await page.getByRole('dialog').getByLabel('Nom du bloc',{exact:true}).fill('Assembler les contributions');await page.getByRole('button',{name:'Ajouter au workflow',exact:true}).click();await page.getByRole('button',{name:'Enregistrer',exact:true}).click();await expect.poll(async()=>(await snapshot()).nodes.find(n=>n.kind==='integrate')?.validation).toBe('automatic');
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^
+      79 | });
+      80 | test('an empty optional collection can close and transmit an empty list without inventing an intention',async()=>{
+      81 |  await seed({schema:2,nodes:[{id:'intentions',kind:'input',title:'Actions de réunion',outputs:{intentions:{type:'array',items:'object',required:true,minItems:0,maxItems:100}},position:{x:50,y:50}}],edges:[]});const run=engine("r=e.start(p['project'],p['graph'],simulation=True,driver='conversation');print(json.dumps({'id':r['id']}))",{project:project.id,graph:await snapshot()});await inspectRun(run.id);await page.getByRole('button',{name:'Détail',exact:true}).click();await expect(page.getByRole('button',{name:'Confirmer la liste et continuer',exact:true})).toBeEnabled();await page.getByRole('button',{name:'Confirmer la liste et continuer',exact:true}).click();await expect.poll(async()=>(await call('run.get',{run:run.id})).run.status).toBe('completed');expect((await call('run.get',{run:run.id})).run.nodes.intentions.result.outputs.intentions).toEqual([]);
+        at /home/blegoff/odoo-tricorder/tests/workflow-v2.spec.cjs:78:507
+
+    Error Context: ../../../tmp/tricorder-persona-reception-accepted/workflow-v2-renaming-per-i-a7cc3-egration-block-can-be-saved/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-persona-reception-accepted/workflow-v2-renaming-per-i-a7cc3-egration-block-can-be-saved/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-persona-reception-accepted/workflow-v2-renaming-per-i-a7cc3-egration-block-can-be-saved/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition 
+    tests/workflow-v2.spec.cjs:74:1 › renaming per-item work preserves configured ports and the integration block can be saved 
+  11 passed (1.2m)

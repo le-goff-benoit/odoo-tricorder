@@ -1,0 +1,122 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Connexions
+  - button "Terminal 1" [pressed]
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:06
+  - button "Actualiser · À jour · 12:06"
+  - strong: Terminal
+  - button "Contexte"
+  - button "Disposition verticale"
+  - button "Agrandir le terminal"
+  - 'button "Shell · Codex arrêté · Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail." [pressed]':
+    - img "Shell"
+    - text: "Shell · Codex arrêté · Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+  - button "Arrêter ce terminal"
+  - button "Nouveau terminal"
+  - button "Rechercher dans le terminal"
+  - text: "Conversation du workflow affiché · Shell : Client Atlas - onboarding · Agent arrêté"
+  - textbox "Terminal input"
+  - separator "Taille du terminal"
+  - main:
+    - text: Outils et plugins
+    - heading "Connexions" [level=1]
+    - paragraph: "Connectez les outils de vos workflows : messagerie, documents et services. Vérifiez une connexion avant de l’utiliser dans une étape."
+    - button "Configurer une connexion…"
+    - button "Plugins OpenAI"
+    - button "Plugins Anthropic"
+    - button "Actualiser"
+    - text: Contexte
+    - combobox "Contexte":
+      - option "Sans projet"
+      - option "Modèles"
+      - option "Client Atlas - onboarding" [selected]
+    - button "Afficher les connexions"
+    - paragraph: "Catalogue de Client Atlas - onboarding : /tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p883958b73e7944f7/.tricorder/plugins.json. Modifiez-le depuis le terminal, puis actualisez. Les déclarations restent distinctes des accès vérifiés."
+    - article:
+      - heading "Codex" [level=2]
+      - text: Installé · connexion à vérifier
+      - paragraph: "CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement."
+      - group: Diagnostic de connexion
+    - article:
+      - heading "Claude Code" [level=2]
+      - text: Installé · connexion à vérifier
+      - paragraph: "CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement."
+      - group: Diagnostic de connexion
+    - article:
+      - heading "Commandes locales isolées" [level=2]
+      - text: Utilisable
+      - paragraph: Sans réseau ; projet en lecture seule ; résultats dans un dossier de travail isolé.
+      - group: Diagnostic de connexion
+    - article:
+      - heading "Confluence" [level=2]
+      - text: À configurer
+      - paragraph: Un plugin Atlassian peut être connecté séparément. Aucun transport authentifié configuré dans Tricorder.
+      - group: Diagnostic de connexion
+    - article:
+      - heading "GitHub → Odoo.sh" [level=2]
+      - text: À configurer
+      - paragraph: Renseigner dépôt, branche et projet Odoo.sh. Publication GitHub, build et déploiement seront suivis séparément.
+      - group: Diagnostic de connexion
+    - article:
+      - heading "Gmail" [level=2]
+      - text: À configurer
+      - paragraph: Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+      - group: Diagnostic de connexion
+    - article:
+      - heading "Outlook" [level=2]
+      - text: À configurer
+      - paragraph: Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+      - group: Diagnostic de connexion
+    - article:
+      - heading "Slack" [level=2]
+      - text: À configurer
+      - paragraph: Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+      - group: Diagnostic de connexion
+    - article:
+      - heading "Telegram" [level=2]
+      - text: À configurer
+      - paragraph: Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+      - group: Diagnostic de connexion
+    - article:
+      - heading "Signal" [level=2]
+      - text: À configurer
+      - paragraph: Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+      - group: Diagnostic de connexion
+    - paragraph: Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.
+  - dialog "Configurer une connexion":
+    - heading "Configurer une connexion" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph:
+      - text: "Contexte :"
+      - strong: Client Atlas - onboarding
+    - list:
+      - listitem: "Choisissez le service et l’opération : lire un email, prévenir sur Slack ou préparer un brouillon."
+      - listitem: Un adaptateur local compatible doit être installé et connecté à votre compte. Les plugins de votre terminal ne deviennent pas automatiquement des connexions Tricorder.
+      - listitem: Demandez à votre agent de préparer le catalogue avec la consigne ci-dessous. Revenez ici, cliquez Actualiser, puis Vérifier l’adaptateur pour examiner ses accès.
+      - listitem: Dans le workflow, sélectionnez l’opération vérifiée et son destinataire. Une notification de question se règle dans les paramètres du workflow.
+    - paragraph: Cette version ne propose pas encore de formulaire de connexion OAuth. L’agent peut préparer la configuration ; il doit signaler tout adaptateur manquant. La déclaration seule ne signifie pas « connecté ».
+    - text: Consigne à copier dans votre terminal
+    - textbox "Consigne à copier dans votre terminal": Aide-moi à configurer une connexion dans /tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p883958b73e7944f7/.tricorder/plugins.json pour ce projet. Commence par me demander le service, l’opération (lecture, notification ou brouillon) et le destinataire. Identifie un adaptateur local installé et son protocole compatible ; s’il manque, explique ce qui doit être installé. Garde les secrets dans l’outil de connexion. Prépare le catalogue puis indique comment utiliser Actualiser et Vérifier l’adaptateur dans Tricorder. Aucun envoi ni création de brouillon externe avant examen de l’opération et de sa cible.
+    - button "Sélectionner la consigne"
+    - button "Ouvrir le terminal existant"

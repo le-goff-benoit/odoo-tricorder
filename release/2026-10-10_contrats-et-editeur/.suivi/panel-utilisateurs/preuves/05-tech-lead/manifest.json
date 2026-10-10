@@ -1,0 +1,113 @@
+{
+  "profile": 5,
+  "build_renderer_sha256": "769515bf8cbd5cf312cb5df1346fa85b0443b55216f4b5ffd6be843d898f5946",
+  "spec_sha256": "33ae6924c2eb6f18d5b5da1cb5bef59d41abc87e86d7a6ddf8f47feba012851b",
+  "evidence": [
+    {
+      "file": "01-.last-run.json",
+      "source": "test-results/panel-v2-user-5/.last-run.json",
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+    },
+    {
+      "file": "02-P1-apres-executer.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Garde-\u2014-sa-38696-l\u2019\u00e9diteur-et-son-diagnostic/P1-apres-executer.png",
+      "sha256": "ea1401509db5cfb94806ef121c67f6ecee940cf9825ab53710d4abd95893b25e"
+    },
+    {
+      "file": "03-P1-sauvegarde-refusee-\u00e9diteur-visible.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Garde-\u2014-sa-38696-l\u2019\u00e9diteur-et-son-diagnostic/P1-sauvegarde-refusee-\u00e9diteur-visible.png",
+      "sha256": "0a9d053c6988ae8d992a033583f3eed64297844adbd5279f8e1ca8706e17dc4b"
+    },
+    {
+      "file": "04-element-api-identifiable.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/element-api-identifiable.png",
+      "sha256": "b5050389a4c8f66cd7266ca2f1adaa30888c446c8e4a759ef04bdf77b3603af3"
+    },
+    {
+      "file": "05-intentions-confirmees.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/intentions-confirmees.png",
+      "sha256": "bbf8ced43f5b1ab57dbfe1c5c717e05e232440986724134e24a933175b2e8d43"
+    },
+    {
+      "file": "06-moteur-preuves.json",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/moteur-preuves.json",
+      "sha256": "7ec17d8b66956d9ee7b189b6c4061a975d69294de13feec226cb760162aa3ad3"
+    },
+    {
+      "file": "07-parallelisme-et-dependances-graphe.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/parallelisme-et-dependances-graphe.png",
+      "sha256": "4c0e38c595a5fae802330e3f6f872dddd8885e95445f912cd9c37c94afde5cc3"
+    },
+    {
+      "file": "08-plan-decompose-a-valider.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/plan-decompose-a-valider.png",
+      "sha256": "d10497c3aff4b354168addb5112b3591a0f0582a0670b284cf8c0258579a917c"
+    },
+    {
+      "file": "09-resultats-communs-recus.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/resultats-communs-recus.png",
+      "sha256": "820391bd34f3475553a1d584daba15d2d11d4970ace0dac3fcf5f6348386f760"
+    },
+    {
+      "file": "10-synthese-commune-consultee.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/synthese-commune-consultee.png",
+      "sha256": "f37dfda2dc8a7e470657fade7e67d8b63db43a92442f6ff670c7402eb230ee4c"
+    },
+    {
+      "file": "11-workflow-configure.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/workflow-configure.png",
+      "sha256": "18a51b4a5acb17647c6f3a101a1aeb8c04b647b9d2707bc97b01059c834f17bd"
+    },
+    {
+      "file": "12-candidat-commun-recu.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/candidat-commun-recu.png",
+      "sha256": "32980345be12152c5aa4c7fc6802fd68241530b14bb73b81aad113398b97237f"
+    },
+    {
+      "file": "13-code-deux-elements-concrets.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/code-deux-elements-concrets.png",
+      "sha256": "7944c2794f7f5ee8b23de67fcee23f52a5cf96b29c5b5a5922fdb21d4a6b7dd9"
+    },
+    {
+      "file": "14-code-workflow-qa-commune-configuree.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/code-workflow-qa-commune-configuree.png",
+      "sha256": "c77d6f0eb0ab745db0858ea848a4bca295f3410996e7c2d0fa571895b516445c"
+    },
+    {
+      "file": "15-contribution-a.json",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/contribution-a.json",
+      "sha256": "cd56312dc9c1b3ca5df891af4d57db0e9ee5d24208ab474472d9262c9a0af09e"
+    },
+    {
+      "file": "16-contribution-b.json",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/contribution-b.json",
+      "sha256": "6995b18a318148dad0718aded4d4c6266d0ce85137dbf9666df0b254f1b2ae4b"
+    },
+    {
+      "file": "17-integration-preuves.json",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/integration-preuves.json",
+      "sha256": "57704958b4a391f3842b2d28de794b89a039f89d2dd6a2e581d822f6e8f75a58"
+    },
+    {
+      "file": "18-intentions-confirmees.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/intentions-confirmees.png",
+      "sha256": "aa00932d90adadbd21cf6095e9a316582bab8d01adbc56730ec783702e87509e"
+    },
+    {
+      "file": "19-plan-decompose-a-valider.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/plan-decompose-a-valider.png",
+      "sha256": "499f0f98a6b5a38c4e88a939e9e8b48fafa4d034f805ec0342fa4e00ccd629c7"
+    },
+    {
+      "file": "20-vraie-qa-commune-reussie.png",
+      "source": "test-results/panel-v2-user-5/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/vraie-qa-commune-reussie.png",
+      "sha256": "842000dc5ba8a6c226bba5fc237d7f55b65490ee636ed251a0bfb1cf14a23dd1"
+    },
+    {
+      "file": "21-verdict.json",
+      "source": "test-results/panel-v2-user-5/verdict.json",
+      "sha256": "7fdab5449be8f4004a5ea73554e1bedd02f145f015a0c742c6d535bdf2c2882d"
+    }
+  ],
+  "scope": "Frozen source build. Synthetic projects and inert providers, real local integration and QA. Visually reviewed by tester."
+}

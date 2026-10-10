@@ -18,9 +18,19 @@ def notification_node(graph):
             "validation": "automatic"}
 
 
-def execution_nodes(graph):
+def execution_nodes(graph, *, recursive=True):
+    """Mandatory execution scope; optional actions have their own activation.
+
+    A per-item component is part of the launch authorization even though its
+    concrete executions will only be enrolled after the plan is approved.
+    """
     node = notification_node(graph)
-    return graph["nodes"] + ([node] if node else [])
+    nodes = list(graph["nodes"]) + ([node] if node else [])
+    if recursive:
+        for item in graph["nodes"]:
+            if item["kind"] == "foreach" and isinstance(item.get("workflow"), dict):
+                nodes.extend(execution_nodes(item["workflow"]))
+    return nodes
 
 
 def queue_question(engine, db, run, node_id, question):

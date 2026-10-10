@@ -1,0 +1,27 @@
+{
+  "diagnostic": "course du banc entre tick automatique et claims injectés",
+  "engine_changed": false,
+  "dist_changed": false,
+  "changed_test": "tests/panel-v2-user-2.spec.cjs",
+  "packaged_passes_seconds": [
+    13.4,
+    13.6,
+    14.1
+  ],
+  "source_passes_seconds": [
+    13.7
+  ],
+  "independent_probe": "course-dispatch.json",
+  "real_external_provider": false,
+  "synthetic_local_provider": true,
+  "claims_and_workers": "real runtime",
+  "assertions": [
+    "trois PID distincts",
+    "appel initial 1/1/1",
+    "appel final 1/2/2",
+    "question transmise et reprise tentative 1",
+    "échec corrigé tentative 2",
+    "ticket terminé inchangé",
+    "parent completed"
+  ]
+}

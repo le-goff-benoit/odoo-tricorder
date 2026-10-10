@@ -1,0 +1,811 @@
+2026-10-10T10:15:48.480Z 01-accueil
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+2026-10-10T10:16:12.092Z 01-accueil
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+2026-10-10T10:16:16.891Z 02-demarrage
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+2026-10-10T10:16:16.933Z [{"text":"Activité"},{"text":"Workflows"},{"text":"Projets"},{"text":"Planifications"},{"text":"Connexions"},{"text":"Paramètres"},{"text":""},{"text":"","action":"workflow-workspace"},{"text":""},{"text":""},{"text":"","action":"agents-link"},{"text":"","action":"workflow-updates"},{"text":"","action":"about"},{"text":"Terminal","action":"terminal-toggle"},{"text":""},{"text":""},{"text":""},{"text":"","action":"refresh"},{"text":"Statut"},{"text":"Terminal"},{"text":"Demandes"},{"text":"Plan"},{"text":"Mémoire"},{"text":"Express"},{"text":"Temps"},{"text":"Démarrer le workflow","action":"workflow-start"},{"text":"Contexte","action":"terminal-options"},{"text":"Disposition verticale","action":"terminal-layout"},{"text":"Agrandir le terminal","action":"terminal-maximize"},{"text":"","action":"new-terminal"},{"text":"","action":"find"},{"text":"Suivant","action":"find-next"},{"text":"Fermer","action":"find-close"},{"text":"Choisir un workflow","action":"terminal-new-request"},{"text":"Ouvrir un terminal","action":"new-terminal"},{"text":"Nouvelle demande","action":"new-request"},{"text":"+ Créer un workflow","action":"new-work"},{"text":"Essayer un exemple","action":"try-example"},{"text":"Voir les archives","action":"toggle-archives"},{"text":"+ Nouveau projet","action":"new-project"},{"text":"Importer un workflow","action":"import-workflow"}]
+2026-10-10T10:16:34.013Z 03-nouvelle-demande
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+2026-10-10T10:16:34.099Z "Nouvelle demande\n×\n\nChoisissez comment travailler. Vous donnerez votre demande à l’agent dans le terminal.\n\nWorkflow\nDe la demande au résultat\nCommande locale avec validation\nÉvolution logicielle\nRelease — demandes, plan, réalisation et validation\nSupport — diagnostic et suite\nClôture de réunion\nDemande ponctuelle\nCorrection express\nIntentions, plan et travaux\nDéveloppement par élément et tests communs\nNouveau message → notification\nGitHub → Odoo.sh : staging puis production\nLivraison directe en production\nDocumentation → Confluence\nOrchestration\nAnalyse\nDéveloppement\nTests\nGestion documentaire\nCommunication\nProjet principal\nSans projet\n\nUne adaptation du workflow sera enregistrée dans Sans projet, dans .tricorder/workflows/. Elle sera réutilisable pour les demandes suivantes.\n\nPour coordonner plusieurs projets avec ce même workflow, ajoutez-les à l’étape suivante.\n\nEnregistrer et continuer"
+2026-10-10T10:16:38.787Z [{"html":"<select id=\"request-workflow\" name=\"choice\"><optgroup label=\"À partir d’un modèle\"><option value=\"template:first-workflow\">De la demande au résultat</option><option value=\"template:local-check\">Commande locale avec validation</option><option value=\"template:software-change\">Évolution logicielle</option><option value=\"template:release-conversation\">Release — demandes, plan, réalisation et validation</option><option value=\"template:support-conversation\">Support — diagnostic et suite</option><option value=\"template:meeting-conversation\">Clôture de réunion</option><option value=\"template:request-conversation\" selected=\"\">Demande ponctuelle</option><option value=\"template:express-conversation\">Correction express</option><option value=\"template:intentions-plan-work\">Intentions, plan et travaux</option><option value=\"template:code-plan-integrate\">Développement par élément et tests communs</option><option value=\"template:mail-notification\">Nouveau message → notification</option><option value=\"template:github-odoo-deployment\">GitHub → Odoo.sh : staging puis production</option><option value=\"template:direct-production\">Livraison directe en production</option><option value=\"template:confluence-publication\">Documentation → Confluence</option><option value=\"template:orchestration\">Orchestration</option><option value=\"template:analysis\">Analyse</option><option value=\"template:development\">Développement</option><option value=\"template:quality\">Tests</option><option value=\"template:documentation\">Gestion documentaire</option><option value=\"template:communication\">Communication</option></optgroup></select>"},{"html":"<select id=\"request-project\" name=\"project\"><option value=\"workspace\" selected=\"\">Sans projet</option></select>"}]
+2026-10-10T10:16:48.447Z 04-lancement
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:16
+2026-10-10T10:16:48.453Z "Nouvelle demande\n×\n\nChoisissez comment travailler. Vous donnerez votre demande à l’agent dans le terminal.\n\nWorkflow\nDe la demande au résultat\nCommande locale avec validation\nÉvolution logicielle\nRelease — demandes, plan, réalisation et validation\nSupport — diagnostic et suite\nClôture de réunion\nDemande ponctuelle\nCorrection express\nIntentions, plan et travaux\nDéveloppement par élément et tests communs\nNouveau message → notification\nGitHub → Odoo.sh : staging puis production\nLivraison directe en production\nDocumentation → Confluence\nOrchestration\nAnalyse\nDéveloppement\nTests\nGestion documentaire\nCommunication\nProjet principal\nSans projet\n\nUne adaptation du workflow sera enregistrée dans Sans projet, dans .tricorder/workflows/. Elle sera réutilisable pour les demandes suivantes.\n\nPour coordonner plusieurs projets avec ce même workflow, ajoutez-les à l’étape suivante.\n\nEnregistrer et continuer"
+2026-10-10T10:16:53.442Z 05-config-lancement
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:16
+2026-10-10T10:16:53.457Z "Lancer cette version du workflow\n×\nQuelle demande souhaitez-vous traiter ?\n\nCette saisie est facultative : vous pouvez tout expliquer à l’agent dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.\n\nInclure d’autres projets\nÀ résoudre avant le lancement\nWorkflows globaux · Pour chaque élément du plan\n\nPour chaque élément du plan · Modèle IA à définir explicitement ; aucun repli automatique.\n\nChoisissez le modèle à utiliser pour cette étape dans les paramètres IA.\n\nChoisir l’IA\nLancer dans le terminal\nVérifier à nouveau\nExécution automatique sans conversation\nSimuler le parcours"
+2026-10-10T10:17:11.185Z 06-choisir-ia
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:16
+2026-10-10T10:17:11.195Z "Choisir l’IA pour ce workflow\n×\nIA pour les étapes de travail\n\nUn choix commun à toutes les étapes IA. Les profils d’agents sont conservés.\n\nFournisseur IA\nOpenAI · Codex\nAnthropic · Claude\nModèle\nLe modèle proposé provient de votre configuration locale. La connexion sera vérifiée au lancement.\nAppliquer ce choix et vérifier\nRevenir au lancement"
+2026-10-10T10:17:17.590Z ["<input type=\"hidden\" name=\"preview\" value=\"yes\" style=\"\">","<input id=\"workflow-model\" name=\"model\" value=\"\" required=\"\" placeholder=\"Modèle configuré chez le fournisseur\" style=\"\">"]
+2026-10-10T10:17:25.698Z "Lancer cette version du workflow\n×\nQuelle demande souhaitez-vous traiter ?\n\nCette saisie est facultative : vous pouvez tout expliquer à l’agent dans votre terminal OpenAI · Codex. Vous pourrez soumettre une ou plusieurs tâches.\n\nInclure d’autres projets\nLancer dans le terminal\nVérifier à nouveau\nExécution automatique sans conversation\nSimuler le parcours"
+2026-10-10T10:17:32.398Z 07-terminal-lancement
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:17
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:17:32.409Z "SUIVI · INTENTIONS, PLAN ET TRAVAUX\nBanc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.\nOptions\nVue d’ensemble\nDemande\n1 demande\n⌄\n\nAucune étape en cours\n\nTerminal\nRecueil ouvert\n0 / 5 étapes\nCompléter les intentions\n\nRecueil ouvert : ajoutez vos contributions puis confirmez la liste.\n\nTransférer vers un projet…\nGraphe\nDétail\nintentions · liste\nplan · un élément\nApprouvée · plan · unélément\nresults · liste\n≡\nRecueillir les intentions\nEntrée utilisateur\nRecueil ouvert\nintentions · liste\n0 intention recueillie(s)\n✦\nPréparer un plan\nTâche IA\nPrévu\nplan · un élément\n?\nValider le plan\nDécision humaine\nPrévu\nVous\n⋮\nPour chaque élément du plan\nPour chaque élément\nPrévu\ncontributions · liste ; results · liste\nTravail par élément\n\nEn attente de la liste et du plan accepté\n\nLimite : 2 simultanés\n?\nExaminer les résultats\nDécision humaine\nPrévu\nVous\n5 blocs · 4 liens\n−\n100 %\n+\nAjuster"
+2026-10-10T10:17:42.551Z 08-recueil
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:17
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:17:42.563Z "SUIVI · INTENTIONS, PLAN ET TRAVAUX\nBanc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.\nOptions\nVue d’ensemble\nDemande\n1 demande\n⌄\n\nAgent arrêté · progression conservée. Aucune étape en cours\n\nReprendre l’agent…\nVoir le shell\nRecueil ouvert\n0 / 5 étapes\n\nRecueil ouvert : ajoutez vos contributions puis confirmez la liste.\n\nTransférer vers un projet…\nGraphe\nDétail\nÉtape sélectionnée\nRecueillir les intentions\n→\nPréparer un plan\n\nAjoutez vos intentions ici ou depuis le terminal. Vous pouvez les corriger avant de confirmer la liste.\n\nAucune intention recueillie.\nNouvelle intention\nAjouter à la liste\n\nSortie : intentions · une liste de 0 élément.\n\nConfirmer la liste et continuer\nLa confirmation transmet cette liste. Le plan sera validé séparément."
+2026-10-10T10:17:48.871Z 09-trois-intentions
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:17
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:17:48.886Z "SUIVI · INTENTIONS, PLAN ET TRAVAUX\nBanc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.\nOptions\nVue d’ensemble\nDemande\n1 demande\n⌄\n\nAgent arrêté · progression conservée. Aucune étape en cours\n\nReprendre l’agent…\nVoir le shell\nRecueil ouvert\n0 / 5 étapes\n\nRecueil ouvert : ajoutez vos contributions puis confirmez la liste.\n\nTransférer vers un projet…\nGraphe\nDétail\nÉtape sélectionnée\nRecueillir les intentions\n→\nPréparer un plan\n\nAjoutez vos intentions ici ou depuis le terminal. Vous pouvez les corriger avant de confirmer la liste.\n\nRéduire les tickets onboarding : checklist administrateur\n\nModifier\nRetirer\n\nExporter les contrats pour audit mensuel\n\nModifier\nRetirer\n\nNotifier les échéances 30 jours avant expiration\n\nModifier\nRetirer\nNouvelle intention\nAjouter à la liste\n\nSortie : intentions · une liste de 3 éléments.\n\nConfirmer la liste et continuer\nLa confirmation transmet cette liste. Le plan sera validé séparément."
+2026-10-10T10:17:52.166Z "Modifier une intention\n×\nIntention\nEnregistrer l’intention"
+2026-10-10T10:17:58.659Z []
+2026-10-10T10:18:04.469Z {"family_counts":{"requests":1,"tasks":0,"actions":0},"items":[{"id":"r4d4271095100417a","project":"workspace","status":"active","created":1791627450.7851865,"updated":1791627478.225351,"simulation":false,"completion_outcome":null,"archived":null,"coordination_wait":null,"coordination_hold":null,"parent":null,"associated_with":null,"conversation":"c17e8d8b9bcf746b6","workers":[],"workers_total":0,"definition":{"id":"intentions-plan-work-mv28p7ye","title":"Intentions, plan et travaux","revision":2},"original":{"id":"intentions-plan-work-mv28p7ye"},"focus":{"node":"plan","title":"Préparer un plan","status":"ready","action":"Continuer dans le terminal"},"health":{"status":"ok","total":0,"issues":[]},"request":"Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.","counts":{"pending":3,"ready":1,"accepted":1},"nodes":{"intentions":{"status":"accepted"},"plan":{"status":"ready"},"receipt":{"status":"pending"},"scope":{"status":"pending"},"work":{"status":"pending"}},"origin":null,"launch":{"status":"ready","label":"Prête au lancement","ready_count":1,"worker_count":1,"native_count":0,"configuration_count":0,"waiting_count":0,"unknown_count":0,"active_count":0,"max_parallel":4,"nodes":[{"node":"plan","title":"Préparer un plan","status":"ready","code":"worker-ready","action":"dispatch","reason":"Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources."}],"nodes_total":1,"nodes_truncated":false}}],"total":1,"offset":0,"limit":25,"next":null}
+2026-10-10T10:18:09.921Z Synthetic engine command: c=e.claim(p['run'],'plan');print(json.dumps(c))
+2026-10-10T10:18:09.921Z {"run":{"contract":"b744142ea05c448c88943052e622fdf9f0faa7465b2971f1f79782a97fe74d68","created":1791627450.7851865,"definition":{"defaults":{"model":"synthetic-local","provider":"codex"},"description":"Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.","edges":[{"from":"intentions","id":"intentions-plan","mapping":{"intentions":"intentions"},"outcome":"done","to":"plan"},{"from":"plan","id":"plan-scope","mapping":{"plan":"plan"},"outcome":"done","to":"scope"},{"from":"scope","id":"scope-work","mapping":{"plan":"plan"},"outcome":"approve","to":"work"},{"from":"work","id":"work-receipt","mapping":{"results":"results"},"outcome":"done","to":"receipt"}],"id":"intentions-plan-work-mv28p7ye","nodes":[{"description":"Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.","id":"intentions","kind":"input","outputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"position":{"x":50,"y":140},"title":"Recueillir les intentions"},{"execution":{"effort":"medium","model":"synthetic-local","profile":"generalist","provider":"codex","session":"delegated"},"id":"plan","inputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"kind":"agent","max_attempts":2,"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":360,"y":140},"profile":"generalist","prompt":"Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.","sample_outputs":{"plan":{"goal":"Préparer le suivi d’une réunion","tasks":[{"criteria":["Distinguer les décisions des sujets à confirmer"],"id":"R1","title":"Préparer le compte rendu"},{"criteria":["Reprendre les décisions reçues sans envoyer le message"],"depends_on":["R1"],"id":"R2","title":"Préparer un brouillon d’email"}]}},"title":"Préparer un plan","validation":"contract"},{"id":"scope","inputs":{"plan":{"required":true,"type":"object"}},"kind":"decision","options":["approve","reject"],"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":670,"y":140},"question":"Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?","title":"Valider le plan"},{"collection":"plan.tasks","concurrency":2,"id":"work","inputs":{"plan":{"required":true,"type":"object"}},"kind":"foreach","outputs":{"contributions":{"items":"object","maxItems":100,"required":true,"type":"array"},"results":{"items":"object","maxItems":100,"required":true,"type":"array"}},"position":{"x":980,"y":140},"title":"Pour chaque élément du plan","workflow":{"edges":[],"id":"work-item","nodes":[{"id":"perform","inputs":{"item":{"required":true,"type":"object"}},"kind":"agent","max_attempts":2,"outputs":{"result":"string"},"position":{"x":70,"y":100},"profile":"generalist","prompt":"Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.","sample_outputs":{"result":"Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."},"title":"Effectuer le travail de cet élément","validation":"contract"}],"schema":2,"title":"Traiter un élément du plan"}},{"id":"receipt","inputs":{"results":{"items":"object","maxItems":100,"required":true,"type":"array"}},"kind":"decision","options":["approve","reject"],"position":{"x":1320,"y":140},"question":"Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.","title":"Examiner les résultats"}],"parameters":{"conversation":"c17e8d8b9bcf746b6","depends_on_runs":[],"request":"Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe."},"revision":2,"schema":2,"title":"Intentions, plan et travaux"},"driver":"conversation","id":"r4d4271095100417a","nodes":{"intentions":{"attempt":0,"collection":{"closed":1791627478.2250655,"commands":{"54fa6f3d-0a14-42c5-807e-5c8149490968":"879acc28182d2539ab5ebb404b089e355f4444768325877e5631affcf7732a9b","8114f1fc-334d-4532-ac0f-8643cfde1693":"617143a0b8df459e4639130afe34ea7819ef2b3f67552f337a5d65c7d84f8050","81666c68-9da8-4f91-a2b4-1dc6e94cb644":"6a5ff12aeb14b827673563c6ea0137fc09a11393fc297077ab6030d8942089cf","bb38c689-3748-4b5f-9c52-03d0156cddb7":"ecf0ece9cd7c2ba3d215ed2eba4c64a04b19b6af5749c6abfd48ddfdbeda6638","eaaa3253-37cd-41e5-8502-185e5b5fb2f0":"2965d8ca7a56e5930919eee2d21097552019dee77a31fe15e629c63171524572"},"items":[{"created":1791627468.021584,"id":"i809852f473b4403c","text":"Réduire les tickets onboarding : checklist administrateur"},{"created":1791627468.2992413,"id":"ib443b1b7d7cf465c","text":"Exporter les contrats actifs en CSV, avec client, échéance et montant ; accès administrateurs uniquement.","updated":1791627478.0578856},{"created":1791627468.5800285,"id":"ieb446679ce514b3d","text":"Notifier les échéances 30 jours avant expiration"}],"revision":5},"input_sources":{},"inputs":{},"outcome":"done","receipt":{"actor":"collection-confirmation","at":1791627478.225064,"revision":4},"result":{"ok":true,"outputs":{"intentions":[{"created":1791627468.021584,"id":"i809852f473b4403c","text":"Réduire les tickets onboarding : checklist administrateur"},{"created":1791627468.2992413,"id":"ib443b1b7d7cf465c","text":"Exporter les contrats actifs en CSV, avec client, échéance et montant ; accès administrateurs uniquement.","updated":1791627478.0578856},{"created":1791627468.5800285,"id":"ieb446679ce514b3d","text":"Notifier les échéances 30 jours avant expiration"}]},"summary":"3 contribution(s) confirmée(s)"},"status":"accepted"},"plan":{"attempt":1,"input_sources":{"intentions":{"edge":"intentions-plan","node":"intentions","port":"intentions"}},"inputs":{"intentions":[{"created":1791627468.021584,"id":"i809852f473b4403c","text":"Réduire les tickets onboarding : checklist administrateur"},{"created":1791627468.2992413,"id":"ib443b1b7d7cf465c","text":"Exporter les contrats actifs en CSV, avec client, échéance et montant ; accès administrateurs uniquement.","updated":1791627478.0578856},{"created":1791627468.5800285,"id":"ieb446679ce514b3d","text":"Notifier les échéances 30 jours avant expiration"}]},"status":"running","ownership":"managed","processes":[],"token":"t7f0ed2bfc7314e67","started":1791627489.9027472,"heartbeat":1791627489.9027472},"receipt":{"attempt":0,"status":"pending"},"scope":{"attempt":0,"status":"pending"},"work":{"attempt":0,"status":"pending"}},"notifications_authorized":false,"original":{"defaults":{"model":"synthetic-local","provider":"codex"},"description":"Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.","edges":[{"from":"intentions","id":"intentions-plan","mapping":{"intentions":"intentions"},"outcome":"done","to":"plan"},{"from":"plan","id":"plan-scope","mapping":{"plan":"plan"},"outcome":"done","to":"scope"},{"from":"scope","id":"scope-work","mapping":{"plan":"plan"},"outcome":"approve","to":"work"},{"from":"work","id":"work-receipt","mapping":{"results":"results"},"outcome":"done","to":"receipt"}],"id":"intentions-plan-work-mv28p7ye","nodes":[{"description":"Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.","id":"intentions","kind":"input","outputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"position":{"x":50,"y":140},"title":"Recueillir les intentions"},{"id":"plan","inputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"kind":"agent","max_attempts":2,"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":360,"y":140},"profile":"generalist","prompt":"Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.","sample_outputs":{"plan":{"goal":"Préparer le suivi d’une réunion","tasks":[{"criteria":["Distinguer les décisions des sujets à confirmer"],"id":"R1","title":"Préparer le compte rendu"},{"criteria":["Reprendre les décisions reçues sans envoyer le message"],"depends_on":["R1"],"id":"R2","title":"Préparer un brouillon d’email"}]}},"title":"Préparer un plan","validation":"contract"},{"id":"scope","inputs":{"plan":{"required":true,"type":"object"}},"kind":"decision","options":["approve","reject"],"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":670,"y":140},"question":"Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?","title":"Valider le plan"},{"collection":"plan.tasks","concurrency":2,"id":"work","inputs":{"plan":{"required":true,"type":"object"}},"kind":"foreach","outputs":{"contributions":{"items":"object","maxItems":100,"required":true,"type":"array"},"results":{"items":"object","maxItems":100,"required":true,"type":"array"}},"position":{"x":980,"y":140},"title":"Pour chaque élément du plan","workflow":{"edges":[],"id":"work-item","nodes":[{"id":"perform","inputs":{"item":{"required":true,"type":"object"}},"kind":"agent","max_attempts":2,"outputs":{"result":"string"},"position":{"x":70,"y":100},"profile":"generalist","prompt":"Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.","sample_outputs":{"result":"Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."},"title":"Effectuer le travail de cet élément","validation":"contract"}],"schema":2,"title":"Traiter un élément du plan"}},{"id":"receipt","inputs":{"results":{"items":"object","maxItems":100,"required":true,"type":"array"}},"kind":"decision","options":["approve","reject"],"position":{"x":1320,"y":140},"question":"Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.","title":"Examiner les résultats"}],"parameters":{},"revision":2,"schema":2,"title":"Intentions, plan et travaux"},"packs":[],"parameters":{"conversation":"c17e8d8b9bcf746b6","depends_on_runs":[],"request":"Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe."},"plugins":{"path":"/tmp/tricorder-personas-produit/05-product/isolated-home/workflows/workspace/.tricorder/plugins.json","plugins":[],"sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"project":"workspace","release":"","scope":{"id":"workspace","kind":"workspace"},"simulation":false,"status":"active","transports":{},"updated":1791627489.902796},"node":{"execution":{"effort":"medium","model":"synthetic-local","profile":"generalist","provider":"codex","session":"delegated"},"id":"plan","inputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"kind":"agent","max_attempts":2,"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":360,"y":140},"profile":"generalist","prompt":"Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.","sample_outputs":{"plan":{"goal":"Préparer le suivi d’une réunion","tasks":[{"criteria":["Distinguer les décisions des sujets à confirmer"],"id":"R1","title":"Préparer le compte rendu"},{"criteria":["Reprendre les décisions reçues sans envoyer le message"],"depends_on":["R1"],"id":"R2","title":"Préparer un brouillon d’email"}]}},"title":"Préparer un plan","validation":"contract"},"token":"t7f0ed2bfc7314e67"}
+2026-10-10T10:18:19.236Z Synthetic engine command: from workflow_engine.conversations import ask; q=ask(e,p['run'],'plan',p['token'],'Souhaitez-vous uniquement un cahier des critères de notification ou un envoi réel ?'); print(json.dumps(q))
+2026-10-10T10:18:19.236Z {"contract":"b744142ea05c448c88943052e622fdf9f0faa7465b2971f1f79782a97fe74d68","created":1791627450.7851865,"definition":{"defaults":{"model":"synthetic-local","provider":"codex"},"description":"Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.","edges":[{"from":"intentions","id":"intentions-plan","mapping":{"intentions":"intentions"},"outcome":"done","to":"plan"},{"from":"plan","id":"plan-scope","mapping":{"plan":"plan"},"outcome":"done","to":"scope"},{"from":"scope","id":"scope-work","mapping":{"plan":"plan"},"outcome":"approve","to":"work"},{"from":"work","id":"work-receipt","mapping":{"results":"results"},"outcome":"done","to":"receipt"}],"id":"intentions-plan-work-mv28p7ye","nodes":[{"description":"Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.","id":"intentions","kind":"input","outputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"position":{"x":50,"y":140},"title":"Recueillir les intentions"},{"execution":{"effort":"medium","model":"synthetic-local","profile":"generalist","provider":"codex","session":"delegated"},"id":"plan","inputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"kind":"agent","max_attempts":2,"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":360,"y":140},"profile":"generalist","prompt":"Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.","sample_outputs":{"plan":{"goal":"Préparer le suivi d’une réunion","tasks":[{"criteria":["Distinguer les décisions des sujets à confirmer"],"id":"R1","title":"Préparer le compte rendu"},{"criteria":["Reprendre les décisions reçues sans envoyer le message"],"depends_on":["R1"],"id":"R2","title":"Préparer un brouillon d’email"}]}},"title":"Préparer un plan","validation":"contract"},{"id":"scope","inputs":{"plan":{"required":true,"type":"object"}},"kind":"decision","options":["approve","reject"],"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":670,"y":140},"question":"Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?","title":"Valider le plan"},{"collection":"plan.tasks","concurrency":2,"id":"work","inputs":{"plan":{"required":true,"type":"object"}},"kind":"foreach","outputs":{"contributions":{"items":"object","maxItems":100,"required":true,"type":"array"},"results":{"items":"object","maxItems":100,"required":true,"type":"array"}},"position":{"x":980,"y":140},"title":"Pour chaque élément du plan","workflow":{"edges":[],"id":"work-item","nodes":[{"id":"perform","inputs":{"item":{"required":true,"type":"object"}},"kind":"agent","max_attempts":2,"outputs":{"result":"string"},"position":{"x":70,"y":100},"profile":"generalist","prompt":"Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.","sample_outputs":{"result":"Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."},"title":"Effectuer le travail de cet élément","validation":"contract"}],"schema":2,"title":"Traiter un élément du plan"}},{"id":"receipt","inputs":{"results":{"items":"object","maxItems":100,"required":true,"type":"array"}},"kind":"decision","options":["approve","reject"],"position":{"x":1320,"y":140},"question":"Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.","title":"Examiner les résultats"}],"parameters":{"conversation":"c17e8d8b9bcf746b6","depends_on_runs":[],"request":"Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe."},"revision":2,"schema":2,"title":"Intentions, plan et travaux"},"driver":"conversation","id":"r4d4271095100417a","nodes":{"intentions":{"attempt":0,"collection":{"closed":1791627478.2250655,"commands":{"54fa6f3d-0a14-42c5-807e-5c8149490968":"879acc28182d2539ab5ebb404b089e355f4444768325877e5631affcf7732a9b","8114f1fc-334d-4532-ac0f-8643cfde1693":"617143a0b8df459e4639130afe34ea7819ef2b3f67552f337a5d65c7d84f8050","81666c68-9da8-4f91-a2b4-1dc6e94cb644":"6a5ff12aeb14b827673563c6ea0137fc09a11393fc297077ab6030d8942089cf","bb38c689-3748-4b5f-9c52-03d0156cddb7":"ecf0ece9cd7c2ba3d215ed2eba4c64a04b19b6af5749c6abfd48ddfdbeda6638","eaaa3253-37cd-41e5-8502-185e5b5fb2f0":"2965d8ca7a56e5930919eee2d21097552019dee77a31fe15e629c63171524572"},"items":[{"created":1791627468.021584,"id":"i809852f473b4403c","text":"Réduire les tickets onboarding : checklist administrateur"},{"created":1791627468.2992413,"id":"ib443b1b7d7cf465c","text":"Exporter les contrats actifs en CSV, avec client, échéance et montant ; accès administrateurs uniquement.","updated":1791627478.0578856},{"created":1791627468.5800285,"id":"ieb446679ce514b3d","text":"Notifier les échéances 30 jours avant expiration"}],"revision":5},"input_sources":{},"inputs":{},"outcome":"done","receipt":{"actor":"collection-confirmation","at":1791627478.225064,"revision":4},"result":{"ok":true,"outputs":{"intentions":[{"created":1791627468.021584,"id":"i809852f473b4403c","text":"Réduire les tickets onboarding : checklist administrateur"},{"created":1791627468.2992413,"id":"ib443b1b7d7cf465c","text":"Exporter les contrats actifs en CSV, avec client, échéance et montant ; accès administrateurs uniquement.","updated":1791627478.0578856},{"created":1791627468.5800285,"id":"ieb446679ce514b3d","text":"Notifier les échéances 30 jours avant expiration"}]},"summary":"3 contribution(s) confirmée(s)"},"status":"accepted"},"plan":{"attempt":1,"heartbeat":1791627489.9027472,"input_sources":{"intentions":{"edge":"intentions-plan","node":"intentions","port":"intentions"}},"inputs":{"intentions":[{"created":1791627468.021584,"id":"i809852f473b4403c","text":"Réduire les tickets onboarding : checklist administrateur"},{"created":1791627468.2992413,"id":"ib443b1b7d7cf465c","text":"Exporter les contrats actifs en CSV, avec client, échéance et montant ; accès administrateurs uniquement.","updated":1791627478.0578856},{"created":1791627468.5800285,"id":"ieb446679ce514b3d","text":"Notifier les échéances 30 jours avant expiration"}]},"ownership":"managed","processes":[],"started":1791627489.9027472,"status":"waiting_input","token":"t7f0ed2bfc7314e67","questions":[{"id":"q1429637d2d6b420c","text":"Souhaitez-vous uniquement un cahier des critères de notification ou un envoi réel ?","created":1791627499.223933,"status":"waiting"}],"question":{"id":"q1429637d2d6b420c","text":"Souhaitez-vous uniquement un cahier des critères de notification ou un envoi réel ?","created":1791627499.223933,"status":"waiting"}},"receipt":{"attempt":0,"status":"pending"},"scope":{"attempt":0,"status":"pending"},"work":{"attempt":0,"status":"pending"}},"notifications_authorized":false,"original":{"defaults":{"model":"synthetic-local","provider":"codex"},"description":"Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.","edges":[{"from":"intentions","id":"intentions-plan","mapping":{"intentions":"intentions"},"outcome":"done","to":"plan"},{"from":"plan","id":"plan-scope","mapping":{"plan":"plan"},"outcome":"done","to":"scope"},{"from":"scope","id":"scope-work","mapping":{"plan":"plan"},"outcome":"approve","to":"work"},{"from":"work","id":"work-receipt","mapping":{"results":"results"},"outcome":"done","to":"receipt"}],"id":"intentions-plan-work-mv28p7ye","nodes":[{"description":"Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.","id":"intentions","kind":"input","outputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"position":{"x":50,"y":140},"title":"Recueillir les intentions"},{"id":"plan","inputs":{"intentions":{"items":"object","maxItems":100,"minItems":1,"required":true,"type":"array"}},"kind":"agent","max_attempts":2,"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":360,"y":140},"profile":"generalist","prompt":"Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.","sample_outputs":{"plan":{"goal":"Préparer le suivi d’une réunion","tasks":[{"criteria":["Distinguer les décisions des sujets à confirmer"],"id":"R1","title":"Préparer le compte rendu"},{"criteria":["Reprendre les décisions reçues sans envoyer le message"],"depends_on":["R1"],"id":"R2","title":"Préparer un brouillon d’email"}]}},"title":"Préparer un plan","validation":"contract"},{"id":"scope","inputs":{"plan":{"required":true,"type":"object"}},"kind":"decision","options":["approve","reject"],"outputs":{"plan":{"required":true,"type":"object"}},"position":{"x":670,"y":140},"question":"Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?","title":"Valider le plan"},{"collection":"plan.tasks","concurrency":2,"id":"work","inputs":{"plan":{"required":true,"type":"object"}},"kind":"foreach","outputs":{"contributions":{"items":"object","maxItems":100,"required":true,"type":"array"},"results":{"items":"object","maxItems":100,"required":true,"type":"array"}},"position":{"x":980,"y":140},"title":"Pour chaque élément du plan","workflow":{"edges":[],"id":"work-item","nodes":[{"id":"perform","inputs":{"item":{"required":true,"type":"object"}},"kind":"agent","max_attempts":2,"outputs":{"result":"string"},"position":{"x":70,"y":100},"profile":"generalist","prompt":"Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.","sample_outputs":{"result":"Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."},"title":"Effectuer le travail de cet élément","validation":"contract"}],"schema":2,"title":"Traiter un élément du plan"}},{"id":"receipt","inputs":{"results":{"items":"object","maxItems":100,"required":true,"type":"array"}},"kind":"decision","options":["approve","reject"],"position":{"x":1320,"y":140},"question":"Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.","title":"Examiner les résultats"}],"parameters":{},"revision":2,"schema":2,"title":"Intentions, plan et travaux"},"packs":[],"parameters":{"conversation":"c17e8d8b9bcf746b6","depends_on_runs":[],"request":"Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe."},"plugins":{"path":"/tmp/tricorder-personas-produit/05-product/isolated-home/workflows/workspace/.tricorder/plugins.json","plugins":[],"sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"project":"workspace","release":"","scope":{"id":"workspace","kind":"workspace"},"simulation":false,"status":"active","transports":{},"updated":1791627499.2242522}
+2026-10-10T10:18:24.233Z 10-clarification
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:18
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:18:24.250Z "SUIVI · INTENTIONS, PLAN ET TRAVAUX\nBanc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.\nOptions\nVue d’ensemble\nDemande\n1 demande\n⌄\n\nAucune étape en cours · 1 question\n\nReprendre l’agent…\nVoir le shell\nRéponse attendue\n1 / 5 étapes\nRépondre à la question\n\nPréparer un plan\n\nTransférer vers un projet…\nGraphe\nDétail\nÉtape sélectionnée\nRecueillir les intentions\n→\nPréparer un plan\n\nListe confirmée\n\n3 contribution(s) confirmée(s)\n\nRésultat validé\n\nValidation enregistrée.\n\nEntrées, sorties et preuves\nRésultat\nIntentions\nCreated\n1791627468.021584\nId\ni809852f473b4403c\nTexte\nRéduire les tickets onboarding : checklist administrateur\nCreated\n1791627468.2992413\nId\nib443b1b7d7cf465c\nTexte\nExporter les contrats actifs en CSV, avec client, échéance et montant ; accès administrateurs uniquement.\nUpdated\n1791627478.0578856\nCreated\n1791627468.5800285\nId\nieb446679ce514b3d\nTexte\nNotifier les échéances 30 jours avant expiration\nDonnées techniques"
+2026-10-10T10:18:34.657Z 11-reponse-avant
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:18
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:18:35.023Z Synthetic engine command: c=e.claim(p['run'],'plan');print(json.dumps({'token':c['token']}))
+2026-10-10T10:18:35.070Z Synthetic engine command: e.submit(p['run'],'plan',p['token'],{'ok':True,'summary':'Plan synthétique B2B : trois travaux, dont deux indépendants et une dépendance','outputs':{'plan':p['plan']}});print(json.dumps({'submitted':True}))
+2026-10-10T10:18:36.099Z 12-plan-decision
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:18
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:18:36.108Z "SUIVI · INTENTIONS, PLAN ET TRAVAUX\nBanc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.\nOptions\nVue d’ensemble\nDemande\n1 demande\n⌄\n\nAucune étape en cours · 1 décision\n\nReprendre l’agent…\nVoir le shell\nDécision attendue\n2 / 5 étapes\n\nValider le plan\n\nTransférer vers un projet…\nGraphe\nDétail\nPréparer un plan\n→\nÉtape sélectionnée\nValider le plan\n→\nSi autorisé\nPour chaque élément du plan\n\nDécision attendue\n\nDécision pour cette demande : Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe..\n\nVotre décision est attendue\n\nLe plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?\n\nEntrées reçues\nPlan\nCritères\nAucun envoi externe\nLivrer uniquement spécifications et brouillons\nObjectif\nAméliorer le parcours administrateur B2B\nTâches\nCritères\n5 étapes prioritaires et erreurs évitées\nId\nA\nTitre\nChecklist onboarding administrateur\nCritères\nClient, échéance, montant ; administrateurs uniquement\nId\nB\nTitre\nSpécification export CSV des contrats\nCritères\nBrouillon 30 jours avant échéance ; aucun envoi\nAprès\nSpécification export CSV des contrats\nId\nC\nTitre\nCahier de notification échéance\nDonnées techniques\n\nSources : plan ← Préparer un plan\n\nCommentaire (facultatif)\n\nBanc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.\nCette proposition · tentative 1 uniquement.\n\nApprouver la suite\nRefuser la suite"
+2026-10-10T10:18:50.513Z 13-plan-refuse
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:18
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:18:50.522Z "SUIVI · INTENTIONS, PLAN ET TRAVAUX\nBanc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.\nOptions\nVue d’ensemble\nDemande\n1 demande\n⌄\n\nAucune étape en cours · 1 décision\n\nReprendre l’agent…\nVoir le shell\nTerminée · refusée\n5 / 5 étapes\n3 traitées · 2 non applicables\nVoir les résultats\nVoir le rapport\n\nExécution terminée.\n\nTransférer vers un projet…\nGraphe\nDétail\nPréparer un plan\n→\nÉtape sélectionnée\nValider le plan\n→\nSi autorisé\nPour chaque élément du plan\n\nRefusée\n\nDécision humaine : Refusée.\n\nEntrées, sorties et preuves\nEntrées reçues\nPlan\nCritères\nAucun envoi externe\nLivrer uniquement spécifications et brouillons\nObjectif\nAméliorer le parcours administrateur B2B\nTâches\nCritères\n5 étapes prioritaires et erreurs évitées\nId\nA\nTitre\nChecklist onboarding administrateur\nCritères\nClient, échéance, montant ; administrateurs uniquement\nId\nB\nTitre\nSpécification export CSV des contrats\nCritères\nBrouillon 30 jours avant échéance ; aucun envoi\nAprès\nSpécification export CSV des contrats\nId\nC\nTitre\nCahier de notification échéance\nDonnées techniques\n\nSources : plan ← Préparer un plan\n\nRésultat\nPlan\nCritères\nAucun envoi externe\nLivrer uniquement spécifications et brouillons\nObjectif\nAméliorer le parcours administrateur B2B\nTâches\nCritères\n5 étapes prioritaires et erreurs évitées\nId\nA\nTitre\nChecklist onboarding administrateur\nCritères\nClient, échéance, montant ; administrateurs uniquement\nId\nB\nTitre\nSpécification export CSV des contrats\nCritères\nBrouillon 30 jours avant échéance ; aucun envoi\nAprès\nSpécification export CSV des contrats\nId\nC\nTitre\nCahier de notification échéance\nDonnées techniques"
+2026-10-10T10:20:10.005Z 14-apres-refus-stable
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:19
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Conversation du workflow affiché · Shell : Workflows globaux · Agent arrêté
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:20:15.420Z "Mes workflows\nModèles\nMes workflows\n\nChoisissez un workflow pour démarrer une demande, ou ouvrez-le pour modifier ses étapes.\n\nNouvelle demande\nCréer un workflow\nImporter un workflow\nVoir les archives\nRechercher un workflow\nIntentions, plan et travaux\n\nSans projet · 5 étapes\n\nExécuter…\nOuvrir le workflow\n⋯"
+2026-10-10T10:20:21.812Z 15-editeur
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:20
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Shell · Codex arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+Autre conversation · Shell : Workflows globaux · Agent arrêté · Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.
+'python3' '/home/blegoff/odoo-tricorder/build-artifacts/linux-unpacked/r
+esources/backend/agent_launch.py' '/tmp/tricorder-personas-produit/05-pr
+oduct/isolated-home/agent-events/0a3c4696-a6f1-419d-956e-49cad209039a.la
+unch.json'
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/workspace$ 'python3' '/home/blegoff/odoo-tric
+order/build-artifacts/linux-unpacked/resources/backend/agent_launch.py' 
+'/tmp/tricorder-personas-produit/05-product/isolated-home/agent-events/0
+a3c4696-a6f1-419d-956e-49cad209039a.launch.json'
+FOURNISSEUR LOCAL SYNTHETIQUE — aucune IA reelle
+blegoff@wrk226:~/workflows/workspace$  
+2026-10-10T10:20:21.822Z "SANS PROJET / WORKFLOW\nIntentions, plan et travaux\n\nRévision 2 · Enregistré\n\nChoisir l’IA\nOptions\nEnregistrer\nExécuter…\n\nEnregistrez ici ; la navigation principale enregistre aussi vos modifications.\n\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\n+ Note\nPropriétés\nParamètres du workflow\n↶\n↷\n›_ Terminal\nÉditeur\n✦ Assistant IA\n☷ Liste\nintentions · liste\nplan · un élément\nApprouvée · plan · unélément\nresults · liste\n≡\nRecueillir les intentions\nEntrée utilisateur\nintentions · liste\n✦\nPréparer un plan\nTâche IA\nplan · un élément\n?\nValider le plan\nDécision humaine\nVous\n⋮\nPour chaque élément du plan\nPour chaque élément\ncontributions · liste ; results · liste\n?\nExaminer les résultats\nDécision humaine\nVous\n5 blocs · 4 liens\n−\n100 %\n+\nAjuster\nRéorganiser le graphe"
+2026-10-10T10:20:27.055Z 16-proprietes-parallele
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:20
+2026-10-10T10:20:27.069Z "SANS PROJET / WORKFLOW\nIntentions, plan et travaux\n\nRévision 2 · Enregistré\n\nChoisir l’IA\nOptions\nEnregistrer\nExécuter…\n\nEnregistrez ici ; la navigation principale enregistre aussi vos modifications.\n\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\n+ Note\nPropriétés\nParamètres du workflow\n↶\n↷\n›_ Terminal\nÉditeur\n✦ Assistant IA\n☷ Liste\nintentions · liste\nplan · un élément\nApprouvée · plan · unélément\nresults · liste\n≡\nRecueillir les intentions\nEntrée utilisateur\nintentions · liste\n✦\nPréparer un plan\nTâche IA\nplan · un élément\n?\nValider le plan\nDécision humaine\nVous\n⋮\nPour chaque élément du plan\nPour chaque élément\ncontributions · liste ; results · liste\n?\nExaminer les résultats\nDécision humaine\nVous\n5 blocs · 4 liens\n−\n100 %\n+\nAjuster\nRéorganiser le graphe\n×\nPOUR CHAQUE ÉLÉMENT\nPour chaque élément du plan\nNom du bloc\nCritères d’acceptation (un par ligne)\nTraitement par élément\nCollection à traiter\nListe reçue directement\nTâches du plan unique\nTravaux simultanés au maximum\n1 · séquentiel\n2\n3\n4\n\nWorkflow par élément : Traiter un élément du plan\n\nChoisir le workflow par élément…Chaque élément garde son exécution. Les dépendances peuvent limiter le nombre réellement actif.\nEntrées et sorties\nEntrées\nplan\nObjet structuré · un élément · requis\nModifierRetirer\nAjouter une entrée\nSorties\ncontributions\nliste de objet structuré · 0…100 éléments · requis\nModifierRetirer\nresults\nliste de objet structuré · 0…100 éléments · requis\nModifierRetirer\nAjouter une sortie\nOrganisation de l’étape\nEntrées et sorties\nReprises, ressources et position\nAppliquer au bloc\nLiens entre les blocs\nActions facultatives\n\nLeur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.\n\nAjouter une action facultative…\nSupprimer cette étape"
+2026-10-10T10:20:31.791Z "Workflow pour chaque élément\n×\nWorkflow à utiliser\nConserver : Traiter un élément du plan\nUn travail IA par élément\nDe la demande au résultat\nCommande locale avec validation\nÉvolution logicielle\nRelease — demandes, plan, réalisation et validation\nSupport — diagnostic et suite\nClôture de réunion\nDemande ponctuelle\nCorrection express\nIntentions, plan et travaux\nDéveloppement par élément et tests communs\nNouveau message → notification\nGitHub → Odoo.sh : staging puis production\nLivraison directe en production\nDocumentation → Confluence\nOrchestration\nAnalyse\nDéveloppement\nTests\nGestion documentaire\nCommunication\n\nUne copie de cette version sera intégrée au bloc. Modifier le modèle ultérieurement ne changera pas ce workflow.\n\nSi le modèle est ancien, convertir sa copie au format structuré\nUtiliser ce workflow"
+2026-10-10T10:20:48.621Z [{"html":"<button class=\"flat\" data-action=\"close-modal\" aria-label=\"Fermer la fenêtre\">×</button>"},{"html":"<button class=\"primary\">Utiliser ce workflow</button>"}]
+2026-10-10T10:20:53.092Z "Ajouter une action facultative\n×\nNom de l’action\nDéclencheur\nRésultat du bloc accepté\nProposer cette action lorsqu’elle est déclenchée\nWorkflow à utiliser\nUn document à préparer\nDe la demande au résultat\nCommande locale avec validation\nÉvolution logicielle\nRelease — demandes, plan, réalisation et validation\nSupport — diagnostic et suite\nClôture de réunion\nDemande ponctuelle\nCorrection express\nIntentions, plan et travaux\nDéveloppement par élément et tests communs\nNouveau message → notification\nGitHub → Odoo.sh : staging puis production\nLivraison directe en production\nDocumentation → Confluence\nOrchestration\nAnalyse\nDéveloppement\nTests\nGestion documentaire\nCommunication\nNom du travail\nContenu du document\n\nUne copie de cette version sera intégrée au bloc. Modifier le modèle ultérieurement ne changera pas ce workflow.\n\nSi le modèle est ancien, convertir sa copie au format structuré\n\nAucun envoi automatique : vous devrez activer l’action dans le suivi. Un document local, un brouillon distant et un envoi sont des opérations différentes.\n\nEnregistrer l’action facultative"
+2026-10-10T10:21:00.157Z {"id":"intentions-plan-work-mv28p7ye","revision":3,"actions":[{"enabled":true,"event":"accepted","id":"action-65101b4c-83d3-4abf-bce0-4411e70f5995","source":"work","title":"Résumé facultatif pour comité produit","workflow":{"edges":[],"id":"item-work","nodes":[{"content":"Résumé local synthétique : travaux B2B et points à revoir. Aucun envoi.","id":"draft","kind":"document","outputs":{},"title":"Préparer le brouillon","validation":"human"}],"schema":2,"title":"Préparer le brouillon"}}]}
+2026-10-10T10:21:11.028Z Synthetic engine command: r=e.start(p['project'],p['graph'],simulation=False,driver='conversation');print(json.dumps({'id':r['id']}))
+2026-10-10T10:21:24.719Z "SANS PROJET / WORKFLOW\nIntentions, plan et travaux\n\nRévision 3 · Enregistré\n\nChoisir l’IA\nOptions\nEnregistrer\nExécuter…\n\nEnregistrez ici ; la navigation principale enregistre aussi vos modifications.\n\nÉditeur\nExécution\nHistorique\nRapport\n+ Ajouter un bloc\nRelier\n+ Note\nPropriétés\nParamètres du workflow\n↶\n↷\n›_ Terminal\nÉditeur\n✦ Assistant IA\n☷ Liste\nintentions · liste\nplan · un élément\nApprouvée · plan · unélément\nresults · liste\n≡\nRecueillir les intentions\nEntrée utilisateur\nintentions · liste\n✦\nPréparer un plan\nTâche IA\nplan · un élément\n?\nValider le plan\nDécision humaine\nVous\n⋮\nPour chaque élément du plan\nPour chaque élément\ncontributions · liste ; results · liste\n?\nExaminer les résultats\nDécision humaine\nVous\n5 blocs · 4 liens\n−\n100 %\n+\nAjuster\nRéorganiser le graphe\n×\nPOUR CHAQUE ÉLÉMENT\nPour chaque élément du plan\nNom du bloc\nCritères d’acceptation (un par ligne)\nTraitement par élément\nCollection à traiter\nListe reçue directement\nTâches du plan unique\nTravaux simultanés au maximum\n1 · séquentiel\n2\n3\n4\n\nWorkflow par élément : Traiter un élément du plan\n\nChoisir le workflow par élément…Chaque élément garde son exécution. Les dépendances peuvent limiter le nombre réellement actif.\nEntrées et sorties\nEntrées\nplan\nObjet structuré · un élément · requis\nModifierRetirer\nAjouter une entrée\nSorties\ncontributions\nliste de objet structuré · 0…100 éléments · requis\nModifierRetirer\nresults\nliste de objet structuré · 0…100 éléments · requis\nModifierRetirer\nAjouter une sortie\nOrganisation de l’étape\nEntrées et sorties\nReprises, ressources et position\nAppliquer au bloc\nLiens entre les blocs\nActions facultatives\n\nLeur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.\n\nRésumé facultatif pour comité produit · proposée · après résultat accepté Configurer\n\nAjouter une action facultative…\nSupprimer cette étape"
+2026-10-10T10:21:29.138Z "SANS PROJET / WORKFLOW\nIntentions, plan et travaux\n\nRévision 3 · Enregistré\n\nChoisir l’IA\nOptions\nEnregistrer\nExécuter…\nÉditeur\nExécution\nHistorique\nRapport\nExécutions du workflow\nRechercher\nÉtat\nTous\nEn cours\nSuspendues\nTerminées\nAnnulées\nExécution\nRéel et simulation\nRéel\nSimulation\nAvec archives\nFiltrer\n1 exécution(s)\nWorkflow\tContexte\tÉtat\t\nBanc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.\nIntentions, plan et travaux · Rév. 2 · 10.10.2026 12:17:30\tExécution réelle\tTerminée · refusée\tConsulterArchiver"
+2026-10-10T10:21:54.834Z {"r2":"r8268f40473fd4b59","ui":"SUIVI · PLAN B2B RÉVISÉ — BANC SYNTHÉTIQUE\nPlan B2B révisé — banc synthétique\nOptions\nPrête au lancement\n1 / 5 étapes\nVoir la prochaine étape\n\nPréparer un plan\n\nTransférer vers un projet…\nGraphe\nDétail\nÉtape sélectionnée\nRecueillir les intentions\n→\nPréparer un plan\n\nListe confirmée\n\n3 contribution(s) confirmée(s)\n\nRésultat validé\n\nValidation enregistrée.\n\nEntrées, sorties et preuves\nRésultat\nIntentions\nCreated\n1791627703.875873\nId\ni614842d9d5ec48c3\nTexte\nChecklist onboarding avec revue UX préalable\nCreated\n1791627703.997887\nId\nif0bd98fecaa64876\nTexte\nExport CSV contrats actifs : admin uniquement\nCreated\n1791627704.0981603\nId\nifff0e15a13df42ed\nTexte\nCahier notification 30 jours : aucun envoi\nDonnées techniques","runs":[{"id":"r8268f40473fd4b59","title":"Plan B2B révisé — banc synthétique","nodes":{"intentions":{"status":"accepted"},"plan":{"status":"ready"},"receipt":{"status":"pending"},"scope":{"status":"pending"},"work":{"status":"pending"}}},{"id":"r4d4271095100417a","title":"Intentions, plan et travaux","nodes":{"intentions":{"status":"accepted"},"plan":{"status":"accepted"},"receipt":{"status":"skipped"},"scope":{"status":"accepted"},"work":{"status":"skipped"}}}]}
+2026-10-10T10:22:01.398Z Synthetic engine command: c=e.claim(p['run'],'plan');e.submit(p['run'],'plan',c['token'],{'ok':True,'summary':'Version enrichie synthétique','outputs':{'plan':p['plan']}});print(json.dumps({'ok':True}))
+2026-10-10T10:22:03.254Z 17-coordination-dependances
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:21
+2026-10-10T10:22:03.264Z "SUIVI · PLAN B2B RÉVISÉ — BANC SYNTHÉTIQUE\nPlan B2B révisé — banc synthétique\nOptions\n2 réponses attendues\n3 / 5 étapes\nTransférer vers un projet…\nGraphe\nDétail\nSi autorisé\nValider le plan\n→\nÉtape sélectionnée\nPour chaque élément du plan\n→\nExaminer les résultats\nCoordination du workflow · Tricorder\n\n0/3 terminé · 0 en cours · 2 réponses attendues · 1 en attente · maximum 2 travaux simultanés.\n\nLe moteur respecte les dépendances et la suspension. Chaque élément conserve son exécution et ses preuves.\n\nChecklist onboarding et revue UX\nRéponse attendue\nPréciser le critère du livrable\nOuvrir\nSpécification export CSV des contrats\nRéponse attendue\nPréciser le critère du livrable\nOuvrir\nCahier de notification échéance\nEn attente\nDépendances à terminer\nAprès : Spécification export CSV des contrats\nOuvrir\nEntrées reçues\nPlan\nObjectif\nPérimètre B2B enrichi après refus\nTâches\nCritères\n5 étapes ; revue UX préalable\nId\nA\nTitre\nChecklist onboarding et revue UX\nCritères\nClient, échéance, montant ; admin uniquement\nId\nB\nTitre\nSpécification export CSV des contrats\nCritères\n30 jours ; aucun envoi\nAprès\nSpécification export CSV des contrats\nId\nC\nTitre\nCahier de notification échéance\nDonnées techniques\n\nSources : plan ← Valider le plan"
+2026-10-10T10:22:15.308Z 18-graphe-taches
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:22
+2026-10-10T10:22:15.570Z 19-enfant-bloque
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:22
+2026-10-10T10:22:15.580Z "SUIVI · RÉCEPTION DU LIVRABLE SYNTHÉTIQUE\nCahier de notification échéance\nOptions\nTâche · Plan B2B révisé — banc synthétique\n← Revenir au workflow parent\nSuspendue\n0 / 1 étapes\nReprendre la demande\n\nExécution suspendue par une action explicite.\n\nTransférer vers un projet…\nGraphe\nDétail\n\nCette demande a été suspendue explicitement. Sa reprise est indépendante de la relance de l’agent.\n\nReprendre la demande"
+2026-10-10T10:22:22.463Z 20-enfant-bloque-stable
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:22
+2026-10-10T10:22:27.848Z {"children":[{"base_from":null,"depends_on":[],"element":"A","project":"workspace","run":"r54d923bf1dc94092","title":"Checklist onboarding et revue UX"},{"base_from":null,"depends_on":[],"element":"B","project":"workspace","run":"r88f2a82ce5fd41ea","title":"Spécification export CSV des contrats"},{"base_from":null,"depends_on":["B"],"element":"C","project":"workspace","run":"rcf5a80bf8ecf4b1d","title":"Cahier de notification échéance"}],"childruns":[{"id":"rcf5a80bf8ecf4b1d","request":"Cahier de notification échéance","status":"paused","hold":null,"wait":null},{"id":"r88f2a82ce5fd41ea","request":"Spécification export CSV des contrats","status":"active","hold":null,"wait":null},{"id":"r54d923bf1dc94092","request":"Checklist onboarding et revue UX","status":"active","hold":null,"wait":null},{"id":"r8268f40473fd4b59","request":"","status":"active","hold":null,"wait":null},{"id":"r4d4271095100417a","request":"Banc synthétique PM : réduire les tickets onboarding B2B, exporter la liste des contrats, préparer les critères de notification. Aucun service externe.","status":"completed","hold":null,"wait":null}]}
+2026-10-10T10:22:54.603Z {"contract":"54e212f343581672ca7b6d47fbc6a112835b85c632059f2877a39678e6938502","created":1791627722.617241,"definition":{"defaults":{"model":"synthetic-local","provider":"codex"},"edges":[],"id":"revue-synthetique","nodes":[{"id":"question","inputs":{"item":{"required":true,"type":"object"}},"kind":"question","outputs":{"answer":{"required":true,"type":"string"}},"question":"Quel critère confirme la réception de cet élément ?","title":"Préciser le critère du livrable"}],"parameters":{"element_id":"C","item":{"criteria":["30 jours ; aucun envoi"],"depends_on":["B"],"id":"C","title":"Cahier de notification échéance"},"request":"Cahier de notification échéance"},"schema":2,"title":"Réception du livrable synthétique"},"driver":"automatic","id":"rcf5a80bf8ecf4b1d","iteration_wait":true,"nodes":{"question":{"attempt":0,"seed_inputs":{"item":{"criteria":["30 jours ; aucun envoi"],"depends_on":["B"],"id":"C","title":"Cahier de notification échéance"}},"status":"pending"}},"notifications_authorized":false,"original":{"defaults":{"model":"synthetic-local","provider":"codex"},"edges":[],"id":"revue-synthetique","nodes":[{"id":"question","inputs":{"item":{"required":true,"type":"object"}},"kind":"question","outputs":{"answer":{"required":true,"type":"string"}},"question":"Quel critère confirme la réception de cet élément ?","title":"Préciser le critère du livrable"}],"schema":2,"title":"Réception du livrable synthétique"},"packs":[],"parameters":{"element_id":"C","item":{"criteria":["30 jours ; aucun envoi"],"depends_on":["B"],"id":"C","title":"Cahier de notification échéance"},"request":"Cahier de notification échéance"},"parent":{"attempt":1,"element":"C","node":"work","run":"r8268f40473fd4b59"},"plugins":{"path":"/tmp/tricorder-personas-produit/05-product/isolated-home/workflows/workspace/.tricorder/plugins.json","plugins":[],"sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"},"project":"workspace","release":"","scope":{"id":"workspace","kind":"workspace"},"simulation":false,"status":"paused","transports":{},"updated":1791627722.6176918,"origin":{"kind":"task","run":"r8268f40473fd4b59","title":"Plan B2B révisé — banc synthétique","project":"workspace"},"focus":null,"health":{"status":"ok","total":0,"issues":[]}}
+2026-10-10T10:23:08.534Z 21-dependance-resolue
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:22
+2026-10-10T10:23:08.546Z "SUIVI · PLAN B2B RÉVISÉ — BANC SYNTHÉTIQUE\nPlan B2B révisé — banc synthétique\nOptions\n1 réponse attendue\n3 / 5 étapes\nTransférer vers un projet…\nGraphe\nDétail\nSi autorisé\nValider le plan\n→\nÉtape sélectionnée\nPour chaque élément du plan\n→\nExaminer les résultats\nCoordination du workflow · Tricorder\n\n1/3 terminé · 0 en cours · 1 réponse attendue · 1 en attente · maximum 2 travaux simultanés.\n\nLe moteur respecte les dépendances et la suspension. Chaque élément conserve son exécution et ses preuves.\n\nChecklist onboarding et revue UX\nRéponse attendue\nPréciser le critère du livrable\nOuvrir\nSpécification export CSV des contrats\nTerminé\nOuvrir\nCahier de notification échéance\nEn attente\nDépendances à terminer\nAprès : Spécification export CSV des contrats\nOuvrir\nEntrées reçues\nPlan\nObjectif\nPérimètre B2B enrichi après refus\nTâches\nCritères\n5 étapes ; revue UX préalable\nId\nA\nTitre\nChecklist onboarding et revue UX\nCritères\nClient, échéance, montant ; admin uniquement\nId\nB\nTitre\nSpécification export CSV des contrats\nCritères\n30 jours ; aucun envoi\nAprès\nSpécification export CSV des contrats\nId\nC\nTitre\nCahier de notification échéance\nDonnées techniques\n\nSources : plan ← Valider le plan"
+2026-10-10T10:23:22.688Z 22-dependance-progression
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:23
+2026-10-10T10:23:22.701Z "SUIVI · PLAN B2B RÉVISÉ — BANC SYNTHÉTIQUE\nPlan B2B révisé — banc synthétique\nOptions\n2 réponses attendues\n3 / 5 étapes\nTransférer vers un projet…\nGraphe\nDétail\nSi autorisé\nValider le plan\n→\nÉtape sélectionnée\nPour chaque élément du plan\n→\nExaminer les résultats\nCoordination du workflow · Tricorder\n\n1/3 terminé · 0 en cours · 2 réponses attendues · maximum 2 travaux simultanés.\n\nLe moteur respecte les dépendances et la suspension. Chaque élément conserve son exécution et ses preuves.\n\nChecklist onboarding et revue UX\nRéponse attendue\nPréciser le critère du livrable\nOuvrir\nSpécification export CSV des contrats\nTerminé\nOuvrir\nCahier de notification échéance\nRéponse attendue\nAprès : Spécification export CSV des contrats\nPréciser le critère du livrable\nOuvrir\nEntrées reçues\nPlan\nObjectif\nPérimètre B2B enrichi après refus\nTâches\nCritères\n5 étapes ; revue UX préalable\nId\nA\nTitre\nChecklist onboarding et revue UX\nCritères\nClient, échéance, montant ; admin uniquement\nId\nB\nTitre\nSpécification export CSV des contrats\nCritères\n30 jours ; aucun envoi\nAprès\nSpécification export CSV des contrats\nId\nC\nTitre\nCahier de notification échéance\nDonnées techniques\n\nSources : plan ← Valider le plan"
+2026-10-10T10:23:40.890Z 23-termine-facultatif
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:23
+2026-10-10T10:23:40.897Z "SUIVI · PLAN B2B RÉVISÉ — BANC SYNTHÉTIQUE\nPlan B2B révisé — banc synthétique\nOptions\nTerminée\n5 / 5 étapes\nVoir les résultats\nVoir le rapport\n\nExécution terminée.\n\nActions facultatives · 1\nTransférer vers un projet…\nGraphe\nDétail\nPour chaque élément du plan\n→\nÉtape sélectionnée\nExaminer les résultats\n\nApprouvée\n\nDécision humaine : Approuvée.\n\nEntrées, sorties et preuves"
+2026-10-10T10:23:49.611Z 24-action-decouverte
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:23
+2026-10-10T10:23:49.627Z "SUIVI · PLAN B2B RÉVISÉ — BANC SYNTHÉTIQUE\nPlan B2B révisé — banc synthétique\nOptions\nTerminée\n5 / 5 étapes\nVoir les résultats\nVoir le rapport\n\nExécution terminée.\n\nActions facultatives · 1\n\nLe résultat principal reste indépendant. Activez chaque action lorsqu’elle est proposée ; aucun envoi ne découle de son dessin.\n\nRésumé facultatif pour comité produit\nÀ activer\nActiver cette action…\nTransférer vers un projet…\nGraphe\nDétail\nPour chaque élément du plan\n→\nÉtape sélectionnée\nExaminer les résultats\n\nApprouvée\n\nDécision humaine : Approuvée.\n\nEntrées, sorties et preuves"
+2026-10-10T10:23:53.941Z 25-confirmation-action
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:23
+2026-10-10T10:23:53.948Z "Activer une action facultative\n×\n\nRésumé facultatif pour comité produit\n\nCette activation lance le workflow associé. Les opérations qu’il contient et leurs validations s’appliquent. Le résultat principal reste indépendant.\n\nConserver en attente\nActiver cette action"
+2026-10-10T10:24:00.367Z 26-action-active
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:23
+2026-10-10T10:24:00.382Z "SUIVI · PLAN B2B RÉVISÉ — BANC SYNTHÉTIQUE\nPlan B2B révisé — banc synthétique\nOptions\nTerminée\n5 / 5 étapes\nVoir les résultats\nVoir le rapport\n\nExécution terminée.\n\nActions facultatives · 1\n\nLe résultat principal reste indépendant. Activez chaque action lorsqu’elle est proposée ; aucun envoi ne découle de son dessin.\n\nRésumé facultatif pour comité produit\nIntervention attendue\nExaminer l’action\nTransférer vers un projet…\nGraphe\nDétail\nPour chaque élément du plan\n→\nÉtape sélectionnée\nExaminer les résultats\n\nApprouvée\n\nDécision humaine : Approuvée.\n\nEntrées, sorties et preuves"
+2026-10-10T10:24:09.716Z 27-document-action
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:23
+2026-10-10T10:24:09.731Z "SUIVI · PRÉPARER LE BROUILLON\nPréparer le brouillon\nOptions\nAction facultative : Préparer le brouillon · Plan B2B révisé — banc synthétique\n← Revenir au résultat principal\nRésultat à valider\n0 / 1 étapes\n\nPréparer le brouillon\n\nTransférer vers un projet…\nGraphe\nDétail\nÉtape sélectionnée\nPréparer le brouillon\n\nÀ valider\n\nBrouillon préparé. Aucune publication externe.\n\nRésumé local synthétique : travaux B2B et points à revoir. Aucun envoi.\nExaminer le résultat\nCommentaire de validation (facultatif)\nEntrées, sorties et preuves\nPreuves\nPreuve 1 · 531f2b66\n\nPréparer le brouillon\nCette proposition · tentative 1 uniquement.\n\nValider le résultat"
+2026-10-10T10:24:17.625Z 28-parcours-final
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour · 12:24
+2026-10-10T10:24:18.213Z "TRACE SAVED"

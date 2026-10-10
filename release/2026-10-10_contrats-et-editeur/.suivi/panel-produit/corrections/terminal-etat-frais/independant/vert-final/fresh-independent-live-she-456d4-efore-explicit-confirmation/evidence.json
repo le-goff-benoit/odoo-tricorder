@@ -1,0 +1,120 @@
+{
+  "calls": [
+    {
+      "at": 1791631239233,
+      "request": {
+        "project": "pd3e70a198c654929",
+        "conversation": "cabebe3d7888d4ac7",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "1e1d055a23e546168e44bf272c33a050",
+        "pid": 1794426,
+        "agentState": "starting",
+        "idleShell": false,
+        "program": "python3"
+      }
+    },
+    {
+      "at": 1791631239669,
+      "request": {
+        "project": "pd3e70a198c654929",
+        "conversation": "cabebe3d7888d4ac7",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "1e1d055a23e546168e44bf272c33a050",
+        "pid": 1794426,
+        "agentState": "stopped",
+        "idleShell": true,
+        "program": "bash"
+      }
+    },
+    {
+      "at": 1791631239924,
+      "request": {
+        "project": "pd3e70a198c654929",
+        "conversation": "cabebe3d7888d4ac7",
+        "resume": true,
+        "design": false
+      },
+      "result": {
+        "id": "1e1d055a23e546168e44bf272c33a050",
+        "pid": 1794426,
+        "agentState": "starting",
+        "idleShell": true,
+        "program": "bash"
+      }
+    }
+  ],
+  "events": [
+    {
+      "at": 1791631239168,
+      "action": "conversation-terminal",
+      "cache": []
+    },
+    {
+      "at": 1791631239619,
+      "action": "conversation-terminal",
+      "cache": [
+        {
+          "id": "1e1d055a23e546168e44bf272c33a050",
+          "pid": 1794426,
+          "alive": true,
+          "idleShell": false,
+          "program": "bash"
+        }
+      ]
+    },
+    {
+      "at": 1791631239817,
+      "action": "resume-agent",
+      "cache": [
+        {
+          "id": "1e1d055a23e546168e44bf272c33a050",
+          "pid": 1794426,
+          "alive": true,
+          "idleShell": true,
+          "program": "bash"
+        }
+      ]
+    },
+    {
+      "at": 1791631239869,
+      "action": "confirm-resume-agent",
+      "cache": [
+        {
+          "id": "1e1d055a23e546168e44bf272c33a050",
+          "pid": 1794426,
+          "alive": true,
+          "idleShell": true,
+          "program": "bash"
+        }
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "id": "1e1d055a23e546168e44bf272c33a050",
+      "project": "/tmp/tricorder-independent-terminal-fresh-iT4kZA/projects/pd3e70a198c654929",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-iT4kZA/projects/pd3e70a198c654929",
+      "release": null,
+      "task": null,
+      "createdAt": 1791631239.342781,
+      "lastOutputAt": 1791631240.0585856,
+      "pid": 1794426,
+      "program": "codex",
+      "provider": "codex",
+      "foreground": 1794462,
+      "promptVerified": true,
+      "idleShell": false,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "launches": 2
+}

@@ -1,0 +1,63 @@
+{
+  "profile": 3,
+  "build_renderer_sha256": "769515bf8cbd5cf312cb5df1346fa85b0443b55216f4b5ffd6be843d898f5946",
+  "spec_sha256": "11c438b7810b7946abc42d2ce540b9720257ee859dd3829032456a74a8fb13df",
+  "captures": [
+    {
+      "file": "01-03-workflow-reunion-adapte.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/03-workflow-reunion-adapte.png",
+      "sha256": "4c82c1df9d4253d1cf37c4aec8c5d287f610fe9ce9a47761b4ef37f5a57cac2f"
+    },
+    {
+      "file": "02-02-configuration-brouillon-facultatif.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/02-configuration-brouillon-facultatif.png",
+      "sha256": "6c179eac7c2193b653467260001190b07da33f4c32d51dec42da9b9e17ab1137"
+    },
+    {
+      "file": "03-06-brouillon-local-a-relire.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/06-brouillon-local-a-relire.png",
+      "sha256": "b8e564834aa18a3c396e71e24b864e3ed4b9baa4f86385dcb46e218c872c470b"
+    },
+    {
+      "file": "04-07-resultat-retrouve-apres-brouillon.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/07-resultat-retrouve-apres-brouillon.png",
+      "sha256": "00d1249edef633a003e4e7441ffd752f9691878a10eb2054732bd1b85145b7f7"
+    },
+    {
+      "file": "05-08a-liste-sujets-typee-limitee.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/08a-liste-sujets-typee-limitee.png",
+      "sha256": "515ddd50dc8551b79d2a6f9b1d6eb78c7a26fc049c163797510445d67dfdd254"
+    },
+    {
+      "file": "06-08-deux-sujets-confirmation-distincte.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/08-deux-sujets-confirmation-distincte.png",
+      "sha256": "35570ee3d9e356e842f3bb4a9483c96b38f0aabe75751b5f50e08555b769e9ec"
+    },
+    {
+      "file": "07-09-plan-et-livrables-sur-graphe.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/09-plan-et-livrables-sur-graphe.png",
+      "sha256": "a1c7a4763b500546e3d2462df4606d578a2794501581e96c9dd84da68014998b"
+    },
+    {
+      "file": "08-11-principal-termine-brouillon-en-echec.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/11-principal-termine-brouillon-en-echec.png",
+      "sha256": "dfcd8d7174f16ce53d23a7c6f4ed8e2f750d4cb5b3f3a31f2923423cabdb962a"
+    },
+    {
+      "file": "09-12-erreur-brouillon-et-prochaine-action.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/12-erreur-brouillon-et-prochaine-action.png",
+      "sha256": "cfe24b7a12f3d8f946156215a34dd59b4caa7f84a9c67637aa35fed3bcca9c45"
+    },
+    {
+      "file": "10-13-resultat-retrouve-malgre-echec.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/13-resultat-retrouve-malgre-echec.png",
+      "sha256": "7d4c4506c52718fd9b31e1fa3e5b076c8744ad25eb3f086bbc2cd90d77d09238"
+    },
+    {
+      "file": "11-14-engagements-accessibles-sous-json.png",
+      "source": "test-results/panel-v2-user-3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/14-engagements-accessibles-sous-json.png",
+      "sha256": "9113b78928b2ffa310275119d943412e3babe4c2a040a215487cd09a9c7a4051"
+    }
+  ],
+  "scope": "Original panel on frozen source build; synthetic fixtures, inert providers; screenshots visually reviewed by the testing agent."
+}

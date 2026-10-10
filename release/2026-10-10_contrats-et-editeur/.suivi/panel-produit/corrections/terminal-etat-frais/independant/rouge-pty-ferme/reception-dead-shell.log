@@ -1,0 +1,46 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-terminal-fresh/playwright.config.cjs --output=/tmp/tricorder-review-terminal-fresh/results-dead-shell --grep dead historical
+PATH: /tmp/tricorder-ci-tools-e7en2c33:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✘  1 ../../../tmp/tricorder-review-terminal-fresh/fresh.spec.cjs:129:1 › independent dead historical PTY requires explicit agreement before an agent is recreated (7.5s)
+
+
+  1) ../../../tmp/tricorder-review-terminal-fresh/fresh.spec.cjs:129:1 › independent dead historical PTY requires explicit agreement before an agent is recreated 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog')
+    Expected substring: "Reprendre"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('dialog') with timeout 5000ms
+      - waiting for getByRole('dialog')
+
+
+      130 |  const first=await startFirst();await command('exit');await expect.poll(async()=>(await list()).find(s=>s.id===first.id)?.idleShell).toBe(true);await command('exit');await expect.poll(async()=>(await list()).find(s=>s.id===first.id)?.alive||false).toBe(false);
+      131 |  await page.getByRole('button',{name:'Retrouver la conversation',exact:true}).click();
+    > 132 |  await expect(page.getByRole('dialog')).toContainText('Reprendre');expect(launchCount()).toBe(1);expect(identities(await list())).toHaveLength(0);
+          |                                         ^
+      133 | });
+      134 |
+        at /tmp/tricorder-review-terminal-fresh/fresh.spec.cjs:132:41
+
+    Error Context: ../../../tmp/tricorder-review-terminal-fresh/results-dead-shell/fresh-independent-dead-his-5c723-efore-an-agent-is-recreated/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-review-terminal-fresh/results-dead-shell/fresh-independent-dead-his-5c723-efore-an-agent-is-recreated/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-review-terminal-fresh/results-dead-shell/fresh-independent-dead-his-5c723-efore-an-agent-is-recreated/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    ../../../tmp/tricorder-review-terminal-fresh/fresh.spec.cjs:129:1 › independent dead historical PTY requires explicit agreement before an agent is recreated 

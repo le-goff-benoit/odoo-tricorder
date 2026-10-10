@@ -1,0 +1,67 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:ui
+PATH: /tmp/tricorder-ci-tools-t4npklhj:/usr/bin:/bin
+codex None
+claude None
+
+> odoo-tricorder@0.6.0-rc.13 test:ui
+> npm run build && playwright test --output=/tmp/tricorder-rc13-final-source-results
+
+
+> odoo-tricorder@0.6.0-rc.13 build
+> node scripts/build.mjs
+
+
+Running 182 tests using 1 worker
+
+  ✓    1 tests/attempt-history.spec.cjs:51:1 › large archived inputs keep failure history readable and attached proofs accessible (12.2s)
+  ✓    2 tests/attempt-history.spec.cjs:97:1 › paged large histories remain formatted with accessible proof links (2.4s)
+  ✓    3 tests/collection-input-ux.spec.cjs:38:1 › a second intention submitted during acknowledgement is recorded once without losing text (2.3s)
+  ✓    4 tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (6.9s)
+  ✓    5 tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (4.3s)
+  ✓    6 tests/collection-input-ux.spec.cjs:66:1 › an addition rejected after a concurrent edit survives the next success, reload and targeted retry (4.4s)
+  ✓    7 tests/collection-input-ux.spec.cjs:78:1 › a lost acknowledgement is retried with the same command after reload without duplicating the intention (4.1s)
+  ✓    8 tests/collection-input-ux.spec.cjs:85:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.1s)
+  ✓    9 tests/collection-input-ux.spec.cjs:106:1 › two project shells remain discoverable after changing project and reloading the window (5.5s)
+  ✓   10 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (7.2s)
+  ✓   11 tests/conversation-overview.spec.cjs:88:1 › running: actual agents, failure history and explicit dispatch are distinct (7.3s)
+  ✓   12 tests/conversation-overview.spec.cjs:103:1 › pages: global activity survives paging and off-page dependencies open the named request (6.7s)
+  ✓   13 tests/conversation-overview.spec.cjs:115:1 › compact: terminal working lines and the question answer remain visible together (6.5s)
+  ✓   14 tests/desktop-output-pipes.spec.cjs:6:1 › a recoverable backend rejection stays in the app after its launcher closes log pipes (1.5s)
+  ✓   15 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (6.0s)
+  ✓   16 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (1.7s)
+  ✓   17 tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (4.0s)
+  ✓   18 tests/desktop.spec.cjs:292:1 › design system: common gutters, cards and controls across every project view (7.5s)
+  ✓   19 tests/desktop.spec.cjs:355:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (2.1s)
+  ✓   20 tests/desktop.spec.cjs:408:1 › effort: partial recorded time survives missing roles, task filtering and refresh (2.2s)
+  ✓   21 tests/desktop.spec.cjs:450:1 › effort: open release updates task and agent percentages before closure (1.7s)
+  ✓   22 tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence (4.2s)
+  ✓   23 tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (2.8s)
+  ✓   24 tests/desktop.spec.cjs:681:1 › Markdown preview: readable safe content and recovery from a project read error (2.8s)
+  ✓   25 tests/desktop.spec.cjs:734:1 › email removed: no UI or API, old private records preserved, project still usable (1.8s)
+  ✓   26 tests/desktop.spec.cjs:785:1 › desktop: projects, proof status, sources, real terminal and persistence (4.4s)
+  ✓   27 tests/desktop.spec.cjs:884:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (8.0s)
+  -   28 tests/desktop.spec.cjs:1010:1 › real project: read-only release/task/mission screens
+  ✓   29 tests/desktop.spec.cjs:1098:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (17.7s)
+  ✓   30 tests/desktop.spec.cjs:1242:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (7.3s)
+  ✓   31 tests/desktop.spec.cjs:1339:1 › live requests appear before planning and reconcile with tasks without manual refresh (7.9s)
+  ✓   32 tests/desktop.spec.cjs:1393:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (11.1s)
+
+  ✓   33 tests/desktop.spec.cjs:1529:1 › work page starts a contextual request and resumes a task without changing its state (3.9s)
+  ✓   34 tests/desktop.spec.cjs:1579:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (9.6s)
+  ✓   35 tests/desktop.spec.cjs:1681:1 › window integration preserves the native conversation while inspecting phases and the library (6.6s)
+  ✓   36 tests/editor-gestures.spec.cjs:57:1 › whole-card dragging updates links at each zoom and each gesture has one undo; cancellations restore the graph (7.3s)
+  ✓   37 tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session (4.1s)
+  ✘   38 tests/editor-gestures.spec.cjs:95:1 › connections support click, drag and keyboard with confirmation, direct editing and cancellation (438ms)
+
+  1 interrupted
+    tests/editor-gestures.spec.cjs:95:1 › connections support click, drag and keyboard with confirmation, direct editing and cancellation 
+  1 skipped
+  144 did not run
+  36 passed (3.4m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

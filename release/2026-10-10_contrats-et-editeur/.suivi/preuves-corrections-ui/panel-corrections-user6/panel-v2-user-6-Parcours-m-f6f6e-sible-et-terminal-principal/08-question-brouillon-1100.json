@@ -1,0 +1,19 @@
+{
+  "inner": {
+    "width": 1100,
+    "height": 800
+  },
+  "document": {
+    "width": 1100,
+    "height": 800
+  },
+  "canvas": null,
+  "nodes": [],
+  "terminal": {
+    "x": 196,
+    "y": 70,
+    "width": 470.078125,
+    "height": 730
+  },
+  "focus": "<body><div id=\"app\">\n  <aside class=\"sidebar\" aria-label=\"Tricorder\">\n    <div class=\"brand\"><div class=\"brand-mark\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m5 7 5 5-5 5m8 0h6\"></path></s"
+}

@@ -44,6 +44,10 @@ class LaunchReadiness:
                              provider=provider, model=model, _catalog=self.catalog)
 
     def _node(self, run, node):
+        if node['kind'] == 'foreach':
+            return {'status': 'native', 'code': 'iteration-ready', 'action': 'iterate',
+                    'native_available': True,
+                    'reason': 'Le plan est prêt. Lancez le traitement des éléments dans le terminal ou dans la vue de coordination ; le moteur gérera les agents et les dépendances.'}
         if self.checks >= self.MAX_CHECKS:
             return {'status': 'unknown', 'code': 'check-limit', 'action': 'inspect',
                     'reason': 'Admissibilité non vérifiée sur cette page. Ouvrez la demande pour examiner la suite.'}
@@ -83,7 +87,8 @@ class LaunchReadiness:
             return {'status': 'waiting', 'code': 'resource-busy', 'action': 'wait',
                     'reason': 'Ressource utilisée par une autre étape : ' + ', '.join(occupied)[:300]}
         return {'status': 'ready', 'code': 'worker-ready', 'action': 'dispatch',
-                'reason': 'Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources.'}
+                'reason': ('Intégration prête. Le moteur réunira les contributions avant les tests communs.' if node['kind'] == 'integrate' else
+                           'Agent de bloc disponible. Le lancement revérifie les accès, les places et les ressources.')}
 
     def project(self, run):
         require(runtime.run_driver(run) == 'conversation', 'Cette disponibilité concerne les agents de la conversation.')

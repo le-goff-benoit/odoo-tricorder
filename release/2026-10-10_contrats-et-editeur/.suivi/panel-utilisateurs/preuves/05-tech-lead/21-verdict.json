@@ -1,0 +1,13 @@
+{
+  "profile": 5,
+  "result": "3 passed (31.9s)",
+  "source_runner": "/tmp/tricorder-ci-target-source-run.py",
+  "display": ":188",
+  "syntax": "node --check: passed",
+  "remaining_synthetic_processes": 0,
+  "confirmed_p0": 0,
+  "confirmed_p1": 0,
+  "p2": 2,
+  "commercial_ai_used": false,
+  "product_files_changed": false
+}

@@ -6,15 +6,17 @@ import json
 import math
 import re
 
+from .ports import (TYPES, compatible_ports, normalized_port, port_required,
+                    port_type, validate_port, validate_values)
+
 
 class ContractError(ValueError):
     pass
 
 
 KINDS = {"task", "command", "agent", "decision", "question", "condition", "join", "review",
-         "document", "external", "subworkflow", "watch", "communication"}
+         "document", "external", "subworkflow", "watch", "communication", "foreach", "integrate", "input"}
 ID = re.compile(r"^[a-zA-Z][a-zA-Z0-9_.-]{0,79}$")
-TYPES = {"string", "number", "boolean", "object", "array", "any"}
 
 
 def digest(value):
@@ -33,15 +35,7 @@ def identifier(value, label="Identifiant"):
 
 
 def validate_outputs(node, result):
-    values = result.get("outputs", {})
-    require(isinstance(values, dict), "Sorties structurées requises")
-    for name, kind in node.get("outputs", {}).items():
-        value = values.get(name)
-        valid = {"string": lambda: isinstance(value, str), "boolean": lambda: isinstance(value, bool),
-                 "number": lambda: type(value) in (int, float) and math.isfinite(value),
-                 "object": lambda: isinstance(value, dict), "array": lambda: isinstance(value, list),
-                 "any": lambda: True}[kind]
-        require(name in values and valid(), f"Sortie {name} absente ou incompatible avec le type {kind}")
+    validate_values(node.get("outputs", {}), result.get("outputs", {}), "outputs")
 
 
 def condition_outcome(node, value):
@@ -67,13 +61,19 @@ def validate_result(graph, node, result, outcome="done"):
             continue
         for source, destination in edge.get("mapping", {}).items():
             if destination == target["parameter"]:
+                if graph.get("schema") == 2 and source not in result.get("outputs", {}) and not port_required(node.get("outputs", {}).get(source)):
+                    # An omitted optional result remains a valid result. The
+                    # consumer diagnoses its own missing routing parameter.
+                    continue
                 require(condition_outcome(target, result.get("outputs", {}).get(source)) in target.get("options", []),
                         f"{node['title']} : sortie {source} incompatible avec les issues de « {target['title']} » ; corriger le résultat avant réception")
 
 
 def validate(graph, *, expanded=False):
-    require(isinstance(graph, dict) and graph.get("schema") == 1, "Schéma de workflow attendu : 1")
+    require(isinstance(graph, dict) and graph.get("schema") in (1, 2), "Schéma de workflow attendu : 1 ou 2")
     require(len(json.dumps(graph, ensure_ascii=False).encode()) <= 2_000_000, "Définition de workflow trop volumineuse")
+    from .annotations import validate_annotations
+    validate_annotations(graph)
     identifier(graph.get("id"), "Workflow")
     require(isinstance(graph.get("title"), str) and graph["title"].strip(), "Nom du workflow requis")
     require(isinstance(graph.get("execution_modes", ["native", "automatic"]), list) and set(graph.get("execution_modes", ["native", "automatic"])) <= {"native", "automatic"} and graph.get("execution_modes", ["native", "automatic"]), "Modes compatibles : native et/ou automatic")
@@ -105,12 +105,13 @@ def validate(graph, *, expanded=False):
         if policy == "contract":
             require(node.get("kind") in {"agent", "task", "document"}, f"{nid} : réception de contrat réservée au travail sans effet externe")
         if policy == "automatic":
-            require(node.get("kind") in {"command", "document", "watch", "communication"}, f"{nid} : validation automatique réservée aux exécutants déterministes")
+            require(node.get("kind") in {"command", "document", "watch", "communication", "integrate"}, f"{nid} : validation automatique réservée aux exécutants déterministes")
             require(not node.get("criteria"), f"{nid} : des critères métier exigent une validation humaine")
         if "position" in node:
             pos = node["position"]
             require(isinstance(pos, dict) and all(isinstance(pos.get(k), (int, float)) and math.isfinite(pos[k]) and 0 <= pos[k] <= 100000 for k in ("x", "y")), f"{nid} : position invalide")
         require(node.get("kind") in KINDS, f"{nid} : type de bloc inconnu")
+        require(node["kind"] not in {"foreach", "integrate", "input"} or graph["schema"] == 2, f"{nid} : ce type de bloc exige le schéma 2")
         require(isinstance(node.get("title"), str) and node["title"].strip(), f"{nid} : mission requise")
         require(isinstance(node.get("criteria", []), list) and all(isinstance(c, str) and c.strip() for c in node.get("criteria", [])), f"{nid} : critères invalides")
         require(isinstance(node.get("resources", []), list) and all(isinstance(r, str) and r for r in node.get("resources", [])), f"{nid} : ressources invalides")
@@ -120,7 +121,7 @@ def validate(graph, *, expanded=False):
             require(isinstance(ports, dict), f"{nid} : ports invalides")
             for port, ptype in ports.items():
                 identifier(port, f"{nid} port")
-                require(ptype in TYPES, f"{nid}.{port} : type inconnu")
+                validate_port(ptype, schema=graph["schema"], label=f"{nid}.{port}")
         if node["kind"] in {"decision", "condition", "review"}:
             outcomes = node.get("options", ["approve", "reject"])
             require(isinstance(outcomes, list) and len(outcomes) >= 2 and all(isinstance(o, str) for o in outcomes) and len(set(outcomes)) == len(outcomes), f"{nid} : au moins deux issues distinctes")
@@ -130,17 +131,20 @@ def validate(graph, *, expanded=False):
         require(type(node.get("candidate_check", False)) is bool, f"{nid} : contrôle QA booléen attendu")
         if node.get("candidate_check"):
             require(node["kind"] in {"agent", "task", "command"}, f"{nid} : contrôle QA réservé aux blocs de travail ou commande")
-            require(node.get("inputs", {}).get("candidate") == "object", f"{nid} : entrée candidate objet requise pour la QA")
-            require(node["kind"] == "command" or node.get("outputs", {}).get("verdict") == "string", f"{nid} : sortie verdict texte requise pour la QA")
+            candidate_port = node.get("inputs", {}).get("candidate")
+            require(port_type(candidate_port) == "object" and (not isinstance(candidate_port, dict) or port_required(candidate_port, "inputs")), f"{nid} : entrée candidate objet obligatoire requise pour la QA")
+            verdict_port = node.get("outputs", {}).get("verdict")
+            require(node["kind"] == "command" or port_type(verdict_port) == "string" and port_required(verdict_port), f"{nid} : sortie verdict texte obligatoire requise pour la QA")
         required = node.get("application_requires", [])
         require(isinstance(required, list) and all(isinstance(key, str) and ID.fullmatch(key) for key in required), f"{nid} : liste de contrôles requise")
         if node["kind"] == "condition":
             require(isinstance(node.get("parameter"), str), f"{nid} : paramètre de condition requis")
         if node["kind"] == "question":
             require(isinstance(node.get("question"), str) and node["question"].strip(), f"{nid} : question requise")
-            require(node.get("outputs", {}) in ({}, {"answer": "string"}), f"{nid} : la réponse est une sortie answer de type string")
+            answer_ports = node.get("outputs", {})
+            require(not answer_ports or set(answer_ports) == {"answer"} and port_type(answer_ports["answer"]) == "string", f"{nid} : la réponse est une sortie answer de type string")
         if node.get("route_output"):
-            require(node["kind"] == "agent" and node.get("outputs", {}).get(node["route_output"]) == "string", f"{nid} : l’aiguillage IA exige une sortie texte déclarée")
+            require(node["kind"] == "agent" and port_type(node.get("outputs", {}).get(node["route_output"])) == "string" and port_required(node.get("outputs", {})[node["route_output"]]), f"{nid} : l’aiguillage IA exige une sortie texte obligatoire déclarée")
             choices = node.get("options", [])
             require(isinstance(choices, list) and len(choices) >= 2 and all(isinstance(c, str) for c in choices) and len(set(choices)) == len(choices), f"{nid} : au moins deux issues distinctes")
             for choice in choices:
@@ -155,7 +159,7 @@ def validate(graph, *, expanded=False):
         if node["kind"] == "agent":
             require(node.get("execution_mode", "text") in {"text", "edit"}, f"{nid} : mode IA text ou edit attendu")
             if node.get("execution_mode") == "edit":
-                require(node.get("outputs", {}).get("candidate") == "object", f"{nid} : sortie candidate de type object requise")
+                require(port_type(node.get("outputs", {}).get("candidate")) == "object" and port_required(node["outputs"]["candidate"]), f"{nid} : sortie candidate obligatoire de type object requise")
             require(node.get("provider", "codex") in {"codex", "claude"}, f"{nid} : fournisseur inconnu")
             require(node.get("session", "delegated") in {"main", "delegated"}, f"{nid} : mode de session inconnu")
     edge_ids = set()
@@ -179,7 +183,7 @@ def validate(graph, *, expanded=False):
             st = by_id[source].get("outputs", {}).get(src)
             dt = by_id[target].get("inputs", {}).get(dst)
             require(st is not None and dt is not None, f"{edge['id']} : port inconnu {src} → {dst}")
-            require(st == dt or "any" in (st, dt), f"{edge['id']} : types incompatibles")
+            require(compatible_ports(st, dt, schema=graph["schema"]), f"{edge['id']} : types incompatibles ou garantie de présence/liste insuffisante")
         adjacency[source].append(target)
         incoming[target].append(source)
     # Iterative topological sort: deep graphs cannot exhaust the Python stack.
@@ -199,6 +203,8 @@ def validate(graph, *, expanded=False):
             gate = by_id.get(node.get("approval"))
             require(gate and gate["kind"] == "decision" and gate.get("operation") == node["operation"], f"{node['id']} : accord lié à cette opération exacte requis")
             require(any(e["from"] == gate["id"] and e["to"] == node["id"] and e.get("outcome") == "approve" for e in edges), f"{node['id']} : connexion d'accord requise")
+    from .advanced_contracts import validate_advanced
+    validate_advanced(graph)
     return graph
 
 
@@ -212,7 +218,19 @@ def expand(graph, library, stack=()):
             continue
         ref = node.get("workflow")
         require(ref in library, f"{node['id']} : sous-workflow {ref!r} absent")
+        require(graph["schema"] != 1 or library[ref].get("schema") == 1,
+                f"{node['id']} : un workflow de schéma 1 ne peut pas inclure un sous-workflow de schéma 2")
         sub = expand(library[ref], library, (*stack, graph["id"]))
+        require(not sub.get("actions"),
+                f"{node['id']} : les actions associées doivent être configurées dans le workflow principal ; ce sous-workflow ne peut pas encore être inséré tel quel")
+        if result["schema"] == 2 and sub["schema"] == 1:
+            # Only the expanded copy changes. Stored schema-1 definitions and
+            # their fingerprints remain intact, including optional inputs.
+            for child in sub["nodes"]:
+                for direction in ("inputs", "outputs"):
+                    if direction in child:
+                        child[direction] = {name: normalized_port(port, direction)
+                                            for name, port in child[direction].items()}
         prefix = node["id"] + "."
         roots = {n["id"] for n in sub["nodes"]} - {e["to"] for e in sub["edges"]}
         ends = {n["id"] for n in sub["nodes"]} - {e["from"] for e in sub["edges"]}
@@ -236,11 +254,16 @@ def expand(graph, library, stack=()):
                     target, name = endpoint["node"], endpoint["port"]
                     require(target in boundary, f"{node['id']} : {target} n’est pas une frontière {direction} du composant")
                     child_kind = children[target].get(direction + "s", {}).get(name)
-                    require(child_kind is not None and (kind == child_kind or "any" in (kind, child_kind)), f"{node['id']}.{port} : type incompatible avec {target}.{name}")
+                    source, destination = (kind, child_kind) if direction == "input" else (child_kind, kind)
+                    require(child_kind is not None and compatible_ports(source, destination, schema=graph["schema"],
+                            source_direction=direction + "s", target_direction=direction + "s"), f"{node['id']}.{port} : type incompatible avec {target}.{name}")
                     links.setdefault(target, {})[port if direction == "input" else name] = name if direction == "input" else port
         node["kind"] = "join"
-        node["outputs"] = public_inputs
-        exit_node = {"id": prefix + "exit", "title": node["title"] + " · résultat", "kind": "join", "phase": node.get("phase", ""), "inputs": public_outputs, "outputs": public_outputs, "component_exit": True, "options": node.get("options", ["done", "reject"])}
+        node["outputs"] = ({name: normalized_port(port, "inputs") for name, port in public_inputs.items()}
+                           if graph["schema"] == 2 else public_inputs)
+        exit_inputs = ({name: normalized_port(port, "outputs") for name, port in public_outputs.items()}
+                       if graph["schema"] == 2 else public_outputs)
+        exit_node = {"id": prefix + "exit", "title": node["title"] + " · résultat", "kind": "join", "phase": node.get("phase", ""), "inputs": exit_inputs, "outputs": public_outputs, "component_exit": True, "options": node.get("options", ["done", "reject"])}
         for edge in result["edges"]:
             if edge["from"] == node["id"]:
                 edge["from"] = exit_node["id"]
@@ -266,6 +289,8 @@ def expand(graph, library, stack=()):
             outcomes = child.get("options", ["approve", "reject"]) if child["kind"] in {"decision", "review", "condition"} or child.get("route_output") or child.get("component_exit") else ["done"]
             for outcome in outcomes:
                 result["edges"].append({"id": prefix + "leave-" + end + "-" + outcome, "from": prefix + end, "to": exit_node["id"], "outcome": outcome, "mapping": output_links.get(end, {})})
+    from .advanced_contracts import resolve_iterations
+    result = resolve_iterations(result, library, stack, expand)
     return validate(result, expanded=True)
 
 
@@ -276,4 +301,9 @@ def semantic_digest(graph):
     for node in graph["nodes"]:
         for key in ("position", "collapsed"):
             node.pop(key, None)
+        if graph.get("schema") == 2 and node.get("kind") == "foreach" and isinstance(node.get("workflow"), dict):
+            node["workflow"] = {"semantic_contract": semantic_digest(node["workflow"])}
+    if graph.get("schema") == 2:
+        for action in graph.get("actions", []):
+            action["workflow"] = {"semantic_contract": semantic_digest(action["workflow"])}
     return digest(graph)

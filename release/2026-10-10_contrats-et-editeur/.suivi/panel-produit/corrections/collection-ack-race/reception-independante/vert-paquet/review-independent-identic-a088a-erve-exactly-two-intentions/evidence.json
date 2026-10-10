@@ -1,0 +1,132 @@
+{
+  "calls": [
+    {
+      "at": 1791631599946,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r493f9f0007bd4827",
+        "node": "intentions",
+        "revision": 0,
+        "operation": "add",
+        "key": "f473daac-f38d-43fa-9a14-baf59943ce5a",
+        "text": "Deux interventions identiques"
+      },
+      "revision": 1,
+      "acceptedBeforeLostAck": true,
+      "error": "Error: Accusé perdu synthétique"
+    },
+    {
+      "at": 1791631600279,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r493f9f0007bd4827",
+        "after": 2
+      },
+      "revision": 1
+    },
+    {
+      "at": 1791631600555,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r493f9f0007bd4827",
+        "node": "intentions",
+        "revision": 1,
+        "operation": "add",
+        "key": "6f4873d8-a8bb-4b2d-a7a1-685ab513c9bb",
+        "text": "Deux interventions identiques"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631600752,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r493f9f0007bd4827"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631600908,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r493f9f0007bd4827",
+        "node": "intentions",
+        "revision": 0,
+        "operation": "add",
+        "key": "f473daac-f38d-43fa-9a14-baf59943ce5a",
+        "text": "Deux interventions identiques"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631600925,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r493f9f0007bd4827"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631601104,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r493f9f0007bd4827",
+        "node": "intentions",
+        "revision": 2,
+        "operation": "close",
+        "key": "553f9295-52be-4ce8-9b14-63d5312539df"
+      },
+      "revision": 3
+    },
+    {
+      "at": 1791631601116,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r493f9f0007bd4827"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631601277,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r493f9f0007bd4827",
+        "after": 3
+      },
+      "revision": 3
+    },
+    {
+      "at": 1791631601359,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r493f9f0007bd4827"
+      },
+      "revision": 3
+    },
+    {
+      "at": 1791631601465,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r493f9f0007bd4827"
+      },
+      "revision": 3
+    }
+  ],
+  "stored": [
+    "Deux interventions identiques",
+    "Deux interventions identiques"
+  ],
+  "recovery": [],
+  "draft": null
+}

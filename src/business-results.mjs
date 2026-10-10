@@ -11,11 +11,13 @@ const fields = {
   next_action:'Suite proposée', next_steps:'Prochaines étapes', rationale:'Justification', missing:'Informations manquantes', impact:'Impact',
   verdict:'Verdict', decision:'Décision', outcome:'Décision', status:'État', request:'Demande', proposal:'Proposition', draft:'Brouillon',
   report:'Rapport', minutes:'Compte rendu', transcript:'Transcription', subject:'Objet', body:'Contenu', recipient:'Destinataire', recipients:'Destinataires', title:'Titre', description:'Description',
+  results:'Résultats', text:'Texte', goal:'Objectif', tasks:'Tâches', project:'Projet', depends_on:'Après', base_from:'Base de code', contributions:'Contributions de code',
+  responsable:'Responsable', échéance:'Échéance', echeance:'Échéance',
   note:'Commentaire', notes:'Commentaires', message:'Message', error:'Erreur', reason:'Motif', result:'Résultat', outputs:'Sorties', inputs:'Entrées',
   evidence:'Preuves', source:'Source', sources:'Sources', files:'Fichiers', path:'Chemin', candidate:'Candidat', plan:'Plan', criteria:'Critères',
   exit_code:'Code de sortie', stdout:'Sortie de la commande', stderr:'Erreurs de la commande', ok:'Résultat déclaré par l’exécutant',
 };
-const decisions = {approve:'Approuvée', reject:'Refusée', pass:'Conforme', fail:'Non conforme', critical:'Critique', normal:'Normale', unknown:'Indéterminée', done:'Terminé', blocked:'Bloquée', deferred:'Différée'};
+const decisions = {approve:'Approuvée', reject:'Refusée', pass:'Conforme', fail:'Non conforme', critical:'Critique', normal:'Normale', unknown:'Indéterminée', done:'Terminé', blocked:'Bloquée', deferred:'Différée', true:'Oui', false:'Non', yes:'Oui', no:'Non'};
 const severities = {critical:'Critique', normal:'Normale', unknown:'Indéterminée', high:'Élevée', medium:'Moyenne', low:'Faible'};
 const roles = {source:'Source', plan:'Plan', deliverable:'Livrable', result:'Résultat', evidence:'Preuve', email:'Email d’origine'};
 const types = {'message/rfc822':'Email', 'text/plain':'Texte', 'text/markdown':'Document Markdown', 'application/json':'Document JSON', 'application/pdf':'PDF'};
@@ -71,11 +73,13 @@ function artifactView(value, context) {
   return `${preview ? value.format === 'text' ? `<p class="business-text">${esc(preview)}</p>` : `<details class="business-technical"><summary>Aperçu des données techniques</summary><pre tabindex="0">${esc(preview)}</pre></details>` : ''}${businessProofView(value, 0, context)}`;
 }
 
-function scalarView(value, key) {
+function scalarView(value, key, context) {
   if (value === null || value === undefined || value === '') return '<span class="muted">Non renseigné</span>';
   if (typeof value === 'boolean') return value ? 'Oui' : 'Non';
-  const translated = typeof value === 'string' && key === 'severity' && own(severities, value) ? severities[value]
-    : typeof value === 'string' && ['verdict', 'outcome', 'decision'].includes(key) ? decisionLabel(value) : value;
+  const named = key === 'project' ? context.projects.find(project => project.id === value)?.title
+    : ['depends_on', 'base_from'].includes(key) ? context.tasks?.get(value) : null;
+  const translated = named || (typeof value === 'string' && key === 'severity' && own(severities, value) ? severities[value]
+    : typeof value === 'string' && ['verdict', 'outcome', 'decision'].includes(key) ? decisionLabel(value) : value);
   return `<span class="business-text">${esc(translated)}</span>`;
 }
 
@@ -94,30 +98,48 @@ function actionsView(values, depth, context) {
   // arbitrary object or a task's title into an inferred action or status.
   const shown = values.slice(0, visibleRows);
   const core = ['action', 'owner', 'due'];
-  const extras = Array.from(new Set(shown.flatMap(value => record(value) ? Object.keys(value).filter(key => !core.includes(key)) : [])));
+  const aliases = {action:['action'], owner:['owner','assignee','responsable'], due:['due','due_date','deadline','échéance','echeance']};
+  const keysFor = value => Object.fromEntries(core.map(key => [key, aliases[key].find(alias => own(value, alias) && value[alias] != null && value[alias] !== '') || key]));
+  const extras = Array.from(new Set(shown.flatMap(value => record(value) ? Object.keys(value).filter(key => !Object.values(keysFor(value)).includes(key)) : [])));
   const hasOtherValues = shown.some(value => !record(value) || value.$artifact);
   const extraColumn = extras.length || hasOtherValues;
   const rows = shown.map(value => {
     const ordinary = record(value) && !value.$artifact;
-    const rest = ordinary ? Object.entries(value).filter(([key]) => !core.includes(key)) : [];
-    return `<tr>${core.map(key => `<td>${valueView(ordinary ? value[key] : undefined, key, depth + 1, context)}</td>`).join('')}${extraColumn ? `<td>${ordinary ? rest.length ? fieldsView(rest, depth + 1, context) : '<span class="muted">—</span>' : valueView(value, '', depth + 1, context)}</td>` : ''}</tr>`;
+    const selected = ordinary ? keysFor(value) : {};
+    const rest = ordinary ? Object.entries(value).filter(([key]) => !Object.values(selected).includes(key)) : [];
+    return `<tr>${core.map(key => `<td>${valueView(ordinary ? value[selected[key]] : undefined, key, depth + 1, context)}</td>`).join('')}${extraColumn ? `<td>${ordinary ? rest.length ? fieldsView(rest, depth + 1, context) : '<span class="muted">—</span>' : valueView(value, '', depth + 1, context)}</td>` : ''}</tr>`;
   }).join('');
   return `<div class="business-table-scroll" tabindex="0" role="region" aria-label="Actions et responsables"><table class="business-table"><thead><tr><th scope="col">Action</th><th scope="col">Responsable</th><th scope="col">Échéance</th>${extraColumn ? '<th scope="col">Autres informations</th>' : ''}</tr></thead><tbody>${rows}</tbody></table></div>${values.length > shown.length ? technicalView(values.slice(shown.length), `${values.length - shown.length} autres éléments`) : ''}`;
 }
 
+function elementResultsView(values, context) {
+  const shown = values.slice(0, visibleRows);
+  // Strip only the known execution envelope from the reading view. Every
+  // original identifier and unknown field remains in the technical disclosure.
+  return `<div class="business-deliverables">${shown.map(item => {
+    const project = context.projects.find(project => project.id === item.project);
+    const outputs = Object.values(item.outputs);
+    const extra = Object.entries(item).filter(([key]) => !['id','title','project','run','outputs'].includes(key));
+    return `<section class="business-deliverable"><h4>${esc(item.title)}</h4>${project ? `<p class="muted">Projet : ${esc(project.title)}</p>` : ''}${outputs.map(output => valueView(output, '', 1, context)).join('')}${extra.length ? fieldsView(extra, 1, context) : ''}</section>`;
+  }).join('')}</div>${values.length > shown.length ? technicalView(values.slice(shown.length), `${values.length - shown.length} autres résultats`) : ''}`;
+}
+
 function valueView(value, key, depth, context) {
   if (value?.$artifact) return artifactView(value, context);
-  if (typeof value !== 'object' || value === null) return scalarView(value, key);
-  if (depth >= maxDepth || --context.remaining < 0) return technicalView(value, 'Structure détaillée');
+  if (typeof value !== 'object' || value === null) return scalarView(value, key, context);
+  const scalarList = Array.isArray(value) && value.every(item => item === null || typeof item !== 'object');
+  if (depth >= maxDepth && !scalarList || --context.budget.remaining < 0) return technicalView(value, 'Structure détaillée');
   if (Array.isArray(value)) {
     if (!value.length) return '<span class="muted">Aucun élément</span>';
+    if (key === 'results' && value.every(item => record(item) && typeof item.title === 'string' && typeof item.run === 'string' && typeof item.project === 'string' && record(item.outputs))) return elementResultsView(value, context);
     if (value.some(item => record(item) && own(item, 'action'))) return actionsView(value, depth, context);
     const shown = value.slice(0, visibleRows);
     return `<ol class="business-list">${shown.map(item => `<li>${valueView(item, key, depth + 1, context)}</li>`).join('')}</ol>${value.length > shown.length ? technicalView(value.slice(shown.length), `${value.length - shown.length} autres éléments`) : ''}`;
   }
   if (own(value, 'question') && own(value, 'answer')) return dialogueView(value, depth, context);
-  const entries = Object.entries(value);
-  return entries.length ? fieldsView(entries, depth, context) : '<span class="muted">Aucun champ renseigné</span>';
+  const local = Array.isArray(value.tasks) ? {...context, tasks:new Map(value.tasks.filter(record).map(task => [task.id, task.title || task.text || task.id]))} : context;
+  const entries = Object.entries(value).filter(([name, child]) => !(name === 'contributions' && Array.isArray(value.results) && Array.isArray(child) && !child.length));
+  return entries.length ? fieldsView(entries, depth, local) : '<span class="muted">Aucun champ renseigné</span>';
 }
 
 /**
@@ -127,9 +149,9 @@ function valueView(value, key, depth, context) {
  * The optional button factory has the signature used by studio.js and receives
  * an already escaped label and attributes.
  */
-export function businessDataView(label, values, {button = defaultButton} = {}) {
+export function businessDataView(label, values, {button = defaultButton, projects = []} = {}) {
   if (values === undefined || values === null || (record(values) && !Object.keys(values).length)) return '';
-  const context = {button, remaining:120};
+  const context = {button, projects, budget:{remaining:120}};
   const structured = typeof values === 'object' && !values.$artifact;
   return `<section class="execution-data business-data">${label ? `<h3>${esc(label)}</h3>` : ''}${valueView(values, '', 0, context)}${structured ? technicalView(values) : ''}</section>`;
 }

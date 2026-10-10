@@ -1,0 +1,455 @@
+{
+  "template": {
+    "defaults": {
+      "effort": "medium",
+      "model": "synthetic",
+      "profile": "generalist",
+      "provider": "codex",
+      "session": "delegated"
+    },
+    "edges": [],
+    "id": "programme-import-27320b09b7b3",
+    "nodes": [
+      {
+        "id": "confirmation",
+        "kind": "question",
+        "outputs": {
+          "answer": "string"
+        },
+        "question": "Le périmètre du projet est-il complet ?",
+        "title": "Confirmer le périmètre"
+      }
+    ],
+    "parameters": {
+      "language": "fr"
+    },
+    "revision": 1,
+    "schema": 1,
+    "title": "Modèle revue transverse",
+    "_project": "library"
+  },
+  "copies": [
+    {
+      "defaults": {
+        "effort": "medium",
+        "model": "synthetic",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "edges": [],
+      "id": "programme-import-27320b09b7b3-import-4f686e307f00",
+      "nodes": [
+        {
+          "id": "confirmation",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "question": "Le périmètre du projet est-il complet ?",
+          "title": "Confirmer le périmètre"
+        }
+      ],
+      "parameters": {
+        "language": "fr"
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Revue Atlas",
+      "_project": "pef8003a198d34587"
+    },
+    {
+      "defaults": {
+        "effort": "medium",
+        "model": "synthetic",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "edges": [],
+      "id": "programme-import-27320b09b7b3-import-565779a1eeeb",
+      "nodes": [
+        {
+          "id": "confirmation",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "question": "Le périmètre du projet est-il complet ?",
+          "title": "Confirmer le périmètre"
+        }
+      ],
+      "parameters": {
+        "language": "fr"
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Revue Boréal",
+      "_project": "pc237a5c0d01b47f5"
+    }
+  ],
+  "atlas": {
+    "created": 1791622871.4878545,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "synthetic",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "edges": [],
+      "id": "programme-import-27320b09b7b3-import-4f686e307f00",
+      "nodes": [
+        {
+          "id": "confirmation",
+          "kind": "question",
+          "outputs": {
+            "answer": "string"
+          },
+          "question": "Le périmètre du projet est-il complet ?",
+          "title": "Confirmer le périmètre"
+        }
+      ],
+      "parameters": {
+        "language": "fr"
+      },
+      "revision": 1,
+      "schema": 1,
+      "title": "Revue Atlas"
+    },
+    "effort": "medium",
+    "id": "c399d0f0412bb4e33",
+    "items": [
+      {
+        "created": 1791622871.4896073,
+        "depends_on": [],
+        "id": "w41a2475f77aa4e26",
+        "key": "initial",
+        "project": "pef8003a198d34587",
+        "request": "Préparer la revue des jalons Atlas.",
+        "run": "r00db7f2939c44253",
+        "request_truncated": false,
+        "execution": {
+          "id": "r00db7f2939c44253",
+          "project": "pef8003a198d34587",
+          "status": "active",
+          "created": 1791622871.4890232,
+          "updated": 1791622871.4894993,
+          "simulation": false,
+          "completion_outcome": null,
+          "archived": null,
+          "coordination_wait": null,
+          "coordination_hold": null,
+          "parent": null,
+          "associated_with": null,
+          "conversation": "c399d0f0412bb4e33",
+          "workers": [],
+          "workers_total": 0,
+          "definition": {
+            "id": "programme-import-27320b09b7b3-import-4f686e307f00",
+            "title": "Revue Atlas",
+            "revision": 1
+          },
+          "original": {
+            "id": "programme-import-27320b09b7b3-import-4f686e307f00"
+          },
+          "focus": {
+            "node": "confirmation",
+            "title": "Confirmer le périmètre",
+            "status": "waiting_input",
+            "action": "Répondre à la question"
+          },
+          "health": {
+            "status": "ok",
+            "total": 0,
+            "issues": []
+          },
+          "request": "Préparer la revue des jalons Atlas.",
+          "counts": {
+            "waiting_input": 1
+          },
+          "nodes": {
+            "confirmation": {
+              "status": "waiting_input"
+            }
+          },
+          "origin": null,
+          "launch": {
+            "status": "waiting",
+            "label": "En attente",
+            "ready_count": 0,
+            "worker_count": 0,
+            "native_count": 0,
+            "configuration_count": 0,
+            "waiting_count": 0,
+            "unknown_count": 0,
+            "active_count": 0,
+            "max_parallel": 4,
+            "nodes": [],
+            "nodes_total": 0,
+            "nodes_truncated": false
+          }
+        },
+        "dependencies": [],
+        "dependencies_total": 0,
+        "dependencies_truncated": false
+      }
+    ],
+    "model": "synthetic",
+    "notifications_authorized": false,
+    "project": "pef8003a198d34587",
+    "projects": [
+      "pef8003a198d34587"
+    ],
+    "provider": "codex",
+    "status": "open",
+    "project_contexts": [
+      {
+        "id": "pef8003a198d34587",
+        "title": "Programme Atlas",
+        "path": "/tmp/tricorder-panel-programme-HI6NAr/state/workflows/projects/pef8003a198d34587"
+      }
+    ],
+    "item_count": 1,
+    "total": 1,
+    "offset": 0,
+    "limit": 25,
+    "next": null,
+    "activity": {
+      "items": 1,
+      "running": 0,
+      "ready": 0,
+      "decisions": 0,
+      "questions": 1,
+      "collecting": 0,
+      "coordination": 0,
+      "failed": 0,
+      "dependencies": 0,
+      "completed": 0,
+      "paused": 0,
+      "cancelled": 0,
+      "uncertain": 0,
+      "children": {
+        "items": 0,
+        "running": 0,
+        "ready": 0,
+        "decisions": 0,
+        "questions": 0,
+        "collecting": 0,
+        "coordination": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0,
+        "cancelled": 0,
+        "uncertain": 0
+      },
+      "associated": {
+        "items": 0,
+        "running": 0,
+        "ready": 0,
+        "decisions": 0,
+        "questions": 0,
+        "collecting": 0,
+        "coordination": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0,
+        "cancelled": 0,
+        "uncertain": 0,
+        "actions": 0
+      }
+    }
+  },
+  "boreal": {
+    "created": 1791622872.8678246,
+    "definition": {
+      "defaults": {
+        "effort": "medium",
+        "model": "synthetic",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "edges": [],
+      "id": "programme-import-27320b09b7b3-import-565779a1eeeb",
+      "nodes": [
+        {
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "confirmation",
+          "inputs": {},
+          "kind": "question",
+          "max_attempts": 1,
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "answer": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 50,
+            "y": 60
+          },
+          "question": "Le périmètre du projet est-il complet ?",
+          "resources": [],
+          "title": "Confirmer les jalons Boréal"
+        }
+      ],
+      "parameters": {
+        "language": "fr"
+      },
+      "revision": 2,
+      "schema": 1,
+      "title": "Revue Boréal"
+    },
+    "effort": "medium",
+    "id": "ca544d45c3fa8423a",
+    "items": [
+      {
+        "created": 1791622872.8688295,
+        "depends_on": [],
+        "id": "w67f49228086c4dfe",
+        "key": "initial",
+        "project": "pc237a5c0d01b47f5",
+        "request": "Préparer la revue des ressources Boréal.",
+        "run": "r4bfc6c1b9f754a34",
+        "request_truncated": false,
+        "execution": {
+          "id": "r4bfc6c1b9f754a34",
+          "project": "pc237a5c0d01b47f5",
+          "status": "active",
+          "created": 1791622872.8685222,
+          "updated": 1791622872.8687704,
+          "simulation": false,
+          "completion_outcome": null,
+          "archived": null,
+          "coordination_wait": null,
+          "coordination_hold": null,
+          "parent": null,
+          "associated_with": null,
+          "conversation": "ca544d45c3fa8423a",
+          "workers": [],
+          "workers_total": 0,
+          "definition": {
+            "id": "programme-import-27320b09b7b3-import-565779a1eeeb",
+            "title": "Revue Boréal",
+            "revision": 2
+          },
+          "original": {
+            "id": "programme-import-27320b09b7b3-import-565779a1eeeb"
+          },
+          "focus": {
+            "node": "confirmation",
+            "title": "Confirmer les jalons Boréal",
+            "status": "waiting_input",
+            "action": "Répondre à la question"
+          },
+          "health": {
+            "status": "ok",
+            "total": 0,
+            "issues": []
+          },
+          "request": "Préparer la revue des ressources Boréal.",
+          "counts": {
+            "waiting_input": 1
+          },
+          "nodes": {
+            "confirmation": {
+              "status": "waiting_input"
+            }
+          },
+          "origin": null,
+          "launch": {
+            "status": "waiting",
+            "label": "En attente",
+            "ready_count": 0,
+            "worker_count": 0,
+            "native_count": 0,
+            "configuration_count": 0,
+            "waiting_count": 0,
+            "unknown_count": 0,
+            "active_count": 0,
+            "max_parallel": 4,
+            "nodes": [],
+            "nodes_total": 0,
+            "nodes_truncated": false
+          }
+        },
+        "dependencies": [],
+        "dependencies_total": 0,
+        "dependencies_truncated": false
+      }
+    ],
+    "model": "synthetic",
+    "notifications_authorized": false,
+    "project": "pc237a5c0d01b47f5",
+    "projects": [
+      "pc237a5c0d01b47f5"
+    ],
+    "provider": "codex",
+    "status": "open",
+    "project_contexts": [
+      {
+        "id": "pc237a5c0d01b47f5",
+        "title": "Programme Boréal",
+        "path": "/tmp/tricorder-panel-programme-HI6NAr/state/workflows/projects/pc237a5c0d01b47f5"
+      }
+    ],
+    "item_count": 1,
+    "total": 1,
+    "offset": 0,
+    "limit": 25,
+    "next": null,
+    "activity": {
+      "items": 1,
+      "running": 0,
+      "ready": 0,
+      "decisions": 0,
+      "questions": 1,
+      "collecting": 0,
+      "coordination": 0,
+      "failed": 0,
+      "dependencies": 0,
+      "completed": 0,
+      "paused": 0,
+      "cancelled": 0,
+      "uncertain": 0,
+      "children": {
+        "items": 0,
+        "running": 0,
+        "ready": 0,
+        "decisions": 0,
+        "questions": 0,
+        "collecting": 0,
+        "coordination": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0,
+        "cancelled": 0,
+        "uncertain": 0
+      },
+      "associated": {
+        "items": 0,
+        "running": 0,
+        "ready": 0,
+        "decisions": 0,
+        "questions": 0,
+        "collecting": 0,
+        "coordination": 0,
+        "failed": 0,
+        "dependencies": 0,
+        "completed": 0,
+        "paused": 0,
+        "cancelled": 0,
+        "uncertain": 0,
+        "actions": 0
+      }
+    }
+  }
+}

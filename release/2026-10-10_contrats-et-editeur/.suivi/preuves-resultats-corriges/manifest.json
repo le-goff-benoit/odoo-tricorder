@@ -1,0 +1,155 @@
+{
+  "scope": "Targeted source GUI checks, synthetic projects, not final packaged receipt",
+  "captures": [
+    {
+      "file": "reunion/01-08-deux-sujets-confirmation-distincte.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/08-deux-sujets-confirmation-distincte.png",
+      "sha256": "2419f48a2146b8cea1484d3ea02912319db3926316662478ac85505e2baf13d1"
+    },
+    {
+      "file": "reunion/02-08a-liste-sujets-typee-limitee.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/08a-liste-sujets-typee-limitee.png",
+      "sha256": "515ddd50dc8551b79d2a6f9b1d6eb78c7a26fc049c163797510445d67dfdd254"
+    },
+    {
+      "file": "reunion/03-09-plan-et-livrables-sur-graphe.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/09-plan-et-livrables-sur-graphe.png",
+      "sha256": "fcb37fad6cef905d2a3bc2280921c80910ece8069ad73824589fb0fd699318b6"
+    },
+    {
+      "file": "reunion/04-10-reception-resultats-livrables.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/10-reception-resultats-livrables.png",
+      "sha256": "fdc386d5f73cec627df5262c39ea5edc7de6e0064fcc4a0851e046c2f6c46449"
+    },
+    {
+      "file": "reunion/05-11-principal-termine-brouillon-en-echec.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/11-principal-termine-brouillon-en-echec.png",
+      "sha256": "7aa3db2618f828daaef436d8faaff64511857072a374776658cd7d7c0958cd56"
+    },
+    {
+      "file": "reunion/06-12-erreur-brouillon-et-prochaine-action.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/12-erreur-brouillon-et-prochaine-action.png",
+      "sha256": "55d973d66919511eb0e5c045b7238788563bfd3f7e056a668e02f50084c1f5b3"
+    },
+    {
+      "file": "reunion/07-13-resultat-retrouve-malgre-echec.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/13-resultat-retrouve-malgre-echec.png",
+      "sha256": "f6c75370777e69db71744df2c78d040b0106b35f507f1565da1b546711a103d7"
+    },
+    {
+      "file": "reunion/08-14-engagements-lisibles-directement.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-plusieurs--9be53-c-sans-perdre-les-r\u00e9sultats/14-engagements-lisibles-directement.png",
+      "sha256": "f6c75370777e69db71744df2c78d040b0106b35f507f1565da1b546711a103d7"
+    },
+    {
+      "file": "reunion/09-01-suppression-email-obligatoire.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/01-suppression-email-obligatoire.png",
+      "sha256": "aae39f4c2966e392b4724fafa348ecb4f6852cdb3cb704a577aa926fd3e6ce38"
+    },
+    {
+      "file": "reunion/10-02-configuration-brouillon-facultatif.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/02-configuration-brouillon-facultatif.png",
+      "sha256": "177cd2542d42b947ebfb6b7dc3aa2dd8ff786122c6b31f40bef2c3b5d795dfbc"
+    },
+    {
+      "file": "reunion/11-03-workflow-reunion-adapte.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/03-workflow-reunion-adapte.png",
+      "sha256": "2c088c23a6883ed83e5426ee5629edb76786ccf36aafa98c5202a4a52ea1e185"
+    },
+    {
+      "file": "reunion/12-04-compte-rendu-et-actions-a-valider.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/04-compte-rendu-et-actions-a-valider.png",
+      "sha256": "9baa5969778546cf7d252df31dd88ef2a1302a7b9a308d6695ca3397fd9bc944"
+    },
+    {
+      "file": "reunion/13-05-resultat-principal-termine.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/05-resultat-principal-termine.png",
+      "sha256": "418cb316dc843bc83b4e8b08182e275d640ec0b02de23b2c1f574642638e0e6b"
+    },
+    {
+      "file": "reunion/14-06-brouillon-local-a-relire.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/06-brouillon-local-a-relire.png",
+      "sha256": "2ca40272862a276f4cb8192766add0d2e5c47f9807e0e6aad256576dd90e77c5"
+    },
+    {
+      "file": "reunion/15-07-resultat-retrouve-apres-brouillon.png",
+      "source": "test-results/corrections-results-user3/panel-v2-user-3-r\u00e9union-ad-6aba2--activer-un-brouillon-local/07-resultat-retrouve-apres-brouillon.png",
+      "sha256": "b0dce773bd284e90e2dc79e191c612c2b71fadea7da6a359cb37c8dd70aa6534"
+    },
+    {
+      "file": "tech-lead/16-P1-apres-executer.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Garde-\u2014-sa-38696-l\u2019\u00e9diteur-et-son-diagnostic/P1-apres-executer.png",
+      "sha256": "8ed36ecec9418e122bcb5d89ce0f98893a5e42723d140821743d26a827ec0877"
+    },
+    {
+      "file": "tech-lead/17-P1-sauvegarde-refusee-\u00e9diteur-visible.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Garde-\u2014-sa-38696-l\u2019\u00e9diteur-et-son-diagnostic/P1-sauvegarde-refusee-\u00e9diteur-visible.png",
+      "sha256": "9b03f86e7ce0c42d6159260e7df77850bbc36251e648bc1b605f6c0fc9ef66f5"
+    },
+    {
+      "file": "tech-lead/18-element-api-identifiable.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/element-api-identifiable.png",
+      "sha256": "0926197d3796fae751f653f6dd6c14e61f227ed8aeeb06de36398e97c4b55903"
+    },
+    {
+      "file": "tech-lead/19-intentions-confirmees.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/intentions-confirmees.png",
+      "sha256": "4f47941ca869db1838abe1fa7a18434d0d3dfcb52c5ac1cb4bdf8d0582e56c52"
+    },
+    {
+      "file": "tech-lead/20-parallelisme-et-dependances-graphe.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/parallelisme-et-dependances-graphe.png",
+      "sha256": "10cc761f9735ea2b4c1a81753750f73f1131b4b5da324f00edd7ad3ad52a9b26"
+    },
+    {
+      "file": "tech-lead/21-plan-decompose-a-valider.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/plan-decompose-a-valider.png",
+      "sha256": "bc6baf3cfe4b90c87d87fa69075fd923966b19859682321f481073915325c023"
+    },
+    {
+      "file": "tech-lead/22-resultats-communs-recus.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/resultats-communs-recus.png",
+      "sha256": "390d08b66eb17c267af73dd8d44390bdb3c8bf04f36e0a68469e621b2d996be1"
+    },
+    {
+      "file": "tech-lead/23-synthese-commune-consultee.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/synthese-commune-consultee.png",
+      "sha256": "390d08b66eb17c267af73dd8d44390bdb3c8bf04f36e0a68469e621b2d996be1"
+    },
+    {
+      "file": "tech-lead/24-workflow-configure.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--c87fe-ndance-et-r\u00e9ception-commune/workflow-configure.png",
+      "sha256": "18a51b4a5acb17647c6f3a101a1aeb8c04b647b9d2707bc97b01059c834f17bd"
+    },
+    {
+      "file": "tech-lead/25-candidat-commun-recu.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/candidat-commun-recu.png",
+      "sha256": "9537e8126bec8138bd20205864be54b60657ac1bd8cff6bf60f4f59de09e10dd"
+    },
+    {
+      "file": "tech-lead/26-code-deux-elements-concrets.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/code-deux-elements-concrets.png",
+      "sha256": "e418bd14fbe22dfe164d1ea43bd5463fa7ddd967ed3555f7bb79f0f45ea9d5e0"
+    },
+    {
+      "file": "tech-lead/27-code-workflow-qa-commune-configuree.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/code-workflow-qa-commune-configuree.png",
+      "sha256": "5f4abe8aa4c31c60b425f2c051e0d5412096fe8746b9c63fa1454c35794b5323"
+    },
+    {
+      "file": "tech-lead/28-intentions-confirmees.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/intentions-confirmees.png",
+      "sha256": "158d9ed99c961c8922ae751bdc3dc1e624a8d3778e41d41c77f744fb8efa32ae"
+    },
+    {
+      "file": "tech-lead/29-plan-decompose-a-valider.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/plan-decompose-a-valider.png",
+      "sha256": "5f24d0ecbfed7b40688ac88d80f94d71441625d9c3533c6089e0135d06541b61"
+    },
+    {
+      "file": "tech-lead/30-vraie-qa-commune-reussie.png",
+      "source": "test-results/corrections-results/panel-v2-user-5-Tech-lead--ed42f-contr\u00f4le-du-candidat-commun/vraie-qa-commune-reussie.png",
+      "sha256": "0eb481361e9477ccf70f154fa0bca11f4892969e5c408ae5ce487e0238c0a854"
+    }
+  ]
+}

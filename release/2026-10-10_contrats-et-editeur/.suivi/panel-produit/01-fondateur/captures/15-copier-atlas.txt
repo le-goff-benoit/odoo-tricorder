@@ -1,0 +1,102 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Modèles
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:04
+  - button "Actualiser · À jour · 12:04"
+  - main:
+    - text: Modèles / Workflow
+    - heading "Onboarding client SaaS" [level=1]
+    - paragraph: Révision 3 · Enregistré
+    - button "Choisir l’IA"
+    - group:
+      - text: Options
+      - button "Planifier"
+      - button "Réutiliser…"
+      - button "Exporter…"
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - text: "Lancement en attente :"
+    - strong: Onboarding client SaaS
+    - text: · Bibliothèque de modèles. Votre demande est conservée.
+    - button "Revenir au lancement"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img:
+      - 'button "Corriger le lien : Recueillir les besoins client → Préparer un plan · intentions · liste"'
+      - 'button "Corriger le lien : Préparer un plan → Valider le plan · plan · un élément"'
+      - 'button "Corriger le lien : Valider le plan → Pour chaque élément du plan · Approuvée · plan · un élément"'
+      - 'button "Corriger le lien : Pour chaque élément du plan → Examiner les résultats · results · liste"'
+    - button "Recueillir les besoins client · Entrée utilisateur": Recueillir les besoins client Entrée utilisateur intentions · liste
+    - button "Préparer un plan · Tâche IA": Préparer un plan Tâche IA plan · un élément
+    - button "Valider le plan · Décision humaine": Valider le plan Décision humaine Vous
+    - button "Pour chaque élément du plan · Pour chaque élément": Pour chaque élément du plan Pour chaque élément results · liste ; contributions · liste
+    - button "Examiner les résultats · Décision humaine": Examiner les résultats Décision humaine Vous
+    - button "Relier vers Recueillir les besoins client"
+    - button "Relier depuis Recueillir les besoins client"
+    - button "Relier vers Préparer un plan"
+    - button "Relier depuis Préparer un plan"
+    - button "Relier vers Valider le plan"
+    - button "Relier depuis Valider le plan"
+    - button "Relier vers Pour chaque élément du plan"
+    - button "Relier depuis Pour chaque élément du plan"
+    - button "Relier vers Examiner les résultats"
+    - button "Relier depuis Examiner les résultats"
+    - text: 5 blocs · 4 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+  - dialog "Réutiliser ce workflow":
+    - heading "Réutiliser ce workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Copiez les blocs, liens et réglages dans un autre projet ou dans vos modèles de workflows. Chaque copie évoluera indépendamment.
+    - paragraph: Les demandes, résultats, validations et planifications ne sont pas repris. Les connexions et profils devront être disponibles à destination.
+    - checkbox "Conserver les exemples personnalisés de simulation"
+    - text: Conserver les exemples personnalisés de simulation
+    - paragraph: Par défaut, les valeurs des anciens essais sont retirées. Cochez cette option pour réutiliser volontairement ces exemples fictifs ; ils ne constituent pas des résultats réels.
+    - text: Nom de la copie
+    - textbox "Nom de la copie": Onboarding client SaaS — copie
+    - text: Destination
+    - combobox "Destination":
+      - option "Modèles de workflows" [selected]
+      - option "Sans projet"
+      - option "Client Atlas - onboarding"
+    - button "Créer la copie"

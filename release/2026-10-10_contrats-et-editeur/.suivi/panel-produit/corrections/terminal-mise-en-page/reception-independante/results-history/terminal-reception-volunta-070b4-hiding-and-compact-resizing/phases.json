@@ -1,0 +1,212 @@
+[
+  {
+    "label": "initial",
+    "width": 1600,
+    "height": 1100,
+    "rows": 60,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 185.390625,
+      "width": 665.828125,
+      "height": 906.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 177.390625,
+      "width": 697.828125,
+      "height": 922.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "ea1da1aa762f4931b747f7092fbed6a5",
+        "pid": 1747890
+      }
+    ]
+  },
+  {
+    "label": "history-before",
+    "width": 1600,
+    "height": 1100,
+    "rows": 59,
+    "cols": 83,
+    "baseY": 169,
+    "viewportY": 129,
+    "cursorY": 58,
+    "visible": "HISTORY_123\nHISTORY_124\nHISTORY_125\nHISTORY_126\nHISTORY_127\nHISTORY_128\nHISTORY_129\nHISTORY_130\nHISTORY_131\nHISTORY_132\nHISTORY_133\nHISTORY_134\nHISTORY_135\nHISTORY_136\nHISTORY_137\nHISTORY_138\nHISTORY_139\nHISTORY_140\nHISTORY_141\nHISTORY_142\nHISTORY_143\nHISTORY_144\nHISTORY_145\nHISTORY_146\nHISTORY_147\nHISTORY_148\nHISTORY_149\nHISTORY_150\nHISTORY_151\nHISTORY_152\nHISTORY_153\nHISTORY_154\nHISTORY_155\nHISTORY_156\nHISTORY_157\nHISTORY_158\nHISTORY_159\nHISTORY_160\nHISTORY_161\nHISTORY_162\nHISTORY_163\nHISTORY_164\nHISTORY_165\nHISTORY_166\nHISTORY_167\nHISTORY_168\nHISTORY_169\nHISTORY_170\nHISTORY_171\nHISTORY_172\nHISTORY_173\nHISTORY_174\nHISTORY_175\nHISTORY_176\nHISTORY_177\nHISTORY_178\nHISTORY_179\nHISTORY_180\nHISTORY_181",
+    "host": {
+      "x": 282,
+      "y": 205.390625,
+      "width": 665.828125,
+      "height": 886.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 197.390625,
+      "width": 697.828125,
+      "height": 902.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "ea1da1aa762f4931b747f7092fbed6a5",
+        "pid": 1747890
+      }
+    ]
+  },
+  {
+    "label": "useful-check",
+    "width": 819,
+    "height": 720,
+    "rows": 11,
+    "cols": 77,
+    "baseY": 217,
+    "viewportY": 177,
+    "cursorY": 10,
+    "visible": "HISTORY_171\nHISTORY_172\nHISTORY_173\nHISTORY_174\nHISTORY_175\nHISTORY_176\nHISTORY_177\nHISTORY_178\nHISTORY_179\nHISTORY_180\nHISTORY_181",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 177.3874969482422
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 193.3874969482422
+    },
+    "workflow": {
+      "x": 176,
+      "y": 393.7875061035156,
+      "width": 643.2000122070312,
+      "height": 326.2124938964844
+    },
+    "divider": {
+      "x": 176,
+      "y": 387.7875061035156,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "ea1da1aa762f4931b747f7092fbed6a5",
+        "pid": 1747890
+      }
+    ]
+  },
+  {
+    "label": "history-after",
+    "width": 819,
+    "height": 720,
+    "rows": 11,
+    "cols": 77,
+    "baseY": 217,
+    "viewportY": 177,
+    "cursorY": 10,
+    "visible": "HISTORY_171\nHISTORY_172\nHISTORY_173\nHISTORY_174\nHISTORY_175\nHISTORY_176\nHISTORY_177\nHISTORY_178\nHISTORY_179\nHISTORY_180\nHISTORY_181",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 177.3874969482422
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 193.3874969482422
+    },
+    "workflow": {
+      "x": 176,
+      "y": 393.7875061035156,
+      "width": 643.2000122070312,
+      "height": 326.2124938964844
+    },
+    "divider": {
+      "x": 176,
+      "y": 387.7875061035156,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "ea1da1aa762f4931b747f7092fbed6a5",
+        "pid": 1747890
+      }
+    ]
+  },
+  {
+    "label": "final",
+    "width": 819,
+    "height": 720,
+    "rows": 11,
+    "cols": 77,
+    "baseY": 217,
+    "viewportY": 177,
+    "cursorY": 10,
+    "visible": "HISTORY_171\nHISTORY_172\nHISTORY_173\nHISTORY_174\nHISTORY_175\nHISTORY_176\nHISTORY_177\nHISTORY_178\nHISTORY_179\nHISTORY_180\nHISTORY_181",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 177.3874969482422
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 193.3874969482422
+    },
+    "workflow": {
+      "x": 176,
+      "y": 393.7875061035156,
+      "width": 643.2000122070312,
+      "height": 326.2124938964844
+    },
+    "divider": {
+      "x": 176,
+      "y": 387.7875061035156,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "ea1da1aa762f4931b747f7092fbed6a5",
+        "pid": 1747890
+      }
+    ]
+  }
+]

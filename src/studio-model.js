@@ -1,7 +1,7 @@
 import statusCatalog from '../electron/workflow-states.json' with { type: 'json' };
 export const states = Object.freeze(statusCatalog.labels);
-export const kinds = Object.freeze({ question: 'Question', task: 'Tâche', agent: 'Tâche IA', command: 'Commande', decision: 'Décision humaine', condition: 'Condition', join: 'Jonction', review: 'Relecture', document: 'Document', external: 'Opération externe', subworkflow: 'Sous-workflow', watch: 'Surveillance', communication: 'Communication' });
-export const symbols = Object.freeze({ question: '?', task: '◇', agent: '✦', command: '›_', decision: '?', condition: '⑂', join: '⋈', review: '✓', document: '▤', external: '↗', subworkflow: '⊞', watch: '◷', communication: '↗' });
+export const kinds = Object.freeze({ question: 'Question', task: 'Tâche', agent: 'Tâche IA', command: 'Commande', decision: 'Décision humaine', condition: 'Condition', join: 'Jonction', review: 'Relecture', document: 'Document', external: 'Opération externe', subworkflow: 'Sous-workflow', watch: 'Surveillance', communication: 'Communication', input: 'Entrée utilisateur', foreach: 'Pour chaque élément', integrate: 'Intégrer les modifications' });
+export const symbols = Object.freeze({ question: '?', task: '◇', agent: '✦', command: '›_', decision: '?', condition: '⑂', join: '⋈', review: '✓', document: '▤', external: '↗', subworkflow: '⊞', watch: '◷', communication: '↗', input: '≡', foreach: '⋮', integrate: '⋈' });
 
 export function nodePosition(node, index) { return node.position || { x: 50 + (index % 4) * 300, y: 60 + Math.floor(index / 4) * 180 }; }
 

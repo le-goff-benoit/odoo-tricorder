@@ -1,0 +1,21 @@
+[
+  {
+    "event": "avant-premier-ajout",
+    "at": 1791626873392,
+    "value": "BORÉAL A : configurer trois utilisateurs"
+  },
+  {
+    "event": "premier-clic-retour",
+    "at": 1791626873473
+  },
+  {
+    "event": "seconde-saisie",
+    "at": 1791626873490,
+    "value": "BORÉAL B : importer Excel puis brouillon de mail"
+  },
+  {
+    "event": "second-clic-retour",
+    "at": 1791626873668,
+    "value": ""
+  }
+]

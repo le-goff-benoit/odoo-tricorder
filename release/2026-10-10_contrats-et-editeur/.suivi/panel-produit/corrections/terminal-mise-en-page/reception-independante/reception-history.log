@@ -1,0 +1,50 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-terminal-final/playwright.config.cjs --output=/tmp/tricorder-review-terminal-final/results-history --grep voluntary history
+PATH: /tmp/tricorder-ci-tools-u7e__wqo:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✘  1 ../../../tmp/tricorder-review-terminal-final/terminal-reception.spec.cjs:35:1 › voluntary history reading is not pulled to the bottom by hiding and compact resizing (6.1s)
+
+
+  1) ../../../tmp/tricorder-review-terminal-final/terminal-reception.spec.cjs:35:1 › voluntary history reading is not pulled to the bottom by hiding and compact resizing 
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected substring: "HISTORY_123"
+    Received string:    "HISTORY_171
+    HISTORY_172
+    HISTORY_173
+    HISTORY_174
+    HISTORY_175
+    HISTORY_176
+    HISTORY_177
+    HISTORY_178
+    HISTORY_179
+    HISTORY_180
+    HISTORY_181"
+
+      38 |  const before=await phase('history-before'),marker=before.visible.match(/HISTORY_\d{3}/)?.[0];expect(marker).toBeTruthy();
+      39 |  await page.locator('[data-action=terminal-toggle]').click();await size(1024,900,1.25);await page.locator('[data-action=terminal-toggle]').click();await useful();
+    > 40 |  const after=await phase('history-after');expect(after.baseY-after.viewportY).toBeGreaterThan(20);expect(after.visible).toContain(marker);expect(after.sessions).toEqual(before.sessions);await snapshot('history-preserved-compact');
+         |                                                                                                                         ^
+      41 | });
+      42 |
+      43 | test('compact split preserves useful terminal size and original PTY through split changes',async()=>{
+        at /tmp/tricorder-review-terminal-final/terminal-reception.spec.cjs:40:121
+
+    Error Context: ../../../tmp/tricorder-review-terminal-final/results-history/terminal-reception-volunta-070b4-hiding-and-compact-resizing/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-review-terminal-final/results-history/terminal-reception-volunta-070b4-hiding-and-compact-resizing/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-review-terminal-final/results-history/terminal-reception-volunta-070b4-hiding-and-compact-resizing/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    ../../../tmp/tricorder-review-terminal-final/terminal-reception.spec.cjs:35:1 › voluntary history reading is not pulled to the bottom by hiding and compact resizing 

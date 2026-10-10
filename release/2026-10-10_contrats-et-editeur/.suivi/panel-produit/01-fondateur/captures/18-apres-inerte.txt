@@ -1,0 +1,79 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas - onboarding
+  - button "Terminal 1" [pressed]
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:05
+  - button "Actualiser · À jour · 12:05"
+  - strong: Terminal
+  - button "Contexte"
+  - button "Disposition verticale"
+  - button "Agrandir le terminal"
+  - 'button "Shell · Codex arrêté · Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail." [pressed]':
+    - img "Shell"
+    - text: "Shell · Codex arrêté · Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+  - button "Arrêter ce terminal"
+  - button "Nouveau terminal"
+  - button "Rechercher dans le terminal"
+  - text: "Conversation du workflow affiché · Shell : Client Atlas - onboarding · Agent arrêté"
+  - textbox "Terminal input"
+  - separator "Taille du terminal"
+  - main:
+    - text: Suivi · Onboarding Atlas
+    - 'heading "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail." [level=1]'
+    - group: Options
+    - group "Périmètre du suivi":
+      - button "Vue d’ensemble"
+      - button "Demande" [pressed]
+    - tablist "Vues du workflow"
+    - group: 1 demande
+    - paragraph:
+      - strong: Agent arrêté · progression conservée.
+      - text: Aucune étape en cours
+    - button "Reprendre l’agent…"
+    - button "Voir le shell"
+    - region "État et prochaine action":
+      - strong: Recueil ouvert
+      - text: 0 / 5 étapes
+      - button "Compléter les intentions"
+      - paragraph: "Recueil ouvert : ajoutez vos contributions puis confirmez la liste."
+    - group "Affichage du suivi":
+      - button "Graphe" [pressed]
+      - button "Détail"
+    - article "Recueillir les besoins client · Recueil ouvert":
+      - button "Recueillir les besoins client": Recueillir les besoins client Entrée utilisateur Recueil ouvert intentions · liste
+      - strong: 0 intention recueillie(s)
+      - list
+    - button "Préparer un plan · Prévu": Préparer un plan Tâche IA Prévu plan · un élément
+    - button "Valider le plan · Prévu": Valider le plan Décision humaine Prévu Vous
+    - article "Pour chaque élément du plan · Prévu":
+      - button "Pour chaque élément du plan": Pour chaque élément du plan Pour chaque élément Prévu contributions · liste ; results · liste
+      - strong: Travail par élément
+      - paragraph: En attente de la liste et du plan accepté
+      - text: "Limite : 2 simultanés"
+    - button "Examiner les résultats · Prévu": Examiner les résultats Décision humaine Prévu Vous
+    - text: 5 blocs · 4 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"

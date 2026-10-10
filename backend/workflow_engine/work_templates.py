@@ -129,4 +129,93 @@ def templates():
         for step in flow["nodes"]:
             if step["id"] in examples[flow["id"]]:
                 step["sample_outputs"] = examples[flow["id"]][step["id"]]
-    return [release, support, meeting, request, express]
+    return [release, support, meeting, request, express, *_collection_templates(work)]
+
+
+def _collection_templates(work):
+    """New versioned models; existing conversations keep their schema-1 graphs."""
+    import copy
+
+    intentions = {"type": "array", "items": "object", "required": True, "minItems": 1, "maxItems": 100}
+    objects = {"type": "array", "items": "object", "required": True, "maxItems": 100}
+    single = {"type": "object", "required": True}
+    sample_plan = {"goal": "Préparer le suivi d’une réunion", "tasks": [
+        {"id": "R1", "title": "Préparer le compte rendu", "criteria": ["Distinguer les décisions des sujets à confirmer"]},
+        {"id": "R2", "title": "Préparer un brouillon d’email", "depends_on": ["R1"], "criteria": ["Reprendre les décisions reçues sans envoyer le message"]}]}
+    plan_prompt = (
+        "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, "
+        "une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. "
+        "depends_on contient uniquement les ids des tâches préalables, sans cycle. "
+        "project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. "
+        "base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. "
+        "Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. "
+        "Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.")
+
+    def opening():
+        return [
+            node("intentions", "Recueillir les intentions", "input", x=50, y=140, outputs={"intentions": copy.deepcopy(intentions)},
+                 description="Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan."),
+            work("plan", "Préparer un plan", x=360, y=140, inputs={"intentions": copy.deepcopy(intentions)},
+                 outputs={"plan": copy.deepcopy(single)}, prompt=plan_prompt, sample_outputs={"plan": copy.deepcopy(sample_plan)}),
+            node("scope", "Valider le plan", "decision", x=670, y=140, inputs={"plan": copy.deepcopy(single)},
+                 outputs={"plan": copy.deepcopy(single)}, question="Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?",
+                 options=["approve", "reject"]),
+        ]
+
+    def opening_edges():
+        return [{**edge("intentions", "plan"), "mapping": {"intentions": "intentions"}},
+                {**edge("plan", "scope"), "mapping": {"plan": "plan"}},
+                {**edge("scope", "work", "approve"), "mapping": {"plan": "plan"}}]
+
+    child = {"schema": 2, "id": "work-item", "title": "Traiter un élément du plan", "nodes": [
+        work("perform", "Effectuer le travail de cet élément", inputs={"item": copy.deepcopy(single)}, outputs={"result": "string"},
+             prompt="Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. "
+                    "Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. "
+                    "Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.",
+             sample_outputs={"result": "Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."})], "edges": []}
+    generic = {"schema": 2, "id": "intentions-plan-work", "title": "Intentions, plan et travaux",
+               "description": "Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.",
+               "nodes": [*opening(),
+                   node("work", "Pour chaque élément du plan", "foreach", x=980, y=140, collection="plan.tasks", concurrency=2,
+                        inputs={"plan": copy.deepcopy(single)}, outputs={"results": copy.deepcopy(objects), "contributions": copy.deepcopy(objects)}, workflow=child),
+                   node("receipt", "Examiner les résultats", "decision", x=1320, y=140, inputs={"results": copy.deepcopy(objects)},
+                        question="Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.", options=["approve", "reject"])],
+               "edges": [*opening_edges(), {**edge("work", "receipt"), "mapping": {"results": "results"}}]}
+
+    # This is an explicit, executable Python example. An absent/empty suite must
+    # fail rather than qualify a repository or an Odoo installation by accident.
+    check = ["python3", "-B", "-c", "import sys, unittest; sys.path.insert(0, '/project'); "
+             "suite = unittest.defaultTestLoader.discover('/project/tests'); "
+             "assert suite.countTestCases() > 0, 'Aucun test trouvé : adapter la commande au projet'; "
+             "result = unittest.TextTestRunner(verbosity=2).run(suite); sys.exit(not result.wasSuccessful())"]
+    qa_prompt = "Exemple Python unittest, à adapter avant lancement. Projet en lecture seule, sans réseau ni base de données ; ce contrôle ne constitue pas une recette Odoo."
+    code_child = {"schema": 2, "id": "code-item", "title": "Modifier et tester un élément", "nodes": [
+        work("edit", "Proposer les modifications", execution_mode="edit", required_capabilities=["edit"],
+             inputs={"item": copy.deepcopy(single), "candidate": {"type": "object", "required": False}}, outputs={"candidate": copy.deepcopy(single)},
+             prompt="Réaliser uniquement inputs.item dans la copie de travail fournie. Elle inclut la dépendance de code autorisée, si présente. "
+                    "Ne pas écrire dans le dépôt original. Si aucune modification n’est nécessaire, demander un recadrage ; ne pas fabriquer de diff. "
+                    "Les tests seront exécutés par le bloc de commande suivant.",
+             sample_outputs={"candidate": {"simulation": True, "summary": "Exemple sans diff applicable"}}),
+        node("qa", "Tester la contribution", "command", x=390, inputs={"candidate": copy.deepcopy(single)},
+             candidate_check=True, argv=copy.deepcopy(check), validation="automatic", evidence_required=True, description=qa_prompt)],
+        "edges": [{**edge("edit", "qa"), "mapping": {"candidate": "candidate"}}]}
+    code_opening = opening()
+    code_opening[1]["prompt"] += " Ce modèle porte uniquement sur des modifications de code. La commande Python unittest des blocs QA est un exemple à adapter au projet avant de valider le plan ; elle n’installe ni Odoo ni une base de données."
+    code_opening[1]["sample_outputs"] = {"plan": {"goal": "Exemple d’évolution d’un projet Python", "tasks": [
+        {"id": "R1", "title": "Modifier la fonction et ses tests", "criteria": ["Les tests pertinents couvrent le résultat attendu"]}]}}
+    code_opening[2]["question"] = "Le périmètre et les dépendances sont-ils validés ? Vérifiez aussi que les commandes de tests Python de chaque élément et du candidat commun ont été adaptées à ce projet."
+    code = {"schema": 2, "id": "code-plan-integrate", "title": "Développement par élément et tests communs",
+            "description": "Valider un plan de code, travailler dans des copies isolées puis intégrer les contributions et tester le candidat commun. Commandes Python unittest fournies comme exemples à adapter ; aucun déploiement ni recette Odoo implicite.",
+            "nodes": [*code_opening,
+                node("work", "Pour chaque élément du plan", "foreach", x=980, y=140, collection="plan.tasks", concurrency=2,
+                     inputs={"plan": copy.deepcopy(single)}, outputs={"results": copy.deepcopy(objects), "contributions": copy.deepcopy(objects)}, workflow=code_child),
+                node("integrate", "Intégrer les modifications", "integrate", x=1310, y=140, validation="automatic",
+                     inputs={"contributions": copy.deepcopy(objects)}, outputs={"candidate": copy.deepcopy(single)}, application_requires=["qa", "receipt"]),
+                node("qa", "Tester le candidat commun", "command", x=1640, y=140, inputs={"candidate": copy.deepcopy(single)},
+                     candidate_check=True, argv=copy.deepcopy(check), validation="automatic", evidence_required=True, description=qa_prompt),
+                node("receipt", "Décider de l’application locale", "decision", x=1970, y=140, inputs={"candidate": copy.deepcopy(single)},
+                     question="Les tests communs ont réussi sur ce candidat exact. Examinez le diff et les preuves avant l’application au dépôt local. Aucune publication ni livraison n’a été effectuée.", options=["approve", "reject"])],
+            "edges": [*opening_edges(), {**edge("work", "integrate"), "mapping": {"contributions": "contributions"}},
+                      {**edge("integrate", "qa"), "mapping": {"candidate": "candidate"}},
+                      {**edge("integrate", "receipt"), "mapping": {"candidate": "candidate"}}, edge("qa", "receipt")]}
+    return [generic, code]

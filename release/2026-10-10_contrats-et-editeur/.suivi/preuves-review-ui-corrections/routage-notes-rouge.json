@@ -1,0 +1,101 @@
+{
+  "geometry": [],
+  "checks": [
+    "Note créée hors liens et étiquettes"
+  ],
+  "terminalsBefore": [
+    {
+      "id": "c35ef36896df4df6a91b74f31bbb973d",
+      "project": "/tmp/tricorder-ui-independent-state-iaoo4w/workflows/workspace",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-ui-independent-state-iaoo4w/workflows/workspace/.tricorder",
+      "release": null,
+      "task": null,
+      "createdAt": 1791623354.5880518,
+      "lastOutputAt": 1791623354.9264448,
+      "pid": 1494895,
+      "program": "bash",
+      "provider": null,
+      "foreground": 1494895,
+      "promptVerified": true,
+      "idleShell": true,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "notesBeforeMove": {
+    "cards": [
+      {
+        "id": "intentions",
+        "r": {
+          "x": 298,
+          "y": 360.9375,
+          "width": 240,
+          "height": 114,
+          "top": 360.9375,
+          "right": 538,
+          "bottom": 474.9375,
+          "left": 298
+        }
+      },
+      {
+        "id": "plan",
+        "r": {
+          "x": 628,
+          "y": 360.9375,
+          "width": 240,
+          "height": 114,
+          "top": 360.9375,
+          "right": 868,
+          "bottom": 474.9375,
+          "left": 628
+        }
+      },
+      {
+        "id": "scope",
+        "r": {
+          "x": 958,
+          "y": 360.9375,
+          "width": 240,
+          "height": 114,
+          "top": 360.9375,
+          "right": 1198,
+          "bottom": 474.9375,
+          "left": 958
+        }
+      },
+      {
+        "id": "work",
+        "r": {
+          "x": 1288,
+          "y": 360.9375,
+          "width": 240,
+          "height": 114,
+          "top": 360.9375,
+          "right": 1528,
+          "bottom": 474.9375,
+          "left": 1288
+        }
+      }
+    ],
+    "notes": [
+      {
+        "left": 496,
+        "top": 336,
+        "width": 280,
+        "height": 180
+      }
+    ],
+    "routesThroughCards": [
+      {
+        "edge": "p-s",
+        "path": "M610,118 L628,118 L484,118 L484,650 L628,650 L682,650 L788,650 L788,118 L682,118 L700,118",
+        "through": [
+          "plan",
+          "scope"
+        ]
+      }
+    ]
+  }
+}

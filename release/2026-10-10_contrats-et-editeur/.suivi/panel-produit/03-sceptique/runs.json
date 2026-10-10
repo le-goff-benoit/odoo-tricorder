@@ -1,0 +1,207 @@
+{
+  "family_counts": {
+    "requests": 4,
+    "tasks": 0,
+    "actions": 0
+  },
+  "items": [
+    {
+      "id": "r3485e66f95d242fe",
+      "project": "p0ac563676a974dd2",
+      "status": "completed",
+      "created": 1791626997.0250795,
+      "updated": 1791627019.6163087,
+      "simulation": false,
+      "completion_outcome": "succeeded",
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "work-ee5f777a-1459-460f-ae24-604f424701a1",
+        "title": "Revue locale reproductible",
+        "revision": 3
+      },
+      "original": {
+        "id": "work-ee5f777a-1459-460f-ae24-604f424701a1"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "",
+      "counts": {
+        "accepted": 2
+      },
+      "nodes": {
+        "check": {
+          "status": "accepted"
+        },
+        "decision": {
+          "status": "accepted"
+        }
+      },
+      "origin": null
+    },
+    {
+      "id": "re18c85faf8ad4881",
+      "project": "p0ac563676a974dd2",
+      "status": "active",
+      "created": 1791626933.4795704,
+      "updated": 1791626965.270629,
+      "simulation": false,
+      "completion_outcome": null,
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "work-ee5f777a-1459-460f-ae24-604f424701a1",
+        "title": "Revue locale reproductible",
+        "revision": 3
+      },
+      "original": {
+        "id": "work-ee5f777a-1459-460f-ae24-604f424701a1"
+      },
+      "focus": {
+        "node": "check",
+        "title": "Contrôler expected.txt — version Git",
+        "status": "returned",
+        "action": "Examiner l’échec"
+      },
+      "health": {
+        "status": "failed",
+        "total": 1,
+        "issues": [
+          {
+            "node": "check",
+            "title": "Contrôler expected.txt — version Git",
+            "reason": "Commande terminée avec le code 1. Résultat à examiner."
+          }
+        ]
+      },
+      "request": "",
+      "counts": {
+        "returned": 1,
+        "pending": 1
+      },
+      "nodes": {
+        "check": {
+          "status": "returned"
+        },
+        "decision": {
+          "status": "pending"
+        }
+      },
+      "origin": null
+    },
+    {
+      "id": "r2b6b0adab01f4a13",
+      "project": "p0ac563676a974dd2",
+      "status": "active",
+      "created": 1791626897.7704027,
+      "updated": 1791626898.2248163,
+      "simulation": true,
+      "completion_outcome": null,
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "work-ee5f777a-1459-460f-ae24-604f424701a1",
+        "title": "Revue locale reproductible",
+        "revision": 3
+      },
+      "original": {
+        "id": "work-ee5f777a-1459-460f-ae24-604f424701a1"
+      },
+      "focus": {
+        "node": "check",
+        "title": "Contrôler expected.txt — version Git",
+        "status": "returned",
+        "action": "Examiner le résultat"
+      },
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "",
+      "counts": {
+        "returned": 1,
+        "pending": 1
+      },
+      "nodes": {
+        "check": {
+          "status": "returned"
+        },
+        "decision": {
+          "status": "pending"
+        }
+      },
+      "origin": null
+    },
+    {
+      "id": "rc6ed1dd8809e45e6",
+      "project": "p0ac563676a974dd2",
+      "status": "completed",
+      "created": 1791626764.3073535,
+      "updated": 1791626811.7214894,
+      "simulation": false,
+      "completion_outcome": "succeeded",
+      "archived": null,
+      "coordination_wait": null,
+      "coordination_hold": null,
+      "parent": null,
+      "associated_with": null,
+      "conversation": null,
+      "workers": [],
+      "workers_total": 0,
+      "definition": {
+        "id": "work-ee5f777a-1459-460f-ae24-604f424701a1",
+        "title": "Revue locale reproductible",
+        "revision": 2
+      },
+      "original": {
+        "id": "work-ee5f777a-1459-460f-ae24-604f424701a1"
+      },
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      },
+      "request": "",
+      "counts": {
+        "accepted": 2
+      },
+      "nodes": {
+        "check": {
+          "status": "accepted"
+        },
+        "decision": {
+          "status": "accepted"
+        }
+      },
+      "origin": null
+    }
+  ],
+  "total": 4,
+  "offset": 0,
+  "limit": 25,
+  "next": null
+}

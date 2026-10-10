@@ -1,0 +1,68 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - button "Client Boréal - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas - onboarding
+  - button "Terminal 1" [pressed]
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:08
+  - button "Actualiser · À jour · 12:08"
+  - strong: Terminal
+  - button "Contexte"
+  - button "Disposition verticale"
+  - button "Agrandir le terminal"
+  - 'button "Shell · Codex arrêté · Onboarder Boréal : 3 utilisateurs, migration depuis Excel, cadrage cette semaine. Brouillon local de mail attendu." [pressed]':
+    - img "Shell"
+    - text: "Shell · Codex arrêté · Onboarder Boréal : 3 utilisateurs, migration depuis Excel, cadrage cette semaine. Brouillon local de mail attendu."
+  - button "Arrêter ce terminal"
+  - button "Nouveau terminal"
+  - button "Rechercher dans le terminal"
+  - text: "Conversation du workflow affiché · Shell : Client Boréal - onboarding · Agent arrêté"
+  - textbox "Terminal input"
+  - separator "Taille du terminal"
+  - main:
+    - heading "Client Atlas - onboarding" [level=1]
+    - paragraph: /tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p883958b73e7944f7
+    - button "Nouvelle demande"
+    - button "Créer un workflow"
+    - group: Options
+    - heading "Reprendre le travail" [level=2]
+    - 'button "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail. Onboarding Atlas · 10.10.2026 12:05:01 · Ouverte · 1 demande · Ouvrir le suivi et le terminal →"':
+      - strong: "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+      - text: Onboarding Atlas · 10.10.2026 12:05:01 · Ouverte · 1 demande · Ouvrir le suivi et le terminal →
+    - table:
+      - rowgroup:
+        - 'row "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail. Onboarding Atlas · Rév. 1 · 10.10.2026 12:05:01 Exécution réelle Décision attendue Consulter"':
+          - 'cell "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail. Onboarding Atlas · Rév. 1 · 10.10.2026 12:05:01"'
+          - cell "Exécution réelle"
+          - cell "Décision attendue"
+          - cell "Consulter":
+            - button "Consulter"
+    - group: Rechercher dans les exécutions
+    - heading "Workflows disponibles" [level=2]
+    - button "Voir les archives"
+    - article:
+      - heading "Onboarding Atlas" [level=3]
+      - paragraph: "5 étapes · Copie du modèle intégré « Intentions, plan et travaux ». Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents."
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯

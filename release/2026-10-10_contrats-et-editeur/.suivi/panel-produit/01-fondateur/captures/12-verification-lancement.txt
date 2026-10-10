@@ -1,0 +1,98 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Modèles
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:04
+  - button "Actualiser · À jour · 12:04"
+  - main:
+    - text: Modèles / Workflow
+    - heading "Onboarding client SaaS" [level=1]
+    - paragraph: Révision 2 · Modifications en attente
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer"
+    - button "Exécuter…"
+    - text: "Lancement en attente :"
+    - strong: Onboarding client SaaS
+    - text: · Bibliothèque de modèles. Votre demande est conservée.
+    - button "Revenir au lancement"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img:
+      - 'button "Corriger le lien : Recueillir les besoins client → Préparer un plan · intentions · liste"'
+      - 'button "Corriger le lien : Préparer un plan → Valider le plan · plan · un élément"'
+      - 'button "Corriger le lien : Valider le plan → Pour chaque élément du plan · Approuvée · plan · un élément"'
+      - 'button "Corriger le lien : Pour chaque élément du plan → Examiner les résultats · results · liste"'
+    - button "Recueillir les besoins client · Entrée utilisateur": Recueillir les besoins client Entrée utilisateur intentions · liste
+    - button "Préparer un plan · Tâche IA": Préparer un plan Tâche IA plan · un élément
+    - button "Valider le plan · Décision humaine": Valider le plan Décision humaine Vous
+    - button "Pour chaque élément du plan · Pour chaque élément": Pour chaque élément du plan Pour chaque élément results · liste ; contributions · liste
+    - button "Examiner les résultats · Décision humaine": Examiner les résultats Décision humaine Vous
+    - button "Relier vers Recueillir les besoins client"
+    - button "Relier depuis Recueillir les besoins client"
+    - button "Relier vers Préparer un plan"
+    - button "Relier depuis Préparer un plan"
+    - button "Relier vers Valider le plan"
+    - button "Relier depuis Valider le plan"
+    - button "Relier vers Pour chaque élément du plan"
+    - button "Relier depuis Pour chaque élément du plan"
+    - button "Relier vers Examiner les résultats"
+    - button "Relier depuis Examiner les résultats"
+    - text: 5 blocs · 4 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+  - dialog "Choisir l’IA pour ce workflow":
+    - heading "Choisir l’IA pour ce workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - strong: IA pour les étapes de travail
+    - paragraph: Un choix commun à toutes les étapes IA. Les profils d’agents sont conservés.
+    - text: Fournisseur IA
+    - combobox "Fournisseur IA":
+      - option "OpenAI · Codex" [selected]
+      - option "Anthropic · Claude"
+    - text: Modèle
+    - textbox "Modèle":
+      - /placeholder: Modèle configuré chez le fournisseur
+      - text: modele-local-inerte
+    - text: Le modèle proposé provient de votre configuration locale. La connexion sera vérifiée au lancement.
+    - button "Appliquer ce choix et vérifier"
+    - button "Revenir au lancement"

@@ -1,5 +1,26 @@
 # Journal
 
+## 2026-10-10 — Intentions, tâches et résultats suivis (0.6.0-rc.13)
+
+- Recueil versionné de plusieurs intentions, contrats de données simples/listes et sortie vers un plan unique.
+- Traitement explicite par élément, enfants durables, dépendances, limites de parallélisme et reprise ciblée.
+- Graphe de suivi alimenté par les intentions, le plan et les tâches réellement enregistrées ; exécutants observés.
+- Contributions de code isolées, intégration d’un candidat commun et tests communs avant accord.
+- Actions facultatives indépendantes du résultat principal, activation explicite et effets incertains réconciliés.
+- Déplacement et liaison des blocs à la souris et au clavier ; notes de présentation, sauvegarde et annulation.
+- Six avis d’architecture puis six agents indépendants jouant des profils utilisateurs, avec parcours GUI et preuves synthétiques conservées.
+- Lecture directe des livrables, projets/dépendances nommés, états de production et d’approbation distincts.
+- Navigation parent/enfant durable, cadrage au partage avec le terminal et tableau de projet compact.
+- Autorisation des notifications des composants obligatoires et contrôle de la connexion figée entre projets.
+- Demandes longues : titres lisibles et texte intégral conservé lors de la reconfiguration et du remplacement.
+- Reprise : remplacement ouvert et confirmé ; sauvegarde clavier, focus du nouveau bloc et question sur petit écran reçus.
+- Panel produit supplémentaire de six agents : fondateur SaaS, services, senior sceptique, opérations, produit B2B et consultant multi-client.
+- Saisie rapide des intentions protégée, brouillon conservé et confirmation sans perte ; shell de suivi à la racine et relance automatique explicitée.
+- Diagnostic de commande visible, étape courante dans Activité, prérequis natifs cohérents et JSON stable pour Git.
+- Terminal compact : réaffichage de la sortie courante sans perdre l’historique consulté ; accès aux sessions des autres projets.
+- Retour à la conversation basé sur la session réelle : commande en cours conservée, reprise après fermeture soumise à confirmation.
+- Documentation et réception : `release/2026-10-10_contrats-et-editeur/README.md`.
+
 ## 2026-10-10 — Création, terminal et suivi des workflows (0.6.0-rc.12)
 
 - Vue d’ensemble des demandes, états, exécutants observés et dépendances entre projets.
@@ -202,3 +223,5 @@ Les interventions antérieures restent dans l’historique Git. Le suivi détail
 - Tests de régression du transport et parcours de démarrage avec un gros historique synthétique.
 - Détails et recette : `release/2026-10-09_chargement/README.md`.
 - Recette : 199 tests Python, 81 JavaScript, 56 parcours UI et 5 ciblés sur le paquet réussis.
+
+- Réception terminal compact : correction du fit avant reprise du rendu xterm, hauteur utile en disposition empilée, historique volontaire et PTY conservés ; scénario initial reçu et trois contre-épreuves indépendantes vertes.

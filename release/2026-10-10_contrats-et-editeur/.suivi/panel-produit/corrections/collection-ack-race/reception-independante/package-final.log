@@ -1,0 +1,13 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-collection-ack/playwright.config.cjs --output=/tmp/tricorder-review-collection-ack/results-package-final
+PATH: /tmp/tricorder-ci-tools-72i_0a__:/usr/bin:/bin
+codex None
+claude None
+
+Running 2 tests using 1 worker
+
+  ✓  1 ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with stale revision preserve exactly two intentions (6.3s)
+  ✓  2 ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with fresh revision preserve exactly two intentions (5.5s)
+
+  2 passed (12.4s)

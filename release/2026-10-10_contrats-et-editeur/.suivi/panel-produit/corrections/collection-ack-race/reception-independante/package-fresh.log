@@ -1,0 +1,40 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-collection-ack/playwright.config.cjs --output=/tmp/tricorder-review-collection-ack/results-package-fresh --grep fresh revision
+PATH: /tmp/tricorder-ci-tools-5e9kfk5q:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✘  1 ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with fresh revision preserve exactly two intentions (5.3s)
+
+
+  1) ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with fresh revision preserve exactly two intentions 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 2
+    Received: undefined
+
+      75 |  await page.locator('.collection-recovery article').filter({hasText:'Accusé perdu synthétique'}).getByRole('button',{name:'Réessayer cet ajout',exact:true}).click();
+      76 |  await expect(page.locator('.collection-recovery')).toHaveCount(0);expect(await stored()).toEqual([text,text]);
+    > 77 |  const final=await app.evaluate(()=>reviewCalls.filter(c=>c.action==='collection.change'));expect(final.at(-1).request).toEqual(final[0].request);expect(final.at(-1).revision).toBe(2);
+         |                                                                                                                                                                                 ^
+      78 |  await page.getByRole('button',{name:'Confirmer la liste et continuer',exact:true}).click();
+      79 |  await expect.poll(async()=>(await call('run.get',{run:run.id})).run.status).toBe('completed');
+      80 |  expect((await call('run.get',{run:run.id})).run.nodes.intentions.result.outputs.intentions.map(i=>i.text)).toEqual([text,text]);
+        at /tmp/tricorder-review-collection-ack/review.spec.cjs:77:177
+
+    Error Context: ../../../tmp/tricorder-review-collection-ack/results-package-fresh/review-independent-identic-a088a-erve-exactly-two-intentions/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-review-collection-ack/results-package-fresh/review-independent-identic-a088a-erve-exactly-two-intentions/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-review-collection-ack/results-package-fresh/review-independent-identic-a088a-erve-exactly-two-intentions/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    ../../../tmp/tricorder-review-collection-ack/review.spec.cjs:44:37 › independent identical additions with fresh revision preserve exactly two intentions 

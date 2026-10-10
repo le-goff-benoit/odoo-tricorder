@@ -1,0 +1,548 @@
+[
+  {
+    "label": "initial",
+    "width": 1600,
+    "height": 1100,
+    "rows": 60,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 185.390625,
+      "width": 665.828125,
+      "height": 906.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 177.390625,
+      "width": 697.828125,
+      "height": 922.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "size-before",
+    "width": 1600,
+    "height": 1100,
+    "rows": 60,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 185.390625,
+      "width": 665.828125,
+      "height": 906.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 177.390625,
+      "width": 697.828125,
+      "height": 922.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "useful-check",
+    "width": 819,
+    "height": 720,
+    "rows": 11,
+    "cols": 77,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 177.3874969482422
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 193.3874969482422
+    },
+    "workflow": {
+      "x": 176,
+      "y": 393.7875061035156,
+      "width": 643.2000122070312,
+      "height": 326.2124938964844
+    },
+    "divider": {
+      "x": 176,
+      "y": 387.7875061035156,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "useful-check",
+    "width": 819,
+    "height": 720,
+    "rows": 10,
+    "cols": 77,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 159.8000030517578
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 175.8000030517578
+    },
+    "workflow": {
+      "x": 176,
+      "y": 376.20001220703125,
+      "width": 643.2000122070312,
+      "height": 343.8000183105469
+    },
+    "divider": {
+      "x": 176,
+      "y": 370.20001220703125,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "compact-minimum-split",
+    "width": 819,
+    "height": 720,
+    "rows": 10,
+    "cols": 77,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 159.8000030517578
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 175.8000030517578
+    },
+    "workflow": {
+      "x": 176,
+      "y": 376.20001220703125,
+      "width": 643.2000122070312,
+      "height": 343.8000183105469
+    },
+    "divider": {
+      "x": 176,
+      "y": 370.20001220703125,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "useful-check",
+    "width": 819,
+    "height": 720,
+    "rows": 20,
+    "cols": 77,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 314.6499938964844
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 330.6499938964844
+    },
+    "workflow": {
+      "x": 176,
+      "y": 531.0499877929688,
+      "width": 643.2000122070312,
+      "height": 188.9499969482422
+    },
+    "divider": {
+      "x": 176,
+      "y": 525.0499877929688,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "compact-maximum-split",
+    "width": 819,
+    "height": 720,
+    "rows": 20,
+    "cols": 77,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 314.6499938964844
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 330.6499938964844
+    },
+    "workflow": {
+      "x": 176,
+      "y": 531.0499877929688,
+      "width": 643.2000122070312,
+      "height": 188.9499969482422
+    },
+    "divider": {
+      "x": 176,
+      "y": 525.0499877929688,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "useful-check",
+    "width": 819,
+    "height": 720,
+    "rows": 20,
+    "cols": 77,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 192,
+      "y": 201.60000610351562,
+      "width": 619.2000122070312,
+      "height": 314.6499938964844
+    },
+    "container": {
+      "x": 176,
+      "y": 193.60000610351562,
+      "width": 643.2000122070312,
+      "height": 330.6499938964844
+    },
+    "workflow": {
+      "x": 176,
+      "y": 531.0499877929688,
+      "width": 643.2000122070312,
+      "height": 188.9499969482422
+    },
+    "divider": {
+      "x": 176,
+      "y": 525.0499877929688,
+      "width": 643.2000122070312,
+      "height": 6
+    },
+    "bodyHeight": 720,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "useful-check",
+    "width": 1600,
+    "height": 1100,
+    "rows": 38,
+    "cols": 165,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 205.390625,
+      "width": 1310,
+      "height": 578.796875
+    },
+    "container": {
+      "x": 258,
+      "y": 197.390625,
+      "width": 1342,
+      "height": 594.796875
+    },
+    "workflow": {
+      "x": 258,
+      "y": 798.1875,
+      "width": 1342,
+      "height": 301.8125
+    },
+    "divider": {
+      "x": 258,
+      "y": 792.1875,
+      "width": 1342,
+      "height": 6
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "useful-check",
+    "width": 1600,
+    "height": 1100,
+    "rows": 59,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 205.390625,
+      "width": 665.828125,
+      "height": 886.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 197.390625,
+      "width": 697.828125,
+      "height": 902.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "size-after",
+    "width": 1600,
+    "height": 1100,
+    "rows": 59,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 5,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 205.390625,
+      "width": 665.828125,
+      "height": 886.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 197.390625,
+      "width": 697.828125,
+      "height": 902.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "same-pty-after-layouts",
+    "width": 1600,
+    "height": 1100,
+    "rows": 59,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 8,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$ printf '\\x50\\x54\\x59\\x5f\\x53\\x54\\x49\\x4c\\x4c\\\nx5f\\x4c\\x49\\x56\\x45\\n'\nPTY_STILL_LIVE\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 205.390625,
+      "width": 665.828125,
+      "height": 886.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 197.390625,
+      "width": 697.828125,
+      "height": 902.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  },
+  {
+    "label": "final",
+    "width": 1600,
+    "height": 1100,
+    "rows": 59,
+    "cols": 83,
+    "baseY": 0,
+    "viewportY": 0,
+    "cursorY": 8,
+    "visible": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ printf \"SYNTHETIC_TERMINAL_READY\\n\"\nSYNTHETIC_TERMINAL_READY\nblegoff@wrk226:~/workflows/workspace$ printf '\\x50\\x54\\x59\\x5f\\x53\\x54\\x49\\x4c\\x4c\\\nx5f\\x4c\\x49\\x56\\x45\\n'\nPTY_STILL_LIVE\nblegoff@wrk226:~/workflows/workspace$  ",
+    "host": {
+      "x": 282,
+      "y": 205.390625,
+      "width": 665.828125,
+      "height": 886.609375
+    },
+    "container": {
+      "x": 258,
+      "y": 197.390625,
+      "width": 697.828125,
+      "height": 902.609375
+    },
+    "workflow": {
+      "x": 961.828125,
+      "y": 74,
+      "width": 638.171875,
+      "height": 1026
+    },
+    "divider": {
+      "x": 955.828125,
+      "y": 74,
+      "width": 6,
+      "height": 1026
+    },
+    "bodyHeight": 1100,
+    "sessions": [
+      {
+        "id": "3c5fe02d4d7c497790242e6f2d7480d4",
+        "pid": 1752346
+      }
+    ]
+  }
+]

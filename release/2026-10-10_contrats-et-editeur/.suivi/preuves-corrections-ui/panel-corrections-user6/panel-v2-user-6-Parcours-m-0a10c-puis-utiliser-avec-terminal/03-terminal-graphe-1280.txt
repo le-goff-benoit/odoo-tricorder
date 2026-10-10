@@ -1,0 +1,36 @@
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+Réunion bénévoles synthétique
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Réunion bénévoles synthétique
+Terminal
+1
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Terminal
+Contexte
+Disposition verticale
+Agrandir le terminal
+Codex · Préparer notre atelier de bénévoles.
+Conversation du workflow affiché · Shell : Réunion bénévoles synthétique
+'python3' '/home/blegoff/odoo-tricorder/backend/agent_launch.p
+y' '/tmp/tricorder-panel-ergo-PGpRt4/agent-events/0ee527d8-19f
+1-4b27-8bb9-11912f09b4f2.launch.json'
+To run a command as administrator (user "root"), use "sudo <co
+mmand>".
+See "man sudo_root" for details.
+blegoff@wrk226:~/workflows/projects/p4b6da9f239604e43$ 'python
+3' '/home/blegoff/odoo-tricorder/backend/agent_launch.py' '/tm
+p/tricorder-panel-ergo-PGpRt4/agent-events/0ee527d8-19f1-4b27-
+8bb9-11912f09b4f2.launch.json'
+PANEL_ERGO_INERT — aucun fournisseur contacte
+ 

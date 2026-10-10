@@ -1,0 +1,58 @@
+{
+  "profile": 2,
+  "build_renderer_sha256": "769515bf8cbd5cf312cb5df1346fa85b0443b55216f4b5ffd6be843d898f5946",
+  "spec_sha256": "588654133439c6de6ce1c67e231de36af9d663ef8ace70fa0ae4b50cbae528e6",
+  "captures": [
+    {
+      "file": "01-01-workflow-cree-support.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-crée-et-aece4-ticité-et-constat-sans-JSON/01-workflow-cree-support.png",
+      "sha256": "31b5794b43fb721f640369206f9250481c05b6c4a30313695d5bf70d6a26f82a"
+    },
+    {
+      "file": "02-02-branche-normale.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-crée-et-aece4-ticité-et-constat-sans-JSON/02-branche-normale.png",
+      "sha256": "ad04353fdd67885e6c0b317a9d26544d5886a651f318a811c9a5c0a444e63428"
+    },
+    {
+      "file": "03-03-branche-critique.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-crée-et-aece4-ticité-et-constat-sans-JSON/03-branche-critique.png",
+      "sha256": "5a623e8e0abc1c65f7519085d15d404de897fcc5d53f70bf4d7c3b6d0e54e4bf"
+    },
+    {
+      "file": "04-04-resultat-normal.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-crée-et-aece4-ticité-et-constat-sans-JSON/04-resultat-normal.png",
+      "sha256": "346d07f4645fdaf5ac192c345d2c55da9764717082db2067f184573b42308d3c"
+    },
+    {
+      "file": "05-06-lien-incompatible.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-répare--c0097-ns-les-formulaires-de-ports/06-lien-incompatible.png",
+      "sha256": "0be7a4bc083dad257e46f7f5316bea0fe61ed82744672831424f518718006674"
+    },
+    {
+      "file": "06-07-lien-repare.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-répare--c0097-ns-les-formulaires-de-ports/07-lien-repare.png",
+      "sha256": "0d12febefd0f246297a7d458f82090e0d3be8a698885a79157435e42a410db1b"
+    },
+    {
+      "file": "07-08-parent-question-et-echec.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-voit-qu-0ca4a-niquement-le-travail-échoué/08-parent-question-et-echec.png",
+      "sha256": "1d007a57aa76fda6f13e081a8ee3bb457013ccee51eba33b2edce85a9a67186a"
+    },
+    {
+      "file": "08-08b-parent-terminal-1280.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-voit-qu-0ca4a-niquement-le-travail-échoué/08b-parent-terminal-1280.png",
+      "sha256": "5a7c842a3a93fbcd047191c577ddd16aabc518a581894e806864764e5e271476"
+    },
+    {
+      "file": "09-09-reprise-ciblee.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-voit-qu-0ca4a-niquement-le-travail-échoué/09-reprise-ciblee.png",
+      "sha256": "3527f5f1539ffbf811606ed8a01190d6f229a49cd78b2a44a006b2ded761b011"
+    },
+    {
+      "file": "10-10-parent-termine-reprise-ciblee.png",
+      "source": "test-results/panel-v2-user-2/panel-v2-user-2-BA-voit-qu-0ca4a-niquement-le-travail-échoué/10-parent-termine-reprise-ciblee.png",
+      "sha256": "e7e02e9a7b768c4df06b7066ffff2a7b944dc7f9e370e5ffbaeea148516111e3"
+    }
+  ],
+  "scope": "Original panel on frozen source build; synthetic fixtures, inert providers; screenshots visually reviewed by the testing agent."
+}

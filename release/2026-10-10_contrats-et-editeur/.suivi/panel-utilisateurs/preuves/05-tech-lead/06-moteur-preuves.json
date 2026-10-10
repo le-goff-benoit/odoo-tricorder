@@ -1,0 +1,1204 @@
+{
+  "parent": {
+    "completion_outcome": "succeeded",
+    "contract": "1a1ac195bee756cf0c350407efbc86562e2672be1065b4444fecd98ecb020432",
+    "created": 1791621986.730796,
+    "definition": {
+      "defaults": {
+        "model": "panel-techlead-fixture",
+        "provider": "codex"
+      },
+      "description": "Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.",
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "intentions-plan",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "results": "results"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "work-1fd00e31-e8a5-451e-8e36-f6bce93deb3b",
+      "nodes": [
+        {
+          "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "title": "Recueillir les intentions"
+        },
+        {
+          "execution": {
+            "effort": "medium",
+            "model": "panel-techlead-fixture",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 360,
+            "y": 140
+          },
+          "profile": "generalist",
+          "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.",
+          "sample_outputs": {
+            "plan": {
+              "goal": "Préparer le suivi d’une réunion",
+              "tasks": [
+                {
+                  "criteria": [
+                    "Distinguer les décisions des sujets à confirmer"
+                  ],
+                  "id": "R1",
+                  "title": "Préparer le compte rendu"
+                },
+                {
+                  "criteria": [
+                    "Reprendre les décisions reçues sans envoyer le message"
+                  ],
+                  "depends_on": [
+                    "R1"
+                  ],
+                  "id": "R2",
+                  "title": "Préparer un brouillon d’email"
+                }
+              ]
+            }
+          },
+          "title": "Préparer un plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 670,
+            "y": 140
+          },
+          "question": "Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?",
+          "title": "Valider le plan"
+        },
+        {
+          "collection": "plan.tasks",
+          "completion_outcome": "succeeded",
+          "concurrency": 2,
+          "criteria": [],
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "max_attempts": 1,
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "phase": "",
+          "position": {
+            "x": 980,
+            "y": 140
+          },
+          "resources": [],
+          "title": "Pour chaque élément du plan",
+          "workflow": {
+            "edges": [],
+            "id": "work-item",
+            "nodes": [
+              {
+                "id": "perform",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.",
+                "sample_outputs": {
+                  "result": "Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."
+                },
+                "title": "Effectuer le travail de cet élément",
+                "validation": "contract"
+              }
+            ],
+            "schema": 2,
+            "title": "Traiter un élément du plan"
+          }
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 1320,
+            "y": 140
+          },
+          "question": "Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.",
+          "title": "Examiner les résultats"
+        }
+      ],
+      "parameters": {
+        "conversation": "c8dff8ca675bd4471",
+        "depends_on_runs": [],
+        "request": "Préparer une décision architecture et sa synthèse commune"
+      },
+      "revision": 3,
+      "schema": 2,
+      "title": "Architecture synthétique — coordination"
+    },
+    "driver": "conversation",
+    "id": "rae60c4d346b9422d",
+    "nodes": {
+      "intentions": {
+        "attempt": 0,
+        "collection": {
+          "closed": 1791621987.8845472,
+          "items": [
+            {
+              "created": 1791621987.2888591,
+              "id": "i26f6ea4f099f4c86",
+              "text": "Évaluer le contrat API"
+            },
+            {
+              "created": 1791621987.444731,
+              "id": "i4842b91c05894792",
+              "text": "Évaluer les contraintes de déploiement"
+            },
+            {
+              "created": 1791621987.6014957,
+              "id": "id481462d00884f3c",
+              "text": "Consolider la décision après les deux évaluations"
+            }
+          ],
+          "revision": 4
+        },
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "receipt": {
+          "actor": "collection-confirmation",
+          "at": 1791621987.8845453,
+          "revision": 3
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "intentions": [
+              {
+                "created": 1791621987.2888591,
+                "id": "i26f6ea4f099f4c86",
+                "text": "Évaluer le contrat API"
+              },
+              {
+                "created": 1791621987.444731,
+                "id": "i4842b91c05894792",
+                "text": "Évaluer les contraintes de déploiement"
+              },
+              {
+                "created": 1791621987.6014957,
+                "id": "id481462d00884f3c",
+                "text": "Consolider la décision après les deux évaluations"
+              }
+            ]
+          },
+          "summary": "3 contribution(s) confirmée(s)"
+        },
+        "status": "accepted"
+      },
+      "plan": {
+        "attempt": 1,
+        "finished": 1791621988.0073385,
+        "heartbeat": 1791621988.0022569,
+        "input_sources": {
+          "intentions": {
+            "edge": "intentions-plan",
+            "node": "intentions",
+            "port": "intentions"
+          }
+        },
+        "inputs": {
+          "intentions": [
+            {
+              "created": 1791621987.2888591,
+              "id": "i26f6ea4f099f4c86",
+              "text": "Évaluer le contrat API"
+            },
+            {
+              "created": 1791621987.444731,
+              "id": "i4842b91c05894792",
+              "text": "Évaluer les contraintes de déploiement"
+            },
+            {
+              "created": 1791621987.6014957,
+              "id": "id481462d00884f3c",
+              "text": "Consolider la décision après les deux évaluations"
+            }
+          ]
+        },
+        "outcome": "done",
+        "ownership": "managed",
+        "processes": [],
+        "receipt": {
+          "actor": "contract-policy",
+          "at": 1791621988.0073905,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "1a1ac195bee756cf0c350407efbc86562e2672be1065b4444fecd98ecb020432",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "plan": {
+              "goal": "Résultat commun vérifiable",
+              "tasks": [
+                {
+                  "criteria": [
+                    "Lister les champs requis"
+                  ],
+                  "id": "api",
+                  "title": "Évaluer le contrat API"
+                },
+                {
+                  "criteria": [
+                    "Décrire les limites"
+                  ],
+                  "id": "infra",
+                  "title": "Évaluer le déploiement"
+                },
+                {
+                  "criteria": [
+                    "Citer les deux évaluations reçues"
+                  ],
+                  "depends_on": [
+                    "api",
+                    "infra"
+                  ],
+                  "id": "synthese",
+                  "title": "Consolider la décision commune"
+                }
+              ]
+            }
+          },
+          "summary": "FIXTURE : plan technique décomposé et critères explicites"
+        },
+        "started": 1791621988.0022566,
+        "status": "accepted",
+        "token": "te00729020abb4a61"
+      },
+      "receipt": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791621992.5015213,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "6bbdedc7fca1d4014d0f5bb3c8efc8a83300f79431879aa4950510767adea22c"
+        },
+        "input_sources": {
+          "results": {
+            "edge": "work-receipt",
+            "node": "work",
+            "port": "results"
+          }
+        },
+        "inputs": {
+          "results": [
+            {
+              "id": "api",
+              "outputs": {
+                "perform": {
+                  "result": "API : identifiant stable, titre obligatoire, statut explicite."
+                }
+              },
+              "project": "pb94bb7df45564ed1",
+              "run": "re0897da095c440c5",
+              "title": "Évaluer le contrat API"
+            },
+            {
+              "id": "infra",
+              "outputs": {
+                "perform": {
+                  "result": "Déploiement : local, réversible, aucune publication."
+                }
+              },
+              "project": "pb94bb7df45564ed1",
+              "run": "rce003d9d1e4c4127",
+              "title": "Évaluer le déploiement"
+            },
+            {
+              "id": "synthese",
+              "outputs": {
+                "perform": {
+                  "result": "Décision commune : API à identifiant stable et titre obligatoire ; déploiement local réversible. Sources : API + déploiement."
+                }
+              },
+              "project": "pb94bb7df45564ed1",
+              "run": "r53dbfd1eaeed462a",
+              "title": "Consolider la décision commune"
+            }
+          ]
+        },
+        "nonce": "dee7ff96ae10d421c",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "6bbdedc7fca1d4014d0f5bb3c8efc8a83300f79431879aa4950510767adea22c",
+        "status": "accepted"
+      },
+      "scope": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791621989.1625574,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "c30b22f2d699fbbcb4f0c548cc38f205f913c2837866e92f1e4e6fda0513f976"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "plan-scope",
+            "node": "plan",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "goal": "Résultat commun vérifiable",
+            "tasks": [
+              {
+                "criteria": [
+                  "Lister les champs requis"
+                ],
+                "id": "api",
+                "title": "Évaluer le contrat API"
+              },
+              {
+                "criteria": [
+                  "Décrire les limites"
+                ],
+                "id": "infra",
+                "title": "Évaluer le déploiement"
+              },
+              {
+                "criteria": [
+                  "Citer les deux évaluations reçues"
+                ],
+                "depends_on": [
+                  "api",
+                  "infra"
+                ],
+                "id": "synthese",
+                "title": "Consolider la décision commune"
+              }
+            ]
+          }
+        },
+        "nonce": "dace4ebd7d2f34b58",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "c30b22f2d699fbbcb4f0c548cc38f205f913c2837866e92f1e4e6fda0513f976",
+        "result": {
+          "outputs": {
+            "plan": {
+              "goal": "Résultat commun vérifiable",
+              "tasks": [
+                {
+                  "criteria": [
+                    "Lister les champs requis"
+                  ],
+                  "id": "api",
+                  "title": "Évaluer le contrat API"
+                },
+                {
+                  "criteria": [
+                    "Décrire les limites"
+                  ],
+                  "id": "infra",
+                  "title": "Évaluer le déploiement"
+                },
+                {
+                  "criteria": [
+                    "Citer les deux évaluations reçues"
+                  ],
+                  "depends_on": [
+                    "api",
+                    "infra"
+                  ],
+                  "id": "synthese",
+                  "title": "Consolider la décision commune"
+                }
+              ]
+            }
+          }
+        },
+        "status": "accepted"
+      },
+      "work": {
+        "attempt": 1,
+        "children": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "api",
+            "project": "pb94bb7df45564ed1",
+            "run": "re0897da095c440c5",
+            "title": "Évaluer le contrat API"
+          },
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "infra",
+            "project": "pb94bb7df45564ed1",
+            "run": "rce003d9d1e4c4127",
+            "title": "Évaluer le déploiement"
+          },
+          {
+            "base_from": null,
+            "depends_on": [
+              "api",
+              "infra"
+            ],
+            "element": "synthese",
+            "project": "pb94bb7df45564ed1",
+            "run": "r53dbfd1eaeed462a",
+            "title": "Consolider la décision commune"
+          }
+        ],
+        "enrollment": {
+          "at": 1791621989.399894,
+          "concurrency": 2,
+          "contract": "f49c316d3e98cd53a95f6c065365fd8b7cc5705add6f23783e9da8cf5305c53b"
+        },
+        "input_sources": {
+          "plan": {
+            "edge": "scope-work",
+            "node": "scope",
+            "port": "plan"
+          }
+        },
+        "inputs": {
+          "plan": {
+            "goal": "Résultat commun vérifiable",
+            "tasks": [
+              {
+                "criteria": [
+                  "Lister les champs requis"
+                ],
+                "id": "api",
+                "title": "Évaluer le contrat API"
+              },
+              {
+                "criteria": [
+                  "Décrire les limites"
+                ],
+                "id": "infra",
+                "title": "Évaluer le déploiement"
+              },
+              {
+                "criteria": [
+                  "Citer les deux évaluations reçues"
+                ],
+                "depends_on": [
+                  "api",
+                  "infra"
+                ],
+                "id": "synthese",
+                "title": "Consolider la décision commune"
+              }
+            ]
+          }
+        },
+        "outcome": "done",
+        "receipt": {
+          "actor": "iteration-engine",
+          "at": 1791621990.9485834,
+          "contract": "f49c316d3e98cd53a95f6c065365fd8b7cc5705add6f23783e9da8cf5305c53b"
+        },
+        "result": {
+          "ok": true,
+          "outputs": {
+            "contributions": [],
+            "results": [
+              {
+                "id": "api",
+                "outputs": {
+                  "perform": {
+                    "result": "API : identifiant stable, titre obligatoire, statut explicite."
+                  }
+                },
+                "project": "pb94bb7df45564ed1",
+                "run": "re0897da095c440c5",
+                "title": "Évaluer le contrat API"
+              },
+              {
+                "id": "infra",
+                "outputs": {
+                  "perform": {
+                    "result": "Déploiement : local, réversible, aucune publication."
+                  }
+                },
+                "project": "pb94bb7df45564ed1",
+                "run": "rce003d9d1e4c4127",
+                "title": "Évaluer le déploiement"
+              },
+              {
+                "id": "synthese",
+                "outputs": {
+                  "perform": {
+                    "result": "Décision commune : API à identifiant stable et titre obligatoire ; déploiement local réversible. Sources : API + déploiement."
+                  }
+                },
+                "project": "pb94bb7df45564ed1",
+                "run": "r53dbfd1eaeed462a",
+                "title": "Consolider la décision commune"
+              }
+            ]
+          },
+          "summary": "3 élément(s) terminé(s)"
+        },
+        "status": "accepted"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "defaults": {
+        "model": "panel-techlead-fixture",
+        "provider": "codex"
+      },
+      "description": "Recueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.",
+      "edges": [
+        {
+          "from": "intentions",
+          "id": "intentions-plan",
+          "mapping": {
+            "intentions": "intentions"
+          },
+          "outcome": "done",
+          "to": "plan"
+        },
+        {
+          "from": "plan",
+          "id": "plan-scope",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "done",
+          "to": "scope"
+        },
+        {
+          "from": "scope",
+          "id": "scope-work",
+          "mapping": {
+            "plan": "plan"
+          },
+          "outcome": "approve",
+          "to": "work"
+        },
+        {
+          "from": "work",
+          "id": "work-receipt",
+          "mapping": {
+            "results": "results"
+          },
+          "outcome": "done",
+          "to": "receipt"
+        }
+      ],
+      "id": "work-1fd00e31-e8a5-451e-8e36-f6bce93deb3b",
+      "nodes": [
+        {
+          "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+          "id": "intentions",
+          "kind": "input",
+          "outputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "title": "Recueillir les intentions"
+        },
+        {
+          "id": "plan",
+          "inputs": {
+            "intentions": {
+              "items": "object",
+              "maxItems": 100,
+              "minItems": 1,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "agent",
+          "max_attempts": 2,
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 360,
+            "y": 140
+          },
+          "profile": "generalist",
+          "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.",
+          "sample_outputs": {
+            "plan": {
+              "goal": "Préparer le suivi d’une réunion",
+              "tasks": [
+                {
+                  "criteria": [
+                    "Distinguer les décisions des sujets à confirmer"
+                  ],
+                  "id": "R1",
+                  "title": "Préparer le compte rendu"
+                },
+                {
+                  "criteria": [
+                    "Reprendre les décisions reçues sans envoyer le message"
+                  ],
+                  "depends_on": [
+                    "R1"
+                  ],
+                  "id": "R2",
+                  "title": "Préparer un brouillon d’email"
+                }
+              ]
+            }
+          },
+          "title": "Préparer un plan",
+          "validation": "contract"
+        },
+        {
+          "id": "scope",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "position": {
+            "x": 670,
+            "y": 140
+          },
+          "question": "Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?",
+          "title": "Valider le plan"
+        },
+        {
+          "collection": "plan.tasks",
+          "completion_outcome": "succeeded",
+          "concurrency": 2,
+          "criteria": [],
+          "id": "work",
+          "inputs": {
+            "plan": {
+              "required": true,
+              "type": "object"
+            }
+          },
+          "kind": "foreach",
+          "max_attempts": 1,
+          "outputs": {
+            "contributions": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            },
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "phase": "",
+          "position": {
+            "x": 980,
+            "y": 140
+          },
+          "resources": [],
+          "title": "Pour chaque élément du plan",
+          "workflow": {
+            "edges": [],
+            "id": "work-item",
+            "nodes": [
+              {
+                "id": "perform",
+                "inputs": {
+                  "item": {
+                    "required": true,
+                    "type": "object"
+                  }
+                },
+                "kind": "agent",
+                "max_attempts": 2,
+                "outputs": {
+                  "result": "string"
+                },
+                "position": {
+                  "x": 70,
+                  "y": 100
+                },
+                "profile": "generalist",
+                "prompt": "Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.",
+                "sample_outputs": {
+                  "result": "Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."
+                },
+                "title": "Effectuer le travail de cet élément",
+                "validation": "contract"
+              }
+            ],
+            "schema": 2,
+            "title": "Traiter un élément du plan"
+          }
+        },
+        {
+          "id": "receipt",
+          "inputs": {
+            "results": {
+              "items": "object",
+              "maxItems": 100,
+              "required": true,
+              "type": "array"
+            }
+          },
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "position": {
+            "x": 1320,
+            "y": 140
+          },
+          "question": "Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.",
+          "title": "Examiner les résultats"
+        }
+      ],
+      "parameters": {},
+      "revision": 3,
+      "schema": 2,
+      "title": "Architecture synthétique — coordination"
+    },
+    "packs": [],
+    "parameters": {
+      "conversation": "c8dff8ca675bd4471",
+      "depends_on_runs": [],
+      "request": "Préparer une décision architecture et sa synthèse commune"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-panel-techlead-J7sD2K/workflows/projects/pb94bb7df45564ed1/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "pb94bb7df45564ed1",
+    "release": "",
+    "scope": {
+      "id": "pb94bb7df45564ed1",
+      "kind": "project"
+    },
+    "simulation": false,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791621992.5017989,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    },
+    "coordination": {
+      "work": {
+        "run": "rae60c4d346b9422d",
+        "node": "work",
+        "coordinator": "engine",
+        "concurrency": 2,
+        "status": "completed",
+        "counts": {
+          "completed": 3,
+          "running": 0,
+          "question": 0,
+          "decision": 0,
+          "failed": 0,
+          "waiting": 0
+        },
+        "total": 3,
+        "offset": 0,
+        "next": null,
+        "items": [
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "api",
+            "project": "pb94bb7df45564ed1",
+            "run": "re0897da095c440c5",
+            "title": "Évaluer le contrat API",
+            "dependencies": [],
+            "state": "completed",
+            "execution": {
+              "id": "re0897da095c440c5",
+              "project": "pb94bb7df45564ed1",
+              "status": "completed",
+              "created": 1791621989.400761,
+              "updated": 1791621990.7336605,
+              "simulation": false,
+              "completion_outcome": "succeeded",
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "api",
+                "node": "work",
+                "run": "rae60c4d346b9422d"
+              },
+              "associated_with": null,
+              "conversation": "c8dff8ca675bd4471",
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "work-item",
+                "title": "Traiter un élément du plan",
+                "revision": null
+              },
+              "original": {
+                "id": "work-item"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Évaluer le contrat API",
+              "counts": {
+                "accepted": 1
+              },
+              "nodes": {
+                "perform": {
+                  "status": "accepted"
+                }
+              }
+            },
+            "reason": ""
+          },
+          {
+            "base_from": null,
+            "depends_on": [],
+            "element": "infra",
+            "project": "pb94bb7df45564ed1",
+            "run": "rce003d9d1e4c4127",
+            "title": "Évaluer le déploiement",
+            "dependencies": [],
+            "state": "completed",
+            "execution": {
+              "id": "rce003d9d1e4c4127",
+              "project": "pb94bb7df45564ed1",
+              "status": "completed",
+              "created": 1791621989.4016123,
+              "updated": 1791621990.8454406,
+              "simulation": false,
+              "completion_outcome": "succeeded",
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "infra",
+                "node": "work",
+                "run": "rae60c4d346b9422d"
+              },
+              "associated_with": null,
+              "conversation": "c8dff8ca675bd4471",
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "work-item",
+                "title": "Traiter un élément du plan",
+                "revision": null
+              },
+              "original": {
+                "id": "work-item"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Évaluer le déploiement",
+              "counts": {
+                "accepted": 1
+              },
+              "nodes": {
+                "perform": {
+                  "status": "accepted"
+                }
+              }
+            },
+            "reason": ""
+          },
+          {
+            "base_from": null,
+            "depends_on": [
+              "api",
+              "infra"
+            ],
+            "element": "synthese",
+            "project": "pb94bb7df45564ed1",
+            "run": "r53dbfd1eaeed462a",
+            "title": "Consolider la décision commune",
+            "dependencies": [
+              {
+                "element": "api",
+                "title": "Évaluer le contrat API",
+                "project": "pb94bb7df45564ed1",
+                "run": "re0897da095c440c5"
+              },
+              {
+                "element": "infra",
+                "title": "Évaluer le déploiement",
+                "project": "pb94bb7df45564ed1",
+                "run": "rce003d9d1e4c4127"
+              }
+            ],
+            "state": "completed",
+            "execution": {
+              "id": "r53dbfd1eaeed462a",
+              "project": "pb94bb7df45564ed1",
+              "status": "completed",
+              "created": 1791621989.4022067,
+              "updated": 1791621990.9454317,
+              "simulation": false,
+              "completion_outcome": "succeeded",
+              "archived": null,
+              "coordination_wait": null,
+              "coordination_hold": null,
+              "parent": {
+                "attempt": 1,
+                "element": "synthese",
+                "node": "work",
+                "run": "rae60c4d346b9422d"
+              },
+              "associated_with": null,
+              "conversation": "c8dff8ca675bd4471",
+              "workers": [],
+              "workers_total": 0,
+              "definition": {
+                "id": "work-item",
+                "title": "Traiter un élément du plan",
+                "revision": null
+              },
+              "original": {
+                "id": "work-item"
+              },
+              "focus": null,
+              "health": {
+                "status": "ok",
+                "total": 0,
+                "issues": []
+              },
+              "request": "Consolider la décision commune",
+              "counts": {
+                "accepted": 1
+              },
+              "nodes": {
+                "perform": {
+                  "status": "accepted"
+                }
+              }
+            },
+            "reason": ""
+          }
+        ]
+      }
+    }
+  },
+  "dependencyResults": {
+    "rce003d9d1e4c4127": {
+      "id": "infra",
+      "outputs": {
+        "perform": {
+          "result": "Déploiement : local, réversible, aucune publication."
+        }
+      },
+      "project": "pb94bb7df45564ed1",
+      "run": "rce003d9d1e4c4127",
+      "title": "Évaluer le déploiement"
+    },
+    "re0897da095c440c5": {
+      "id": "api",
+      "outputs": {
+        "perform": {
+          "result": "API : identifiant stable, titre obligatoire, statut explicite."
+        }
+      },
+      "project": "pb94bb7df45564ed1",
+      "run": "re0897da095c440c5",
+      "title": "Évaluer le contrat API"
+    }
+  },
+  "processes": {
+    "api": [
+      {
+        "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+        "pid": 1467654,
+        "session": 1467654,
+        "start": "15580250"
+      },
+      {
+        "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+        "pid": 1467656,
+        "session": 1467656,
+        "start": "15580255"
+      }
+    ],
+    "infra": [
+      {
+        "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+        "pid": 1467653,
+        "session": 1467653,
+        "start": "15580249"
+      },
+      {
+        "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+        "pid": 1467655,
+        "session": 1467655,
+        "start": "15580253"
+      }
+    ]
+  }
+}

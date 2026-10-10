@@ -1,0 +1,302 @@
+{
+  "geometry": [
+    {
+      "label": "Terminal ouvert à 1500",
+      "viewport": {
+        "x": 909.828125,
+        "y": 251.59375,
+        "width": 590.171875,
+        "height": 711.40625,
+        "top": 251.59375,
+        "right": 1500,
+        "bottom": 963,
+        "left": 909.828125
+      },
+      "card": {
+        "x": 1066.828125,
+        "y": 446.59375,
+        "width": 260,
+        "height": 477.453125,
+        "top": 446.59375,
+        "right": 1326.828125,
+        "bottom": 924.046875,
+        "left": 1066.828125
+      },
+      "heading": {
+        "x": 1067.828125,
+        "y": 447.59375,
+        "width": 258,
+        "height": 119.984375,
+        "top": 447.59375,
+        "right": 1325.828125,
+        "bottom": 567.578125,
+        "left": 1067.828125
+      },
+      "inside": true
+    },
+    {
+      "label": "Fenêtre réduite à 1100",
+      "viewport": {
+        "x": 672.078125,
+        "y": 248.59375,
+        "width": 427.921875,
+        "height": 564.40625,
+        "top": 248.59375,
+        "right": 1100,
+        "bottom": 813,
+        "left": 672.078125
+      },
+      "card": {
+        "x": 748.078125,
+        "y": 296.59375,
+        "width": 260,
+        "height": 477.453125,
+        "top": 296.59375,
+        "right": 1008.078125,
+        "bottom": 774.046875,
+        "left": 748.078125
+      },
+      "heading": {
+        "x": 749.078125,
+        "y": 297.59375,
+        "width": 258,
+        "height": 119.984375,
+        "top": 297.59375,
+        "right": 1007.078125,
+        "bottom": 417.578125,
+        "left": 749.078125
+      },
+      "inside": true
+    },
+    {
+      "label": "Séparateur déplacé",
+      "viewport": {
+        "x": 717.265625,
+        "y": 248.59375,
+        "width": 382.734375,
+        "height": 564.40625,
+        "top": 248.59375,
+        "right": 1100,
+        "bottom": 813,
+        "left": 717.265625
+      },
+      "card": {
+        "x": 793.265625,
+        "y": 296.59375,
+        "width": 260,
+        "height": 477.453125,
+        "top": 296.59375,
+        "right": 1053.265625,
+        "bottom": 774.046875,
+        "left": 793.265625
+      },
+      "heading": {
+        "x": 794.265625,
+        "y": 297.59375,
+        "width": 258,
+        "height": 119.984375,
+        "top": 297.59375,
+        "right": 1052.265625,
+        "bottom": 417.578125,
+        "left": 794.265625
+      },
+      "inside": true
+    },
+    {
+      "label": "Disposition verticale",
+      "viewport": {
+        "x": 196,
+        "y": 503.1875,
+        "width": 904,
+        "height": 309.8125,
+        "top": 503.1875,
+        "right": 1100,
+        "bottom": 813,
+        "left": 196
+      },
+      "card": {
+        "x": 257.5,
+        "y": 551.1875,
+        "width": 260,
+        "height": 477.453125,
+        "top": 551.1875,
+        "right": 517.5,
+        "bottom": 1028.640625,
+        "left": 257.5
+      },
+      "heading": {
+        "x": 258.5,
+        "y": 552.1875,
+        "width": 258,
+        "height": 119.984375,
+        "top": 552.1875,
+        "right": 516.5,
+        "bottom": 672.171875,
+        "left": 258.5
+      },
+      "inside": true
+    },
+    {
+      "label": "Retour disposition horizontale",
+      "viewport": {
+        "x": 717.265625,
+        "y": 248.59375,
+        "width": 382.734375,
+        "height": 564.40625,
+        "top": 248.59375,
+        "right": 1100,
+        "bottom": 813,
+        "left": 717.265625
+      },
+      "card": {
+        "x": 770.765625,
+        "y": 296.59375,
+        "width": 260,
+        "height": 477.453125,
+        "top": 296.59375,
+        "right": 1030.765625,
+        "bottom": 774.046875,
+        "left": 770.765625
+      },
+      "heading": {
+        "x": 771.765625,
+        "y": 297.59375,
+        "width": 258,
+        "height": 119.984375,
+        "top": 297.59375,
+        "right": 1029.765625,
+        "bottom": 417.578125,
+        "left": 771.765625
+      },
+      "inside": true
+    },
+    {
+      "label": "Retour 1280 après Ajuster",
+      "viewport": {
+        "x": 846.53125,
+        "y": 252.59375,
+        "width": 433.46875,
+        "height": 560.40625,
+        "top": 252.59375,
+        "right": 1280,
+        "bottom": 813,
+        "left": 846.53125
+      },
+      "card": {
+        "x": 875.9826049804688,
+        "y": 611.1171875,
+        "width": 88.5242919921875,
+        "height": 162.562255859375,
+        "top": 611.1171875,
+        "right": 964.5068969726562,
+        "bottom": 773.679443359375,
+        "left": 875.9826049804688
+      },
+      "heading": {
+        "x": 876.3230590820312,
+        "y": 611.4576416015625,
+        "width": 87.8433837890625,
+        "height": 40.85205078125,
+        "top": 611.4576416015625,
+        "right": 964.1664428710938,
+        "bottom": 652.3096923828125,
+        "left": 876.3230590820312
+      },
+      "inside": true
+    },
+    {
+      "label": "Focus graphe après zoom 100",
+      "viewport": {
+        "x": 846.53125,
+        "y": 252.59375,
+        "width": 433.46875,
+        "height": 560.40625,
+        "top": 252.59375,
+        "right": 1280,
+        "bottom": 813,
+        "left": 846.53125
+      },
+      "card": {
+        "x": 925.03125,
+        "y": 296.59375,
+        "width": 260,
+        "height": 477.453125,
+        "top": 296.59375,
+        "right": 1185.03125,
+        "bottom": 774.046875,
+        "left": 925.03125
+      },
+      "heading": {
+        "x": 926.03125,
+        "y": 297.59375,
+        "width": 258,
+        "height": 119.984375,
+        "top": 297.59375,
+        "right": 1184.03125,
+        "bottom": 417.578125,
+        "left": 926.03125
+      },
+      "inside": true
+    }
+  ],
+  "checks": [
+    "Note créée hors liens et étiquettes",
+    "Panoramique volontaire conservé après actualisation",
+    "Origine durable depuis Projets et Activité",
+    "Comptage une demande et cinq tâches",
+    "Réponses et résultats lisibles sans JSON",
+    "Même terminal id/PID conservé"
+  ],
+  "terminalsBefore": [
+    {
+      "id": "b0893690e0ae46739b438f98aa101907",
+      "project": "/tmp/tricorder-ui-independent-state-CIBNlj/workflows/workspace",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-ui-independent-state-CIBNlj/workflows/workspace/.tricorder",
+      "release": null,
+      "task": null,
+      "createdAt": 1791623218.5253825,
+      "lastOutputAt": 1791623218.7394843,
+      "pid": 1492548,
+      "program": "bash",
+      "provider": null,
+      "foreground": 1492548,
+      "promptVerified": true,
+      "idleShell": true,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "terminalsAfter": [
+    {
+      "id": "b0893690e0ae46739b438f98aa101907",
+      "project": "/tmp/tricorder-ui-independent-state-CIBNlj/workflows/workspace",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-ui-independent-state-CIBNlj/workflows/workspace/.tricorder",
+      "release": null,
+      "task": null,
+      "createdAt": 1791623218.5253825,
+      "lastOutputAt": 1791623225.3972514,
+      "pid": 1492548,
+      "program": "bash",
+      "provider": null,
+      "foreground": 1492548,
+      "promptVerified": true,
+      "idleShell": true,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "buildBefore": {
+    "dist/app.js": "6a1860e1ad33fe7d7d5ffbc3b0ad390a0453caa9e1dff2da2ac1186cceceefad",
+    "dist/app.css": "d3be2009e29166ce3889a3c189e65822da978911a5c20e96285057fdde759f14",
+    "dist/studio.css": "18238bcea06391a43a0d545d11f2ee17e3a6cebed957dbf7f6d7f887431d3d8e"
+  },
+  "buildAfter": {
+    "dist/app.js": "6a1860e1ad33fe7d7d5ffbc3b0ad390a0453caa9e1dff2da2ac1186cceceefad",
+    "dist/app.css": "d3be2009e29166ce3889a3c189e65822da978911a5c20e96285057fdde759f14",
+    "dist/studio.css": "18238bcea06391a43a0d545d11f2ee17e3a6cebed957dbf7f6d7f887431d3d8e"
+  }
+}

@@ -1,0 +1,13 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test tests/panel-v2-user-2.spec.cjs --grep BA voit question --repeat-each=2 --output=/tmp/tricorder-rc13-support-relaunch-final
+PATH: /tmp/tricorder-ci-tools-0z30x0pk:/usr/bin:/bin
+codex None
+claude None
+
+Running 2 tests using 1 worker
+
+  ✓  1 tests/panel-v2-user-2.spec.cjs:32:1 › BA voit question et échec par élément et reprend uniquement le travail échoué (11.7s)
+  ✓  2 tests/panel-v2-user-2.spec.cjs:32:1 › BA voit question et échec par élément et reprend uniquement le travail échoué (11.6s)
+
+  2 passed (24.1s)

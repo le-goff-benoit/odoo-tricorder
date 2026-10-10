@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-10",
+  "build": "0.6.0-rc.13",
+  "display": ":188",
+  "isolated_home": true,
+  "real_providers": false,
+  "build_unchanged": true,
+  "checks": [
+    {
+      "test": "Ajout normal, dépendances AND et prérequis annulé",
+      "passed": true,
+      "seconds": 4.9
+    },
+    {
+      "test": "Copie après échec avec demande intégrale et run initial inchangé",
+      "passed": true,
+      "seconds": 3.5
+    },
+    {
+      "test": "Remplacement demande longue, ouverture et accusé, conservation source, résultats lisibles",
+      "passed": true,
+      "seconds": 4.1
+    }
+  ],
+  "caveats": [
+    "Les tests GUI sont les scénarios pérennes ajoutés par l’orchestrateur, exécutés et inspectés indépendamment.",
+    "Sélecteurs de banc corrigés en cours de réception : getByLabel vers rôle textbox et #feedback vers .flash ; assertions métier conservées.",
+    "La navigation après remplacement est une correction produit distincte, reçue sur un nouveau build."
+  ]
+}

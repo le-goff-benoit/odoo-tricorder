@@ -214,3 +214,7 @@ dialog::backdrop { background: rgba(6, 7, 9, .7); backdrop-filter: blur(3px); }
 #workflow-panel[hidden] {display:none}
 .side-nav {display:grid;gap:3px}
 .side-nav .side-item {min-height:36px}
+
+.open-terminal-list { display: grid; gap: var(--space-3); }
+.open-terminal-list .info-card { width: 100%; overflow-wrap: anywhere; }
+#terminal-tabs [data-action="choose-open-terminal"] { flex-shrink: 0; white-space: nowrap; }

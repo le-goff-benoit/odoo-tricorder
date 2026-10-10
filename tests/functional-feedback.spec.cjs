@@ -110,6 +110,7 @@ p=e.project(sys.argv[3]);g=next(g for g in e.workflows(p['id']) if g['id']=='fee
 test('version feedback: an automatic failure can configure a new copy while preserving its results',async()=>{
  const failed=JSON.parse(python(`g=next(g for g in e.workflows(sys.argv[3]) if g['id']=='feedback');g.pop('revision',None);r=e.start(sys.argv[3],g,parameters={'request':'Préparer un bilan synthétique : '+('Tous les points doivent être conservés. '*1000)});claim=e.claim(r['id'],'work');e.submit(r['id'],'work',claim['token'],{'ok':False,'summary':'Configuration à revoir pour ce besoin.','outputs':{}});print(json.dumps(e.run(r['id'])))`,[fixture.project.id]));
  await page.locator('[data-workflow-route=overview]').click();await page.locator(`.activity-row[data-id="${failed.id}"]`).click();
+ await expect(page.locator('.workflow-heading h1')).toContainText('Préparer un bilan synthétique');
  await page.getByRole('button',{name:'Examiner l’échec',exact:true}).click();
  await expect(page.locator('#inspector')).toContainText('Configuration à revoir pour ce besoin.');
  await page.getByRole('button',{name:'Configurer un nouveau lancement…',exact:true}).click();
@@ -125,4 +126,30 @@ test('version feedback: an automatic failure can configure a new copy while pres
  expect(workflows.some(g=>g.title==='Suivi métier — adaptation'&&g.id!=='feedback')).toBe(true);
  await page.getByRole('button',{name:'Exécuter…',exact:true}).click();
  await expect(page.locator('#initial-request')).toHaveValue(failed.parameters.request);
+});
+
+test('long request replacement retains the complete text and finished results keep a readable title',async()=>{
+ const request='Relire le dossier de réunion et ses engagements.\n'+'Conserver les décisions et les échéances. '.repeat(1600).trim();
+ const blocked=JSON.parse(python(`from workflow_engine.conversations import Conversations
+c=Conversations(e);v=c.get(sys.argv[3]);item=c.add(v['id'],sys.argv[4],depends_on=[v['items'][0]['id']]);e.control(v['items'][0]['run'],'cancel');print(json.dumps(e.run(item['run'])))`,[fixture.conversation,request]));
+ await openOverview();
+ await page.locator(`#conversation-overview .conversation-demand[data-run="${blocked.id}"] .conversation-demand-open`).click();
+ await page.getByRole('button',{name:'Détail',exact:true}).click();
+ await page.getByRole('button',{name:'Créer une demande de remplacement',exact:true}).click();
+ await expect(page.getByRole('dialog').getByRole('textbox',{name:'Demande',exact:true})).toHaveValue(request);
+ await page.getByRole('button',{name:'Enregistrer la demande',exact:true}).click();
+ await expect(page.getByRole('dialog')).toHaveCount(0);
+ const conversation=JSON.parse(python(`from workflow_engine.conversations import Conversations
+print(json.dumps(Conversations(e).get(sys.argv[3])))`,[fixture.conversation]));
+ const replacement=conversation.items.at(-1);
+ expect(replacement.request).toBe(request);expect(replacement.run).not.toBe(blocked.id);expect(replacement.depends_on).toEqual([]);
+ await expect(page.locator('.flash')).toContainText('La demande de remplacement est ouverte.');
+ await expect(page.locator('#inspector')).not.toContainText('Bloquée par une demande préalable');
+ expect(JSON.parse(python(`print(json.dumps(e.run(sys.argv[3])))`,[blocked.id]))).toEqual(blocked);
+ python(`c=e.claim(sys.argv[3],'work');e.submit(sys.argv[3],'work',c['token'],{'ok':True,'summary':'Compte rendu complet reçu.','outputs':{'report':'Décisions et échéances conservées.'}})`,[replacement.run]);
+ await page.getByRole('button',{name:'Voir les résultats',exact:true}).click();
+ await expect(page.getByRole('dialog')).toContainText('Relire le dossier de réunion et ses engagements.');
+ await expect(page.getByRole('dialog')).not.toContainText('[object Object]');
+ await expect(page.getByRole('dialog')).toContainText('Décisions et échéances conservées.');
+ await page.screenshot({path:test.info().outputPath('long-request-preserved-and-readable.png')});
 });

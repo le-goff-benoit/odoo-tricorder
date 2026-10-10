@@ -1,0 +1,17 @@
+[
+  {
+    "case": "scheduled-child-transport-change-blocks-before-start",
+    "ok": true,
+    "evidence": {
+      "schedule_status": "blocked",
+      "error": "Catalogue modifié : recréer la récurrence après vérification",
+      "runs": 0
+    }
+  },
+  {
+    "case": "notification-of-optional-grandchild-respects-main-pause",
+    "ok": false,
+    "error": "{\"main\": \"paused\", \"action\": \"active\", \"leaf\": \"active\", \"notification\": \"running\", \"unexpectedly_accepted\": [\"claim\", \"effect_guard\"], \"external_calls\": false}",
+    "trace": "Traceback (most recent call last):\n  File \"/tmp/tricorder-review-panel-corrections.py\", line 33, in case\n    try:results.append({'case':name,'ok':True,'evidence':fn()})\n  File \"/tmp/tricorder-review-panel-corrections.py\", line 148, in notification_ancestor_pause\n    raise AssertionError(json.dumps(evidence))\nAssertionError: {\"main\": \"paused\", \"action\": \"active\", \"leaf\": \"active\", \"notification\": \"running\", \"unexpectedly_accepted\": [\"claim\", \"effect_guard\"], \"external_calls\": false}\n"
+  }
+]

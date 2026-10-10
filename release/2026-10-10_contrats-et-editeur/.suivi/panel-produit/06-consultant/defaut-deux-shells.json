@@ -1,0 +1,45 @@
+{
+  "tabs": "Shell 1",
+  "count": "1",
+  "context": "Shell : Client Alpha fictif · Demande affichée : Client Beta fictif · Shell du projet\nProjet du shell à son ouverture ; le dossier courant peut changer. /tmp/tricorder-personas-produit/06-consultant/home/workflows/projects/pef1d4962f76b444a",
+  "sessions": [
+    {
+      "id": "84b6bac3707f40afb0b8d7f66a9c6716",
+      "project": "/tmp/tricorder-personas-produit/06-consultant/home/workflows/projects/p8dc1690480124b1b",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-personas-produit/06-consultant/home/workflows/projects/p8dc1690480124b1b/.tricorder",
+      "release": null,
+      "task": null,
+      "createdAt": 1791627580.4789863,
+      "lastOutputAt": 1791627720.940125,
+      "pid": 1681750,
+      "program": "bash",
+      "provider": null,
+      "foreground": 1681750,
+      "promptVerified": true,
+      "idleShell": true,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    },
+    {
+      "id": "63683d2884164ea2b41e679c4549ac7e",
+      "project": "/tmp/tricorder-personas-produit/06-consultant/home/workflows/projects/pef1d4962f76b444a",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-personas-produit/06-consultant/home/workflows/projects/pef1d4962f76b444a/.tricorder",
+      "release": null,
+      "task": null,
+      "createdAt": 1791627720.9162123,
+      "lastOutputAt": 1791627736.760256,
+      "pid": 1687809,
+      "program": "bash",
+      "provider": null,
+      "foreground": 1687809,
+      "promptVerified": true,
+      "idleShell": true,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ]
+}

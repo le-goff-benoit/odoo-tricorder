@@ -1,0 +1,191 @@
+{
+  "calls": [
+    {
+      "at": 1791631593543,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r3142458a601a4eab",
+        "node": "intentions",
+        "revision": 0,
+        "operation": "add",
+        "key": "554a8f75-4bc7-4e57-9be0-f9f3a8d0db70",
+        "text": "Deux interventions identiques"
+      },
+      "revision": 1,
+      "acceptedBeforeLostAck": true,
+      "error": "Error: Accusé perdu synthétique"
+    },
+    {
+      "at": 1791631593876,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r3142458a601a4eab",
+        "node": "intentions",
+        "revision": 0,
+        "operation": "add",
+        "key": "c51911f1-c7e6-4988-855c-13e50a7f2a3f",
+        "text": "Deux interventions identiques"
+      },
+      "error": "Error: Le recueil a changé. Relisez la liste avant de confirmer votre modification."
+    },
+    {
+      "at": 1791631594074,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab",
+        "after": 2
+      },
+      "revision": 1
+    },
+    {
+      "at": 1791631594081,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 1
+    },
+    {
+      "at": 1791631594707,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 1
+    },
+    {
+      "at": 1791631594842,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 1
+    },
+    {
+      "at": 1791631594855,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 1
+    },
+    {
+      "at": 1791631594959,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r3142458a601a4eab",
+        "node": "intentions",
+        "revision": 1,
+        "operation": "add",
+        "key": "19d4aa0c-0cb5-4df3-a3dd-d992f880c516",
+        "text": "Deux interventions identiques"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631594991,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab",
+        "after": 3
+      },
+      "revision": 1
+    },
+    {
+      "at": 1791631595061,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631595212,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r3142458a601a4eab",
+        "node": "intentions",
+        "revision": 0,
+        "operation": "add",
+        "key": "554a8f75-4bc7-4e57-9be0-f9f3a8d0db70",
+        "text": "Deux interventions identiques"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631595233,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631595492,
+      "action": "collection.change",
+      "request": {
+        "action": "collection.change",
+        "run": "r3142458a601a4eab",
+        "node": "intentions",
+        "revision": 2,
+        "operation": "close",
+        "key": "e8914cbc-e906-4922-992f-9c2b33bf665a"
+      },
+      "revision": 3
+    },
+    {
+      "at": 1791631595510,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 2
+    },
+    {
+      "at": 1791631595717,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 3
+    },
+    {
+      "at": 1791631595866,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab"
+      },
+      "revision": 3
+    },
+    {
+      "at": 1791631595990,
+      "action": "run.get",
+      "request": {
+        "action": "run.get",
+        "run": "r3142458a601a4eab",
+        "after": 3
+      }
+    }
+  ],
+  "stored": [
+    "Deux interventions identiques",
+    "Deux interventions identiques"
+  ],
+  "recovery": [],
+  "draft": null
+}

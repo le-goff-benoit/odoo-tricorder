@@ -1,0 +1,4081 @@
+{
+  "events": [
+    {
+      "at": 1791629211350,
+      "type": "focusin",
+      "target": "BUTTON",
+      "cls": "secondary terminal-toggle"
+    },
+    {
+      "at": 1791629211467,
+      "type": "focusout",
+      "target": "BUTTON",
+      "cls": "secondary terminal-toggle"
+    },
+    {
+      "at": 1791629211468,
+      "type": "focusin",
+      "target": "BUTTON",
+      "cls": "secondary"
+    },
+    {
+      "at": 1791629211673,
+      "type": "focusout",
+      "target": "BUTTON",
+      "cls": "secondary"
+    },
+    {
+      "at": 1791629211755,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\r\u001b[Kblegoff@wrk226:~/workflows/workspace$ "
+    },
+    {
+      "at": 1791629211864,
+      "type": "focusin",
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211887,
+      "type": "keydown",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211889,
+      "type": "keyup",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211890,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "c"
+    },
+    {
+      "at": 1791629211891,
+      "type": "keydown",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211892,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "o"
+    },
+    {
+      "at": 1791629211892,
+      "type": "keyup",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211893,
+      "type": "keydown",
+      "key": "m",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211894,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "m"
+    },
+    {
+      "at": 1791629211895,
+      "type": "keyup",
+      "key": "m",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211896,
+      "type": "keydown",
+      "key": "m",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211897,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "m"
+    },
+    {
+      "at": 1791629211898,
+      "type": "keyup",
+      "key": "m",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211899,
+      "type": "keydown",
+      "key": "a",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211900,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "a"
+    },
+    {
+      "at": 1791629211901,
+      "type": "keyup",
+      "key": "a",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211902,
+      "type": "keydown",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211903,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "n"
+    },
+    {
+      "at": 1791629211904,
+      "type": "keyup",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211908,
+      "type": "keydown",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211909,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "d"
+    },
+    {
+      "at": 1791629211910,
+      "type": "keyup",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211911,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211915,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629211919,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211920,
+      "type": "keydown",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211921,
+      "type": "keyup",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211921,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "-"
+    },
+    {
+      "at": 1791629211922,
+      "type": "keydown",
+      "key": "v",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211930,
+      "type": "keyup",
+      "key": "v",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211930,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "v"
+    },
+    {
+      "at": 1791629211937,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211938,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629211939,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211947,
+      "type": "keydown",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211948,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "c"
+    },
+    {
+      "at": 1791629211948,
+      "type": "keyup",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211949,
+      "type": "keydown",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211950,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "o"
+    },
+    {
+      "at": 1791629211951,
+      "type": "keyup",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211952,
+      "type": "keydown",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211953,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "d"
+    },
+    {
+      "at": 1791629211954,
+      "type": "keyup",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211955,
+      "type": "keydown",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211956,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "e"
+    },
+    {
+      "at": 1791629211957,
+      "type": "keyup",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211962,
+      "type": "keydown",
+      "key": "x",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211963,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "x"
+    },
+    {
+      "at": 1791629211963,
+      "type": "keyup",
+      "key": "x",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211964,
+      "type": "keydown",
+      "key": ";",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211967,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": ";"
+    },
+    {
+      "at": 1791629211967,
+      "type": "keyup",
+      "key": ";",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211972,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211973,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629211974,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211975,
+      "type": "keydown",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211984,
+      "type": "keyup",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629211984,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "c"
+    },
+    {
+      "at": 1791629211998,
+      "type": "keydown",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212003,
+      "type": "keyup",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212004,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "o"
+    },
+    {
+      "at": 1791629212004,
+      "type": "keydown",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212006,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "d"
+    },
+    {
+      "at": 1791629212006,
+      "type": "keyup",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212008,
+      "type": "keydown",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212010,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "e"
+    },
+    {
+      "at": 1791629212010,
+      "type": "keyup",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212020,
+      "type": "keydown",
+      "key": "x",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212021,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "x"
+    },
+    {
+      "at": 1791629212022,
+      "type": "keyup",
+      "key": "x",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212024,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212025,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629212026,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212027,
+      "type": "keydown",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212029,
+      "type": "keyup",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212029,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "-"
+    },
+    {
+      "at": 1791629212030,
+      "type": "keydown",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212031,
+      "type": "keyup",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212032,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "-"
+    },
+    {
+      "at": 1791629212032,
+      "type": "keydown",
+      "key": "v",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212034,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "v"
+    },
+    {
+      "at": 1791629212034,
+      "type": "keyup",
+      "key": "v",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212035,
+      "type": "keydown",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212042,
+      "type": "keyup",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212043,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "e"
+    },
+    {
+      "at": 1791629212044,
+      "type": "keydown",
+      "key": "r",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212046,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "r"
+    },
+    {
+      "at": 1791629212047,
+      "type": "keyup",
+      "key": "r",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212048,
+      "type": "keydown",
+      "key": "s",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212049,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "s"
+    },
+    {
+      "at": 1791629212050,
+      "type": "keyup",
+      "key": "s",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212055,
+      "type": "keydown",
+      "key": "i",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212058,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "i"
+    },
+    {
+      "at": 1791629212058,
+      "type": "keyup",
+      "key": "i",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212060,
+      "type": "keydown",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212061,
+      "type": "keyup",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212061,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "o"
+    },
+    {
+      "at": 1791629212062,
+      "type": "keydown",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212063,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "n"
+    },
+    {
+      "at": 1791629212064,
+      "type": "keyup",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212065,
+      "type": "keydown",
+      "key": ";",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212066,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": ";"
+    },
+    {
+      "at": 1791629212066,
+      "type": "keyup",
+      "key": ";",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212071,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212073,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629212074,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212077,
+      "type": "keydown",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212079,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "c"
+    },
+    {
+      "at": 1791629212083,
+      "type": "keyup",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212086,
+      "type": "keydown",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212089,
+      "type": "keyup",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212090,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "o"
+    },
+    {
+      "at": 1791629212091,
+      "type": "keydown",
+      "key": "m",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212093,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "m"
+    },
+    {
+      "at": 1791629212094,
+      "type": "keyup",
+      "key": "m",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212100,
+      "type": "keydown",
+      "key": "m",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212100,
+      "type": "keyup",
+      "key": "m",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212101,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "m"
+    },
+    {
+      "at": 1791629212102,
+      "type": "keydown",
+      "key": "a",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212103,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "a"
+    },
+    {
+      "at": 1791629212103,
+      "type": "keyup",
+      "key": "a",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212104,
+      "type": "keydown",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212105,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "n"
+    },
+    {
+      "at": 1791629212106,
+      "type": "keyup",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212108,
+      "type": "keydown",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212109,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "d"
+    },
+    {
+      "at": 1791629212110,
+      "type": "keyup",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212111,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212115,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212116,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629212117,
+      "type": "keydown",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212118,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "-"
+    },
+    {
+      "at": 1791629212118,
+      "type": "keyup",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212120,
+      "type": "keydown",
+      "key": "v",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212121,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "v \r"
+    },
+    {
+      "at": 1791629212124,
+      "type": "keyup",
+      "key": "v",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212125,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212126,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212126,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629212128,
+      "type": "keydown",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212129,
+      "type": "keyup",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212129,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "c"
+    },
+    {
+      "at": 1791629212130,
+      "type": "keydown",
+      "key": "l",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212131,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "l"
+    },
+    {
+      "at": 1791629212132,
+      "type": "keyup",
+      "key": "l",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212133,
+      "type": "keydown",
+      "key": "a",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212134,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "a"
+    },
+    {
+      "at": 1791629212134,
+      "type": "keyup",
+      "key": "a",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212135,
+      "type": "keydown",
+      "key": "u",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212137,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "u"
+    },
+    {
+      "at": 1791629212137,
+      "type": "keyup",
+      "key": "u",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212140,
+      "type": "keydown",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212141,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "d"
+    },
+    {
+      "at": 1791629212141,
+      "type": "keyup",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212143,
+      "type": "keydown",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212146,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "e"
+    },
+    {
+      "at": 1791629212150,
+      "type": "keyup",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212151,
+      "type": "keydown",
+      "key": ";",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212152,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": ";"
+    },
+    {
+      "at": 1791629212153,
+      "type": "keyup",
+      "key": ";",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212154,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212158,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212158,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629212160,
+      "type": "keydown",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212163,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "c"
+    },
+    {
+      "at": 1791629212163,
+      "type": "keyup",
+      "key": "c",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212168,
+      "type": "keydown",
+      "key": "l",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212169,
+      "type": "keyup",
+      "key": "l",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212169,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "l"
+    },
+    {
+      "at": 1791629212170,
+      "type": "keydown",
+      "key": "a",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212171,
+      "type": "keyup",
+      "key": "a",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212171,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "a"
+    },
+    {
+      "at": 1791629212172,
+      "type": "keydown",
+      "key": "u",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212173,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "u"
+    },
+    {
+      "at": 1791629212173,
+      "type": "keyup",
+      "key": "u",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212174,
+      "type": "keydown",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212174,
+      "type": "keyup",
+      "key": "d",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212175,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "d"
+    },
+    {
+      "at": 1791629212175,
+      "type": "keydown",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212176,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "e"
+    },
+    {
+      "at": 1791629212176,
+      "type": "keyup",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212177,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212178,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629212179,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212179,
+      "type": "keydown",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212180,
+      "type": "keyup",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212181,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "-"
+    },
+    {
+      "at": 1791629212181,
+      "type": "keydown",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212182,
+      "type": "keyup",
+      "key": "-",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212182,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "-"
+    },
+    {
+      "at": 1791629212183,
+      "type": "keydown",
+      "key": "v",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212184,
+      "type": "keyup",
+      "key": "v",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212188,
+      "type": "keydown",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212188,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "v"
+    },
+    {
+      "at": 1791629212189,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "e"
+    },
+    {
+      "at": 1791629212189,
+      "type": "keyup",
+      "key": "e",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212190,
+      "type": "keydown",
+      "key": "r",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212193,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "r"
+    },
+    {
+      "at": 1791629212193,
+      "type": "keyup",
+      "key": "r",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212197,
+      "type": "keydown",
+      "key": "s",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212198,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "s"
+    },
+    {
+      "at": 1791629212198,
+      "type": "keyup",
+      "key": "s",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212199,
+      "type": "keydown",
+      "key": "i",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212200,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "i"
+    },
+    {
+      "at": 1791629212200,
+      "type": "keyup",
+      "key": "i",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212200,
+      "type": "keydown",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212201,
+      "type": "keyup",
+      "key": "o",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212201,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "o"
+    },
+    {
+      "at": 1791629212202,
+      "type": "keydown",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212203,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "n"
+    },
+    {
+      "at": 1791629212203,
+      "type": "keyup",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212222,
+      "type": "keydown",
+      "key": "Enter",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212224,
+      "type": "keyup",
+      "key": "Enter",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212224,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\r\n\u001b[?2004l\r"
+    },
+    {
+      "at": 1791629212224,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": ""
+    },
+    {
+      "at": 1791629212224,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "/tmp/tricorder-gestures-GdmVQ8/bin/codex\r\n"
+    },
+    {
+      "at": 1791629212225,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "GESTURES_INERT\r\n"
+    },
+    {
+      "at": 1791629212225,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "/tmp/tricorder-gestures-GdmVQ8/bin/claude\r\n"
+    },
+    {
+      "at": 1791629212227,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "GESTURES_INERT\r\n"
+    },
+    {
+      "at": 1791629212227,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": ""
+    },
+    {
+      "at": 1791629212227,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ "
+    },
+    {
+      "at": 1791629212339,
+      "type": "focusout",
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629212341,
+      "type": "focusin",
+      "target": "BUTTON",
+      "cls": "secondary terminal-toggle"
+    },
+    {
+      "at": 1791629212637,
+      "type": "focusout",
+      "target": "BUTTON",
+      "cls": "secondary terminal-toggle"
+    },
+    {
+      "at": 1791629212637,
+      "type": "focusin",
+      "target": "BUTTON",
+      "cls": "side-item"
+    },
+    {
+      "at": 1791629213501,
+      "type": "focusout",
+      "target": "BUTTON",
+      "cls": "side-item"
+    },
+    {
+      "at": 1791629213501,
+      "type": "focusin",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629213900,
+      "type": "focusout",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214042,
+      "type": "focusin",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214164,
+      "type": "keydown",
+      "key": "ArrowRight",
+      "ctrl": false,
+      "shift": false,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214169,
+      "type": "focusout",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214173,
+      "type": "focusin",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214175,
+      "type": "keyup",
+      "key": "ArrowRight",
+      "ctrl": false,
+      "shift": false,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214268,
+      "type": "keydown",
+      "key": "Shift",
+      "ctrl": false,
+      "shift": true,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214270,
+      "type": "keydown",
+      "key": "ArrowDown",
+      "ctrl": false,
+      "shift": true,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214273,
+      "type": "focusout",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214278,
+      "type": "focusin",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214280,
+      "type": "keyup",
+      "key": "ArrowDown",
+      "ctrl": false,
+      "shift": true,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214281,
+      "type": "keyup",
+      "key": "Shift",
+      "ctrl": false,
+      "shift": false,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214323,
+      "type": "keydown",
+      "key": "Control",
+      "ctrl": true,
+      "shift": false,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214325,
+      "type": "keydown",
+      "key": "z",
+      "ctrl": true,
+      "shift": false,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214328,
+      "type": "focusout",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214333,
+      "type": "focusin",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214335,
+      "type": "keyup",
+      "key": "z",
+      "ctrl": true,
+      "shift": false,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214336,
+      "type": "keyup",
+      "key": "Control",
+      "ctrl": false,
+      "shift": false,
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214558,
+      "type": "focusout",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214568,
+      "type": "focusin",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629214900,
+      "type": "focusout",
+      "target": "SECTION",
+      "cls": ""
+    },
+    {
+      "at": 1791629215263,
+      "type": "focusin",
+      "target": "BUTTON",
+      "cls": "secondary terminal-toggle"
+    },
+    {
+      "at": 1791629215330,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\r\u001b[Kblegoff@wrk226:~/workflows/workspace$ "
+    },
+    {
+      "at": 1791629215421,
+      "type": "focusout",
+      "target": "BUTTON",
+      "cls": "secondary terminal-toggle"
+    },
+    {
+      "at": 1791629215422,
+      "type": "focusin",
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215477,
+      "type": "keydown",
+      "key": "p",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215478,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "p"
+    },
+    {
+      "at": 1791629215479,
+      "type": "keyup",
+      "key": "p",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215480,
+      "type": "keydown",
+      "key": "r",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215481,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "r"
+    },
+    {
+      "at": 1791629215481,
+      "type": "keyup",
+      "key": "r",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215482,
+      "type": "keydown",
+      "key": "i",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215483,
+      "type": "keyup",
+      "key": "i",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215483,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "i"
+    },
+    {
+      "at": 1791629215483,
+      "type": "keydown",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215485,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "n"
+    },
+    {
+      "at": 1791629215485,
+      "type": "keyup",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215486,
+      "type": "keydown",
+      "key": "t",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215491,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "t"
+    },
+    {
+      "at": 1791629215500,
+      "type": "keyup",
+      "key": "t",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215501,
+      "type": "keydown",
+      "key": "f",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215503,
+      "type": "keyup",
+      "key": "f",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215505,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "f"
+    },
+    {
+      "at": 1791629215506,
+      "type": "keydown",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215507,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": " "
+    },
+    {
+      "at": 1791629215508,
+      "type": "keyup",
+      "key": " ",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215509,
+      "type": "keydown",
+      "key": "\"",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215510,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\""
+    },
+    {
+      "at": 1791629215510,
+      "type": "keyup",
+      "key": "\"",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215511,
+      "type": "keydown",
+      "key": "G",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215513,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "G"
+    },
+    {
+      "at": 1791629215513,
+      "type": "keyup",
+      "key": "G",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215514,
+      "type": "keydown",
+      "key": "E",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215518,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "E"
+    },
+    {
+      "at": 1791629215524,
+      "type": "keyup",
+      "key": "E",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215525,
+      "type": "keydown",
+      "key": "S",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215526,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "S"
+    },
+    {
+      "at": 1791629215527,
+      "type": "keyup",
+      "key": "S",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215528,
+      "type": "keydown",
+      "key": "T",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215531,
+      "type": "keyup",
+      "key": "T",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215531,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "T"
+    },
+    {
+      "at": 1791629215532,
+      "type": "keydown",
+      "key": "U",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215533,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "U"
+    },
+    {
+      "at": 1791629215533,
+      "type": "keyup",
+      "key": "U",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215537,
+      "type": "keydown",
+      "key": "R",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215538,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "R"
+    },
+    {
+      "at": 1791629215546,
+      "type": "keyup",
+      "key": "R",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215547,
+      "type": "keydown",
+      "key": "E",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215548,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "E"
+    },
+    {
+      "at": 1791629215548,
+      "type": "keyup",
+      "key": "E",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215549,
+      "type": "keydown",
+      "key": "_",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215550,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "_"
+    },
+    {
+      "at": 1791629215550,
+      "type": "keyup",
+      "key": "_",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215551,
+      "type": "keydown",
+      "key": "T",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215552,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "T"
+    },
+    {
+      "at": 1791629215553,
+      "type": "keyup",
+      "key": "T",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215554,
+      "type": "keydown",
+      "key": "E",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215555,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "E"
+    },
+    {
+      "at": 1791629215556,
+      "type": "keyup",
+      "key": "E",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215557,
+      "type": "keydown",
+      "key": "R",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215559,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "R"
+    },
+    {
+      "at": 1791629215559,
+      "type": "keyup",
+      "key": "R",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215562,
+      "type": "keydown",
+      "key": "M",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215563,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "M"
+    },
+    {
+      "at": 1791629215564,
+      "type": "keyup",
+      "key": "M",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215565,
+      "type": "keydown",
+      "key": "I",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215566,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "I"
+    },
+    {
+      "at": 1791629215566,
+      "type": "keyup",
+      "key": "I",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215567,
+      "type": "keydown",
+      "key": "N",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215568,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "N"
+    },
+    {
+      "at": 1791629215569,
+      "type": "keyup",
+      "key": "N",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215570,
+      "type": "keydown",
+      "key": "A",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215571,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "A"
+    },
+    {
+      "at": 1791629215572,
+      "type": "keyup",
+      "key": "A",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215572,
+      "type": "keydown",
+      "key": "L",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215574,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "L"
+    },
+    {
+      "at": 1791629215575,
+      "type": "keyup",
+      "key": "L",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215575,
+      "type": "keydown",
+      "key": "_",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215576,
+      "type": "keyup",
+      "key": "_",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215577,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "_"
+    },
+    {
+      "at": 1791629215577,
+      "type": "keydown",
+      "key": "O",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215579,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "O"
+    },
+    {
+      "at": 1791629215579,
+      "type": "keyup",
+      "key": "O",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215580,
+      "type": "keydown",
+      "key": "K",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215582,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "K"
+    },
+    {
+      "at": 1791629215582,
+      "type": "keyup",
+      "key": "K",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215583,
+      "type": "keydown",
+      "key": "\\",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215583,
+      "type": "keyup",
+      "key": "\\",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215584,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\\"
+    },
+    {
+      "at": 1791629215584,
+      "type": "keydown",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215585,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "n"
+    },
+    {
+      "at": 1791629215585,
+      "type": "keyup",
+      "key": "n",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215586,
+      "type": "keydown",
+      "key": "\"",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215587,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\""
+    },
+    {
+      "at": 1791629215587,
+      "type": "keyup",
+      "key": "\"",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215604,
+      "type": "keydown",
+      "key": "ArrowLeft",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215606,
+      "type": "keyup",
+      "key": "ArrowLeft",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215607,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\b"
+    },
+    {
+      "at": 1791629215616,
+      "type": "keydown",
+      "key": "ArrowRight",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215617,
+      "type": "keyup",
+      "key": "ArrowRight",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215618,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\u001b[C"
+    },
+    {
+      "at": 1791629215636,
+      "type": "keydown",
+      "key": "Control",
+      "ctrl": true,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215637,
+      "type": "keydown",
+      "key": "s",
+      "ctrl": true,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215639,
+      "type": "keyup",
+      "key": "s",
+      "ctrl": true,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215641,
+      "type": "keyup",
+      "key": "Control",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215673,
+      "type": "keydown",
+      "key": "Control",
+      "ctrl": true,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215674,
+      "type": "keydown",
+      "key": "q",
+      "ctrl": true,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215677,
+      "type": "keyup",
+      "key": "q",
+      "ctrl": true,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215678,
+      "type": "keyup",
+      "key": "Control",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215712,
+      "type": "keydown",
+      "key": "Enter",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215714,
+      "type": "keyup",
+      "key": "Enter",
+      "ctrl": false,
+      "shift": false,
+      "target": "TEXTAREA",
+      "cls": "xterm-helper-textarea"
+    },
+    {
+      "at": 1791629215716,
+      "event": "data",
+      "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+      "data": "\r\n\u001b[?2004l\rGESTURE_TERMINAL_OK\r\n\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ "
+    }
+  ],
+  "phases": [
+    {
+      "label": "probe-seen",
+      "at": 1791629212280,
+      "focused": "xterm-helper-textarea",
+      "screen": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; command -v\n claude; claude --version\n/tmp/tricorder-gestures-GdmVQ8/bin/codex\nGESTURES_INERT\n/tmp/tricorder-gestures-GdmVQ8/bin/claude\nGESTURES_INERT\nblegoff@wrk226:~/workflows/workspace$  ",
+      "viewport": {
+        "top": 0,
+        "height": 907,
+        "scrollHeight": 907
+      },
+      "sessions": [
+        {
+          "id": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "project": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "release": null,
+          "task": null,
+          "createdAt": 1791629211.6638832,
+          "lastOutputAt": 1791629212.226405,
+          "pid": 1737335,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1737335,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    },
+    {
+      "label": "before-command",
+      "at": 1791629215446,
+      "focused": "xterm-helper-textarea",
+      "screen": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; comm",
+      "viewport": {
+        "top": 0,
+        "height": 68,
+        "scrollHeight": 68
+      },
+      "sessions": [
+        {
+          "id": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "project": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "release": null,
+          "task": null,
+          "createdAt": 1791629211.6638832,
+          "lastOutputAt": 1791629215.2866466,
+          "pid": 1737335,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1737335,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    },
+    {
+      "label": "before-XOFF",
+      "at": 1791629215627,
+      "focused": "xterm-helper-textarea",
+      "screen": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; comm",
+      "viewport": {
+        "top": 0,
+        "height": 68,
+        "scrollHeight": 68
+      },
+      "sessions": [
+        {
+          "id": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "project": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "release": null,
+          "task": null,
+          "createdAt": 1791629211.6638832,
+          "lastOutputAt": 1791629215.617272,
+          "pid": 1737335,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1737335,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    },
+    {
+      "label": "after-XOFF",
+      "at": 1791629215653,
+      "focused": "xterm-helper-textarea",
+      "screen": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; comm",
+      "viewport": {
+        "top": 0,
+        "height": 68,
+        "scrollHeight": 68
+      },
+      "sessions": [
+        {
+          "id": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "project": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "release": null,
+          "task": null,
+          "createdAt": 1791629211.6638832,
+          "lastOutputAt": 1791629215.617272,
+          "pid": 1737335,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1737335,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    },
+    {
+      "label": "after-XON",
+      "at": 1791629215694,
+      "focused": "xterm-helper-textarea",
+      "screen": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; comm",
+      "viewport": {
+        "top": 0,
+        "height": 68,
+        "scrollHeight": 68
+      },
+      "sessions": [
+        {
+          "id": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "project": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "release": null,
+          "task": null,
+          "createdAt": 1791629211.6638832,
+          "lastOutputAt": 1791629215.617272,
+          "pid": 1737335,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1737335,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    },
+    {
+      "label": "end",
+      "at": 1791629220745,
+      "focused": "xterm-helper-textarea",
+      "screen": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\nSee \"man sudo_root\" for details.\nblegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; comm",
+      "viewport": {
+        "top": 0,
+        "height": 68,
+        "scrollHeight": 68
+      },
+      "sessions": [
+        {
+          "id": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "project": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+          "release": null,
+          "task": null,
+          "createdAt": 1791629211.6638832,
+          "lastOutputAt": 1791629215.7140284,
+          "pid": 1737335,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1737335,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    }
+  ],
+  "buffers": [
+    {
+      "session": {
+        "id": "6fec6c5336ed45d4a9a183a9c267d73c",
+        "project": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-gestures-GdmVQ8/workflows/workspace",
+        "release": null,
+        "task": null,
+        "createdAt": 1791629211.6638832,
+        "lastOutputAt": 1791629215.7140284,
+        "pid": 1737335,
+        "program": "bash",
+        "provider": null,
+        "foreground": 1737335,
+        "promptVerified": true,
+        "idleShell": true,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      },
+      "buffer": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\r\nSee \"man sudo_root\" for details.\r\n\r\n\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ \r\u001b[Kblegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; command -v \r claude; claude --version\r\n\u001b[?2004l\r/tmp/tricorder-gestures-GdmVQ8/bin/codex\r\nGESTURES_INERT\r\n/tmp/tricorder-gestures-GdmVQ8/bin/claude\r\nGESTURES_INERT\r\n\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ \r\u001b[Kblegoff@wrk226:~/workflows/workspace$ printf \"GESTURE_TERMINAL_OK\\n\"\b\u001b[C\r\n\u001b[?2004l\rGESTURE_TERMINAL_OK\r\n\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ "
+    }
+  ],
+  "main": {
+    "calls": [
+      {
+        "at": 1791629211724,
+        "channel": "terminal:attach",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c"
+        },
+        "resultAt": 1791629211726,
+        "buffer": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\r\nSee \"man sudo_root\" for details.\r\n\r\n\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ "
+      },
+      {
+        "at": 1791629211742,
+        "channel": "terminal:resize",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "cols": 83,
+          "rows": 60
+        },
+        "resultAt": 1791629211743
+      },
+      {
+        "at": 1791629211888,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "c"
+        },
+        "resultAt": 1791629211888
+      },
+      {
+        "at": 1791629211891,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "o"
+        },
+        "resultAt": 1791629211892
+      },
+      {
+        "at": 1791629211893,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "m"
+        },
+        "resultAt": 1791629211894
+      },
+      {
+        "at": 1791629211896,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "m"
+        },
+        "resultAt": 1791629211897
+      },
+      {
+        "at": 1791629211899,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "a"
+        },
+        "resultAt": 1791629211900
+      },
+      {
+        "at": 1791629211902,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "n"
+        },
+        "resultAt": 1791629211903
+      },
+      {
+        "at": 1791629211908,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "d"
+        },
+        "resultAt": 1791629211909
+      },
+      {
+        "at": 1791629211912,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629211912
+      },
+      {
+        "at": 1791629211920,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "-"
+        },
+        "resultAt": 1791629211921
+      },
+      {
+        "at": 1791629211922,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "v"
+        },
+        "resultAt": 1791629211923
+      },
+      {
+        "at": 1791629211937,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629211938
+      },
+      {
+        "at": 1791629211947,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "c"
+        },
+        "resultAt": 1791629211948
+      },
+      {
+        "at": 1791629211949,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "o"
+        },
+        "resultAt": 1791629211950
+      },
+      {
+        "at": 1791629211952,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "d"
+        },
+        "resultAt": 1791629211953
+      },
+      {
+        "at": 1791629211955,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "e"
+        },
+        "resultAt": 1791629211955
+      },
+      {
+        "at": 1791629211962,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "x"
+        },
+        "resultAt": 1791629211963
+      },
+      {
+        "at": 1791629211965,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": ";"
+        },
+        "resultAt": 1791629211966
+      },
+      {
+        "at": 1791629211972,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629211973
+      },
+      {
+        "at": 1791629211977,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "c"
+        },
+        "resultAt": 1791629211978
+      },
+      {
+        "at": 1791629212000,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "o"
+        },
+        "resultAt": 1791629212000
+      },
+      {
+        "at": 1791629212005,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "d"
+        },
+        "resultAt": 1791629212005
+      },
+      {
+        "at": 1791629212009,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "e"
+        },
+        "resultAt": 1791629212009
+      },
+      {
+        "at": 1791629212020,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "x"
+        },
+        "resultAt": 1791629212021
+      },
+      {
+        "at": 1791629212024,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629212025
+      },
+      {
+        "at": 1791629212028,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "-"
+        },
+        "resultAt": 1791629212028
+      },
+      {
+        "at": 1791629212031,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "-"
+        },
+        "resultAt": 1791629212031
+      },
+      {
+        "at": 1791629212033,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "v"
+        },
+        "resultAt": 1791629212033
+      },
+      {
+        "at": 1791629212036,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "e"
+        },
+        "resultAt": 1791629212042
+      },
+      {
+        "at": 1791629212044,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "r"
+        },
+        "resultAt": 1791629212045
+      },
+      {
+        "at": 1791629212048,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "s"
+        },
+        "resultAt": 1791629212049
+      },
+      {
+        "at": 1791629212056,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "i"
+        },
+        "resultAt": 1791629212057
+      },
+      {
+        "at": 1791629212060,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "o"
+        },
+        "resultAt": 1791629212061
+      },
+      {
+        "at": 1791629212062,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "n"
+        },
+        "resultAt": 1791629212063
+      },
+      {
+        "at": 1791629212065,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": ";"
+        },
+        "resultAt": 1791629212066
+      },
+      {
+        "at": 1791629212072,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629212073
+      },
+      {
+        "at": 1791629212078,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "c"
+        },
+        "resultAt": 1791629212079
+      },
+      {
+        "at": 1791629212086,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "o"
+        },
+        "resultAt": 1791629212088
+      },
+      {
+        "at": 1791629212092,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "m"
+        },
+        "resultAt": 1791629212093
+      },
+      {
+        "at": 1791629212100,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "m"
+        },
+        "resultAt": 1791629212100
+      },
+      {
+        "at": 1791629212102,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "a"
+        },
+        "resultAt": 1791629212102
+      },
+      {
+        "at": 1791629212105,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "n"
+        },
+        "resultAt": 1791629212105
+      },
+      {
+        "at": 1791629212108,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "d"
+        },
+        "resultAt": 1791629212109
+      },
+      {
+        "at": 1791629212111,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629212113
+      },
+      {
+        "at": 1791629212117,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "-"
+        },
+        "resultAt": 1791629212118
+      },
+      {
+        "at": 1791629212120,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "v"
+        },
+        "resultAt": 1791629212121
+      },
+      {
+        "at": 1791629212125,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629212125
+      },
+      {
+        "at": 1791629212128,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "c"
+        },
+        "resultAt": 1791629212128
+      },
+      {
+        "at": 1791629212130,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "l"
+        },
+        "resultAt": 1791629212131
+      },
+      {
+        "at": 1791629212133,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "a"
+        },
+        "resultAt": 1791629212134
+      },
+      {
+        "at": 1791629212136,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "u"
+        },
+        "resultAt": 1791629212136
+      },
+      {
+        "at": 1791629212140,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "d"
+        },
+        "resultAt": 1791629212141
+      },
+      {
+        "at": 1791629212144,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "e"
+        },
+        "resultAt": 1791629212145
+      },
+      {
+        "at": 1791629212151,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": ";"
+        },
+        "resultAt": 1791629212152
+      },
+      {
+        "at": 1791629212154,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629212155
+      },
+      {
+        "at": 1791629212160,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "c"
+        },
+        "resultAt": 1791629212162
+      },
+      {
+        "at": 1791629212168,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "l"
+        },
+        "resultAt": 1791629212169
+      },
+      {
+        "at": 1791629212170,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "a"
+        },
+        "resultAt": 1791629212171
+      },
+      {
+        "at": 1791629212172,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "u"
+        },
+        "resultAt": 1791629212173
+      },
+      {
+        "at": 1791629212174,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "d"
+        },
+        "resultAt": 1791629212174
+      },
+      {
+        "at": 1791629212175,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "e"
+        },
+        "resultAt": 1791629212176
+      },
+      {
+        "at": 1791629212177,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629212178
+      },
+      {
+        "at": 1791629212180,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "-"
+        },
+        "resultAt": 1791629212180
+      },
+      {
+        "at": 1791629212181,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "-"
+        },
+        "resultAt": 1791629212182
+      },
+      {
+        "at": 1791629212183,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "v"
+        },
+        "resultAt": 1791629212184
+      },
+      {
+        "at": 1791629212188,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "e"
+        },
+        "resultAt": 1791629212188
+      },
+      {
+        "at": 1791629212190,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "r"
+        },
+        "resultAt": 1791629212193
+      },
+      {
+        "at": 1791629212197,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "s"
+        },
+        "resultAt": 1791629212198
+      },
+      {
+        "at": 1791629212199,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "i"
+        },
+        "resultAt": 1791629212199
+      },
+      {
+        "at": 1791629212200,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "o"
+        },
+        "resultAt": 1791629212201
+      },
+      {
+        "at": 1791629212202,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "n"
+        },
+        "resultAt": 1791629212202
+      },
+      {
+        "at": 1791629212223,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\r"
+        },
+        "resultAt": 1791629212223
+      },
+      {
+        "at": 1791629215286,
+        "channel": "terminal:resize",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "cols": 77,
+          "rows": 4
+        },
+        "resultAt": 1791629215286
+      },
+      {
+        "at": 1791629215478,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "p"
+        },
+        "resultAt": 1791629215478
+      },
+      {
+        "at": 1791629215480,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "r"
+        },
+        "resultAt": 1791629215480
+      },
+      {
+        "at": 1791629215482,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "i"
+        },
+        "resultAt": 1791629215482
+      },
+      {
+        "at": 1791629215484,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "n"
+        },
+        "resultAt": 1791629215484
+      },
+      {
+        "at": 1791629215489,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "t"
+        },
+        "resultAt": 1791629215490
+      },
+      {
+        "at": 1791629215502,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "f"
+        },
+        "resultAt": 1791629215505
+      },
+      {
+        "at": 1791629215506,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": " "
+        },
+        "resultAt": 1791629215507
+      },
+      {
+        "at": 1791629215509,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\""
+        },
+        "resultAt": 1791629215510
+      },
+      {
+        "at": 1791629215511,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "G"
+        },
+        "resultAt": 1791629215512
+      },
+      {
+        "at": 1791629215514,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "E"
+        },
+        "resultAt": 1791629215517
+      },
+      {
+        "at": 1791629215525,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "S"
+        },
+        "resultAt": 1791629215526
+      },
+      {
+        "at": 1791629215530,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "T"
+        },
+        "resultAt": 1791629215530
+      },
+      {
+        "at": 1791629215532,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "U"
+        },
+        "resultAt": 1791629215533
+      },
+      {
+        "at": 1791629215537,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "R"
+        },
+        "resultAt": 1791629215538
+      },
+      {
+        "at": 1791629215547,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "E"
+        },
+        "resultAt": 1791629215548
+      },
+      {
+        "at": 1791629215549,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "_"
+        },
+        "resultAt": 1791629215550
+      },
+      {
+        "at": 1791629215551,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "T"
+        },
+        "resultAt": 1791629215552
+      },
+      {
+        "at": 1791629215555,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "E"
+        },
+        "resultAt": 1791629215555
+      },
+      {
+        "at": 1791629215558,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "R"
+        },
+        "resultAt": 1791629215558
+      },
+      {
+        "at": 1791629215562,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "M"
+        },
+        "resultAt": 1791629215563
+      },
+      {
+        "at": 1791629215565,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "I"
+        },
+        "resultAt": 1791629215566
+      },
+      {
+        "at": 1791629215568,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "N"
+        },
+        "resultAt": 1791629215568
+      },
+      {
+        "at": 1791629215570,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "A"
+        },
+        "resultAt": 1791629215570
+      },
+      {
+        "at": 1791629215573,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "L"
+        },
+        "resultAt": 1791629215573
+      },
+      {
+        "at": 1791629215576,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "_"
+        },
+        "resultAt": 1791629215576
+      },
+      {
+        "at": 1791629215577,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "O"
+        },
+        "resultAt": 1791629215578
+      },
+      {
+        "at": 1791629215581,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "K"
+        },
+        "resultAt": 1791629215581
+      },
+      {
+        "at": 1791629215583,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\\"
+        },
+        "resultAt": 1791629215583
+      },
+      {
+        "at": 1791629215584,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "n"
+        },
+        "resultAt": 1791629215584
+      },
+      {
+        "at": 1791629215586,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\""
+        },
+        "resultAt": 1791629215587
+      },
+      {
+        "at": 1791629215605,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\u001b[D"
+        },
+        "resultAt": 1791629215606
+      },
+      {
+        "at": 1791629215616,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\u001b[C"
+        },
+        "resultAt": 1791629215617
+      },
+      {
+        "at": 1791629215638,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\u0013"
+        },
+        "resultAt": 1791629215638
+      },
+      {
+        "at": 1791629215675,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\u0011"
+        },
+        "resultAt": 1791629215676
+      },
+      {
+        "at": 1791629215712,
+        "channel": "terminal:write",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c",
+          "data": "\r"
+        },
+        "resultAt": 1791629215713
+      },
+      {
+        "at": 1791629220756,
+        "channel": "terminal:attach",
+        "payload": {
+          "session": "6fec6c5336ed45d4a9a183a9c267d73c"
+        },
+        "resultAt": 1791629220756,
+        "buffer": "To run a command as administrator (user \"root\"), use \"sudo <command>\".\r\nSee \"man sudo_root\" for details.\r\n\r\n\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ \r\u001b[Kblegoff@wrk226:~/workflows/workspace$ command -v codex; codex --version; command -v \r claude; claude --version\r\n\u001b[?2004l\r/tmp/tricorder-gestures-GdmVQ8/bin/codex\r\nGESTURES_INERT\r\n/tmp/tricorder-gestures-GdmVQ8/bin/claude\r\nGESTURES_INERT\r\n\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ \r\u001b[Kblegoff@wrk226:~/workflows/workspace$ printf \"GESTURE_TERMINAL_OK\\n\"\b\u001b[C\r\n\u001b[?2004l\rGESTURE_TERMINAL_OK\r\n\u001b[?2004hblegoff@wrk226:~/workflows/workspace$ "
+      }
+    ],
+    "keys": []
+  }
+}

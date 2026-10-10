@@ -1,5 +1,5 @@
 {
-  "labels": {"waiting_input":"Réponse attendue","pending":"Prévu","ready":"Prêt","running":"En cours","waiting":"Décision attendue","returned":"À valider","accepted":"Validé","skipped":"Non applicable","blocked":"Bloqué"},
-  "priority": ["blocked","waiting_input","waiting","returned","running","ready","pending","accepted","skipped"],
-  "attention": ["waiting_input","waiting","returned","blocked"]
+  "labels": {"waiting_input":"Réponse attendue","collecting":"Recueil ouvert","waiting_children":"Coordination en cours","pending":"Prévu","ready":"Prêt","running":"En cours","waiting":"Décision attendue","returned":"À valider","accepted":"Validé","skipped":"Non applicable","blocked":"Bloqué"},
+  "priority": ["blocked","waiting_input","collecting","waiting","returned","running","waiting_children","ready","pending","accepted","skipped"],
+  "attention": ["waiting_input","collecting","waiting","returned","blocked"]
 }

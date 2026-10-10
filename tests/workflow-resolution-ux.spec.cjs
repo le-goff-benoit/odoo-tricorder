@@ -95,6 +95,7 @@ test('refusing a branch shows treated and non-applicable steps separately in the
   await page.getByRole('button',{name:'Simuler le parcours',exact:true}).click();
   await expect(page.locator('.execution-label')).toHaveText('Décision attendue');
   await page.getByRole('button',{name:'Examiner la décision',exact:true}).click();
+  await expect(page.locator('.decision-consequence')).toContainText('Ce refus ne demande pas de révision');
   await page.getByRole('button',{name:'Refuser la suite',exact:true}).click();
   await expect(page.locator('.execution-progress')).toContainText('2 / 2 étapes');
   await expect(page.locator('.execution-progress')).toContainText('1 traitée · 1 non applicable');

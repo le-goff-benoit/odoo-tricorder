@@ -1,0 +1,1157 @@
+[
+  {
+    "project": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "id": "p34450b6a9ddb4c33",
+      "managed": true,
+      "packs": [],
+      "path": "/tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p34450b6a9ddb4c33",
+      "title": "Client Boréal - onboarding"
+    },
+    "runs": [
+      {
+        "id": "rd78e6bcaf3864360",
+        "request": {
+          "conversation": "c9e4f5adb61fb492c",
+          "depends_on_runs": [],
+          "request": "Onboarder Boréal : 3 utilisateurs, migration depuis Excel, cadrage cette semaine. Brouillon local de mail attendu."
+        },
+        "nodes": {
+          "intentions": {
+            "attempt": 0,
+            "collection": {
+              "closed": 1791626899.859939,
+              "commands": {
+                "01525fd6-b8d6-4253-a2ad-c225fad8ef39": "e0c04a4db04185aa8d40e961a92ff31c4a78e69e61fa8f9d0e3a7461357d47a9",
+                "84429c95-c4ca-4e8a-a917-2995d41ab16d": "daf3a4d9db92a9cb0fbe0cda74b2b3c873fe18065f567e9230300d2d05d1247a",
+                "ffd6b7c9-12e8-4fa0-a39c-abe02fa0b06c": "5a96a57b4394f427bc5d4b1dcf95d842cdb971d6a719e67ebfc17a266d1e096a"
+              },
+              "items": [
+                {
+                  "created": 1791626873.5456967,
+                  "id": "ie057503031944063",
+                  "text": "BORÉAL A : configurer trois utilisateurs"
+                },
+                {
+                  "created": 1791626895.223923,
+                  "id": "ied60e21377174d8e",
+                  "text": "BORÉAL B : importer Excel puis brouillon de mail"
+                }
+              ],
+              "revision": 3
+            },
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "receipt": {
+              "actor": "collection-confirmation",
+              "at": 1791626899.8599353,
+              "revision": 2
+            },
+            "result": {
+              "ok": true,
+              "outputs": {
+                "intentions": [
+                  {
+                    "created": 1791626873.5456967,
+                    "id": "ie057503031944063",
+                    "text": "BORÉAL A : configurer trois utilisateurs"
+                  },
+                  {
+                    "created": 1791626895.223923,
+                    "id": "ied60e21377174d8e",
+                    "text": "BORÉAL B : importer Excel puis brouillon de mail"
+                  }
+                ]
+              },
+              "summary": "2 contribution(s) confirmée(s)"
+            },
+            "status": "accepted"
+          },
+          "plan": {
+            "attempt": 0,
+            "input_sources": {
+              "intentions": {
+                "edge": "intentions-plan",
+                "node": "intentions",
+                "port": "intentions"
+              }
+            },
+            "inputs": {
+              "intentions": [
+                {
+                  "created": 1791626873.5456967,
+                  "id": "ie057503031944063",
+                  "text": "BORÉAL A : configurer trois utilisateurs"
+                },
+                {
+                  "created": 1791626895.223923,
+                  "id": "ied60e21377174d8e",
+                  "text": "BORÉAL B : importer Excel puis brouillon de mail"
+                }
+              ]
+            },
+            "status": "ready"
+          },
+          "receipt": {
+            "attempt": 0,
+            "status": "pending"
+          },
+          "scope": {
+            "attempt": 0,
+            "status": "pending"
+          },
+          "work": {
+            "attempt": 0,
+            "status": "pending"
+          }
+        },
+        "definition": {
+          "defaults": {
+            "model": "modele-local-inerte",
+            "provider": "codex"
+          },
+          "description": "Copie du modèle intégré « Intentions, plan et travaux ».\n\nRecueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.",
+          "edges": [
+            {
+              "from": "intentions",
+              "id": "intentions-plan",
+              "mapping": {
+                "intentions": "intentions"
+              },
+              "outcome": "done",
+              "to": "plan"
+            },
+            {
+              "from": "plan",
+              "id": "plan-scope",
+              "mapping": {
+                "plan": "plan"
+              },
+              "outcome": "done",
+              "to": "scope"
+            },
+            {
+              "from": "scope",
+              "id": "scope-work",
+              "mapping": {
+                "plan": "plan"
+              },
+              "outcome": "approve",
+              "to": "work"
+            },
+            {
+              "from": "work",
+              "id": "work-receipt",
+              "mapping": {
+                "results": "results"
+              },
+              "outcome": "done",
+              "to": "receipt"
+            }
+          ],
+          "id": "work-a59fcecb-1413-459b-bb79-d52d078a4946",
+          "nodes": [
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [
+                "Identifier objectif métier, utilisateurs, données à importer et échéance",
+                "Confirmer les accès requis et le responsable client"
+              ],
+              "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+              "id": "intentions",
+              "inputs": {},
+              "kind": "input",
+              "max_attempts": 1,
+              "outputs": {
+                "intentions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "minItems": 1,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "phase": "",
+              "position": {
+                "x": 50,
+                "y": 140
+              },
+              "resources": [],
+              "title": "Recueillir les besoins client"
+            },
+            {
+              "candidate_check": false,
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "effort": "medium",
+              "execution": {
+                "effort": "medium",
+                "model": "modele-local-inerte",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "execution_mode": "text",
+              "id": "plan",
+              "inputs": {
+                "intentions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "minItems": 1,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "kind": "agent",
+              "max_attempts": 2,
+              "outputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "phase": "",
+              "position": {
+                "x": 360,
+                "y": 140
+              },
+              "profile": "generalist",
+              "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.\nPour cet onboarding SaaS : cadrage client, import de données, configuration des utilisateurs et formation. Préparer aussi un brouillon local de mail récapitulatif pour relecture.",
+              "required_capabilities": [],
+              "resources": [],
+              "sample_outputs": {
+                "plan": {
+                  "goal": "Préparer le suivi d’une réunion",
+                  "tasks": [
+                    {
+                      "criteria": [
+                        "Distinguer les décisions des sujets à confirmer"
+                      ],
+                      "id": "R1",
+                      "title": "Préparer le compte rendu"
+                    },
+                    {
+                      "criteria": [
+                        "Reprendre les décisions reçues sans envoyer le message"
+                      ],
+                      "depends_on": [
+                        "R1"
+                      ],
+                      "id": "R2",
+                      "title": "Préparer un brouillon d’email"
+                    }
+                  ]
+                }
+              },
+              "session": "delegated",
+              "title": "Préparer un plan",
+              "validation": "contract"
+            },
+            {
+              "id": "scope",
+              "inputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "outputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "position": {
+                "x": 670,
+                "y": 140
+              },
+              "question": "Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?",
+              "title": "Valider le plan"
+            },
+            {
+              "collection": "plan.tasks",
+              "concurrency": 2,
+              "id": "work",
+              "inputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "kind": "foreach",
+              "outputs": {
+                "contributions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                },
+                "results": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "position": {
+                "x": 980,
+                "y": 140
+              },
+              "title": "Pour chaque élément du plan",
+              "workflow": {
+                "edges": [],
+                "id": "work-item",
+                "nodes": [
+                  {
+                    "id": "perform",
+                    "inputs": {
+                      "item": {
+                        "required": true,
+                        "type": "object"
+                      }
+                    },
+                    "kind": "agent",
+                    "max_attempts": 2,
+                    "outputs": {
+                      "result": "string"
+                    },
+                    "position": {
+                      "x": 70,
+                      "y": 100
+                    },
+                    "profile": "generalist",
+                    "prompt": "Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.",
+                    "sample_outputs": {
+                      "result": "Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."
+                    },
+                    "title": "Effectuer le travail de cet élément",
+                    "validation": "contract"
+                  }
+                ],
+                "schema": 2,
+                "title": "Traiter un élément du plan"
+              }
+            },
+            {
+              "id": "receipt",
+              "inputs": {
+                "results": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "position": {
+                "x": 1320,
+                "y": 140
+              },
+              "question": "Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.",
+              "title": "Examiner les résultats"
+            }
+          ],
+          "parameters": {
+            "conversation": "c9e4f5adb61fb492c",
+            "depends_on_runs": [],
+            "request": "Onboarder Boréal : 3 utilisateurs, migration depuis Excel, cadrage cette semaine. Brouillon local de mail attendu."
+          },
+          "revision": 1,
+          "schema": 2,
+          "title": "Onboarding Boréal"
+        }
+      }
+    ]
+  },
+  {
+    "project": {
+      "defaults": {
+        "effort": "medium",
+        "model": "",
+        "profile": "generalist",
+        "provider": "codex",
+        "session": "delegated"
+      },
+      "id": "p883958b73e7944f7",
+      "managed": true,
+      "packs": [],
+      "path": "/tmp/tricorder-personas-produit/01-fondateur/state/workflows/projects/p883958b73e7944f7",
+      "title": "Client Atlas - onboarding"
+    },
+    "runs": [
+      {
+        "id": "r5630b2714d944cc6",
+        "request": {
+          "conversation": "ce6bb1876a1844dce",
+          "element_id": "mail",
+          "item": {
+            "criteria": [
+              "Mention des 8 utilisateurs et formation le 20 octobre"
+            ],
+            "depends_on": [
+              "cadrage"
+            ],
+            "id": "mail",
+            "scope": "Rédaction locale seulement",
+            "title": "Préparer brouillon local de mail de lancement"
+          },
+          "request": "Préparer brouillon local de mail de lancement"
+        },
+        "nodes": {
+          "perform": {
+            "attempt": 0,
+            "seed_inputs": {
+              "item": {
+                "criteria": [
+                  "Mention des 8 utilisateurs et formation le 20 octobre"
+                ],
+                "depends_on": [
+                  "cadrage"
+                ],
+                "id": "mail",
+                "scope": "Rédaction locale seulement",
+                "title": "Préparer brouillon local de mail de lancement"
+              }
+            },
+            "status": "pending"
+          }
+        },
+        "definition": {
+          "defaults": {
+            "effort": "medium",
+            "model": "modele-local-inerte",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "edges": [],
+          "id": "work-item",
+          "nodes": [
+            {
+              "execution": {
+                "effort": "medium",
+                "model": "modele-local-inerte",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "id": "perform",
+              "inputs": {
+                "item": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "kind": "agent",
+              "max_attempts": 2,
+              "outputs": {
+                "result": "string"
+              },
+              "position": {
+                "x": 70,
+                "y": 100
+              },
+              "profile": "generalist",
+              "prompt": "Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.",
+              "sample_outputs": {
+                "result": "Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."
+              },
+              "title": "Effectuer le travail de cet élément",
+              "validation": "contract"
+            }
+          ],
+          "parameters": {
+            "conversation": "ce6bb1876a1844dce",
+            "element_id": "mail",
+            "item": {
+              "criteria": [
+                "Mention des 8 utilisateurs et formation le 20 octobre"
+              ],
+              "depends_on": [
+                "cadrage"
+              ],
+              "id": "mail",
+              "scope": "Rédaction locale seulement",
+              "title": "Préparer brouillon local de mail de lancement"
+            },
+            "request": "Préparer brouillon local de mail de lancement"
+          },
+          "schema": 2,
+          "title": "Traiter un élément du plan"
+        }
+      },
+      {
+        "id": "r151599ae748045e3",
+        "request": {
+          "conversation": "ce6bb1876a1844dce",
+          "dependency_results": {},
+          "depends_on_runs": [],
+          "element_id": "cadrage",
+          "item": {
+            "criteria": [
+              "Liste explicite des accès et source attendue"
+            ],
+            "id": "cadrage",
+            "scope": "Préparer liste locale de prérequis, sans contact client",
+            "title": "Confirmer fichier CSV et accès auprès de Claire"
+          },
+          "request": "Confirmer fichier CSV et accès auprès de Claire"
+        },
+        "nodes": {
+          "perform": {
+            "attempt": 1,
+            "finished": 1791626962.3938427,
+            "heartbeat": 1791626962.1027162,
+            "input_sources": {},
+            "inputs": {
+              "item": {
+                "criteria": [
+                  "Liste explicite des accès et source attendue"
+                ],
+                "id": "cadrage",
+                "scope": "Préparer liste locale de prérequis, sans contact client",
+                "title": "Confirmer fichier CSV et accès auprès de Claire"
+              }
+            },
+            "ownership": "managed",
+            "pid": 1655830,
+            "processes": [
+              {
+                "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+                "pid": 1655829,
+                "session": 1655829,
+                "start": "16077484"
+              },
+              {
+                "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+                "pid": 1655830,
+                "session": 1655830,
+                "start": "16077489"
+              }
+            ],
+            "result": {
+              "ok": false,
+              "summary": "Le fournisseur IA n’a pas renvoyé une réponse au format attendu. Vérifiez sa connexion, le modèle choisi et la version du programme, puis préparez la reprise de cette étape."
+            },
+            "seed_inputs": {
+              "item": {
+                "criteria": [
+                  "Liste explicite des accès et source attendue"
+                ],
+                "id": "cadrage",
+                "scope": "Préparer liste locale de prérequis, sans contact client",
+                "title": "Confirmer fichier CSV et accès auprès de Claire"
+              }
+            },
+            "started": 1791626962.0311353,
+            "status": "returned",
+            "token": "t3a46bf86f9e14ce7",
+            "validation_error": "L'exécutant a signalé un échec"
+          }
+        },
+        "definition": {
+          "defaults": {
+            "effort": "medium",
+            "model": "modele-local-inerte",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "edges": [],
+          "id": "work-item",
+          "nodes": [
+            {
+              "execution": {
+                "effort": "medium",
+                "model": "modele-local-inerte",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "id": "perform",
+              "inputs": {
+                "item": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "kind": "agent",
+              "max_attempts": 2,
+              "outputs": {
+                "result": "string"
+              },
+              "position": {
+                "x": 70,
+                "y": 100
+              },
+              "profile": "generalist",
+              "prompt": "Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.",
+              "sample_outputs": {
+                "result": "Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."
+              },
+              "title": "Effectuer le travail de cet élément",
+              "validation": "contract"
+            }
+          ],
+          "parameters": {
+            "conversation": "ce6bb1876a1844dce",
+            "element_id": "cadrage",
+            "item": {
+              "criteria": [
+                "Liste explicite des accès et source attendue"
+              ],
+              "id": "cadrage",
+              "scope": "Préparer liste locale de prérequis, sans contact client",
+              "title": "Confirmer fichier CSV et accès auprès de Claire"
+            },
+            "request": "Confirmer fichier CSV et accès auprès de Claire"
+          },
+          "schema": 2,
+          "title": "Traiter un élément du plan"
+        }
+      },
+      {
+        "id": "rce1d066abe5843c0",
+        "request": {
+          "conversation": "ce6bb1876a1844dce",
+          "depends_on_runs": [],
+          "request": "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+        },
+        "nodes": {
+          "intentions": {
+            "attempt": 0,
+            "collection": {
+              "closed": 1791626763.049075,
+              "commands": {
+                "a448955a-7bd6-4c86-ad4b-e6370ad5f786": "1598fbc694cd243cef1501b3f49065b2b201750b997816d8563664f9098041dd",
+                "f4a848c2-0b06-412c-89f3-bba189e2b402": "993c626bfc281843f6908cca5d9f8abe0483e8e23566610e110523c6d91bdc5e"
+              },
+              "items": [
+                {
+                  "created": 1791626762.7980273,
+                  "id": "i6730daa935244d09",
+                  "text": "Créer les accès pour 8 utilisateurs Atlas avec rôles commercial et administrateur. Référent : Claire. Échéance : 20 octobre."
+                }
+              ],
+              "revision": 2
+            },
+            "input_sources": {},
+            "inputs": {},
+            "outcome": "done",
+            "receipt": {
+              "actor": "collection-confirmation",
+              "at": 1791626763.0490735,
+              "revision": 1
+            },
+            "result": {
+              "ok": true,
+              "outputs": {
+                "intentions": [
+                  {
+                    "created": 1791626762.7980273,
+                    "id": "i6730daa935244d09",
+                    "text": "Créer les accès pour 8 utilisateurs Atlas avec rôles commercial et administrateur. Référent : Claire. Échéance : 20 octobre."
+                  }
+                ]
+              },
+              "summary": "1 contribution(s) confirmée(s)"
+            },
+            "status": "accepted"
+          },
+          "plan": {
+            "attempt": 1,
+            "finished": 1791626831.542733,
+            "heartbeat": 1791626831.537384,
+            "input_sources": {
+              "intentions": {
+                "edge": "intentions-plan",
+                "node": "intentions",
+                "port": "intentions"
+              }
+            },
+            "inputs": {
+              "intentions": [
+                {
+                  "created": 1791626762.7980273,
+                  "id": "i6730daa935244d09",
+                  "text": "Créer les accès pour 8 utilisateurs Atlas avec rôles commercial et administrateur. Référent : Claire. Échéance : 20 octobre."
+                }
+              ]
+            },
+            "outcome": "done",
+            "ownership": "native",
+            "processes": [
+              {
+                "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+                "pid": 1650585,
+                "session": 1650583,
+                "start": "16064429"
+              }
+            ],
+            "receipt": {
+              "actor": "contract-policy",
+              "at": 1791626831.542849,
+              "checks": [
+                "executor-success",
+                "output-types",
+                "evidence-integrity"
+              ],
+              "contract": "68214d6d6fdf11f6500965743730db317934689179a1b23a8e919e3d72e38518",
+              "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+            },
+            "result": {
+              "evidence": [],
+              "ok": true,
+              "outputs": {
+                "plan": {
+                  "criteria": [
+                    "Référent et source CSV confirmés avant import"
+                  ],
+                  "goal": "Préparer onboarding Atlas (données synthétiques)",
+                  "tasks": [
+                    {
+                      "criteria": [
+                        "Liste explicite des accès et source attendue"
+                      ],
+                      "id": "cadrage",
+                      "scope": "Préparer liste locale de prérequis, sans contact client",
+                      "title": "Confirmer fichier CSV et accès auprès de Claire"
+                    },
+                    {
+                      "criteria": [
+                        "Mention des 8 utilisateurs et formation le 20 octobre"
+                      ],
+                      "depends_on": [
+                        "cadrage"
+                      ],
+                      "id": "mail",
+                      "scope": "Rédaction locale seulement",
+                      "title": "Préparer brouillon local de mail de lancement"
+                    }
+                  ]
+                }
+              },
+              "summary": "FOURNISSEUR SYNTHÉTIQUE : plan de démonstration, aucune implémentation ni connexion réelle."
+            },
+            "started": 1791626831.5373838,
+            "status": "accepted",
+            "token": "t7665b625d93c4d21"
+          },
+          "receipt": {
+            "attempt": 0,
+            "status": "pending"
+          },
+          "scope": {
+            "attempt": 1,
+            "decision": {
+              "actor": "local-user",
+              "at": 1791626917.9062726,
+              "note": "Plan synthétique approuvé pour vérifier le suivi local, sans envoi ni implémentation réelle.",
+              "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+              "outcome": "approve",
+              "proposal": "25e145785456e1b59a6c30fd8bb1fbbf5efef2e83423acf43428cbe08a022cf1"
+            },
+            "input_sources": {
+              "plan": {
+                "edge": "plan-scope",
+                "node": "plan",
+                "port": "plan"
+              }
+            },
+            "inputs": {
+              "plan": {
+                "criteria": [
+                  "Référent et source CSV confirmés avant import"
+                ],
+                "goal": "Préparer onboarding Atlas (données synthétiques)",
+                "tasks": [
+                  {
+                    "criteria": [
+                      "Liste explicite des accès et source attendue"
+                    ],
+                    "id": "cadrage",
+                    "scope": "Préparer liste locale de prérequis, sans contact client",
+                    "title": "Confirmer fichier CSV et accès auprès de Claire"
+                  },
+                  {
+                    "criteria": [
+                      "Mention des 8 utilisateurs et formation le 20 octobre"
+                    ],
+                    "depends_on": [
+                      "cadrage"
+                    ],
+                    "id": "mail",
+                    "scope": "Rédaction locale seulement",
+                    "title": "Préparer brouillon local de mail de lancement"
+                  }
+                ]
+              }
+            },
+            "nonce": "d008127ec80724b59",
+            "operation": null,
+            "outcome": "approve",
+            "proposal": "25e145785456e1b59a6c30fd8bb1fbbf5efef2e83423acf43428cbe08a022cf1",
+            "result": {
+              "outputs": {
+                "plan": {
+                  "criteria": [
+                    "Référent et source CSV confirmés avant import"
+                  ],
+                  "goal": "Préparer onboarding Atlas (données synthétiques)",
+                  "tasks": [
+                    {
+                      "criteria": [
+                        "Liste explicite des accès et source attendue"
+                      ],
+                      "id": "cadrage",
+                      "scope": "Préparer liste locale de prérequis, sans contact client",
+                      "title": "Confirmer fichier CSV et accès auprès de Claire"
+                    },
+                    {
+                      "criteria": [
+                        "Mention des 8 utilisateurs et formation le 20 octobre"
+                      ],
+                      "depends_on": [
+                        "cadrage"
+                      ],
+                      "id": "mail",
+                      "scope": "Rédaction locale seulement",
+                      "title": "Préparer brouillon local de mail de lancement"
+                    }
+                  ]
+                }
+              }
+            },
+            "status": "accepted"
+          },
+          "work": {
+            "attempt": 1,
+            "children": [
+              {
+                "base_from": null,
+                "depends_on": [],
+                "element": "cadrage",
+                "project": "p883958b73e7944f7",
+                "run": "r151599ae748045e3",
+                "title": "Confirmer fichier CSV et accès auprès de Claire"
+              },
+              {
+                "base_from": null,
+                "depends_on": [
+                  "cadrage"
+                ],
+                "element": "mail",
+                "project": "p883958b73e7944f7",
+                "run": "r5630b2714d944cc6",
+                "title": "Préparer brouillon local de mail de lancement"
+              }
+            ],
+            "enrollment": {
+              "at": 1791626960.9904184,
+              "concurrency": 2,
+              "contract": "9ed0db43164daa3c385217829776551d14f53808f0524548e1f4eb47f7746447"
+            },
+            "input_sources": {
+              "plan": {
+                "edge": "scope-work",
+                "node": "scope",
+                "port": "plan"
+              }
+            },
+            "inputs": {
+              "plan": {
+                "criteria": [
+                  "Référent et source CSV confirmés avant import"
+                ],
+                "goal": "Préparer onboarding Atlas (données synthétiques)",
+                "tasks": [
+                  {
+                    "criteria": [
+                      "Liste explicite des accès et source attendue"
+                    ],
+                    "id": "cadrage",
+                    "scope": "Préparer liste locale de prérequis, sans contact client",
+                    "title": "Confirmer fichier CSV et accès auprès de Claire"
+                  },
+                  {
+                    "criteria": [
+                      "Mention des 8 utilisateurs et formation le 20 octobre"
+                    ],
+                    "depends_on": [
+                      "cadrage"
+                    ],
+                    "id": "mail",
+                    "scope": "Rédaction locale seulement",
+                    "title": "Préparer brouillon local de mail de lancement"
+                  }
+                ]
+              }
+            },
+            "status": "waiting_children"
+          }
+        },
+        "definition": {
+          "defaults": {
+            "effort": "medium",
+            "model": "modele-local-inerte",
+            "profile": "generalist",
+            "provider": "codex",
+            "session": "delegated"
+          },
+          "description": "Copie du modèle intégré « Intentions, plan et travaux ».\n\nRecueillir plusieurs intentions, valider un plan unique et suivre chaque élément dans son propre workflow. Analyse, support, réunion ou autre travail : le modèle reste indépendant du métier et des agents.",
+          "edges": [
+            {
+              "from": "intentions",
+              "id": "intentions-plan",
+              "mapping": {
+                "intentions": "intentions"
+              },
+              "outcome": "done",
+              "to": "plan"
+            },
+            {
+              "from": "plan",
+              "id": "plan-scope",
+              "mapping": {
+                "plan": "plan"
+              },
+              "outcome": "done",
+              "to": "scope"
+            },
+            {
+              "from": "scope",
+              "id": "scope-work",
+              "mapping": {
+                "plan": "plan"
+              },
+              "outcome": "approve",
+              "to": "work"
+            },
+            {
+              "from": "work",
+              "id": "work-receipt",
+              "mapping": {
+                "results": "results"
+              },
+              "outcome": "done",
+              "to": "receipt"
+            }
+          ],
+          "id": "custom-0893ef21-6651-4950-be67-945f7c167906-import-c716c01df9ad",
+          "nodes": [
+            {
+              "completion_outcome": "succeeded",
+              "criteria": [
+                "Identifier objectif métier, utilisateurs, données à importer et échéance",
+                "Confirmer les accès requis et le responsable client"
+              ],
+              "description": "Ajoutez et précisez les besoins depuis le terminal ou la liste, puis terminez le recueil. Cette étape transmet une liste, sans approuver le plan.",
+              "id": "intentions",
+              "inputs": {},
+              "kind": "input",
+              "max_attempts": 1,
+              "outputs": {
+                "intentions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "minItems": 1,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "phase": "",
+              "position": {
+                "x": 50,
+                "y": 140
+              },
+              "resources": [],
+              "title": "Recueillir les besoins client"
+            },
+            {
+              "candidate_check": false,
+              "capabilities": [],
+              "completion_outcome": "succeeded",
+              "criteria": [],
+              "effort": "medium",
+              "execution": {
+                "effort": "medium",
+                "model": "modele-local-inerte",
+                "profile": "generalist",
+                "provider": "codex",
+                "session": "delegated"
+              },
+              "execution_mode": "text",
+              "id": "plan",
+              "inputs": {
+                "intentions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "minItems": 1,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "kind": "agent",
+              "max_attempts": 2,
+              "outputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "phase": "",
+              "position": {
+                "x": 360,
+                "y": 140
+              },
+              "profile": "generalist",
+              "prompt": "Lire la liste inputs.intentions. Produire un seul objet plan, avec goal, critères globaux et tasks, une liste de 1 à 100 objets. Chaque tâche a id stable, title, périmètre et critères. depends_on contient uniquement les ids des tâches préalables, sans cycle. project, si présent, est un identifiant de projet autorisé ; ne pas déduire le projet du nom d’un client. base_from est facultatif : l’id d’une dépendance de code déjà présente dans depends_on, dans le même dépôt. Une dépendance documentaire n’est pas une base de code. Demander les précisions avec ask. Ne pas réaliser les tâches pendant la planification et ne pas s’accorder la décision humaine.\nPour cet onboarding SaaS : cadrage client, import de données, configuration des utilisateurs et formation. Préparer aussi un brouillon local de mail récapitulatif pour relecture.",
+              "required_capabilities": [],
+              "resources": [],
+              "session": "delegated",
+              "title": "Préparer un plan",
+              "validation": "contract"
+            },
+            {
+              "id": "scope",
+              "inputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "outputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "position": {
+                "x": 670,
+                "y": 140
+              },
+              "question": "Le plan, ses éléments, leurs dépendances et leurs projets correspondent-ils au travail autorisé ?",
+              "title": "Valider le plan"
+            },
+            {
+              "collection": "plan.tasks",
+              "concurrency": 2,
+              "id": "work",
+              "inputs": {
+                "plan": {
+                  "required": true,
+                  "type": "object"
+                }
+              },
+              "kind": "foreach",
+              "outputs": {
+                "contributions": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                },
+                "results": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "position": {
+                "x": 980,
+                "y": 140
+              },
+              "title": "Pour chaque élément du plan",
+              "workflow": {
+                "edges": [],
+                "id": "work-item",
+                "nodes": [
+                  {
+                    "id": "perform",
+                    "inputs": {
+                      "item": {
+                        "required": true,
+                        "type": "object"
+                      }
+                    },
+                    "kind": "agent",
+                    "max_attempts": 2,
+                    "outputs": {
+                      "result": "string"
+                    },
+                    "position": {
+                      "x": 70,
+                      "y": 100
+                    },
+                    "profile": "generalist",
+                    "prompt": "Traiter uniquement inputs.item, dans son projet et selon ses critères. Consulter les résultats des dépendances dans parameters.dependency_results. Une analyse, un diagnostic, un compte rendu ou un brouillon constituent des résultats valides ; aucune modification de code n’est exigée. Demander les précisions nécessaires avec ask. Fournir sources, résultat et limites ; ne pas inventer de test exécuté, de publication ou d’envoi.",
+                    "sample_outputs": {
+                      "result": "Exemple de résultat documentaire pour cet élément. Aucun fichier modifié ni message envoyé."
+                    },
+                    "title": "Effectuer le travail de cet élément",
+                    "validation": "contract"
+                  }
+                ],
+                "schema": 2,
+                "title": "Traiter un élément du plan"
+              }
+            },
+            {
+              "id": "receipt",
+              "inputs": {
+                "results": {
+                  "items": "object",
+                  "maxItems": 100,
+                  "required": true,
+                  "type": "array"
+                }
+              },
+              "kind": "decision",
+              "options": [
+                "approve",
+                "reject"
+              ],
+              "position": {
+                "x": 1320,
+                "y": 140
+              },
+              "question": "Les résultats de chaque élément répondent-ils aux critères du plan ? Les brouillons restent des brouillons, sans envoi implicite.",
+              "title": "Examiner les résultats"
+            }
+          ],
+          "parameters": {
+            "conversation": "ce6bb1876a1844dce",
+            "depends_on_runs": [],
+            "request": "Onboarder Atlas : 8 utilisateurs, importer 250 contacts CSV, formation le 20 octobre. Confirmer fichier et accès client. Préparer un plan et un brouillon local de mail."
+          },
+          "revision": 1,
+          "schema": 2,
+          "title": "Onboarding Atlas"
+        }
+      }
+    ]
+  }
+]

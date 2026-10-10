@@ -1,0 +1,68 @@
+{
+  "profile": 6,
+  "build_renderer_sha256": "769515bf8cbd5cf312cb5df1346fa85b0443b55216f4b5ffd6be843d898f5946",
+  "spec_sha256": "a8574c8cc6088071785fc0414ac74c576dac3d44ef23308cdeafc6460f74fa30",
+  "captures": [
+    {
+      "file": "01-dessin-note-1280.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-0a10c-puis-utiliser-avec-terminal/01-dessin-note-1280.png",
+      "sha256": "055ca7216546b1d65a7f5341661d11b7835f19af5b77ad31d52d371a51e9c687"
+    },
+    {
+      "file": "02-sauvegarde-retrouvee.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-0a10c-puis-utiliser-avec-terminal/02-sauvegarde-retrouvee.png",
+      "sha256": "54d23391bd2353b1a4ed8956a57823226522a20a85d8acac9b8bde84bff229b4"
+    },
+    {
+      "file": "03-terminal-graphe-1280.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-0a10c-puis-utiliser-avec-terminal/03-terminal-graphe-1280.png",
+      "sha256": "42749dae30e192217b8f562ccededb8f72a928a3ade49b38a3455069932dde26"
+    },
+    {
+      "file": "04-question-terminal-1280.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-0a10c-puis-utiliser-avec-terminal/04-question-terminal-1280.png",
+      "sha256": "87eea22f75d69c0bd14d20270c0ae38a71401c73390731233533e4cc40455ceb"
+    },
+    {
+      "file": "05-suivi-terminal-1100.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-0a10c-puis-utiliser-avec-terminal/05-suivi-terminal-1100.png",
+      "sha256": "a5db5273c726bf634e6047600d1e2a78d5abd27f866c260b5042e73e4d262fa8"
+    },
+    {
+      "file": "06-termine-terminal.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-0a10c-puis-utiliser-avec-terminal/06-termine-terminal.png",
+      "sha256": "08d5c1d097a67e0b67dd8a3b7e0a6333dfe65fc48f9967b2203d24b885ffcb4b"
+    },
+    {
+      "file": "07-workflow-invitation.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-f6f6e-sible-et-terminal-principal/07-workflow-invitation.png",
+      "sha256": "046b6397592678c31439fd19e28fa14e08ff484b346ff35fddec49c76ce4ca49"
+    },
+    {
+      "file": "08-question-brouillon-1100.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-f6f6e-sible-et-terminal-principal/08-question-brouillon-1100.png",
+      "sha256": "b678a432bf3c058612fab33cab4da06e7b2ad6118084953d5360aa76e45f2c9e"
+    },
+    {
+      "file": "09-reparation-attendue-1100.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-f6f6e-sible-et-terminal-principal/09-reparation-attendue-1100.png",
+      "sha256": "77ffdfb25657d36f995222373ff40677d4bb23c9b80bfd7ada9d47483471e989"
+    },
+    {
+      "file": "10-reparation-formulaire-1100.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-f6f6e-sible-et-terminal-principal/10-reparation-formulaire-1100.png",
+      "sha256": "09ed700abf4ae0c13cd19929f2585390f38ed881d3b13979c3130c5f3d7610a9"
+    },
+    {
+      "file": "11a-projet-tableau-terminal-1100.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-f6f6e-sible-et-terminal-principal/11a-projet-tableau-terminal-1100.png",
+      "sha256": "99ea098495d508a37eb81a1ae2676d7c6e5094f1cf150fa2eb932a880549399f"
+    },
+    {
+      "file": "11b-conversation-retrouvee-terminal-1100.png",
+      "source": "test-results/panel-v2-user-6/panel-v2-user-6-Parcours-m-f6f6e-sible-et-terminal-principal/11b-conversation-retrouvee-terminal-1100.png",
+      "sha256": "ad83f0da77ce41504ca44efbaae6b329edac2194f70ae542b7463b0ed20e0e4e"
+    }
+  ],
+  "scope": "Frozen source build. Synthetic projects, inert providers. Visually reviewed by tester."
+}

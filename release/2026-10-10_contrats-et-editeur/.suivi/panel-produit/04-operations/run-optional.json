@@ -1,0 +1,185 @@
+{
+  "run": {
+    "associated_with": {
+      "action": "action-d9f7ee2f9aa556bfed87ad5f95a41d78",
+      "attempt": 1,
+      "event": "accepted",
+      "question": null,
+      "run": "r345c6af0b98a4333",
+      "source": "bilan"
+    },
+    "completion_outcome": "succeeded",
+    "contract": "a47d01483c2401f94dd9f13318cfc422ee7088f14ee2e2aa2c62fb4e553d39ed",
+    "created": 1791627695.1825988,
+    "definition": {
+      "defaults": {},
+      "edges": [],
+      "id": "item-work",
+      "nodes": [
+        {
+          "content": "Bonjour Julie, nous confirmons votre accueil le 20 octobre. Ce texte est un brouillon local fictif, sans envoi.",
+          "id": "draft",
+          "kind": "document",
+          "outputs": {},
+          "title": "Brouillon local de bienvenue Acacia",
+          "validation": "human"
+        }
+      ],
+      "parameters": {
+        "source_context": {
+          "inputs": {},
+          "outcome": "done",
+          "outputs": {}
+        },
+        "source_event": "accepted",
+        "source_node": "bilan",
+        "source_run": "r345c6af0b98a4333"
+      },
+      "schema": 2,
+      "title": "Brouillon local de bienvenue Acacia"
+    },
+    "driver": "automatic",
+    "id": "r5bb2d4ce3bd84889",
+    "nodes": {
+      "draft": {
+        "attempt": 1,
+        "finished": 1791627696.3654456,
+        "heartbeat": 1791627695.9316168,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 1687015,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1687015,
+            "session": 1687015,
+            "start": "16150869"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791627719.8413289,
+          "checks": [],
+          "contract": "a47d01483c2401f94dd9f13318cfc422ee7088f14ee2e2aa2c62fb4e553d39ed",
+          "note": "Action facultative simulée relue, sans envoi."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "8148989689b6417997cd25e9623f301d321fb7f685ec329adeb4a5675f3f20e8",
+              "size": 140
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Résultat d'exemple pour « Brouillon local de bienvenue Acacia ». Aucun outil métier ni service externe n'a été appelé."
+        },
+        "seed_inputs": {},
+        "started": 1791627695.8655388,
+        "status": "accepted",
+        "token": "t819a14915c9c4746"
+      }
+    },
+    "notifications_authorized": true,
+    "original": {
+      "defaults": {},
+      "edges": [],
+      "id": "item-work",
+      "nodes": [
+        {
+          "content": "Bonjour Julie, nous confirmons votre accueil le 20 octobre. Ce texte est un brouillon local fictif, sans envoi.",
+          "id": "draft",
+          "kind": "document",
+          "outputs": {},
+          "title": "Brouillon local de bienvenue Acacia",
+          "validation": "human"
+        }
+      ],
+      "schema": 2,
+      "title": "Brouillon local de bienvenue Acacia"
+    },
+    "packs": [],
+    "parameters": {
+      "source_context": {
+        "inputs": {},
+        "outcome": "done",
+        "outputs": {}
+      },
+      "source_event": "accepted",
+      "source_node": "bilan",
+      "source_run": "r345c6af0b98a4333"
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-personas-produit/04-operations/isolated/workflows/projects/p0a1de40a43274240/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p0a1de40a43274240",
+    "release": "",
+    "scope": {
+      "id": "p0a1de40a43274240",
+      "kind": "project"
+    },
+    "simulation": true,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791627719.8416238,
+    "origin": {
+      "kind": "action",
+      "run": "r345c6af0b98a4333",
+      "title": "Second accueil fictif : confirmer date, approuver puis préparer le brouillon facultatif.",
+      "project": "p0a1de40a43274240"
+    },
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 46,
+      "at": 1791627695.183146,
+      "node": null,
+      "simulation": true,
+      "type": "started"
+    },
+    {
+      "seq": 47,
+      "at": 1791627695.1834357,
+      "node": "draft",
+      "type": "ready"
+    },
+    {
+      "seq": 49,
+      "at": 1791627695.8655427,
+      "attempt": 1,
+      "node": "draft",
+      "type": "running"
+    },
+    {
+      "seq": 50,
+      "at": 1791627696.3654811,
+      "attempt": 1,
+      "node": "draft",
+      "type": "returned"
+    },
+    {
+      "seq": 51,
+      "at": 1791627719.8413315,
+      "node": "draft",
+      "type": "accepted"
+    },
+    {
+      "seq": 52,
+      "at": 1791627719.8413837,
+      "node": null,
+      "type": "completed"
+    }
+  ],
+  "events_next": null
+}

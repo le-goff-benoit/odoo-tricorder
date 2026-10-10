@@ -42,9 +42,10 @@ choix. L’état et une action directe restent au-dessus de la surface.
 
 Une décision présente le plan ou l’opération exacte avant ses boutons et nomme
 la demande concernée. Une question montre d’abord son texte et la réponse. Un
-échec montre d’abord sa cause, puis **Préparer la reprise** si elle est autorisée.
-Le dialogue indique le budget restant et prépare l’étape ; il ne prétend pas
-démarrer un nouvel agent. Après préparation, suivre l’action indiquée dans le suivi.
+échec montre d’abord sa cause et, pour une commande, sa sortie. **Relancer cette
+étape…** annonce une relance automatique et son budget avant **Relancer maintenant**.
+Pour une tâche pilotée par la conversation, **Préparer la reprise** remet le bloc
+à disposition sans démarrer l’agent. Le résultat précédent reste dans l’historique.
 Les tentatives précédentes affichent date, compte rendu, raison de reprise et
 preuves. Un historique volumineux se lit par pages de trois tentatives ; ses
 entrées techniques restent repliées. Le nombre de tentatives utilisées explique
@@ -93,6 +94,11 @@ Les actions secondaires restent dans les menus du suivi.
 
 ## Lancer plusieurs exécutants
 
+Deux usages sont distincts : les demandes indépendantes d’une conversation, et
+les tâches d’un plan rattachées au bloc **Pour chaque élément**. Le premier
+utilise une vague explicite ; le second autorise une file durable pour les
+éléments du plan figé.
+
 **Lancer les demandes prêtes** porte sur les demandes affichées dans la page.
 Le préflight en lecture seule `execution.launch` distingue disponibilité d’un
 exécutant, conversation native, configuration manquante et attente temporaire
@@ -123,11 +129,57 @@ Ce lancement n’enregistre pas de file autonome : le coordinateur doit rappeler
 Une consultation ou une actualisation ne lance aucun agent. Les étapes réservées
 au terminal restent signalées ; la commande ne leur invente pas d’autres outils.
 
-Les demandes sont encore des exécutions complètes d’un même workflow. Le moteur
-ne représente pas encore leur rattachement à un bloc parent, la portée d’une
-validation commune ou l’intégration de candidats de code parallèles. Le lancement
-concurrent ne prouve donc pas une release intégrée : voir
-l’[analyse des écarts et critères de réception](../release/2026-10-09_demandes-et-parallele/ANALYSE.md).
+Les demandes indépendantes restent des exécutions complètes. Pour partager un
+plan, une validation et une réception, utilisez le modèle par éléments ci-dessous.
+
+## Recueillir les intentions et coordonner un plan
+
+Le modèle **Intentions, plan et travaux** garde plusieurs intentions
+dans une seule demande. Ajoutez-les depuis le terminal ou le formulaire de
+recueil, corrigez-les puis confirmez la liste. Cette confirmation transmet les
+données au planificateur. Une décision distincte porte ensuite sur le plan exact.
+
+Une fois le plan accepté, **Lancer le traitement des éléments** autorise les
+exécutions enfants. Le moteur fige chaque identifiant, son projet, sa version de
+workflow et ses dépendances. Il démarre les éléments prêts sous la limite choisie
+de un à quatre travaux simultanés, puis continue lorsque leurs prérequis sont
+terminés. En mode automatique, le lancement initial autorise cette progression.
+
+Le graphe présente les tâches concrètes, leur état et leurs exécutants observés.
+Le détail de coordination donne les dépendances nommées, questions, décisions et
+échecs. Ouvrir un enfant conserve le terminal ; le retour au workflow parent
+retrouve le plan et les autres résultats. Suspendre le parent arrête les nouveaux
+départs. La reprise d’un élément ne rejoue pas ses voisins déjà terminés.
+
+Le pont natif dispose de `collect` (contribution avec révision et clé stable),
+`iterate` (activation du bloc par éléments) et `children` (suivi paginé). `add`
+crée toujours une demande indépendante : il ne sert pas à ajouter chaque intention
+ou tâche à un plan. Le moteur accepte jusqu’à 100 éléments. `depends_on` contient
+leurs identifiants ; `base_from` indique une dépendance fournissant la base de
+code et exige le même projet. Une dépendance documentaire transmet ses résultats.
+
+Le modèle de développement ajoute une intégration des candidats, les tests du
+candidat commun et sa décision de réception. Les tests individuels ne suffisent
+pas à autoriser son application. Des modifications incompatibles sur le même
+fichier, une base périmée ou une contribution étrangère sont refusées. Les tests
+Python proposés sont un exemple à adapter ; une suite vide échoue.
+
+## Actions facultatives
+
+Une action associée se configure sur un résultat accepté ou une question ouverte.
+Elle conserve son propre workflow et son état. Son activation est explicite :
+la dessiner ne suffit pas à envoyer un message. Elle peut préparer un complément,
+notifier un canal ou utiliser un connecteur vérifié selon sa configuration.
+
+Le résultat principal peut se terminer alors qu’une action reste à activer ou
+échoue. Le suivi la garde visible et permet d’ouvrir son détail. Une reprise vise
+cette exécution seule. Une question devenue obsolète ne déclenche pas de nouvel
+envoi ; un effet distant incertain passe par la recherche de son accusé.
+
+Les notifications automatiques de question existantes restent configurées et
+autorisées au lancement. Les actions facultatives sont distinctes de ce réglage.
+Un composant inséré statiquement contenant ses propres actions est refusé :
+configurez ces actions dans le workflow principal.
 
 ## Historique et usage quotidien
 
@@ -166,6 +218,17 @@ Git n’est nécessaire pour commencer un workflow métier. Pour un dépôt exis
 son chemin peut être choisi ou collé ; sa validité est contrôlée à la création.
 
 Dans l’éditeur, chaque bloc possède une consigne, des critères et des entrées/sorties.
+Les contrats enrichis distinguent type, présence requise/facultative et liste
+d’éléments. Une liste reste une seule donnée tant qu’un bloc **Pour chaque élément**
+ne prévoit pas de la traiter individuellement. Une liste peut être vide si son
+minimum est zéro ; une sortie facultative peut être absente. Les liaisons
+incompatibles sont refusées avant le lancement.
+
+Les cartes se déplacent directement, avec annulation par Échap pendant le geste
+ou avec **Annuler** après celui-ci. Les points de connexion et le bouton **Relier**
+ouvrent la même vérification des données. Les notes servent à commenter le dessin :
+elles sont sauvegardées et exportées, sans port, état ni effet sur les agents.
+
 **Relier** propose les branches réelles, y compris les choix par défaut d’une
 décision neuve. Les propriétés du bloc montrent quelle sortie alimente quelle
 entrée ; le lien indique le nombre de données. **Ne transmettre aucune donnée**

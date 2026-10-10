@@ -1,0 +1,72 @@
+{
+  "bank": "/tmp/tricorder-personas-produit/03-sceptique/replay-95bXrQ",
+  "runs": {
+    "family_counts": {
+      "requests": 1,
+      "tasks": 0,
+      "actions": 0
+    },
+    "items": [
+      {
+        "id": "rf7db293224e74e5d",
+        "project": "p0d3361abf2f74af1",
+        "status": "active",
+        "created": 1791627157.2939622,
+        "updated": 1791627158.9093597,
+        "simulation": false,
+        "completion_outcome": null,
+        "archived": null,
+        "coordination_wait": null,
+        "coordination_hold": null,
+        "parent": null,
+        "associated_with": null,
+        "conversation": null,
+        "workers": [],
+        "workers_total": 0,
+        "definition": {
+          "id": "work-28f0f60d-6783-479f-9a16-536c328715ea",
+          "title": "Échec local reproductible",
+          "revision": 2
+        },
+        "original": {
+          "id": "work-28f0f60d-6783-479f-9a16-536c328715ea"
+        },
+        "focus": {
+          "node": "check",
+          "title": "Vérifier le runtime Python",
+          "status": "returned",
+          "action": "Examiner l’échec"
+        },
+        "health": {
+          "status": "failed",
+          "total": 1,
+          "issues": [
+            {
+              "node": "check",
+              "title": "Vérifier le runtime Python",
+              "reason": "Commande terminée avec le code 7. Résultat à examiner."
+            }
+          ]
+        },
+        "request": "",
+        "counts": {
+          "pending": 1,
+          "returned": 1
+        },
+        "nodes": {
+          "check": {
+            "status": "returned"
+          },
+          "decision": {
+            "status": "pending"
+          }
+        },
+        "origin": null
+      }
+    ],
+    "total": 1,
+    "offset": 0,
+    "limit": 25,
+    "next": null
+  }
+}

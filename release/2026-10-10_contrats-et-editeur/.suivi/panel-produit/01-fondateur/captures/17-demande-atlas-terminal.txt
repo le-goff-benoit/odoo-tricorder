@@ -1,0 +1,53 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas - onboarding"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas - onboarding
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour · 12:04
+  - button "Actualiser · À jour · 12:04"
+  - main:
+    - text: Suivi du workflow
+    - heading "Onboarding Atlas" [level=1]
+    - paragraph: Conversation ouverte · OpenAI · Codex
+    - heading "Votre demande est enregistrée" [level=2]
+    - paragraph: Votre demande a été transmise à la conversation. Son suivi apparaîtra ici ; vous n’avez pas à la ressaisir.
+    - group: Demande enregistrée
+    - button "Retrouver le terminal"
+    - heading "Étapes du workflow" [level=2]
+    - list:
+      - listitem:
+        - strong: Recueillir les besoins client
+        - text: Entrée utilisateur · intentions · liste
+      - listitem:
+        - strong: Préparer un plan
+        - text: Tâche IA · plan · un élément
+      - listitem:
+        - strong: Valider le plan
+        - text: Décision humaine · plan · un élément
+      - listitem:
+        - strong: Pour chaque élément du plan
+        - text: Pour chaque élément · contributions · liste ; results · liste
+      - listitem:
+        - strong: Examiner les résultats
+        - text: Décision humaine · Aucune sortie
+    - paragraph: Aucune étape n’est en cours tant que l’agent n’a pas créé de demande.

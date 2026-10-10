@@ -1,0 +1,44 @@
+{
+  "calls": [
+    {
+      "action": "collection.change",
+      "run": "r132ef597b00446db",
+      "node": "intentions",
+      "revision": 0,
+      "operation": "add",
+      "key": "e7e183f7-1987-4623-845f-83f07c9a1582",
+      "text": "Intention identique mais délibérément répétée"
+    },
+    {
+      "action": "collection.change",
+      "run": "r132ef597b00446db",
+      "node": "intentions",
+      "revision": 0,
+      "operation": "add",
+      "key": "619b6d7f-82f2-4b8f-9b39-127a878531ea",
+      "text": "Intention identique mais délibérément répétée"
+    },
+    {
+      "action": "collection.change",
+      "run": "r132ef597b00446db",
+      "node": "intentions",
+      "revision": 1,
+      "operation": "add",
+      "key": "40307305-7b84-4fe6-9b3f-1e664dde2fcf",
+      "text": "Intention identique mais délibérément répétée"
+    },
+    {
+      "action": "collection.change",
+      "run": "r132ef597b00446db",
+      "node": "intentions",
+      "revision": 0,
+      "operation": "add",
+      "key": "e7e183f7-1987-4623-845f-83f07c9a1582",
+      "text": "Intention identique mais délibérément répétée"
+    }
+  ],
+  "stored": [
+    "Intention identique mais délibérément répétée",
+    "Intention identique mais délibérément répétée"
+  ]
+}

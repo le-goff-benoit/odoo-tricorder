@@ -1,0 +1,73 @@
+{
+  "profile": 1,
+  "build_renderer_sha256": "769515bf8cbd5cf312cb5df1346fa85b0443b55216f4b5ffd6be843d898f5946",
+  "spec_sha256": "fff7685e37960350baa3728209d5311f8289865d0b020923b42bfd89a53dc376",
+  "captures": [
+    {
+      "file": "01-workflow-adopte-configure.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-1-56ed1-ltats-documentaires-par-GUI/workflow-adopte-configure.png",
+      "sha256": "97bed4f26683f934072c2c68c7a9e7b77f1eb6b990ba914ef320c280003dc0f8"
+    },
+    {
+      "file": "02-recueil.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-1-56ed1-ltats-documentaires-par-GUI/recueil.png",
+      "sha256": "b84fc6ca31ba06f1ebfc3dd3a9fd9b44ea358faa75f7ec5dad2cf492076d547f"
+    },
+    {
+      "file": "03-plan-a-approuver.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-1-56ed1-ltats-documentaires-par-GUI/plan-a-approuver.png",
+      "sha256": "147e1c7995ec3a8bd83fb8a010cc397be8868f3b56d703e08fe305cbb57ec0d7"
+    },
+    {
+      "file": "04-travaux-sur-graphe.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-1-56ed1-ltats-documentaires-par-GUI/travaux-sur-graphe.png",
+      "sha256": "5e739dcebd88bcef49ad675e1283886635cee6e27a6fdffa78fcbfbb58e57150"
+    },
+    {
+      "file": "05-resultat-compte-rendu.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-1-56ed1-ltats-documentaires-par-GUI/resultat-compte-rendu.png",
+      "sha256": "5284cb9d3b3384fac584429e3caf8c8279d65d8aa611265eb36e41aa12b1e274"
+    },
+    {
+      "file": "06-resultat-brouillon.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-1-56ed1-ltats-documentaires-par-GUI/resultat-brouillon.png",
+      "sha256": "ca9dd5cb6ea6b65ee524e67c19af697c213539e809787f6a461981a2fd4298a5"
+    },
+    {
+      "file": "07-resultat-final.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-1-56ed1-ltats-documentaires-par-GUI/resultat-final.png",
+      "sha256": "ed2b4730d0313985f7fee7dc32211e3637cacd5a276b2931ff830c8ff8451538"
+    },
+    {
+      "file": "08-copie-reutilisee.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/copie-reutilisee.png",
+      "sha256": "9e2437ca826791b2253d972208739b4154644591294ebd1ae1c2b9e5b5efd419"
+    },
+    {
+      "file": "09-demande-terminal.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/demande-terminal.png",
+      "sha256": "b41696eb24a065b838bb3a303a594108cfea0067d69c8bee6495a09bfb8d01b5"
+    },
+    {
+      "file": "10-coordination-parallele-1280.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/coordination-parallele-1280.png",
+      "sha256": "0ecd22c3f99eb72dcc722f086f929fd4a8eb31682eff3d2ab38b7e28e407ffc0"
+    },
+    {
+      "file": "11-tache-enfant-terminal.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/tache-enfant-terminal.png",
+      "sha256": "87e65b019578a85ceaae539d7fa35b36b07ae115d09d51c9d6325a3cfd99531c"
+    },
+    {
+      "file": "12-projet-retrouve.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/projet-retrouve.png",
+      "sha256": "dea0b12c4ae4f423654d326858a3fdd3837743831fb9d30a9683a72144edb011"
+    },
+    {
+      "file": "13-demande-retrouvee-terminal.png",
+      "source": "test-results/panel-v2-user-1/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/demande-retrouvee-terminal.png",
+      "sha256": "f00aa70c1cf32e5b07e756eda770b7685496a4949a7c0109c7cc8afd7b2a61e8"
+    }
+  ],
+  "scope": "Original panel on frozen source build; synthetic fixtures, inert providers; screenshots visually reviewed by the testing agent."
+}

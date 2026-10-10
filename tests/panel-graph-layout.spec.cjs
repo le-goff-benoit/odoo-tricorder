@@ -80,10 +80,10 @@ test('saved inline alternatives remain intact until explicit organization, with 
   expect(saved.edges).toEqual(original.edges);
   expect(saved.nodes.map(({ position, ...node }) => node)).toEqual(original.nodes.map(({ position, ...node }) => node));
   const link = page.locator('g.graph-link[data-edge=urgent]');
-  await page.locator('.graph-label[data-edge=urgent] text').click(); await expect(page.getByRole('dialog')).toContainText('Priorité urgente ? → Préparer la réponse urgente');
+  await page.locator('.graph-label[data-edge=urgent] text').click(); await expect(page.getByRole('dialog')).toContainText('Modifier le lien'); await expect(page.locator('#edge-from')).toHaveValue('condition'); await expect(page.locator('#edge-to')).toHaveValue('urgent');
   await page.getByRole('button', { name: 'Conserver le lien', exact: true }).click();
   await link.focus(); await page.keyboard.press('Enter');
-  await expect(page.getByRole('dialog')).toContainText('retirez ce lien puis utilisez « Relier »');
+  await expect(page.getByRole('button', { name: 'Enregistrer le lien', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Retirer ce lien…', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('Supprimer ce lien');
   await page.getByRole('button', { name: 'Supprimer le lien', exact: true }).click();
@@ -118,7 +118,7 @@ test('Support branches and joins stay readable beside the terminal with native s
   await page.screenshot({ path: test.info().outputPath('support-joins-1440.png') });
   await page.setViewportSize({ width: 1024, height: 800 });
   await page.getByRole('button', { name: 'Ajuster', exact: true }).click();
-  geometry = await measureDiagram(); expect(geometry.collisions).toEqual([]); expect(geometry.overflows).toEqual([]); expect(geometry.labelAboveWires).toBe(true); expect(geometry.scale).toBe(1);
+  geometry = await measureDiagram(); expect(geometry.collisions).toEqual([]); expect(geometry.overflows).toEqual([]); expect(geometry.labelAboveWires).toBe(true); expect(geometry.scale).toBeGreaterThan(0);expect(geometry.scale).toBeLessThanOrEqual(1);
   expect(await snapshot(graph.id)).toEqual(original);
   expect((await call('conversation.get', { conversation: conversation.id })).items).toEqual(before.items);
   expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);

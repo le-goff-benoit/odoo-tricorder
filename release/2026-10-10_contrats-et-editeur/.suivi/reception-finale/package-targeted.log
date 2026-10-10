@@ -1,0 +1,21 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test tests/terminal-resume-ux.spec.cjs tests/workflow-v2.spec.cjs --output=/tmp/tricorder-rc13-final-target-package
+PATH: /tmp/tricorder-ci-tools-nou9a439:/usr/bin:/bin
+codex None
+claude None
+
+Running 9 tests using 1 worker
+
+  ✓  1 tests/terminal-resume-ux.spec.cjs:47:1 › stopped agent is resumed explicitly from overview and activity without duplicate conversation or lost shell draft (12.8s)
+  ✓  2 tests/terminal-resume-ux.spec.cjs:75:1 › cross-project context names both shell project and displayed request project (7.9s)
+  ✓  3 tests/terminal-resume-ux.spec.cjs:94:1 › resuming an agent keeps manual suspension and dependency waits until explicit request resume (13.2s)
+
+  ✓  4 tests/terminal-resume-ux.spec.cjs:119:1 › completed request offers its result without instructing the user to resume the stopped agent (8.2s)
+  ✓  5 tests/workflow-v2.spec.cjs:31:1 › editor converts explicitly, describes typed list ports, configures per-item work and optional actions without JSON (4.9s)
+  ✓  6 tests/workflow-v2.spec.cjs:44:1 › three intentions feed one accepted plan, explicit child coordination and a failed optional action leave the main result completed (15.6s)
+  ✓  7 tests/workflow-v2.spec.cjs:74:1 › renaming per-item work preserves configured ports and the integration block can be saved (4.3s)
+  ✓  8 tests/workflow-v2.spec.cjs:80:1 › an empty optional collection can close and transmit an empty list without inventing an intention (4.1s)
+  ✓  9 tests/workflow-v2.spec.cjs:84:1 › dependent children show the wait and parent suspension without offering a manual resume (9.0s)
+
+  9 passed (1.3m)

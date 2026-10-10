@@ -22,6 +22,8 @@ let tray, quitting = false, trayTimer, tickBusy = false, lastRuns = [], lastSche
 let terminals;
 const allowed = new Set(['workflow.conflict', 'run.list', 'workflow.list', 'workflow.get', 'run.proof', 'run.attempts', 'run.recovery', 'conversation.open', 'conversation.list', 'conversation.get', 'conversation.add', 'conversation.answer', 'run.answer', 'bootstrap', 'overview.get', 'candidate.preview', 'workflow.export-portable', 'workflow.preview-portable', 'workflow.import-portable', 'plugins.discover', 'plugins.preview', 'workspace.get', 'design.workspace', 'assistant.propose', 'pack.preview', 'pack.install', 'project.create', 'project.get', 'template.workspace', 'schedule.list', 'schedule.get', 'schedule.create', 'schedule.toggle', 'workflow.save', 'workflow.reload', 'workflow.validate', 'run.start', 'run.get', 'run.control', 'run.document', 'run.reconcile', 'release.export', 'work.export', 'workflow.repository', 'workflow.import-repository']);
 const human = new Set(['entity.archive', 'workflow.resolve', 'run.finish-interrupted', 'conversation.open', 'conversation.dispatch', 'run.accept', 'run.decide', 'run.retry', 'plugins.qualify', 'run.handoff', 'run.reconcile-effect', 'candidate.apply', 'run.start', 'schedule.create']);
+for (const action of ['collection.change', 'iteration.get', 'action.list']) allowed.add(action);
+for (const action of ['iteration.start', 'action.activate']) human.add(action);
 
 function backend(payload, isHuman = false) {
   const script = app.isPackaged ? path.join(process.resourcesPath, 'backend/studio.py') : path.join(__dirname, '../backend/studio.py');

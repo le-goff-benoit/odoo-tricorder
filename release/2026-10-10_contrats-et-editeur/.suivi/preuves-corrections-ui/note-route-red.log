@@ -1,0 +1,35 @@
+✔ Support skip edges and joins reserve readable labels and never cross cards at split width (2.993107ms)
+✔ explicit design layout separates alternatives, places join after both, and changes positions only (1.338344ms)
+✔ a branch in the saved single-line drawing goes around the intervening card without changing positions (0.271818ms)
+✔ long branch names wrap in the allocated band and malformed drafts remain inspectable (0.347573ms)
+✔ notes are obstacles for both routes and their labels even when moved onto a previous wire (1.596685ms)
+✖ a note below neighbouring cards never reroutes a link through its source or destination (1.200603ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57.956731
+
+✖ failing tests:
+
+test at tests/panel-graph-layout.test.cjs:73:1
+✖ a note below neighbouring cards never reroutes a link through its source or destination (1.200603ms)
+  AssertionError [ERR_ASSERTION]: Route p-s crosses plan
+  
+  true !== false
+  
+      at verifyRoutes (/home/blegoff/odoo-tricorder/tests/panel-graph-layout.test.cjs:25:38)
+      at TestContext.<anonymous> (/home/blegoff/odoo-tricorder/tests/panel-graph-layout.test.cjs:80:40)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,5 @@
+{
+  "build-artifacts/linux-unpacked/resources/app.asar": "7e89f6ad3d7c6be6907797c505d72bbf4274c5db801c09e670746591324a54b4",
+  "build-artifacts/linux-unpacked/resources/backend/workflow_engine/collection.py": "03ab1fa19a02cbceaebc7fbb02ebe4726cb0f05ed02dd5cfd8ef819e92f6bf1e",
+  "src/studio.js": "617cac7e0edc9ec5472c8063bd7b9de5e1fb784a1cd8993bd748c68d94ccb449"
+}

@@ -1,0 +1,14 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-terminal-final/playwright.config.cjs --output=/tmp/tricorder-review-terminal-final/results-final
+PATH: /tmp/tricorder-ci-tools-xb1z8smv:/usr/bin:/bin
+codex None
+claude None
+
+Running 3 tests using 1 worker
+
+  ✓  1 ../../../tmp/tricorder-review-terminal-final/terminal-reception.spec.cjs:27:1 › current output remains followed after compact reopening and keyboard flow control (5.4s)
+  ✓  2 ../../../tmp/tricorder-review-terminal-final/terminal-reception.spec.cjs:35:1 › voluntary history reading is not pulled to the bottom by hiding and compact resizing (7.3s)
+  ✓  3 ../../../tmp/tricorder-review-terminal-final/terminal-reception.spec.cjs:43:1 › compact split preserves useful terminal size and original PTY through split changes (7.5s)
+
+  3 passed (20.9s)

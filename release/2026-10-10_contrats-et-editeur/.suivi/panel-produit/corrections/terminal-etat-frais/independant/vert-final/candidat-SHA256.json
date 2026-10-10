@@ -1,0 +1,6 @@
+{
+  "electron/main.cjs": "c441b101fedf7ce39f7b444069966aa24998b13841ac3000d0e593abfb3fe7f6",
+  "src/app.js": "fa11eaeed26f88ea2460989a3f5de90927efecf62720c5c9eb38005651addeff",
+  "src/studio.js": "617cac7e0edc9ec5472c8063bd7b9de5e1fb784a1cd8993bd748c68d94ccb449",
+  "dist/app.js": "78f5ea4083fe1c2a54f69712bea3e7527c3081273fefa3bdb64b74862f9a5e65"
+}

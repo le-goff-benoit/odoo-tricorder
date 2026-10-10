@@ -69,7 +69,9 @@ def preflight(graph, simulation=False, defaults=None, project=None, engine=None,
         return []
     catalog = _catalog if _catalog is not None else {c["id"]: c for c in capabilities()}
     from .integrations import issues as plugin_issues
-    issues = plugin_issues(graph, project, engine)
+    # This function also checks every mandatory component below, preserving
+    # its owning block in diagnostics without reporting the same issue twice.
+    issues = plugin_issues(graph, project, engine, recursive=False)
     from .packs import profile_issues
     missing_profiles = profile_issues(project, graph, primary=primary) if project else []
     issues += missing_profiles
@@ -83,6 +85,12 @@ def preflight(graph, simulation=False, defaults=None, project=None, engine=None,
         issues.append({"node": graph["nodes"][0]["id"], "message": "Ce workflow n’est pas compatible avec ce mode d’exécution."})
     for node in graph["nodes"]:
         kind = node["kind"]
+        if kind == "foreach" and isinstance(node.get("workflow"), dict):
+            child = {**node["workflow"], "defaults": {**graph.get("defaults", {}), **node["workflow"].get("defaults", {})}}
+            child_issues = preflight(child, defaults=defaults, project=project, engine=engine,
+                                     mode="automatic", primary=False, _catalog=catalog)
+            issues += [{**issue, "node": node["id"], "child_node": issue.get("node"),
+                        "message": f"{node['title']} · {issue['message']}"} for issue in child_issues]
         selection = {**(defaults or {}), **graph.get("defaults", {}), **node}
         native = mode == "native" and kind in {"agent", "task", "document"} and node.get("execution_mode") != "edit" and selection.get("provider", provider) == provider and (not selection.get("model") or selection.get("model") == model)
         if native and selection.get("effort", "medium") != graph.get("defaults", {}).get("effort", "medium"):
@@ -144,6 +152,9 @@ def preflight(graph, simulation=False, defaults=None, project=None, engine=None,
 def dispatch(engine, run_id):
     """Claim before spawn; a crash at either boundary never blindly respawns work."""
     run = engine.run(run_id)
+    if any(s.get("status") == "waiting_children" for s in run["nodes"].values()):
+        from .iterations import tick
+        run = tick(engine, run_id)
     if run["status"] != "active":
         return run
     if run["original"]["id"] == "question-notification" and run["parameters"].get("source_question") and all(s["status"] in {"pending", "ready"} for s in run["nodes"].values()):
@@ -155,6 +166,20 @@ def dispatch(engine, run_id):
         if state["status"] != "ready":
             continue
         node = next(n for n in run["definition"]["nodes"] if n["id"] == nid)
+        if node["kind"] == "foreach":
+            if run_driver(run) == "automatic":
+                from .iterations import activate
+                try:
+                    activate(engine, run_id, nid)
+                except ContractError as error:
+                    with engine.store.transaction() as db:
+                        current = engine.run(run_id, db)
+                        target = current["nodes"][nid]
+                        if target["status"] == "ready":
+                            target.update(status="blocked", reason=str(error)[:1200], validation_error=str(error)[:1200])
+                            engine._event(db, current, "iteration-blocked", nid, reason=str(error)[:1200])
+                            engine._save(db, current)
+            continue
         if run_driver(run) == "conversation" and node["kind"] in {"agent", "task", "document"}:
             continue  # The native conversation claims work; the graph remains authoritative.
         try:
@@ -168,8 +193,11 @@ def _spawn_worker(engine, run_id, node_id):
     """Reserve atomically before a detached spawn; never wait for worker output."""
     claim = engine.claim(run_id, node_id)
     current = engine.run(run_id)
-    if current['status'] != 'active':
-        engine.submit(run_id, node_id, claim['token'], {'ok': False, 'summary': 'Lancement interrompu : exécution suspendue ou annulée avant le démarrage.'})
+    try:
+        from .associated_actions import check_current
+        check_current(engine, current)
+    except ContractError as error:
+        engine.submit(run_id, node_id, claim['token'], {'ok': False, 'summary': 'Lancement interrompu : ' + str(error)[:400]})
         return None
     try:
         worker = subprocess.Popen([sys.executable, str(Path(__file__).parents[1] / 'studio.py'), '--state', str(engine.store.directory), '--worker', run_id, node_id, claim['token']],
@@ -190,7 +218,7 @@ def worker_preflight(engine, run, node, project, *, catalog=None):
     The claim still owns quota, locks and authorization atomically. Readiness is
     only an observation, never a reservation or permission to run future work.
     """
-    if node['kind'] not in {'agent', 'command', 'document'}:
+    if node['kind'] not in {'agent', 'command', 'document', 'integrate'}:
         return [{'node': node['id'], 'code': 'native-step', 'action': 'terminal',
                  'message': 'Ce bloc se traite dans la conversation du terminal.'}]
     checked_node = {**node, **node.get('execution', {})}
@@ -312,7 +340,8 @@ def execute(engine, run_id, node_id, token):
     job = engine.store.directory / "jobs" / token
     job.mkdir(parents=True, mode=0o700, exist_ok=True)
     try:
-        require(run["status"] != "cancelled", "Exécution annulée avant lancement de l'outil")
+        from .associated_actions import check_current
+        check_current(engine, run)
         if run["simulation"]:
             from .simulation import output_examples
             time.sleep(0.4)
@@ -326,6 +355,9 @@ def execute(engine, run_id, node_id, token):
                 generated = execute_text(engine, run, node, token, job)
                 generated["evidence"] = result["evidence"] + generated.get("evidence", [])
                 result = generated
+        elif node["kind"] == "integrate":
+            from connectors.candidate_integration import integrate
+            result = integrate(engine, run, node, run["nodes"][node_id])
         elif node["kind"] == "command":
             work = job / "work"
             work.mkdir(exist_ok=True)

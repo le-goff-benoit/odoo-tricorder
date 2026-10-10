@@ -1723,6 +1723,9 @@ test('window integration preserves the native conversation while inspecting phas
     expect(await app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows().length)).toBe(1);
     await studio.getByRole('button', { name: 'Essayer un exemple' }).click();
     await studio.locator('.node[data-id="analyse"]').click();
+    // Selection keeps the compact graph visible; editing is an explicit action.
+    await expect(studio.locator('.canvas-area')).toBeVisible();
+    await studio.getByRole('button', { name: 'Propriétés', exact: true }).click();
     await studio.getByLabel('Nom du bloc', { exact: true }).fill('Brouillon non appliqué');
     await page.locator('#project-list [data-project=' + JSON.stringify(project) + ']').click();
     expect(await page.evaluate(() => window.conversationMarker)).toBe('preserved');

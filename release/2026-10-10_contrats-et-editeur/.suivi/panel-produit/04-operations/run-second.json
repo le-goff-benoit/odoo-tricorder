@@ -1,0 +1,906 @@
+{
+  "run": {
+    "associated_actions": [
+      {
+        "action": "action-084dc597-299c-4e0b-a799-4e47ea35ff96",
+        "activated": 1791627695.1833165,
+        "attempt": 1,
+        "authorization": {
+          "actor": "local-user",
+          "project": "p0a1de40a43274240",
+          "source": "72152f97f3cf8fef9a3b7a18cf4a8b516b56913eb506ba9f5c4d4cfc04b014d3",
+          "transports": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+          "workflow": "a47d01483c2401f94dd9f13318cfc422ee7088f14ee2e2aa2c62fb4e553d39ed"
+        },
+        "created": 1791627689.025833,
+        "event": "accepted",
+        "id": "action-d9f7ee2f9aa556bfed87ad5f95a41d78",
+        "question": null,
+        "run": "r5bb2d4ce3bd84889",
+        "source": "bilan",
+        "source_digest": "72152f97f3cf8fef9a3b7a18cf4a8b516b56913eb506ba9f5c4d4cfc04b014d3",
+        "status": "active",
+        "title": "Préparer le message de bienvenue"
+      }
+    ],
+    "completion_outcome": "succeeded",
+    "contract": "fa3361125f9ef22ffc03e5e4144bba2204f295251724e9c83a17df52d9217f37",
+    "created": 1791627634.2797134,
+    "definition": {
+      "actions": [
+        {
+          "enabled": true,
+          "event": "accepted",
+          "id": "action-084dc597-299c-4e0b-a799-4e47ea35ff96",
+          "source": "bilan",
+          "title": "Préparer le message de bienvenue",
+          "workflow": {
+            "edges": [],
+            "id": "item-work",
+            "nodes": [
+              {
+                "content": "Bonjour Julie, nous confirmons votre accueil le 20 octobre. Ce texte est un brouillon local fictif, sans envoi.",
+                "id": "draft",
+                "kind": "document",
+                "outputs": {},
+                "title": "Brouillon local de bienvenue Acacia",
+                "validation": "human"
+              }
+            ],
+            "schema": 2,
+            "title": "Brouillon local de bienvenue Acacia"
+          }
+        }
+      ],
+      "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        },
+        {
+          "from": "step-mv28tmo7",
+          "id": "edge-mv28tvbc",
+          "mapping": {},
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "work-9539f337-b472-4fd9-a689-469360d82b04",
+      "nodes": [
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "inputs": {},
+          "kind": "task",
+          "max_attempts": 2,
+          "outputs": {},
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "prompt": "Client fictif Acacia : vérifier interlocuteur, objectif et date de démarrage. Si une précision manque, demander une réponse au responsable opérations.",
+          "resources": [],
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre le nouveau client"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "build",
+          "inputs": {},
+          "kind": "task",
+          "max_attempts": 1,
+          "outputs": {},
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "prompt": "Rédiger une checklist simple : réunion de démarrage, collecte des accès et formation.",
+          "resources": [],
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer le parcours d’accueil"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "test",
+          "inputs": {},
+          "kind": "task",
+          "max_attempts": 1,
+          "outputs": {},
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "prompt": "Vérifier que chaque action a un responsable et une date, sans effectuer aucune communication.",
+          "resources": [],
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Vérifier les points d’accueil"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "content": "Compte rendu fictif Acacia : accueil prévu, checklist et responsables. Brouillon local de bienvenue, à relire.",
+          "criteria": [],
+          "id": "bilan",
+          "inputs": {},
+          "kind": "document",
+          "max_attempts": 1,
+          "outputs": {},
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "resources": [],
+          "reuse": false,
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Rédiger le compte rendu d’accueil",
+          "validation": "human"
+        },
+        {
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "step-mv28tmo7",
+          "inputs": {},
+          "kind": "question",
+          "max_attempts": 1,
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "answer": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 616,
+            "y": 296
+          },
+          "question": "Quelle date retenons-nous pour accueillir Acacia ?",
+          "resources": [],
+          "title": "Confirmer la date d’accueil"
+        }
+      ],
+      "parameters": {
+        "request": "Second accueil fictif : confirmer date, approuver puis préparer le brouillon facultatif."
+      },
+      "revision": 3,
+      "schema": 2,
+      "title": "Onboarding client - méthode opérations"
+    },
+    "driver": "automatic",
+    "id": "r345c6af0b98a4333",
+    "nodes": {
+      "analyse": {
+        "attempt": 1,
+        "finished": 1791627648.8848248,
+        "heartbeat": 1791627648.4395392,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 1684408,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1684408,
+            "session": 1684408,
+            "start": "16146118"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791627681.0907023,
+          "checks": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "contract": "fa3361125f9ef22ffc03e5e4144bba2204f295251724e9c83a17df52d9217f37",
+          "note": "Vérification du parcours simulé."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "bf5ffcbac197e3b1dfba841c5dfbae5872d5ef48b3db2549b37ec0239b08d3da",
+              "size": 90
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Demande clarifiée : proposer une évolution et ses critères de réussite."
+        },
+        "started": 1791627647.7974746,
+        "status": "accepted",
+        "token": "t18dfd4392b294eb1"
+      },
+      "bilan": {
+        "attempt": 1,
+        "finished": 1791627687.364279,
+        "heartbeat": 1791627686.942581,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 1686221,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1686221,
+            "session": 1686221,
+            "start": "16149968"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791627689.0248892,
+          "checks": [],
+          "contract": "fa3361125f9ef22ffc03e5e4144bba2204f295251724e9c83a17df52d9217f37",
+          "note": "Compte rendu simulé accepté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "6639ead0abc6d1cf480418552f4c37ae85ff8da4e2fe50194bbc84abc4ff1472",
+              "size": 90
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Bilan de démonstration : branches reçues et décision humaine conservée."
+        },
+        "started": 1791627686.863032,
+        "status": "accepted",
+        "token": "t424299786c0e40ea"
+      },
+      "build": {
+        "attempt": 1,
+        "finished": 1791627682.798516,
+        "heartbeat": 1791627682.389932,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 1685745,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1685745,
+            "session": 1685745,
+            "start": "16149514"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791627683.654009,
+          "checks": [],
+          "contract": "fa3361125f9ef22ffc03e5e4144bba2204f295251724e9c83a17df52d9217f37",
+          "note": "Vérification du parcours simulé."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "70b78a32d7cabfbe908b824d9fdde703873bf66f1d42f9425baccc89b643f89c",
+              "size": 95
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Proposition de réalisation préparée. Aucun code de projet n'a été modifié."
+        },
+        "started": 1791627682.3377202,
+        "status": "accepted",
+        "token": "t422492bb347344c0"
+      },
+      "decision": {
+        "attempt": 1,
+        "decision": {
+          "actor": "local-user",
+          "at": 1791627686.1774292,
+          "note": "",
+          "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "approve",
+          "proposal": "10923d8174a4f63fc6d4607f4b433c1fd3ea684c2cfd4d5fdad6f128b0e20da7"
+        },
+        "input_sources": {},
+        "inputs": {},
+        "nonce": "d6846ae178002458e",
+        "operation": null,
+        "outcome": "approve",
+        "proposal": "10923d8174a4f63fc6d4607f4b433c1fd3ea684c2cfd4d5fdad6f128b0e20da7",
+        "status": "accepted"
+      },
+      "join": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "result": {
+          "outputs": {}
+        },
+        "status": "accepted"
+      },
+      "step-mv28tmo7": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "interactions": [
+          {
+            "answer": "Le 20 octobre à 10 h, contact Julie.",
+            "question": "Quelle date retenons-nous pour accueillir Acacia ?"
+          }
+        ],
+        "outcome": "done",
+        "question": {
+          "answer": "Le 20 octobre à 10 h, contact Julie.",
+          "answered": 1791627647.1873796,
+          "created": 1791627634.2809625,
+          "id": "q8715c47c109f4adf",
+          "status": "answered",
+          "text": "Quelle date retenons-nous pour accueillir Acacia ?"
+        },
+        "questions": [
+          {
+            "answer": "Le 20 octobre à 10 h, contact Julie.",
+            "answered": 1791627647.1873796,
+            "created": 1791627634.2809625,
+            "id": "q8715c47c109f4adf",
+            "status": "answered",
+            "text": "Quelle date retenons-nous pour accueillir Acacia ?"
+          }
+        ],
+        "result": {
+          "ok": true,
+          "outputs": {
+            "answer": "Le 20 octobre à 10 h, contact Julie."
+          },
+          "summary": "Information fournie"
+        },
+        "status": "accepted"
+      },
+      "test": {
+        "attempt": 1,
+        "finished": 1791627682.8023665,
+        "heartbeat": 1791627682.3939083,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 1685746,
+        "processes": [
+          {
+            "boot": "d0f667df-5efe-4a2b-ade5-19aa8118d8c5",
+            "pid": 1685746,
+            "session": 1685746,
+            "start": "16149515"
+          }
+        ],
+        "receipt": {
+          "actor": "local-user",
+          "at": 1791627684.9213243,
+          "checks": [],
+          "contract": "fa3361125f9ef22ffc03e5e4144bba2204f295251724e9c83a17df52d9217f37",
+          "note": "Vérification du parcours simulé."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "5a43c3378aa919159e6f9c306a15e0012404ad3c2e63351573010acd96586054",
+              "size": 84
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Scénarios de test proposés. Aucun test métier n'a été exécuté."
+        },
+        "started": 1791627682.3448696,
+        "status": "accepted",
+        "token": "tf3584f621f784ad5"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "actions": [
+        {
+          "enabled": true,
+          "event": "accepted",
+          "id": "action-084dc597-299c-4e0b-a799-4e47ea35ff96",
+          "source": "bilan",
+          "title": "Préparer le message de bienvenue",
+          "workflow": {
+            "edges": [],
+            "id": "item-work",
+            "nodes": [
+              {
+                "content": "Bonjour Julie, nous confirmons votre accueil le 20 octobre. Ce texte est un brouillon local fictif, sans envoi.",
+                "id": "draft",
+                "kind": "document",
+                "outputs": {},
+                "title": "Brouillon local de bienvenue Acacia",
+                "validation": "human"
+              }
+            ],
+            "schema": 2,
+            "title": "Brouillon local de bienvenue Acacia"
+          }
+        }
+      ],
+      "description": "Un exemple simulé pour découvrir les branches, la validation et les décisions humaines.",
+      "edges": [
+        {
+          "from": "analyse",
+          "id": "analyse-build",
+          "outcome": "done",
+          "to": "build"
+        },
+        {
+          "from": "analyse",
+          "id": "analyse-test",
+          "outcome": "done",
+          "to": "test"
+        },
+        {
+          "from": "build",
+          "id": "build-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "test",
+          "id": "test-join",
+          "outcome": "done",
+          "to": "join"
+        },
+        {
+          "from": "join",
+          "id": "join-decision",
+          "outcome": "done",
+          "to": "decision"
+        },
+        {
+          "from": "decision",
+          "id": "decision-bilan",
+          "outcome": "approve",
+          "to": "bilan"
+        },
+        {
+          "from": "step-mv28tmo7",
+          "id": "edge-mv28tvbc",
+          "mapping": {},
+          "outcome": "done",
+          "to": "analyse"
+        }
+      ],
+      "id": "work-9539f337-b472-4fd9-a689-469360d82b04",
+      "nodes": [
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [
+            "Le résultat attendu est compréhensible."
+          ],
+          "id": "analyse",
+          "inputs": {},
+          "kind": "task",
+          "max_attempts": 2,
+          "outputs": {},
+          "phase": "Analyse",
+          "position": {
+            "x": 50,
+            "y": 140
+          },
+          "prompt": "Client fictif Acacia : vérifier interlocuteur, objectif et date de démarrage. Si une précision manque, demander une réponse au responsable opérations.",
+          "resources": [],
+          "sample": "Demande clarifiée : proposer une évolution et ses critères de réussite.",
+          "title": "Comprendre le nouveau client"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "build",
+          "inputs": {},
+          "kind": "task",
+          "max_attempts": 1,
+          "outputs": {},
+          "phase": "Réalisation",
+          "position": {
+            "x": 350,
+            "y": 60
+          },
+          "prompt": "Rédiger une checklist simple : réunion de démarrage, collecte des accès et formation.",
+          "resources": [],
+          "sample": "Proposition de réalisation préparée. Aucun code de projet n'a été modifié.",
+          "title": "Préparer le parcours d’accueil"
+        },
+        {
+          "candidate_check": false,
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "test",
+          "inputs": {},
+          "kind": "task",
+          "max_attempts": 1,
+          "outputs": {},
+          "phase": "Qualité",
+          "position": {
+            "x": 350,
+            "y": 250
+          },
+          "prompt": "Vérifier que chaque action a un responsable et une date, sans effectuer aucune communication.",
+          "resources": [],
+          "sample": "Scénarios de test proposés. Aucun test métier n'a été exécuté.",
+          "title": "Vérifier les points d’accueil"
+        },
+        {
+          "id": "join",
+          "kind": "join",
+          "phase": "Validation",
+          "position": {
+            "x": 650,
+            "y": 140
+          },
+          "title": "Réunir les résultats"
+        },
+        {
+          "id": "decision",
+          "kind": "decision",
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "phase": "Validation",
+          "position": {
+            "x": 950,
+            "y": 140
+          },
+          "question": "Les deux résultats sont prêts. Souhaitez-vous préparer le bilan ?",
+          "title": "Valider la suite"
+        },
+        {
+          "capabilities": [],
+          "completion_outcome": "succeeded",
+          "content": "Compte rendu fictif Acacia : accueil prévu, checklist et responsables. Brouillon local de bienvenue, à relire.",
+          "criteria": [],
+          "id": "bilan",
+          "inputs": {},
+          "kind": "document",
+          "max_attempts": 1,
+          "outputs": {},
+          "phase": "Documentation",
+          "position": {
+            "x": 1250,
+            "y": 140
+          },
+          "resources": [],
+          "reuse": false,
+          "sample": "Bilan de démonstration : branches reçues et décision humaine conservée.",
+          "title": "Rédiger le compte rendu d’accueil",
+          "validation": "human"
+        },
+        {
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "step-mv28tmo7",
+          "inputs": {},
+          "kind": "question",
+          "max_attempts": 1,
+          "options": [
+            "approve",
+            "reject"
+          ],
+          "outputs": {
+            "answer": "string"
+          },
+          "phase": "",
+          "position": {
+            "x": 616,
+            "y": 296
+          },
+          "question": "Quelle date retenons-nous pour accueillir Acacia ?",
+          "resources": [],
+          "title": "Confirmer la date d’accueil"
+        }
+      ],
+      "parameters": {},
+      "revision": 3,
+      "schema": 2,
+      "title": "Onboarding client - méthode opérations"
+    },
+    "packs": [],
+    "parameters": {
+      "request": "Second accueil fictif : confirmer date, approuver puis préparer le brouillon facultatif."
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-personas-produit/04-operations/isolated/workflows/projects/p0a1de40a43274240/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "p0a1de40a43274240",
+    "release": "",
+    "scope": {
+      "id": "p0a1de40a43274240",
+      "kind": "project"
+    },
+    "simulation": true,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791627695.183593,
+    "origin": null,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    },
+    "associated": {
+      "items": [
+        {
+          "id": "action-d9f7ee2f9aa556bfed87ad5f95a41d78",
+          "action": "action-084dc597-299c-4e0b-a799-4e47ea35ff96",
+          "title": "Préparer le message de bienvenue",
+          "source": "bilan",
+          "event": "accepted",
+          "question": null,
+          "status": "completed",
+          "run": "r5bb2d4ce3bd84889",
+          "reason": "",
+          "effects": {},
+          "focus": null,
+          "trigger_current": true
+        }
+      ],
+      "total": 1,
+      "counts": {
+        "completed": 1
+      },
+      "offset": 0,
+      "next": null
+    }
+  },
+  "events": [
+    {
+      "seq": 22,
+      "at": 1791627634.2808573,
+      "node": null,
+      "simulation": true,
+      "type": "started"
+    },
+    {
+      "seq": 23,
+      "at": 1791627634.281196,
+      "node": "step-mv28tmo7",
+      "type": "waiting_input"
+    },
+    {
+      "seq": 24,
+      "answer": "Le 20 octobre à 10 h, contact Julie.",
+      "at": 1791627647.1873934,
+      "node": "step-mv28tmo7",
+      "question": "q8715c47c109f4adf",
+      "type": "answer"
+    },
+    {
+      "seq": 25,
+      "at": 1791627647.1875136,
+      "node": "analyse",
+      "type": "ready"
+    },
+    {
+      "seq": 26,
+      "at": 1791627647.797478,
+      "attempt": 1,
+      "node": "analyse",
+      "type": "running"
+    },
+    {
+      "seq": 27,
+      "at": 1791627648.8848622,
+      "attempt": 1,
+      "node": "analyse",
+      "type": "returned"
+    },
+    {
+      "seq": 28,
+      "at": 1791627681.0907047,
+      "node": "analyse",
+      "type": "accepted"
+    },
+    {
+      "seq": 29,
+      "at": 1791627681.090774,
+      "node": "build",
+      "type": "ready"
+    },
+    {
+      "seq": 30,
+      "at": 1791627681.0907965,
+      "node": "test",
+      "type": "ready"
+    },
+    {
+      "seq": 31,
+      "at": 1791627682.3377237,
+      "attempt": 1,
+      "node": "build",
+      "type": "running"
+    },
+    {
+      "seq": 32,
+      "at": 1791627682.3448725,
+      "attempt": 1,
+      "node": "test",
+      "type": "running"
+    },
+    {
+      "seq": 33,
+      "at": 1791627682.798553,
+      "attempt": 1,
+      "node": "build",
+      "type": "returned"
+    },
+    {
+      "seq": 34,
+      "at": 1791627682.8023877,
+      "attempt": 1,
+      "node": "test",
+      "type": "returned"
+    },
+    {
+      "seq": 35,
+      "at": 1791627683.6540182,
+      "node": "build",
+      "type": "accepted"
+    },
+    {
+      "seq": 36,
+      "at": 1791627684.921327,
+      "node": "test",
+      "type": "accepted"
+    },
+    {
+      "seq": 37,
+      "at": 1791627684.9214063,
+      "node": "join",
+      "type": "accepted"
+    },
+    {
+      "seq": 38,
+      "at": 1791627684.9215958,
+      "node": "decision",
+      "type": "waiting"
+    },
+    {
+      "seq": 39,
+      "at": 1791627686.1774783,
+      "node": "decision",
+      "outcome": "approve",
+      "type": "decision"
+    },
+    {
+      "seq": 40,
+      "at": 1791627686.1775827,
+      "node": "bilan",
+      "type": "ready"
+    },
+    {
+      "seq": 41,
+      "at": 1791627686.8630438,
+      "attempt": 1,
+      "node": "bilan",
+      "type": "running"
+    },
+    {
+      "seq": 42,
+      "at": 1791627687.364348,
+      "attempt": 1,
+      "node": "bilan",
+      "type": "returned"
+    },
+    {
+      "seq": 43,
+      "at": 1791627689.024896,
+      "node": "bilan",
+      "type": "accepted"
+    },
+    {
+      "seq": 44,
+      "at": 1791627689.0251153,
+      "node": null,
+      "type": "completed"
+    },
+    {
+      "seq": 45,
+      "action": "action-d9f7ee2f9aa556bfed87ad5f95a41d78",
+      "at": 1791627689.0258381,
+      "node": "bilan",
+      "status": "awaiting_activation",
+      "type": "associated-action-ready"
+    },
+    {
+      "seq": 48,
+      "action": "action-d9f7ee2f9aa556bfed87ad5f95a41d78",
+      "at": 1791627695.1835659,
+      "node": "bilan",
+      "status": "active",
+      "type": "associated-action-activation"
+    }
+  ],
+  "events_next": null
+}

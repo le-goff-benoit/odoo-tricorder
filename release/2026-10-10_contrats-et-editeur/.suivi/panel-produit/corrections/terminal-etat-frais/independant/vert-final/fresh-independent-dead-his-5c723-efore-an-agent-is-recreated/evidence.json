@@ -1,0 +1,103 @@
+{
+  "calls": [
+    {
+      "at": 1791631248289,
+      "request": {
+        "project": "p2b01377cb3954539",
+        "conversation": "c8396183edc1347a6",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "a755391ba3ac4daab3e60b0a0cc62dbe",
+        "pid": 1794967,
+        "agentState": "starting",
+        "idleShell": false,
+        "program": "python3"
+      }
+    },
+    {
+      "at": 1791631249260,
+      "request": {
+        "project": "p2b01377cb3954539",
+        "conversation": "c8396183edc1347a6",
+        "resume": false
+      },
+      "result": {
+        "agentState": "stopped",
+        "terminalState": "closed"
+      }
+    },
+    {
+      "at": 1791631249681,
+      "request": {
+        "project": "p2b01377cb3954539",
+        "conversation": "c8396183edc1347a6",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "agentState": "stopped",
+        "terminalState": "closed"
+      }
+    },
+    {
+      "at": 1791631252923,
+      "request": {
+        "project": "p2b01377cb3954539",
+        "conversation": "c8396183edc1347a6",
+        "resume": true,
+        "design": false
+      },
+      "result": {
+        "id": "cb06c06aa7c042e485c4f901286dfc06",
+        "pid": 1795067,
+        "agentState": "starting",
+        "idleShell": false,
+        "program": "python3"
+      }
+    }
+  ],
+  "events": [],
+  "sessions": [
+    {
+      "id": "a755391ba3ac4daab3e60b0a0cc62dbe",
+      "project": "/tmp/tricorder-independent-terminal-fresh-07AMs9/projects/p2b01377cb3954539",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-07AMs9/projects/p2b01377cb3954539",
+      "release": null,
+      "task": null,
+      "createdAt": 1791631248.4943008,
+      "lastOutputAt": 1791631249.2556767,
+      "pid": 1794967,
+      "program": null,
+      "provider": null,
+      "foreground": null,
+      "promptVerified": true,
+      "idleShell": false,
+      "alive": false,
+      "exitCode": 0,
+      "activity": "exited"
+    },
+    {
+      "id": "cb06c06aa7c042e485c4f901286dfc06",
+      "project": "/tmp/tricorder-independent-terminal-fresh-07AMs9/projects/p2b01377cb3954539",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-07AMs9/projects/p2b01377cb3954539",
+      "release": null,
+      "task": null,
+      "createdAt": 1791631253.0300088,
+      "lastOutputAt": 1791631253.0557475,
+      "pid": 1795067,
+      "program": "codex",
+      "provider": "codex",
+      "foreground": 1795070,
+      "promptVerified": true,
+      "idleShell": false,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "launches": 2
+}

@@ -1,0 +1,146 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node /home/blegoff/.nvm/versions/node/v24.15.0/lib/node_modules/npm/bin/npm-cli.js run test:packaged
+PATH: /tmp/tricorder-ci-tools-d52584mk:/usr/bin:/bin
+codex None
+claude None
+
+> odoo-tricorder@0.6.0-rc.13 test:packaged
+> node scripts/test-packaged.mjs
+
+
+Running 184 tests using 1 worker
+
+  ✓    1 tests/attempt-history.spec.cjs:51:1 › large archived inputs keep failure history readable and attached proofs accessible (5.6s)
+  ✓    2 tests/attempt-history.spec.cjs:97:1 › paged large histories remain formatted with accessible proof links (4.2s)
+  ✓    3 tests/collection-input-ux.spec.cjs:38:1 › a second intention submitted during acknowledgement is recorded once without losing text (6.0s)
+  ✓    4 tests/collection-input-ux.spec.cjs:46:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (4.0s)
+  ✓    5 tests/collection-input-ux.spec.cjs:59:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (3.0s)
+  ✓    6 tests/collection-input-ux.spec.cjs:66:1 › an addition rejected after a concurrent edit survives the next success, reload and targeted retry (4.3s)
+  ✓    7 tests/collection-input-ux.spec.cjs:78:1 › a lost acknowledgement is retried with the same command after reload without duplicating the intention (4.3s)
+  ✓    8 tests/collection-input-ux.spec.cjs:85:1 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (3.2s)
+  ✓    9 tests/collection-input-ux.spec.cjs:96:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.1s)
+  ✓   10 tests/collection-input-ux.spec.cjs:117:1 › two project shells remain discoverable after changing project and reloading the window (5.4s)
+  ✓   11 tests/conversation-overview.spec.cjs:64:1 › gates: six demands, cross-project context and true dependency links remain understandable (6.4s)
+  ✓   12 tests/conversation-overview.spec.cjs:88:1 › running: actual agents, failure history and explicit dispatch are distinct (6.7s)
+  ✓   13 tests/conversation-overview.spec.cjs:103:1 › pages: global activity survives paging and off-page dependencies open the named request (6.7s)
+  ✓   14 tests/conversation-overview.spec.cjs:115:1 › compact: terminal working lines and the question answer remain visible together (6.4s)
+  ✓   15 tests/desktop-output-pipes.spec.cjs:6:1 › a recoverable backend rejection stays in the app after its launcher closes log pipes (2.6s)
+  ✓   16 tests/desktop.spec.cjs:72:1 › simplified workspace: task dialogs, agent identity, preferences and launch buttons (7.0s)
+  ✓   17 tests/desktop.spec.cjs:158:1 › global Kanban: all projects, closed-release filter and exact task navigation (2.2s)
+  ✓   18 tests/desktop.spec.cjs:207:1 › release Kanban: receipts, criteria, filters, live refresh and existing terminal stay scoped (4.8s)
+  ✓   19 tests/desktop.spec.cjs:292:1 › design system: common gutters, cards and controls across every project view (8.3s)
+  ✓   20 tests/desktop.spec.cjs:355:1 › preparation: project scope becomes release scope without a duplicate or a retroactive forecast (2.6s)
+  ✓   21 tests/desktop.spec.cjs:408:1 › effort: partial recorded time survives missing roles, task filtering and refresh (2.7s)
+  ✓   22 tests/desktop.spec.cjs:450:1 › effort: open release updates task and agent percentages before closure (2.7s)
+  ✓   23 tests/desktop.spec.cjs:493:1 › release context: none, automatic new release, same terminal and persistence (5.1s)
+  ✓   24 tests/desktop.spec.cjs:569:1 › flow starts: delayed terminal cannot hijack navigation, ambiguous adoption stays explicit (3.9s)
+  ✓   25 tests/desktop.spec.cjs:681:1 › Markdown preview: readable safe content and recovery from a project read error (4.1s)
+  ✓   26 tests/desktop.spec.cjs:734:1 › email removed: no UI or API, old private records preserved, project still usable (2.4s)
+  ✓   27 tests/desktop.spec.cjs:785:1 › desktop: projects, proof status, sources, real terminal and persistence (4.7s)
+  ✓   28 tests/desktop.spec.cjs:884:1 › lifecycle: releases, remembered tasks, terminal scope, attention and rapid navigation (6.3s)
+  -   29 tests/desktop.spec.cjs:1010:1 › real project: read-only release/task/mission screens
+  ✓   30 tests/desktop.spec.cjs:1098:1 › roadmap: observations, human alert, measures, files, graph, preparation and preferences (11.3s)
+  ✓   31 tests/desktop.spec.cjs:1242:1 › intentions, dependency graph and concurrent activities remain usable at compact size and zoom (7.4s)
+  ✓   32 tests/desktop.spec.cjs:1339:1 › live requests appear before planning and reconcile with tasks without manual refresh (7.9s)
+  ✓   33 tests/desktop.spec.cjs:1393:1 › UI review: bundled typography, expanded views and dialogs stay readable at desktop and compact zoom (12.6s)
+
+  ✓   34 tests/desktop.spec.cjs:1529:1 › work page starts a contextual request and resumes a task without changing its state (3.8s)
+  ✓   35 tests/desktop.spec.cjs:1579:1 › appearance: light, dark and system persist with live terminals and a readable release hierarchy (7.7s)
+  ✓   36 tests/desktop.spec.cjs:1681:1 › window integration preserves the native conversation while inspecting phases and the library (6.0s)
+  ✓   37 tests/editor-gestures.spec.cjs:57:1 › whole-card dragging updates links at each zoom and each gesture has one undo; cancellations restore the graph (8.4s)
+  ✓   38 tests/editor-gestures.spec.cjs:79:1 › compact selection keeps the graph usable, keyboard movement retains focus and terminal shortcuts retain the live session (4.3s)
+  ✓   39 tests/editor-gestures.spec.cjs:95:1 › terminal reveal follows current output, preserves deliberate history and keeps useful compact rows (4.8s)
+  ✓   40 tests/editor-gestures.spec.cjs:121:1 › connections support click, drag and keyboard with confirmation, direct editing and cancellation (6.3s)
+  ✓   41 tests/editor-gestures.spec.cjs:137:1 › notes are editable, movable and undoable presentation metadata preserved by save and portable export (6.6s)
+  ✓   42 tests/editor-gestures.spec.cjs:150:1 › new blocks and notes appear in the visible part of a large graph and zoom keeps its center (4.4s)
+  ✓   43 tests/editor-gestures.spec.cjs:166:1 › a frozen execution exposes neither notes nor editor handles and pointer or keyboard gestures cannot change its definition (5.2s)
+  ✓   44 tests/editor-gestures.spec.cjs:179:1 › a note below adjacent blocks stays draggable while its detour avoids all cards and ports (6.1s)
+  ✓   45 tests/editor-layout-ux.spec.cjs:59:1 › design opens at readable scale and compact properties use the panel without losing edits on resize (9.5s)
+  ✓   46 tests/editor-layout-ux.spec.cjs:98:1 › compact editing retains the live terminal and shows full sidebar project names on pointer and keyboard focus (4.1s)
+  ✓   47 tests/execution-interactions.spec.cjs:90:1 › negative result remains receivable and routes to the corrective branch (6.1s)
+  ✓   48 tests/execution-interactions.spec.cjs:103:1 › uncertain local notification retains receipt lookup without sending twice (6.2s)
+  ✓   49 tests/execution-interactions.spec.cjs:111:1 › live failure updates the graph badge and accessible name without reopening the run (6.0s)
+  ✓   50 tests/execution-interactions.spec.cjs:121:1 › request menu keeps keyboard focus and a question draft while activity changes (6.0s)
+  ✓   51 tests/execution-interactions.spec.cjs:143:1 › search menu keeps its expanded state and keyboard focus when requests arrive (6.0s)
+  ✓   52 tests/execution-interactions.spec.cjs:154:1 › search draft survives polling and deferred request counts refresh after leaving the input (5.9s)
+  ✓   53 tests/execution-interactions.spec.cjs:181:1 › terminal identifies another conversation and preserves the same PTY through navigation and agent exit (11.3s)
+  ✓   54 tests/execution-interactions.spec.cjs:221:1 › a stopped conversation with a pending question resumes explicitly without losing requests or its terminal (8.2s)
+  ✓   55 tests/functional-feedback.spec.cjs:25:1 › business feedback: create an AND dependency on four demands, then explain a cancelled prerequisite (5.1s)
+  ✓   56 tests/functional-feedback.spec.cjs:39:1 › business feedback: a focused inspector updates after completion without stale ready instructions (3.1s)
+  ✓   57 tests/functional-feedback.spec.cjs:47:1 › business feedback: a late conversation reply cannot overwrite the editor or raise a null query error (4.7s)
+  ✓   58 tests/functional-feedback.spec.cjs:56:1 › business feedback: task instructions save with the common AI selection and survive reopen (5.4s)
+  ✓   59 tests/functional-feedback.spec.cjs:63:1 › business feedback: pause and cancellation update an open inspector even when the node is unchanged (4.5s)
+  ✓   60 tests/functional-feedback.spec.cjs:71:1 › handover feedback: source execution stays reachable from its new workflow without reading JSON (3.4s)
+  ✓   61 tests/functional-feedback.spec.cjs:83:1 › creation feedback: choosing a model keeps the custom workflow name already entered (3.7s)
+  ✓   62 tests/functional-feedback.spec.cjs:92:1 › version feedback: a missing delegated model keeps native work actionable and offers optional configuration (5.7s)
+  ✓   63 tests/functional-feedback.spec.cjs:110:1 › version feedback: an automatic failure can configure a new copy while preserving its results (5.4s)
+  ✓   64 tests/functional-feedback.spec.cjs:131:1 › long request replacement retains the complete text and finished results keep a readable title (5.3s)
+  ✓   65 tests/launch-repair.spec.cjs:96:1 › repair missing model preserves request and additional project through native launch (7.4s)
+  ✓   66 tests/launch-repair.spec.cjs:146:1 › repair secondary-project connection diagnoses before launch and returns without retyping (11.7s)
+  ✓   67 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (explicit domain) (5.8s)
+  ✓   68 tests/launch-repair.spec.cjs:177:41 › repair missing Odoo version exposes its field and preserves the launch request (domain from pack profile) (5.9s)
+  ✓   69 tests/launch-repair.spec.cjs:201:1 › repair global code workflow adapts into a project without changing its origin (5.8s)
+  ✓   70 tests/launch-repair.spec.cjs:227:1 › late run response cannot navigate back after the user opens Projects (5.9s)
+  ✓   71 tests/launch-repair.spec.cjs:260:1 › repair missing profile preserves it until the user explicitly chooses generalist (5.8s)
+  ✓   72 tests/panel-configuration.spec.cjs:51:1 › schedule recurrence remains readable and replacement retains it with fresh permissions (5.1s)
+  ✓   73 tests/panel-configuration.spec.cjs:96:1 › reuse removes old trial examples unless explicitly kept, without carrying request context (5.3s)
+
+  ✓   74 tests/panel-configuration.spec.cjs:135:1 › a pasted repository is validated and the new block receives keyboard focus (5.2s)
+  ✓   75 tests/panel-graph-layout.spec.cjs:57:1 › saved inline alternatives remain intact until explicit organization, with undo and link correction by mouse and keyboard (11.0s)
+  ✓   76 tests/panel-graph-layout.spec.cjs:100:1 › Support branches and joins stay readable beside the terminal with native status and ports inside cards (5.8s)
+  ✓   77 tests/panel-interaction.spec.cjs:64:1 › terminal visibility choices survive navigation, projects and design while shell and provider stay intact (10.7s)
+  ✓   78 tests/panel-interaction.spec.cjs:91:1 › long decision keeps contextual actions visible, preserves its draft and records one targeted approval (10.6s)
+  ✓   79 tests/panel-interaction.spec.cjs:120:1 › receipt requires its announced comment and retains the keyboard draft until native validation succeeds (5.4s)
+  ✓   80 tests/panel-interaction.spec.cjs:136:1 › initial request is acknowledged during launch and long terminal names remain available with several tabs (14.3s)
+  ✓   81 tests/panel-v2-user-1.spec.cjs:15:1 › Parcours 1 — chef de projet adopte et configure le modèle puis reçoit deux résultats documentaires par GUI (18.4s)
+  ✘   82 tests/panel-v2-user-1.spec.cjs:26:1 › Parcours 2 — réutiliser vers un projet, demande en terminal, lire parallèle et dépendance puis retrouver le contexte (6.3s)
+
+
+  1) tests/panel-v2-user-1.spec.cjs:26:1 › Parcours 2 — réutiliser vers un projet, demande en terminal, lire parallèle et dépendance puis retrouver le contexte 
+
+    Test was interrupted.
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  locator('.workflow-heading h1')
+    Expected: "Lancement produit — méthode réutilisée"
+    Received: "Coordonner le lancement produit"
+
+    Call log:
+      - Expect "toHaveText" locator('.workflow-heading h1') with timeout 5000ms
+      - waiting for locator('.workflow-heading h1')
+        4 × locator resolved to <h1 title="Coordonner le lancement produit">Coordonner le lancement produit</h1>
+          - unexpected value "Coordonner le lancement produit"
+      - Target page, context or browser has been closed
+
+
+      26 | test('Parcours 2 — réutiliser vers un projet, demande en terminal, lire parallèle et dépendance puis retrouver le contexte',async()=>{
+      27 |  test.setTimeout(120000);const project=await projectGUI('Réunion commerciale synthétique');await adopt('Coordonner le lancement produit');
+    > 28 |  const target=await projectGUI('Lancement produit synthétique');await page.getByRole('button',{name:'Workflows',exact:true}).click();await page.locator('.workflow-row').filter({hasText:'Coordonner le lancement produit'}).getByRole('button',{name:'Ouvrir le workflow',exact:true}).click();await page.locator('.design-menu > summary').click();await page.getByRole('button',{name:'Réutiliser…',exact:true}).click();await page.getByLabel('Nom de la copie',{exact:true}).fill('Lancement produit — méthode réutilisée');await page.getByLabel('Destination',{exact:true}).selectOption(target.id);await page.getByRole('button',{name:'Créer la copie',exact:true}).click();await expect(page.locator('.workflow-heading h1')).toHaveText('Lancement produit — méthode réutilisée');await shot('copie-reutilisee');await page.getByRole('button',{name:'Choisir l’IA',exact:true}).click();await page.getByLabel('Modèle',{exact:true}).fill('panel-fixture-model');await page.getByRole('button',{name:'Appliquer à toutes les étapes IA',exact:true}).click();
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^
+      29 |  await page.getByRole('button',{name:'Exécuter…',exact:true}).click();await page.getByLabel('Quelle demande souhaitez-vous traiter ?').fill('Organiser la préparation du lancement produit avec trois livrables.');await page.getByRole('button',{name:'Lancer dans le terminal',exact:true}).click();await expect(page.locator('.xterm-screen:visible')).toContainText('PANEL_PM_INERT');const sessions=(await page.evaluate(()=>window.tricorder.terminals.list())).filter(s=>s.alive).map(s=>[s.id,s.pid]);await shot('demande-terminal');
+      30 |  await intentions(['Analyser les retours clients','Préparer les éléments de présentation','Rédiger le message de lancement après analyse']);const conversations=await call('conversation.list',{project:target.id});const conversation=await call('conversation.get',{conversation:conversations[0].id});const run=conversation.items[0].run;
+      31 |  // Semence IA: un résultat de planificateur via les commandes validées du moteur, aucune vraie IA.
+        at /home/blegoff/odoo-tricorder/tests/panel-v2-user-1.spec.cjs:28:713
+
+    Error Context: test-results/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/panel-v2-user-1-Parcours-2-793a0--puis-retrouver-le-contexte/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 interrupted
+    tests/panel-v2-user-1.spec.cjs:26:1 › Parcours 2 — réutiliser vers un projet, demande en terminal, lire parallèle et dépendance puis retrouver le contexte 
+  1 skipped
+  102 did not run
+  80 passed (8.3m)
+npm notice
+npm notice New major version of npm available! 11.12.1 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

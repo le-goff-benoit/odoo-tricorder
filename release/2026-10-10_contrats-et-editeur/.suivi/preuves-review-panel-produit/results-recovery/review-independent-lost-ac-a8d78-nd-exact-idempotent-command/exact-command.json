@@ -1,0 +1,26 @@
+{
+  "calls": [
+    {
+      "action": "collection.change",
+      "run": "rba2cd6ecf9c040b3",
+      "node": "intentions",
+      "revision": 0,
+      "operation": "add",
+      "key": "3e1dfcbc-c9c8-497c-87e4-22764af8d391",
+      "text": "A accepté sans accusé"
+    },
+    {
+      "action": "collection.change",
+      "run": "rba2cd6ecf9c040b3",
+      "node": "intentions",
+      "revision": 0,
+      "operation": "add",
+      "key": "3e1dfcbc-c9c8-497c-87e4-22764af8d391",
+      "text": "A accepté sans accusé"
+    }
+  ],
+  "stored": [
+    "A accepté sans accusé",
+    "B brouillon plus récent"
+  ]
+}

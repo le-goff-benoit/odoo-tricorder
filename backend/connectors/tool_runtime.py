@@ -20,14 +20,18 @@ def execute_tool(engine, run, node, token):
 
     def check():
         require(engine.run(run["id"])["status"] != "cancelled", "Exécution annulée")
+        from workflow_engine.associated_actions import check_current
+        check_current(engine, run)
         engine.heartbeat(run["id"], node["id"], token)
 
     from workflow_engine.recovery import tracked_argv
     check.launch = lambda argv: tracked_argv(engine, run["id"], node["id"], token, argv)
 
     def invoke(arguments, key=None):
+        check()
         description = exchange(record["config"], {"protocol": "tricorder.tool/1", "action": "describe"}, check=check, timeout=8)
         require(description.get("connected") is True and description.get("identity") == record["identity"] and description.get("operations") == record["operations"] and description.get("tool_digest") == record.get("tool_digest"), "Compte ou capacités du transport modifiés : vérifier à nouveau la connexion")
+        check()
         response = exchange(record["config"], {"protocol": "tricorder.tool/1", "action": "call", "operation": binding["operation"],
                             "arguments": arguments, "idempotency_key": key, "expected_identity": record["identity"], "expected_tool_digest": record.get("tool_digest")}, check=check)
         require(response.get("identity") == record["identity"], "La réponse provient d’une autre connexion")
@@ -65,7 +69,8 @@ def execute_tool(engine, run, node, token):
                 content = content.replace("{" + field + "}", str(message.get(field, "")))
             require(content.strip() and node.get("recipient"), "Contenu et destinataire requis")
             operation = {"action": binding["operation"], "plugin": binding["plugin"], "target": node["recipient"], "content": content}
-            event = digest({"account": message.get("account"), "message": message.get("id")}) if message.get("id") else run["id"] + ":" + node["id"]
+            event = (digest({"account": message.get("account"), "message": message.get("id")})
+                     if message.get("id") and not run.get("associated_with") else run["id"] + ":" + node["id"])
         else:
             decision = run["nodes"][node["approval"]].get("decision", {})
             require(decision.get("outcome") == "approve" and decision.get("operation") == digest(run["nodes"][node["id"]].get("operation", node["operation"])) and decision.get("consumed") == node["id"], "Accord externe absent ou périmé")
@@ -77,6 +82,7 @@ def execute_tool(engine, run, node, token):
             receipt = response.get("receipt")
             require(isinstance(receipt, dict) and isinstance(receipt.get("id"), str) and receipt["id"], "Accusé de réception distant absent")
             return {**receipt, "outputs": response["outputs"]}
+        check()
         ledger = Effects(engine.store).perform(operation, {"approved": True, "operation": digest(operation)}, event, send)
         if ledger["status"] != "sent":
             return {"ok": False, "summary": "Résultat externe incertain : aucune répétition automatique ; rechercher l’accusé distant.", "effect_id": ledger["id"], "outputs": {}, "evidence": [engine.artifact(json.dumps(ledger, ensure_ascii=False).encode())]}

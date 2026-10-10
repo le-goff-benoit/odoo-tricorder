@@ -1,0 +1,19 @@
+{
+  "inner": {
+    "width": 1280,
+    "height": 800
+  },
+  "document": {
+    "width": 1280,
+    "height": 800
+  },
+  "canvas": null,
+  "nodes": [],
+  "terminal": {
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0
+  },
+  "focus": "<section id=\"workflow-panel\" data-theme=\"light\"></section>"
+}

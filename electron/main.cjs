@@ -173,15 +173,20 @@ function wireAPI() {
     if (bound && request.resume && !bound.promptVerified) throw new Error('Cette session ne vérifie pas le prompt (ancien service ou shell non pris en charge). Elle reste intacte. Quand son travail est terminé, fermez son onglet puis reprenez la conversation pour ouvrir un terminal compatible.');
     if (bound && request.resume && !bound.idleShell) throw new Error('Le terminal n’est pas au prompt du shell. Retrouvez l’agent actif ; aucune commande de reprise envoyée.');
     if (!request.conversation) {
-      const workspace = await studio.backend({ action: 'design.workspace', project: project.id });
-      return all.find(s => s.project === project.path && s.alive) || terminal({ action: 'create', project: project.path, workingDirectory: workspace.cwd, cols: 100, rows: 30, cleanShell: process.env.TRICORDER_TEST_MODE === '1' });
+      const cwd = request.design === true ? (await studio.backend({ action: 'design.workspace', project: project.id })).cwd : project.path;
+      return all.find(s => s.project === project.path && s.alive) || terminal({ action: 'create', project: project.path, workingDirectory: cwd, cols: 100, rows: 30, cleanShell: process.env.TRICORDER_TEST_MODE === '1' });
     }
     const conversation = await studio.backend({ action: 'conversation.get', conversation: request.conversation });
     if (conversation.project !== project.id) throw new Error('Conversation d’un autre projet');
+    // A previous session is not a first launch. Looking up a closed conversation
+    // must not create a shell or invoke its agent before an explicit resume.
+    if (!bound && !request.resume && (settings.workflowTerminals[conversation.id] || settings.workflowAgents?.[conversation.id])) {
+      return { project: project.path, agentState: 'stopped', terminalState: 'closed' };
+    }
     const session = bound || await terminal({ action: 'create', project: project.path, workingDirectory: project.path, cols: 100, rows: 30, cleanShell: process.env.TRICORDER_TEST_MODE === '1' });
     const quote = value => "'" + String(value).replace(/'/g, "'\\''") + "'";
     const command = ['python3', path.join(backend, 'workflow_cli.py'), '--state', stores.studio, '--conversation', conversation.id].map(quote).join(' ');
-    const prompt = `Tu pilotes le workflow Tricorder « ${conversation.definition.title} » dans cette conversation native. Commence par status : reprends les tâches déjà enregistrées, sans les dupliquer ; si aucune demande n’est présente, attends ma demande. Enregistre les nouvelles tâches avec le pont ci-dessous. Le graphique suit les états réels du moteur. Ne crée pas un second flow historique. Les profils de blocs déterminent tes missions ; consulte-les avant le travail.
+    const prompt = conversation.definition.schema === 2 ? require('./workflow-prompt.cjs').buildV2Prompt(conversation, command) : `Tu pilotes le workflow Tricorder « ${conversation.definition.title} » dans cette conversation native. Commence par status : reprends les tâches déjà enregistrées, sans les dupliquer ; si aucune demande n’est présente, attends ma demande. Enregistre les nouvelles tâches avec le pont ci-dessous. Le graphique suit les états réels du moteur. Ne crée pas un second flow historique. Les profils de blocs déterminent tes missions ; consulte-les avant le travail.
 Pont : ${command}
 Commandes : status (sans stdin, --offset N et --query texte pour paginer/rechercher), inspect, read, add, ready, dispatch, claim, context, execute, result, ask, answer, artifact, heartbeat, prepare-candidate (objet JSON sur stdin).
 inspect: {run} ouvre le détail d’une exécution ; read: {run,sha256,offset?} lit une page d’artefact ($artifact). Consulter next pour charger la suite, ne jamais confondre un aperçu avec le contenu complet. add: {request,project?,key?,depends_on?:[identifiants_de_tâches]}, ready: {run,offset?,limit?} renvoie {items,parameters,project,total,next} ; paramètres communs une seule fois, continuer avec next pour tous les blocs. claim: {run,node}, result: {run,node,token,result:{ok,summary,outputs,evidence?}}, ask: {run,node,token,text}, answer: {run,node,question,text}, execute: {run,node}, artifact: {path}, context: {run,node,context:{environment:"local",neutralized_copy:"nom de la copie réellement préparée"}}. Avant une recette Odoo, préparer la copie puis enregistrer ce contexte local ; ne pas déclarer une copie fictive.

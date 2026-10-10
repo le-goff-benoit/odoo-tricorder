@@ -70,6 +70,27 @@ class ConversationTests(unittest.TestCase):
         self.assertEqual(state["inputs"]["clarifications"], [{"question": "Quel utilisateur ?", "answer": "Alice"}])
         self.assertEqual(state["receipt"]["actor"], "contract-policy")
 
+    def test_optional_child_question_is_answered_in_the_same_terminal(self):
+        from workflow_engine.associated_actions import activate
+        graph = copy.deepcopy(self.graph)
+        graph['schema'] = 2
+        graph['actions'] = [{'id': 'draft', 'title': 'Préparer un brouillon', 'source': 'analyse', 'event': 'accepted', 'enabled': True,
+                             'workflow': {'schema': 2, 'id': 'draft', 'title': 'Brouillon', 'nodes': [
+                                 {'id': 'recipient', 'kind': 'question', 'title': 'Destinataire', 'question': 'À qui adresser le brouillon ?'}], 'edges': []}}]
+        self.conversation = self.service.open(self.a['id'], graph, 'codex')
+        item = self.add('Diagnostic et brouillon')
+        self.finish(item)
+        main = self.engine.run(item['run'])
+        main = activate(self.engine, main['id'], main['associated_actions'][0]['id'], human=True)
+        child = self.engine.run(main['associated_actions'][0]['run'])
+        question = child['nodes']['recipient']['question']['id']
+        request(self.engine, self.conversation['id'], 'answer', {'run': child['id'], 'node': 'recipient', 'question': question, 'text': 'Équipe support'})
+        self.assertEqual(self.engine.run(child['id'])['status'], 'completed')
+        self.assertEqual(self.engine.run(main['id'])['status'], 'completed')
+        other = self.service.open(self.b['id'], self.graph, 'codex')
+        with self.assertRaisesRegex(ContractError, 'autre conversation'):
+            self.service.checked_run(other['id'], child['id'])
+
     def test_cross_project_dependency_waits_then_receives_predecessor_results(self):
         first = self.add("API", project=self.a["id"])
         second = self.add("Consommateur", project=self.b["id"], depends_on=[first["id"]])
