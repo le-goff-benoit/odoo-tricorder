@@ -52,3 +52,10 @@ test('default human choices are written in French without changing approval sema
 test('custom synthesis remains visible and copyable beside a final actions list',async()=>{
  const {finalDeliverables}=await helpers;const run={status:'completed',definition:{nodes:[{id:'work',kind:'task'}],edges:[]},nodes:{work:{status:'accepted',result:{outputs:{actions:[{action:'Prioriser'}],Synthese_produit:'Le CSV est prioritaire.'}}}}};const result=finalDeliverables(run);assert.equal(result.length,2);assert.equal(result[0].text,'Le CSV est prioritaire.');assert.deepEqual(result[1].value,[{action:'Prioriser'}]);
 });
+
+test('receiving context never replaces a condition explicitly using a launch field', async()=>{
+ const {connectInformation}=await import('../src/workflow-usage-ui.mjs');
+ const graph={schema:1,launch_fields:[{key:'choice',label:'Canal',type:'choice',options:['email','ticket']}],nodes:[{id:'a',kind:'task',outputs:{context:'string'}},{id:'b',kind:'condition',parameter:'choice',parameters:{},options:['email','ticket']}],edges:[]};
+ const linked=connectInformation(graph,{from:'a',output:'context',to:'b',input:'Contexte',outcome:'done'});
+ assert.equal(linked.nodes[1].parameter,'choice');
+});

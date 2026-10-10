@@ -1,0 +1,6 @@
+locator.click: Timeout 8000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-action=open-workflow][data-id="work-36c769e1-1ec8-4ddc-9e0e-cef565ea8583"]')[22m
+
+    at open (/home/blegoff/odoo-tricorder/release/2026-10-10_retours-complementaires/.suivi/panel/produit/parcours.cjs:17:233)
+    at async /home/blegoff/odoo-tricorder/release/2026-10-10_retours-complementaires/.suivi/panel/produit/parcours.cjs:21:2

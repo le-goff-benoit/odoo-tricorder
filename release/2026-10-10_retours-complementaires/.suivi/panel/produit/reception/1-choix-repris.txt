@@ -1,0 +1,108 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Quotas
+Commandes des agents
+Installer le pack OdooAgents pour Claude et Codex
+Mises à jour
+À propos v0.6.0-rc.16
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+OpenAI · Codex
+Anthropic · Claude [valeur : codex]
+
+
+
+
+Reprendre mes destinations
+Révision 1 · Modifications en attente
+← Retour à la liste
+Choisir l’IA
+Planifier
+Réutiliser…
+Exporter…
+Enregistrer
+Exécuter…
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Phases
+Fichier JSON du workflow…
+Recharger et valider
+✦ Assistant IA
+☷ Liste
+⑂
+Choisir le canal
+Condition
+Sans donnée provenant d’un autre bloc
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+×
+Choisir le canal
+Nom du bloc
+ [valeur : Choisir le canal]
+Cette règle choisit une branche à partir de la donnée reçue.
+Information à comparer
+Choisir une information
+choice · paramètre fixe
+Destination souhaitée · demandé au lancement [valeur : destination]
+Type de branchement
+Oui / Non
+Valeurs personnalisées [valeur : values]
+Choix possibles (un par ligne)
+Email client
+Ticket équipe [valeur : Email client
+Ticket équipe]
+Reprendre les valeurs du formulaire
+Critères d’acceptation (un par ligne)
+
+Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+Recevoir un résultat existant…
+Ajouter une information à utiliser
+Ajouter un résultat attendu
+Effet du résultat sur les tâches dépendantes
+Permettre la suiteBloquer la suite : travail non résolu [valeur : succeeded]
+Phase
+
+Entrées (nom : type, JSON)
+{} [valeur : {}]
+Sorties (nom : type, JSON)
+{} [valeur : {}]
+Tentatives maximales
+ [valeur : 1]
+Ressources exclusives (une par ligne)
+
+Position X
+ [valeur : 50]
+Position Y
+ [valeur : 60]
+Appliquer au bloc
+Aucun lien.
+Relier une entrée…
+Actions facultatives
+Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+Ajouter une action facultative…
+Supprimer cette étape

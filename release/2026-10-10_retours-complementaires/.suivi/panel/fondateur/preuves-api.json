@@ -1,0 +1,727 @@
+[
+  {
+    "run": {
+      "completion_outcome": "succeeded",
+      "contract": "197bcb01f0c5730b443c991a627b707906eadd7cfb541f9610191c8e786e4720",
+      "created": 1791653953.4173608,
+      "definition": {
+        "edges": [
+          {
+            "from": "gate",
+            "id": "to-email",
+            "outcome": "email",
+            "to": "email"
+          },
+          {
+            "from": "gate",
+            "id": "to-ticket",
+            "outcome": "ticket",
+            "to": "ticket"
+          }
+        ],
+        "id": "canal",
+        "nodes": [
+          {
+            "completion_outcome": "succeeded",
+            "criteria": [],
+            "id": "gate",
+            "inputs": {},
+            "kind": "decision",
+            "max_attempts": 1,
+            "option_labels": {
+              "email": "Email au client",
+              "ticket": "Ticket support"
+            },
+            "options": [
+              "email",
+              "ticket"
+            ],
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 50,
+              "y": 60
+            },
+            "question": "Quelle destination ?",
+            "resources": [],
+            "title": "Choisir le canal"
+          },
+          {
+            "content": "Réponse Atlas prête.",
+            "id": "email",
+            "kind": "document",
+            "title": "Préparer email",
+            "validation": "automatic"
+          },
+          {
+            "content": "Ticket Atlas prêt.",
+            "id": "ticket",
+            "kind": "document",
+            "title": "Préparer ticket",
+            "validation": "automatic"
+          }
+        ],
+        "parameters": {
+          "request": "Décision Atlas vendredi"
+        },
+        "revision": 2,
+        "schema": 2,
+        "title": "Choisir le canal Atlas"
+      },
+      "driver": "automatic",
+      "id": "r72dd1724e7c9461e",
+      "nodes": {
+        "email": {
+          "attempt": 1,
+          "finished": 1791653953.9258497,
+          "heartbeat": 1791653953.9193892,
+          "input_sources": {},
+          "inputs": {},
+          "outcome": "done",
+          "ownership": "managed",
+          "pid": 422185,
+          "processes": [
+            {
+              "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+              "pid": 422185,
+              "session": 422185,
+              "start": "1089570"
+            }
+          ],
+          "receipt": {
+            "actor": "validation-policy",
+            "at": 1791653953.9260423,
+            "checks": [
+              "executor-success",
+              "output-types",
+              "evidence-integrity"
+            ],
+            "contract": "197bcb01f0c5730b443c991a627b707906eadd7cfb541f9610191c8e786e4720",
+            "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+          },
+          "result": {
+            "evidence": [
+              {
+                "sha256": "9d11a1f5e6e41461b7ceeb5404f1a3f17969637a9ef38701cc9f4d0dba40c796",
+                "size": 22
+              }
+            ],
+            "ok": true,
+            "preview": "Réponse Atlas prête.",
+            "summary": "Brouillon préparé. Aucune publication externe."
+          },
+          "started": 1791653953.8735225,
+          "status": "accepted",
+          "token": "tfe72583cc72047e1"
+        },
+        "gate": {
+          "attempt": 1,
+          "decision": {
+            "actor": "local-user",
+            "at": 1791653953.633762,
+            "note": "",
+            "operation": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+            "outcome": "email",
+            "proposal": "03135ffb360ad461e71629107c20259d84afee0de8b5ba0b3c35e91ac2cbb5c6"
+          },
+          "input_sources": {},
+          "inputs": {},
+          "nonce": "d32ce163ec88d4834",
+          "operation": null,
+          "outcome": "email",
+          "proposal": "03135ffb360ad461e71629107c20259d84afee0de8b5ba0b3c35e91ac2cbb5c6",
+          "status": "accepted"
+        },
+        "ticket": {
+          "attempt": 0,
+          "status": "skipped"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "edges": [
+          {
+            "from": "gate",
+            "id": "to-email",
+            "outcome": "email",
+            "to": "email"
+          },
+          {
+            "from": "gate",
+            "id": "to-ticket",
+            "outcome": "ticket",
+            "to": "ticket"
+          }
+        ],
+        "id": "canal",
+        "nodes": [
+          {
+            "completion_outcome": "succeeded",
+            "criteria": [],
+            "id": "gate",
+            "inputs": {},
+            "kind": "decision",
+            "max_attempts": 1,
+            "option_labels": {
+              "email": "Email au client",
+              "ticket": "Ticket support"
+            },
+            "options": [
+              "email",
+              "ticket"
+            ],
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 50,
+              "y": 60
+            },
+            "question": "Quelle destination ?",
+            "resources": [],
+            "title": "Choisir le canal"
+          },
+          {
+            "content": "Réponse Atlas prête.",
+            "id": "email",
+            "kind": "document",
+            "title": "Préparer email",
+            "validation": "automatic"
+          },
+          {
+            "content": "Ticket Atlas prêt.",
+            "id": "ticket",
+            "kind": "document",
+            "title": "Préparer ticket",
+            "validation": "automatic"
+          }
+        ],
+        "revision": 2,
+        "schema": 2,
+        "title": "Choisir le canal Atlas"
+      },
+      "packs": [],
+      "parameters": {
+        "request": "Décision Atlas vendredi"
+      },
+      "plugins": {
+        "path": "/tmp/tricorder-founder-c9x7BI/projects/p5c5b0de1ff574f48/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p5c5b0de1ff574f48",
+      "release": "",
+      "scope": {
+        "id": "p5c5b0de1ff574f48",
+        "kind": "project"
+      },
+      "simulation": false,
+      "status": "completed",
+      "transports": {},
+      "updated": 1791653953.9260852,
+      "timing": {
+        "started": 1791653953.4173608,
+        "finished": 1791653953.9260728,
+        "duration": 0.5087120532989502
+      },
+      "origin": null,
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      }
+    },
+    "events": [
+      {
+        "seq": 13,
+        "at": 1791653953.4181747,
+        "node": null,
+        "simulation": false,
+        "type": "started"
+      },
+      {
+        "seq": 14,
+        "at": 1791653953.4184794,
+        "node": "gate",
+        "type": "waiting"
+      },
+      {
+        "seq": 15,
+        "at": 1791653953.633832,
+        "node": "gate",
+        "outcome": "email",
+        "type": "decision"
+      },
+      {
+        "seq": 16,
+        "at": 1791653953.633918,
+        "node": "email",
+        "type": "ready"
+      },
+      {
+        "seq": 17,
+        "at": 1791653953.633933,
+        "node": "ticket",
+        "type": "skipped"
+      },
+      {
+        "seq": 18,
+        "at": 1791653953.8735244,
+        "attempt": 1,
+        "node": "email",
+        "type": "running"
+      },
+      {
+        "seq": 19,
+        "at": 1791653953.925866,
+        "attempt": 1,
+        "node": "email",
+        "type": "returned"
+      },
+      {
+        "seq": 20,
+        "actor": "validation-policy",
+        "at": 1791653953.926045,
+        "node": "email",
+        "type": "accepted"
+      },
+      {
+        "seq": 21,
+        "at": 1791653953.9260728,
+        "node": null,
+        "type": "completed"
+      }
+    ],
+    "events_next": null
+  },
+  {
+    "run": {
+      "completion_outcome": "succeeded",
+      "contract": "a4efae729e0e005c856330b1d8f7fe97e880dcd2b7f5824f66aee28ccc199dbf",
+      "created": 1791653950.5079257,
+      "definition": {
+        "description": "",
+        "edges": [],
+        "id": "work-934b5fac-e4e7-46fc-94f9-d4d96b55403d",
+        "launch_fields": [
+          {
+            "help": "Ex. semaine du 12 octobre",
+            "key": "Periode_du_suivi",
+            "label": "Période du suivi",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "nodes": [
+          {
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "content": "Bonjour Atlas, voici le suivi à compléter pour cette période.",
+            "criteria": [],
+            "id": "start",
+            "inputs": {},
+            "kind": "document",
+            "max_attempts": 1,
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 60,
+              "y": 80
+            },
+            "resources": [],
+            "reuse": false,
+            "title": "Préparer le message de suivi",
+            "validation": "automatic"
+          }
+        ],
+        "parameter_labels": {},
+        "parameters": {
+          "Periode_du_suivi": "Semaine du 19 octobre",
+          "request": "Suivi Atlas semaine 43"
+        },
+        "revision": 2,
+        "schema": 2,
+        "title": "Préparer le suivi Atlas"
+      },
+      "driver": "automatic",
+      "id": "r61f1f5fc7800437f",
+      "nodes": {
+        "start": {
+          "attempt": 1,
+          "finished": 1791653950.5619318,
+          "heartbeat": 1791653950.5571458,
+          "input_sources": {},
+          "inputs": {},
+          "outcome": "done",
+          "ownership": "managed",
+          "pid": 421975,
+          "processes": [
+            {
+              "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+              "pid": 421975,
+              "session": 421975,
+              "start": "1089234"
+            }
+          ],
+          "receipt": {
+            "actor": "validation-policy",
+            "at": 1791653950.562116,
+            "checks": [
+              "executor-success",
+              "output-types",
+              "evidence-integrity"
+            ],
+            "contract": "a4efae729e0e005c856330b1d8f7fe97e880dcd2b7f5824f66aee28ccc199dbf",
+            "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+          },
+          "result": {
+            "evidence": [
+              {
+                "sha256": "265fa88fa5dbdb259cf93e810190c94dd7dd8cd1c5391037e028ae76374a73b2",
+                "size": 64
+              }
+            ],
+            "ok": true,
+            "preview": "Bonjour Atlas, voici le suivi à compléter pour cette période.",
+            "summary": "Brouillon préparé. Aucune publication externe."
+          },
+          "started": 1791653950.515577,
+          "status": "accepted",
+          "token": "tf25c8ff4d0c740cf"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "description": "",
+        "edges": [],
+        "id": "work-934b5fac-e4e7-46fc-94f9-d4d96b55403d",
+        "launch_fields": [
+          {
+            "help": "Ex. semaine du 12 octobre",
+            "key": "Periode_du_suivi",
+            "label": "Période du suivi",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "nodes": [
+          {
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "content": "Bonjour Atlas, voici le suivi à compléter pour cette période.",
+            "criteria": [],
+            "id": "start",
+            "inputs": {},
+            "kind": "document",
+            "max_attempts": 1,
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 60,
+              "y": 80
+            },
+            "resources": [],
+            "reuse": false,
+            "title": "Préparer le message de suivi",
+            "validation": "automatic"
+          }
+        ],
+        "parameter_labels": {},
+        "parameters": {},
+        "revision": 2,
+        "schema": 2,
+        "title": "Préparer le suivi Atlas"
+      },
+      "packs": [],
+      "parameters": {
+        "Periode_du_suivi": "Semaine du 19 octobre",
+        "request": "Suivi Atlas semaine 43"
+      },
+      "plugins": {
+        "path": "/tmp/tricorder-founder-c9x7BI/projects/p5c5b0de1ff574f48/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p5c5b0de1ff574f48",
+      "release": "",
+      "scope": {
+        "id": "p5c5b0de1ff574f48",
+        "kind": "project"
+      },
+      "simulation": false,
+      "status": "completed",
+      "transports": {},
+      "updated": 1791653950.5621524,
+      "timing": {
+        "started": 1791653950.5079257,
+        "finished": 1791653950.5621407,
+        "duration": 0.0542149543762207
+      },
+      "origin": null,
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      }
+    },
+    "events": [
+      {
+        "seq": 7,
+        "at": 1791653950.508956,
+        "node": null,
+        "simulation": false,
+        "type": "started"
+      },
+      {
+        "seq": 8,
+        "at": 1791653950.5090554,
+        "node": "start",
+        "type": "ready"
+      },
+      {
+        "seq": 9,
+        "at": 1791653950.5155795,
+        "attempt": 1,
+        "node": "start",
+        "type": "running"
+      },
+      {
+        "seq": 10,
+        "at": 1791653950.5619502,
+        "attempt": 1,
+        "node": "start",
+        "type": "returned"
+      },
+      {
+        "seq": 11,
+        "actor": "validation-policy",
+        "at": 1791653950.5621173,
+        "node": "start",
+        "type": "accepted"
+      },
+      {
+        "seq": 12,
+        "at": 1791653950.5621407,
+        "node": null,
+        "type": "completed"
+      }
+    ],
+    "events_next": null
+  },
+  {
+    "run": {
+      "completion_outcome": "succeeded",
+      "contract": "5b97815b655ba04cbb1084994e138263b69183bf06e2a13770455f25670345cb",
+      "created": 1791653948.1349065,
+      "definition": {
+        "description": "",
+        "edges": [],
+        "id": "work-934b5fac-e4e7-46fc-94f9-d4d96b55403d",
+        "launch_fields": [
+          {
+            "help": "Ex. semaine du 12 octobre",
+            "key": "Periode_du_suivi",
+            "label": "Période du suivi",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "nodes": [
+          {
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "content": "Bonjour Atlas, voici le suivi à compléter pour cette période.",
+            "criteria": [],
+            "id": "start",
+            "inputs": {},
+            "kind": "document",
+            "max_attempts": 1,
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 60,
+              "y": 80
+            },
+            "resources": [],
+            "reuse": false,
+            "title": "Préparer le message de suivi",
+            "validation": "automatic"
+          }
+        ],
+        "parameter_labels": {},
+        "parameters": {
+          "Periode_du_suivi": "Semaine du 12 octobre",
+          "request": "Suivi Atlas semaine 42"
+        },
+        "revision": 2,
+        "schema": 2,
+        "title": "Préparer le suivi Atlas"
+      },
+      "driver": "automatic",
+      "id": "re3f202e7ad824987",
+      "nodes": {
+        "start": {
+          "attempt": 1,
+          "finished": 1791653948.2077687,
+          "heartbeat": 1791653948.2017183,
+          "input_sources": {},
+          "inputs": {},
+          "outcome": "done",
+          "ownership": "managed",
+          "pid": 421782,
+          "processes": [
+            {
+              "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+              "pid": 421782,
+              "session": 421782,
+              "start": "1088996"
+            }
+          ],
+          "receipt": {
+            "actor": "validation-policy",
+            "at": 1791653948.2079227,
+            "checks": [
+              "executor-success",
+              "output-types",
+              "evidence-integrity"
+            ],
+            "contract": "5b97815b655ba04cbb1084994e138263b69183bf06e2a13770455f25670345cb",
+            "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+          },
+          "result": {
+            "evidence": [
+              {
+                "sha256": "265fa88fa5dbdb259cf93e810190c94dd7dd8cd1c5391037e028ae76374a73b2",
+                "size": 64
+              }
+            ],
+            "ok": true,
+            "preview": "Bonjour Atlas, voici le suivi à compléter pour cette période.",
+            "summary": "Brouillon préparé. Aucune publication externe."
+          },
+          "started": 1791653948.141263,
+          "status": "accepted",
+          "token": "te30710bbf5044fe5"
+        }
+      },
+      "notifications_authorized": false,
+      "original": {
+        "description": "",
+        "edges": [],
+        "id": "work-934b5fac-e4e7-46fc-94f9-d4d96b55403d",
+        "launch_fields": [
+          {
+            "help": "Ex. semaine du 12 octobre",
+            "key": "Periode_du_suivi",
+            "label": "Période du suivi",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "nodes": [
+          {
+            "capabilities": [],
+            "completion_outcome": "succeeded",
+            "content": "Bonjour Atlas, voici le suivi à compléter pour cette période.",
+            "criteria": [],
+            "id": "start",
+            "inputs": {},
+            "kind": "document",
+            "max_attempts": 1,
+            "outputs": {},
+            "phase": "",
+            "position": {
+              "x": 60,
+              "y": 80
+            },
+            "resources": [],
+            "reuse": false,
+            "title": "Préparer le message de suivi",
+            "validation": "automatic"
+          }
+        ],
+        "parameter_labels": {},
+        "parameters": {},
+        "revision": 2,
+        "schema": 2,
+        "title": "Préparer le suivi Atlas"
+      },
+      "packs": [],
+      "parameters": {
+        "Periode_du_suivi": "Semaine du 12 octobre",
+        "request": "Suivi Atlas semaine 42"
+      },
+      "plugins": {
+        "path": "/tmp/tricorder-founder-c9x7BI/projects/p5c5b0de1ff574f48/.tricorder/plugins.json",
+        "plugins": [],
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "project": "p5c5b0de1ff574f48",
+      "release": "",
+      "scope": {
+        "id": "p5c5b0de1ff574f48",
+        "kind": "project"
+      },
+      "simulation": false,
+      "status": "completed",
+      "transports": {},
+      "updated": 1791653948.2079573,
+      "timing": {
+        "started": 1791653948.1349065,
+        "finished": 1791653948.2079458,
+        "duration": 0.07303929328918457
+      },
+      "origin": null,
+      "focus": null,
+      "health": {
+        "status": "ok",
+        "total": 0,
+        "issues": []
+      }
+    },
+    "events": [
+      {
+        "seq": 1,
+        "at": 1791653948.1358912,
+        "node": null,
+        "simulation": false,
+        "type": "started"
+      },
+      {
+        "seq": 2,
+        "at": 1791653948.135969,
+        "node": "start",
+        "type": "ready"
+      },
+      {
+        "seq": 3,
+        "at": 1791653948.141265,
+        "attempt": 1,
+        "node": "start",
+        "type": "running"
+      },
+      {
+        "seq": 4,
+        "at": 1791653948.2077842,
+        "attempt": 1,
+        "node": "start",
+        "type": "returned"
+      },
+      {
+        "seq": 5,
+        "actor": "validation-policy",
+        "at": 1791653948.2079244,
+        "node": "start",
+        "type": "accepted"
+      },
+      {
+        "seq": 6,
+        "at": 1791653948.2079458,
+        "node": null,
+        "type": "completed"
+      }
+    ],
+    "events_next": null
+  }
+]

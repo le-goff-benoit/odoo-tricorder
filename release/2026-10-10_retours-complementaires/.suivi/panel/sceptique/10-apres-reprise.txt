@@ -1,0 +1,31 @@
+SUIVI · CONTRÔLE LOCAL EXPLICITE
+Contrôle local explicite
+← Retour à la liste
+Options
+Échec · reprise nécessaire
+0 / 1 étapes
+
+Commande terminée avec le code 3. Résultat à examiner.
+
+Depuis le début : 6 s · attentes comprises
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Première étape
+Cette étape a échoué
+
+Tentative 2 sur 2 · 0 reprise restante
+
+Commande terminée avec le code 3. Résultat à examiner.
+
+Sortie de la commande
+ECHEC LOCAL VOLONTAIRE
+
+Preuves
+Preuve 1 · 09e4e4a6
+Choisir un workflow adapté
+
+2 tentatives sur 2 utilisées. Corrigez le périmètre ou le workflow, puis créez une nouvelle demande. Les résultats précédents restent consultables.
+
+Entrées, résultat technique et historique

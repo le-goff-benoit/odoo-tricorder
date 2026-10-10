@@ -1,0 +1,65 @@
+{
+  "edges": [
+    {
+      "id": "review",
+      "from": "start",
+      "to": "review",
+      "mapping": {
+        "Synthese_detaillee": "synthese"
+      }
+    }
+  ],
+  "id": "work-52ff2794-07d7-44f0-8363-16890548d8c5",
+  "nodes": [
+    {
+      "criteria": [],
+      "id": "start",
+      "kind": "task",
+      "outputs": {
+        "Synthese_detaillee": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "port_labels": {
+        "outputs": {
+          "Synthese_detaillee": "Synthèse détaillée"
+        }
+      },
+      "position": {
+        "x": 60,
+        "y": 80
+      },
+      "title": "Première étape"
+    },
+    {
+      "id": "review",
+      "title": "Relire la synthèse",
+      "kind": "decision",
+      "question": "La synthèse peut-elle être partagée ?",
+      "inputs": {
+        "synthese": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "port_labels": {
+        "inputs": {
+          "synthese": "Synthèse détaillée"
+        }
+      },
+      "options": [
+        "approve",
+        "reject"
+      ],
+      "option_labels": {
+        "approve": "Prête à partager",
+        "reject": "À compléter"
+      }
+    }
+  ],
+  "parameters": {},
+  "revision": 3,
+  "schema": 2,
+  "title": "Synthèse réutilisable"
+}

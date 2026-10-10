@@ -51,6 +51,9 @@ def activate(engine, rid, nid):
         items = elements(at_path(state.get("inputs", {}), node.get("collection", "items")))
         workflow = node["workflow"]
         require(isinstance(workflow, dict), "Le sous-workflow doit être figé avant le lancement")
+        require(not workflow.get("launch_fields"),
+                f"{node['title']} : un traitement par élément ne peut pas afficher de formulaire de lancement ; "
+                "utilisez le formulaire du workflow principal ou une Question ouverte dans le travail par élément")
         allowed = {run["project"]}
         conversation = None
         cid = run["parameters"].get("conversation")

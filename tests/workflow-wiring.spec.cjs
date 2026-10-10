@@ -6,7 +6,7 @@ let directory, app, page, project;
 const call = (action, data = {}) => page.evaluate(payload => window.studio.request(payload), { action, ...data });
 const snapshot = () => call('workflow.get', { project: project.id, workflow: 'creation-review' });
 async function openWorkflow() {
-  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();
   await page.locator('[data-action=open-workflow][data-id=creation-review]').click();
 }
 async function seed(graph) {
@@ -86,7 +86,7 @@ test('a renamed data connection remains readable beside the selected block and o
     edges:[{id:'data',from:'collect',to:'review',mapping:{fiche_diagnostic:'fiche'}}]});
   await page.locator('.node[data-id=review]').click();
   await page.locator('.design-links > summary').click();
-  await expect(page.locator('.design-links')).toContainText('fiche_diagnostic → fiche');
+  await expect(page.locator('.design-links')).toContainText('fiche diagnostic → fiche');
   await expect(page.locator('.design-links')).toContainText('Travail terminé');
   await expect(page.locator('.canvas svg text')).toHaveText('1 donnée');
 });

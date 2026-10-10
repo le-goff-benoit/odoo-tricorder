@@ -1,0 +1,8 @@
+{
+  "version": "0.6.0-rc.16",
+  "deb": "odoo-tricorder_0.6.0-rc.16_amd64.deb",
+  "sha256": "296d3e028c508d7c8fd04030e42cefc405809ba56826830fb5d9ff35d7213321",
+  "directory": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.16",
+  "previous": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.15",
+  "launcher_changed": false
+}

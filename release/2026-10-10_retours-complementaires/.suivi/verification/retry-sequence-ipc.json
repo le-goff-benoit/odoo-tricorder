@@ -1,0 +1,188 @@
+[
+  {
+    "source": "target.json",
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921.280029296875,
+        "y": 653.780029296875,
+        "at": 1791654574713,
+        "defaultPrevented": false,
+        "active": "<textarea id=\"retry-note\" name=\"note\" required=\"\"></textarea>",
+        "preventedAfter": false
+      },
+      {
+        "type": "pointerup",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921.280029296875,
+        "y": 653.780029296875,
+        "at": 1791654574714,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": false
+      },
+      {
+        "type": "click",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921,
+        "y": 653,
+        "at": 1791654574714,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": false
+      },
+      {
+        "type": "submit",
+        "target": "<form id=\"retry-form\"><p><strong>Tentative 1 sur 2 · 1 reprise restante</strong></p><p>Le résultat précédent reste dans l’historique. La validation de ce formulaire relance immédiatement cette étape dès qu’une ressource est disponible et consomme une tentative. Effectuez votre correction avant de confirmer.</p><section class=\"execution-data business-data\"><h3>Résultat précédent</h3><span class=\"business-text\">Commande terminée avec le code 7. Résultat à examiner.</span></section><label for=\"retr",
+        "at": 1791654574715,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": true
+      }
+    ],
+    "ipc": [
+      {
+        "action": "run.retry",
+        "at": 1791654574718,
+        "channel": "studio:human",
+        "end": 1791654574827
+      }
+    ],
+    "dialog_remains": false
+  },
+  {
+    "source": "throttled-0.json",
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921.280029296875,
+        "y": 653.780029296875,
+        "at": 1791654622097,
+        "defaultPrevented": false,
+        "active": "<textarea id=\"retry-note\" name=\"note\" required=\"\"></textarea>",
+        "preventedAfter": false
+      },
+      {
+        "type": "focusin",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "at": 1791654622099,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": false
+      },
+      {
+        "type": "pointerup",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921.280029296875,
+        "y": 653.780029296875,
+        "at": 1791654622100,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": false
+      },
+      {
+        "type": "click",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921,
+        "y": 653,
+        "at": 1791654622100,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": false
+      },
+      {
+        "type": "submit",
+        "target": "<form id=\"retry-form\"><p><strong>Tentative 1 sur 2 · 1 reprise restante</strong></p><p>Le résultat précédent reste dans l’historique. La validation de ce formulaire relance immédiatement cette étape dès qu’une ressource est disponible et consomme une tentative. Effectuez votre correction avant de confirmer.</p><section class=\"execution-data business-data\"><h3>Résultat précédent</h3><span class=\"business-text\">Commande terminée avec le code 7. Résultat à examiner.</span></section><label for=\"retr",
+        "at": 1791654622101,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": true
+      },
+      {
+        "type": "focusout",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "at": 1791654622224,
+        "defaultPrevented": false,
+        "preventedAfter": false
+      }
+    ],
+    "ipc": [
+      {
+        "action": "run.retry",
+        "at": 1791654622115,
+        "channel": "studio:human",
+        "end": 1791654622223
+      }
+    ],
+    "dialog_remains": false
+  },
+  {
+    "source": "throttled-1.json",
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921.280029296875,
+        "y": 653.780029296875,
+        "at": 1791654632477,
+        "defaultPrevented": false,
+        "active": "<textarea id=\"retry-note\" name=\"note\" required=\"\"></textarea>",
+        "preventedAfter": false
+      },
+      {
+        "type": "focusin",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "at": 1791654632480,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": false
+      },
+      {
+        "type": "pointerup",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921.280029296875,
+        "y": 653.780029296875,
+        "at": 1791654632481,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": false
+      },
+      {
+        "type": "click",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "x": 921,
+        "y": 653,
+        "at": 1791654632481,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": false
+      },
+      {
+        "type": "submit",
+        "target": "<form id=\"retry-form\"><p><strong>Tentative 1 sur 2 · 1 reprise restante</strong></p><p>Le résultat précédent reste dans l’historique. La validation de ce formulaire relance immédiatement cette étape dès qu’une ressource est disponible et consomme une tentative. Effectuez votre correction avant de confirmer.</p><section class=\"execution-data business-data\"><h3>Résultat précédent</h3><span class=\"business-text\">Commande terminée avec le code 7. Résultat à examiner.</span></section><label for=\"retr",
+        "at": 1791654632482,
+        "defaultPrevented": false,
+        "active": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "preventedAfter": true
+      },
+      {
+        "type": "focusout",
+        "target": "<button class=\"primary\" type=\"submit\">Relancer maintenant</button>",
+        "at": 1791654632578,
+        "defaultPrevented": false,
+        "preventedAfter": false
+      }
+    ],
+    "ipc": [
+      {
+        "action": "run.retry",
+        "at": 1791654632491,
+        "channel": "studio:human",
+        "end": 1791654632576
+      }
+    ],
+    "dialog_remains": false
+  }
+]

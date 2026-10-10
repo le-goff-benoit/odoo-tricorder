@@ -9,7 +9,7 @@ const call = (action, data = {}) => page.evaluate(payload => window.studio.reque
 const human = (action, data = {}) => page.evaluate(payload => window.studio.human(payload), { action, ...data });
 const scheduleCard = () => page.locator(`[data-schedule="${schedule.id}"]`);
 async function showSchedules() { await page.getByRole('button', { name: 'Planifications', exact: true }).click(); }
-async function showSnapshot() { await scheduleCard().getByRole('button', { name: 'Version planifiée · révision 1', exact: true }).click(); }
+async function showSnapshot() { await scheduleCard().getByRole('button', { name: 'Configuration et réponses · révision 1', exact: true }).click(); }
 
 test.beforeEach(async () => {
   directory = fs.mkdtempSync(path.join(os.tmpdir(), 'tricorder-schedule-versions-'));
@@ -41,17 +41,17 @@ test.afterEach(async () => {
 test('schedule snapshot is readable and replacement requires explicit archive then fresh activation', async () => {
   await showSchedules();
   await expect(scheduleCard()).toContainText('Active'); await showSnapshot();
-  const snapshot = page.getByRole('dialog', { name: 'Version planifiée', exact: true });
+  const snapshot = page.getByRole('dialog', { name: 'Configuration et réponses', exact: true });
   await expect(snapshot).toContainText('révision 1');
   await snapshot.locator('.schedule-snapshot > details').first().locator(':scope > summary').click();
   await expect(snapshot.locator('.schedule-snapshot')).toContainText('Compte rendu V1');
   await expect(snapshot.locator('.schedule-snapshot')).not.toContainText('Compte rendu V2');
   await page.screenshot({ path: test.info().outputPath('schedule-frozen-version.png') });
-  await snapshot.getByRole('button', { name: 'Préparer une nouvelle version…', exact: true }).click();
+  await snapshot.getByRole('button', { name: 'Modifier les réponses ou la version…', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('révision 2');
   await page.getByRole('button', { name: 'Annuler', exact: true }).click();
   expect((await call('schedule.get', { schedule: schedule.id })).enabled).toBe(true);
-  await showSnapshot(); await page.getByRole('button', { name: 'Préparer une nouvelle version…', exact: true }).click();
+  await showSnapshot(); await page.getByRole('button', { name: 'Modifier les réponses ou la version…', exact: true }).click();
   await page.getByRole('button', { name: 'Archiver et configurer la nouvelle', exact: true }).click();
   const form = page.locator('#schedule-form');
   await expect(form).toContainText('révision 2'); await expect(form).toContainText('ancienne planification est archivée');
@@ -63,7 +63,7 @@ test('schedule snapshot is readable and replacement requires explicit archive th
   expect(await call('schedule.list')).toHaveLength(1);
   await showSchedules(); await page.getByRole('button', { name: 'Voir les archives', exact: true }).click();
   await expect(scheduleCard()).toContainText('Archivée'); await showSnapshot();
-  await page.getByRole('button', { name: 'Préparer une nouvelle version…', exact: true }).click();
+  await page.getByRole('button', { name: 'Modifier les réponses ou la version…', exact: true }).click();
   await page.getByRole('button', { name: 'Configurer la nouvelle planification', exact: true }).click();
   await page.locator('#schedule-form input[type=checkbox][required]').check();
   await page.getByRole('button', { name: 'Activer la planification', exact: true }).click();
@@ -91,7 +91,7 @@ test('communication properties distinguish result validation from approval befor
 
 test('a rapid double click activates a replacement only once and still requires human confirmation', async () => {
   await showSchedules(); await showSnapshot();
-  await page.getByRole('button', { name: 'Préparer une nouvelle version…', exact: true }).click();
+  await page.getByRole('button', { name: 'Modifier les réponses ou la version…', exact: true }).click();
   await page.getByRole('button', { name: 'Archiver et configurer la nouvelle', exact: true }).click();
   await expect(page.locator('#schedule-form')).toBeVisible();
   await app.evaluate(({ ipcMain }) => {

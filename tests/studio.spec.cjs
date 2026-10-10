@@ -432,10 +432,10 @@ test('trusted local adapter runs through the UI and automatic validation complet
   const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Adaptateur de test', exact: true }) });
   await card.getByRole('button', { name: 'Vérifier l’adaptateur…' }).click();
   await expect(page.getByRole('dialog')).toContainText(script);
-  await page.getByRole('button', { name: 'Exécuter le contrôle' }).click();
-  await expect(card).toContainText('Utilisable');
+  await page.getByRole('button', { name: 'Vérifier le transport et l’identité' }).click();
+  await expect(card).toContainText('Adaptateur vérifié');
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
-  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-action=registered-workflows]').click();
   await page.getByRole('button', { name: 'Ouvrir le workflow' }).click();
   await page.getByRole('button', { name: 'Exécuter…' }).click();
   await expect(page.getByRole('dialog')).toContainText('Validation automatique');
@@ -451,7 +451,7 @@ test('large workflow remains editable in canvas and keyboard list', async () => 
   const graph = { schema: 1, id: 'large', title: 'Mille étapes', nodes: Array.from({ length: 1000 }, (_, i) => ({ id: `n${i}`, title: `Étape ${i}`, kind: 'join', position: { x: (i % 20) * 300, y: Math.floor(i / 20) * 170 } })), edges: Array.from({ length: 999 }, (_, i) => ({ id: `e${i}`, from: `n${i}`, to: `n${i + 1}` })) };
   await page.evaluate(graph => window.studio.request({ action: 'workflow.save', project: 'workspace', graph }), graph);
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
-  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-action=registered-workflows]').click();
   const start = Date.now();
   await page.getByRole('button', { name: 'Ouvrir le workflow' }).click();
   await expect(page.locator('.node')).toHaveCount(1000);
@@ -542,7 +542,7 @@ test('human gate presents the full external content and candidate before approva
   const graph = { schema: 1, id: 'exact-review', title: 'Exact review', nodes: [{ id: 'approve', kind: 'decision', title: 'Review publication', operation }], edges: [] };
   await page.evaluate(graph => window.studio.request({ action: 'workflow.save', project: 'workspace', graph }), graph);
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
-  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-action=registered-workflows]').click();
   await page.getByRole('button', { name: 'Ouvrir le workflow', exact: true }).click();
   await simulate();
   await page.locator('.node[data-id="approve"]').click();
@@ -574,7 +574,7 @@ test('one provider choice applies to all AI steps and the project offers direct 
   expect(data.defaults.model).toBe('explicit-claude-fixture');
   expect(data.nodes.filter(n => n.kind === 'agent').every(n => !Object.hasOwn(n, 'model'))).toBe(true);
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
-  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-action=registered-workflows]').click();
   await page.getByRole('button', { name: 'Exécuter…', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('IA pour les étapes de travail');
   await expect(page.getByRole('dialog').getByLabel('Fournisseur IA', { exact: true })).toHaveValue('claude');
@@ -888,8 +888,8 @@ else:
   await page.locator('.project-card').filter({hasText:/Questions et outils/}).click();
   await page.getByRole('button',{name:'Connexions',exact:true}).click();
   await page.getByRole('button',{name:'Vérifier l’adaptateur…'}).click();
-  await page.getByRole('button',{name:'Exécuter le contrôle'}).click();
-  await expect(page.locator('.card').filter({has:page.getByRole('heading',{name:'Notifications de test'})})).toContainText('Utilisable');
+  await page.getByRole('button',{name:'Vérifier le transport et l’identité'}).click();
+  await expect(page.locator('.card').filter({has:page.getByRole('heading',{name:'Notifications de test'})})).toContainText('Adaptateur vérifié');
   await page.evaluate(id => window.studio.request({action:'workflow.save',project:id,graph:{schema:1,id:'questions',title:'Préparation du compte rendu',nodes:[{id:'clarify',kind:'question',title:'Identifier le relecteur',question:'Qui doit relire le compte rendu ?',outputs:{answer:'string'}}],edges:[]}}),project.id);
   await page.getByRole('button',{name:'Projets',exact:true}).click();
   await page.locator('.project-card').filter({hasText:/Questions et outils/}).click();
@@ -1215,7 +1215,8 @@ test('candidate QA: explicit editor control persists typed ports and remains vis
   await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();
   await page.getByRole('button',{name:'Enregistrer',exact:true}).click();
   await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();
-  await expect(page.locator('.ports')).toContainText('Version à vérifier');await expect(page.locator('.ports')).toContainText('Résultat du contrôle');
+  // The explicit name entered above is preserved instead of replaced by the technical-key fallback.
+  await expect(page.locator('.ports')).toContainText('candidate');await expect(page.locator('.ports')).toContainText('Résultat du contrôle');
   const mission=page.locator('.node[data-id=analyse] .mission');await expect(mission).toHaveAttribute('title','Vérifier le candidat sans agent imposé');
   const titleBounds=await mission.boundingBox(),nodeBounds=await page.locator('.node[data-id=analyse]').boundingBox(),kindBounds=await page.locator('.node[data-id=analyse] .kind').boundingBox();
   expect(titleBounds.x+titleBounds.width).toBeLessThanOrEqual(nodeBounds.x+nodeBounds.width);

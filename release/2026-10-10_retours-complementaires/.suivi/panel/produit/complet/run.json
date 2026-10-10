@@ -1,0 +1,306 @@
+{
+  "run": {
+    "completion_outcome": "succeeded",
+    "contract": "51806e7e0bd3fa1db1554f6d8706fd351b42e35b29dfcbb4ac50dada3ccce178",
+    "created": 1791654108.0853152,
+    "definition": {
+      "description": "",
+      "edges": [
+        {
+          "from": "start",
+          "id": "email",
+          "outcome": "Email client",
+          "to": "email"
+        },
+        {
+          "from": "start",
+          "id": "ticket",
+          "outcome": "Ticket équipe",
+          "to": "ticket"
+        }
+      ],
+      "id": "work-91966527-0b7a-46f2-8f4e-2e433bd565f4",
+      "launch_fields": [
+        {
+          "help": "Où souhaitez-vous exploiter la synthèse ?",
+          "key": "Destination_souhaitee",
+          "label": "Destination souhaitée",
+          "options": [
+            "Email client",
+            "Ticket équipe"
+          ],
+          "required": true,
+          "type": "choice"
+        }
+      ],
+      "nodes": [
+        {
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "start",
+          "inputs": {},
+          "kind": "condition",
+          "max_attempts": 1,
+          "options": [
+            "Email client",
+            "Ticket équipe"
+          ],
+          "outputs": {},
+          "parameter": "Destination_souhaitee",
+          "phase": "",
+          "position": {
+            "x": 60,
+            "y": 80
+          },
+          "resources": [],
+          "title": "Première étape"
+        },
+        {
+          "content": "Synthèse destinée au client — exemple synthétique",
+          "id": "email",
+          "kind": "document",
+          "title": "Synthèse pour le client",
+          "validation": "automatic"
+        },
+        {
+          "content": "Synthèse destinée au ticket — exemple synthétique",
+          "id": "ticket",
+          "kind": "document",
+          "title": "Synthèse pour l’équipe",
+          "validation": "automatic"
+        }
+      ],
+      "parameter_labels": {},
+      "parameters": {
+        "Destination_souhaitee": "Ticket équipe",
+        "request": ""
+      },
+      "revision": 3,
+      "schema": 2,
+      "title": "Orienter un retour produit"
+    },
+    "driver": "automatic",
+    "id": "rc62ea4040bf94495",
+    "nodes": {
+      "email": {
+        "attempt": 0,
+        "status": "skipped"
+      },
+      "start": {
+        "attempt": 0,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "Ticket équipe",
+        "result": {
+          "outputs": {}
+        },
+        "status": "accepted"
+      },
+      "ticket": {
+        "attempt": 1,
+        "finished": 1791654108.532862,
+        "heartbeat": 1791654108.119986,
+        "input_sources": {},
+        "inputs": {},
+        "outcome": "done",
+        "ownership": "managed",
+        "pid": 428608,
+        "processes": [
+          {
+            "boot": "55949fc2-1cf5-4067-96d7-3901295a5139",
+            "pid": 428608,
+            "session": 428608,
+            "start": "1104991"
+          }
+        ],
+        "receipt": {
+          "actor": "validation-policy",
+          "at": 1791654108.5333395,
+          "checks": [
+            "executor-success",
+            "output-types",
+            "evidence-integrity"
+          ],
+          "contract": "51806e7e0bd3fa1db1554f6d8706fd351b42e35b29dfcbb4ac50dada3ccce178",
+          "note": "Contrôles techniques automatiques ; aucun critère métier attesté."
+        },
+        "result": {
+          "evidence": [
+            {
+              "sha256": "b34e52ebb849cbb8f5ff286cc83e7e67b908aafc653a12a53572230a7531f0f0",
+              "size": 131
+            }
+          ],
+          "ok": true,
+          "outputs": {},
+          "simulated": true,
+          "summary": "SIMULATION — Résultat d'exemple pour « Synthèse pour l’équipe ». Aucun outil métier ni service externe n'a été appelé."
+        },
+        "started": 1791654108.090252,
+        "status": "accepted",
+        "token": "t2fed2d723c6f491c"
+      }
+    },
+    "notifications_authorized": false,
+    "original": {
+      "description": "",
+      "edges": [
+        {
+          "from": "start",
+          "id": "email",
+          "outcome": "Email client",
+          "to": "email"
+        },
+        {
+          "from": "start",
+          "id": "ticket",
+          "outcome": "Ticket équipe",
+          "to": "ticket"
+        }
+      ],
+      "id": "work-91966527-0b7a-46f2-8f4e-2e433bd565f4",
+      "launch_fields": [
+        {
+          "help": "Où souhaitez-vous exploiter la synthèse ?",
+          "key": "Destination_souhaitee",
+          "label": "Destination souhaitée",
+          "options": [
+            "Email client",
+            "Ticket équipe"
+          ],
+          "required": true,
+          "type": "choice"
+        }
+      ],
+      "nodes": [
+        {
+          "completion_outcome": "succeeded",
+          "criteria": [],
+          "id": "start",
+          "inputs": {},
+          "kind": "condition",
+          "max_attempts": 1,
+          "options": [
+            "Email client",
+            "Ticket équipe"
+          ],
+          "outputs": {},
+          "parameter": "Destination_souhaitee",
+          "phase": "",
+          "position": {
+            "x": 60,
+            "y": 80
+          },
+          "resources": [],
+          "title": "Première étape"
+        },
+        {
+          "content": "Synthèse destinée au client — exemple synthétique",
+          "id": "email",
+          "kind": "document",
+          "title": "Synthèse pour le client",
+          "validation": "automatic"
+        },
+        {
+          "content": "Synthèse destinée au ticket — exemple synthétique",
+          "id": "ticket",
+          "kind": "document",
+          "title": "Synthèse pour l’équipe",
+          "validation": "automatic"
+        }
+      ],
+      "parameter_labels": {},
+      "parameters": {},
+      "revision": 3,
+      "schema": 2,
+      "title": "Orienter un retour produit"
+    },
+    "packs": [],
+    "parameters": {
+      "Destination_souhaitee": "Ticket équipe",
+      "request": ""
+    },
+    "plugins": {
+      "path": "/tmp/tricorder-produit-p1Ll7r/workspace/.tricorder/plugins.json",
+      "plugins": [],
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "project": "workspace",
+    "release": "",
+    "scope": {
+      "id": "workspace",
+      "kind": "workspace"
+    },
+    "simulation": true,
+    "status": "completed",
+    "transports": {},
+    "updated": 1791654108.5334542,
+    "timing": {
+      "started": 1791654108.0853152,
+      "finished": 1791654108.5334182,
+      "duration": 0.4481029510498047
+    },
+    "origin": null,
+    "focus": null,
+    "health": {
+      "status": "ok",
+      "total": 0,
+      "issues": []
+    }
+  },
+  "events": [
+    {
+      "seq": 1,
+      "at": 1791654108.085745,
+      "node": null,
+      "simulation": true,
+      "type": "started"
+    },
+    {
+      "seq": 2,
+      "at": 1791654108.0857868,
+      "node": "start",
+      "type": "accepted"
+    },
+    {
+      "seq": 3,
+      "at": 1791654108.085802,
+      "node": "email",
+      "type": "skipped"
+    },
+    {
+      "seq": 4,
+      "at": 1791654108.0858166,
+      "node": "ticket",
+      "type": "ready"
+    },
+    {
+      "seq": 5,
+      "at": 1791654108.0902534,
+      "attempt": 1,
+      "node": "ticket",
+      "type": "running"
+    },
+    {
+      "seq": 6,
+      "at": 1791654108.5329049,
+      "attempt": 1,
+      "node": "ticket",
+      "type": "returned"
+    },
+    {
+      "seq": 7,
+      "actor": "validation-policy",
+      "at": 1791654108.533345,
+      "node": "ticket",
+      "type": "accepted"
+    },
+    {
+      "seq": 8,
+      "at": 1791654108.5334182,
+      "node": null,
+      "type": "completed"
+    }
+  ],
+  "events_next": null
+}

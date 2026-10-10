@@ -35,6 +35,9 @@ def validate_advanced(graph):
                     f"{node['title']} : choisissez le workflow à appliquer à chaque élément")
             if isinstance(workflow, dict):
                 require(workflow.get("schema") == 2, f"{node['title']} : convertir le sous-workflow en schéma 2 avant de le traiter par élément")
+                require(not workflow.get("launch_fields"),
+                        f"{node['title']} : un traitement par élément ne peut pas afficher de formulaire de lancement ; "
+                        "utilisez le formulaire du workflow principal ou une Question ouverte dans le travail par élément")
                 require(not any(n.get("kind") == "foreach" for n in workflow.get("nodes", [])),
                         f"{node['title']} : les traitements par élément imbriqués ne sont pas encore pris en charge")
                 validate(workflow)

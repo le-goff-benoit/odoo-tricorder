@@ -39,6 +39,22 @@ def health(run):
     return {'status': 'failed' if total else 'ok', 'total': total, 'issues': issues}
 
 
+def completion_label(run):
+    """A frozen business choice, only when every rejection has one clear label."""
+    if run.get('status') != 'completed' or run.get('completion_outcome') not in {None, 'rejected'}:
+        return None
+    definitions = {node['id']: node for node in run['definition']['nodes']}
+    labels = set()
+    for nid, state in run['nodes'].items():
+        if state.get('decision', {}).get('outcome') != 'reject':
+            continue
+        label = definitions.get(nid, {}).get('option_labels', {}).get('reject')
+        if not isinstance(label, str) or not label.strip():
+            return None
+        labels.add(label.strip()[:120])
+    return next(iter(labels)) if len(labels) == 1 else None
+
+
 def focus(run):
     """One bounded next action, without transporting every block definition."""
     nodes = run['nodes']
@@ -87,6 +103,7 @@ _COMPACT_SELECT = """
                'kind', json_extract(d.value, '$.kind'),
                'route_output', json_extract(d.value, '$.route_output'),
                'options', json_extract(d.value, '$.options'),
+               'option_labels', json_object('reject', substr(json_extract(d.value, '$.option_labels.reject'), 1, 120)),
                'execution', json_object('provider', json_extract(d.value, '$.execution.provider'),
                                         'model', json_extract(d.value, '$.execution.model'),
                                         'profile', json_extract(d.value, '$.execution.profile')),
@@ -96,6 +113,7 @@ _COMPACT_SELECT = """
            )) FROM json_each(r.body, '$.definition.nodes') d) AS definitions,
            (SELECT json_group_object(n.key, json_object(
                'status', json_extract(n.value, '$.status'),
+               'decision', json_object('outcome', json_extract(n.value, '$.decision.outcome')),
                'ownership', json_extract(n.value, '$.ownership'),
                'started', json_extract(n.value, '$.started'),
                'heartbeat', json_extract(n.value, '$.heartbeat'),
@@ -310,6 +328,7 @@ def summary(run, *, engine=None, connection=None):
                         **{key: state.get(key) for key in ('ownership', 'started', 'heartbeat')}})
     result = {**{key: run.get(key) for key in ("id", "project", "status", "created", "updated", "simulation", "completion_outcome", "archived", "coordination_wait", "coordination_hold", "iteration_wait", "iteration_hold", "parent_paused", "parent", "associated_with")},
             "conversation": conversation if isinstance(conversation, str) and len(conversation) <= 128 else None,
+            "completion_label": completion_label(run),
             "workers": workers, "workers_total": len(running),
             "definition": {"id": run["definition"]["id"], "title": run["definition"]["title"][:300], "revision": run["definition"].get("revision")},
             "original": {"id": run["original"]["id"]},

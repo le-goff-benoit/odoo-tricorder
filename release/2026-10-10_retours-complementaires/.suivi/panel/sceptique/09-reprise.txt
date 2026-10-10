@@ -1,0 +1,31 @@
+SUIVI · CONTRÔLE LOCAL EXPLICITE
+Contrôle local explicite
+← Retour à la liste
+Options
+Échec · reprise nécessaire
+0 / 1 étapes
+
+Commande terminée avec le code 3. Résultat à examiner.
+
+Depuis le début : 4 s · attentes comprises
+Transférer vers un projet…
+Graphe
+Détail
+Étape sélectionnée
+Première étape
+Cette étape a échoué
+
+Tentative 1 sur 2 · 1 reprise restante
+
+Commande terminée avec le code 3. Résultat à examiner.
+
+Sortie de la commande
+ECHEC LOCAL VOLONTAIRE
+
+Preuves
+Preuve 1 · 09e4e4a6
+Relancer cette étape…
+
+Précisez la correction avant de relancer. Le résultat précédent reste dans l’historique.
+
+Entrées, résultat technique et historique

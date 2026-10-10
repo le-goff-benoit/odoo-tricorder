@@ -1,0 +1,409 @@
+
+### 01-creer
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Activité
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+De l'intention à la réalisationUn workflow clair.Un travail que vous pouvez suivre.Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.Nouvelle demande+ Créer un workflowEssayer un exempleL'exemple est simulé : aucun modèle payant, aucune publication.✦ Analyser→? Décider→✓ Valider
+    Vos projetsVoir les archivesUn projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.+ Nouveau projetImporter un workflow
+    Votre premier projet commence iciAjoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.Créer un workflow×Choisissez votre premier bloc ou partez d’un modèle. Configurez les blocs dans l’éditeur. Vos demandes seront données au lancement ou dans le terminal.Modèle de workflowWorkflow simple — premier bloc au choixDe la demande au résultatCommande locale avec validationÉvolution logicielleRelease — demandes, plan, réalisation et validationSupport — diagnostic et réponseClôture de réunionDemande ponctuelleCorrection expressIntentions, plan et travauxDéveloppement par élément et tests communsNouveau message → notificationGitHub → Odoo.sh : staging puis productionLivraison directe en productionDocumentation → ConfluenceOrchestrationAnalyseDéveloppementTestsGestion documentaireCommunicationPremier blocTâche guidéeQuestion ouverteRègle expliciteAccord humainDocumentCommande localeTâche IA autonomeRecueillir des intentionsL’agent de la conversation réalise la consigne. Choisissez dans le bloc si son résultat attend votre validation.Nom du workflowEnregistrer dansSans projetBibliothèque de modèles partagésRetrouvez votre création dans Workflows → Gestion des workflows → Workflows enregistrés, avec ou sans projet. Pour en faire un modèle partagé, utilisez Réutiliser ce workflow dans l’éditeur.Créer et ouvrir le workflow
+
+### 02-document
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Sans projet / WorkflowRelevé hebdomadaire des commandesRévision 1 · Enregistré← Retour à la listeChoisir l’IAOptionsPlanifierRéutiliser…Exporter…EnregistrerExécuter…
+    Enregistrez ici ; la navigation principale enregistre aussi vos modifications.ÉditeurExécutionHistoriqueRapport
+
+
+    + Ajouter un blocRelier+ NotePropriétésParamètres du workflow↶↷›_ TerminalÉditeurPhasesFichier JSON du workflow…Recharger et valider✦ Assistant IA☷ Liste
+    ▤Première étapeDocumentSans donnée provenant d’un autre bloc1 bloc · 0 lien−100 %+AjusterRéorganiser le graphe← Retour au graphePremière étape×DocumentPremière étapeNom du blocContenu du brouillonPréparation locale. La publication demande une opération et un accord distincts.Critères d’acceptation (un par ligne)Informations de cette étapeCes informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.UtiliseAucune donnée reçue d’un autre bloc.Recevoir un résultat existant…Ajouter une information à utiliserProduitAucun résultat déclaré.Ajouter un résultat attenduDonnées de simulation…Organisation de l’étapeEffet du résultat sur les tâches dépendantesPermettre la suiteBloquer la suite : travail non résoluPhase
+
+    Effort IA de cette étapeUtiliser le niveau de la conversationlowmediumhighxhigh
+
+
+    Outils et plugins de cette étapeCapacités de plugins (facultatives)AucuneCatalogue : .tricorder/plugins.json · aucune dépendance à un agent dédié.Actualiser les outilsAucun plugin déclaré dans ce dépôt.
+
+
+
+    Validation du résultatManuelleAutomatique — contrôles techniquesLa validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+    Autoriser la réutilisation des preuves pendant 24 hUniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+    Configuration technique des données (avancé)Entrées (nom : type, JSON){}Sorties (nom : type, JSON){}Reprises, ressources et positionTentatives maximalesRessources exclusives (une par ligne)Position XPosition YAppliquer au bloc
+    Liens entre les blocsAucun lien.Relier une entrée…Actions facultativesLeur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.Ajouter une action facultative…Supprimer cette étapeAppliquer au blocWorkflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+
+### 03-parametres
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Sans projet / WorkflowRelevé hebdomadaire des commandesModifications en attente · enregistrées en quittant cette vue← Retour à la listeChoisir l’IAOptionsPlanifierRéutiliser…Exporter…EnregistrerExécuter…
+    Enregistrez ici ; la navigation principale enregistre aussi vos modifications.ÉditeurExécutionHistoriqueRapport
+
+
+    + Ajouter un blocRelier+ NotePropriétésParamètres du workflow↶↷›_ TerminalÉditeurPhasesFichier JSON du workflow…Recharger et valider✦ Assistant IA☷ Liste
+    ▤Première étapeDocumentSans donnée provenant d’un autre bloc1 bloc · 0 lien−100 %+AjusterRéorganiser le graphe← Retour au graphePremière étape×DocumentPremière étapeNom du blocContenu du brouillonPréparation locale. La publication demande une opération et un accord distincts.Critères d’acceptation (un par ligne)Informations de cette étapeCes informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.UtiliseAucune donnée reçue d’un autre bloc.Recevoir un résultat existant…Ajouter une information à utiliserProduitAucun résultat déclaré.Ajouter un résultat attenduDonnées de simulation…Organisation de l’étapeEffet du résultat sur les tâches dépendantesPermettre la suiteBloquer la suite : travail non résoluPhase
+
+    Effort IA de cette étapeUtiliser le niveau de la conversationlowmediumhighxhigh
+
+
+    Outils et plugins de cette étapeCapacités de plugins (facultatives)AucuneCatalogue : .tricorder/plugins.json · aucune dépendance à un agent dédié.Actualiser les outilsAucun plugin déclaré dans ce dépôt.
+
+
+
+    Validation du résultatManuelleAutomatique — contrôles techniquesLa validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+    Autoriser la réutilisation des preuves pendant 24 hUniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+    Configuration technique des données (avancé)Entrées (nom : type, JSON){}Sorties (nom : type, JSON){}Reprises, ressources et positionTentatives maximalesRessources exclusives (une par ligne)Position XPosition YAppliquer au bloc
+    Liens entre les blocsAucun lien.Relier une entrée…Actions facultativesLeur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.Ajouter une action facultative…Supprimer cette étapeAppliquer au blocWorkflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.Paramètres du workflow×NomDescriptionFormulaire de lancementCes informations sont demandées à chaque exécution. Elles sont conservées avec cette demande, sans changer le modèle. Pour demander une précision pendant le travail, utilisez une Question ouverte.Ajouter un champ au lancementQuand le workflow a une questionMe prévenir avecDans Tricorder uniquementCanal ou destinataire exactConfigurer une notification…S’applique aux questions prévues et à celles posées en cours de travail. La notification contient le nom du workflow et sa référence ; la question reste dans Tricorder. Email, Slack ou autre service : ajoutez et vérifiez une connexion de notification pour la choisir ici. Sans connexion, les questions restent visibles dans Tricorder.Paramètres supplémentairesCes valeurs sont fixes pour les prochains lancements. Le formulaire ci-dessus permet de les remplacer pour une demande ; une Question ouverte recueille une précision pendant le travail.Aucune valeur fixe simple.Nom du nouveau paramètreValeur fixeAjouter ce paramètreConfiguration avancée (JSON)Paramètres (objet JSON){}Appliquer
+
+### 04-formulaire
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Sans projet / WorkflowRelevé hebdomadaire des commandesModifications en attente · enregistrées en quittant cette vue← Retour à la listeChoisir l’IAOptionsPlanifierRéutiliser…Exporter…EnregistrerExécuter…
+    Enregistrez ici ; la navigation principale enregistre aussi vos modifications.ÉditeurExécutionHistoriqueRapport
+
+
+    + Ajouter un blocRelier+ NotePropriétésParamètres du workflow↶↷›_ TerminalÉditeurPhasesFichier JSON du workflow…Recharger et valider✦ Assistant IA☷ Liste
+    ▤Première étapeDocumentSans donnée provenant d’un autre bloc1 bloc · 0 lien−100 %+AjusterRéorganiser le graphe← Retour au graphePremière étape×DocumentPremière étapeNom du blocContenu du brouillonPréparation locale. La publication demande une opération et un accord distincts.Critères d’acceptation (un par ligne)Informations de cette étapeCes informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.UtiliseAucune donnée reçue d’un autre bloc.Recevoir un résultat existant…Ajouter une information à utiliserProduitAucun résultat déclaré.Ajouter un résultat attenduDonnées de simulation…Organisation de l’étapeEffet du résultat sur les tâches dépendantesPermettre la suiteBloquer la suite : travail non résoluPhase
+
+    Effort IA de cette étapeUtiliser le niveau de la conversationlowmediumhighxhigh
+
+
+    Outils et plugins de cette étapeCapacités de plugins (facultatives)AucuneCatalogue : .tricorder/plugins.json · aucune dépendance à un agent dédié.Actualiser les outilsAucun plugin déclaré dans ce dépôt.
+
+
+
+    Validation du résultatManuelleAutomatique — contrôles techniquesLa validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+    Autoriser la réutilisation des preuves pendant 24 hUniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+    Configuration technique des données (avancé)Entrées (nom : type, JSON){}Sorties (nom : type, JSON){}Reprises, ressources et positionTentatives maximalesRessources exclusives (une par ligne)Position XPosition YAppliquer au bloc
+    Liens entre les blocsAucun lien.Relier une entrée…Actions facultativesLeur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.Ajouter une action facultative…Supprimer cette étapeAppliquer au blocWorkflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.Paramètres du workflow×NomDescriptionFormulaire de lancementCes informations sont demandées à chaque exécution. Elles sont conservées avec cette demande, sans changer le modèle. Pour demander une précision pendant le travail, utilisez une Question ouverte.Champ 1Libellé du champType de réponseTexte courtTexte longNombreOui / NonListe de choixAide à la saisieRéponse obligatoireValeurs proposées (une par ligne)Retirer ce champChamp 2Libellé du champType de réponseTexte courtTexte longNombreOui / NonListe de choixAide à la saisieRéponse obligatoireValeurs proposées (une par ligne)Retirer ce champAjouter un champ au lancementQuand le workflow a une questionMe prévenir avecDans Tricorder uniquementCanal ou destinataire exactConfigurer une notification…S’applique aux questions prévues et à celles posées en cours de travail. La notification contient le nom du workflow et sa référence ; la question reste dans Tricorder. Email, Slack ou autre service : ajoutez et vérifiez une connexion de notification pour la choisir ici. Sans connexion, les questions restent visibles dans Tricorder.Paramètres supplémentairesCes valeurs sont fixes pour les prochains lancements. Le formulaire ci-dessus permet de les remplacer pour une demande ; une Question ouverte recueille une précision pendant le travail.Aucune valeur fixe simple.Nom du nouveau paramètreValeur fixeAjouter ce paramètreConfiguration avancée (JSON)Paramètres (objet JSON){}Appliquer
+
+### 05-planifier
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Sans projet / WorkflowRelevé hebdomadaire des commandesRévision 2 · Enregistré← Retour à la listeChoisir l’IAOptionsPlanifierRéutiliser…Exporter…EnregistrerExécuter…
+    Enregistrez ici ; la navigation principale enregistre aussi vos modifications.ÉditeurExécutionHistoriqueRapport
+
+
+    + Ajouter un blocRelier+ NotePropriétésParamètres du workflow↶↷›_ TerminalÉditeurPhasesFichier JSON du workflow…Recharger et valider✦ Assistant IA☷ Liste
+    ▤Préparer le relevéDocumentSans donnée provenant d’un autre bloc1 bloc · 0 lien−100 %+AjusterRéorganiser le graphe← Retour au graphePréparer le relevé×DocumentPréparer le relevéNom du blocContenu du brouillonRelevé hebdomadaire : vérifier les commandes et communiquer les retards.Préparation locale. La publication demande une opération et un accord distincts.Critères d’acceptation (un par ligne)Informations de cette étapeCes informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.UtiliseAucune donnée reçue d’un autre bloc.Recevoir un résultat existant…Ajouter une information à utiliserProduitAucun résultat déclaré.Ajouter un résultat attenduDonnées de simulation…Organisation de l’étapeEffet du résultat sur les tâches dépendantesPermettre la suiteBloquer la suite : travail non résoluPhase
+
+    Effort IA de cette étapeUtiliser le niveau de la conversationlowmediumhighxhigh
+
+
+    Outils et plugins de cette étapeCapacités de plugins (facultatives)AucuneCatalogue : .tricorder/plugins.json · aucune dépendance à un agent dédié.Actualiser les outilsAucun plugin déclaré dans ce dépôt.
+
+
+
+    Validation du résultatManuelleAutomatique — contrôles techniquesLa validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+    Autoriser la réutilisation des preuves pendant 24 hUniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+    Configuration technique des données (avancé)Entrées (nom : type, JSON){}Sorties (nom : type, JSON){}Reprises, ressources et positionTentatives maximalesRessources exclusives (une par ligne)Position XPosition YAppliquer au bloc
+    Liens entre les blocsAucun lien.Relier une entrée…Actions facultativesLeur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.Ajouter une action facultative…Supprimer cette étapeAppliquer au blocWorkflow enregistré. Les exécutions précédentes gardent leur version.Configurer une planification×Informations de cette demandeÉquipe concernée · obligatoireChoisir…VentesLogistiqueInclure les retards · obligatoireChoisir…OuiNonCes réponses seront réutilisées à chaque occurrence de cette planification. Modifier le modèle ne les changera pas.Relevé hebdomadaire des commandes · révision 2Modèles IA : aucun. FréquenceChaque jourDu lundi au vendrediÀ intervalle régulierHeure localeIntervalle (minutes)Fuseau horaireSimulation sans appel de modèle ni de serviceJ’active cette révision à cette fréquence. Les décisions humaines du workflow restent obligatoires.Sans chevauchement. L’ordinateur et Tricorder doivent être ouverts. Une heure inexistante au changement d’heure est ignorée ; une heure répétée s’exécute une seule fois.Activer la planification
+
+### 06-planifications
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Planifications
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Automatisations localesPlanificationsRetrouvez vos prochaines exécutions ici et dans l’icône Tricorder de la barre Ubuntu.Voir les archivesActualiserComment fonctionnent les planifications ?Tricorder doit rester ouvert, éventuellement dans la zone de notification. Après une interruption, une seule occurrence en retard est rattrapée. Une exécution encore ouverte empêche le chevauchement.Pour créer une planification, ouvrez un workflow puis choisissez Options → Planifier. Pour utiliser une nouvelle version, ouvrez « Version planifiée » sur sa carte : vous pourrez archiver l’ancienne planification puis vérifier et activer la nouvelle.Relevé hebdomadaire des commandesActiveGlobal · Simulation · Europe/ZurichChaque jour à 09:00Prochaine : 11.10.2026 09:00:00Les modifications du workflow ne changent pas cette planification.Version planifiée · révision 2SuspendreArchiverPlanification activée. Elle apparaît aussi dans l’icône Ubuntu.
+
+### 07-version-planifiee
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Planifications
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Automatisations localesPlanificationsRetrouvez vos prochaines exécutions ici et dans l’icône Tricorder de la barre Ubuntu.Voir les archivesActualiserComment fonctionnent les planifications ?Tricorder doit rester ouvert, éventuellement dans la zone de notification. Après une interruption, une seule occurrence en retard est rattrapée. Une exécution encore ouverte empêche le chevauchement.Pour créer une planification, ouvrez un workflow puis choisissez Options → Planifier. Pour utiliser une nouvelle version, ouvrez « Version planifiée » sur sa carte : vous pourrez archiver l’ancienne planification puis vérifier et activer la nouvelle.Relevé hebdomadaire des commandesActiveGlobal · Simulation · Europe/ZurichChaque jour à 09:00Prochaine : 11.10.2026 09:00:00Les modifications du workflow ne changent pas cette planification.Version planifiée · révision 2SuspendreArchiverPlanification activée. Elle apparaît aussi dans l’icône Ubuntu.Version planifiée×Relevé hebdomadaire des commandes · révision 2 · SimulationChaque jour à 09:00 · Europe/ZurichCette version est conservée en lecture seule. Modifier le workflow dans l’éditeur ne change pas les prochains lancements de cette planification.Réponses conservées pour chaque occurrenceÉquipe concernéeLogistiqueInclure les retardsNonDonnées techniques{
+  "Equipe_concernee": "Logistique",
+  "Inclure_les_retards": false
+}Préparer le relevé · DocumentType de blocDocumentValidation du résultatManuelle, après exécutionDonnées techniques{
+  "Type de bloc": "Document",
+  "Validation du résultat": "Manuelle, après exécution"
+}Configuration complète de cette versionDescriptionNon renseignéEdgesAucun élémentIdwork-ccff838a-a3ed-4c7f-9e33-d00bb900c4deLaunch fieldsHelpNon renseignéKeyEquipe_concerneeLabelÉquipe concernéeOptionsVentesLogistiqueRequiredOuiTypechoiceHelpNon renseignéKeyInclure_les_retardsLabelInclure les retardsRequiredOuiTypebooleanNodesCapabilitiesAucun élémentCompletion outcomesucceededContentRelevé hebdomadaire : vérifier les commandes et communiquer les retards.CritèresAucun élémentIdstartEntréesAucun champ renseignéKinddocumentMax attempts1SortiesAucun champ renseignéPhaseNon renseignéPositionX60Y80ResourcesAucun élémentReuseNonTitrePréparer le relevéValidationhumanParameter labelsAucun champ renseignéParametersAucun champ renseignéRevision2Schema2TitreRelevé hebdomadaire des commandesDonnées techniques{
+  "description": "",
+  "edges": [],
+  "id": "work-ccff838a-a3ed-4c7f-9e33-d00bb900c4de",
+  "launch_fields": [
+    {
+      "help": "",
+      "key": "Equipe_concernee",
+      "label": "Équipe concernée",
+      "options": [
+        "Ventes",
+        "Logistique"
+      ],
+      "required": true,
+      "type": "choice"
+    },
+    {
+      "help": "",
+      "key": "Inclure_les_retards",
+      "label": "Inclure les retards",
+      "required": true,
+      "type": "boolean"
+    }
+  ],
+  "nodes": [
+    {
+      "capabilities": [],
+      "completion_outcome": "succeeded",
+      "content": "Relevé hebdomadaire : vérifier les commandes et communiquer les retards.",
+      "criteria": [],
+      "id": "start",
+      "inputs": {},
+      "kind": "document",
+      "max_attempts": 1,
+      "outputs": {},
+      "phase": "",
+      "position": {
+        "x": 60,
+        "y": 80
+      },
+      "resources": [],
+      "reuse": false,
+      "title": "Préparer le relevé",
+      "validation": "human"
+    }
+  ],
+  "parameter_labels": {},
+  "parameters": {},
+  "revision": 2,
+  "schema": 2,
+  "title": "Relevé hebdomadaire des commandes"
+}FermerPréparer une nouvelle version…
+
+### 08-remplacer
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Planifications
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Automatisations localesPlanificationsRetrouvez vos prochaines exécutions ici et dans l’icône Tricorder de la barre Ubuntu.Voir les archivesActualiserComment fonctionnent les planifications ?Tricorder doit rester ouvert, éventuellement dans la zone de notification. Après une interruption, une seule occurrence en retard est rattrapée. Une exécution encore ouverte empêche le chevauchement.Pour créer une planification, ouvrez un workflow puis choisissez Options → Planifier. Pour utiliser une nouvelle version, ouvrez « Version planifiée » sur sa carte : vous pourrez archiver l’ancienne planification puis vérifier et activer la nouvelle.Relevé hebdomadaire des commandesActiveGlobal · Simulation · Europe/ZurichChaque jour à 09:00Prochaine : 11.10.2026 09:00:00Les modifications du workflow ne changent pas cette planification.Version planifiée · révision 2SuspendreArchiverPlanification activée. Elle apparaît aussi dans l’icône Ubuntu.Remplacer cette planification×La planification actuelle utilise Relevé hebdomadaire des commandes, révision 2. La version enregistrée du workflow est Relevé hebdomadaire des commandes, révision 2.L’ancienne planification sera archivée et ses prochains départs seront arrêtés. Les exécutions déjà en cours continuent. Les exécutions et leurs résultats sont conservés.Vous vérifierez ensuite la fréquence, le mode d’exécution et les autorisations de la nouvelle planification. Rien ne démarrera avant votre activation explicite. Si vous annulez cette configuration, aucune nouvelle planification ne sera créée ; vous pourrez restaurer puis réactiver l’ancienne depuis les archives.AnnulerArchiver et configurer la nouvelle
+
+### 09-reponses-reprises
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Sans projet / WorkflowRelevé hebdomadaire des commandesRévision 2 · Enregistré← Retour à la listeChoisir l’IAOptionsPlanifierRéutiliser…Exporter…EnregistrerExécuter…
+    Enregistrez ici ; la navigation principale enregistre aussi vos modifications.ÉditeurExécutionHistoriqueRapport
+
+
+    + Ajouter un blocRelier+ NotePropriétésParamètres du workflow↶↷›_ TerminalÉditeurPhasesFichier JSON du workflow…Recharger et valider✦ Assistant IA☷ Liste
+    ▤Préparer le relevéDocumentSans donnée provenant d’un autre bloc1 bloc · 0 lien−100 %+AjusterRéorganiser le graphePlanification activée. Elle apparaît aussi dans l’icône Ubuntu.Configurer une planification×L’ancienne planification est archivée. Sa fréquence, son fuseau et ses réponses sont préremplis. Vérifiez ces réglages, le mode Simulation et les autorisations avant d’activer cette nouvelle version.Informations de cette demandeÉquipe concernée · obligatoireChoisir…VentesLogistiqueInclure les retards · obligatoireChoisir…OuiNonCes réponses seront réutilisées à chaque occurrence de cette planification. Modifier le modèle ne les changera pas.Relevé hebdomadaire des commandes · révision 2Modèles IA : aucun. FréquenceChaque jourDu lundi au vendrediÀ intervalle régulierHeure localeIntervalle (minutes)Fuseau horaireSimulation sans appel de modèle ni de serviceJ’active cette révision à cette fréquence. Les décisions humaines du workflow restent obligatoires.Sans chevauchement. L’ordinateur et Tricorder doivent être ouverts. Une heure inexistante au changement d’heure est ignorée ; une heure répétée s’exécute une seule fois.Activer la planification
+
+### 10-reponses-modifiees
+Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Planifications
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Automatisations localesPlanificationsRetrouvez vos prochaines exécutions ici et dans l’icône Tricorder de la barre Ubuntu.Voir les archivesActualiserComment fonctionnent les planifications ?Tricorder doit rester ouvert, éventuellement dans la zone de notification. Après une interruption, une seule occurrence en retard est rattrapée. Une exécution encore ouverte empêche le chevauchement.Pour créer une planification, ouvrez un workflow puis choisissez Options → Planifier. Pour utiliser une nouvelle version, ouvrez « Version planifiée » sur sa carte : vous pourrez archiver l’ancienne planification puis vérifier et activer la nouvelle.Relevé hebdomadaire des commandesActiveGlobal · Simulation · Europe/ZurichChaque jour à 09:00Prochaine : 11.10.2026 09:00:00Les modifications du workflow ne changent pas cette planification.Version planifiée · révision 2SuspendreArchiverPlanification activée. Elle apparaît aussi dans l’icône Ubuntu.Version planifiée×Relevé hebdomadaire des commandes · révision 2 · SimulationChaque jour à 09:00 · Europe/ZurichCette version est conservée en lecture seule. Modifier le workflow dans l’éditeur ne change pas les prochains lancements de cette planification.Réponses conservées pour chaque occurrenceÉquipe concernéeVentesInclure les retardsOuiDonnées techniques{
+  "Equipe_concernee": "Ventes",
+  "Inclure_les_retards": true
+}Préparer le relevé · DocumentType de blocDocumentValidation du résultatManuelle, après exécutionDonnées techniques{
+  "Type de bloc": "Document",
+  "Validation du résultat": "Manuelle, après exécution"
+}Configuration complète de cette versionDescriptionNon renseignéEdgesAucun élémentIdwork-ccff838a-a3ed-4c7f-9e33-d00bb900c4deLaunch fieldsHelpNon renseignéKeyEquipe_concerneeLabelÉquipe concernéeOptionsVentesLogistiqueRequiredOuiTypechoiceHelpNon renseignéKeyInclure_les_retardsLabelInclure les retardsRequiredOuiTypebooleanNodesCapabilitiesAucun élémentCompletion outcomesucceededContentRelevé hebdomadaire : vérifier les commandes et communiquer les retards.CritèresAucun élémentIdstartEntréesAucun champ renseignéKinddocumentMax attempts1SortiesAucun champ renseignéPhaseNon renseignéPositionX60Y80ResourcesAucun élémentReuseNonTitrePréparer le relevéValidationhumanParameter labelsAucun champ renseignéParametersAucun champ renseignéRevision2Schema2TitreRelevé hebdomadaire des commandesDonnées techniques{
+  "description": "",
+  "edges": [],
+  "id": "work-ccff838a-a3ed-4c7f-9e33-d00bb900c4de",
+  "launch_fields": [
+    {
+      "help": "",
+      "key": "Equipe_concernee",
+      "label": "Équipe concernée",
+      "options": [
+        "Ventes",
+        "Logistique"
+      ],
+      "required": true,
+      "type": "choice"
+    },
+    {
+      "help": "",
+      "key": "Inclure_les_retards",
+      "label": "Inclure les retards",
+      "required": true,
+      "type": "boolean"
+    }
+  ],
+  "nodes": [
+    {
+      "capabilities": [],
+      "completion_outcome": "succeeded",
+      "content": "Relevé hebdomadaire : vérifier les commandes et communiquer les retards.",
+      "criteria": [],
+      "id": "start",
+      "inputs": {},
+      "kind": "document",
+      "max_attempts": 1,
+      "outputs": {},
+      "phase": "",
+      "position": {
+        "x": 60,
+        "y": 80
+      },
+      "resources": [],
+      "reuse": false,
+      "title": "Préparer le relevé",
+      "validation": "human"
+    }
+  ],
+  "parameter_labels": {},
+  "parameters": {},
+  "revision": 2,
+  "schema": 2,
+  "title": "Relevé hebdomadaire des commandes"
+}FermerPréparer une nouvelle version…

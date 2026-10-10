@@ -37,3 +37,5 @@ Première application de ce mandat :
 [retours d’usage du 10 octobre](../release/2026-10-10_retours-usage/README.md).
 
 Deuxième application : [revue spécialisée, corrections puis nouveau panel](../release/2026-10-10_retours-personas/README.md). La revue spécialisée précède les six parcours indépendants. Chaque correction issue de ce panel fait ensuite l’objet d’une contre-épreuve ciblée sur un candidat figé ; les rapports initiaux restent conservés.
+
+Troisième passage ciblé : [configuration des demandes et points restants](../release/2026-10-10_retours-complementaires/README.md), avec formulaires propres à chaque exécution, création de modèles et réponses planifiées.

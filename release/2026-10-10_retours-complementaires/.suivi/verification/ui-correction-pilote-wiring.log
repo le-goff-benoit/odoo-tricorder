@@ -1,0 +1,13 @@
+
+Running 6 tests using 1 worker
+
+(node:503729) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/workflow-wiring.spec.cjs:42:1 › a new human decision exposes its default branches and keeps the selected branch when changing destination (7.4s)
+  ✓  2 tests/workflow-wiring.spec.cjs:83:1 › a renamed data connection remains readable beside the selected block and on the graph (4.7s)
+  ✓  3 tests/workflow-wiring.spec.cjs:95:1 › choosing only a data output gives an inline repair instead of silently creating an order-only link (5.3s)
+  ✓  4 tests/workflow-wiring.spec.cjs:108:1 › a processed refusal reads Refusée instead of a green Validé and does not release the approved branch (3.9s)
+  ✓  5 tests/workflow-wiring.spec.cjs:121:1 › order-only explicitly overrides automatic matching of same-name ports (6.8s)
+  ✓  6 tests/workflow-wiring.spec.cjs:132:1 › choosing the revised output replaces the automatically matched source for that input (6.1s)
+
+  6 passed (34.8s)

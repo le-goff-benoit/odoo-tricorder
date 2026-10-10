@@ -54,22 +54,24 @@ class Schedules:
         with self.engine.store.connect() as db:
             return [self.engine.store.body(row) for row in db.execute("SELECT body FROM schedules ORDER BY id")]
 
-    def create(self, project_id, graph, rule, simulation=False, now=None, library=None, notifications_authorized=False):
+    def create(self, project_id, graph, rule, simulation=False, now=None, library=None, notifications_authorized=False, parameters=None):
         validate(graph)
         now = time.time() if now is None else now
         project = self.engine.project(project_id)
         graph = expand(graph, library or {})
+        from .launch_fields import resolve_parameters
+        parameters = resolve_parameters(graph, parameters)
         from .packs import resolve_profiles, policy_issues
         if not simulation:
             graph = resolve_profiles(project, graph)
-        issues = preflight(graph, simulation, project["defaults"], project, self.engine)
+        issues = preflight({**graph, "parameters": parameters}, simulation, project["defaults"], project, self.engine)
         if not simulation:
-            issues += policy_issues(project, graph)
+            issues += policy_issues(project, {**graph, "parameters": parameters})
             from .notifications import execution_nodes
             if any(n["kind"] == "communication" for n in execution_nodes(graph)):
                 require(notifications_authorized, "Autoriser explicitement les notifications de cette révision avant activation")
         require(not issues, " · ".join(i["message"] for i in issues))
-        schedule = {"id": new_id("s"), "project": project_id, "title": graph["title"], "definition": graph, "library": library or {}, "rule": rule,
+        schedule = {"id": new_id("s"), "project": project_id, "title": graph["title"], "definition": graph, "parameters": parameters, "library": library or {}, "rule": rule,
                     "scope": {"kind": self.engine.project(project_id).get("scope", "project"), "id": project_id},
                     "notifications_authorized": bool(notifications_authorized), "simulation": bool(simulation), "enabled": True, "created": now, "next": next_due(rule, now), "last_run": None, "last_status": "scheduled"}
         from .integrations import catalog
@@ -121,10 +123,10 @@ class Schedules:
                             require(schedule.get("plugins_digest") == catalog(project)["sha256"], "Catalogue modifié : recréer la récurrence après vérification")
                             for plugin, expected in schedule.get("transports", {}).items():
                                 require(approved(self.engine, project, plugin) == expected, "Transport modifié : recréer la récurrence après vérification")
-                            issues = preflight(schedule["definition"], False, project["defaults"], project, self.engine)
+                            issues = preflight({**schedule["definition"], "parameters": schedule.get("parameters", schedule["definition"].get("parameters", {}))}, False, project["defaults"], project, self.engine)
                             require(not issues, " · ".join(i["message"] for i in issues))
                         run = self.engine.start(schedule["project"], schedule["definition"], simulation=schedule["simulation"], library=schedule["library"], connection=db,
-                                                notifications_authorized=schedule.get("notifications_authorized", False),
+                                                notifications_authorized=schedule.get("notifications_authorized", False), parameters=schedule.get("parameters"),
                                                 occurrence={"schedule": schedule["id"], "due": schedule["last_due"], "since": schedule["created"]})
                         schedule.update(last_run=run["id"], last_status="started")
                         started.append(run)

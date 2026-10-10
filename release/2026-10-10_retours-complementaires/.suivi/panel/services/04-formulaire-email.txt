@@ -1,0 +1,151 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Outils et aide
+
+
+
+
+
+
+
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+
+
+
+
+Support — diagnostic et réponse
+Révision 1 · Enregistré
+← Retour à la liste
+Choisir l’IA
+Options
+
+
+
+Enregistrer
+Exécuter…
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Données structurées…
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Éditeur
+
+
+
+✦ Assistant IA
+☷ Liste
+✦
+Analyser la demande et son urgence
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Constat, Suite proposée, Niveau d’urgence
+✦
+Préparer la réponse urgente
+Tâche IA
+Utilise : Constat, Suite proposée · Produit : Proposition
+✦
+Préparer la réponse sans urgence établie
+Tâche IA
+Utilise : Constat, Suite proposée · Produit : Brouillon
+?
+Préciser ce qui est bloqué
+Question
+Sans donnée provenant d’un autre bloc · Produit : Votre réponse
+✦
+Réévaluer l’urgence avec les faits reçus
+Tâche IA
+Utilise : Votre réponse · Produit : Constat, Suite proposée, Niveau d’urgence
+?
+Choisir l’investigation manquante
+Question
+Sans donnée provenant d’un autre bloc · Produit : Votre réponse
+✦
+Reprendre la destination de la réponse
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Votre réponse
+✦
+Mettre la réponse au format choisi
+Tâche IA
+Utilise : Destination choisie, Réponse préparée · Produit : Brouillon
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+Lancer cette version du workflow
+×
+Faits et exemple du problème · facultatif
+Comportement observé, résultat attendu et exemple concret. Vous pouvez aussi les décrire dans la demande.
+Impact et urgence · facultatif
+Qui est touché, quel travail est bloqué, depuis quand, quel contournement et quelle échéance ? Laissez les inconnues à préciser.
+Destination de la réponse · facultatif
+Préparation du texte uniquement. Aucun envoi ni brouillon distant créé par ce choix.
+Titre court (facultatif)
+Quelle demande souhaitez-vous traiter ?
+Vous pouvez aussi expliquer votre demande dans le terminal. Les questions de l’agent apparaîtront dans le suivi.
+Inclure d’autres projets
+Lancer dans le terminal
+Vérifier à nouveau
+Exécution automatique sans conversation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Simuler le parcours

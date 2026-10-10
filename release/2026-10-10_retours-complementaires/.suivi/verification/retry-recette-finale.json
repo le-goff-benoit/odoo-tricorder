@@ -1,0 +1,184 @@
+{
+  "status": "passed",
+  "renderer": {
+    "events": [
+      {
+        "type": "pointerdown",
+        "at": 1791654912274,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "open-project",
+        "button": "Collecte de besoins synthétiques/tmp/tricorder-collection-input-vayKRs/workflows",
+        "x": 829,
+        "y": 281.0899963378906,
+        "defaultPrevented": false
+      },
+      {
+        "type": "pointerup",
+        "at": 1791654912274,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "open-project",
+        "button": "Collecte de besoins synthétiques/tmp/tricorder-collection-input-vayKRs/workflows",
+        "x": 829,
+        "y": 281.0899963378906,
+        "defaultPrevented": false
+      },
+      {
+        "type": "click",
+        "at": 1791654912274,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "open-project",
+        "button": "Collecte de besoins synthétiques/tmp/tricorder-collection-input-vayKRs/workflows",
+        "x": 829,
+        "y": 281,
+        "defaultPrevented": true
+      },
+      {
+        "type": "pointerdown",
+        "at": 1791654912490,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "open-run",
+        "button": "Consulter",
+        "x": 1318.8199462890625,
+        "y": 288.7900085449219,
+        "defaultPrevented": false
+      },
+      {
+        "type": "pointerup",
+        "at": 1791654912490,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "open-run",
+        "button": "Consulter",
+        "x": 1318.8199462890625,
+        "y": 288.7900085449219,
+        "defaultPrevented": false
+      },
+      {
+        "type": "click",
+        "at": 1791654912490,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "open-run",
+        "button": "Consulter",
+        "x": 1318,
+        "y": 288,
+        "defaultPrevented": true
+      },
+      {
+        "type": "pointerdown",
+        "at": 1791654912606,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "execution-details",
+        "button": "Détail",
+        "x": 372.2300109863281,
+        "y": 230.08999633789062,
+        "defaultPrevented": false
+      },
+      {
+        "type": "pointerup",
+        "at": 1791654912606,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "execution-details",
+        "button": "Détail",
+        "x": 372.2300109863281,
+        "y": 230.08999633789062,
+        "defaultPrevented": false
+      },
+      {
+        "type": "click",
+        "at": 1791654912606,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "execution-details",
+        "button": "Détail",
+        "x": 372,
+        "y": 230,
+        "defaultPrevented": true
+      },
+      {
+        "type": "pointerdown",
+        "at": 1791654913228,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "retry",
+        "button": "Relancer cette étape…",
+        "x": 356.4100036621094,
+        "y": 672.280029296875,
+        "defaultPrevented": false
+      },
+      {
+        "type": "pointerup",
+        "at": 1791654913228,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "retry",
+        "button": "Relancer cette étape…",
+        "x": 356.4100036621094,
+        "y": 672.280029296875,
+        "defaultPrevented": false
+      },
+      {
+        "type": "click",
+        "at": 1791654913228,
+        "tag": "BUTTON",
+        "id": "",
+        "action": "retry",
+        "button": "Relancer cette étape…",
+        "x": 356,
+        "y": 672,
+        "defaultPrevented": true
+      },
+      {
+        "type": "pointerdown",
+        "at": 1791654913358,
+        "tag": "BUTTON",
+        "id": "",
+        "button": "Relancer maintenant",
+        "x": 921.280029296875,
+        "y": 671.780029296875,
+        "defaultPrevented": false
+      },
+      {
+        "type": "pointerup",
+        "at": 1791654913359,
+        "tag": "BUTTON",
+        "id": "",
+        "button": "Relancer maintenant",
+        "x": 921.280029296875,
+        "y": 671.780029296875,
+        "defaultPrevented": false
+      },
+      {
+        "type": "click",
+        "at": 1791654913359,
+        "tag": "BUTTON",
+        "id": "",
+        "button": "Relancer maintenant",
+        "x": 921,
+        "y": 671,
+        "defaultPrevented": false
+      },
+      {
+        "type": "submit",
+        "at": 1791654913359,
+        "tag": "FORM",
+        "id": "retry-form",
+        "defaultPrevented": true
+      }
+    ],
+    "formPresent": false
+  },
+  "ipc": [
+    {
+      "action": "run.retry",
+      "at": 1791654913360,
+      "end": 1791654913448
+    }
+  ]
+}

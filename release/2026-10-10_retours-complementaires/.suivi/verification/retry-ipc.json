@@ -1,0 +1,74 @@
+[
+  {
+    "repetition": 1,
+    "calls": [
+      {
+        "action": "run.retry",
+        "at": 1791654173493,
+        "end": 1791654173680,
+        "duration_ms": 187,
+        "error": null
+      }
+    ]
+  },
+  {
+    "repetition": 2,
+    "calls": [
+      {
+        "action": "run.retry",
+        "at": 1791654185120,
+        "end": 1791654185236,
+        "duration_ms": 116,
+        "error": null
+      }
+    ]
+  },
+  {
+    "repetition": 3,
+    "calls": [
+      {
+        "action": "run.retry",
+        "at": 1791654197748,
+        "end": 1791654198087,
+        "duration_ms": 339,
+        "error": null
+      }
+    ]
+  },
+  {
+    "repetition": 4,
+    "calls": [
+      {
+        "action": "run.retry",
+        "at": 1791654209539,
+        "end": 1791654209704,
+        "duration_ms": 165,
+        "error": null
+      }
+    ]
+  },
+  {
+    "repetition": 5,
+    "calls": [
+      {
+        "action": "run.retry",
+        "at": 1791654227132,
+        "end": 1791654227724,
+        "duration_ms": 592,
+        "error": null
+      }
+    ]
+  },
+  {
+    "repetition": 6,
+    "calls": [
+      {
+        "action": "run.retry",
+        "at": 1791654244790,
+        "end": 1791654245028,
+        "duration_ms": 238,
+        "error": null
+      }
+    ]
+  }
+]

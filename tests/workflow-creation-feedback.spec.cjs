@@ -7,7 +7,7 @@ const call = (action, data = {}) => page.evaluate(payload => window.studio.reque
 const snapshot = () => call('workflow.get', { project: project.id, workflow: 'creation-review' });
 async function openWorkflow() {
   await page.locator('[data-workflow-route=global]').click();
-  await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-action=registered-workflows]').click();
   await page.locator('[data-action=open-workflow][data-id=creation-review]').click();
 }
 async function seed(graph) {
@@ -145,7 +145,7 @@ test('portable import previews named blocks and data before optional technical J
   await app.evaluate(({ dialog }, selected) => { dialog.showSaveDialog = async () => ({ canceled: false, filePath: selected }); dialog.showOpenDialog = async () => ({ canceled: false, filePaths: [selected] }); }, file);
   await page.locator('.design-menu > summary').click();
   await page.getByRole('button', { name: 'Exporter…', exact: true }).click(); await expect.poll(() => fs.existsSync(file)).toBe(true);
-  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows',{exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click(); await page.getByRole('button', { name: 'Importer un workflow', exact: true }).click();
+  await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click(); await page.getByRole('button', { name: 'Importer un workflow', exact: true }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByText('Examiner les étapes et les données', { exact: true }).click();
   await dialog.getByText('Préparer le dossier métier · Tâche', { exact: true }).click();

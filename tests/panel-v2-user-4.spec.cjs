@@ -42,7 +42,7 @@ test.afterEach(async({},info)=>{
 });
 
 test('programme — adopter le modèle et réutiliser dans deux projets sans mélanger copies et demandes',async({},info)=>{
- await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();await page.locator('[data-action=open-workflow][data-id=programme]').click();
+ await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();await page.locator('[data-action=open-workflow][data-id=programme]').click();
  await page.locator('.design-menu > summary').click();await page.getByRole('button',{name:'Réutiliser…',exact:true}).click();
  await expect(page.getByRole('dialog')).toContainText('Les demandes, résultats, validations et planifications ne sont pas repris');
  await page.getByLabel('Nom de la copie',{exact:true}).fill('Modèle revue transverse');await capture(info,'01-adoption-modele');

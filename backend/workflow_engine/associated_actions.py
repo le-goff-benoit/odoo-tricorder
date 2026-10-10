@@ -23,6 +23,10 @@ def validate_actions(graph):
         require(type(action["enabled"]) is bool, "Activation d'action booléenne requise")
         child = action["workflow"]
         require(isinstance(child, dict) and child.get("schema") == 2, "L'action associée exige un workflow de schéma 2")
+        require(not child.get("launch_fields"),
+                f"{action['title']} : une action facultative ne peut pas afficher de formulaire de lancement ; "
+                "recueillez et transmettez les informations depuis le workflow principal, "
+                "ou ajoutez une Question ouverte dans le travail associé")
         # Bound recursive activation separately from normal sub-workflow reuse.
         require(not child.get("actions"), "Une action associée ne peut pas créer d'autres actions associées")
         from .contracts import validate
@@ -104,6 +108,10 @@ def activate(engine, parentid, action_record_id, *, human=False):
             return run
         context = copy.deepcopy(_context(run, action))
         graph = copy.deepcopy(action["workflow"])
+        require(not graph.get("launch_fields"),
+                f"{action['title']} : une action facultative ne peut pas afficher de formulaire de lancement ; "
+                "recueillez et transmettez les informations depuis le workflow principal, "
+                "ou ajoutez une Question ouverte dans le travail associé")
         graph["defaults"] = {**run["definition"].get("defaults", {}), **graph.get("defaults", {})}
         incoming = {edge["to"] for edge in graph["edges"]}
         seed = {node["id"]: {name: copy.deepcopy(context["outputs"][name]) for name in node.get("inputs", {}) if name in context.get("outputs", {})}

@@ -35,7 +35,7 @@ def attempt_lines(state, node, historical=False, retry_reason=None):
             pass
     for label, values in (("Entrées reçues", state.get("inputs")), ("Résultat", result.get("outputs"))):
         if values:
-            lines += [level + " " + label, ""] + value_lines(values)
+            lines += [level + " " + label, ""] + value_lines(values, labels=node.get("port_labels", {}).get("inputs" if label == "Entrées reçues" else "outputs"))
     if state.get("validation_error"):
         lines += ["**Contrôle non satisfait**", ""] + value_lines(state["validation_error"])
     if result.get("patch"):
@@ -62,6 +62,15 @@ def markdown(run):
     graph = run["definition"]
     lines = [f"# {graph['title']}", "", "## Demande", "", run.get("parameters", {}).get("request") or graph.get("description", "Demande à préciser dans le workflow."), "",
              "**Exécution simulée : aucun résultat métier réel n'est attesté.**" if run["simulation"] else "Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.", "", "## Plan", "", "| Travail | État | Critères |", "|---|---|---|"]
+    launch_fields = graph.get("launch_fields", [])
+    if launch_fields:
+        launch_lines = ["## Informations au lancement", ""]
+        for field in launch_fields:
+            value = run.get("parameters", {}).get(field["key"])
+            if value is not None:
+                launch_lines += ["**" + text(field["label"]) + "**", ""] + value_lines(value) + [""]
+        position = lines.index("## Plan")
+        lines[position:position] = launch_lines
     for node in graph["nodes"]:
         state = run["nodes"][node["id"]]
         lines.append(f"| {cell(node['title'])} | {state_label(state, node)} | {cell('; '.join(node.get('criteria', [])) or 'À préciser')} |")
@@ -98,7 +107,7 @@ def markdown(run):
             lines += [f"- **{node['title']}** : {node.get('question', 'Résultat à valider.')}"]
         elif state.get("decision"):
             outcome = state['decision']['outcome']
-            lines += [f"- {node['title']} : **{text(DECISIONS.get(outcome, outcome))}** — décision humaine conservée."]
+            lines += [f"- {node['title']} : **{text(node.get('option_labels', {}).get(outcome, DECISIONS.get(outcome, outcome)))}** — décision humaine conservée."]
     lines += ["", "<details><summary>Références techniques de l’exécution</summary>", "", f"Exécution `{run['id']}` · contrat `{run['contract']}`.", "", "</details>", ""]
     return "\n".join(lines)
 

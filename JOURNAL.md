@@ -1,5 +1,20 @@
 # Journal
 
+## 2026-10-10 — Configuration des demandes (0.6.0-rc.16)
+
+- Formulaires configurables par exécution, demandes suivantes et planifications ; réponses typées et obligatoires.
+- Réponses transmises aux prompts, adaptateurs et règles avec contexte moteur préservé.
+- Premier bloc au choix, propriétés essentielles remontées, noms métier accentués et liaisons stables.
+- Support guidé par faits, impact et canal ; recherche des workflows et des longues listes de modèles IA.
+- Accès direct aux workflows enregistrés et séparation modèle partagé / adaptation.
+- Choix humain renommé conservé dans l’historique, valeurs de planification reprises sans effacement silencieux.
+- Connexions : transport/identité distingués des opérations métier réellement éprouvées.
+- Formulaires enfants non pris en charge refusés dès configuration avec solution de remplacement.
+- Correction de la fermeture du menu Gestion à l’actualisation, défaut confirmé par la CI rc.15 après publication.
+- Revue indépendante puis contre-épreuves des six personas sur candidat figé ; preuves dans release/2026-10-10_retours-complementaires/.
+- 647 tests unitaires verts, 200 scénarios UI reçus après deux corrections de pilotes, 23 parcours du paquet réussis.
+- Paquet rc.16 installé via le lanceur utilisateur ; rc.15 conservée. Reprise intermittente inexpliquée et services externes non qualifiés documentés.
+
 ## 2026-10-10 — Création et usage consolidés (0.6.0-rc.15)
 
 - Revue spécialisée puis six agents personas, douze intentions et contre-épreuves indépendantes.

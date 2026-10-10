@@ -3,11 +3,11 @@ import copy
 import time
 from contextlib import nullcontext
 
-from .contracts import require, validate, expand
+from .contracts import require, validate, expand, digest
 from .engine import new_id, dependency_satisfied, completion_outcome
 
 
-def native_preflight(engine, project, graph, provider, projects=None, model=None):
+def native_preflight(engine, project, graph, provider, projects=None, model=None, parameters=None):
     """One launch contract for the dialog and the actual native conversation."""
     from .packs import resolve_profiles, policy_readiness, conversation_parameters
     from .runtime import preflight
@@ -26,7 +26,7 @@ def native_preflight(engine, project, graph, provider, projects=None, model=None
     for pid in ids:
         target = engine.project(pid)
         checked = copy.deepcopy(definition)
-        checked["parameters"] = {**checked.get("parameters", {}), **conversation_parameters(target, checked)}
+        checked["parameters"] = {**checked.get("parameters", {}), **(parameters or {}), **conversation_parameters(target, checked)}
         checked = resolve_profiles(target, checked, strict=False)
         problems = preflight(checked, defaults=target.get("defaults"), project=target, engine=engine,
                              mode="native", provider=provider, model=definition.get("defaults", {}).get("model"), primary=pid == project)
@@ -57,9 +57,12 @@ class Conversations:
             return [{**{k: v[k] for k in ("id", "project", "projects", "status", "created", "provider", "model")}, "definition": {"title": v["definition"]["title"]}, "request_excerpt": (v["items"][0]["request"].strip().splitlines()[0][:200] if v["items"] else ""), "item_count": len(v["items"]), "archived": v.get("archived", False)} for v in values]
         return values
 
-    def open(self, project, graph, provider, projects=None, library=None, model=None, *, notifications_authorized=False, initial_request=None):
+    def open(self, project, graph, provider, projects=None, library=None, model=None, *, notifications_authorized=False, initial_request=None, parameters=None):
         validate(graph)
-        checked = native_preflight(self.engine, project, expand(graph, library or {}), provider, projects, model)
+        from .launch_fields import resolve_parameters
+        if initial_request is not None or parameters is not None:
+            resolve_parameters(graph, parameters)
+        checked = native_preflight(self.engine, project, expand(graph, library or {}), provider, projects, model, parameters)
         require(not checked["issues"], " · ".join(p["project_title"] + " : " + p["message"] for p in checked["issues"]))
         definition, ids = checked["definition"], checked["projects"]
         from .notifications import execution_nodes
@@ -80,14 +83,16 @@ class Conversations:
         with self.engine.store.transaction() as db:
             db.execute("INSERT INTO conversations VALUES (?, ?)", (value["id"], self.engine.store.encode(value)))
             if initial_request is not None:
-                self.add(value["id"], initial_request, key="initial", connection=db)
+                self.add(value["id"], initial_request, key="initial", parameters=parameters, connection=db)
                 value = self.get(value["id"], db)
         return value
 
-    def add(self, cid, request, project=None, key=None, depends_on=None, *, connection=None):
+    def add(self, cid, request, project=None, key=None, depends_on=None, *, parameters=None, connection=None):
         require(isinstance(request, str) and 0 < len(request.strip()) <= 100_000, "Demande vide ou trop volumineuse")
         require(key is None or (isinstance(key, str) and 0 < len(key) <= 120), "Identifiant de demande invalide")
         require(depends_on is None or (isinstance(depends_on, list) and all(isinstance(i, str) for i in depends_on)), "Dépendances : liste d’identifiants attendue")
+        require(parameters is None or isinstance(parameters, dict), "Réponses du formulaire : objet attendu")
+        parameters = copy.deepcopy(parameters or {})
         dependencies = list(dict.fromkeys(depends_on or []))
         with (nullcontext(connection) if connection else self.engine.store.transaction()) as db:
             conversation = self.get(cid, db)
@@ -95,7 +100,7 @@ class Conversations:
             if key:
                 existing = next((i for i in conversation["items"] if i.get("key") == key), None)
                 if existing:
-                    require(existing["request"] == request and existing["project"] == (project or conversation["project"]) and set(existing.get("depends_on", [])) == set(dependencies), "Cette demande a déjà été enregistrée avec un contenu différent")
+                    require(existing["request"] == request and existing["project"] == (project or conversation["project"]) and set(existing.get("depends_on", [])) == set(dependencies) and digest(existing.get("parameters", {})) == digest(parameters), "Cette demande a déjà été enregistrée avec un contenu différent")
                     return existing
             pid = project or conversation["project"]
             require(pid in conversation["projects"], "Projet hors du périmètre de la conversation")
@@ -111,8 +116,8 @@ class Conversations:
                 require(approved(self.engine, target, plugin) == record, "Connexion modifiée : relancer le workflow pour examiner les nouveaux accès")
             from .packs import conversation_parameters
             context = conversation_parameters(target, graph)
-            run = self.engine.start(pid, graph, parameters={**context, "request": request, "conversation": cid, "depends_on_runs": parent_runs}, connection=db, deferred=bool(parent_runs), notifications_authorized=conversation.get("notifications_authorized", False), driver="conversation")
-            item = {"id": new_id("w"), "project": pid, "request": request, "run": run["id"], "key": key, "depends_on": dependencies, "created": time.time()}
+            run = self.engine.start(pid, graph, parameters={**parameters, **context, "request": request, "conversation": cid, "depends_on_runs": parent_runs}, connection=db, deferred=bool(parent_runs), notifications_authorized=conversation.get("notifications_authorized", False), driver="conversation")
+            item = {"id": new_id("w"), "project": pid, "request": request, "run": run["id"], "key": key, "parameters": parameters, "depends_on": dependencies, "created": time.time()}
             conversation["items"].append(item)
             db.execute("UPDATE conversations SET body=? WHERE id=?", (self.engine.store.encode(conversation), cid))
             return item

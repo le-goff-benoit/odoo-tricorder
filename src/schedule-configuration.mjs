@@ -14,5 +14,5 @@ export function scheduleFrequency(rule) {
 export function replacementScheduleDraft(schedule) {
   const rule = schedule.rule;
   return { kind: rule.kind, time: rule.time || '09:00', minutes: rule.minutes || 30,
-    timezone: rule.timezone || 'Europe/Zurich', weekdays: JSON.stringify(rule.weekdays || workdays), simulation: true };
+    timezone: rule.timezone || 'Europe/Zurich', weekdays: JSON.stringify(rule.weekdays || workdays), simulation: true, ...(schedule.parameters ? {values:structuredClone(schedule.parameters)} : {}) };
 }

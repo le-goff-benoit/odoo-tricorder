@@ -89,8 +89,8 @@ async function launchInert(project, graph, text) {
 async function qualifyLocalAdapter() {
   const card = page.locator('article').filter({ has: page.getByRole('heading', { name: 'Lecture locale synthétique', exact: true }) });
   await card.getByRole('button', { name: 'Vérifier l’adaptateur…' }).click();
-  await page.getByRole('button', { name: 'Exécuter le contrôle', exact: true }).click();
-  await expect(card).toContainText('Utilisable');
+  await page.getByRole('button', { name: 'Vérifier le transport et l’identité', exact: true }).click();
+  await expect(card).toContainText('Adaptateur vérifié');
 }
 
 test('repair missing model preserves request and additional project through native launch', async () => {
@@ -205,7 +205,7 @@ test('repair global code workflow adapts into a project without changing its ori
     { id: 'edit', title: 'Modifier le code', kind: 'agent', execution_mode: 'edit', outputs: { candidate: 'object' } }], edges: [] };
   const original = await call('workflow.save', { project: 'workspace', graph });
   await page.getByRole('button', { name: 'Workflows', exact: true }).click();
-  await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-action=registered-workflows]').click();
   await page.locator('article').filter({ has: page.getByRole('heading', { name: graph.title, exact: true }) }).getByRole('button', { name: 'Ouvrir le workflow', exact: true }).click();
   const text = 'Préparer la correction dans Alpha, sans lancer le travail.';
   await launchDialog(text);

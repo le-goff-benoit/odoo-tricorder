@@ -19,7 +19,7 @@ def _request(engine, cid, action, payload):
     if action == "status":
         return conversations.snapshot(cid, offset=payload.get("offset", 0), limit=25, query=payload.get("query", ""))
     if action == "add":
-        return conversations.add(cid, payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"))
+        return conversations.add(cid, payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"), parameters=payload.get("parameters"))
     if action == "dispatch":
         from workflow_engine.runtime import dispatch_conversation
         require(isinstance(payload, dict) and set(payload) <= {"runs", "offset", "limit", "node_offsets"}, "dispatch accepte runs, offset, limit et node_offsets uniquement")

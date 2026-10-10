@@ -1,0 +1,11 @@
+Valeurs reprises Logistique false
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('heading', { name: 'Version planifiée', exact: true }) to be visible[22m
+
+    at /home/blegoff/odoo-tricorder/release/2026-10-10_retours-complementaires/.suivi/panel/operations/reception/parcours.cjs:5:4600 {
+  log: [
+    "  - waiting for getByRole('heading', { name: 'Version planifiée', exact: true }) to be visible"
+  ],
+  name: 'TimeoutError'
+}

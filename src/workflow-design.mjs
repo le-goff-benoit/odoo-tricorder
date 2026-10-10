@@ -12,7 +12,7 @@ export function designWarnings(graph) {
     const incoming = graph.edges.filter(edge => edge.to === node.id);
     const outgoing = graph.edges.filter(edge => edge.from === node.id);
     const supplied = new Set(incoming.flatMap(edge => Object.values(edge.mapping || {})));
-    const parameters = Object.hasOwn(node, 'parameters') ? node.parameters : graph.parameters;
+    const parameters = {...Object.fromEntries((graph.launch_fields || []).map(f=>[f.key,null])),...graph.parameters,...node.parameters};
     if (node.kind === 'condition' && !Object.hasOwn(node.inputs || {}, node.parameter) && !Object.hasOwn(parameters || {}, node.parameter)) warnings.push({node:node.id, code:'condition-source', message:'Information à comparer absente. Choisissez une information reçue ou un paramètre déclaré dans les propriétés de cette règle.'});
     const missing = Object.keys(node.inputs || {}).filter(name => !supplied.has(name) &&
       !(node.kind === 'condition' && node.parameter === name && Object.hasOwn(parameters || {}, name)));

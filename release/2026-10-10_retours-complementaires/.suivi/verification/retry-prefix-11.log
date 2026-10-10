@@ -1,0 +1,18 @@
+
+Running 11 tests using 1 worker
+
+(node:456347) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 ../../../tmp/tricorder-rc16-retry-sequence/attempt-history.spec.cjs:51:1 › large archived inputs keep failure history readable and attached proofs accessible (3.9s)
+  ✓   2 ../../../tmp/tricorder-rc16-retry-sequence/attempt-history.spec.cjs:97:1 › paged large histories remain formatted with accessible proof links (4.4s)
+  ✓   3 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:44:1 › a second intention submitted during acknowledgement is recorded once without losing text (3.9s)
+  ✓   4 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:52:1 › a newer unsent draft survives acknowledgement and reload and cannot be silently left out on confirmation (6.5s)
+  ✓   5 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:65:1 › retyping the same text is a new draft while an identical pending submit is deduplicated (5.1s)
+  ✓   6 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:72:1 › an addition rejected after a concurrent edit survives the next success, reload and targeted retry (7.5s)
+  ✓   7 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:84:1 › a lost acknowledgement is retried with the same command after reload without duplicating the intention (3.7s)
+  ✓   8 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:91:45 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (stale revision) (5.5s)
+  ✓   9 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:91:45 › a new identical intention after a lost acknowledgement is distinct from retrying the first addition (fresh revision) (4.6s)
+  ✓  10 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:142:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (9.1s)
+  ✓  11 ../../../tmp/tricorder-rc16-retry-sequence/collection.spec.cjs:168:1 › two project shells remain discoverable after changing project and reloading the window (6.1s)
+
+  11 passed (1.0m)

@@ -1,0 +1,47 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Outils et aide
+
+
+
+
+
+
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+
+
+
+
+En cours
+Modèles
+Historique
+Workflows enregistrés
+Workflows
+Les demandes en cours et les interventions attendues.
+Nouvelle demande
+Actualiser
+Aucune demande à afficher. « Nouvelle demande » vous permet de choisir un workflow et de démarrer dans le terminal.
+Gestion des workflows
+
+
+Nouvelle demande
+×
+Choisissez un modèle, puis indiquez votre demande. Chaque exécution conserve ses propres résultats.
+Rechercher un workflow
+Workflow
+
+Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.
+Réutiliser un workflow enregistré dans un projet
+Projet principal
+Le modèle sera utilisé dans Sans projet. Ses prochaines modifications ne changeront pas les exécutions déjà lancées.
+Pour coordonner plusieurs projets, ajoutez-les à l’étape suivante.
+Continuer

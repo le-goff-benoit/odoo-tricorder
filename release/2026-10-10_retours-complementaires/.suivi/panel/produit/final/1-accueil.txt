@@ -1,0 +1,38 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Quotas
+Commandes des agents
+Installer le pack OdooAgents pour Claude et Codex
+Mises à jour
+À propos v0.6.0-rc.16
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+OpenAI · Codex
+Anthropic · Claude [valeur : codex]
+
+
+
+
+Un workflow clair.
+Un travail que vous pouvez suivre.
+Composez les étapes, choisissez qui intervient et gardez la main sur les décisions importantes.
+Nouvelle demande
++ Créer un workflow
+Essayer un exemple
+L'exemple est simulé : aucun modèle payant, aucune publication.
+Vos projets
+Voir les archives
+Un projet réunit ses workflows, ses demandes et leurs résultats. Créez un espace local ou associez un dépôt Git existant.
++ Nouveau projet
+Importer un workflow
+Votre premier projet commence ici
+Ajoutez un dépôt existant ou créez un projet pour y enregistrer vos workflows et suivre leur exécution.

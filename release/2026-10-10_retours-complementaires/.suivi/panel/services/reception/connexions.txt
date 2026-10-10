@@ -1,0 +1,72 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Outils et aide
+
+
+
+
+
+
+
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+
+
+
+
+Connexions
+Connectez les outils de vos workflows : messagerie, documents et services. Vérifiez une connexion avant de l’utiliser dans une étape.
+Configurer une connexion…
+Plugins OpenAI
+Plugins Anthropic
+Actualiser
+Contexte
+Afficher les connexions
+Configuration technique de la connexion
+
+Codex
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+Diagnostic de connexion
+Claude Code
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+Diagnostic de connexion
+Commandes locales isolées
+Sans réseau ; projet en lecture seule ; résultats dans un dossier de travail isolé.
+Diagnostic de connexion
+Confluence
+Un plugin Atlassian peut être connecté séparément. Aucun transport authentifié configuré dans Tricorder.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+GitHub → Odoo.sh
+Renseigner dépôt, branche et projet Odoo.sh. Publication GitHub, build et déploiement seront suivis séparément.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Gmail
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Outlook
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Slack
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Telegram
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Signal
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.

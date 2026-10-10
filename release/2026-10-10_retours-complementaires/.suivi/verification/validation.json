@@ -1,0 +1,25 @@
+{
+  "version": "0.6.0-rc.16",
+  "unit": {
+    "python_passed": 466,
+    "javascript_passed": 181
+  },
+  "ui": {
+    "defined": 202,
+    "initial_passed": 198,
+    "opt_in_skipped": 2,
+    "initial_failed": 2,
+    "failures": "Deux attentes obsolètes de libellés dans les pilotes ; application inchangée.",
+    "targeted_verification_passed": 7,
+    "unique_scenarios_received": 200
+  },
+  "packaged_targeted_passed": 23,
+  "dist": "passed",
+  "installed_startup": "passed",
+  "qa_manifest": "candidat-qa-final-controls.json",
+  "application_manifest": "candidat-livraison.json",
+  "limitations": [
+    "Reprise intermittente : deux échecs antérieurs inexpliqués ; recette finale et essais ciblés réussis, cause non résolue.",
+    "Services externes Meeting Minutes/Gmail/Odoo/Slack non qualifiés."
+  ]
+}

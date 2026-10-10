@@ -1,0 +1,94 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+      - button "Workflows enregistrés"
+    - heading "Workflows enregistrés" [level=1]
+    - paragraph: Choisissez un workflow pour démarrer une demande, ou ouvrez-le pour modifier ses étapes.
+    - button "Nouvelle demande"
+    - button "Créer un workflow"
+    - button "Importer un workflow"
+    - button "Voir les archives"
+    - text: Rechercher un workflow
+    - searchbox "Rechercher un workflow"
+    - article:
+      - heading "Choisir le canal Atlas" [level=3]
+      - paragraph: Client Atlas · 3 étapes
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+  - dialog "Créer un workflow":
+    - heading "Créer un workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Choisissez votre premier bloc ou partez d’un modèle. Configurez les blocs dans l’éditeur. Vos demandes seront données au lancement ou dans le terminal.
+    - text: Modèle de workflow
+    - combobox "Modèle de workflow":
+      - option "Workflow simple — premier bloc au choix" [selected]
+      - option "De la demande au résultat"
+      - option "Commande locale avec validation"
+      - option "Évolution logicielle"
+      - option "Release — demandes, plan, réalisation et validation"
+      - option "Support — diagnostic et réponse"
+      - option "Clôture de réunion"
+      - option "Demande ponctuelle"
+      - option "Correction express"
+      - option "Intentions, plan et travaux"
+      - option "Développement par élément et tests communs"
+      - option "Nouveau message → notification"
+      - 'option "GitHub → Odoo.sh : staging puis production"'
+      - option "Livraison directe en production"
+      - option "Documentation → Confluence"
+      - option "Orchestration"
+      - option "Analyse"
+      - option "Développement"
+      - option "Tests"
+      - option "Gestion documentaire"
+      - option "Communication"
+    - text: Premier bloc
+    - combobox "Premier bloc":
+      - option "Tâche guidée" [selected]
+      - option "Question ouverte"
+      - option "Règle explicite"
+      - option "Accord humain"
+      - option "Document"
+      - option "Commande locale"
+      - option "Tâche IA autonome"
+      - option "Recueillir des intentions"
+    - paragraph: L’agent de la conversation réalise la consigne. Choisissez dans le bloc si son résultat attend votre validation.
+    - text: Nom du workflow
+    - textbox "Nom du workflow": Nouveau workflow
+    - text: Enregistrer dans
+    - combobox "Enregistrer dans":
+      - option "Sans projet" [selected]
+      - option "Bibliothèque de modèles partagés"
+      - option "Client Atlas"
+    - paragraph: Retrouvez votre création dans Workflows → Workflows enregistrés, avec ou sans projet. Pour créer ensuite un modèle partagé, utilisez Réutiliser ce workflow dans l’éditeur.
+    - button "Créer et ouvrir le workflow"

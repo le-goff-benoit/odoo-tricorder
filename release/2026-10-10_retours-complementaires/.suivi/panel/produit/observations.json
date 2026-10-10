@@ -1,0 +1,52 @@
+[
+  {
+    "stage": "accueil",
+    "thought": "Je veux créer une règle de routage pour les retours produit. Le bouton créer un workflow paraît être mon point de départ.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nActivité\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "creation",
+    "thought": "Le premier bloc est un choix explicite. Je choisis une règle parce que la destination dépendra du canal saisi.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nActivité\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "regle-vide",
+    "thought": "Information à comparer ne propose pas encore le canal. Je cherche une manière de demander ce canal au lancement ; paramètres du workflow sous Options semble le bon endroit mais le champ est éloigné de la règle.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nSans projet\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "parametres",
+    "thought": "Les informations demandées au lancement sont enfin explicites. Je peux déclarer le vocabulaire métier sans nom API.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nSans projet\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "regle-choix",
+    "thought": "La source affiche Destination souhaitée. En revanche je dois recopier moi-même Email client et Ticket équipe dans les choix de la règle : les valeurs du formulaire ne sont pas reprises automatiquement. Risque de faute et branche jamais utilisée.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nSans projet\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "branches",
+    "thought": "Les deux destinations ont été ajoutées par fixture du moteur, pas par le parcours humain. Les choix métier sont lisibles sur le dessin.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nWorkflows\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "lancement",
+    "thought": "La question et sa liste déroulante reprennent mes mots et son aide. Je sais ce qui sera utilisé pour cette demande.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nSans projet\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "resultat",
+    "thought": "Je cherche maintenant la synthèse destinée au ticket et la raison du choix. La simulation doit être affichée distinctement de toute analyse IA réelle.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nSans projet\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "information",
+    "thought": "Le nom métier peut inclure des accents. Les types de données sont un choix technique ; pour une synthèse je comprends Texte.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nModèles\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  },
+  {
+    "stage": "interruption",
+    "thought": "Le pilote a rencontré un arrêt ; séparer erreur de sélecteur et difficulté utilisateur dans le rapport.",
+    "text": "Tricorder\nActivité\nWorkflows\nProjets\nAccès rapide aux projets\nRechercher un projet\n\nAjoutez un dépôt depuis Projets, ou commencez un workflow global.\n\nPlanifications\nConnexions\nParamètres\nOutils et aide\nWorkflows\nTerminal\nIA des prochains lancements\nOpenAI · Codex\nAnthropic · Claude\nÀ jour"
+  }
+]

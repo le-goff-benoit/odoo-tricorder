@@ -9,7 +9,7 @@ const card = id => page.locator(`.node[data-id="${id}"]`);
 const position = item => item.evaluate(element => ({ x: element.offsetLeft, y: element.offsetTop }));
 const port = (id, direction) => page.locator(`.graph-port[data-id="${id}"][data-direction="${direction}"]`);
 async function save() { await page.getByRole('button', { name: 'Enregistrer', exact: true }).click(); await expect(page.locator('.workflow-heading p')).toContainText('Enregistré'); }
-async function open() { await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click(); await page.locator('[data-action=open-workflow][data-id=gestures]').click(); }
+async function open() { await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click(); await page.locator('[data-action=open-workflow][data-id=gestures]').click(); }
 async function seed(graph = {}) {
   project = await call('project.create', { title: 'Gestes du workflow synthétique' });
   await call('workflow.save', { project: project.id, graph: { schema: 1, id: 'gestures', title: 'Dessiner ensemble', nodes: [

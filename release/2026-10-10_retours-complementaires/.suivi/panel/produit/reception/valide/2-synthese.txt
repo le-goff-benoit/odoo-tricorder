@@ -1,0 +1,76 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Kanban des releases
+Quotas
+Commandes des agents
+Installer le pack OdooAgents pour Claude et Codex
+Mises à jour
+À propos v0.6.0-rc.16
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+OpenAI · Codex
+Anthropic · Claude [valeur : codex]
+
+
+
+
+Reprendre mes destinations
+← Retour à la liste
+Revenir à l’éditeur
+Annuler
+Historique
+Rapport
+›_ Terminal
+Phases
+Journal d’exécution
+☷ Liste
+Voir les résultats
+Voir le rapport
+Exécution terminée.
+Transférer vers un projet…
+Graphe
+Détail
+⑂
+Choisir le canal
+Condition
+Validé
+Sans donnée provenant d’un autre bloc
+▤
+Document client
+Document
+Non applicable
+Sans donnée provenant d’un autre bloc
+▤
+Document équipe
+Document
+Produit · sorties vérifiées
+Sans donnée provenant d’un autre bloc
+−
+100 %
++
+Ajuster
+Résultats de cette demande
+×
+Reprendre mes destinations
+Simulation · ces contenus ne prouvent aucun travail métier réel.
+Livrable final
+Synthèse
+Texte à reprendre
+Copier le texte
+Résultat validé · tentative 1
+Compte rendu
+Preuves
+Preuve 1 · 3f3e8500
+Choisir le canal
+Résultat validé · tentative 1
+Fermer
+Voir le rapport complet

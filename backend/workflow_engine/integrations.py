@@ -54,7 +54,7 @@ def capabilities(project, engine=None):
             try:
                 record = approved(engine, project, item["id"])
                 card.update(installed=True, connected=True, usable=True, qualified=True,
-                            reason="Adaptateur local vérifié. Son authentification reste sous sa responsabilité.", verified_at=record["verified_at"], effects=record["operations"])
+                            reason="Adaptateur local vérifié. Son authentification reste sous sa responsabilité.", verified_at=record["verified_at"], identity=record["identity"], effects=record["operations"])
             except (ContractError, OSError) as exc:
                 card["reason"] = str(exc)
         result.append(card)

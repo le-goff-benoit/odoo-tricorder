@@ -1,0 +1,14 @@
+const { _electron:electron,expect }=require('/home/blegoff/odoo-tricorder/node_modules/@playwright/test');
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),{execFileSync}=require('node:child_process');
+const {cleanupBroker}=require('/home/blegoff/odoo-tricorder/tests/terminal-fixture.cjs');
+const root='/tmp/tricorder-rc16-reception',out=__dirname;
+(async()=>{const home=fs.mkdtempSync('/tmp/tricorder-consultant-final-');fs.mkdirSync(home+'/bin');for(const p of ['codex','claude'])fs.writeFileSync(home+'/bin/'+p,'#!/bin/sh\nprintf "FOURNISSEUR SYNTHETIQUE INERTE\\n"\nexit 78\n',{mode:0o755});
+const env={PATH:home+'/bin:/usr/bin:/bin',HOME:home,DISPLAY:process.env.DISPLAY,XAUTHORITY:process.env.XAUTHORITY,LANG:'C.UTF-8',XDG_CONFIG_HOME:home+'/config',XDG_CACHE_HOME:home+'/cache',XDG_DATA_HOME:home+'/data',CODEX_HOME:home+'/.codex',CLAUDE_CONFIG_DIR:home+'/claude',TRICORDER_HOME:home,TRICORDER_STATE_DIR:home,TRICORDER_WORKFLOW_STATE_DIR:home,TRICORDER_RUNTIME_DIR:home+'/runtime',TRICORDER_AGENTS_DIR:home+'/no-pack',TRICORDER_TEST_MODE:'1',PYTHONDONTWRITEBYTECODE:'1'};
+const fixture=JSON.parse(execFileSync('/usr/bin/python3',['-c',`import json,sys
+sys.path.insert(0,sys.argv[1]);from workflow_engine import Engine
+e=Engine(sys.argv[2]);a=e.create_project('Client Atlas');b=e.create_project('Client Boréal')
+print(json.dumps({'atlas':a['id'],'boreal':b['id']}))`,root+'/backend',home],{env,encoding:'utf8'}));
+let app,page;const log=[];const snap=async(name)=>{await page.screenshot({path:out+'/'+name+'.png'});fs.writeFileSync(out+'/'+name+'.txt',await page.locator('body').ariaSnapshot());};
+try{app=await electron.launch({args:[root],env});page=await app.firstWindow();page.on('pageerror',e=>fs.appendFileSync(out+'/console.txt',e.stack+'\n'));page.on('console',m=>{if(m.type()==='error')fs.appendFileSync(out+'/console.txt',m.text()+'\n');});await page.setViewportSize({width:1440,height:1000});page.setDefaultTimeout(10000);await expect(page.getByRole('heading',{name:'Activité',exact:true})).toBeVisible();
+await page.locator('[data-workflow-route=global]').click();await page.getByRole('button',{name:'Modèles',exact:true}).click();await expect(page.getByRole('heading',{name:'Clôture de réunion',exact:true})).toBeVisible();await page.locator('.template-card').filter({has:page.getByRole('heading',{name:'Clôture de réunion',exact:true})}).getByRole('button',{name:'Créer une adaptation…',exact:true}).click();await expect(page.getByRole('dialog')).toBeVisible();await snap('aide-adaptation');
+}catch(e){fs.writeFileSync(out+'/error.txt',e.stack);if(page)await snap('erreur');throw e;}finally{if(app)await app.close();for(const s of ['runtime/pty.sock','cockpit/odoo-tricorder/pty.sock','studio-pty.sock'])await cleanupBroker(home+'/'+s);fs.writeFileSync(out+'/fixture-aide.json',JSON.stringify({home,...fixture},null,2));}})().catch(e=>{console.error(e);process.exitCode=1;});

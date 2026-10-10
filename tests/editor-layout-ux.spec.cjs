@@ -22,7 +22,7 @@ async function capture(name) {
   fs.writeFileSync(test.info().outputPath(name), Buffer.from(png, 'base64'));
 }
 async function openEditor() {
-  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();
   await page.locator('[data-action=open-workflow][data-id=layout-guide]').click();
   await expect(page.locator('.workflow-heading h1')).toHaveText('Relecture du guide');
 }

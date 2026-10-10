@@ -1,0 +1,36 @@
+{
+  "copie": {
+    "completion_outcome": "succeeded",
+    "criteria": [],
+    "id": "start",
+    "inputs": {},
+    "kind": "condition",
+    "max_attempts": 1,
+    "options": [
+      "Email client",
+      "Ticket équipe"
+    ],
+    "outputs": {},
+    "parameter": "destination",
+    "phase": "",
+    "position": {
+      "x": 50,
+      "y": 60
+    },
+    "resources": [],
+    "title": "Choisir le canal"
+  },
+  "branche_preservee": [
+    {
+      "from": "start",
+      "id": "protected",
+      "outcome": "Ancien canal",
+      "to": "archive"
+    }
+  ],
+  "options_preservees": [
+    "Ancien canal",
+    "Ticket équipe"
+  ],
+  "resultat": "3 contre-épreuves GUI réussies"
+}

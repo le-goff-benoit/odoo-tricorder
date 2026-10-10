@@ -6,7 +6,7 @@ let directory, app, page, project, pageErrors;
 const call = (action, data = {}) => page.evaluate(payload => window.studio.request(payload), { action, ...data });
 const snapshot = id => call('workflow.get', { project: project.id, workflow: id });
 async function openEditor(id) {
-  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();
   await page.locator(`[data-action=open-workflow][data-id="${id}"]`).click();
   await expect(page.locator('.canvas .node').first()).toBeVisible();
 }

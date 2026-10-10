@@ -1,0 +1,57 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+      - button "Workflows enregistrés"
+    - heading "Workflows" [level=1]
+    - paragraph: Les demandes terminées et leurs résultats.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - 'button "Décision Atlas vendredi Demande · Client Atlas · Choisir le canal Atlas · Rév. 2 Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Décision Atlas vendredi
+      - text: Demande · Client Atlas · Choisir le canal Atlas · Rév. 2
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+    - 'button "Suivi Atlas semaine 43 Demande · Client Atlas · Préparer le suivi Atlas · Rév. 2 Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Suivi Atlas semaine 43
+      - text: Demande · Client Atlas · Préparer le suivi Atlas · Rév. 2
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+    - 'button "Suivi Atlas semaine 42 Demande · Client Atlas · Préparer le suivi Atlas · Rév. 2 Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Suivi Atlas semaine 42
+      - text: Demande · Client Atlas · Préparer le suivi Atlas · Rév. 2
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+    - group:
+      - text: Gestion des workflows
+      - paragraph: Vos créations et adaptations, avec ou sans projet, restent disponibles pour les modifier ou les réutiliser.
+      - button "Workflows enregistrés"
+  - status: Décision enregistrée.

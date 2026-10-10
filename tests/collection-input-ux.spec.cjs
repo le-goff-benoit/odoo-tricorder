@@ -6,6 +6,51 @@ const call=(action,data={})=>page.evaluate(payload=>window.studio.request(payloa
 const input=()=>page.getByLabel('Nouvelle intention',{exact:true});
 const add=()=>page.getByRole('button',{name:'Ajouter à la liste',exact:true});
 const stored=async()=>(await call('run.get',{run:run.id})).run.nodes.intentions.collection.items.map(i=>i.text);
+let retryDiagnostic=false;
+
+// Observe the intermittent retry failure without retrying the click, delaying it,
+// or changing the application. Outer-document events retarget the Shadow host.
+async function observeRetry(){
+ retryDiagnostic=true;
+ await page.evaluate(()=>{
+  const root=document.querySelector('#workflow-panel').shadowRoot,events=[];
+  window.retryDiagnosticEvents=events;
+  const records=new WeakMap();
+  for(const type of ['pointerdown','pointerup','click','submit','invalid']){
+   root.addEventListener(type,event=>{
+    const target=event.composedPath()[0];
+    const entry={type,at:Date.now(),tag:target.tagName,id:target.id,action:target.dataset?.action,button:target.tagName==='BUTTON'?target.textContent.slice(0,80):undefined,x:event.clientX,y:event.clientY,defaultPrevented:event.defaultPrevented};
+    records.set(event,entry);events.push(entry);if(events.length>100)events.shift();
+   },{capture:true,passive:true});
+   root.addEventListener(type,event=>{const entry=records.get(event);if(entry)entry.defaultPrevented=event.defaultPrevented;},{passive:true});
+  }
+ });
+ await app.evaluate(({ipcMain})=>{
+  const channel='studio:human',original=ipcMain._invokeHandlers.get(channel),calls=[];
+  globalThis.retryDiagnosticCalls=calls;
+  ipcMain.removeHandler(channel);ipcMain.handle(channel,(event,payload)=>{
+   if(payload?.action!=='run.retry')return original(event,payload);
+   const entry={action:payload.action,at:Date.now()};calls.push(entry);if(calls.length>20)calls.shift();
+   const failed=error=>{entry.end=Date.now();entry.error=String(error?.message || error).slice(0,500);};
+   try{const result=original(event,payload);Promise.resolve(result).then(()=>{entry.end=Date.now();},failed);return result;}
+   catch(error){failed(error);throw error;}
+  });
+ });
+}
+async function attachRetryDiagnostic(){
+ if(!retryDiagnostic)return;
+ const result={status:test.info().status};
+ try{
+  result.renderer=await page.evaluate(()=>{
+   const root=document.querySelector('#workflow-panel')?.shadowRoot,form=root?.querySelector('#retry-form'),note=form?.querySelector('[name=note]');
+   return {events:window.retryDiagnosticEvents,formPresent:!!form,noteLength:note?.value.length,noteValid:note?.validity.valid,feedback:root?.querySelector('.modal-card .status-line')?.textContent.slice(0,500)};
+  });
+ }catch(error){result.rendererError=String(error.message).slice(0,500);}
+ try{result.ipc=await app.evaluate(()=>globalThis.retryDiagnosticCalls);}catch(error){result.ipcError=String(error.message).slice(0,500);}
+ const artifact=test.info().outputPath('retry-dom-ipc.json');
+ fs.writeFileSync(artifact,JSON.stringify(result,null,2));
+ await test.info().attach('retry-dom-ipc',{path:artifact,contentType:'application/json'});
+}
 
 // Delay acknowledgement, not execution: reproduce typing while an accepted
 // write is in flight. This must not depend on machine speed or a real provider.
@@ -22,6 +67,7 @@ const waitAck=()=>expect.poll(()=>app.evaluate(()=>globalThis.collectionAck.wait
 const releaseAck=()=>app.evaluate(()=>globalThis.collectionAck.release());
 
 test.beforeEach(async()=>{
+ retryDiagnostic=false;
  directory=fs.mkdtempSync(path.join(os.tmpdir(),'tricorder-collection-input-'));
  const bin=path.join(directory,'bin');fs.mkdirSync(bin);
  for(const cli of ['codex','claude'])fs.writeFileSync(path.join(bin,cli),'#!/bin/sh\nexit 78\n',{mode:0o755});
@@ -33,7 +79,7 @@ test.beforeEach(async()=>{
  run=await call('run.start',{project:project.id,graph,simulation:true});
  await page.locator('[data-workflow-route=projects]').click();await page.locator('.project-card').filter({hasText:project.title}).click();await page.locator(`[data-action=open-run][data-id="${run.id}"]`).click();await page.getByRole('button',{name:'Détail',exact:true}).click();
 });
-test.afterEach(async()=>{if(app){await app.evaluate(()=>globalThis.collectionAck?.release?.()).catch(()=>{});await app.close();}for(const socket of ['cockpit/odoo-tricorder/pty.sock','studio-pty.sock','runtime/pty.sock'])await cleanupBroker(path.join(directory,socket));fs.rmSync(directory,{recursive:true,force:true,maxRetries:5,retryDelay:100});});
+test.afterEach(async()=>{try{await attachRetryDiagnostic();}finally{if(app){await app.evaluate(()=>globalThis.collectionAck?.release?.()).catch(()=>{});await app.close();}for(const socket of ['cockpit/odoo-tricorder/pty.sock','studio-pty.sock','runtime/pty.sock'])await cleanupBroker(path.join(directory,socket));fs.rmSync(directory,{recursive:true,force:true,maxRetries:5,retryDelay:100});}});
 
 test('a second intention submitted during acknowledgement is recorded once without losing text',async()=>{
  await holdNextAdd();await input().fill('Première demande');await add().click();await waitAck();
@@ -134,6 +180,7 @@ for(const revisionMode of ['stale','fresh'])test(`a new identical intention afte
 });
 
 test('a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation',async()=>{
+ await observeRetry();
  const graph=await call('workflow.save',{project:project.id,graph:{id:'control',title:'Contrôle local sans IA',schema:2,nodes:[{id:'check',kind:'command',title:'Vérifier le dossier',argv:['python3','-c','print("FICHIER_ATTENDU_ABSENT"); raise SystemExit(7)'],outputs:{},criteria:[],validation:'human',max_attempts:2,position:{x:60,y:60}}],edges:[]}});
  const executed=await call('run.start',{project:project.id,graph});
  await expect.poll(async()=>(await call('run.get',{run:executed.id})).run.nodes.check.status).toBe('returned');

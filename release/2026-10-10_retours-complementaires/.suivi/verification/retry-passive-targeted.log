@@ -1,0 +1,16 @@
+
+> odoo-tricorder@0.6.0-rc.16 test:ui
+> npm run build && playwright test tests/collection-input-ux.spec.cjs --grep a failed local command --workers=1 --output=/tmp/tricorder-rc16-retry-passive
+
+
+> odoo-tricorder@0.6.0-rc.16 build
+> node scripts/build.mjs
+
+
+Running 1 test using 1 worker
+
+(node:468283) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/collection-input-ux.spec.cjs:180:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.3s)
+
+  1 passed (7.0s)

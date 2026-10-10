@@ -1,0 +1,91 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Kanban des releases
+Quotas
+Commandes des agents
+Installer le pack OdooAgents pour Claude et Codex
+Mises à jour
+À propos v0.6.0-rc.16
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+OpenAI · Codex
+Anthropic · Claude [valeur : codex]
+
+
+
+
+Orienter un retour produit
+Révision 3 · Enregistré
+← Retour à la liste
+Choisir l’IA
+Planifier
+Réutiliser…
+Exporter…
+Enregistrer
+Exécuter…
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Phases
+Fichier JSON du workflow…
+Recharger et valider
+✦ Assistant IA
+☷ Liste
+⑂
+Première étape
+Condition
+Sans donnée provenant d’un autre bloc
+▤
+Synthèse pour le client
+Document
+Sans donnée provenant d’un autre bloc
+▤
+Synthèse pour l’équipe
+Document
+Sans donnée provenant d’un autre bloc
+
+
+
+
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+Lancer cette version du workflow
+×
+Destination souhaitée · obligatoire
+Choisir…
+Email client
+Ticket équipe [valeur : Ticket équipe]
+Titre court (facultatif)
+
+Contexte de cette vérification (facultatif)
+
+Ce workflow exécute ses étapes locales sans fournisseur IA. Les résultats et les éventuelles décisions apparaîtront dans le suivi.
+Validation automatique : Synthèse pour le client, Synthèse pour l’équipe. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires.
+Orienter un retour produit · révision 3 · 3 étapes
+Les étapes démarrent dans leur ordre prévu. Les décisions humaines restent dans le suivi.
+Lancer l’exécution réelle
+Simuler le parcours

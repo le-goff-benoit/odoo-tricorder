@@ -1,0 +1,65 @@
+{
+  "edges": [
+    {
+      "from": "start",
+      "id": "review",
+      "mapping": {
+        "Synthese_detaillee": "synthese"
+      },
+      "to": "review"
+    }
+  ],
+  "id": "work-2145184c-f6c1-43d9-b90d-1c26696ec0a9",
+  "nodes": [
+    {
+      "criteria": [],
+      "id": "start",
+      "kind": "task",
+      "outputs": {
+        "Synthese_detaillee": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "port_labels": {
+        "outputs": {
+          "Synthese_detaillee": "Synthèse à transmettre"
+        }
+      },
+      "position": {
+        "x": 60,
+        "y": 80
+      },
+      "title": "Première étape"
+    },
+    {
+      "id": "review",
+      "inputs": {
+        "synthese": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "kind": "decision",
+      "option_labels": {
+        "approve": "Prête à partager",
+        "reject": "À compléter"
+      },
+      "options": [
+        "approve",
+        "reject"
+      ],
+      "port_labels": {
+        "inputs": {
+          "synthese": "Synthèse à transmettre"
+        }
+      },
+      "question": "La synthèse peut-elle être partagée ?",
+      "title": "Relire la synthèse"
+    }
+  ],
+  "parameters": {},
+  "revision": 5,
+  "schema": 2,
+  "title": "Synthèse réutilisable"
+}

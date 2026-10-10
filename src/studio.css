@@ -334,3 +334,16 @@ input,select,textarea {font-family:var(--font-ui);font-size:13px;font-weight:400
 .business-deliverable {padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);}
 .business-deliverable h4 {font-size:14px;line-height:1.4;margin:0 0 10px;overflow-wrap:anywhere;}
 .business-deliverable .business-fields {margin-bottom:0;}
+
+/* Keep the launch form editor readable without stacking every label and control. */
+@media (min-width:700px) {
+  .launch-fields-editor [data-launch-field] {display:grid;grid-template-columns:minmax(110px,.45fr) minmax(0,1fr);gap:8px 14px;align-items:center;}
+  .launch-fields-editor [data-launch-field] > label {margin:0;}
+  .launch-fields-editor [data-launch-field] > label:has(input[type=checkbox]),
+  .launch-fields-editor [data-field-choices],
+  .launch-fields-editor [data-action=remove-launch-field] {grid-column:1 / -1;}
+  .launch-fields-editor [data-action=remove-launch-field] {justify-self:end;}
+}
+.launch-answers textarea {min-height:64px;height:76px;}
+.launch-dialog > textarea {min-height:64px;}
+.modal-card:has(.launch-dialog) > .modal-actions {position:sticky;bottom:-24px;background:var(--surface);padding:12px 0;z-index:1;}

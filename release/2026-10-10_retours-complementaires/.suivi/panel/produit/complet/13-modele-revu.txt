@@ -1,0 +1,122 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Kanban des releases
+Quotas
+Commandes des agents
+Installer le pack OdooAgents pour Claude et Codex
+Mises à jour
+À propos v0.6.0-rc.16
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+OpenAI · Codex
+Anthropic · Claude [valeur : codex]
+
+
+
+
+Synthèse réutilisable
+Révision 5 · Enregistré
+← Retour à la liste
+Choisir l’IA
+Planifier
+Réutiliser…
+Exporter…
+Enregistrer
+Exécuter…
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Phases
+Fichier JSON du workflow…
+Recharger et valider
+✦ Assistant IA
+☷ Liste
+◇
+Première étape
+Tâche
+Utilise : demande initiale et contexte · Produit : Synthèse à transmettre
+?
+Relire la synthèse
+Décision humaine
+Vous
+
+
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+×
+Relire la synthèse
+Nom du bloc
+ [valeur : Relire la synthèse]
+Question à poser
+La synthèse peut-elle être partagée ? [valeur : La synthèse peut-elle être partagée ?]
+Choix possibles (un par ligne)
+Prête à partager
+À compléter [valeur : Prête à partager
+À compléter]
+La suite attend votre décision.
+Critères d’acceptation (un par ligne)
+
+Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+Modifier
+Retirer
+Recevoir un résultat existant…
+Ajouter une information à utiliser
+Ajouter un résultat attendu
+Effet du résultat sur les tâches dépendantes
+Permettre la suiteBloquer la suite : travail non résolu [valeur : succeeded]
+Phase
+
+Entrées (nom : type, JSON)
+{
+  "synthese": {
+    "required": true,
+    "type": "string"
+  }
+} [valeur : {
+  "synthese": {
+    "required": true,
+    "type": "string"
+  }
+}]
+Sorties (nom : type, JSON)
+{} [valeur : {}]
+Tentatives maximales
+ [valeur : 1]
+Ressources exclusives (une par ligne)
+
+Position X
+ [valeur : 350]
+Position Y
+ [valeur : 60]
+Appliquer au bloc
+Première étape → Relire la synthèse · Travail terminéDonnées : Synthèse à transmettre → Synthèse à transmettre Retirer
+Retirer
+Relier une entrée…
+Actions facultatives
+Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+Ajouter une action facultative…
+Supprimer cette étape

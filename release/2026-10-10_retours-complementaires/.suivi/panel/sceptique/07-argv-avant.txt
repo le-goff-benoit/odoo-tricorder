@@ -1,0 +1,83 @@
+SANS PROJET / WORKFLOW
+Contrôle local explicite
+
+Modifications en attente · enregistrées en quittant cette vue
+
+← Retour à la liste
+Choisir l’IA
+Options
+Enregistrer
+Exécuter…
+
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Éditeur
+✦ Assistant IA
+☷ Liste
+›_
+Première étape
+Commande
+Sans donnée provenant d’un autre bloc
+1 bloc · 0 lien
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+×
+COMMANDE
+Première étape
+Nom du bloc
+Commande et arguments (un par ligne)
+Délai maximal (secondes)
+
+Sans shell ni réseau. Projet monté en lecture seule dans /project ; travail dans /work.
+
+Critères d’acceptation (un par ligne)
+Informations de cette étape
+
+Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+
+Utilise
+Aucune donnée reçue d’un autre bloc.
+Recevoir un résultat existant…Ajouter une information à utiliser
+Produit
+Aucun résultat déclaré.
+Ajouter un résultat attendu
+Données de simulation…
+Contrôle de code (QA)
+Organisation de l’étape
+Validation du résultat
+Manuelle
+Automatique — contrôles techniques
+
+La validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+
+Autoriser la réutilisation des preuves pendant 24 h
+Uniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+Configuration technique des données (avancé)
+Reprises, ressources et position
+Tentatives maximales
+Ressources exclusives (une par ligne)
+Position X
+Position Y
+Appliquer au bloc
+Liens entre les blocs
+Actions facultatives
+
+Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+
+Ajouter une action facultative…
+Supprimer cette étape

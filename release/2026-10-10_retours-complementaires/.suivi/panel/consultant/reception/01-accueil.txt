@@ -1,0 +1,36 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - button "Client Boréal"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Activité
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - heading "Activité" [level=1]
+    - paragraph: Votre travail en cours et ce qui attend votre intervention. 0 demandes.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - heading "Exécutions récentes" [level=2]
+    - text: 0 exécutions affichées
+    - paragraph: Aucune demande à afficher. « Nouvelle demande » vous permet de choisir un workflow et de démarrer dans le terminal.

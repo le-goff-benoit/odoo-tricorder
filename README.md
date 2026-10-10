@@ -7,19 +7,19 @@ et le suivi des demandes dans une application de bureau. Il sert à préparer un
 release, analyser un ticket, clôturer une réunion ou organiser votre propre processus.
 Les projets Odoo sont un usage possible ; le pack Odoo reste facultatif.
 
-**Préversion publiée 0.6.0-rc.15 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.15)
-· [Nouveautés](release/2026-10-10_retours-personas/README.md)
+**Préversion publiée 0.6.0-rc.16 · Ubuntu** — [Télécharger](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.16)
+· [Nouveautés](release/2026-10-10_retours-complementaires/README.md)
 · [Guide d’utilisation](docs/WORKFLOW-RUNTIME.md)
 
-![Retrouver la synthèse et les actions, puis copier le texte final](release/2026-10-10_retours-personas/captures/resultats.png)
+![Renseigner les informations propres à chaque demande](release/2026-10-10_retours-complementaires/captures/formulaire-lancement.png)
 
 *Captures de l’application avec des projets et exécutants fictifs.*
 
 ## Une création et un suivi plus compréhensibles
 
-Cette version intègre les [retours d’usage, la revue spécialisée et la nouvelle recette des six personas](release/2026-10-10_retours-personas/README.md).
+Cette version complète les [retours de la revue spécialisée et des six personas](release/2026-10-10_retours-complementaires/README.md), avec formulaires de lancement configurables et libellés métier conservés.
 **Workflows** ouvre **En cours**, **Modèles** et **Historique**. Les adaptations
-propres aux projets restent dans **Gestion des workflows**. **Nouvelle demande**
+propres aux projets sont accessibles dans **Workflows enregistrés**. **Nouvelle demande**
 propose la même bibliothèque ; la réutilisation d’une adaptation est un choix explicite.
 Un retour visible ramène à la liste depuis une exécution ou une release. Le catalogue distingue les workflows complets des blocs à composer. Le livrable final apparaît avant les résultats intermédiaires, avec un bouton pour copier son texte.
 Les six agents personas suivent un [mandat de retours à l’usage](docs/RECETTE-USAGE.md).
@@ -29,7 +29,7 @@ Les six agents personas suivent un [mandat de retours à l’usage](docs/RECETTE
 1. **Choisir ou dessiner.** Ouvrez **Workflows → Modèles**, utilisez un modèle
    ou personnalisez une copie ; **Créer un modèle** permet de partir de zéro. Décrivez les blocs, leurs consignes, les données échangées et les décisions.
 2. **Lancer.** Depuis **Nouvelle demande** ou **Exécuter…**, choisissez le workflow
-   et son périmètre : sans projet, dans un projet, ou dans plusieurs projets.
+   et son périmètre : sans projet, dans un projet, ou dans plusieurs projets. Renseignez le formulaire prévu par le modèle ; ces réponses restent propres à cette demande.
 3. **Dialoguer.** **Lancer dans le terminal** ouvre la conversation liée au suivi.
    Donnez votre intention, par exemple « Lis cet email et prépare les demandes
    de support ». L’agent peut demander une précision pendant le travail.
@@ -62,6 +62,13 @@ Les workflows enregistrés et rapports exportés sont versionnables ; l’export
 contrôle local ne constitue pas à lui seul une attestation du commit Git testé.
 
 ## Votre méthode, vos blocs
+
+Choisissez le premier bloc lors de la création. Dans **Options → Paramètres du workflow**,
+le **Formulaire de lancement** définit les informations demandées à chaque exécution :
+texte, nombre, Oui/Non ou liste de choix, avec aide et réponse obligatoire.
+Les réponses figurent dans le suivi et le rapport. Une planification les conserve
+pour ses prochaines occurrences. Les paramètres fixes restent dans le modèle.
+
 
 L’éditeur relie des tâches, agents, documents, décisions, conditions et opérations.
 Chaque bloc explique son travail, ce qu’il utilise, ce qu’il produit et ses critères.
@@ -214,7 +221,7 @@ import. Les comptes, autorisations et anciennes exécutions ne sont pas transfé
 
 ## Installer et mettre à jour
 
-Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.15),
+Téléchargez le paquet `.deb` depuis la [release](https://github.com/le-goff-benoit/odoo-tricorder/releases/tag/v0.6.0-rc.16),
 installez-le avec le gestionnaire de paquets Ubuntu, puis ouvrez **Tricorder**.
 **Essayer un exemple** permet de découvrir un parcours simulé sans modèle payant.
 

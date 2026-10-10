@@ -21,7 +21,8 @@ export function connectInformation(graph, {from, output, to, input, outcome}) {
   if (reachable.has(from)) throw new Error('Cette liaison reviendrait vers une étape précédente et créerait une boucle.');
   const firstInput = !Object.keys(target.inputs || {}).length;
   target.inputs ||= {}; target.inputs[key] = next.schema === 2 ? normalizedPort(source.outputs[output]) : structuredClone(source.outputs[output]);
-  if (target.kind === 'condition' && firstInput && (!target.parameter || target.parameter === 'choice') && !Object.hasOwn(target.parameters || next.parameters || {}, target.parameter)) target.parameter = key;
+  target.port_labels ||= {}; target.port_labels.inputs ||= {}; target.port_labels.inputs[key] = input.trim();
+  if (target.kind === 'condition' && firstInput && (!target.parameter || target.parameter === 'choice') && !Object.hasOwn({...next.parameters,...target.parameters}, target.parameter) && !(next.launch_fields || []).some(field=>field.key===target.parameter)) target.parameter = key;
   let edge = next.edges.find(e => e.from === from && e.to === to && e.outcome === outcome);
   if (!edge) { edge = {id:'link-' + crypto.randomUUID(),from,to,outcome,mapping:{}}; next.edges.push(edge); }
   edge.mapping ||= {};

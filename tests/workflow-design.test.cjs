@@ -18,7 +18,9 @@ test('a root condition can use an explicit false parameter without being falsely
   graph.nodes[0].parameters = { critical: false };
   assert.deepEqual(design.designWarnings(graph), []);
   graph.parameters.critical = true; graph.nodes[0].parameters = {};
-  assert.equal(design.designWarnings(graph)[0].code, 'unbound-inputs');
+  assert.deepEqual(design.designWarnings(graph), []);
+  delete graph.parameters.critical;graph.launch_fields=[{key:'critical',label:'Urgent',type:'boolean'}];
+  assert.deepEqual(design.designWarnings(graph), []);
 });
 
 test('personalized simulation retains false, zero and empty text and leaves automatic ports absent', () => {

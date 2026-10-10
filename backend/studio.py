@@ -87,14 +87,14 @@ def _request(engine, payload, *, human=False):
         conversations = Conversations(engine)
         if action == "conversation.open":
             library = {g["id"]: g for g in templates() + engine.workflows("library")}
-            graph = {**payload["graph"], "parameters": {**payload["graph"].get("parameters", {}), **payload.get("parameters", {})}}
-            return conversations.open(payload["project"], graph, payload["provider"], payload.get("projects"), library, native_model(payload), notifications_authorized=human and payload.get("authorize_notifications") is True, initial_request=payload.get("request"))
+            graph = payload["graph"]
+            return conversations.open(payload["project"], graph, payload["provider"], payload.get("projects"), library, native_model(payload), notifications_authorized=human and payload.get("authorize_notifications") is True, initial_request=payload.get("request"), parameters=payload.get("parameters"))
         if action == "conversation.list":
             return conversations.list(payload.get("project"), compact=True)
         if action == "conversation.get":
             return conversations.snapshot(payload["conversation"], offset=payload.get("offset", 0), limit=payload.get("limit", 25), query=payload.get("query", ""))
         if action == "conversation.add":
-            return conversations.add(payload["conversation"], payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"))
+            return conversations.add(payload["conversation"], payload["request"], payload.get("project"), payload.get("key"), payload.get("depends_on"), parameters=payload.get("parameters"))
         if action == "conversation.dispatch":
             from workflow_engine.contracts import require
             from workflow_engine.runtime import dispatch_conversation
@@ -203,7 +203,7 @@ def _request(engine, payload, *, human=False):
     if action == "schedule.create":
         library = {g["id"]: g for g in templates() + engine.workflows("library")}
         graph = expand(payload["graph"], library)
-        return Schedules(engine).create(payload["project"], graph, payload["rule"], payload.get("simulation", False), library=library, notifications_authorized=human and payload.get("authorize_notifications") is True)
+        return Schedules(engine).create(payload["project"], graph, payload["rule"], payload.get("simulation", False), library=library, notifications_authorized=human and payload.get("authorize_notifications") is True, parameters=payload.get("parameters"))
     if action == "schedule.toggle":
         return Schedules(engine).toggle(payload["schedule"], payload["enabled"])
     if action == "assistant.propose":

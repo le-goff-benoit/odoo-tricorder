@@ -1,0 +1,20 @@
+{
+  "directory": "/tmp/tricorder-founder-c9x7BI",
+  "fixture": {
+    "atlas": {
+      "id": "p5c5b0de1ff574f48",
+      "title": "Client Atlas",
+      "packs": [],
+      "defaults": {
+        "provider": "codex",
+        "profile": "generalist",
+        "model": "",
+        "effort": "medium",
+        "session": "delegated"
+      },
+      "path": "/tmp/tricorder-founder-c9x7BI/projects/p5c5b0de1ff574f48",
+      "managed": true
+    }
+  },
+  "declared": "Projet et workflow décision synthétiques. Fournisseurs inertes. Engine uniquement."
+}

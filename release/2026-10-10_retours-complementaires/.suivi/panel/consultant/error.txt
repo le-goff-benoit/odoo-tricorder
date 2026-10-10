@@ -1,0 +1,17 @@
+Error: expect(locator).toHaveValue(expected) failed
+
+Locator:  getByRole('textbox', { name: 'Objet du comité · obligatoire', exact: true })
+Expected: ""
+Received: "Comité ventes du lundi"
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveValue" getByRole('textbox', { name: 'Objet du comité · obligatoire', exact: true }) with timeout 5000ms
+  - waiting for getByRole('textbox', { name: 'Objet du comité · obligatoire', exact: true })
+    14 × locator resolved to <input required="" type="text" id="launch-answer-0" value="Comité ventes du lundi" data-launch-answer="Objet_du_comite" aria-describedby="launch-answer-0-help"/>
+       - unexpected value "Comité ventes du lundi"
+
+    at captureRawStack (/home/blegoff/odoo-tricorder/node_modules/playwright-core/lib/coreBundle.js:8588:17)
+    at callMatcherAsStep (/home/blegoff/odoo-tricorder/node_modules/playwright/lib/matchers/expect.js:13310:57)
+    at Object.toHaveValue (/home/blegoff/odoo-tricorder/node_modules/playwright/lib/matchers/expect.js:13302:23)
+    at /home/blegoff/odoo-tricorder/release/2026-10-10_retours-complementaires/.suivi/panel/consultant/parcours.cjs:15:177

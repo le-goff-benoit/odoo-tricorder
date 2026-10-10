@@ -1,0 +1,377 @@
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+BOUTONS EXEC ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Examiner le résultat","Transférer vers un projet…","Graphe","Détail","›_Première étapeCommandeÀ validerSans donnée provenant d’un autre bloc","−","100 %","+","Ajuster"]
+PILOTAGE OU ECHEC: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: 'Lancer la demande', exact: true })[22m
+
+    at /home/blegoff/odoo-tricorder/release/2026-10-10_retours-complementaires/.suivi/panel/sceptique/parcours.cjs:18:71
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+BOUTONS EXEC ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Examiner le résultat","Transférer vers un projet…","Graphe","Détail","›_Première étapeCommandeÀ validerSans donnée provenant d’un autre bloc","−","100 %","+","Ajuster"]
+RESULTAT Tricorder
+Activité
+Workflows
+Projets
+Accès rapide aux projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+
+Planifications
+Connexions
+Paramètres
+Outils et aide
+Sans projet
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+À jour
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+BOUTONS EXEC ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Examiner le résultat","Transférer vers un projet…","Graphe","Détail","›_Première étapeCommandeÀ validerSans donnée provenant d’un autre bloc","−","100 %","+","Ajuster"]
+REPRISE BOUTONS ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Transférer vers un projet…","Graphe","Détail","Étape sélectionnéePremière étape","Preuve 1 · 66a045b4","Valider le résultat","Demander une reprise"]
+DIALOGUES []
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+ARGV AVANT python3
+-c
+print("Hello")
+GRAPHE {"description":"","edges":[],"id":"work-3e382b5f-1c29-4042-bd74-a860b6080a76","launch_fields":[{"help":"","key":"Quantite","label":"Quantité","required":true,"type":"number"},{"help":"","key":"Inclure_le_detail","label":"Inclure le détail","required":true,"type":"boolean"}],"nodes":[{"argv":["python3","-c","print(\"Hello\")"],"candidate_check":false,"completion_outcome":"succeeded","criteria":[],"id":"start","inputs":{},"kind":"command","max_attempts":2,"outputs":{},"phase":"","position":{"x":60,"y":80},"resources":[],"reuse":false,"timeout":60,"title":"Première étape","validation":"human"}],"parameter_labels":{},"parameters":{},"revision":2,"schema":2,"title":"Contrôle local explicite"}
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+BOUTONS EXEC ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Examiner le résultat","Transférer vers un projet…","Graphe","Détail","›_Première étapeCommandeÀ validerSans donnée provenant d’un autre bloc","−","100 %","+","Ajuster"]
+REPRISE BOUTONS ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Transférer vers un projet…","Graphe","Détail","Étape sélectionnéePremière étape","Preuve 1 · 66a045b4","Valider le résultat","Demander une reprise"]
+DIALOGUES []
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+ARGV AVANT python3
+-c
+import sys; print("ECHEC LOCAL VOLONTAIRE"); sys.exit(3)
+GRAPHE {"description":"","edges":[],"id":"work-7a0c48f6-0f6f-4d57-8417-db4f7de8ab9b","launch_fields":[{"help":"","key":"Quantite","label":"Quantité","required":true,"type":"number"},{"help":"","key":"Inclure_le_detail","label":"Inclure le détail","required":true,"type":"boolean"}],"nodes":[{"argv":["python3","-c","import sys; print(\"ECHEC LOCAL VOLONTAIRE\"); sys.exit(3)"],"candidate_check":false,"completion_outcome":"succeeded","criteria":[],"id":"start","inputs":{},"kind":"command","max_attempts":2,"outputs":{},"phase":"","position":{"x":60,"y":80},"resources":[],"reuse":false,"timeout":60,"title":"Première étape","validation":"human"}],"parameter_labels":{},"parameters":{},"revision":2,"schema":2,"title":"Contrôle local explicite"}
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+BOUTONS EXEC ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Examiner l’échec","Transférer vers un projet…","Graphe","Détail","›_Première étapeCommandeÉchecSans donnée provenant d’un autre bloc","−","100 %","+","Ajuster"]
+REPRISE BOUTONS ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Transférer vers un projet…","Graphe","Détail","Étape sélectionnéePremière étape","Preuve 1 · 09e4e4a6","Relancer cette étape…"]
+DIALOGUES []
+PILOTAGE OU ECHEC: locator.innerText: Error: strict mode violation: locator('main') resolved to 2 elements:
+    1) <main class="workspace">…</main> aka getByRole('main').filter({ hasText: 'ConnexionsTerminalIA des' })
+    2) <main class="workspace embedded-workspace">…</main> aka locator('#studio-root').getByRole('main')
+
+Call log:
+[2m  - waiting for locator('main')[22m
+
+    at /home/blegoff/odoo-tricorder/release/2026-10-10_retours-complementaires/.suivi/panel/sceptique/parcours.cjs:21:481
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+ARGV AVANT python3
+-c
+import sys; print("ECHEC LOCAL VOLONTAIRE"); sys.exit(3)
+GRAPHE {"description":"","edges":[],"id":"work-c031b29e-ae68-416e-80c0-0dcbd1433315","launch_fields":[{"help":"","key":"Quantite","label":"Quantité","required":true,"type":"number"},{"help":"","key":"Inclure_le_detail","label":"Inclure le détail","required":true,"type":"boolean"}],"nodes":[{"argv":["python3","-c","import sys; print(\"ECHEC LOCAL VOLONTAIRE\"); sys.exit(3)"],"candidate_check":false,"completion_outcome":"succeeded","criteria":[],"id":"start","inputs":{},"kind":"command","max_attempts":2,"outputs":{},"phase":"","position":{"x":60,"y":80},"resources":[],"reuse":false,"timeout":60,"title":"Première étape","validation":"human"}],"parameter_labels":{},"parameters":{},"revision":2,"schema":2,"title":"Contrôle local explicite"}
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+BOUTONS EXEC ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Examiner l’échec","Transférer vers un projet…","Graphe","Détail","›_Première étapeCommandeÉchecSans donnée provenant d’un autre bloc","−","100 %","+","Ajuster"]
+REPRISE BOUTONS ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Transférer vers un projet…","Graphe","Détail","Étape sélectionnéePremière étape","Preuve 1 · 09e4e4a6","Relancer cette étape…"]
+REPRISE DIALOGUE ["Relancer cette étape maintenant×Tentative 1 sur 2 · 1 reprise restanteLe résultat précédent reste dans l’historique. La validation de ce formulaire relance immédiatement cette étape dès qu’une ressource est disponible et consomme une tentative. Effectuez votre correction avant de confirmer.Résultat précédentCommande terminée avec le code 3. Résultat à examiner.Correction attendueRelancer maintenant"]
+CONNEXIONS OUTILS ET PLUGINS
+Connexions
+
+Connectez les outils de vos workflows : messagerie, documents et services. Vérifiez une connexion avant de l’utiliser dans une étape.
+
+Configurer une connexion…
+Plugins OpenAI
+Plugins Anthropic
+Actualiser
+Contexte
+Sans projet
+Modèles
+Afficher les connexions
+
+Catalogue de Sans projet : /tmp/tricorder-sceptique-3MCfyw/workspace/.tricorder/plugins.json. Modifiez-le depuis le terminal, puis actualisez. Les déclarations restent distinctes des accès vérifiés.
+
+Codex
+Installé · connexion à vérifier
+
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+
+Diagnostic de connexion
+Claude Code
+Installé · connexion à vérifier
+
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+
+Diagnostic de connexion
+Commandes locales isolées
+Utilisable
+
+Sans réseau ; projet en lecture seule ; résultats dans un dossier de travail isolé.
+
+Diagnostic de connexion
+Confluence
+Service proposé · à configurer
+
+Un plugin Atlassian peut être connecté séparément. Aucun transport authentifié configuré dans Tricorder.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+GitHub → Odoo.sh
+Service proposé · à configurer
+
+Renseigner dépôt, branche et projet Odoo.sh. Publication GitHub, build et déploiement seront suivis séparément.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Gmail
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Outlook
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Slack
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Telegram
+Service proposé · à configurer
+
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Signal
+Service proposé · à configurer
+
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+
+Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+ARGV AVANT python3
+-c
+import sys; print("ECHEC LOCAL VOLONTAIRE"); sys.exit(3)
+GRAPHE {"description":"","edges":[],"id":"work-ca8487c8-feb8-439b-95e4-c0bbb0388d14","launch_fields":[{"help":"","key":"Quantite","label":"Quantité","required":true,"type":"number"},{"help":"","key":"Inclure_le_detail","label":"Inclure le détail","required":true,"type":"boolean"}],"nodes":[{"argv":["python3","-c","import sys; print(\"ECHEC LOCAL VOLONTAIRE\"); sys.exit(3)"],"candidate_check":false,"completion_outcome":"succeeded","criteria":[],"id":"start","inputs":{},"kind":"command","max_attempts":2,"outputs":{},"phase":"","position":{"x":60,"y":80},"resources":[],"reuse":false,"timeout":60,"title":"Première étape","validation":"human"}],"parameter_labels":{},"parameters":{},"revision":2,"schema":2,"title":"Contrôle local explicite"}
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+BOUTONS EXEC ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Examiner l’échec","Transférer vers un projet…","Graphe","Détail","›_Première étapeCommandeÉchecSans donnée provenant d’un autre bloc","−","100 %","+","Ajuster"]
+REPRISE BOUTONS ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Transférer vers un projet…","Graphe","Détail","Étape sélectionnéePremière étape","Preuve 1 · 09e4e4a6","Relancer cette étape…"]
+REPRISE DIALOGUE ["Relancer cette étape maintenant×Tentative 1 sur 2 · 1 reprise restanteLe résultat précédent reste dans l’historique. La validation de ce formulaire relance immédiatement cette étape dès qu’une ressource est disponible et consomme une tentative. Effectuez votre correction avant de confirmer.Résultat précédentCommande terminée avec le code 3. Résultat à examiner.Correction attendueRelancer maintenant"]
+DIALOGUE APRES REPRISE []
+CONNEXIONS OUTILS ET PLUGINS
+Connexions
+
+Connectez les outils de vos workflows : messagerie, documents et services. Vérifiez une connexion avant de l’utiliser dans une étape.
+
+Configurer une connexion…
+Plugins OpenAI
+Plugins Anthropic
+Actualiser
+Contexte
+Sans projet
+Modèles
+Afficher les connexions
+
+Catalogue de Sans projet : /tmp/tricorder-sceptique-OfNveD/workspace/.tricorder/plugins.json. Modifiez-le depuis le terminal, puis actualisez. Les déclarations restent distinctes des accès vérifiés.
+
+Codex
+Installé · connexion à vérifier
+
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+
+Diagnostic de connexion
+Claude Code
+Installé · connexion à vérifier
+
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+
+Diagnostic de connexion
+Commandes locales isolées
+Utilisable
+
+Sans réseau ; projet en lecture seule ; résultats dans un dossier de travail isolé.
+
+Diagnostic de connexion
+Confluence
+Service proposé · à configurer
+
+Un plugin Atlassian peut être connecté séparément. Aucun transport authentifié configuré dans Tricorder.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+GitHub → Odoo.sh
+Service proposé · à configurer
+
+Renseigner dépôt, branche et projet Odoo.sh. Publication GitHub, build et déploiement seront suivis séparément.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Gmail
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Outlook
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Slack
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Telegram
+Service proposé · à configurer
+
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Signal
+Service proposé · à configurer
+
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+
+Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.
+Premier bloc Commande locale sélectionnable directement. Les arguments occupent le début de l’inspecteur.
+ARGV AVANT python3
+-c
+import sys; print("ECHEC LOCAL VOLONTAIRE"); sys.exit(3)
+GRAPHE {"description":"","edges":[],"id":"work-89795cc3-f126-4ed6-afb6-0fcad05012ee","launch_fields":[{"help":"","key":"Quantite","label":"Quantité","required":true,"type":"number"},{"help":"","key":"Inclure_le_detail","label":"Inclure le détail","required":true,"type":"boolean"}],"nodes":[{"argv":["python3","-c","import sys; print(\"ECHEC LOCAL VOLONTAIRE\"); sys.exit(3)"],"candidate_check":false,"completion_outcome":"succeeded","criteria":[],"id":"start","inputs":{},"kind":"command","max_attempts":2,"outputs":{},"phase":"","position":{"x":60,"y":80},"resources":[],"reuse":false,"timeout":60,"title":"Première étape","validation":"human"}],"parameter_labels":{},"parameters":{},"revision":2,"schema":2,"title":"Contrôle local explicite"}
+Quantité 0 et Non sont saisissables, présentés comme réponses obligatoires.
+BOUTONS LANCEMENT ["×","Lancer l’exécution réelle","Simuler le parcours"]
+BOUTONS EXEC ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Examiner l’échec","Transférer vers un projet…","Graphe","Détail","›_Première étapeCommandeÉchecSans donnée provenant d’un autre bloc","−","100 %","+","Ajuster"]
+REPRISE BOUTONS ["Activité","Workflows","Projets","Planifications","Connexions","Paramètres","Terminal","","","","","← Retour à la liste","Transférer vers un projet…","Graphe","Détail","Étape sélectionnéePremière étape","Preuve 1 · 09e4e4a6","Relancer cette étape…"]
+REPRISE DIALOGUE ["Relancer cette étape maintenant×Tentative 1 sur 2 · 1 reprise restanteLe résultat précédent reste dans l’historique. La validation de ce formulaire relance immédiatement cette étape dès qu’une ressource est disponible et consomme une tentative. Effectuez votre correction avant de confirmer.Résultat précédentCommande terminée avec le code 3. Résultat à examiner.Correction attendueRelancer maintenant"]
+DIALOGUE APRES REPRISE []
+CONNEXIONS OUTILS ET PLUGINS
+Connexions
+
+Connectez les outils de vos workflows : messagerie, documents et services. Vérifiez une connexion avant de l’utiliser dans une étape.
+
+Configurer une connexion…
+Plugins OpenAI
+Plugins Anthropic
+Actualiser
+Contexte
+Sans projet
+Modèles
+Afficher les connexions
+
+Catalogue de Sans projet : /tmp/tricorder-sceptique-NuENa2/workspace/.tricorder/plugins.json. Modifiez-le depuis le terminal, puis actualisez. Les déclarations restent distinctes des accès vérifiés.
+
+Codex
+Installé · connexion à vérifier
+
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+
+Diagnostic de connexion
+Claude Code
+Installé · connexion à vérifier
+
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+
+Diagnostic de connexion
+Commandes locales isolées
+Utilisable
+
+Sans réseau ; projet en lecture seule ; résultats dans un dossier de travail isolé.
+
+Diagnostic de connexion
+Confluence
+Service proposé · à configurer
+
+Un plugin Atlassian peut être connecté séparément. Aucun transport authentifié configuré dans Tricorder.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+GitHub → Odoo.sh
+Service proposé · à configurer
+
+Renseigner dépôt, branche et projet Odoo.sh. Publication GitHub, build et déploiement seront suivis séparément.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Gmail
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Outlook
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Slack
+Service proposé · à configurer
+
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Telegram
+Service proposé · à configurer
+
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+Signal
+Service proposé · à configurer
+
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+
+Diagnostic de connexion
+
+Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.

@@ -47,17 +47,17 @@ test('business feedback: a focused inspector updates after completion without st
 test('business feedback: a late conversation reply cannot overwrite the editor or raise a null query error',async()=>{
  await app.evaluate(({ipcMain})=>{const handler=ipcMain._invokeHandlers.get('studio:request');globalThis.__held=false;globalThis.__finished=false;ipcMain.removeHandler('studio:request');ipcMain.handle('studio:request',async(event,payload)=>{const result=await handler(event,payload);if(payload.action==='conversation.get'&&!globalThis.__held){globalThis.__held=true;await new Promise(resolve=>globalThis.__release=resolve);globalThis.__finished=true;}return result;});});
  await expect.poll(()=>app.evaluate(()=>globalThis.__held)).toBe(true);
- await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();await page.locator('[data-action=open-workflow][data-id=feedback]').click();await expect(page.locator('[data-action=save]')).toBeVisible();
+ await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();await page.locator('[data-action=open-workflow][data-id=feedback]').click();await expect(page.locator('[data-action=save]')).toBeVisible();
  await app.evaluate(()=>globalThis.__release());await expect.poll(()=>app.evaluate(()=>globalThis.__finished)).toBe(true);
  // Observe a subsequent completed backend request instead of a timing-only sleep.
  await call('workflow.get',{project:fixture.project.id,workflow:'feedback'});await expect(page.locator('#feedback')).not.toContainText('query');await expect(page.locator('#conversation-overview')).toHaveCount(0);await expect(page.locator('[data-action=save]')).toBeVisible();
 });
 
 test('business feedback: task instructions save with the common AI selection and survive reopen',async()=>{
- await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();await page.locator('[data-action=open-workflow][data-id=feedback]').click();await page.locator('.node[data-id=work]').click();
+ await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();await page.locator('[data-action=open-workflow][data-id=feedback]').click();await page.locator('.node[data-id=work]').click();
  await page.getByLabel('Consigne',{exact:true}).fill('Conserver cette consigne métier avant de choisir une autre IA.');await page.getByRole('button',{name:'Choisir l’IA',exact:true}).click();await page.getByLabel('Modèle IA', {exact:true}).selectOption('__custom__');await page.getByLabel('Identifiant technique du modèle', {exact:true}).fill('synthetic-second');await page.getByRole('button',{name:'Appliquer à toutes les étapes IA',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);
  const g=await call('workflow.get',{project:fixture.project.id,workflow:'feedback'});expect(g.nodes[0].prompt).toBe('Conserver cette consigne métier avant de choisir une autre IA.');expect(g.defaults.model).toBe('synthetic-second');
- await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();await page.locator('[data-action=open-workflow][data-id=feedback]').click();await page.locator('.node[data-id=work]').click();await expect(page.getByLabel('Consigne',{exact:true})).toHaveValue(g.nodes[0].prompt);await expect(page.locator('.workflow-heading p')).toContainText('Enregistré');
+ await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();await page.locator('[data-action=open-workflow][data-id=feedback]').click();await page.locator('.node[data-id=work]').click();await expect(page.getByLabel('Consigne',{exact:true})).toHaveValue(g.nodes[0].prompt);await expect(page.locator('.workflow-heading p')).toContainText('Enregistré');
 });
 
 test('business feedback: pause and cancellation update an open inspector even when the node is unchanged',async()=>{
@@ -70,7 +70,7 @@ test('business feedback: pause and cancellation update an open inspector even wh
 
 test('handover feedback: source execution stays reachable from its new workflow without reading JSON',async()=>{
  const transferred=JSON.parse(python(`e.workspace_context();g={'schema':1,'id':'global-source','title':'Compte rendu global fictif','nodes':[{'id':'work','kind':'task','title':'Constat global','validation':'contract','outputs':{'report':'string'}}],'edges':[]};r=e.start('workspace',g);claim=e.claim(r['id'],'work');e.submit(r['id'],'work',claim['token'],{'ok':True,'summary':'Constat global conservé.','outputs':{'report':'Deux décisions à préparer.'}});saved=e.handoff(r['id'],sys.argv[3],g,human=True);print(json.dumps({'workflow':saved,'run':r['id']}))`,[fixture.project.id]));
- await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();await page.locator(`[data-action=open-workflow][data-id="${transferred.workflow.id}"]`).click();
+ await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();await page.locator(`[data-action=open-workflow][data-id="${transferred.workflow.id}"]`).click();
  await expect(page.locator('.workflow-source')).toContainText('1 résultat(s) validé(s)');
  await expect(page.locator('.workflow-source')).toContainText('validations et autorisations restent propres');
  await page.getByRole('button',{name:'Consulter l’exécution d’origine',exact:true}).click();
@@ -81,7 +81,7 @@ test('handover feedback: source execution stays reachable from its new workflow 
 });
 
 test('creation feedback: choosing a model keeps the custom workflow name already entered',async()=>{
- await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();await page.getByRole('button',{name:'Créer un workflow',exact:true}).click();
+ await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();await page.getByRole('button',{name:'Créer un workflow',exact:true}).click();
  await page.getByLabel('Nom du workflow',{exact:true}).fill('Contrôle des achats hebdomadaire');
  const model=await page.locator('#work-template option').nth(1).getAttribute('value');await page.locator('#work-template').selectOption(model);
  await expect(page.getByLabel('Nom du workflow',{exact:true})).toHaveValue('Contrôle des achats hebdomadaire');

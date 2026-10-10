@@ -1,0 +1,87 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Choisir le canal Atlas
+    - heading "Décision Atlas vendredi" [level=1]
+    - paragraph: Révision 2 figée · Terminée · 10.10.2026 19:39:13
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow":
+      - tab "Revenir au suivi"
+    - heading "Rapport d’exécution" [level=2]
+    - button "Exporter le rapport dans le projet"
+    - button "Export de release…"
+    - article:
+      - heading "Choisir le canal Atlas" [level=1]
+      - heading "Demande" [level=2]
+      - paragraph: Décision Atlas vendredi
+      - paragraph: Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.
+      - heading "Plan" [level=2]
+      - table:
+        - rowgroup:
+          - row "Travail État Critères":
+            - columnheader "Travail"
+            - columnheader "État"
+            - columnheader "Critères"
+        - rowgroup:
+          - row "Choisir le canal Validé À préciser":
+            - cell "Choisir le canal"
+            - cell "Validé"
+            - cell "À préciser"
+          - row "Préparer email Validé À préciser":
+            - cell "Préparer email"
+            - cell "Validé"
+            - cell "À préciser"
+          - row "Préparer ticket Non applicable À préciser":
+            - cell "Préparer ticket"
+            - cell "Non applicable"
+            - cell "À préciser"
+      - heading "Réalisation" [level=2]
+      - heading "Préparer email" [level=3]
+      - paragraph: Brouillon préparé. Aucune publication externe.
+      - paragraph:
+        - text: "État :"
+        - strong: Validé
+        - text: . Tentative 1.
+      - paragraph: "Date enregistrée : 10.10.2026 à 17:39 UTC."
+      - heading "Preuves" [level=4]
+      - list:
+        - listitem:
+          - link "Preuve 1":
+            - /url: "#proof-9d11a1f5e6e41461b7ceeb5404f1a3f17969637a9ef38701cc9f4d0dba40c796"
+      - paragraph: "Validation : Contrôles techniques automatiques ; aucun critère métier attesté."
+      - heading "Vérifications et limites" [level=2]
+      - paragraph: Les états ci-dessus reflètent les validations enregistrées. Les résultats de simulation restent des exemples.
+      - heading "Décisions et suite" [level=2]
+      - list:
+        - listitem:
+          - text: "Choisir le canal :"
+          - strong: email
+          - text: — décision humaine conservée.
+      - group: Références techniques de l’exécution
+  - status: Décision enregistrée.

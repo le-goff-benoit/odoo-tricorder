@@ -1,0 +1,50 @@
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Préparer le suivi Atlas
+    - heading "Suivi Atlas semaine 42" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 1 / 1 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 0 s · attentes comprises Début : 10.10.2026 19:39:08 · Fin : 10.10.2026 19:39:08"
+    - group "Affichage du suivi":
+      - button "Graphe" [pressed]
+      - button "Détail"
+    - button "Préparer le message de suivi · Produit · sorties vérifiées": Préparer le message de suivi Document Produit · sorties vérifiées Sans donnée provenant d’un autre bloc
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.

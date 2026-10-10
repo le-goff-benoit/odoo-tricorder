@@ -1,0 +1,80 @@
+
+Running 32 tests using 1 worker, shard 4 of 4
+
+(node:471523) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/terminal-resume-ux.spec.cjs:47:1 › stopped agent is resumed explicitly from overview and activity without duplicate conversation or lost shell draft (8.6s)
+  ✓   2 tests/terminal-resume-ux.spec.cjs:75:1 › cross-project context names both shell project and displayed request project (5.9s)
+  ✓   3 tests/terminal-resume-ux.spec.cjs:94:1 › resuming an agent keeps manual suspension and dependency waits until explicit request resume (7.8s)
+
+  ✓   4 tests/terminal-resume-ux.spec.cjs:119:1 › completed request offers its result without instructing the user to resume the stopped agent (5.3s)
+  ✓   5 tests/usage-feedback.spec.cjs:25:1 › usage — workflows show current work, history with duration and a visible return (4.0s)
+  ✓   6 tests/usage-feedback.spec.cjs:36:1 › usage — new request shares the model library, project adaptations are opt in (2.8s)
+  ✓   7 tests/usage-feedback.spec.cjs:44:1 › usage — question editor asks for free text and models have readable choices (3.4s)
+  ✓   8 tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy (7.8s)
+  ✓   9 tests/usage-feedback.spec.cjs:83:1 › personas — receive an existing result in one action, preserve notification draft and distinguish templates (5.1s)
+  ✓  10 tests/usage-feedback.spec.cjs:92:1 › personas — local launch has one primary execution and one final human decision (5.3s)
+  ✓  11 tests/usage-feedback.spec.cjs:97:1 › personas — final deliverable is first, copies exactly and a short title preserves the full request (4.9s)
+  ✓  12 tests/usage-feedback.spec.cjs:103:1 › expert — natural decision labels survive renaming and drive the original branch (7.1s)
+  ✓  13 tests/usage-feedback.spec.cjs:111:1 › expert — fixed parameters configure a rule without JSON and task validation is explicit (4.1s)
+  ✓  14 tests/workflow-creation-feedback.spec.cjs:43:1 › typed simulation data persists and a false boolean follows only the normal branch (7.7s)
+  ✓  15 tests/workflow-creation-feedback.spec.cjs:78:1 › removing a middle block announces detached data and launch guidance leads to a repairable link (7.5s)
+  ✓  16 tests/workflow-creation-feedback.spec.cjs:103:1 › integrated template copies are explicitly named and the source remains available (5.6s)
+  ✓  17 tests/workflow-creation-feedback.spec.cjs:122:1 › navigation records pending block edits and provider installation is not described as an authenticated connection (5.9s)
+  ✓  18 tests/workflow-creation-feedback.spec.cjs:139:1 › portable import previews named blocks and data before optional technical JSON (6.3s)
+  ✓  19 tests/workflow-resolution-ux.spec.cjs:60:1 › retry states its remaining budget without pretending to start and the completed request exposes its accepted content directly (5.6s)
+  ✓  20 tests/workflow-resolution-ux.spec.cjs:90:1 › refusing a branch shows treated and non-applicable steps separately in the completed follow-up (5.2s)
+  ✓  21 tests/workflow-reuse-ux.spec.cjs:42:1 › a business project needs no existing repository and its workflow can become a reusable model and an independent project copy (7.3s)
+  ✓  22 tests/workflow-v2.spec.cjs:31:1 › editor converts explicitly, describes typed list ports, configures per-item work and optional actions without JSON (5.4s)
+  ✓  23 tests/workflow-v2.spec.cjs:44:1 › three intentions feed one accepted plan, explicit child coordination and a failed optional action leave the main result completed (15.6s)
+  ✓  24 tests/workflow-v2.spec.cjs:74:1 › renaming per-item work preserves configured ports and the integration block can be saved (5.2s)
+  ✓  25 tests/workflow-v2.spec.cjs:80:1 › an empty optional collection can close and transmit an empty list without inventing an intention (4.2s)
+  ✓  26 tests/workflow-v2.spec.cjs:84:1 › dependent children show the wait and parent suspension without offering a manual resume (7.5s)
+  ✓  27 tests/workflow-wiring.spec.cjs:42:1 › a new human decision exposes its default branches and keeps the selected branch when changing destination (5.7s)
+  ✘  28 tests/workflow-wiring.spec.cjs:83:1 › a renamed data connection remains readable beside the selected block and on the graph (8.4s)
+(node:495717) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  29 tests/workflow-wiring.spec.cjs:95:1 › choosing only a data output gives an inline repair instead of silently creating an order-only link (4.3s)
+  ✓  30 tests/workflow-wiring.spec.cjs:108:1 › a processed refusal reads Refusée instead of a green Validé and does not release the approved branch (5.8s)
+  ✓  31 tests/workflow-wiring.spec.cjs:121:1 › order-only explicitly overrides automatic matching of same-name ports (4.4s)
+  ✓  32 tests/workflow-wiring.spec.cjs:132:1 › choosing the revised output replaces the automatically matched source for that input (4.3s)
+
+
+  1) tests/workflow-wiring.spec.cjs:83:1 › a renamed data connection remains readable beside the selected block and on the graph
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.design-links')
+    Expected substring: "fiche_diagnostic → fiche"
+    Received string:    "Liens entre les blocsRecueillir les informations → Relire la fiche · Travail terminéDonnées : fiche diagnostic → fiche RetirerRelier une entrée…"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.design-links') with timeout 5000ms
+      - waiting for locator('.design-links')
+        14 × locator resolved to <details open="" class="design-links">…</details>
+           - unexpected value "Liens entre les blocsRecueillir les informations → Relire la fiche · Travail terminéDonnées : fiche diagnostic → fiche RetirerRelier une entrée…"
+
+
+      87 |   await page.locator('.node[data-id=review]').click();
+      88 |   await page.locator('.design-links > summary').click();
+    > 89 |   await expect(page.locator('.design-links')).toContainText('fiche_diagnostic → fiche');
+         |                                               ^
+      90 |   await expect(page.locator('.design-links')).toContainText('Travail terminé');
+      91 |   await expect(page.locator('.canvas svg text')).toHaveText('1 donnée');
+      92 | });
+        at /tmp/tricorder-rc16-qa/tests/workflow-wiring.spec.cjs:89:47
+
+    Error Context: ../tricorder-rc16-qa-4/workflow-wiring-a-renamed--1dc8a-cted-block-and-on-the-graph/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../tricorder-rc16-qa-4/workflow-wiring-a-renamed--1dc8a-cted-block-and-on-the-graph/trace.zip
+    Usage:
+
+        npx playwright show-trace ../tricorder-rc16-qa-4/workflow-wiring-a-renamed--1dc8a-cted-block-and-on-the-graph/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/workflow-wiring.spec.cjs:83:1 › a renamed data connection remains readable beside the selected block and on the graph
+  31 passed (3.3m)

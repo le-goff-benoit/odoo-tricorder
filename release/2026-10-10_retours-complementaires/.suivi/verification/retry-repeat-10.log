@@ -1,0 +1,35 @@
+
+Running 10 tests using 1 worker
+
+(node:429403) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.6s)
+(node:429672) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.3s)
+(node:429946) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   3 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (6.2s)
+(node:430439) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   4 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (9.8s)
+(node:431218) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (7.6s)
+(node:431780) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (12.3s)
+(node:432848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   7 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (9.8s)
+(node:433543) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (9.9s)
+(node:434384) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   9 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (10.7s)
+(node:435309) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 ../../../tmp/tricorder-rc16-retry-diagnostic/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (13.3s)
+
+  10 passed (1.6m)

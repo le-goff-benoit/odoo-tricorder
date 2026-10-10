@@ -1,0 +1,10 @@
+{
+  "version": "0.6.0-rc.16",
+  "launcher": "/home/blegoff/.local/bin/odoo-tricorder",
+  "target": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.16/odoo-tricorder",
+  "previous": "/home/blegoff/.local/opt/odoo-tricorder-0.6.0-rc.15/odoo-tricorder",
+  "previous_preserved": true,
+  "changed_at": "2026-10-10T18:02:38.852362+00:00",
+  "startup_proof": "installation-demarrage.json",
+  "content_proof": "installed-content.json"
+}

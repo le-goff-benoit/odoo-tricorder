@@ -10,7 +10,7 @@ const call = (action, data = {}) => page.evaluate(payload => window.studio.reque
 const human = (action, data = {}) => page.evaluate(payload => window.studio.human(payload), { action, ...data });
 
 async function openWorkflow(id) {
-  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();
   await page.locator(`[data-action=open-workflow][data-id="${id}"]`).click();
 }
 async function topOptions(action) {
@@ -66,9 +66,9 @@ test('schedule recurrence remains readable and replacement retains it with fresh
   const card = page.locator(`[data-schedule="${schedule.id}"]`);
   await expect(card).toContainText('Toutes les 60 minutes');
   await expect(card).toContainText('Pacific/Auckland');
-  await card.getByRole('button', { name: 'Version planifiée · révision 1', exact: true }).click();
+  await card.getByRole('button', { name: 'Configuration et réponses · révision 1', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('Toutes les 60 minutes · Pacific/Auckland');
-  await page.getByRole('button', { name: 'Préparer une nouvelle version…', exact: true }).click();
+  await page.getByRole('button', { name: 'Modifier les réponses ou la version…', exact: true }).click();
   await page.getByRole('button', { name: 'Archiver et configurer la nouvelle', exact: true }).click();
   const form = page.locator('#schedule-form');
   await expect(form.locator('[name=kind]')).toHaveValue('interval');

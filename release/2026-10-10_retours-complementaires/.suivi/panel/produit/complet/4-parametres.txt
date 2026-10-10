@@ -1,0 +1,129 @@
+Activité
+Workflows
+Projets
+Rechercher un projet
+
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Kanban des releases
+Quotas
+Commandes des agents
+Installer le pack OdooAgents pour Claude et Codex
+Mises à jour
+À propos v0.6.0-rc.16
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+OpenAI · Codex
+Anthropic · Claude [valeur : codex]
+
+
+
+
+Orienter un retour produit
+Révision 1 · Enregistré
+← Retour à la liste
+Choisir l’IA
+Planifier
+Réutiliser…
+Exporter…
+Enregistrer
+Exécuter…
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Phases
+Fichier JSON du workflow…
+Recharger et valider
+✦ Assistant IA
+☷ Liste
+⑂
+Première étape
+Condition
+Sans donnée provenant d’un autre bloc
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+×
+Première étape
+Nom du bloc
+ [valeur : Première étape]
+Cette règle choisit une branche à partir de la donnée reçue.
+Information à comparer
+Choisir une information
+choice · source à configurer [valeur : choice]
+Type de branchement
+Oui / Non
+Valeurs personnalisées [valeur : boolean]
+Deux branches : Oui et Non. Reliez chacune à l’étape correspondante.
+Critères d’acceptation (un par ligne)
+
+Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+Recevoir un résultat existant…
+Ajouter une information à utiliser
+Ajouter un résultat attendu
+Ces indications ne bloquent pas les brouillons ni les étapes volontairement indépendantes.
+Information à comparer absente. Choisissez une information reçue ou un paramètre déclaré dans les propriétés de cette règle.
+Vérifier les liens
+Effet du résultat sur les tâches dépendantes
+Permettre la suiteBloquer la suite : travail non résolu [valeur : succeeded]
+Phase
+
+Entrées (nom : type, JSON)
+{} [valeur : {}]
+Sorties (nom : type, JSON)
+{} [valeur : {}]
+Tentatives maximales
+ [valeur : 1]
+Ressources exclusives (une par ligne)
+
+Position X
+ [valeur : 60]
+Position Y
+ [valeur : 80]
+Appliquer au bloc
+Aucun lien.
+Relier une entrée…
+Actions facultatives
+Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+Ajouter une action facultative…
+Supprimer cette étape
+Paramètres du workflow
+×
+Nom
+ [valeur : Orienter un retour produit]
+Description
+
+Ces informations sont demandées à chaque exécution. Elles sont conservées avec cette demande, sans changer le modèle. Pour demander une précision pendant le travail, utilisez une Question ouverte.
+Ajouter un champ au lancement
+Me prévenir avec
+Dans Tricorder uniquement
+Configurer une notification…
+S’applique aux questions prévues et à celles posées en cours de travail. La notification contient le nom du workflow et sa référence ; la question reste dans Tricorder. Email, Slack ou autre service : ajoutez et vérifiez une connexion de notification pour la choisir ici. Sans connexion, les questions restent visibles dans Tricorder.
+Ces valeurs sont fixes pour les prochains lancements. Le formulaire ci-dessus permet de les remplacer pour une demande ; une Question ouverte recueille une précision pendant le travail.
+Aucune valeur fixe simple.
+Nom du nouveau paramètre
+
+Valeur fixe
+
+Ajouter ce paramètre
+Paramètres (objet JSON)
+{} [valeur : {}]
+Appliquer

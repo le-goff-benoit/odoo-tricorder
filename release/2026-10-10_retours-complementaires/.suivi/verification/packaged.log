@@ -1,0 +1,30 @@
+
+Running 23 tests using 1 worker
+
+(node:453354) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/collection-input-ux.spec.cjs:136:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (8.4s)
+  ✓   2 tests/residual-feedback.spec.cjs:16:1 › remaining feedback — create a rule first, design a required launch form and run independent answers (11.7s)
+  ✓   3 tests/residual-feedback.spec.cjs:27:1 › remaining feedback — accented output names stay editable without breaking stable links (4.8s)
+  ✓   4 tests/residual-feedback.spec.cjs:30:1 › remaining feedback — essential command fields precede criteria and exchanged information (3.5s)
+  ✓   5 tests/residual-feedback.spec.cjs:33:1 › remaining feedback — model search, adaptation vocabulary and guided support launch (5.3s)
+  ✓   6 tests/residual-feedback.spec.cjs:37:1 › remaining feedback — a shared model chooses its first block and schedule responses are frozen (7.3s)
+  ✓   7 tests/residual-feedback.spec.cjs:42:1 › remaining feedback — deleting fixed values in advanced settings removes orphaned labels (4.0s)
+  ✓   8 tests/residual-feedback.spec.cjs:46:1 › remaining feedback — management stays open across an explicit refresh (3.8s)
+  ✓   9 tests/schedule-versions.spec.cjs:41:1 › schedule snapshot is readable and replacement requires explicit archive then fresh activation (11.2s)
+  ✓  10 tests/schedule-versions.spec.cjs:81:1 › communication properties distinguish result validation from approval before sending (5.8s)
+  ✓  11 tests/schedule-versions.spec.cjs:92:1 › a rapid double click activates a replacement only once and still requires human confirmation (8.0s)
+  ✓  12 tests/studio.spec.cjs:204:1 › connections never infer native authentication and real unconfigured launch is blocked (5.7s)
+  ✓  13 tests/studio.spec.cjs:423:1 › trusted local adapter runs through the UI and automatic validation completes without a human receipt (6.3s)
+  ✓  14 tests/studio.spec.cjs:539:1 › human gate presents the full external content and candidate before approval (5.8s)
+  ✓  15 tests/usage-feedback.spec.cjs:25:1 › usage — workflows show current work, history with duration and a visible return (3.9s)
+  ✓  16 tests/usage-feedback.spec.cjs:36:1 › usage — new request shares the model library, project adaptations are opt in (4.0s)
+  ✓  17 tests/usage-feedback.spec.cjs:44:1 › usage — question editor asks for free text and models have readable choices (3.7s)
+  ✓  18 tests/usage-feedback.spec.cjs:54:1 › usage — using a meeting model asks for sources and reuses the unchanged project copy (9.2s)
+  ✓  19 tests/usage-feedback.spec.cjs:83:1 › personas — receive an existing result in one action, preserve notification draft and distinguish templates (3.9s)
+  ✓  20 tests/usage-feedback.spec.cjs:92:1 › personas — local launch has one primary execution and one final human decision (4.2s)
+  ✓  21 tests/usage-feedback.spec.cjs:97:1 › personas — final deliverable is first, copies exactly and a short title preserves the full request (4.7s)
+  ✓  22 tests/usage-feedback.spec.cjs:103:1 › expert — natural decision labels survive renaming and drive the original branch (5.2s)
+  ✓  23 tests/usage-feedback.spec.cjs:111:1 › expert — fixed parameters configure a rule without JSON and task validation is explicit (4.2s)
+
+  23 passed (2.3m)

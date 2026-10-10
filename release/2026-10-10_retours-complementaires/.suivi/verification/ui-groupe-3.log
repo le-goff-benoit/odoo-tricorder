@@ -1,0 +1,121 @@
+
+Running 65 tests using 1 worker, shard 3 of 4
+
+(node:471522) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/schedule-versions.spec.cjs:41:1 › schedule snapshot is readable and replacement requires explicit archive then fresh activation (7.2s)
+  ✓   2 tests/schedule-versions.spec.cjs:81:1 › communication properties distinguish result validation from approval before sending (3.6s)
+  ✓   3 tests/schedule-versions.spec.cjs:92:1 › a rapid double click activates a replacement only once and still requires human confirmation (4.3s)
+  ✓   4 tests/simplicity.spec.cjs:18:1 › support: intent stays in terminal, empty conversation has a next action, question leads to result (7.2s)
+  ✓   5 tests/simplicity.spec.cjs:21:1 › reuse: two launches reuse one workflow and reopening keeps the same terminal (7.5s)
+  ✓   6 tests/simplicity.spec.cjs:25:1 › scope: adaptation is explicit and reusable on another project (4.8s)
+  ✓   7 tests/simplicity.spec.cjs:30:1 › cross project: one terminal coordinates two projects without copying the workflow (6.3s)
+  ✓   8 tests/simplicity.spec.cjs:34:1 › meeting: work without a project produces a draft and requires the intended decision (6.9s)
+  ✓   9 tests/simplicity.spec.cjs:38:1 › home terminal: shell and workflow entry remain usable before selecting a project (2.3s)
+  ✓  10 tests/simplicity.spec.cjs:42:1 › terminal answer: input in the same PTY answers the pending workflow question (6.9s)
+  ✓  11 tests/simplicity.spec.cjs:46:1 › reading context: graph, other request and compact layout preserve the answer draft (3.9s)
+  ✓  12 tests/simplicity.spec.cjs:50:1 › design: create a blank generic workflow, connect typed I/O, save and launch in the same app (4.3s)
+  ✓  13 tests/simplicity.spec.cjs:54:1 › empty conversation: Activity resumes the open terminal before any task exists (5.4s)
+
+  ✓  14 tests/simplicity.spec.cjs:58:1 › legacy: historical Odoo release remains accessible in the same app without changing it (2.0s)
+
+  ✓  15 tests/simplicity.spec.cjs:63:1 › first project: an empty installation can add an existing Git repository (2.7s)
+  ✓  16 tests/simplicity.spec.cjs:71:1 › catalog pagination: a workflow beyond the first project page opens and launches without a copy (6.1s)
+  ✓  17 tests/startup-navigation.spec.cjs:60:1 › normal first launch offers a new request without configuring a project (7.0s)
+  ✓  18 tests/startup-navigation.spec.cjs:71:1 › normal restart discovers generic work and names preserved terminals by intention (12.3s)
+  ✓  19 tests/startup-navigation.spec.cjs:95:1 › existing project remains selectable and explicit workspace choice survives restart (17.9s)
+
+  ✓  20 tests/studio.spec.cjs:88:1 › Odoo launch journey: missing QA database does not block intake through the actual launch dialog (5.8s)
+
+  ✓  21 tests/studio.spec.cjs:107:1 › large release history: startup and refresh preserve projects, workflows and terminal (6.2s)
+  ✓  22 tests/studio.spec.cjs:151:1 › first use: generic project, graph editing, undo, persisted workflow and keyboard list (6.0s)
+  ✓  23 tests/studio.spec.cjs:173:1 › simulation: two branches, human decision, truthful results and single documentation view (8.8s)
+  ✓  24 tests/studio.spec.cjs:190:1 › decisions persist after application restart and reject skips its branch (11.6s)
+  ✓  25 tests/studio.spec.cjs:204:1 › connections never infer native authentication and real unconfigured launch is blocked (5.6s)
+  ✓  26 tests/studio.spec.cjs:217:1 › live events preserve text input and focus; layout fits 1024 and dark theme (6.1s)
+  ✓  27 tests/studio.spec.cjs:232:1 › structured proposal needs preview, rejects stale revision and never starts a run (5.6s)
+  ✓  28 tests/studio.spec.cjs:246:1 › template creation has a real terminal; file edits require validated reload (5.6s)
+  ✓  29 tests/studio.spec.cjs:268:1 › recurrence activation shows models and persists; communication needs exact recipients (6.1s)
+  ✓  30 tests/studio.spec.cjs:288:1 › window closes to Ubuntu tray and remains available (5.8s)
+  ✓  31 tests/studio.spec.cjs:296:1 › new plugin declared in the terminal workspace is selectable without a dedicated agent (5.8s)
+  ✓  32 tests/studio.spec.cjs:323:1 › real isolated command exposes evidence at its only human decision (5.7s)
+  ✓  33 tests/studio.spec.cjs:341:1 › global workflow runs independently of Git projects and draws right-angle links (5.5s)
+  ✓  34 tests/studio.spec.cjs:382:1 › exported clickable file opens on another local instance as a draft without execution (11.3s)
+  ✓  35 tests/studio.spec.cjs:405:1 › update dialog is explicit and test mode makes no automatic network request (5.5s)
+  ✓  36 tests/studio.spec.cjs:413:1 › repeated example clicks never create duplicate demo projects (5.7s)
+  ✓  37 tests/studio.spec.cjs:423:1 › trusted local adapter runs through the UI and automatic validation completes without a human receipt (5.6s)
+  ✓  38 tests/studio.spec.cjs:450:1 › large workflow remains editable in canvas and keyboard list (5.5s)
+  ✓  39 tests/studio.spec.cjs:463:1 › application navigation separates overview, workflow use and editor with compact responsive spacing (5.7s)
+  ✓  40 tests/studio.spec.cjs:486:1 › code proposal diff is reviewable and only explicit application changes the Git project (5.5s)
+  ✓  41 tests/studio.spec.cjs:525:1 › accessible navigation, editor, inspector and dialog in light and dark themes (5.6s)
+  ✓  42 tests/studio.spec.cjs:539:1 › human gate presents the full external content and candidate before approval (5.7s)
+  ✓  43 tests/studio.spec.cjs:557:1 › one provider choice applies to all AI steps and the project offers direct execution (5.8s)
+  ✓  44 tests/studio.spec.cjs:585:1 › native conversation: provider choice, durable questions, live graph and same terminal after restart (15.6s)
+  ✓  45 tests/studio.spec.cjs:653:1 › previous studio terminal is adopted in the main terminal without a new shell (5.7s)
+  ✓  46 tests/studio.spec.cjs:671:1 › review: Odoo profiles, editable unresolved outcome and synthetic release capture (5.6s)
+  ✓  47 tests/studio.spec.cjs:705:1 › design review: library and management views use the workspace, with readable actions in both themes (11.5s)
+  ✓  48 tests/studio.spec.cjs:741:1 › opening the library frees the content area and preserves the live terminal session (5.4s)
+  ✓  49 tests/studio.spec.cjs:772:1 › bootstrap failure is distinct from an empty catalog and Actualiser recovers (5.5s)
+
+  ✓  50 tests/studio.spec.cjs:790:1 › optional workflow setup failure keeps native projects and can be retried (5.4s)
+  ✓  51 tests/studio.spec.cjs:802:1 › work journey: name a meeting, select its repository, launch initial intention once and preserve the terminal (5.5s)
+  ✓  52 tests/studio.spec.cjs:847:1 › repository journey: resume a cloned workflow, simulate a question and export a generic work dossier (5.5s)
+  ✓  53 tests/studio.spec.cjs:874:1 › question journey: configure a verified tool, authorize notifications and follow delivery without answering the question (5.4s)
+  ✓  54 tests/studio.spec.cjs:922:1 › workspace layout: focused navigation, adjustable split and editor preserve the same terminal (5.5s)
+  ✓  55 tests/studio.spec.cjs:970:1 › configuration: pending fields survive I/O editing, block selection and keyboard save (5.6s)
+  ✓  56 tests/studio.spec.cjs:1000:1 › embedded theme: workflow controls use the shared surface colors (5.6s)
+  ✓  57 tests/studio.spec.cjs:1011:1 › audit reception: decision shows the delivered text, provenance and safe proof reader (5.4s)
+  ✓  58 tests/studio.spec.cjs:1037:1 › audit reception: concurrent terminal edit merges with the persisted editor draft (5.4s)
+  ✓  59 tests/studio.spec.cjs:1054:1 › audit reception: stopped native agent resumes explicitly in the same terminal (5.4s)
+  ✓  60 tests/studio.spec.cjs:1067:1 › audit reception: history pages and archives preserve the completed work (5.5s)
+
+  ✓  61 tests/studio.spec.cjs:1101:1 › mail intake: native terminal prepares four requests, source files and plan without duplicate or deployment (6.4s)
+
+  ✓  62 tests/studio.spec.cjs:1136:43 › mail intake: missing access becomes a visible question without inventing a source (5.4s)
+
+  ✓  63 tests/studio.spec.cjs:1136:43 › mail intake: ambiguous access becomes a visible question without inventing a source (5.4s)
+
+  ✓  64 tests/studio.spec.cjs:1146:1 › mail illustration: four independent states, selected question and QA failure stay readable with terminal (5.4s)
+  ✘  65 tests/studio.spec.cjs:1204:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload (6.8s)
+
+
+  1) tests/studio.spec.cjs:1204:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.ports')
+    Expected substring: "Version à vérifier"
+    Received string:    "Informations de cette étapeCes informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.UtilisecandidateDonnées regroupées · facultatifÀ relier à une étape précédenteModifierRetirerRecevoir un résultat existant…Ajouter une information à utiliserProduitRésultat du contrôleTexte · obligatoireConservé dans le résultat de cette étapeModifierRetirerAjouter un résultat attendu"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" locator('.ports') with timeout 5000ms
+      - waiting for locator('.ports')
+        2 × locator resolved to <fieldset class="ports">…</fieldset>
+          - unexpected value "Informations de cette étapeCes informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.UtilisecandidateDonnées regroupées · facultatifÀ relier à une étape précédenteModifierRetirerRecevoir un résultat existant…Ajouter une information à utiliserProduitAucun résultat déclaré.Ajouter un résultat attendu"
+        12 × locator resolved to <fieldset class="ports">…</fieldset>
+           - unexpected value "Informations de cette étapeCes informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.UtilisecandidateDonnées regroupées · facultatifÀ relier à une étape précédenteModifierRetirerRecevoir un résultat existant…Ajouter une information à utiliserProduitRésultat du contrôleTexte · obligatoireConservé dans le résultat de cette étapeModifierRetirerAjouter un résultat attendu"
+
+
+      1216 |   await page.getByRole('button',{name:'Enregistrer',exact:true}).click();
+      1217 |   await expect(page.getByLabel('Contrôle QA du candidat',{exact:true})).toBeChecked();
+    > 1218 |   await expect(page.locator('.ports')).toContainText('Version à vérifier');await expect(page.locator('.ports')).toContainText('Résultat du contrôle');
+           |                                        ^
+      1219 |   const mission=page.locator('.node[data-id=analyse] .mission');await expect(mission).toHaveAttribute('title','Vérifier le candidat sans agent imposé');
+      1220 |   const titleBounds=await mission.boundingBox(),nodeBounds=await page.locator('.node[data-id=analyse]').boundingBox(),kindBounds=await page.locator('.node[data-id=analyse] .kind').boundingBox();
+      1221 |   expect(titleBounds.x+titleBounds.width).toBeLessThanOrEqual(nodeBounds.x+nodeBounds.width);
+        at /tmp/tricorder-rc16-qa/tests/studio.spec.cjs:1218:40
+
+    Error Context: ../tricorder-rc16-qa-3/studio-candidate-QA-explic-c10db-emains-visible-after-reload/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../tricorder-rc16-qa-3/studio-candidate-QA-explic-c10db-emains-visible-after-reload/trace.zip
+    Usage:
+
+        npx playwright show-trace ../tricorder-rc16-qa-3/studio-candidate-QA-explic-c10db-emains-visible-after-reload/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests/studio.spec.cjs:1204:1 › candidate QA: explicit editor control persists typed ports and remains visible after reload
+  64 passed (6.9m)

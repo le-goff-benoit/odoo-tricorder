@@ -1,0 +1,514 @@
+01-choix
+Activité
+Workflows
+Projets
+Rechercher un projet
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Outils et aide
+
+
+
+
+
+
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+
+
+
+
+En cours
+Modèles
+Historique
+Workflows enregistrés
+Workflows
+Les demandes en cours et les interventions attendues.
+Nouvelle demande
+Actualiser
+Aucune demande à afficher. « Nouvelle demande » vous permet de choisir un workflow et de démarrer dans le terminal.
+Gestion des workflows
+
+
+Nouvelle demande
+×
+Choisissez un modèle, puis indiquez votre demande. Chaque exécution conserve ses propres résultats.
+Rechercher un workflow
+Workflow
+
+Clarifier une demande, effectuer le travail et présenter le résultat. Analyse, recherche, document ou autre activité : aucun pack métier requis.
+Réutiliser un workflow enregistré dans un projet
+Projet principal
+Le modèle sera utilisé dans Sans projet. Ses prochaines modifications ne changeront pas les exécutions déjà lancées.
+Pour coordonner plusieurs projets, ajoutez-les à l’étape suivante.
+Continuer
+02-formulaire
+Activité
+Workflows
+Projets
+Rechercher un projet
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Outils et aide
+
+
+
+
+
+
+
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+
+
+
+
+Support — diagnostic et réponse
+Révision 1 · Enregistré
+← Retour à la liste
+Choisir l’IA
+Options
+
+
+
+Enregistrer
+Exécuter…
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Données structurées…
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Éditeur
+
+
+
+✦ Assistant IA
+☷ Liste
+✦
+Analyser la demande et son urgence
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Niveau d’urgence, Constat, Suite proposée
+✦
+Préparer la réponse urgente
+Tâche IA
+Utilise : Constat, Suite proposée · Produit : Proposition
+✦
+Préparer la réponse sans urgence établie
+Tâche IA
+Utilise : Constat, Suite proposée · Produit : Brouillon
+?
+Préciser ce qui est bloqué
+Question
+Sans donnée provenant d’un autre bloc · Produit : Votre réponse
+✦
+Réévaluer l’urgence avec les faits reçus
+Tâche IA
+Utilise : Votre réponse · Produit : Niveau d’urgence, Constat, Suite proposée
+?
+Choisir l’investigation manquante
+Question
+Sans donnée provenant d’un autre bloc · Produit : Votre réponse
+✦
+Reprendre la destination de la réponse
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Votre réponse
+✦
+Mettre la réponse au format choisi
+Tâche IA
+Utilise : Réponse préparée, Destination choisie · Produit : Brouillon
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+Lancer cette version du workflow
+×
+Faits et exemple du problème · facultatif
+Comportement observé, résultat attendu et exemple concret. Vous pouvez aussi les décrire dans la demande.
+Impact et urgence · facultatif
+Qui est touché, quel travail est bloqué, depuis quand, quel contournement et quelle échéance ? Laissez les inconnues à préciser.
+Destination de la réponse · facultatif
+Préparation du texte uniquement. Aucun envoi ni brouillon distant créé par ce choix.
+Titre court (facultatif)
+Objectif ou consigne complémentaire (facultatif)
+Les informations du formulaire sont déjà transmises à l’agent. Ajoutez ici seulement un objectif ou une précision utile. Les questions de l’agent apparaîtront dans le suivi.
+Inclure d’autres projets
+Lancer dans le terminal
+Vérifier à nouveau
+Exécution automatique sans conversation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Simuler le parcours
+formulaire-support
+Activité
+Workflows
+Projets
+Rechercher un projet
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Outils et aide
+
+
+
+
+
+
+
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+
+
+
+
+Support — diagnostic et réponse
+Révision 1 · Enregistré
+← Retour à la liste
+Choisir l’IA
+Options
+
+
+
+Enregistrer
+Exécuter…
+Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+Éditeur
+Exécution
+Historique
+Rapport
++ Ajouter un bloc
+Relier
++ Note
+Propriétés
+Données structurées…
+Paramètres du workflow
+↶
+↷
+›_ Terminal
+Éditeur
+
+
+
+✦ Assistant IA
+☷ Liste
+✦
+Analyser la demande et son urgence
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Niveau d’urgence, Constat, Suite proposée
+✦
+Préparer la réponse urgente
+Tâche IA
+Utilise : Constat, Suite proposée · Produit : Proposition
+✦
+Préparer la réponse sans urgence établie
+Tâche IA
+Utilise : Constat, Suite proposée · Produit : Brouillon
+?
+Préciser ce qui est bloqué
+Question
+Sans donnée provenant d’un autre bloc · Produit : Votre réponse
+✦
+Réévaluer l’urgence avec les faits reçus
+Tâche IA
+Utilise : Votre réponse · Produit : Niveau d’urgence, Constat, Suite proposée
+?
+Choisir l’investigation manquante
+Question
+Sans donnée provenant d’un autre bloc · Produit : Votre réponse
+✦
+Reprendre la destination de la réponse
+Tâche IA
+Utilise : demande initiale et contexte · Produit : Votre réponse
+✦
+Mettre la réponse au format choisi
+Tâche IA
+Utilise : Réponse préparée, Destination choisie · Produit : Brouillon
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+−
+100 %
++
+Ajuster
+Réorganiser le graphe
+Lancer cette version du workflow
+×
+Faits et exemple du problème · facultatif
+Comportement observé, résultat attendu et exemple concret. Vous pouvez aussi les décrire dans la demande.
+Impact et urgence · facultatif
+Qui est touché, quel travail est bloqué, depuis quand, quel contournement et quelle échéance ? Laissez les inconnues à préciser.
+Destination de la réponse · facultatif
+Préparation du texte uniquement. Aucun envoi ni brouillon distant créé par ce choix.
+Titre court (facultatif)
+Objectif ou consigne complémentaire (facultatif)
+Les informations du formulaire sont déjà transmises à l’agent. Ajoutez ici seulement un objectif ou une précision utile. Les questions de l’agent apparaîtront dans le suivi.
+Inclure d’autres projets
+Lancer dans le terminal
+Vérifier à nouveau
+Exécution automatique sans conversation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Simuler le parcours
+simulation-sans-consigne
+Activité
+Workflows
+Projets
+Rechercher un projet
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Outils et aide
+
+
+
+
+
+
+
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+
+
+
+
+Support — diagnostic et réponse
+← Retour à la liste
+Options
+
+
+
+
+
+
+
+
+4 traitées · 4 non applicables
+Voir les résultats
+Voir le rapport
+Exécution terminée.
+Durée totale : 3 s · attentes comprises
+Transférer vers un projet…
+Graphe
+Détail
+✦
+Analyser la demande et son urgence
+Tâche IA
+Produit · sorties vérifiées
+Utilise : demande initiale et contexte · Produit : Constat, Suite proposée, Niveau d’urgence
+✦
+Préparer la réponse urgente
+Tâche IA
+Non applicable
+Utilise : Constat, Suite proposée · Produit : Proposition
+✦
+Préparer la réponse sans urgence établie
+Tâche IA
+Produit · sorties vérifiées
+Utilise : Constat, Suite proposée · Produit : Brouillon
+?
+Préciser ce qui est bloqué
+Question
+Non applicable
+Sans donnée provenant d’un autre bloc · Produit : Votre réponse
+✦
+Réévaluer l’urgence avec les faits reçus
+Tâche IA
+Non applicable
+Utilise : Votre réponse · Produit : Constat, Suite proposée, Niveau d’urgence
+?
+Choisir l’investigation manquante
+Question
+Non applicable
+Sans donnée provenant d’un autre bloc · Produit : Votre réponse
+✦
+Reprendre la destination de la réponse
+Tâche IA
+Produit · sorties vérifiées
+Utilise : demande initiale et contexte · Produit : Votre réponse
+✦
+Mettre la réponse au format choisi
+Tâche IA
+Produit · sorties vérifiées
+Utilise : Destination choisie, Réponse préparée · Produit : Brouillon
+−
+100 %
++
+Ajuster
+connexions
+Activité
+Workflows
+Projets
+Rechercher un projet
+Ajoutez un dépôt depuis Projets, ou commencez un workflow global.
+Planifications
+Connexions
+Paramètres
+Outils et aide
+
+
+
+
+
+
+
+Terminal
+IA des prochains lancements
+OpenAI · Codex
+Anthropic · Claude
+
+
+
+
+Connexions
+Connectez les outils de vos workflows : messagerie, documents et services. Vérifiez une connexion avant de l’utiliser dans une étape.
+Configurer une connexion…
+Plugins OpenAI
+Plugins Anthropic
+Actualiser
+Contexte
+Afficher les connexions
+Configuration technique de la connexion
+
+Codex
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+Diagnostic de connexion
+Claude Code
+CLI détecté. Sessions neuves : analyse ou modification dans une copie isolée. La connexion et le modèle sont vérifiés au lancement. Un lancement explicite peut consommer votre abonnement.
+Diagnostic de connexion
+Commandes locales isolées
+Sans réseau ; projet en lecture seule ; résultats dans un dossier de travail isolé.
+Diagnostic de connexion
+Confluence
+Un plugin Atlassian peut être connecté séparément. Aucun transport authentifié configuré dans Tricorder.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+GitHub → Odoo.sh
+Renseigner dépôt, branche et projet Odoo.sh. Publication GitHub, build et déploiement seront suivis séparément.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Gmail
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Outlook
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Slack
+Aucun connecteur authentifié dans le runtime Tricorder. L'installation dans Codex est distincte.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Telegram
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Signal
+Aucun plugin correspondant identifié dans le catalogue consulté. Un adaptateur doit être fourni et qualifié.
+Service proposé par Tricorder. Cette carte ne prouve pas qu’un compte est connecté.
+Diagnostic de connexion
+Aucun secret n'est lu ou affiché dans cette page. Les comptes et la connexion OAuth restent chez les fournisseurs.
+VERDICT : 3 corrections reçues, bouton accessible y=901, simulation lancée sans consigne complémentaire.

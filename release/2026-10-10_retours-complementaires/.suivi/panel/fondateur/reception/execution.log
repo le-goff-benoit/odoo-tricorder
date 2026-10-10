@@ -1,0 +1,1185 @@
+01-workflows
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+      - button "Workflows enregistrés"
+    - heading "Workflows" [level=1]
+    - paragraph: Les demandes en cours et les interventions attendues.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - paragraph: Aucune demande à afficher. « Nouvelle demande » vous permet de choisir un workflow et de démarrer dans le terminal.
+    - group: Gestion des workflows
+02-creer
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+      - button "Workflows enregistrés"
+    - heading "Workflows enregistrés" [level=1]
+    - paragraph: Choisissez un workflow pour démarrer une demande, ou ouvrez-le pour modifier ses étapes.
+    - button "Nouvelle demande"
+    - button "Créer un workflow"
+    - button "Importer un workflow"
+    - button "Voir les archives"
+    - text: Rechercher un workflow
+    - searchbox "Rechercher un workflow"
+    - article:
+      - heading "Choisir le canal Atlas" [level=3]
+      - paragraph: Client Atlas · 3 étapes
+      - button "Exécuter…"
+      - button "Ouvrir le workflow"
+      - group: ⋯
+  - dialog "Créer un workflow":
+    - heading "Créer un workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - paragraph: Choisissez votre premier bloc ou partez d’un modèle. Configurez les blocs dans l’éditeur. Vos demandes seront données au lancement ou dans le terminal.
+    - text: Modèle de workflow
+    - combobox "Modèle de workflow":
+      - option "Workflow simple — premier bloc au choix" [selected]
+      - option "De la demande au résultat"
+      - option "Commande locale avec validation"
+      - option "Évolution logicielle"
+      - option "Release — demandes, plan, réalisation et validation"
+      - option "Support — diagnostic et réponse"
+      - option "Clôture de réunion"
+      - option "Demande ponctuelle"
+      - option "Correction express"
+      - option "Intentions, plan et travaux"
+      - option "Développement par élément et tests communs"
+      - option "Nouveau message → notification"
+      - 'option "GitHub → Odoo.sh : staging puis production"'
+      - option "Livraison directe en production"
+      - option "Documentation → Confluence"
+      - option "Orchestration"
+      - option "Analyse"
+      - option "Développement"
+      - option "Tests"
+      - option "Gestion documentaire"
+      - option "Communication"
+    - text: Premier bloc
+    - combobox "Premier bloc":
+      - option "Tâche guidée" [selected]
+      - option "Question ouverte"
+      - option "Règle explicite"
+      - option "Accord humain"
+      - option "Document"
+      - option "Commande locale"
+      - option "Tâche IA autonome"
+      - option "Recueillir des intentions"
+    - paragraph: L’agent de la conversation réalise la consigne. Choisissez dans le bloc si son résultat attend votre validation.
+    - text: Nom du workflow
+    - textbox "Nom du workflow": Nouveau workflow
+    - text: Enregistrer dans
+    - combobox "Enregistrer dans":
+      - option "Sans projet" [selected]
+      - option "Bibliothèque de modèles partagés"
+      - option "Client Atlas"
+    - paragraph: Retrouvez votre création dans Workflows → Workflows enregistrés, avec ou sans projet. Pour créer ensuite un modèle partagé, utilisez Réutiliser ce workflow dans l’éditeur.
+    - button "Créer et ouvrir le workflow"
+03-parametres
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Préparer le suivi Atlas" [level=1]
+    - paragraph: Révision 1 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés" [disabled]
+    - button "Paramètres du workflow"
+    - button "Annuler la modification" [disabled]: ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Première étape · Document": Première étape Document Sans donnée provenant d’un autre bloc
+    - button "Relier vers Première étape"
+    - button "Relier depuis Première étape"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+  - status: Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+  - dialog "Paramètres du workflow":
+    - heading "Paramètres du workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - text: Nom
+    - textbox "Nom": Préparer le suivi Atlas
+    - text: Description
+    - textbox "Description"
+    - group "Formulaire de lancement":
+      - text: Formulaire de lancement
+      - paragraph: Ces informations sont demandées à chaque exécution. Elles sont conservées avec cette demande, sans changer le modèle. Pour demander une précision pendant le travail, utilisez une Question ouverte.
+      - button "Ajouter un champ au lancement"
+    - group "Quand le workflow a une question":
+      - text: Quand le workflow a une question Me prévenir avec
+      - combobox "Me prévenir avec":
+        - option "Dans Tricorder uniquement" [selected]
+      - button "Configurer une notification…"
+      - paragraph: "S’applique aux questions prévues et à celles posées en cours de travail. La notification contient le nom du workflow et sa référence ; la question reste dans Tricorder. Email, Slack ou autre service : ajoutez et vérifiez une connexion de notification pour la choisir ici. Sans connexion, les questions restent visibles dans Tricorder."
+    - group: Paramètres supplémentaires
+    - button "Appliquer"
+04-champ
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Préparer le suivi Atlas" [level=1]
+    - paragraph: Révision 1 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés" [disabled]
+    - button "Paramètres du workflow"
+    - button "Annuler la modification" [disabled]: ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Première étape · Document": Première étape Document Sans donnée provenant d’un autre bloc
+    - button "Relier vers Première étape"
+    - button "Relier depuis Première étape"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+  - status: Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+  - dialog "Paramètres du workflow":
+    - heading "Paramètres du workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - text: Nom
+    - textbox "Nom": Préparer le suivi Atlas
+    - text: Description
+    - textbox "Description"
+    - group "Formulaire de lancement":
+      - text: Formulaire de lancement
+      - paragraph: Ces informations sont demandées à chaque exécution. Elles sont conservées avec cette demande, sans changer le modèle. Pour demander une précision pendant le travail, utilisez une Question ouverte.
+      - group "Champ 1":
+        - text: Champ 1 Libellé du champ
+        - textbox "Libellé du champ"
+        - text: Type de réponse
+        - combobox "Type de réponse":
+          - option "Texte court" [selected]
+          - option "Texte long"
+          - option "Nombre"
+          - option "Oui / Non"
+          - option "Liste de choix"
+        - text: Aide à la saisie
+        - textbox "Aide à la saisie"
+        - checkbox "Réponse obligatoire"
+        - text: Réponse obligatoire
+        - button "Retirer ce champ"
+      - button "Ajouter un champ au lancement"
+    - group "Quand le workflow a une question":
+      - text: Quand le workflow a une question Me prévenir avec
+      - combobox "Me prévenir avec":
+        - option "Dans Tricorder uniquement" [selected]
+      - button "Configurer une notification…"
+      - paragraph: "S’applique aux questions prévues et à celles posées en cours de travail. La notification contient le nom du workflow et sa référence ; la question reste dans Tricorder. Email, Slack ou autre service : ajoutez et vérifiez une connexion de notification pour la choisir ici. Sans connexion, les questions restent visibles dans Tricorder."
+    - group: Paramètres supplémentaires
+    - button "Appliquer"
+05-document
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Préparer le suivi Atlas" [level=1]
+    - paragraph: Révision 1 · Modifications en attente
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer"
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Première étape · Document": Première étape Document Sans donnée provenant d’un autre bloc
+    - button "Relier vers Première étape"
+    - button "Relier depuis Première étape"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Document
+      - heading "Première étape" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Première étape
+      - text: Contenu du brouillon
+      - textbox "Contenu du brouillon"
+      - text: Préparation locale. La publication demande une opération et un accord distincts. Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Aucune donnée reçue d’un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem: Aucun résultat déclaré.
+        - button "Ajouter un résultat attendu"
+      - button "Données de simulation…"
+      - group: Organisation de l’étape
+      - group: Outils et plugins de cette étape
+      - text: Validation du résultat
+      - combobox "Validation du résultat":
+        - option "Manuelle" [selected]
+        - option "Automatique — contrôles techniques"
+      - paragraph: La validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+      - checkbox "Autoriser la réutilisation des preuves pendant 24 h"
+      - text: Autoriser la réutilisation des preuves pendant 24 h Uniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+  - status: Workflow enregistré dans le dossier choisi. Adaptez-le ou choisissez Exécuter.
+06-formulaire
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Préparer le suivi Atlas" [level=1]
+    - paragraph: Révision 2 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Préparer le message de suivi · Document": Préparer le message de suivi Document Sans donnée provenant d’un autre bloc
+    - button "Relier vers Préparer le message de suivi"
+    - button "Relier depuis Préparer le message de suivi"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Document
+      - heading "Préparer le message de suivi" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Préparer le message de suivi
+      - text: Contenu du brouillon
+      - textbox "Contenu du brouillon": Bonjour Atlas, voici le suivi à compléter pour cette période.
+      - text: Préparation locale. La publication demande une opération et un accord distincts. Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - paragraph: Ces critères demandent une réception humaine. Choisissez « Manuelle » dans Validation du résultat, ou placez-les dans la Décision humaine qui réceptionne ce travail.
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Aucune donnée reçue d’un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem: Aucun résultat déclaré.
+        - button "Ajouter un résultat attendu"
+      - button "Données de simulation…"
+      - group: Organisation de l’étape
+      - group: Outils et plugins de cette étape
+      - text: Validation du résultat
+      - combobox "Validation du résultat":
+        - option "Manuelle"
+        - option "Automatique — contrôles techniques" [selected]
+      - paragraph: La validation automatique vérifie succès, types et preuves. Elle exige une liste de critères métier vide. Ajoutez une Décision humaine pour confirmer une action.
+      - checkbox "Autoriser la réutilisation des preuves pendant 24 h"
+      - text: Autoriser la réutilisation des preuves pendant 24 h Uniquement si le bloc, ses dépendances et ses fichiers sont inchangés. Désactiver pour les contrôles dépendant de l’heure ou d’un état extérieur.
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+07-premiere-terminee
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Préparer le suivi Atlas
+    - heading "Suivi Atlas semaine 42" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 1 / 1 étapes
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 0 s · attentes comprises Début : 10.10.2026 19:45:45 · Fin : 10.10.2026 19:45:45"
+    - group "Affichage du suivi":
+      - button "Graphe" [pressed]
+      - button "Détail"
+    - button "Préparer le message de suivi · Produit · sorties vérifiées": Préparer le message de suivi Document Produit · sorties vérifiées Sans donnée provenant d’un autre bloc
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+08-deuxieme-formulaire-vierge
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Préparer le suivi Atlas" [level=1]
+    - paragraph: Révision 2 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés" [disabled]
+    - button "Paramètres du workflow"
+    - button "Annuler la modification" [disabled]: ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img
+    - button "Préparer le message de suivi · Document": Préparer le message de suivi Document Sans donnée provenant d’un autre bloc
+    - button "Relier vers Préparer le message de suivi"
+    - button "Relier depuis Préparer le message de suivi"
+    - text: 1 bloc · 0 lien
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+  - dialog "Lancer cette version du workflow":
+    - heading "Lancer cette version du workflow" [level=2]
+    - button "Fermer la fenêtre": ×
+    - group "Informations de cette demande":
+      - text: Informations de cette demande Période du suivi · obligatoire
+      - textbox "Période du suivi · obligatoire"
+      - text: Ex. semaine du 12 octobre
+    - text: Titre court (facultatif)
+    - textbox "Titre court (facultatif)":
+      - /placeholder: Ex. Suivi hebdomadaire Atlas
+    - text: Contexte de cette vérification (facultatif)
+    - textbox "Contexte de cette vérification (facultatif)"
+    - paragraph: Ce workflow exécute ses étapes locales sans fournisseur IA. Les résultats et les éventuelles décisions apparaîtront dans le suivi.
+    - group: Inclure d’autres projets
+    - paragraph: "Validation automatique : Préparer le message de suivi. Succès, sorties et preuves contrôlés ; les décisions humaines restent obligatoires."
+    - group:
+      - text: Exécution locale
+      - paragraph:
+        - strong: Préparer le suivi Atlas
+        - text: · révision 2 · 1 étapes
+      - paragraph: Les étapes démarrent dans leur ordre prévu. Les décisions humaines restent dans le suivi.
+      - checkbox "Réutiliser les preuves encore valides des blocs qui l’autorisent"
+      - text: Réutiliser les preuves encore valides des blocs qui l’autorisent
+      - button "Lancer l’exécution réelle"
+    - button "Simuler le parcours"
+09-renommer-choix
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Choisir le canal Atlas" [level=1]
+    - paragraph: Révision 1 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification" [disabled]: ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img:
+      - 'button "Corriger le lien : Choisir le canal → Préparer email · Email client"'
+      - 'button "Corriger le lien : Choisir le canal → Préparer ticket · Ticket support"'
+    - button "Choisir le canal · Décision humaine": Choisir le canal Décision humaine Vous
+    - button "Préparer email · Document": Préparer email Document Sans donnée provenant d’un autre bloc
+    - button "Préparer ticket · Document": Préparer ticket Document Sans donnée provenant d’un autre bloc
+    - button "Relier vers Choisir le canal"
+    - button "Relier depuis Choisir le canal"
+    - button "Relier vers Préparer email"
+    - button "Relier depuis Préparer email"
+    - button "Relier vers Préparer ticket"
+    - button "Relier depuis Préparer ticket"
+    - text: 3 blocs · 2 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Décision humaine
+      - heading "Choisir le canal" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Choisir le canal
+      - text: Question à poser
+      - textbox "Question à poser": Quelle destination ?
+      - text: Choix possibles (un par ligne)
+      - textbox "Choix possibles (un par ligne)": Email client Ticket support
+      - text: Écrivez les choix présentés à la personne, par exemple Email client et Ticket Odoo. Les liens conservent leur branche lorsque vous renommez un choix. Les accords d’opérations conservent leurs choix d’autorisation et de refus.
+      - paragraph: La suite attend votre décision.
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Aucune donnée reçue d’un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem: Aucun résultat déclaré.
+        - button "Ajouter un résultat attendu"
+      - group: Organisation de l’étape
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+10-decision-terminee
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Choisir le canal Atlas
+    - heading "Décision Atlas vendredi" [level=1]
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow"
+    - region "État et prochaine action":
+      - strong: Terminée
+      - text: 3 / 3 étapes 2 traitées · 1 non applicable
+      - button "Voir les résultats"
+      - button "Voir le rapport"
+      - paragraph: Exécution terminée.
+      - group: "Durée totale : 0 s · attentes comprises Début : 10.10.2026 19:45:53 · Fin : 10.10.2026 19:45:53"
+    - group "Affichage du suivi":
+      - button "Graphe"
+      - button "Détail" [pressed]
+    - complementary "Inspecteur du bloc":
+      - navigation "Position dans le workflow":
+        - button "Étape sélectionnée Choisir le canal":
+          - text: Étape sélectionnée
+          - strong: Choisir le canal
+        - 'button "Si : Email au client Préparer email"':
+          - text: "Si : Email au client"
+          - strong: Préparer email
+        - 'button "Si : Ticket support Préparer ticket"':
+          - text: "Si : Ticket support"
+          - strong: Préparer ticket
+      - paragraph: Email au client
+      - paragraph:
+        - text: "Décision humaine :"
+        - strong: Email au client
+        - text: .
+  - status: Décision enregistrée.
+modele-renomme-apres-decision
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Client Atlas / Workflow
+    - heading "Choisir le canal Atlas" [level=1]
+    - paragraph: Révision 3 · Enregistré
+    - button "← Retour à la liste"
+    - button "Choisir l’IA"
+    - group: Options
+    - button "Enregistrer" [disabled]
+    - button "Exécuter…"
+    - paragraph: Enregistrez ici ; la navigation principale enregistre aussi vos modifications.
+    - tablist "Vues du workflow":
+      - tab "Éditeur" [selected]
+      - tab "Exécution" [disabled]
+      - tab "Historique"
+      - tab "Rapport" [disabled]
+    - button "+ Ajouter un bloc"
+    - button "Relier"
+    - button "+ Note"
+    - button "Propriétés"
+    - button "Paramètres du workflow"
+    - button "Annuler la modification": ↶
+    - button "Rétablir la modification" [disabled]: ↷
+    - button "Ouvrir le terminal existant": ›_ Terminal
+    - group: Éditeur
+    - button "✦ Assistant IA"
+    - button "Changer la vue graphe ou liste": ☷ Liste
+    - img:
+      - 'button "Corriger le lien : Choisir le canal → Préparer email · Message partenaire"'
+      - 'button "Corriger le lien : Choisir le canal → Préparer ticket · Ticket support"'
+    - button "Choisir le canal · Décision humaine": Choisir le canal Décision humaine Vous
+    - button "Préparer email · Document": Préparer email Document Sans donnée provenant d’un autre bloc
+    - button "Préparer ticket · Document": Préparer ticket Document Sans donnée provenant d’un autre bloc
+    - button "Relier vers Choisir le canal"
+    - button "Relier depuis Choisir le canal"
+    - button "Relier vers Préparer email"
+    - button "Relier depuis Préparer email"
+    - button "Relier vers Préparer ticket"
+    - button "Relier depuis Préparer ticket"
+    - text: 3 blocs · 2 liens
+    - button "Réduire le graphe": −
+    - button "100 %"
+    - button "Agrandir le graphe": +
+    - button "Ajuster"
+    - button "Réorganiser le graphe"
+    - complementary "Inspecteur du bloc":
+      - button "Fermer les propriétés": ×
+      - text: Décision humaine
+      - heading "Choisir le canal" [level=2]
+      - text: Nom du bloc
+      - textbox "Nom du bloc": Choisir le canal
+      - text: Question à poser
+      - textbox "Question à poser": Quelle destination ?
+      - text: Choix possibles (un par ligne)
+      - textbox "Choix possibles (un par ligne)": Message partenaire Ticket support
+      - text: Écrivez les choix présentés à la personne, par exemple Email client et Ticket Odoo. Les liens conservent leur branche lorsque vous renommez un choix. Les accords d’opérations conservent leurs choix d’autorisation et de refus.
+      - paragraph: La suite attend votre décision.
+      - text: Critères d’acceptation (un par ligne)
+      - textbox "Critères d’acceptation (un par ligne)"
+      - group "Informations de cette étape":
+        - text: Informations de cette étape
+        - paragraph: Ces informations vérifient la structure du résultat. La qualité de son contenu dépend de la consigne et des critères métier ; une vérification de structure ne suffit pas à la garantir.
+        - strong: Utilise
+        - list:
+          - listitem: Aucune donnée reçue d’un autre bloc.
+        - button "Recevoir un résultat existant…"
+        - button "Ajouter une information à utiliser"
+        - strong: Produit
+        - list:
+          - listitem: Aucun résultat déclaré.
+        - button "Ajouter un résultat attendu"
+      - group: Organisation de l’étape
+      - group: Configuration technique des données (avancé)
+      - group: Reprises, ressources et position
+      - button "Appliquer au bloc"
+      - group: Liens entre les blocs
+      - separator
+      - heading "Actions facultatives" [level=3]
+      - paragraph: Leur échec ne bloque pas le résultat principal. Chaque occurrence attend une activation explicite.
+      - button "Ajouter une action facultative…"
+      - button "Supprimer cette étape"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+11-historique
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Workflows
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - navigation "Workflows":
+      - button "En cours"
+      - button "Modèles"
+      - button "Historique"
+      - button "Workflows enregistrés"
+    - heading "Workflows" [level=1]
+    - paragraph: Les demandes terminées et leurs résultats.
+    - button "Nouvelle demande"
+    - button "Actualiser"
+    - 'button "Décision Atlas vendredi Demande · Client Atlas · Choisir le canal Atlas · Rév. 2 Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Décision Atlas vendredi
+      - text: Demande · Client Atlas · Choisir le canal Atlas · Rév. 2
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+    - 'button "Suivi Atlas semaine 43 Demande · Client Atlas · Préparer le suivi Atlas · Rév. 2 Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Suivi Atlas semaine 43
+      - text: Demande · Client Atlas · Préparer le suivi Atlas · Rév. 2
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+    - 'button "Suivi Atlas semaine 42 Demande · Client Atlas · Préparer le suivi Atlas · Rév. 2 Terminée Durée totale : 0 s · attentes comprises"':
+      - strong: Suivi Atlas semaine 42
+      - text: Demande · Client Atlas · Préparer le suivi Atlas · Rév. 2
+      - strong: Terminée
+      - text: "Durée totale : 0 s · attentes comprises"
+    - group:
+      - text: Gestion des workflows
+      - paragraph: Vos créations et adaptations, avec ou sans projet, restent disponibles pour les modifier ou les réutiliser.
+      - button "Workflows enregistrés"
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+12-rapport-decision
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Choisir le canal Atlas
+    - heading "Décision Atlas vendredi" [level=1]
+    - paragraph: Révision 2 figée · Terminée · 10.10.2026 19:45:53
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow":
+      - tab "Revenir au suivi"
+    - heading "Rapport d’exécution" [level=2]
+    - button "Exporter le rapport dans le projet"
+    - button "Export de release…"
+    - article:
+      - heading "Choisir le canal Atlas" [level=1]
+      - heading "Demande" [level=2]
+      - paragraph: Décision Atlas vendredi
+      - paragraph: Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.
+      - heading "Plan" [level=2]
+      - table:
+        - rowgroup:
+          - row "Travail État Critères":
+            - columnheader "Travail"
+            - columnheader "État"
+            - columnheader "Critères"
+        - rowgroup:
+          - row "Choisir le canal Validé À préciser":
+            - cell "Choisir le canal"
+            - cell "Validé"
+            - cell "À préciser"
+          - row "Préparer email Validé À préciser":
+            - cell "Préparer email"
+            - cell "Validé"
+            - cell "À préciser"
+          - row "Préparer ticket Non applicable À préciser":
+            - cell "Préparer ticket"
+            - cell "Non applicable"
+            - cell "À préciser"
+      - heading "Réalisation" [level=2]
+      - heading "Préparer email" [level=3]
+      - paragraph: Brouillon préparé. Aucune publication externe.
+      - paragraph:
+        - text: "État :"
+        - strong: Validé
+        - text: . Tentative 1.
+      - paragraph: "Date enregistrée : 10.10.2026 à 17:45 UTC."
+      - heading "Preuves" [level=4]
+      - list:
+        - listitem:
+          - link "Preuve 1":
+            - /url: "#proof-9d11a1f5e6e41461b7ceeb5404f1a3f17969637a9ef38701cc9f4d0dba40c796"
+      - paragraph: "Validation : Contrôles techniques automatiques ; aucun critère métier attesté."
+      - heading "Vérifications et limites" [level=2]
+      - paragraph: Les états ci-dessus reflètent les validations enregistrées. Les résultats de simulation restent des exemples.
+      - heading "Décisions et suite" [level=2]
+      - list:
+        - listitem:
+          - text: "Choisir le canal :"
+          - strong: Email au client
+          - text: — décision humaine conservée.
+      - group: Références techniques de l’exécution
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+13-libelle-historique
+- complementary "Tricorder":
+  - text: Tricorder
+  - navigation "Navigation principale":
+    - button "Activité"
+    - button "Workflows"
+    - button "Projets"
+  - text: Accès rapide aux projets Rechercher un projet
+  - searchbox "Rechercher un projet"
+  - button "Client Atlas"
+  - navigation "Configuration":
+    - button "Planifications"
+    - button "Connexions"
+  - button "Paramètres"
+  - group: Outils et aide
+- main:
+  - text: Client Atlas
+  - button "Terminal"
+  - text: IA des prochains lancements
+  - combobox "Fournisseur IA":
+    - option "OpenAI · Codex" [selected]
+    - option "Anthropic · Claude"
+  - group "Thème de l’interface":
+    - button "Thème clair"
+    - button "Thème sombre"
+    - button "Thème système" [pressed]
+  - status: À jour
+  - button "Actualiser · À jour"
+  - main:
+    - text: Suivi · Choisir le canal Atlas
+    - heading "Décision Atlas vendredi" [level=1]
+    - paragraph: Révision 2 figée · Terminée · 10.10.2026 19:45:53
+    - button "← Retour à la liste"
+    - group: Options
+    - tablist "Vues du workflow":
+      - tab "Revenir au suivi"
+    - heading "Rapport d’exécution" [level=2]
+    - button "Exporter le rapport dans le projet"
+    - button "Export de release…"
+    - article:
+      - heading "Choisir le canal Atlas" [level=1]
+      - heading "Demande" [level=2]
+      - paragraph: Décision Atlas vendredi
+      - paragraph: Exécution locale. Les validations humaines et les contrôles automatiques sont distingués ci-dessous.
+      - heading "Plan" [level=2]
+      - table:
+        - rowgroup:
+          - row "Travail État Critères":
+            - columnheader "Travail"
+            - columnheader "État"
+            - columnheader "Critères"
+        - rowgroup:
+          - row "Choisir le canal Validé À préciser":
+            - cell "Choisir le canal"
+            - cell "Validé"
+            - cell "À préciser"
+          - row "Préparer email Validé À préciser":
+            - cell "Préparer email"
+            - cell "Validé"
+            - cell "À préciser"
+          - row "Préparer ticket Non applicable À préciser":
+            - cell "Préparer ticket"
+            - cell "Non applicable"
+            - cell "À préciser"
+      - heading "Réalisation" [level=2]
+      - heading "Préparer email" [level=3]
+      - paragraph: Brouillon préparé. Aucune publication externe.
+      - paragraph:
+        - text: "État :"
+        - strong: Validé
+        - text: . Tentative 1.
+      - paragraph: "Date enregistrée : 10.10.2026 à 17:45 UTC."
+      - heading "Preuves" [level=4]
+      - list:
+        - listitem:
+          - link "Preuve 1":
+            - /url: "#proof-9d11a1f5e6e41461b7ceeb5404f1a3f17969637a9ef38701cc9f4d0dba40c796"
+      - paragraph: "Validation : Contrôles techniques automatiques ; aucun critère métier attesté."
+      - heading "Vérifications et limites" [level=2]
+      - paragraph: Les états ci-dessus reflètent les validations enregistrées. Les résultats de simulation restent des exemples.
+      - heading "Décisions et suite" [level=2]
+      - list:
+        - listitem:
+          - text: "Choisir le canal :"
+          - strong: Email au client
+          - text: — décision humaine conservée.
+      - group: Références techniques de l’exécution
+  - status: Workflow enregistré. Les exécutions précédentes gardent leur version.
+RECEPTION TROIS CORRECTIONS REUSSIE

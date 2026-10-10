@@ -62,7 +62,7 @@ def proof_link(proof, index=0):
     return f"[{text(label)}](.suivi/preuves/{sha})"
 
 
-def value_lines(value, key="", depth=0):
+def value_lines(value, key="", depth=0, labels=None):
     if not isinstance(value, (dict, list)):
         return [scalar(value, key), ""]
     if isinstance(value, dict) and "$artifact" in value:
@@ -90,5 +90,5 @@ def value_lines(value, key="", depth=0):
         return lines
     lines = []
     for name, item in value.items():
-        lines += ["**" + text(field_label(name)) + "**", ""] + value_lines(item, name, depth + 1)
+        lines += ["**" + text((labels or {}).get(name, field_label(name))) + "**", ""] + value_lines(item, name, depth + 1)
     return lines or ["Aucun champ renseigné.", ""]

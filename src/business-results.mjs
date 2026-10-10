@@ -86,7 +86,7 @@ function scalarView(value, key, context) {
 
 function fieldsView(entries, depth, context) {
   const shown = entries.slice(0, visibleFields);
-  return `<dl class="business-fields">${shown.map(([key, value]) => `<dt>${esc(fieldLabel(key))}</dt><dd>${valueView(value, key, depth + 1, context)}</dd>`).join('')}</dl>${entries.length > shown.length ? technicalView(Object.fromEntries(entries.slice(shown.length)), `${entries.length - shown.length} autres champs`) : ''}`;
+  return `<dl class="business-fields">${shown.map(([key, value]) => `<dt>${esc(context.labels?.[key] || fieldLabel(key))}</dt><dd>${valueView(value, key, depth + 1, context)}</dd>`).join('')}</dl>${entries.length > shown.length ? technicalView(Object.fromEntries(entries.slice(shown.length)), `${entries.length - shown.length} autres champs`) : ''}`;
 }
 
 function dialogueView(value, depth, context) {
@@ -150,9 +150,9 @@ function valueView(value, key, depth, context) {
  * The optional button factory has the signature used by studio.js and receives
  * an already escaped label and attributes.
  */
-export function businessDataView(label, values, {button = defaultButton, projects = []} = {}) {
+export function businessDataView(label, values, {button = defaultButton, projects = [], labels = {}} = {}) {
   if (values === undefined || values === null || (record(values) && !Object.keys(values).length)) return '';
-  const context = {button, projects, budget:{remaining:120}};
+  const context = {button, projects, labels, budget:{remaining:120}};
   const structured = typeof values === 'object' && !values.$artifact;
   return `<section class="execution-data business-data">${label ? `<h3>${esc(label)}</h3>` : ''}${valueView(values, '', 0, context)}${structured ? technicalView(values) : ''}</section>`;
 }

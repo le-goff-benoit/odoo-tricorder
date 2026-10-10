@@ -50,5 +50,7 @@ test('replacing a schedule prepopulates recurrence, with no inherited permission
   assert.deepEqual(replacementScheduleDraft(schedule), { kind: 'weekly', time: '17:20', minutes: 30,
     timezone: 'Pacific/Auckland', weekdays: '[0,4]', simulation: true });
   assert.equal(schedule.notifications_authorized, true);
+  const withAnswers={...schedule,parameters:{include:false,amount:0,choice:'email'}};
+  const draft=replacementScheduleDraft(withAnswers);assert.deepEqual(draft.values,withAnswers.parameters);draft.values.choice='ticket';assert.equal(withAnswers.parameters.choice,'email');
   assert.equal(replacementScheduleDraft({ rule: { kind: 'interval', minutes: 60, timezone: 'Europe/Zurich' } }).minutes, 60);
 });

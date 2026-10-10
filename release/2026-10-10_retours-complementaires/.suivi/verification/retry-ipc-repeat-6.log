@@ -1,0 +1,23 @@
+
+Running 6 tests using 1 worker
+
+(node:432078) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 ../../../tmp/tricorder-rc16-retry-diagnostic-v2/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (12.0s)
+(node:433100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 ../../../tmp/tricorder-rc16-retry-diagnostic-v2/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (10.5s)
+(node:433909) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 ../../../tmp/tricorder-rc16-retry-diagnostic-v2/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (12.2s)
+(node:434839) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 ../../../tmp/tricorder-rc16-retry-diagnostic-v2/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (10.2s)
+(node:435728) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 ../../../tmp/tricorder-rc16-retry-diagnostic-v2/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (17.2s)
+(node:436762) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  6 ../../../tmp/tricorder-rc16-retry-diagnostic-v2/collection.spec.cjs:144:1 › a failed local command shows its diagnostic, opens a root shell and announces immediate retry before confirmation (17.0s)
+
+  6 passed (1.4m)

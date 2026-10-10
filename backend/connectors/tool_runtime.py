@@ -7,6 +7,7 @@ import time
 from .effects import Effects, matching_messages
 from .local_tools import approved, exchange
 from .providers import redact
+from workflow_engine.launch_fields import execution_parameters
 from workflow_engine.contracts import digest, require
 
 
@@ -39,7 +40,7 @@ def execute_tool(engine, run, node, token):
         require(isinstance(response.get("outputs"), dict), "Sorties structurées de l’outil absentes")
         return response
 
-    arguments = {"parameters": node.get("parameters", run["parameters"]), "inputs": inputs}
+    arguments = {"parameters": execution_parameters(run["parameters"], node.get("parameters")), "inputs": inputs}
     if node["kind"] == "watch":
         since = run.get("occurrence", {}).get("since", run["created"])
         arguments.update(account=node["account"], sender=node["sender"], since=since)

@@ -7,6 +7,7 @@ from pathlib import Path
 import time
 import uuid
 
+from .launch_fields import execution_parameters
 from .contracts import ContractError, condition_outcome, digest, expand, identifier, require, semantic_digest, validate, validate_outputs, validate_result
 from .store import Store
 from .projects import initialize, repository
@@ -208,7 +209,8 @@ class Engine:
         from .annotations import without_annotations
         resolved = without_annotations(resolved)
         project = self.project(project_id, connection)
-        resolved["parameters"] = {**resolved.get("parameters", {}), **(parameters or {})}
+        from .launch_fields import resolve_parameters
+        resolved["parameters"] = resolve_parameters(resolved, parameters)
         from .packs import resolve_profiles, policy_readiness
         if not simulation:
             mode = "native" if driver == "conversation" else "automatic"
@@ -224,7 +226,7 @@ class Engine:
                "plugins": catalog(project),
                "packs": [{"id": p["id"], "version": p["version"], "sha256": p["sha256"]} for p in project.get("packs", [])],
                "simulation": bool(simulation), "definition": resolved, "original": original,
-               "contract": semantic_digest(resolved), "parameters": {**resolved.get("parameters", {}), **(parameters or {})},
+               "contract": semantic_digest(resolved), "parameters": copy.deepcopy(resolved["parameters"]),
                "nodes": {n["id"]: {"status": "pending", "attempt": 0} for n in resolved["nodes"]}}
         run["transports"] = {}
         if parent:
@@ -358,7 +360,7 @@ class Engine:
                                 continue
                         state.update(status="accepted", outcome=outcome, result={"outputs": outputs})
                     elif node["kind"] == "condition":
-                        outcome = state["inputs"].get(node["parameter"], node.get("parameters", run["parameters"]).get(node["parameter"]))
+                        outcome = state["inputs"].get(node["parameter"], execution_parameters(run["parameters"], node.get("parameters")).get(node["parameter"]))
                         outcome = condition_outcome(node, outcome)
                         if outcome in node.get("options", []):
                             state.update(status="accepted", outcome=outcome, result={"outputs": {k: state["inputs"].get(k) for k in node.get("outputs", {}) if run["definition"]["schema"] == 1 or k in state["inputs"]}})

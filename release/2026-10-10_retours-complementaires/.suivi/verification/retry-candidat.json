@@ -1,0 +1,8 @@
+{
+  "candidate": "/tmp/tricorder-rc16-final",
+  "sha256": {
+    "src/studio.js": "af5fbfc03c661da760907bd8b0634493f4cdcdd652927c2929b3f8523f9fd621",
+    "backend/workflow_engine/engine.py": "b2c52ca31204903130845a9df70a73aaf4316ecd94687eee374a794921eb6e5d",
+    "tests/collection-input-ux.spec.cjs": "6c707c8c88c879ac68977c8f68f6e4b91e0206a2012f3d262de7970995861cfa"
+  }
+}

@@ -1,0 +1,24 @@
+SUIVI · CONTRÔLE LOCAL EXPLICITE
+Contrôle local explicite
+← Retour à la liste
+Options
+Échec · reprise nécessaire
+0 / 1 étapes
+Examiner l’échec
+
+Commande terminée avec le code 3. Résultat à examiner.
+
+Depuis le début : 2 s · attentes comprises
+Transférer vers un projet…
+Graphe
+Détail
+›_
+Première étape
+Commande
+Échec
+Sans donnée provenant d’un autre bloc
+1 bloc · 0 lien
+−
+100 %
++
+Ajuster

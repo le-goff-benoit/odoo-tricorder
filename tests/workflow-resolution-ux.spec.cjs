@@ -6,7 +6,7 @@ let directory, app, page, project;
 const call = (action, data = {}) => page.evaluate(payload => window.studio.request(payload), { action, ...data });
 const snapshot = () => call('workflow.get', { project: project.id, workflow: 'creation-review' });
 async function openWorkflow() {
-  await page.locator('[data-workflow-route=global]').click();await page.getByText('Gestion des workflows', {exact:true}).click();await page.locator('[data-action=workflow-hub][data-tab=registered]').click();
+  await page.locator('[data-workflow-route=global]').click();await page.locator('[data-action=registered-workflows]').click();
   await page.locator('[data-action=open-workflow][data-id=creation-review]').click();
 }
 async function seed(graph) {

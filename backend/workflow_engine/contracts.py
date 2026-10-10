@@ -74,6 +74,8 @@ def validate(graph, *, expanded=False):
     require(len(json.dumps(graph, ensure_ascii=False).encode()) <= 2_000_000, "Définition de workflow trop volumineuse")
     from .annotations import validate_annotations
     validate_annotations(graph)
+    from .launch_fields import validate_metadata, validate_port_labels
+    validate_metadata(graph)
     identifier(graph.get("id"), "Workflow")
     require(isinstance(graph.get("title"), str) and graph["title"].strip(), "Nom du workflow requis")
     require(isinstance(graph.get("execution_modes", ["native", "automatic"]), list) and set(graph.get("execution_modes", ["native", "automatic"])) <= {"native", "automatic"} and graph.get("execution_modes", ["native", "automatic"]), "Modes compatibles : native et/ou automatic")
@@ -122,11 +124,16 @@ def validate(graph, *, expanded=False):
             for port, ptype in ports.items():
                 identifier(port, f"{nid} port")
                 validate_port(ptype, schema=graph["schema"], label=f"{nid}.{port}")
+        require(isinstance(node.get("parameters", {}), dict), f"{nid} : paramètres locaux invalides")
+        validate_port_labels(node)
         if node["kind"] in {"decision", "condition", "review"}:
             outcomes = node.get("options", ["approve", "reject"])
             require(isinstance(outcomes, list) and len(outcomes) >= 2 and all(isinstance(o, str) for o in outcomes) and len(set(outcomes)) == len(outcomes), f"{nid} : au moins deux issues distinctes")
             for outcome in outcomes:
-                identifier(outcome, f"{nid} issue")
+                if node["kind"] == "condition":
+                    require(0 < len(outcome.strip()) <= 200 and outcome.isprintable(), f"{nid} : valeur de condition vide, trop longue ou non imprimable")
+                else:
+                    identifier(outcome, f"{nid} issue")
         require(node.get("completion_outcome", "succeeded") in {"succeeded", "blocked"}, f"{nid} : résultat final succeeded ou blocked attendu")
         require(type(node.get("candidate_check", False)) is bool, f"{nid} : contrôle QA booléen attendu")
         if node.get("candidate_check"):
@@ -221,6 +228,8 @@ def expand(graph, library, stack=()):
         require(graph["schema"] != 1 or library[ref].get("schema") == 1,
                 f"{node['id']} : un workflow de schéma 1 ne peut pas inclure un sous-workflow de schéma 2")
         sub = expand(library[ref], library, (*stack, graph["id"]))
+        require(not sub.get("launch_fields"),
+                f"{node['id']} : ce sous-workflow possède un formulaire de lancement ; configurez ces champs dans le workflow principal avant de l’insérer")
         require(not sub.get("actions"),
                 f"{node['id']} : les actions associées doivent être configurées dans le workflow principal ; ce sous-workflow ne peut pas encore être inséré tel quel")
         if result["schema"] == 2 and sub["schema"] == 1:
@@ -258,12 +267,17 @@ def expand(graph, library, stack=()):
                     require(child_kind is not None and compatible_ports(source, destination, schema=graph["schema"],
                             source_direction=direction + "s", target_direction=direction + "s"), f"{node['id']}.{port} : type incompatible avec {target}.{name}")
                     links.setdefault(target, {})[port if direction == "input" else name] = name if direction == "input" else port
+        public_labels = copy.deepcopy(node.pop("port_labels", {}))
+        if public_labels:
+            node["port_labels"] = {"inputs": public_labels.get("inputs", {}), "outputs": public_labels.get("inputs", {})}
         node["kind"] = "join"
         node["outputs"] = ({name: normalized_port(port, "inputs") for name, port in public_inputs.items()}
                            if graph["schema"] == 2 else public_inputs)
         exit_inputs = ({name: normalized_port(port, "outputs") for name, port in public_outputs.items()}
                        if graph["schema"] == 2 else public_outputs)
         exit_node = {"id": prefix + "exit", "title": node["title"] + " · résultat", "kind": "join", "phase": node.get("phase", ""), "inputs": exit_inputs, "outputs": public_outputs, "component_exit": True, "options": node.get("options", ["done", "reject"])}
+        if public_labels:
+            exit_node["port_labels"] = {"inputs": public_labels.get("outputs", {}), "outputs": public_labels.get("outputs", {})}
         for edge in result["edges"]:
             if edge["from"] == node["id"]:
                 edge["from"] = exit_node["id"]
@@ -288,7 +302,8 @@ def expand(graph, library, stack=()):
             child = children[end]
             outcomes = child.get("options", ["approve", "reject"]) if child["kind"] in {"decision", "review", "condition"} or child.get("route_output") or child.get("component_exit") else ["done"]
             for outcome in outcomes:
-                result["edges"].append({"id": prefix + "leave-" + end + "-" + outcome, "from": prefix + end, "to": exit_node["id"], "outcome": outcome, "mapping": output_links.get(end, {})})
+                outcome_id = outcome if ID.fullmatch(outcome) else digest(outcome)[:12]
+                result["edges"].append({"id": prefix + "leave-" + end + "-" + outcome_id, "from": prefix + end, "to": exit_node["id"], "outcome": outcome, "mapping": output_links.get(end, {})})
     from .advanced_contracts import resolve_iterations
     result = resolve_iterations(result, library, stack, expand)
     return validate(result, expanded=True)
