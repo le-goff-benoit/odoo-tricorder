@@ -118,6 +118,26 @@ test('terminal reveal follows current output, preserves deliberate history and k
   expect((await page.evaluate(() => window.tricorder.terminals.list())).filter(s => s.alive).map(s => [s.id, s.pid])).toEqual(before.map(s => [s.id, s.pid]));
 });
 
+test('keyboard connection remains usable after a card drag when click cleanup is delayed', async () => {
+  await seed();
+  // Chromium can deliver the next keyboard activation before drag-click cleanup.
+  await page.evaluate(() => {
+    const original = window.setTimeout;
+    window.__restoreDragTimers = () => { window.setTimeout = original; };
+    window.setTimeout = (callback, delay, ...args) => original(callback, delay === 0 ? 1000 : delay, ...args);
+  });
+  await drag(card('other'), 30, 20);
+  await port('source', 'out').focus(); await page.keyboard.press('Enter');
+  await expect(page.locator('.connection-instruction')).toContainText('Choisissez une entrée');
+  await port('target', 'in').focus(); await page.keyboard.press('Enter');
+  await expect(page.locator('#edge-from')).toHaveValue('source');
+  await expect(page.locator('#edge-to')).toHaveValue('target');
+  await page.evaluate(() => window.__restoreDragTimers());
+  await page.getByRole('button', { name: 'Créer le lien', exact: true }).click();
+  await save();
+  expect((await snapshot()).edges).toEqual([expect.objectContaining({ from: 'source', to: 'target', mapping: { text: 'text' } })]);
+});
+
 test('connections support click, drag and keyboard with confirmation, direct editing and cancellation', async () => {
   await seed(); await port('source', 'out').click(); await expect(page.locator('.connection-instruction[role=status]')).toContainText('Choisissez une entrée'); await port('target', 'in').click();
   await expect(page.locator('#edge-from')).toHaveValue('source'); await expect(page.locator('#edge-to')).toHaveValue('target'); await page.getByRole('button', { name: 'Créer le lien', exact: true }).click();

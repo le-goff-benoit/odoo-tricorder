@@ -895,6 +895,8 @@ function installEditorGestures() {
   const listen = (type, fn) => window.document.addEventListener(type, fn, true);
   const unlisten = (type, fn) => window.document.removeEventListener(type, fn, true);
   document.addEventListener('pointerdown', event => {
+    // A fresh pointer gesture is not the compatibility click from the last drag.
+    suppressGestureClick = false;
     if (event.button !== 0 || state.mode !== 'design' || state.route !== 'workflow' || document.querySelector('.modal') || editorGesture) return;
     const port = event.target.closest('.graph-port'), card = event.target.closest('.node[data-id],.note-heading');
     if (!port && !card) return;
@@ -1891,7 +1893,7 @@ async function launch(simulation) {
 }
 
 document.addEventListener('click', event => {
-  if (suppressGestureClick) { suppressGestureClick = false; event.preventDefault(); return; }
+  if (suppressGestureClick && event.detail > 0) { suppressGestureClick = false; event.preventDefault(); return; }
   const el = event.target.closest('[data-action]'); if (!el) return;
   const action = actions[el.dataset.action]; if (!action) return;
   event.preventDefault(); if (el.dataset.pending) return; el.dataset.pending = '1';
