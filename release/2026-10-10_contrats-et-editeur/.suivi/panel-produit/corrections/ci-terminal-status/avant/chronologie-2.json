@@ -1,0 +1,218 @@
+{
+  "renderer": [
+    {
+      "at": 1791634553373,
+      "event": "cache",
+      "next": [],
+      "old": []
+    },
+    {
+      "at": 1791634554532,
+      "event": "broker-sessions"
+    },
+    {
+      "at": 1791634554538,
+      "event": "cache",
+      "next": [
+        {
+          "id": "de055a38acd646b8bee931439a2e5e3d",
+          "project": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "release": null,
+          "task": null,
+          "createdAt": 1791634554.5312617,
+          "lastOutputAt": 1791634554.5360823,
+          "pid": 1901054,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1901054,
+          "promptVerified": true,
+          "idleShell": false,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ],
+      "old": []
+    },
+    {
+      "at": 1791634554563,
+      "event": "cache",
+      "next": [
+        {
+          "id": "de055a38acd646b8bee931439a2e5e3d",
+          "project": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "release": null,
+          "task": null,
+          "createdAt": 1791634554.5312617,
+          "lastOutputAt": 1791634554.5389657,
+          "pid": 1901054,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1901054,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ],
+      "old": [
+        {
+          "id": "de055a38acd646b8bee931439a2e5e3d",
+          "project": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "release": null,
+          "task": null,
+          "createdAt": 1791634554.5312617,
+          "lastOutputAt": 1791634554.5360823,
+          "pid": 1901054,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1901054,
+          "promptVerified": true,
+          "idleShell": false,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    },
+    {
+      "at": 1791634555125,
+      "event": "agent-poll",
+      "next": "stopped",
+      "old": "starting",
+      "id": "cbd2065e9b7e24729"
+    },
+    {
+      "at": 1791634556109,
+      "event": "agent-poll",
+      "next": "stopped",
+      "old": "stopped",
+      "id": "cbd2065e9b7e24729"
+    }
+  ],
+  "ipc": [
+    {
+      "at": 1791634553226,
+      "channel": "terminal:list",
+      "resultAt": 1791634553336,
+      "result": []
+    },
+    {
+      "at": 1791634554383,
+      "channel": "workflow-terminal",
+      "payload": {
+        "project": "p305732e74a6540bd",
+        "conversation": "cbd2065e9b7e24729",
+        "resume": false,
+        "design": false
+      },
+      "resultAt": 1791634554537,
+      "result": {
+        "id": "de055a38acd646b8bee931439a2e5e3d",
+        "project": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634554.5312617,
+        "lastOutputAt": null,
+        "pid": 1901054,
+        "program": "python3",
+        "provider": null,
+        "foreground": 1901054,
+        "promptVerified": true,
+        "idleShell": false,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process",
+        "agentState": "starting",
+        "resumedSession": null
+      }
+    },
+    {
+      "at": 1791634554536,
+      "channel": "terminal:list",
+      "resultAt": 1791634554537,
+      "result": [
+        {
+          "id": "de055a38acd646b8bee931439a2e5e3d",
+          "project": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "release": null,
+          "task": null,
+          "createdAt": 1791634554.5312617,
+          "lastOutputAt": 1791634554.5360823,
+          "pid": 1901054,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1901054,
+          "promptVerified": true,
+          "idleShell": false,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    },
+    {
+      "at": 1791634554539,
+      "channel": "terminal:list",
+      "resultAt": 1791634554539,
+      "result": [
+        {
+          "id": "de055a38acd646b8bee931439a2e5e3d",
+          "project": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "release": null,
+          "task": null,
+          "createdAt": 1791634554.5312617,
+          "lastOutputAt": 1791634554.5389657,
+          "pid": 1901054,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1901054,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    },
+    {
+      "at": 1791634554708,
+      "channel": "terminal:list",
+      "resultAt": 1791634554709,
+      "result": [
+        {
+          "id": "de055a38acd646b8bee931439a2e5e3d",
+          "project": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "environment": null,
+          "workingDirectory": "/tmp/tricorder-terminal-resume-ux-BXdlTR/state/workflows/projects/p305732e74a6540bd",
+          "release": null,
+          "task": null,
+          "createdAt": 1791634554.5312617,
+          "lastOutputAt": 1791634554.5936759,
+          "pid": 1901054,
+          "program": "bash",
+          "provider": null,
+          "foreground": 1901054,
+          "promptVerified": true,
+          "idleShell": true,
+          "alive": true,
+          "exitCode": null,
+          "activity": "process"
+        }
+      ]
+    }
+  ]
+}

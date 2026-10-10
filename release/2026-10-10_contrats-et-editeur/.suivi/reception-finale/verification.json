@@ -1,7 +1,7 @@
 {
   "version": "0.6.0-rc.13",
   "local_unit_tests": {
-    "python": 436,
+    "python": 438,
     "javascript": 158
   },
   "local_full_gui_before_last_label_fix": {
@@ -16,9 +16,8 @@
       "skipped": 2
     }
   },
-  "local_final_package_targeted_tests": 9,
   "expected_ci_tests": {
-    "python": 436,
+    "python": 438,
     "javascript": 158,
     "gui_source": 184,
     "gui_paquet": 184
@@ -130,5 +129,22 @@
     "scope": "Synthetic test projects and inert providers. No client release executed."
   },
   "qualification": "Final full source and packaged GUI suites are required in GitHub CI on the published commit. The release uses the artifact produced and tested by that run, not this local candidate.",
-  "scope": "Synthetic projects, inert providers and local adapters; no client release or external account qualified."
+  "scope": "Synthetic projects, inert providers and local adapters; no client release or external account qualified.",
+  "local_package_targeted_before_ci_terminal_fix": 9,
+  "ci_first_pass_before_terminal_status_fix": {
+    "run_id": 38050200544,
+    "commit": "ad8d4e7510c6f740b26a3d8d9716230031296b98",
+    "source": {
+      "passed": 183,
+      "failed": 1,
+      "skipped": 2
+    },
+    "packaged": "not executed"
+  },
+  "terminal_status_fix_source_reception": {
+    "developer_gui_passed": 5,
+    "independent_gui_passed": 1,
+    "python_terminal_tests_passed": 10,
+    "two_new_python_tests_failed_before_fix": true
+  }
 }

@@ -1,0 +1,16 @@
+{
+  "RECEPTION-INDEPENDANTE.md": "6d056121334c3f04cc3a4c765112b475aa34055d898a6375ae2f060857f220c2",
+  "candidat-SHA256.json": "aa9e2e5bc3df88d3bf967dff505273a3197f599e9508b150e8b9ded697a8d7ee",
+  "playwright.config.cjs": "4c65bf1582b570bb92db5511dd2316e023504183d5382b11872a4f9f35ee298a",
+  "rouge-ci/error-context.md": "fb40840eb83db1dff5d53dd2aa3315bca36253c51a9aaef78433a8c26efa3f14",
+  "rouge-ci/trace.zip": "745e431ea71062a1b26edcdb5efbaf878ceb3cff506974ce4c2a6de758ef785c",
+  "source-final.log": "288765c65ced9dbc876e46c88a97eeb63c117a802d65c6efb7a1f9cdc0c5adc0",
+  "source.log": "833f77b367e6d0916c3a4fc9f7c3ca1d5af66a0b398d7856ec5cb920a507a360",
+  "status.spec.cjs": "5d0f22d25061bdabe77d1fb7f727c0ffff7f5bcd6ea15e8a42e7c6c965180ba9",
+  "vert-independant-source/.last-run.json": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+  "vert-independant-source/status-independent-real-pr-2fda7-g-or-duplicating-a-terminal/busy-without-restart.png": "e24fa391722b027687712038efec1c0188c4e36a748f0e638858f508dbcd3ca9",
+  "vert-independant-source/status-independent-real-pr-2fda7-g-or-duplicating-a-terminal/end-native.png": "191d820cb9d89ad5754588f7291ac56e85b46a6a6881b1e117bb6a34d639c955",
+  "vert-independant-source/status-independent-real-pr-2fda7-g-or-duplicating-a-terminal/evidence.json": "1d4b5589b9b5fa636902372b4bfb4aaa5cda6d1e31d967355ee0145e69f6a82c",
+  "vert-independant-source/status-independent-real-pr-2fda7-g-or-duplicating-a-terminal/stopped-visible.png": "b3f4c1e1e93d673ca475315efdbf003e175b8d6ed54cab756c7e577dc40d581b",
+  "vert-independant-source/status-independent-real-pr-2fda7-g-or-duplicating-a-terminal/timeline.json": "cbcd9bdd9e7a41ed057060d5395213b0aab60891641feaffa52b6b704061a124"
+}

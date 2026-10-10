@@ -1,0 +1,14 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-ci-terminal-diagnostic/playwright.config.cjs --grep completed request --output=/tmp/tricorder-ci-terminal-instrumented-green --reporter=line
+PATH: /tmp/tricorder-ci-tools-z3nd04n_:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+[1/1] ../../../tmp/tricorder-ci-terminal-diagnostic/diagnostic.spec.cjs:131:1 › completed request offers its result without instructing the user to resume the stopped agent
+../../../tmp/tricorder-ci-terminal-diagnostic/diagnostic.spec.cjs:131:1 › completed request offers its result without instructing the user to resume the stopped agent
+
+
+  1 passed (5.1s)

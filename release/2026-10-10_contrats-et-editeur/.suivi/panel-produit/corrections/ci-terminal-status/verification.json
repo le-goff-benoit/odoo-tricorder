@@ -1,0 +1,18 @@
+{
+  "base_commit": "ad8d4e",
+  "files": {
+    "backend/terminal_service.py": "6248399c60cf1da8e7eee1b92ddf361eda21a6d2eafd6dec7f19a4d0176f8130",
+    "tests/test_terminal_service.py": "a2cb408fb5c0f2a8788b94c63b4a603bd1230db6a30e33fa37a1e1a8086f42ec"
+  },
+  "terminal_python": {
+    "passed": 10,
+    "seconds": 3.375
+  },
+  "source_ui": {
+    "passed": 5,
+    "seconds": 26.8
+  },
+  "python_discovered": 438,
+  "ui_discovered": 186,
+  "unchanged_timeouts": true
+}

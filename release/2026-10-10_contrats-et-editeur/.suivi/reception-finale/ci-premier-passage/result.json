@@ -1,0 +1,13 @@
+{
+  "run_id": 38050200544,
+  "commit": "ad8d4e7510c6f740b26a3d8d9716230031296b98",
+  "url": "https://github.com/le-goff-benoit/odoo-tricorder/actions/runs/38050200544",
+  "source": {
+    "passed": 183,
+    "failed": 1,
+    "skipped": 2
+  },
+  "failed_assertion": "beforeEach: terminal idleShell true but conversation tray did not show Agent arrêté",
+  "packaged_suite": "not executed after source suite failure",
+  "trace_local": "/tmp/tricorder-rc13-ci-failure-artifacts/terminal-resume-ux-complet-9ba50-to-resume-the-stopped-agent/trace.zip"
+}

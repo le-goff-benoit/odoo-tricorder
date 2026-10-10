@@ -66,6 +66,10 @@ un ordre stable pour faciliter la revue Git.
 Le terminal compact préserve la sortie courante et l’historique consulté.
 Retrouver une conversation vérifie la session réelle ; un terminal fermé
 nécessite une reprise explicite avant tout nouveau lancement.
+Le service terminal notifie désormais les transitions entre commande active et
+retour au prompt. Les services déjà ouverts restent préservés lors d'une mise à
+jour et gardent le rafraîchissement périodique ; la notification immédiate prend
+effet au prochain démarrage du service, pas au seul redémarrage de la fenêtre.
 
 Le refus d’un plan annonce sa conséquence. La révision dans la même exécution,
 les connexions OAuth intégrées et l’attestation des sources Git réellement testées

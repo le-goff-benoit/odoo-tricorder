@@ -1,0 +1,6 @@
+{
+  "backend/terminal_service.py": "6248399c60cf1da8e7eee1b92ddf361eda21a6d2eafd6dec7f19a4d0176f8130",
+  "src/app.js": "fa11eaeed26f88ea2460989a3f5de90927efecf62720c5c9eb38005651addeff",
+  "src/studio.js": "f9653580c92ae108043a4c87bb274f152d42d01ee260a392a6c973a9b48ef70b",
+  "dist/app.js": "861a09a1b9ea6fb1b92bf57dd4c2314b7a6df3894300a5c82ca0073aa2c21efc"
+}

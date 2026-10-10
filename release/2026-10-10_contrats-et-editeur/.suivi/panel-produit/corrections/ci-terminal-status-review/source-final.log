@@ -1,0 +1,12 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-ci-status/playwright.config.cjs --output=/tmp/tricorder-review-ci-status/results-source-final
+PATH: /tmp/tricorder-ci-tools-k8mz8rxg:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✓  1 ../../../tmp/tricorder-review-ci-status/status.spec.cjs:103:1 › independent real process changes promptly update workflow without restarting or duplicating a terminal (6.0s)
+
+  1 passed (6.4s)

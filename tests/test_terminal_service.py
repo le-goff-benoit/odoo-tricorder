@@ -6,9 +6,41 @@ from pathlib import Path
 import signal
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 
 BROKER = Path(__file__).resolve().parents[1] / 'backend/terminal_service.py'
+sys.path.insert(0, str(BROKER.parent))
+from terminal_service import Terminal
+
+
+class PromptNotificationTests(unittest.TestCase):
+    def test_only_complete_private_prompt_transitions_notify_clients(self):
+        events = []
+        terminal = Terminal.__new__(Terminal)
+        terminal.broker = SimpleNamespace(emit=events.append)
+        terminal.at_prompt = False
+        terminal.prompt_generation = 0
+        terminal.control_buffer = b''
+        terminal.prompt_prefix = b'\x1b]777;tricorder-private;'
+        marker = terminal.prompt_prefix + b'prompt\x07'
+        ordinary = b'Agent exited\n\x1b]777;tricorder-other;prompt\x07'
+        self.assertEqual(terminal.prompt_output(ordinary), ordinary)
+        self.assertEqual(events, [])
+        self.assertEqual(terminal.prompt_output(marker[:-1]), b'')
+        self.assertFalse(terminal.at_prompt)
+        self.assertEqual(events, [])
+        self.assertEqual(terminal.prompt_output(marker[-1:] + b'$ '), b'$ ')
+        self.assertTrue(terminal.at_prompt)
+        self.assertEqual(events, [{'event': 'sessions'}])
+        terminal.prompt_output(marker)
+        self.assertEqual(len(events), 1, 'An unchanged prompt must not notify again')
+        self.assertEqual(terminal.prompt_generation, 2, 'Resume still observes fresh prompts')
+        terminal.prompt_output(terminal.prompt_prefix + b'busy\x07')
+        self.assertFalse(terminal.at_prompt)
+        self.assertEqual(len(events), 2)
+        terminal.prompt_output(terminal.prompt_prefix + b'busy\x07ordinary output')
+        self.assertEqual(len(events), 2)
 
 
 class TerminalTests(unittest.IsolatedAsyncioTestCase):
@@ -102,6 +134,49 @@ class TerminalTests(unittest.IsolatedAsyncioTestCase):
             self.assertNotIn('UNEXPECTED-EXECUTION',text)
             self.assertNotIn('DRAFT-DISCARDED',text)
             self.assertEqual((await self.call('list'))[0]['pid'],before['pid'])
+
+    async def test_clients_are_notified_when_a_command_starts_and_the_prompt_returns(self):
+        identifier = await self.create()
+        for _ in range(100):
+            before = (await self.call('list'))[0]
+            if before['idleShell']:
+                break
+            await asyncio.sleep(.02)
+        self.assertTrue(before['idleShell'])
+        observer, writer = await asyncio.open_unix_connection(str(self.socket))
+        try:
+            writer.write(b'{"id":0,"action":"list"}\n')
+            await writer.drain()
+            self.assertEqual(json.loads(await observer.readline())['id'], 0)
+
+            async def notification():
+                return json.loads(await asyncio.wait_for(observer.readline(), 2))
+
+            await self.call('write', session=identifier, data='sleep 30\n')
+            self.assertEqual(await notification(), {'event': 'sessions'})
+            self.assertFalse((await self.call('list'))[0]['idleShell'])
+            for _ in range(100):
+                busy = (await self.call('list'))[0]
+                if busy['program'] == 'sleep':
+                    break
+                await asyncio.sleep(.02)
+            self.assertEqual(busy['program'], 'sleep')
+            await self.call('write', session=identifier, data='\x03')
+            self.assertEqual(await notification(), {'event': 'sessions'})
+            after = (await self.call('list'))[0]
+            self.assertTrue(after['idleShell'])
+            self.assertEqual((after['id'], after['pid']), (before['id'], before['pid']))
+            # A normal command return must also notify; output alone is not a prompt.
+            await self.call('write', session=identifier, data="printf 'waiting-%s\\n' 'input'; read -r answer\n")
+            self.assertEqual(await notification(), {'event': 'sessions'})
+            await self.output(identifier, 'waiting-input')
+            self.assertFalse((await self.call('list'))[0]['idleShell'])
+            await self.call('write', session=identifier, data='finished\n')
+            self.assertEqual(await notification(), {'event': 'sessions'})
+            self.assertTrue((await self.call('list'))[0]['idleShell'])
+        finally:
+            writer.close()
+            await writer.wait_closed()
 
 
     async def test_real_shell_resize_unicode_and_context(self):

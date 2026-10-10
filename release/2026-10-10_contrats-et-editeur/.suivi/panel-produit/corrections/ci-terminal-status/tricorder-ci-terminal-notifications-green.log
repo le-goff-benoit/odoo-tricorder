@@ -1,0 +1,15 @@
+test_only_complete_private_prompt_transitions_notify_clients (test_terminal_service.PromptNotificationTests) ... ok
+test_clients_are_notified_when_a_command_starts_and_the_prompt_returns (test_terminal_service.TerminalTests) ... ok
+test_closed_session_is_not_active_and_stop_is_explicit (test_terminal_service.TerminalTests) ... ok
+test_detached_broker_does_not_retain_inherited_desktop_descriptors (test_terminal_service.TerminalTests) ... ok
+test_invalid_resize_rejected (test_terminal_service.TerminalTests) ... ok
+test_real_shell_resize_unicode_and_context (test_terminal_service.TerminalTests) ... ok
+test_reconnect_preserves_pid_and_output (test_terminal_service.TerminalTests) ... ok
+test_resume_requires_primary_prompt_not_read_heredoc_or_foreground (test_terminal_service.TerminalTests) ... ok
+test_stalled_input_never_blocks_other_terminals (test_terminal_service.TerminalTests) ... ok
+test_stopped_shell_is_reaped (test_terminal_service.TerminalTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 3.375s
+
+OK

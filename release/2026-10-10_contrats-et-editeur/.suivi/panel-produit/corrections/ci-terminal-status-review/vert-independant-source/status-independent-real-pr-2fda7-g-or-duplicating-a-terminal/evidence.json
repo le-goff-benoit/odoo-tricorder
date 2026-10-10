@@ -1,0 +1,69 @@
+{
+  "calls": [
+    {
+      "at": 1791634809529,
+      "request": {
+        "project": "pfe1c1f7cf86140d0",
+        "conversation": "c77285007e2c74bfa",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "pid": 1906067,
+        "agentState": "starting"
+      }
+    },
+    {
+      "at": 1791634812192,
+      "request": {
+        "project": "pfe1c1f7cf86140d0",
+        "conversation": "c77285007e2c74bfa",
+        "resume": false,
+        "design": false
+      },
+      "result": {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "pid": 1906067,
+        "agentState": "busy"
+      }
+    },
+    {
+      "at": 1791634813103,
+      "request": {
+        "project": "pfe1c1f7cf86140d0",
+        "conversation": "c77285007e2c74bfa",
+        "resume": true,
+        "design": false
+      },
+      "result": {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "pid": 1906067,
+        "agentState": "starting"
+      }
+    }
+  ],
+  "events": [],
+  "sessions": [
+    {
+      "id": "0f2026ef65c34e779fc10db36b44e9a1",
+      "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+      "environment": null,
+      "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+      "release": null,
+      "task": null,
+      "createdAt": 1791634809.6421056,
+      "lastOutputAt": 1791634813.255397,
+      "pid": 1906067,
+      "program": "codex",
+      "provider": "codex",
+      "foreground": 1906243,
+      "promptVerified": true,
+      "idleShell": false,
+      "alive": true,
+      "exitCode": null,
+      "activity": "process"
+    }
+  ],
+  "launches": 2
+}

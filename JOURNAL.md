@@ -19,6 +19,7 @@
 - Diagnostic de commande visible, étape courante dans Activité, prérequis natifs cohérents et JSON stable pour Git.
 - Terminal compact : réaffichage de la sortie courante sans perdre l’historique consulté ; accès aux sessions des autres projets.
 - Retour à la conversation basé sur la session réelle : commande en cours conservée, reprise après fermeture soumise à confirmation.
+- Statut du terminal : notification à la transition prompt/commande, sans attendre deux rafraîchissements ; anciens services persistants conservés.
 - Documentation et réception : `release/2026-10-10_contrats-et-editeur/README.md`.
 
 ## 2026-10-10 — Création, terminal et suivi des workflows (0.6.0-rc.12)

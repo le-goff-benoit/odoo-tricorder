@@ -1,0 +1,63 @@
+Reference crew: 75612ee195f08b5a764e5aac303d453741666457
+Node: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node
+Command: /home/blegoff/.nvm/versions/node/v24.15.0/bin/node node_modules/@playwright/test/cli.js test --config=/tmp/tricorder-review-ci-status/playwright.config.cjs --output=/tmp/tricorder-review-ci-status/results-source
+PATH: /tmp/tricorder-ci-tools-tu5qmmj1:/usr/bin:/bin
+codex None
+claude None
+
+Running 1 test using 1 worker
+
+  ✘  1 ../../../tmp/tricorder-review-ci-status/status.spec.cjs:102:1 › independent real process changes promptly update workflow without restarting or duplicating a terminal (34.9s)
+
+
+  1) ../../../tmp/tricorder-review-ci-status/status.spec.cjs:102:1 › independent real process changes promptly update workflow without restarting or duplicating a terminal 
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('#conversation-tray [data-action=resume-agent]')
+        - locator resolved to <button class="flat" data-action="resume-agent">Reprendre l’agent…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <div class="modal">…</div> intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        58 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <div class="modal">…</div> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      110 |  await input().focus();await page.keyboard.press('Control+C');await expect.poll(async()=>(await list()).find(s=>s.id===first.id)?.idleShell).toBe(true);await evidence('broker-idle-again');
+      111 |  await expect(page.locator('#conversation-tray')).toContainText('Agent arrêté',{timeout:3000});await evidence('workflow-idle-again');
+    > 112 |  await page.locator('#conversation-tray [data-action=resume-agent]').click();await expect(page.getByRole('dialog')).toContainText('Reprendre');expect(launchCount()).toBe(1);
+          |                                                                      ^
+      113 |  await page.getByRole('button',{name:'Revenir',exact:true}).click();expect(launchCount()).toBe(1);expect(identities(await list())).toEqual([{id:first.id,pid:first.pid}]);
+      114 |  await page.locator('#conversation-tray [data-action=resume-agent]').click();await page.getByRole('button',{name:'Reprendre dans ce terminal',exact:true}).click();await expect.poll(launchCount).toBe(2);
+      115 |  await expect(page.locator('#conversation-tray [data-action=resume-agent]')).toHaveCount(0,{timeout:3000});await evidence('explicit-resume-active');expect(identities(await list())).toEqual([{id:first.id,pid:first.pid}]);
+        at /tmp/tricorder-review-ci-status/status.spec.cjs:112:70
+
+    Error Context: ../../../tmp/tricorder-review-ci-status/results-source/status-independent-real-pr-2fda7-g-or-duplicating-a-terminal/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../../tmp/tricorder-review-ci-status/results-source/status-independent-real-pr-2fda7-g-or-duplicating-a-terminal/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../../tmp/tricorder-review-ci-status/results-source/status-independent-real-pr-2fda7-g-or-duplicating-a-terminal/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    ../../../tmp/tricorder-review-ci-status/status.spec.cjs:102:1 › independent real process changes promptly update workflow without restarting or duplicating a terminal 

@@ -113,6 +113,13 @@ class Terminal:
         except OSError:
             self.finish()
 
+    def set_prompt(self, at_prompt):
+        if self.at_prompt != at_prompt:
+            self.at_prompt = at_prompt
+            # Notify the existing desktop cache on a verified state transition,
+            # rather than waiting for its periodic foreground-process refresh.
+            self.broker.emit({'event': 'sessions'})
+
     def prompt_output(self, data):
         """Strip private shell markers, including markers split across PTY reads."""
         pending = self.control_buffer + data
@@ -131,7 +138,7 @@ class Terminal:
             if end < 0:
                 break
             marker = pending[len(self.prompt_prefix):end]
-            self.at_prompt = marker == b'prompt'
+            self.set_prompt(marker == b'prompt')
             if self.at_prompt:
                 self.prompt_generation += 1
             pending = pending[end+1:]
@@ -203,7 +210,7 @@ class Terminal:
         if len(self.pending) + len(data) > MAX_PENDING_INPUT:
             raise ValueError('Le programme de ce terminal ne lit plus sa saisie : texte refusé')
         if any(char in data for char in (b'\r', b'\n', b'\x03', b'\x04', b'\x0f')):
-            self.at_prompt = False
+            self.set_prompt(False)
         self.pending.extend(data)
         self.flush()
 

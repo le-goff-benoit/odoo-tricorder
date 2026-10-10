@@ -1,0 +1,218 @@
+[
+  {
+    "label": "agent-active",
+    "at": 1791634809824,
+    "sessions": [
+      {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634809.6421056,
+        "lastOutputAt": 1791634809.6715684,
+        "pid": 1906067,
+        "program": "codex",
+        "provider": "codex",
+        "foreground": 1906070,
+        "promptVerified": true,
+        "idleShell": false,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      }
+    ],
+    "tray": "2 demandes\n⌄\n\nAucune étape en cours · 2 demandes à prendre en charge\n\nTerminal",
+    "launches": 1
+  },
+  {
+    "label": "broker-stopped",
+    "at": 1791634809851,
+    "sessions": [
+      {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634809.6421056,
+        "lastOutputAt": 1791634809.8442023,
+        "pid": 1906067,
+        "program": "bash",
+        "provider": null,
+        "foreground": 1906067,
+        "promptVerified": true,
+        "idleShell": true,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      }
+    ],
+    "tray": "2 demandes\n⌄\n\nAucune étape en cours · 2 demandes à prendre en charge\n\nTerminal",
+    "launches": 1
+  },
+  {
+    "label": "workflow-stopped",
+    "at": 1791634811169,
+    "sessions": [
+      {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634809.6421056,
+        "lastOutputAt": 1791634809.8442023,
+        "pid": 1906067,
+        "program": "bash",
+        "provider": null,
+        "foreground": 1906067,
+        "promptVerified": true,
+        "idleShell": true,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      }
+    ],
+    "tray": "2 demandes\n⌄\n\nAgent arrêté · progression conservée. Aucune étape en cours · 2 demandes à prendre en charge\n\nReprendre l’agent…\nVoir le shell",
+    "launches": 1
+  },
+  {
+    "label": "broker-busy",
+    "at": 1791634811280,
+    "sessions": [
+      {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634809.6421056,
+        "lastOutputAt": 1791634811.2754414,
+        "pid": 1906067,
+        "program": "sleep",
+        "provider": null,
+        "foreground": 1906128,
+        "promptVerified": true,
+        "idleShell": false,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      }
+    ],
+    "tray": "2 demandes\n⌄\n\nAgent arrêté · progression conservée. Aucune étape en cours · 2 demandes à prendre en charge\n\nReprendre l’agent…\nVoir le shell",
+    "launches": 1
+  },
+  {
+    "label": "workflow-busy",
+    "at": 1791634812081,
+    "sessions": [
+      {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634809.6421056,
+        "lastOutputAt": 1791634811.2754414,
+        "pid": 1906067,
+        "program": "sleep",
+        "provider": null,
+        "foreground": 1906128,
+        "promptVerified": true,
+        "idleShell": false,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      }
+    ],
+    "tray": "2 demandes\n⌄\n\nAucune étape en cours · 2 demandes à prendre en charge\n\nTerminal",
+    "launches": 1
+  },
+  {
+    "label": "broker-idle-again",
+    "at": 1791634812557,
+    "sessions": [
+      {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634809.6421056,
+        "lastOutputAt": 1791634812.552783,
+        "pid": 1906067,
+        "program": "bash",
+        "provider": null,
+        "foreground": 1906067,
+        "promptVerified": true,
+        "idleShell": true,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      }
+    ],
+    "tray": "2 demandes\n⌄\n\nAucune étape en cours · 2 demandes à prendre en charge\n\nTerminal",
+    "launches": 1
+  },
+  {
+    "label": "workflow-idle-again",
+    "at": 1791634812853,
+    "sessions": [
+      {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634809.6421056,
+        "lastOutputAt": 1791634812.552783,
+        "pid": 1906067,
+        "program": "bash",
+        "provider": null,
+        "foreground": 1906067,
+        "promptVerified": true,
+        "idleShell": true,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      }
+    ],
+    "tray": "2 demandes\n⌄\n\nAgent arrêté · progression conservée. Aucune étape en cours · 2 demandes à prendre en charge\n\nReprendre l’agent…\nVoir le shell",
+    "launches": 1
+  },
+  {
+    "label": "explicit-resume-active",
+    "at": 1791634813407,
+    "sessions": [
+      {
+        "id": "0f2026ef65c34e779fc10db36b44e9a1",
+        "project": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "environment": null,
+        "workingDirectory": "/tmp/tricorder-independent-terminal-fresh-2YTwvJ/projects/pfe1c1f7cf86140d0",
+        "release": null,
+        "task": null,
+        "createdAt": 1791634809.6421056,
+        "lastOutputAt": 1791634813.255397,
+        "pid": 1906067,
+        "program": "codex",
+        "provider": "codex",
+        "foreground": 1906243,
+        "promptVerified": true,
+        "idleShell": false,
+        "alive": true,
+        "exitCode": null,
+        "activity": "process"
+      }
+    ],
+    "tray": "2 demandes\n⌄\n\nAucune étape en cours · 2 demandes à prendre en charge\n\nTerminal",
+    "launches": 2
+  }
+]
